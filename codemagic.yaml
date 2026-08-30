@@ -14,12 +14,27 @@ workflows:
       - name: Capacitor sync
         script: |
           npx cap sync ios
-      - name: Build unsigned IPA
+      - name: Build unsigned .app
         script: |
-          xcode-project build-ipa \
-            --workspace ios/App/App.xcworkspace \
-            --scheme App \
-            --config Debug
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphoneos \
+            -derivedDataPath "$CM_BUILD_DIR/DerivedData" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            clean build
+      - name: Package unsigned IPA
+        script: |
+          set -e
+          APP_PATH=$(find "$CM_BUILD_DIR/DerivedData/Build/Products" -maxdepth 2 -name "*.app" | head -1)
+          mkdir -p build/ios/ipa/Payload
+          cp -r "$APP_PATH" build/ios/ipa/Payload/
+          cd build/ios/ipa
+          zip -r App.ipa Payload
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
