@@ -1,0 +1,37 @@
+{
+  "name": "dungeon-descent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author leo productions": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "7": "^0.0.1",
+    "@capacitor-community/admob": "^7.0.0",
+    "@capacitor-community/keep-awake": "^7.0.0",
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/cli": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/haptics": "^7.0.0",
+    "@capacitor/ios": "^7.0.0",
+    "@capacitor/local-notifications": "^7.0.0",
+    "@capacitor/motion": "^7.0.0",
+    "@capacitor/network": "^7.0.0",
+    "@capacitor/screen-reader": "^7.0.4",
+    "@capacitor/status-bar": "^7.0.0",
+    "@capawesome/capacitor-badge": "^7.0.0",
+    "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4",
+    "capacitor-game-connect-7": "^7.0.5",
+    "cordova-plugin-purchase": "^13.17.2",
+    "ios": "^0.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5"
+  }
+}

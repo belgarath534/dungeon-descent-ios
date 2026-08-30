@@ -1,0 +1,14 @@
+{
+  "appId": "com.dungeon.descent",
+  "appName": "dungeon Descent",
+  "webDir": "www",
+  "android": {
+    "studioPath": "C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe",
+    "adjustMarginsForEdgeToEdge": "auto"
+  },
+  "plugins": {
+    "CapacitorGameConnect": {
+      "androidAppId": "109323203666"
+    }
+  }
+}
