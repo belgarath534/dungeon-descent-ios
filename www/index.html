@@ -6477,7 +6477,7 @@ var DDStore = (function() {
       <button onclick="accountSignUp()" style="width:100%;padding:12px;background:#0a0a1a;border:1px solid #333366;color:#aaaaff;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;margin-bottom:8px;" aria-label="Create new account">
         Create Account
       </button>
-      <button onclick="accountGoogleLogin()" style="width:100%;padding:12px;background:#1a0a0a;border:1px solid #663333;color:#ffaaaa;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;margin-bottom:8px;" aria-label="Sign in with Google">
+      <button onclick="accountGoogleLogin()" id="btn-google-login" style="width:100%;padding:12px;background:#1a0a0a;border:1px solid #663333;color:#ffaaaa;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;margin-bottom:8px;" aria-label="Sign in with Google">
         🔵 Sign in with Google
       </button>
       <button onclick="accountForgotPassword()" style="width:100%;padding:8px;background:none;border:none;color:#555;font-family:'Cinzel',serif;font-size:0.65rem;cursor:pointer;text-decoration:underline;" aria-label="Forgot password">
@@ -8552,6 +8552,7 @@ function getTrack(name) {
 
 var _howlMusic = null;
 var _howlMusicName = null;
+var _pendingTrack = null; // guard against async audio overlap
 
 function playTrack(name) {
   if (!AUD.loaded) return;
@@ -8587,12 +8588,20 @@ function playTrack(name) {
   if (_webAudioReady && AUD.ctx && AUD.musicGain) {
     // Resume context if suspended (iOS requires this)
     if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
+    _pendingTrack = name; // mark what we want to play
     loadAudioBuffer(url, AUD.buffers, name, function(buffer) {
-      if (!buffer || AUD.current !== name) {
-        // Failed or track changed — fall back
+      // If another track was requested while we were loading, abort this one
+      if (_pendingTrack !== name || AUD.current !== name) {
+        return; // stale load — discard silently
+      }
+      _pendingTrack = null;
+      if (!buffer) {
+        // Failed — fall back
         _playTrackFallback(name, url);
         return;
       }
+      // Stop anything still playing before we start the new source
+      if (AUD.currentSource) { try { AUD.currentSource.stop(); } catch(e) {} AUD.currentSource = null; }
       AUD.currentSource = playBuffer(buffer, AUD.musicGain, true);
       // Force gain to saved value immediately after starting — iOS can reset it
       if (AUD.musicGain) AUD.musicGain.gain.setValueAtTime(AUD.musicVol, AUD.ctx.currentTime);
@@ -8609,8 +8618,11 @@ function _playTrackFallback(name, url) {
   // On iOS, Howler html5 audio ignores volume (hardware locked) — always use Web Audio
   if (isIOS && AUD.ctx && AUD.musicGain) {
     if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
+    _pendingTrack = name;
     loadAudioBuffer(url, AUD.buffers, name, function(buffer) {
-      if (!buffer || AUD.current !== name) return;
+      if (_pendingTrack !== name || AUD.current !== name) return; // stale load
+      _pendingTrack = null;
+      if (!buffer) return;
       if (AUD.currentSource) { try { AUD.currentSource.stop(); } catch(e) {} AUD.currentSource = null; }
       AUD.musicGain.gain.setValueAtTime(AUD.musicVol, AUD.ctx.currentTime);
       AUD.currentSource = playBuffer(buffer, AUD.musicGain, true);
@@ -8900,10 +8912,11 @@ function goTo(id) {
   if (!el) { console.error('goTo: screen not found: screen-' + id); return; }
   el.classList.add('active');
   if (id !== 'mine') el.scrollTop = 0;
-  if (id === 'charlist') { renderCharList(); refreshDungeonUnlocks(); setTimeout(function(){ checkDungeonUnlockPopups(); }, 600); }
-  if (id === 'deathlog') renderDeathLog();
-  if (id === 'graveyard') renderGraveyard();
-  if (id === 'challenges') initChallenges();
+  // Defer heavy renders so the screen transition is immediate on iOS
+  if (id === 'charlist') { setTimeout(function(){ renderCharList(); refreshDungeonUnlocks(); setTimeout(function(){ checkDungeonUnlockPopups(); }, 600); }, 50); }
+  if (id === 'deathlog') setTimeout(function(){ renderDeathLog(); }, 50);
+  if (id === 'graveyard') setTimeout(function(){ renderGraveyard(); }, 50);
+  if (id === 'challenges') setTimeout(function(){ initChallenges(); }, 50);
   if (id === 'obituary') setTimeout(function(){ loadObituary('obituary-list'); }, 200);
   if (id === 'mine') setTimeout(function(){
     try {
@@ -22233,6 +22246,15 @@ async function accountSignUp() {
 
 async function accountGoogleLogin() {
   var err = document.getElementById('account-error');
+  // Google sign-in via popup does not work in iOS Capacitor —
+  // the browser opens but cannot redirect back to the app.
+  // Email/password login works fine on all platforms.
+  var isCapacitorIOS = window.Capacitor && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  if (isCapacitorIOS) {
+    if (err) { err.style.color = '#ffaa44'; err.textContent = 'Google sign-in is not available in the iOS app. Use email and password instead.'; }
+    say('Google sign-in is not available in the iOS app. Please use email and password.');
+    return;
+  }
   if (!window._fbAuth) { 
     if (err) { err.style.color='#ff4444'; err.textContent = 'Cloud not ready. Check connection.'; }
     say('Cloud not available. Check your internet connection.');
@@ -22341,6 +22363,12 @@ function openAccountPanel() {
   var ov = document.getElementById('ov-account');
   if (ov) {
     ov.classList.add('open');
+    // Hide Google sign-in on iOS Capacitor — popup can't redirect back to app
+    var googleBtn = document.getElementById('btn-google-login');
+    if (googleBtn) {
+      var isCapacitorIOS = window.Capacitor && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      googleBtn.style.display = isCapacitorIOS ? 'none' : '';
+    }
     updateAccountUI();
     say('Account panel. Beta feature. Account is not required to play. The game always saves to local storage.');
     setTimeout(function() {
@@ -48151,6 +48179,16 @@ DDStore.whenReady().then(function() {
   }
   document.addEventListener('click', initAudio, { once: true });
   document.addEventListener('keydown', initAudio, { once: true });
+  document.addEventListener('touchstart', initAudio, { once: true }); // iOS: first touch unlocks audio
+  document.addEventListener('touchend', initAudio, { once: true });   // belt and braces
+
+  // iOS Capacitor cold launch: pre-fetch audio assets immediately (AudioContext still needs gesture)
+  // This means assets are cached and ready the moment the user first taps
+  if (window.Capacitor && !_audioLoaded) {
+    setTimeout(function() {
+      if (!_audioLoaded) { _audioLoaded = true; loadAudio(); }
+    }, 400);
+  }
 
   // Resume Web Audio context when app comes back from background
   // iOS suspends the audio context when app is backgrounded or screen locks
@@ -49604,12 +49642,15 @@ function vibe(pattern) {
         (function(d, dur) {
           setTimeout(function() {
             try {
+              // ImpactStyle enum values work on both iOS and Android
+              var ImpactStyle = (Capacitor.Plugins.Haptics.ImpactStyle) ||
+                { Heavy: 'HEAVY', Medium: 'MEDIUM', Light: 'LIGHT' };
               if (dur >= 300) {
-                Capacitor.Plugins.Haptics.impact({ style: 'HEAVY' });
+                Capacitor.Plugins.Haptics.impact({ style: ImpactStyle.Heavy || 'HEAVY' });
               } else if (dur >= 150) {
-                Capacitor.Plugins.Haptics.impact({ style: 'MEDIUM' });
+                Capacitor.Plugins.Haptics.impact({ style: ImpactStyle.Medium || 'MEDIUM' });
               } else {
-                Capacitor.Plugins.Haptics.impact({ style: 'LIGHT' });
+                Capacitor.Plugins.Haptics.impact({ style: ImpactStyle.Light || 'LIGHT' });
               }
             } catch(e) {}
           }, d);
@@ -49837,28 +49878,51 @@ var _lastShakeTime = 0;
 var _shakeThreshold = 15; // sensitivity
 var _shakeCooldown = 800; // ms between shakes
 
+var _shakeListenerAttached = false;
 function initShakeToAttack() {
+  if (_shakeListenerAttached) return;
   try {
     if (!window.Capacitor || !Capacitor.Plugins || !Capacitor.Plugins.Motion) return;
-    Capacitor.Plugins.Motion.addListener('accel', function(event) {
-      if (!_shakeEnabled) return;
-      if (!DS || !DS.inCombat) return; // only works in combat
-      var a = event.acceleration;
-      if (!a) return;
-      var force = Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-      var now = Date.now();
-      if (force > _shakeThreshold && now - _lastShakeTime > _shakeCooldown) {
-        _lastShakeTime = now;
-        // Hard shake = skill if SP available, light shake = normal attack
-        if (force > 25 && DS.sp >= 3) {
-          say('Shake attack! Unleashing skill!');
-          doFight('skill0'); // use first available skill
-        } else {
-          doFight('attack');
+
+    function _attachMotionListener() {
+      if (_shakeListenerAttached) return;
+      _shakeListenerAttached = true;
+      Capacitor.Plugins.Motion.addListener('accel', function(event) {
+        if (!_shakeEnabled) return;
+        if (!DS || !DS.inCombat) return;
+        var a = event.acceleration;
+        if (!a) return;
+        var force = Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+        var now = Date.now();
+        if (force > _shakeThreshold && now - _lastShakeTime > _shakeCooldown) {
+          _lastShakeTime = now;
+          if (force > 25 && DS.sp >= 3) {
+            say('Shake attack! Unleashing skill!');
+            doFight('skill0');
+          } else {
+            doFight('attack');
+          }
         }
-      }
-    });
-    console.log('[DD] Shake to attack enabled');
+      });
+      console.log('[DD] Shake to attack enabled');
+    }
+
+    // iOS 13+ requires explicit permission for DeviceMotion
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS && typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(function(state) {
+        if (state === 'granted') {
+          _attachMotionListener();
+        } else {
+          console.warn('[DD] DeviceMotion permission denied');
+        }
+      }).catch(function(e) {
+        console.warn('[DD] DeviceMotion permission error:', e);
+      });
+    } else {
+      // Android or older iOS — no permission needed
+      _attachMotionListener();
+    }
   } catch(e) {
     console.warn('[DD] Motion init failed:', e);
   }
