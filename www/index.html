@@ -7517,6 +7517,15 @@ var DDStore = (function() {
         <span class="settings-cat-arrow" aria-hidden="true">›</span>
       </button>
 
+      <button class="settings-cat-btn" onclick="openSettingsPanel('notifications')" aria-label="Notification settings — choose what the game notifies you about" id="btn-settings-notifications">
+        <span class="settings-cat-icon" aria-hidden="true">🔔</span>
+        <div class="settings-cat-info">
+          <div class="settings-cat-name">Notifications</div>
+          <div class="settings-cat-desc">Choose what the game notifies you about</div>
+        </div>
+        <span class="settings-cat-arrow" aria-hidden="true">›</span>
+      </button>
+
       <button class="settings-cat-btn" onclick="openSettingsPanel('beta')" aria-label="Beta Features — experimental features you can test">
         <span class="settings-cat-icon" aria-hidden="true">🧪</span>
         <div class="settings-cat-info">
@@ -7600,6 +7609,59 @@ var DDStore = (function() {
 </div>
 
 <!-- SETTINGS PANEL: BETA FEATURES -->
+<div class="settings-panel" id="settings-panel-notifications" role="dialog" aria-modal="true" aria-label="Notification Settings">
+  <div class="settings-panel-header">
+    <button class="settings-back-btn" onclick="closeSettingsPanel('notifications')" aria-label="Back to settings">← Back</button>
+    <div class="settings-panel-title">🔔 Notifications</div>
+  </div>
+  <div class="settings-panel-body">
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#555;letter-spacing:0.1em;margin-bottom:16px;">Choose what the game can notify you about. You can change these anytime.</div>
+
+    <div class="setting-label"><span>Daily Dungeon Reset</span><button class="toggle-btn on" id="notif-toggle-daily" aria-pressed="true" onclick="toggleNotifPref('daily', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Notified at midnight when the daily dungeon resets.</div>
+
+    <div class="setting-label"><span>Streak Reminder</span><button class="toggle-btn on" id="notif-toggle-streak" aria-pressed="true" onclick="toggleNotifPref('streak', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Reminded at 7PM to claim your daily reward before midnight.</div>
+
+    <div class="setting-label"><span>Night Mode</span><button class="toggle-btn on" id="notif-toggle-night" aria-pressed="true" onclick="toggleNotifPref('night', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Notified at 8PM when night mode activates (+50% gold).</div>
+
+    <div class="setting-label"><span>Morning Reminder</span><button class="toggle-btn" id="notif-toggle-morning" aria-pressed="false" onclick="toggleNotifPref('morning', this)">Off</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">A morning nudge at 9AM to start your descent.</div>
+
+    <div class="setting-label"><span>Void Reaper Warning</span><button class="toggle-btn on" id="notif-toggle-void" aria-pressed="true" onclick="toggleNotifPref('void', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Warned when the Void Reaper is about to expire.</div>
+
+    <div class="setting-label"><span>Comeback Reminder</span><button class="toggle-btn on" id="notif-toggle-comeback" aria-pressed="true" onclick="toggleNotifPref('comeback', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Reminded if you haven't played in 48 hours.</div>
+
+    <div class="setting-label"><span>Seasonal Events</span><button class="toggle-btn on" id="notif-toggle-events" aria-pressed="true" onclick="toggleNotifPref('events', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Halloween, Christmas, July 4th, Brazil Day, Valentine's, and more.</div>
+
+    <div class="setting-label"><span>Ambush Day</span><button class="toggle-btn on" id="notif-toggle-ambush" aria-pressed="true" onclick="toggleNotifPref('ambush', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Warned when Ambush Day begins (4x per year).</div>
+
+    <div class="setting-label"><span>Friday the 13th</span><button class="toggle-btn on" id="notif-toggle-friday13" aria-pressed="true" onclick="toggleNotifPref('friday13', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 24px 0;">Notified when Friday the 13th arrives.</div>
+
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:var(--gold-dim);letter-spacing:0.1em;margin-bottom:12px;margin-top:8px;">WEEKLY EVENTS</div>
+
+    <div class="setting-label"><span>XP Weekend</span><button class="toggle-btn on" id="notif-toggle-xpweekend" aria-pressed="true" onclick="toggleNotifPref('xpweekend', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Notified every Saturday — double XP all weekend.</div>
+
+    <div class="setting-label"><span>Void Week</span><button class="toggle-btn on" id="notif-toggle-voidweek" aria-pressed="true" onclick="toggleNotifPref('voidweek', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Notified every Monday — double gold, stronger enemies.</div>
+
+    <div class="setting-label"><span>Blood Moon</span><button class="toggle-btn on" id="notif-toggle-bloodmoon" aria-pressed="true" onclick="toggleNotifPref('bloodmoon', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Notified on the 1st of each month — higher risk, higher reward.</div>
+
+    <div class="setting-label"><span>Architect Week</span><button class="toggle-btn on" id="notif-toggle-architect" aria-pressed="true" onclick="toggleNotifPref('architect', this)">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 24px 0;">Notified on the 8th of each month — bonus XP and unique encounters.</div>
+
+    <button class="btn-ghost" onclick="rescheduleNotifications()" style="width:100%;padding:12px;font-family:'Cinzel',serif;font-size:0.75rem;" aria-label="Save and reschedule notifications">Save &amp; Apply Changes</button>
+  </div>
+</div>
+
 <div class="settings-panel" id="settings-panel-beta" role="dialog" aria-modal="true" aria-label="Beta Features">
   <div class="settings-panel-wrap">
     <button class="settings-back" onclick="closeSettingsPanel('beta')" aria-label="Back to settings">← Back</button>
@@ -7868,7 +7930,7 @@ var DDStore = (function() {
     </div>
     <div class="setting-div"></div>
     <div class="setting-row">
-      <div class="setting-label"><span>Shake to Attack</span><button class="toggle-btn" id="shake-toggle" aria-pressed="false" onclick="toggleShakeAttack(); var b=document.getElementById('shake-toggle'); b.textContent=_shakeEnabled?'On':'Off'; b.classList.toggle('on',_shakeEnabled); b.setAttribute('aria-pressed',String(_shakeEnabled));" aria-label="Shake to attack toggle">Off</button></div>
+      <div class="setting-label"><span>Shake to Attack</span><button class="toggle-btn" id="shake-toggle" aria-pressed="false" onclick="toggleShakeAttack();" aria-label="Shake to attack toggle">Off</button></div>
     </div>
     <div style="padding:14px 0;">
       <div style="font-family:'Cinzel',serif;font-size:0.72rem;color:var(--gold-dim);letter-spacing:0.2em;margin-bottom:10px;">🎵 CUSTOM TRACK</div>
@@ -8124,9 +8186,18 @@ function rnd(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
 function ri(a, b) { return rnd(a, b); }
 
 function _saySR(msg) {
+  // Always update aria-live region — works on web, JAWS, and as fallback
   var el = document.getElementById('aria-announce');
   el.textContent = '';
   setTimeout(function() { el.textContent = msg; }, 60);
+  // Additionally use native ScreenReader.speak() on Capacitor iOS if VoiceOver is active
+  // This is more reliable than aria-live for native apps
+  if (window.Capacitor && _screenReaderActive && Capacitor.Plugins && Capacitor.Plugins.ScreenReader) {
+    try {
+      var srLang = (_translationLang === 'pt-BR') ? 'pt' : (_translationLang === 'es') ? 'es' : 'en';
+      Capacitor.Plugins.ScreenReader.speak({ value: msg, language: srLang });
+    } catch(e) {}
+  }
 }
 
 //═════════════════
@@ -8912,6 +8983,7 @@ function goTo(id) {
   if (!el) { console.error('goTo: screen not found: screen-' + id); return; }
   el.classList.add('active');
   if (id !== 'mine') el.scrollTop = 0;
+  window.scrollTo(0, 0); // iOS: reset page scroll on every screen transition
   // Defer heavy renders so the screen transition is immediate on iOS
   if (id === 'charlist') { setTimeout(function(){ renderCharList(); refreshDungeonUnlocks(); setTimeout(function(){ checkDungeonUnlockPopups(); }, 600); }, 50); }
   if (id === 'deathlog') setTimeout(function(){ renderDeathLog(); }, 50);
@@ -8937,6 +9009,7 @@ function goTo(id) {
     initStatusBar();
     initNetwork();
     initShakeToAttack();
+    initScreenReader();
     clearBadge();
     initBackButton(); // handle Android back button properly
     setTimeout(function(){ updateMenuEnemyCount(); }, 500);
@@ -10107,7 +10180,7 @@ function showDungeonUnlockedPopup(dungeonName) {
   document.getElementById('du-desc').textContent = info.desc;
   document.getElementById('du-details').textContent = info.details;
   ov.style.display = 'flex';
-  sfx('sfx-unlock');
+  sfx('sfx-unlock'); vibe(VIBE.bossKill);
   say('New dungeon unlocked! ' + dungeonName + '. ' + info.desc + ' ' + info.details);
   setTimeout(function(){ var btn = ov.querySelector('button'); if(btn) btn.focus(); }, 100);
 }
@@ -10698,7 +10771,7 @@ function showSubclassChoice() {
   });
 
   ov.style.display = 'flex';
-  say('Level 5 reached. Choose your subclass as a ' + DS.cls + '. Option 1: ' + options[0].name + '. ' + options[0].desc + '. Option 2: ' + options[1].name + '. ' + options[1].desc);
+  speakCritical('Level 5 reached. Choose your subclass as a ' + DS.cls + '. Option 1: ' + options[0].name + '. ' + options[0].desc + '. Option 2: ' + options[1].name + '. ' + options[1].desc);
   setTimeout(function(){ var btn = optEl.querySelector('button'); if(btn) btn.focus(); }, 100);
 }
 
@@ -13373,7 +13446,7 @@ function enterRoom() {
         }
         DS.inventory.push(lootItem);
         applyItem(lootItem);
-        sfx('sfx-loot');
+        sfx('sfx-loot'); vibe(VIBE.loot);
         // Lucky Descent — first loot of run is always rare
         if (DS._luckyDescent && !DS._luckyDescentUsed && lootItem.type === 'weapon') {
           DS._luckyDescentUsed = true;
@@ -13621,7 +13694,7 @@ function advanceFloor() {
   addRunLog('Descended to floor ' + DS.floor, 'info');
   trackGlobalStat('totalFloors', 1);
   setGlobalStatMax('bestFloor', DS.floor);
-  sfx('sfx-stairs');
+  sfx('sfx-stairs'); vibe(VIBE.loot);
   say('Floor ' + DS.floor + ' of 10. You reach the stairs. A merchant waits in the passage. Shop open.');
   setEvent('good', 'You find the stairs down. The cold deepens. A hooded figure crouches nearby, wares spread on a cloth.');
   updateTopBar();
@@ -15194,7 +15267,7 @@ function handleDeath() {
     DS.inCombat = false;
     showDgPanels(true, false, false);
     setEvent('danger', 'Death took you — but your soul clings to this world. You awaken, weakened. Lives remaining: ' + DS.lives + '.');
-    say('You died. ' + DS.lives + ' life remaining. Restored to 40 percent health.');
+    speakCritical('You died. ' + DS.lives + ' life remaining. Restored to 40 percent health.');
     updateTopBar();
   }
   } catch(err) {
@@ -15871,21 +15944,30 @@ function useItem(i) {
     if (DS.inCombat) { say("Cannot gamble during combat."); return; }
     DS._gamblersUsed = true;
     DS.inventory.splice(i, 1);
-    // Ask player: double or halve?
-    var choice = confirm("Gambler's Spirit — choose your fate!\n\nOK = Double your gold (" + DS.gold + " → " + (DS.gold*2) + ")\nCancel = Halve your gold (" + DS.gold + " → " + Math.floor(DS.gold/2) + ")\n\nNo refunds. The dice decide nothing here — only you.");
-    if (choice) {
-      DS.gold = DS.gold * 2;
-      addLog("🎲 Gambler's Spirit — DOUBLED! " + DS.gold + " gold!");
-      say("Gambler's Spirit. You doubled your gold. " + DS.gold + " gold.");
-      setEvent('good', "🎲 Gambler's Spirit — Fortune smiles. Gold doubled!");
-    } else {
-      DS.gold = Math.floor(DS.gold / 2);
-      addLog("🎲 Gambler's Spirit — HALVED. " + DS.gold + " gold.");
-      say("Gambler's Spirit. You halved your gold. " + DS.gold + " gold.");
-      setEvent('danger', "🎲 Gambler's Spirit — The dice were cruel. Gold halved.");
-    }
-    updateTopBar();
-    renderInv(); saveProgress();
+    // Ask player: double or halve? — use accessible modal instead of confirm()
+    var doubleAmt = DS.gold * 2;
+    var halveAmt = Math.floor(DS.gold / 2);
+    showChoiceModal(
+      "🎲 Gambler's Spirit — Choose Your Fate",
+      "Double your gold (" + DS.gold + " → " + doubleAmt + "g) or halve it (" + DS.gold + " → " + halveAmt + "g). No refunds.",
+      [
+        { label: "Double (" + doubleAmt + "g)", action: function() {
+          DS.gold = doubleAmt;
+          addLog("🎲 Gambler's Spirit — DOUBLED! " + DS.gold + " gold!");
+          say("Gambler's Spirit. You doubled your gold. " + DS.gold + " gold.");
+          setEvent('good', "🎲 Gambler's Spirit — Fortune smiles. Gold doubled!");
+          updateTopBar(); saveProgress();
+        }},
+        { label: "Halve (" + halveAmt + "g)", action: function() {
+          DS.gold = halveAmt;
+          addLog("🎲 Gambler's Spirit — HALVED. " + DS.gold + " gold.");
+          say("Gambler's Spirit. You halved your gold. " + DS.gold + " gold.");
+          setEvent('danger', "🎲 Gambler's Spirit — The dice were cruel. Gold halved.");
+          updateTopBar(); saveProgress();
+        }}
+      ]
+    );
+    renderInv();
     return;
   } else {
     say(item.name + '. ' + item.desc + ' This item is passive and already active.');
@@ -16595,7 +16677,7 @@ function showVictory() {
   var rsBtn = document.getElementById('rs-continue-journey-btn');
   if (rsBtn) rsBtn.style.display = '';
 
-  say('Victory! You completed ' + (DS.dungeon||'the dungeon') + '. ' + DS.kills + ' enemies slain. ' + DS.gold + ' gold collected. Choose Continue to go to the next dungeon or New Game Plus to replay this one.');
+  speakCritical('Victory! You completed ' + (DS.dungeon||'the dungeon') + '. ' + DS.kills + ' enemies slain. ' + DS.gold + ' gold collected. Choose Continue to go to the next dungeon or New Game Plus to replay this one.');
   setTimeout(function() {
     var btn = document.getElementById('dg-ngplus-btn');
     if (btn) { btn.setAttribute('tabindex','0'); btn.focus(); }
@@ -17097,7 +17179,7 @@ function buyItem(i) {
   }
   DS.gold -= finalCost; spendGlobalGold(finalCost);
   item.sold = true;
-  sfx('sfx-purchase');
+  sfx('sfx-purchase'); vibe(VIBE.shopBuy);
 
   if (item.type === 'potion') {
     DS.inventory.push({ name:item.name, icon:item.icon, type:'potion', heal:item.heal, desc:item.desc });
@@ -17210,7 +17292,7 @@ function renderShopSell() {
       if (totalSells >= 1) awardAchievement('ach-first-sale');
       if (totalSells >= 5) awardAchievement('ach-merchant');
       if (totalSells >= 20) awardAchievement('ach-black-market');
-      sfx('sfx-purchase');
+      sfx('sfx-purchase'); vibe(VIBE.shopBuy);
       say('Sold ' + item.name + ' for ' + price + ' gold. You now have ' + DS.gold + ' gold.');
       document.getElementById('shop-gold-display').textContent = 'Your gold: ' + DS.gold + 'g';
       renderShopSell();
@@ -17231,7 +17313,7 @@ function refreshShopItems() {
   var cost = 50;
   if (DS.gold < cost) { say('Not enough gold. Refresh costs 50 gold.'); sfx('sfx-select'); return; }
   DS.gold -= cost;
-  sfx('sfx-purchase');
+  sfx('sfx-purchase'); vibe(VIBE.shopBuy);
   // Rebuild shop session with new items
   var baseStock = DS.dungeon === 'The Ashbound Wastes' ? ASH_SHOP_STOCK
                 : DS.dungeon === 'Frosthold Abyss'       ? FROST_SHOP_STOCK
@@ -17253,6 +17335,27 @@ function refreshShopItems() {
   var msg = document.getElementById('shop-msg');
   if (msg) msg.textContent = 'Shop refreshed! 50 gold spent.';
   say('Shop refreshed. New items available. 50 gold spent. You have ' + DS.gold + ' gold remaining.');
+}
+
+function getShopDiscount() {
+  var disc = 0;
+  // Night time: 25% off
+  if (isNightTime()) disc += 0.25;
+  // Dwarf race: 10% shop discount
+  if (DS && DS.race === 'Dwarf') disc += 0.10;
+  // Market Sprite spirit: 20% discount
+  if (DS && DS.activeSpirit && DS.activeSpirit.isMarketSprite) disc += 0.20;
+  // Blacksmith stored discount (from Time Eater reward, reward codes, etc.)
+  try {
+    var bsRaw = DDStore ? DDStore.getItem('dd_blacksmith_discount') : null;
+    if (bsRaw) {
+      var bsData = JSON.parse(bsRaw);
+      if (bsData && bsData.pct && (!bsData.expires || Date.now() < bsData.expires)) {
+        disc += bsData.pct;
+      }
+    }
+  } catch(e) {}
+  return Math.min(disc, 0.75); // cap at 75% off
 }
 
 function renderShopItems() {
@@ -17541,7 +17644,7 @@ function getRaidTier() {
 
 function raidVictory(){
   RD.done=true;
-  playTrack('raid-victory'); sfx('sfx-victory');
+  playTrack('raid-victory'); sfx('sfx-victory'); vibe(VIBE.bossKill);
   var data=getRaidSave();
   data.completedDate=todayKey();
   data.totalRaidsWon = (data.totalRaidsWon||0) + 1;
@@ -21715,7 +21818,7 @@ function vrVictory(isKillingBlow) {
     var btn = document.querySelector('#screen-void-reaper-victory .menu-btn');
     if (btn) btn.focus();
   }, 200);
-  say('Victory! The Void Reaper has been defeated! You earned ' + VR_GOLD_REWARD.toLocaleString() + ' gold and ' + VR_COIN_REWARD + ' Mystery Coins. The dungeons are safe. For now.');
+  speakCritical('Victory! The Void Reaper has been defeated! You earned ' + VR_GOLD_REWARD.toLocaleString() + ' gold and ' + VR_COIN_REWARD + ' Mystery Coins. The dungeons are safe. For now.');
 
   // Start new cycle after 10 seconds
   setTimeout(function() { vrRestartCycle(); }, 10000);
@@ -29133,7 +29236,7 @@ var DUNGEON_EVENTS = [
           if(DS.hp<=0) handleDeath();
         } else {
           var g=rnd(15,35); DS.gold+=g; addGlobalGold(g);
-          sfx('sfx-loot'); updateTopBar();
+          sfx('sfx-loot'); vibe(VIBE.loot); updateTopBar();
           setEvent('good','The chest contains '+g+' gold and something that smells like old paper.');
           say('Found '+g+' gold in the chest.');
           updateDailyQuestProgress('gold',g);
@@ -29998,8 +30101,64 @@ function getVictoryQuote() {
 //═════════════════
 // SETTINGS NAVIGATION
 //═════════════════
+// Generic accessible choice modal — replaces confirm() dialogs throughout the game
+function showChoiceModal(title, body, options) {
+  // Remove any existing modal
+  var existing = document.getElementById('dd-choice-modal');
+  if (existing) existing.remove();
+
+  var overlay = document.createElement('div');
+  overlay.id = 'dd-choice-modal';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', title);
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;';
+
+  var box = document.createElement('div');
+  box.style.cssText = 'background:#0a0500;border:1px solid #663300;padding:24px;max-width:340px;width:100%;';
+
+  var h = document.createElement('div');
+  h.style.cssText = 'font-family:Cinzel,serif;font-size:0.9rem;color:#ff8844;margin-bottom:12px;';
+  h.textContent = title;
+
+  var p = document.createElement('div');
+  p.style.cssText = 'font-family:Cinzel,serif;font-size:0.75rem;color:#888;margin-bottom:20px;line-height:1.5;';
+  p.textContent = body;
+
+  box.appendChild(h);
+  box.appendChild(p);
+
+  say(title + '. ' + body);
+
+  options.forEach(function(opt, i) {
+    var btn = document.createElement('button');
+    btn.style.cssText = 'width:100%;padding:12px;background:#1a0800;border:1px solid #663300;color:#ffaa44;font-family:Cinzel,serif;font-size:0.75rem;cursor:pointer;margin-bottom:8px;display:block;';
+    btn.textContent = opt.label;
+    btn.setAttribute('aria-label', opt.label);
+    btn.onclick = function() {
+      overlay.remove();
+      if (opt.action) opt.action();
+    };
+    box.appendChild(btn);
+    if (i === 0) setTimeout(function(){ btn.focus(); }, 50);
+  });
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+}
+
 function openSettings() {
   document.getElementById('settings-screen').classList.add('open');
+  // Hide notification settings on web — only relevant on native app
+  var notifBtn = document.getElementById('btn-settings-notifications');
+  if (notifBtn) notifBtn.style.display = window.Capacitor ? '' : 'none';
+  // Sync shake toggle to actual saved state
+  var shakeBtn = document.getElementById('shake-toggle');
+  if (shakeBtn) {
+    shakeBtn.textContent = _shakeEnabled ? 'On' : 'Off';
+    shakeBtn.classList.toggle('on', _shakeEnabled);
+    shakeBtn.setAttribute('aria-pressed', String(_shakeEnabled));
+  }
   say(t('⚙ Settings') + '. ' + t('Choose a category to customize your experience.'));
   setTimeout(function() {
     var first = document.querySelector('#settings-screen .settings-cat-btn');
@@ -30019,6 +30178,7 @@ function closeSettings() {
 
 function openSettingsPanel(panel) {
   if (panel === 'beta') updateBetaPanel();
+  if (panel === 'notifications') syncNotifToggleUI();
   var el = document.getElementById('settings-panel-' + panel);
   if (el) el.classList.add('open');
   var names = { audio: 'Audio', language: 'Language', accessibility: 'Accessibility', gameplay: 'Gameplay', account: 'Account', dev: 'Developer Tools' };
@@ -33515,6 +33675,15 @@ function skipToMain() {
   if (el) el.focus();
   say('Main menu.');
 }
+
+// Remove skip nav from DOM entirely on Capacitor — VoiceOver on native doesn't need it
+// and it causes accidental Dynamic Island focus when swiping left from the top
+(function() {
+  if (window.Capacitor) {
+    var skipNav = document.getElementById('skip-nav');
+    if (skipNav) skipNav.parentNode.removeChild(skipNav);
+  }
+})();
 
 // ── MANUAL SAVE ──
 function manualSave() {
@@ -37047,10 +37216,19 @@ function buildRunSummary(isVictory) {
     (isVictory ? ' New Game Plus is available.' : '');
   say(jaws);
 
-  // Play music for run summary
+  // Play music for run summary — clean cut from combat, brief silence, then summary music
   try {
     stopAmbient();
-    playTrack(isVictory ? 'raid-victory' : getMenuTrack());
+    // Hard stop combat music immediately
+    if (AUD && AUD.currentSource) {
+      try { AUD.currentSource.stop(); } catch(e) {}
+      AUD.currentSource = null;
+    }
+    AUD.current = '';
+    // Brief silence (1.2s) then start summary music — feels intentional, not glitchy
+    setTimeout(function() {
+      playTrack(isVictory ? 'raid-victory' : getMenuTrack());
+    }, 1200);
   } catch(e) {}
 
   } catch(e) { console.error('[DD] buildRunSummary crashed:', e.message); }
@@ -38588,21 +38766,55 @@ function applyHeadingsIfEnabled() {
 //═════════════════
 // FIRST LAUNCH SCREEN READER PROMPT
 //═════════════════
-function checkSRPrompt() {
+async function checkSRPrompt() {
   // Only show once ever
   if (DDStore.getItem('dd_sr_prompt_seen')) return;
+
+  // On Capacitor — we KNOW if VoiceOver is on, so don't ask
+  if (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.ScreenReader) {
+    try {
+      var result = await Capacitor.Plugins.ScreenReader.isEnabled();
+      var voiceOverOn = !!(result && result.value);
+
+      if (voiceOverOn) {
+        // VoiceOver is ON — show a tailored prompt
+        setTimeout(function() {
+          var el = document.getElementById('sr-prompt');
+          if (!el) return;
+          // Update text for Capacitor/VoiceOver context
+          document.getElementById('sr-prompt-title').textContent = 'VoiceOver Detected';
+          el.querySelector('p').textContent = 'We detected you are using VoiceOver. Would you like to enable all accessibility features for the best experience?';
+          el.querySelector('[onclick="srPromptYes()"]').textContent = 'Yes — Enable Accessibility Features';
+          el.querySelector('[onclick="srPromptNo()"]').textContent = 'No — Continue as is';
+          el.style.display = 'flex';
+          setTimeout(function() {
+            say('VoiceOver detected. Would you like to enable all accessibility features? Press the first button for yes, second button for no.');
+            var btn = el.querySelector('button');
+            if (btn) btn.focus();
+          }, 500);
+        }, 2000);
+      } else {
+        // VoiceOver is OFF on Capacitor — skip the prompt entirely
+        DDStore.setItem('dd_sr_prompt_seen', '1');
+      }
+      return;
+    } catch(e) {
+      // Fall through to web prompt if plugin fails
+    }
+  }
+
+  // Web — can't detect screen reader, so ask the user
   setTimeout(function() {
     var el = document.getElementById('sr-prompt');
     if (el) {
       el.style.display = 'flex';
-      // Give JAWS time to pick up the dialog
       setTimeout(function() {
         say('Welcome to Dungeon Descent. Are you using a screen reader? Press the first button to enable all accessibility features, or the second button to continue without them.');
         var btn = el.querySelector('button');
         if (btn) btn.focus();
       }, 500);
     }
-  }, 2000); // Show after loading screen
+  }, 2000);
 }
 
 function srPromptYes() {
@@ -41202,6 +41414,7 @@ function checkOfflineProgress() {
 
   // Show popup
   setTimeout(function() {
+    window.scrollTo(0, 0); // iOS: must be at top for fixed positioning to work
     var ov = document.getElementById('ov-offline-progress');
     if (!ov) {
       ov = document.createElement('div');
@@ -41209,19 +41422,22 @@ function checkOfflineProgress() {
       ov.setAttribute('role', 'dialog');
       ov.setAttribute('aria-modal', 'true');
       ov.setAttribute('aria-label', 'Offline progress');
-      ov.style.cssText = 'display:flex;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:9999;align-items:center;justify-content:center;padding:24px;';
-      ov.innerHTML =
-        '<div style="max-width:380px;width:100%;background:#0a0800;border:1px solid var(--gold-dim);padding:24px;text-align:center;">' +
-        msg +
-        '<button onclick="document.getElementById(\'ov-offline-progress\').style.display=\'none\';" ' +
-        'style="margin-top:16px;width:100%;padding:12px;background:#1a1000;border:2px solid var(--gold);color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;cursor:pointer;" ' +
-        'aria-label="Continue">Continue →</button>' +
-        '</div>';
+      ov.style.cssText = 'display:flex;position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:99999;align-items:center;justify-content:center;padding:24px;box-sizing:border-box;';
       document.body.appendChild(ov);
     } else {
-      ov.querySelector('div').innerHTML = msg + '<button onclick="document.getElementById(\'ov-offline-progress\').style.display=\'none\';" style="margin-top:16px;width:100%;padding:12px;background:#1a1000;border:2px solid var(--gold);color:var(--gold);font-family:Cinzel,serif;font-size:0.75rem;cursor:pointer;">Continue →</button>';
       ov.style.display = 'flex';
     }
+    ov.innerHTML =
+      '<div style="max-width:380px;width:100%;background:#0a0800;border:1px solid var(--gold-dim);padding:24px;text-align:center;">' +
+      msg +
+      '<button onclick="document.getElementById(\'ov-offline-progress\').style.display=\'none\';" ' +
+      'style="margin-top:16px;width:100%;padding:14px;background:#1a1000;border:2px solid var(--gold);color:var(--gold);font-family:Cinzel,serif;font-size:0.85rem;cursor:pointer;" ' +
+      'aria-label="Continue">Continue →</button>' +
+      '</div>';
+    setTimeout(function() {
+      var btn = ov.querySelector('button');
+      if (btn) btn.focus();
+    }, 100);
     say('Welcome back. ' + ch.name + ' rested for ' + hoursText + '. You earned ' + goldEarned + ' gold and ' + killsEarned + ' kills while away.');
   }, 2000);
 }
@@ -42445,8 +42661,19 @@ function mineSurface(defeated) {
 
 function mineExit() {
   if (_mineState.active && _mineState.hand.length > 0) {
-    if (!confirm('Surface first to collect your items. Leave anyway and lose hand items?')) return;
-    _mineState.hand = [];
+    showChoiceModal(
+      '⚠ Leave the Mine?',
+      'You still have items in your hands. Leave now and lose them, or surface first to keep them.',
+      [
+        { label: 'Leave (lose items)', action: function() {
+          _mineState.hand = [];
+          _mineState.active = false;
+          goTo('menu');
+        }},
+        { label: 'Stay in mine', action: function() { /* do nothing */ } }
+      ]
+    );
+    return;
   }
   _mineState.active = false;
   goTo('menu');
@@ -43801,6 +44028,7 @@ function afkShowSummary() {
   }
 
   goTo('afk-summary');
+  window.scrollTo(0, 0);
   say('Run ended. Floor ' + AFK.floor + ' reached. Level ' + AFK.level + '. ' + AFK.levelsGainedThisRun + ' levels gained. ' + AFK.points + ' descent points earned. Your progress is saved and carries into all game modes.');
   stopAmbient();
   playTrack(getMenuTrack());
@@ -45131,34 +45359,35 @@ function importSaveCode() {
     
     // Show confirmation
     var keyCount = Object.keys(data).length;
-    if (!confirm('This will overwrite your current save with ' + keyCount + ' data entries. Are you sure?')) {
-      say('Import cancelled.');
-      return;
-    }
-    
-    // Import all keys
-    var imported = 0;
-    for (var k in data) {
-      if (k.startsWith('dd_')) {
-        DDStore.setItem(k, data[k]);
-        imported++;
-      }
-    }
-    
-    // Try to sync to Firebase if signed in
-    if (typeof syncToCloud === 'function') {
-      syncToCloud();
-    }
-    
-    if (result) { result.style.color = '#44ff88'; result.textContent = imported + ' entries imported successfully.'; }
-    say(imported + ' save entries imported successfully. Reloading your data now.');
-    
-    // Reload key game data
-    loadChars();
-    loadHighScore();
-    updateGlobalGoldDisplay();
+    showChoiceModal(
+      '⚠ Import Save Data?',
+      'This will overwrite your current save with ' + keyCount + ' data entries. This cannot be undone.',
+      [
+        { label: 'Import and overwrite', action: function() {
+          // Import all keys
+          var imported = 0;
+          for (var k in data) {
+            if (k.startsWith('dd_')) {
+              DDStore.setItem(k, data[k]);
+              imported++;
+            }
+          }
+
+          // Try to sync to Firebase if signed in
+          if (typeof syncToCloud === 'function') syncToCloud();
+
+          var result = document.getElementById('import-result');
+          if (result) { result.style.color = '#44ff88'; result.textContent = imported + ' entries imported successfully.'; }
+          say(imported + ' save entries imported. Reloading your data now.');
+          loadChars(); loadHighScore(); updateGlobalGoldDisplay();
+        }},
+        { label: 'Cancel', action: function() { say('Import cancelled.'); } }
+      ]
+    );
+    return;
     
   } catch(e) {
+    var result = document.getElementById('import-result');
     if (result) { result.style.color = '#ff4444'; result.textContent = 'Import failed — invalid code.'; }
     say('Import failed. The code may be corrupted or invalid.');
     console.error('Import error:', e);
@@ -45942,6 +46171,7 @@ function doFightMulti(action) {
     var _multiSwiftGuarantee = (DS._swiftPotion && DS._swiftPotion > 0) || DS._runeSpeed;
     if (DS._swiftPotion && DS._swiftPotion > 0) DS._swiftPotion--;
     if (_multiSwiftGuarantee || Math.random() < 0.4) {
+      vibe(VIBE.fleeSuccess);
       endMultiCombat(false, true);
     } else {
       addLog('Escape failed! The enemies block your path.');
@@ -45969,7 +46199,13 @@ var _selectingTarget = false;
 function showTargetSelector() {
   var sel = document.getElementById('dg-target-select');
   var btnContainer = document.getElementById('dg-target-btns');
-  if (!sel || !btnContainer) return;
+  if (!sel || !btnContainer) {
+    // UI element missing — recover by re-enabling buttons instead of freezing
+    console.warn('[DD] Target selector UI missing — recovering');
+    setCombatBtns(true);
+    _pendingAction = null;
+    return;
+  }
 
   sel.style.display = '';
   btnContainer.innerHTML = '';
@@ -45996,7 +46232,7 @@ function showTargetSelector() {
 
   // Focus first target
   setTimeout(function(){ var first = btnContainer.querySelector('button'); if (first) first.focus(); }, 50);
-  say('Choose your target. ' + _multiEnemies.map(function(e){ return e.name + ' ' + e.hp + ' HP'; }).join(', '));
+  say('Choose your target. ' + aliveEnemies.map(function(e){ return e.name + ' ' + e.hp + ' HP'; }).join(', '));
 }
 
 function hideTargetSelector() {
@@ -46109,9 +46345,13 @@ function multiEnemiesTakeTurns() {
   setCombatBtns(false);
 
   var delay = 0;
-  _multiEnemies.forEach(function(e) {
+  var snapshot = _multiEnemies.slice(); // snapshot so splice during combat doesn't affect turns
+  snapshot.forEach(function(e) {
     setTimeout(function() {
+      // Abort if combat ended or player already dead
       if (!_multiCombatActive || DS.hp <= 0) return;
+      // Skip if this enemy was already defeated
+      if (e.hp <= 0) return;
       var rawDmg = rnd(e.atk[0], e.atk[1]);
       rawDmg = applyEnemyMechanicsOnTurn(e, rawDmg);
       var def = (DS.defBonus || 0) + (DS.equippedArmorDef || 0);
@@ -46122,7 +46362,7 @@ function multiEnemiesTakeTurns() {
       addLog(e.name + ' hits you for ' + dmg + (DS.defending ? ' (defended)' : '') + '. Your HP: ' + DS.hp + '.');
 
       if (DS.hp <= 0) {
-        endMultiCombat(false, false);
+        if (_multiCombatActive) endMultiCombat(false, false); // only call once
         return;
       }
     }, delay);
@@ -48175,7 +48415,16 @@ DDStore.whenReady().then(function() {
   var _audioLoaded = false;
   function initAudio() {
     initWebAudio(); // Must run first so GainNode exists before music starts
-    if (!_audioLoaded) { _audioLoaded = true; loadAudio(); }
+    if (!_audioLoaded) {
+      _audioLoaded = true;
+      loadAudio();
+      // Start menu music immediately on first touch — don't wait for goTo
+      setTimeout(function() {
+        if (AUD && AUD.musicOn && (!AUD.current || AUD.current === '')) {
+          try { playTrack(getMenuTrack()); } catch(e) {}
+        }
+      }, 300);
+    }
   }
   document.addEventListener('click', initAudio, { once: true });
   document.addEventListener('keydown', initAudio, { once: true });
@@ -48214,7 +48463,8 @@ DDStore.whenReady().then(function() {
   if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
     window.Capacitor.Plugins.App.addListener('appStateChange', function(state) {
       if (state.isActive) {
-        if (AUD.ctx && AUD.ctx.state === 'suspended') {
+        // App came to foreground — resume audio context and restart music
+        if (AUD && AUD.ctx && AUD.ctx.state === 'suspended') {
           AUD.ctx.resume().then(function() {
             if (AUD.musicOn && AUD.current && !AUD.currentSource) {
               var cur = AUD.current;
@@ -48223,6 +48473,28 @@ DDStore.whenReady().then(function() {
             }
           }).catch(function() {});
         }
+      } else {
+        // App went to background — stop all audio immediately
+        // Stop music source
+        if (AUD) {
+          if (AUD.currentSource) {
+            try { AUD.currentSource.stop(); } catch(e) {}
+            AUD.currentSource = null;
+          }
+          // Suspend audio context to free resources
+          if (AUD.ctx && AUD.ctx.state === 'running') {
+            AUD.ctx.suspend().catch(function() {});
+          }
+        }
+        // Stop ambient
+        try { stopAmbient(); } catch(e) {}
+        // Stop hunter music if running
+        try { stopHunterMusic(); } catch(e) {}
+        // Stop any looping HTML audio elements
+        try {
+          if (window._hunterMusicEl) { _hunterMusicEl.pause(); }
+          if (window._heartbeatEl) { _heartbeatEl.pause(); }
+        } catch(e) {}
       }
     });
   }
@@ -49230,10 +49502,12 @@ function spireReturnToMenu() {
 
 <!-- AFK SUMMARY SCREEN -->
 <div id="screen-afk-summary" class="screen" role="main" aria-label="Endless Descent run summary">
-  <div style="max-width:380px;margin:0 auto;padding:40px 16px;text-align:center;">
+  <div style="max-width:380px;margin:0 auto;padding:40px 16px 120px 16px;text-align:center;width:100%;">
     <div style="font-size:2rem;margin-bottom:12px;">⬇</div>
     <h2 style="font-family:'Cinzel Decorative',cursive;font-size:1rem;color:#8888ff;margin-bottom:16px;">The Descent Ends</h2>
-    <div id="afk-summary-content" aria-live="polite" style="font-family:'Cinzel',serif;font-size:0.8rem;color:#aaa;line-height:2;margin-bottom:24px;"></div>
+    <div id="afk-summary-content" aria-live="polite" style="font-family:'Cinzel',serif;font-size:0.8rem;color:#aaa;line-height:2;margin-bottom:24px;text-align:left;"></div>
+  </div>
+  <div style="position:sticky;bottom:0;left:0;right:0;padding:16px;background:#050505;border-top:1px solid #1a1a1a;">
     <button data-lang="Descend Again" class="menu-btn primary" onclick="goTo('afk-setup')" aria-label="Descend again" style="width:100%;margin-bottom:8px;">⬇ Descend Again</button>
     <button data-lang="Main Menu" class="menu-btn" onclick="goTo('menu')" aria-label="Return to main menu" style="width:100%;">← Main Menu</button>
   </div>
@@ -49679,72 +49953,128 @@ async function requestNotificationPermission() {
   } catch(e) { return false; }
 }
 
+// ── NOTIFICATION PREFERENCES ──
+var _notifPrefs = null;
+
+function getNotifPrefs() {
+  if (_notifPrefs) return _notifPrefs;
+  try {
+    var raw = DDStore.getItem('dd_notif_prefs');
+    _notifPrefs = raw ? JSON.parse(raw) : {};
+  } catch(e) { _notifPrefs = {}; }
+  // defaults — everything on except morning
+  var defaults = { daily:1, streak:1, night:1, morning:0, void:1, comeback:1, events:1, ambush:1, friday13:1, xpweekend:1, voidweek:1, bloodmoon:1, architect:1 };
+  for (var k in defaults) { if (_notifPrefs[k] === undefined) _notifPrefs[k] = defaults[k]; }
+  return _notifPrefs;
+}
+
+function saveNotifPrefs() {
+  try { DDStore.setItem('dd_notif_prefs', JSON.stringify(_notifPrefs)); } catch(e) {}
+}
+
+function toggleNotifPref(key, btn) {
+  var prefs = getNotifPrefs();
+  prefs[key] = prefs[key] ? 0 : 1;
+  saveNotifPrefs();
+  var on = !!prefs[key];
+  btn.textContent = on ? 'On' : 'Off';
+  btn.classList.toggle('on', on);
+  btn.setAttribute('aria-pressed', String(on));
+  say(key + ' notifications ' + (on ? 'enabled' : 'disabled') + '.');
+}
+
+function syncNotifToggleUI() {
+  var prefs = getNotifPrefs();
+  var map = { daily:'notif-toggle-daily', streak:'notif-toggle-streak', night:'notif-toggle-night',
+              morning:'notif-toggle-morning', void:'notif-toggle-void', comeback:'notif-toggle-comeback',
+              events:'notif-toggle-events', ambush:'notif-toggle-ambush', friday13:'notif-toggle-friday13',
+              xpweekend:'notif-toggle-xpweekend', voidweek:'notif-toggle-voidweek',
+              bloodmoon:'notif-toggle-bloodmoon', architect:'notif-toggle-architect' };
+  for (var k in map) {
+    var btn = document.getElementById(map[k]);
+    if (!btn) continue;
+    var on = !!prefs[k];
+    btn.textContent = on ? 'On' : 'Off';
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', String(on));
+  }
+}
+
+async function rescheduleNotifications() {
+  _notifScheduled = false;
+  await scheduleAllNotifications();
+  say('Notification preferences saved and applied.');
+  setEvent('good', '🔔 Notification preferences saved.');
+}
+
 async function scheduleAllNotifications() {
   try {
     if (!window.Capacitor || !Capacitor.Plugins || !Capacitor.Plugins.LocalNotifications) return;
     var granted = await requestNotificationPermission();
     if (!granted) return;
 
-    // Cancel all existing so we don't stack duplicates
-    await Capacitor.Plugins.LocalNotifications.cancel({ notifications: [] });
+    // Cancel all known notification IDs — empty array does nothing on iOS
+    var knownIds = [];
+    for (var _i = 1; _i <= 30; _i++) knownIds.push({ id: _i });
+    try { await Capacitor.Plugins.LocalNotifications.cancel({ notifications: knownIds }); } catch(e) {}
 
     var now = new Date();
     var notifications = [];
     var id = 1;
+    var prefs = getNotifPrefs();
 
-    // ── DAILY DUNGEON — fires at midnight every day
-    var midnight = new Date(now);
-    midnight.setDate(midnight.getDate() + 1);
-    midnight.setHours(0, 1, 0, 0);
-    notifications.push({
+    // ── DAILY DUNGEON — fires at 12:01 AM every day
+    if (prefs.daily) notifications.push({
       id: id++,
       title: '📅 A New Dungeon Awaits',
-      body: 'The dungeon has reset. A new challenge descends at midnight.',
-      schedule: { at: midnight, repeats: true, every: 'day' },
+      body: 'The dungeon has reset. A new challenge descends into the dark.',
+      schedule: { on: { hour: 0, minute: 1 }, repeats: true },
       sound: null, smallIcon: 'ic_launcher'
     });
 
     // ── DAILY STREAK REMINDER — fires at 7PM every day
-    var streakTime = new Date(now);
-    streakTime.setHours(19, 0, 0, 0);
-    if (streakTime <= now) streakTime.setDate(streakTime.getDate() + 1);
-    notifications.push({
+    if (prefs.streak) notifications.push({
       id: id++,
       title: '🔥 Your Streak Is Waiting',
-      body: 'Claim your daily descent reward before midnight or lose your streak.',
-      schedule: { at: streakTime, repeats: true, every: 'day' },
+      body: 'Claim your daily descent before midnight or lose your streak.',
+      schedule: { on: { hour: 19, minute: 0 }, repeats: true },
       sound: null, smallIcon: 'ic_launcher'
     });
 
     // ── NIGHT MODE — fires at 8PM every day
-    var nightStart = new Date(now);
-    nightStart.setHours(20, 0, 0, 0);
-    if (nightStart <= now) nightStart.setDate(nightStart.getDate() + 1);
-    notifications.push({
+    if (prefs.night) notifications.push({
       id: id++,
       title: '🌙 Night Mode Is Active',
-      body: 'Gold flows in the dark. +50% gold and cheaper shop prices until 8AM.',
-      schedule: { at: nightStart, repeats: true, every: 'day' },
+      body: '+50% gold and cheaper shop prices. The dark rewards the bold.',
+      schedule: { on: { hour: 20, minute: 0 }, repeats: true },
       sound: null, smallIcon: 'ic_launcher'
     });
 
-    // ── VOID REAPER WARNING — fires 14 hours after app open
+    // ── MORNING REMINDER — fires at 9AM every day
+    if (prefs.morning) notifications.push({
+      id: id++,
+      title: '⚔ The Dungeon Awaits',
+      body: 'A new day. New enemies. New loot. Descend.',
+      schedule: { on: { hour: 9, minute: 0 }, repeats: true },
+      sound: null, smallIcon: 'ic_launcher'
+    });
+
+    // ── VOID REAPER WARNING — fires 14 hours after app open (one-time)
     var voidTime = new Date(now.getTime() + (14 * 60 * 60 * 1000));
-    notifications.push({
+    if (prefs.void) notifications.push({
       id: id++,
       title: '🌑 The Void Reaper Stirs',
-      body: 'Two hours remain. Defeat the Void Reaper or face consequences.',
+      body: 'Two hours remain before the dungeon suffers. Defeat it or face consequences.',
       schedule: { at: voidTime },
       sound: null, smallIcon: 'ic_launcher'
     });
 
-    // ── COMEBACK — fires 48 hours after last open at 6PM
+    // ── COMEBACK — fires 48 hours after last open (one-time)
     var comeback = new Date(now.getTime() + (48 * 60 * 60 * 1000));
-    comeback.setHours(18, 0, 0, 0);
-    notifications.push({
+    if (prefs.comeback) notifications.push({
       id: id++,
       title: '⚔ The Dungeon Misses You',
-      body: 'Your streak is at risk. The darkness grows without you.',
+      body: 'Your streak is at risk. The darkness grows without a hero.',
       schedule: { at: comeback },
       sound: null, smallIcon: 'ic_launcher'
     });
@@ -49752,10 +50082,11 @@ async function scheduleAllNotifications() {
     // ── SEASONAL EVENTS ──
     var year = now.getFullYear();
 
+    // ── SEASONAL EVENTS wrapped in prefs.events
     // Halloween — October 25 at 9AM
     var halloween = new Date(year, 9, 25, 9, 0, 0);
     if (halloween <= now) halloween.setFullYear(year + 1);
-    notifications.push({
+    if (prefs.events) notifications.push({
       id: id++,
       title: '🎃 The Dungeon Grows Darker',
       body: 'Halloween has begun. Something ancient stirs in the crypt.',
@@ -49766,7 +50097,7 @@ async function scheduleAllNotifications() {
     // Christmas — December 20 at 9AM
     var christmas = new Date(year, 11, 20, 9, 0, 0);
     if (christmas <= now) christmas.setFullYear(year + 1);
-    notifications.push({
+    if (prefs.events) notifications.push({
       id: id++,
       title: '🎄 A Cursed Gift Awaits',
       body: 'Christmas descends on the dungeon. Festive enemies and rewards await.',
@@ -49777,7 +50108,7 @@ async function scheduleAllNotifications() {
     // Fourth of July — July 1 at 9AM
     var july4 = new Date(year, 6, 1, 9, 0, 0);
     if (july4 <= now) july4.setFullYear(year + 1);
-    notifications.push({
+    if (prefs.events) notifications.push({
       id: id++,
       title: '🎆 The Redcoats Invade',
       body: '76% bonus gold and XP all week. The Fourth of July event has begun.',
@@ -49788,11 +50119,127 @@ async function scheduleAllNotifications() {
     // Cinco de Mayo — May 5 at 9AM
     var cinco = new Date(year, 4, 5, 9, 0, 0);
     if (cinco <= now) cinco.setFullYear(year + 1);
-    notifications.push({
+    if (prefs.events) notifications.push({
       id: id++,
       title: '🌮 El Taco Blade Awaits',
       body: 'Cinco de Mayo is here. One day only — +50% XP and the El Taco Blade in the Blacksmith.',
       schedule: { at: cinco },
+      sound: null, smallIcon: 'ic_launcher'
+    });
+
+    // Brazil Independence Day — September 7 at 9AM
+    var brazil = new Date(year, 8, 7, 9, 0, 0);
+    if (brazil <= now) brazil.setFullYear(year + 1);
+    if (prefs.events) notifications.push({
+      id: id++,
+      title: '🇧🇷 Brasil Independente',
+      body: 'Brazil Independence Day. The dungeon flies the green and gold. Bonus gold and XP today.',
+      schedule: { at: brazil },
+      sound: null, smallIcon: 'ic_launcher'
+    });
+
+    // Valentine's Day — February 13 at 9AM
+    var valentines = new Date(year, 1, 13, 9, 0, 0);
+    if (valentines <= now) valentines.setFullYear(year + 1);
+    if (prefs.events) notifications.push({
+      id: id++,
+      title: '💘 The Heartbreaker Stirs',
+      body: "Valentine's Day event. Love is a curse. The Heartbreaker enemy has entered the dungeon.",
+      schedule: { at: valentines },
+      sound: null, smallIcon: 'ic_launcher'
+    });
+
+    // St. Patrick's Day — March 14 at 9AM
+    var stpatricks = new Date(year, 2, 14, 9, 0, 0);
+    if (stpatricks <= now) stpatricks.setFullYear(year + 1);
+    if (prefs.events) notifications.push({
+      id: id++,
+      title: "☘ The Luck o' the Dungeon",
+      body: "St. Patrick's Day. Extra gold drops and Lucky Potion available in the shop.",
+      schedule: { at: stpatricks },
+      sound: null, smallIcon: 'ic_launcher'
+    });
+
+    // Leo's Birthday — March 23 at 9AM (in-game birthday event)
+    var birthday = new Date(year, 2, 23, 9, 0, 0);
+    if (birthday <= now) birthday.setFullYear(year + 1);
+    if (prefs.events) notifications.push({
+      id: id++,
+      title: '🎂 The Dungeon Celebrates',
+      body: "It's the creator's birthday. A special gift awaits in the dungeon today.",
+      schedule: { at: birthday },
+      sound: null, smallIcon: 'ic_launcher'
+    });
+
+    // Ambush Days — January, April, July, October 15th at 8AM
+    var ambushMonths = [0, 3, 6, 9]; // Jan, Apr, Jul, Oct
+    if (prefs.ambush) ambushMonths.forEach(function(month) {
+      var ambush = new Date(year, month, 15, 8, 0, 0);
+      if (ambush <= now) ambush.setFullYear(year + 1);
+      notifications.push({
+        id: id++,
+        title: '⚔ Ambush Day Has Begun',
+        body: 'Every battle today is a multi-enemy ambush. Enter at your own risk.',
+        schedule: { at: ambush },
+        sound: null, smallIcon: 'ic_launcher'
+      });
+    });
+
+    // Friday the 13th — dynamic, find next one
+    (function() {
+      var d = new Date(now);
+      d.setDate(d.getDate() + 1); // start from tomorrow
+      for (var i = 0; i < 400; i++) { // scan up to ~13 months ahead
+        if (d.getDay() === 5 && d.getDate() === 13) {
+          var fri13 = new Date(d.getFullYear(), d.getMonth(), 13, 8, 0, 0);
+          notifications.push({
+            id: id++,
+            title: '💀 Friday the 13th',
+            body: 'Cursed enemies have entered the dungeon. Danger and rare loot await.',
+            schedule: { at: fri13 },
+            sound: null, smallIcon: 'ic_launcher'
+          });
+          break;
+        }
+        d.setDate(d.getDate() + 1);
+      }
+    })();
+
+    // ── WEEKLY EVENTS ──
+
+    // XP Weekend — every Saturday at 8AM
+    if (prefs.xpweekend) notifications.push({
+      id: id++,
+      title: '⚡ XP Weekend Has Begun',
+      body: 'Double XP all weekend. The best time to level up your characters.',
+      schedule: { on: { weekday: 7, hour: 8, minute: 0 }, repeats: true },
+      sound: null, smallIcon: 'ic_launcher'
+    });
+
+    // Void Week — every Monday at 8AM
+    if (prefs.voidweek) notifications.push({
+      id: id++,
+      title: '🌑 Void Week Descends',
+      body: 'Double gold this week. But enemies are stronger. Enter at your own risk.',
+      schedule: { on: { weekday: 2, hour: 8, minute: 0 }, repeats: true },
+      sound: null, smallIcon: 'ic_launcher'
+    });
+
+    // Blood Moon — 1st of every month at 8AM
+    if (prefs.bloodmoon) notifications.push({
+      id: id++,
+      title: '🔴 The Blood Moon Rises',
+      body: 'Enemies hit harder this week but gold flows freely. High risk, high reward.',
+      schedule: { on: { day: 1, hour: 8, minute: 0 }, repeats: true },
+      sound: null, smallIcon: 'ic_launcher'
+    });
+
+    // Architect Week — 8th of every month at 8AM
+    if (prefs.architect) notifications.push({
+      id: id++,
+      title: '🏛 Architect Week Begins',
+      body: 'Bonus XP this week and unique encounters with The Architect.',
+      schedule: { on: { day: 8, hour: 8, minute: 0 }, repeats: true },
       sound: null, smallIcon: 'ic_launcher'
     });
 
@@ -49830,9 +50277,14 @@ function initBackButton() {
       switch (_currentScreen) {
         case 'menu':
           // On main menu — ask if they want to exit
-          if (confirm('Exit Dungeon Descent?')) {
-            Capacitor.Plugins.App.exitApp();
-          }
+          showChoiceModal(
+            'Exit Dungeon Descent?',
+            'Your progress is saved.',
+            [
+              { label: 'Exit', action: function() { Capacitor.Plugins.App.exitApp(); } },
+              { label: 'Stay', action: function() {} }
+            ]
+          );
           break;
         case 'dungeon':
           // In dungeon — open pause menu instead of exiting
@@ -49873,7 +50325,7 @@ function initBackButton() {
     console.warn('[DD] Back button init failed:', e);
   }
 }
-var _shakeEnabled = true;
+var _shakeEnabled = false; // default off — enabled by user gesture (required for iOS permission)
 var _lastShakeTime = 0;
 var _shakeThreshold = 15; // sensitivity
 var _shakeCooldown = 800; // ms between shakes
@@ -49930,8 +50382,45 @@ function initShakeToAttack() {
 
 function toggleShakeAttack() {
   _shakeEnabled = !_shakeEnabled;
-  say('Shake to attack ' + (_shakeEnabled ? 'enabled' : 'disabled') + '.');
   DDStore.setItem('dd_shake', _shakeEnabled ? '1' : '0');
+
+  // Sync toggle button UI
+  var btn = document.getElementById('shake-toggle');
+  if (btn) {
+    btn.textContent = _shakeEnabled ? 'On' : 'Off';
+    btn.classList.toggle('on', _shakeEnabled);
+    btn.setAttribute('aria-pressed', String(_shakeEnabled));
+  }
+
+  if (_shakeEnabled) {
+    // iOS 13+ permission MUST come from a direct user gesture — this click IS one
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS && typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(function(state) {
+        if (state === 'granted') {
+          _shakeListenerAttached = false;
+          initShakeToAttack();
+          say('Shake to attack enabled. Motion permission granted.');
+        } else {
+          _shakeEnabled = false;
+          DDStore.setItem('dd_shake', '0');
+          if (btn) { btn.textContent = 'Off'; btn.classList.remove('on'); btn.setAttribute('aria-pressed', 'false'); }
+          say('Motion permission denied. Shake to attack unavailable.');
+        }
+      }).catch(function() {
+        _shakeListenerAttached = false;
+        initShakeToAttack();
+        say('Shake to attack enabled.');
+      });
+    } else {
+      // Android or older iOS — no permission dialog needed
+      _shakeListenerAttached = false;
+      initShakeToAttack();
+      say('Shake to attack enabled.');
+    }
+  } else {
+    say('Shake to attack disabled.');
+  }
 }
 
 // Load shake preference — real value applied in the DDStore.whenReady() callback
@@ -49984,6 +50473,62 @@ async function initNetwork() {
     console.warn('[DD] Network init failed:', e);
   }
 }
+// ── SCREEN READER DETECTION ──
+var _screenReaderActive = false;
+var _screenReaderInitDone = false;
+
+async function initScreenReader() {
+  if (_screenReaderInitDone) return;
+  _screenReaderInitDone = true;
+  try {
+    if (!window.Capacitor || !Capacitor.Plugins || !Capacitor.Plugins.ScreenReader) return;
+
+    // Check current state
+    var result = await Capacitor.Plugins.ScreenReader.isEnabled();
+    _screenReaderActive = !!(result && result.value);
+    _onScreenReaderStateChange(_screenReaderActive);
+
+    // Listen for changes (user turns VoiceOver on/off mid-session)
+    Capacitor.Plugins.ScreenReader.addListener('stateChange', function(state) {
+      _screenReaderActive = !!(state && state.value);
+      _onScreenReaderStateChange(_screenReaderActive);
+      console.log('[DD] Screen reader ' + (_screenReaderActive ? 'enabled' : 'disabled'));
+    });
+
+    console.log('[DD] Screen reader detected: ' + _screenReaderActive);
+  } catch(e) {
+    console.warn('[DD] ScreenReader init failed:', e);
+  }
+}
+
+function _onScreenReaderStateChange(active) {
+  // When VoiceOver turns on — make sure aria-live region is ready
+  // and announce current screen to orient the user
+  if (active) {
+    // Ensure announce element exists and is properly set up
+    var el = document.getElementById('aria-announce');
+    if (el) {
+      el.setAttribute('aria-live', 'assertive');
+      el.setAttribute('aria-atomic', 'true');
+    }
+    // Announce the current screen
+    setTimeout(function() {
+      var current = document.querySelector('.screen.active');
+      if (current) {
+        var label = current.getAttribute('aria-label') || 'Dungeon Descent';
+        say('Screen reader active. ' + label + '.');
+      }
+    }, 500);
+  }
+}
+
+// speakCritical — for the most important moments.
+// Now identical to say() since _saySR handles native speak automatically.
+// Kept as a separate function so callers are clearly marked as critical.
+function speakCritical(msg) {
+  say(msg);
+}
+
 async function initStatusBar() {
   try {
     if (!window.Capacitor || !Capacitor.Plugins || !Capacitor.Plugins.StatusBar) return;
