@@ -13289,7 +13289,7 @@ function enterRoom() {
           document.getElementById('dg-enemy-icon').textContent = enemy.icon;
           document.getElementById('dg-enemy-name').textContent = t(enemy.name);
           updateEnemyBar(); updatePlayerBar();
-          renderActionButtons();
+          setCombatBtns(true); updateSkillButtons();
           return;
         }
       }
@@ -13317,7 +13317,7 @@ function enterRoom() {
           document.getElementById('dg-enemy-icon').textContent = ce.icon || '👤';
           document.getElementById('dg-enemy-name').textContent = ce.name;
           updateEnemyBar(); updatePlayerBar();
-          renderActionButtons();
+          setCombatBtns(true); updateSkillButtons();
           return;
         }
       }
@@ -50342,9 +50342,13 @@ function initShakeToAttack() {
       Capacitor.Plugins.Motion.addListener('accel', function(event) {
         if (!_shakeEnabled) return;
         if (!DS || !DS.inCombat) return;
-        var a = event.acceleration;
+        // Capacitor Motion plugin returns acceleration or accelerationIncludingGravity
+        var a = event.acceleration || event.accelerationIncludingGravity;
         if (!a) return;
-        var force = Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+        var x = a.x || 0, y = a.y || 0, z = a.z || 0;
+        // If using gravity-included, subtract ~9.8 from z to get net acceleration
+        if (!event.acceleration && event.accelerationIncludingGravity) z = z - 9.8;
+        var force = Math.sqrt(x * x + y * y + z * z);
         var now = Date.now();
         if (force > _shakeThreshold && now - _lastShakeTime > _shakeCooldown) {
           _lastShakeTime = now;
