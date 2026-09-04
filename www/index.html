@@ -50029,7 +50029,7 @@ async function scheduleAllNotifications() {
       title: '📅 A New Dungeon Awaits',
       body: 'The dungeon has reset. A new challenge descends into the dark.',
       schedule: { on: { hour: 0, minute: 1 }, repeats: true },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // ── DAILY STREAK REMINDER — fires at 7PM every day
@@ -50038,7 +50038,7 @@ async function scheduleAllNotifications() {
       title: '🔥 Your Streak Is Waiting',
       body: 'Claim your daily descent before midnight or lose your streak.',
       schedule: { on: { hour: 19, minute: 0 }, repeats: true },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // ── NIGHT MODE — fires at 8PM every day
@@ -50047,7 +50047,7 @@ async function scheduleAllNotifications() {
       title: '🌙 Night Mode Is Active',
       body: '+50% gold and cheaper shop prices. The dark rewards the bold.',
       schedule: { on: { hour: 20, minute: 0 }, repeats: true },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // ── MORNING REMINDER — fires at 9AM every day
@@ -50056,7 +50056,7 @@ async function scheduleAllNotifications() {
       title: '⚔ The Dungeon Awaits',
       body: 'A new day. New enemies. New loot. Descend.',
       schedule: { on: { hour: 9, minute: 0 }, repeats: true },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // ── VOID REAPER WARNING — fires 14 hours after app open (one-time)
@@ -50066,7 +50066,7 @@ async function scheduleAllNotifications() {
       title: '🌑 The Void Reaper Stirs',
       body: 'Two hours remain before the dungeon suffers. Defeat it or face consequences.',
       schedule: { at: voidTime },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // ── COMEBACK — fires 48 hours after last open (one-time)
@@ -50076,7 +50076,7 @@ async function scheduleAllNotifications() {
       title: '⚔ The Dungeon Misses You',
       body: 'Your streak is at risk. The darkness grows without a hero.',
       schedule: { at: comeback },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // ── SEASONAL EVENTS ──
@@ -50091,7 +50091,7 @@ async function scheduleAllNotifications() {
       title: '🎃 The Dungeon Grows Darker',
       body: 'Halloween has begun. Something ancient stirs in the crypt.',
       schedule: { at: halloween },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Christmas — December 20 at 9AM
@@ -50102,7 +50102,7 @@ async function scheduleAllNotifications() {
       title: '🎄 A Cursed Gift Awaits',
       body: 'Christmas descends on the dungeon. Festive enemies and rewards await.',
       schedule: { at: christmas },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Fourth of July — July 1 at 9AM
@@ -50113,7 +50113,7 @@ async function scheduleAllNotifications() {
       title: '🎆 The Redcoats Invade',
       body: '76% bonus gold and XP all week. The Fourth of July event has begun.',
       schedule: { at: july4 },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Cinco de Mayo — May 5 at 9AM
@@ -50124,7 +50124,7 @@ async function scheduleAllNotifications() {
       title: '🌮 El Taco Blade Awaits',
       body: 'Cinco de Mayo is here. One day only — +50% XP and the El Taco Blade in the Blacksmith.',
       schedule: { at: cinco },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Brazil Independence Day — September 7 at 9AM
@@ -50135,7 +50135,7 @@ async function scheduleAllNotifications() {
       title: '🇧🇷 Brasil Independente',
       body: 'Brazil Independence Day. The dungeon flies the green and gold. Bonus gold and XP today.',
       schedule: { at: brazil },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Valentine's Day — February 13 at 9AM
@@ -50146,7 +50146,7 @@ async function scheduleAllNotifications() {
       title: '💘 The Heartbreaker Stirs',
       body: "Valentine's Day event. Love is a curse. The Heartbreaker enemy has entered the dungeon.",
       schedule: { at: valentines },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // St. Patrick's Day — March 14 at 9AM
@@ -50157,7 +50157,7 @@ async function scheduleAllNotifications() {
       title: "☘ The Luck o' the Dungeon",
       body: "St. Patrick's Day. Extra gold drops and Lucky Potion available in the shop.",
       schedule: { at: stpatricks },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Leo's Birthday — March 23 at 9AM (in-game birthday event)
@@ -50168,7 +50168,7 @@ async function scheduleAllNotifications() {
       title: '🎂 The Dungeon Celebrates',
       body: "It's the creator's birthday. A special gift awaits in the dungeon today.",
       schedule: { at: birthday },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Ambush Days — January, April, July, October 15th at 8AM
@@ -50181,7 +50181,7 @@ async function scheduleAllNotifications() {
         title: '⚔ Ambush Day Has Begun',
         body: 'Every battle today is a multi-enemy ambush. Enter at your own risk.',
         schedule: { at: ambush },
-        sound: null, smallIcon: 'ic_launcher'
+        sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
       });
     });
 
@@ -50197,7 +50197,7 @@ async function scheduleAllNotifications() {
             title: '💀 Friday the 13th',
             body: 'Cursed enemies have entered the dungeon. Danger and rare loot await.',
             schedule: { at: fri13 },
-            sound: null, smallIcon: 'ic_launcher'
+            sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
           });
           break;
         }
@@ -50213,7 +50213,7 @@ async function scheduleAllNotifications() {
       title: '⚡ XP Weekend Has Begun',
       body: 'Double XP all weekend. The best time to level up your characters.',
       schedule: { on: { weekday: 7, hour: 8, minute: 0 }, repeats: true },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Void Week — every Monday at 8AM
@@ -50222,7 +50222,7 @@ async function scheduleAllNotifications() {
       title: '🌑 Void Week Descends',
       body: 'Double gold this week. But enemies are stronger. Enter at your own risk.',
       schedule: { on: { weekday: 2, hour: 8, minute: 0 }, repeats: true },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Blood Moon — 1st of every month at 8AM
@@ -50231,7 +50231,7 @@ async function scheduleAllNotifications() {
       title: '🔴 The Blood Moon Rises',
       body: 'Enemies hit harder this week but gold flows freely. High risk, high reward.',
       schedule: { on: { day: 1, hour: 8, minute: 0 }, repeats: true },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     // Architect Week — 8th of every month at 8AM
@@ -50240,7 +50240,7 @@ async function scheduleAllNotifications() {
       title: '🏛 Architect Week Begins',
       body: 'Bonus XP this week and unique encounters with The Architect.',
       schedule: { on: { day: 8, hour: 8, minute: 0 }, repeats: true },
-      sound: null, smallIcon: 'ic_launcher'
+      sound: 'sfx-unlock.wav', smallIcon: 'ic_launcher'
     });
 
     await Capacitor.Plugins.LocalNotifications.schedule({ notifications: notifications });
