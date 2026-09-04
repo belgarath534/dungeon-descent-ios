@@ -22348,6 +22348,14 @@ async function accountSignUp() {
 }
 
 var _ddSocialLoginInitialized = false;
+// Wraps a promise so a hung native call fails loudly instead of leaving the
+// UI looking dead forever with no error and no feedback.
+function _ddWithTimeout(promise, ms, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error(label + ' timed out')), ms)),
+  ]);
+}
 async function accountGoogleLogin() {
   var err = document.getElementById('account-error');
   var isCapacitorIOS = window.Capacitor && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -22360,26 +22368,32 @@ async function accountGoogleLogin() {
     // iOS native — use @capgo/capacitor-social-login, which handles the
     // URL scheme redirect automatically (see AppDelegate.swift)
     try {
+      console.log('[DD Cloud] Google sign-in tapped (native)');
       var SocialLogin = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.SocialLogin;
       if (!SocialLogin) throw new Error('SocialLogin plugin not available');
       if (err) err.textContent = 'Opening Google sign in...';
       if (!_ddSocialLoginInitialized) {
-        await SocialLogin.initialize({
+        console.log('[DD Cloud] Initializing SocialLogin...');
+        await _ddWithTimeout(SocialLogin.initialize({
           google: {
             webClientId: '109323203666-sj667ngkft9jr7h85c5338bvllhl3hoq.apps.googleusercontent.com',
             iOSClientId: '109323203666-sj667ngkft9jr7h85c5338bvllhl3hoq.apps.googleusercontent.com',
             mode: 'online',
           },
-        });
+        }), 15000, 'SocialLogin.initialize');
         _ddSocialLoginInitialized = true;
+        console.log('[DD Cloud] SocialLogin initialized');
       }
-      var loginRes = await SocialLogin.login({
+      if (err) err.textContent = 'Waiting for Google...';
+      var loginRes = await _ddWithTimeout(SocialLogin.login({
         provider: 'google',
         options: { scopes: ['email', 'profile'] },
-      });
+      }), 60000, 'SocialLogin.login');
+      console.log('[DD Cloud] SocialLogin.login resolved:', loginRes);
       var idToken = loginRes && loginRes.result ? loginRes.result.idToken : null;
       if (!idToken) throw new Error('No idToken returned');
       var credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+      if (err) err.textContent = 'Signing into Firebase...';
       // Signing in with an already-obtained credential uses
       // signInWithCredential, not signInWithPopup (which expects an
       // AuthProvider to start a new browser OAuth flow).
@@ -22396,8 +22410,9 @@ async function accountGoogleLogin() {
       }
       closeAccountPanel();
     } catch(e) {
-      err.textContent = 'Google sign in failed. Try again.';
-      say('Google sign in failed.');
+      console.log('[DD Cloud] Native Google sign in error:', e);
+      err.textContent = 'Google sign in failed: ' + (e.message || 'unknown error');
+      say('Google sign in failed: ' + (e.message || 'unknown error'));
     }
     return;
   }
