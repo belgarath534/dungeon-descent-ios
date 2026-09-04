@@ -25,7 +25,7 @@
     "@capacitor/screen-reader": "^7.0.4",
     "@capacitor/status-bar": "^7.0.0",
     "@capawesome/capacitor-badge": "^7.0.0",
-    "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4",
+    "@capgo/capacitor-social-login": "^7.20.0",
     "capacitor-game-connect-7": "^7.0.5",
     "cordova-plugin-purchase": "^13.17.2"
   },
