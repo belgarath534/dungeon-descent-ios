@@ -22397,7 +22397,8 @@ async function accountGoogleLogin() {
       // Signing in with an already-obtained credential uses
       // signInWithCredential, not signInWithPopup (which expects an
       // AuthProvider to start a new browser OAuth flow).
-      await window._fbAuth.signInWithCredential(credential);
+      await _ddWithTimeout(window._fbAuth.signInWithCredential(credential), 15000, 'signInWithCredential');
+      console.log('[DD Cloud] signInWithCredential resolved');
       err.textContent = '';
       say('Signed in with Google. Syncing your save data.');
       var loadedNative = await loadFromCloud();
