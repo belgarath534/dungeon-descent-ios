@@ -22356,6 +22356,27 @@ function _ddWithTimeout(promise, ms, label) {
     new Promise((_, reject) => setTimeout(() => reject(new Error(label + ' timed out')), ms)),
   ]);
 }
+// Polls auth.currentUser instead of awaiting signInWithCredential's promise
+// directly, since that promise is known to hang indefinitely in some
+// Capacitor/WKWebView environments even after a successful sign-in.
+function _ddWaitForAuthUser(auth, timeoutMs) {
+  return new Promise((resolve) => {
+    var waited = 0;
+    var interval = 250;
+    var timer = setInterval(function() {
+      if (auth.currentUser) {
+        clearInterval(timer);
+        resolve(auth.currentUser);
+        return;
+      }
+      waited += interval;
+      if (waited >= timeoutMs) {
+        clearInterval(timer);
+        resolve(null);
+      }
+    }, interval);
+  });
+}
 async function accountGoogleLogin() {
   var err = document.getElementById('account-error');
   var isCapacitorIOS = window.Capacitor && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -22402,9 +22423,17 @@ async function accountGoogleLogin() {
       if (err) err.textContent = 'Signing into Firebase...';
       // Signing in with an already-obtained credential uses
       // signInWithCredential, not signInWithPopup (which expects an
-      // AuthProvider to start a new browser OAuth flow).
-      await _ddWithTimeout(window._fbAuth.signInWithCredential(credential), 15000, 'signInWithCredential');
-      console.log('[DD Cloud] signInWithCredential resolved');
+      // AuthProvider to start a new browser OAuth flow). Known issue: this
+      // promise can hang forever in a Capacitor/WKWebView even though the
+      // sign-in actually succeeds server-side — auth.currentUser still
+      // updates and onAuthStateChanged still fires. So don't block on it;
+      // fire it and poll currentUser instead of trusting the promise.
+      window._fbAuth.signInWithCredential(credential).catch(function(e) {
+        console.log('[DD Cloud] signInWithCredential promise rejected (may be spurious):', e);
+      });
+      var signedInUser = await _ddWaitForAuthUser(window._fbAuth, 10000);
+      if (!signedInUser) throw new Error('Firebase sign-in did not complete');
+      console.log('[DD Cloud] signInWithCredential succeeded (via currentUser poll)');
       err.textContent = '';
       say('Signed in with Google. Syncing your save data.');
       var loadedNative = await loadFromCloud();
