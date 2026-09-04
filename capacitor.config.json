@@ -9,6 +9,14 @@
   "plugins": {
     "CapacitorGameConnect": {
       "androidAppId": "109323203666"
+    },
+    "SocialLogin": {
+      "providers": {
+        "google": true,
+        "facebook": false,
+        "apple": true,
+        "twitter": false
+      }
     }
   }
 }
