@@ -8700,7 +8700,14 @@ function _playTrackFallback(name, url) {
     });
     return;
   }
-  if (window.Howl) {
+  // Native Capacitor app: skip Howler for music. Howler has its own internal
+  // "autoUnlock" gate that silently queues .play() until it sees a user gesture
+  // on document — that's a browser-autoplay-policy safety net, but Capacitor's
+  // WKWebView already disables the user-action-for-playback requirement, so a
+  // plain <audio> element (below) plays immediately on cold launch with no
+  // gesture needed. Howler stays for the plain web build, where the browser's
+  // real autoplay policy applies and Howler's cross-browser handling helps.
+  if (window.Howl && !window.Capacitor) {
     _howlMusic = new Howl({
       src: [url],
       volume: AUD.musicVol,
@@ -48493,8 +48500,11 @@ DDStore.whenReady().then(function() {
   document.addEventListener('touchstart', initAudio, { once: true }); // iOS: first touch unlocks audio
   document.addEventListener('touchend', initAudio, { once: true });   // belt and braces
 
-  // iOS Capacitor cold launch: pre-fetch audio assets immediately (AudioContext still needs gesture)
-  // This means assets are cached and ready the moment the user first taps
+  // iOS Capacitor cold launch: start loading + playing immediately, no gesture needed.
+  // Capacitor's WKWebView disables the media-autoplay-requires-gesture restriction,
+  // so the plain <audio> fallback in _playTrackFallback() plays right away here.
+  // (Only the raw Web Audio AudioContext needs a real gesture — that kicks in once
+  // the user's first tap fires initWebAudio(), for GainNode-based volume control.)
   if (window.Capacitor && !_audioLoaded) {
     setTimeout(function() {
       if (!_audioLoaded) { _audioLoaded = true; loadAudio(); }
