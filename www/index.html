@@ -8922,31 +8922,10 @@ function updateVol(sid, vid, type) {
   el.setAttribute('aria-label', (type === 'music' ? 'Music' : type === 'ambient' ? 'Ambient' : 'Sound effects') + ' volume ' + v + ' percent');
   if (type === 'music') {
     AUD.musicVol = v / 100;
-    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if (isIOS) {
-      // iOS: GainNode and Howler both ignore mid-stream volume changes.
-      // Only reliable fix is to restart the track with the new volume baked in.
-      if (AUD.musicOn && AUD.current) {
-        // Debounce restarts — only fire 400ms after slider stops moving
-        clearTimeout(AUD._volRestartTimer);
-        AUD._volRestartTimer = setTimeout(function() {
-          var cur = AUD.current;
-          // Tear down current source
-          if (AUD.currentSource) { try { AUD.currentSource.stop(); } catch(e) {} AUD.currentSource = null; }
-          if (_howlMusic) { try { _howlMusic.stop(); _howlMusic.unload(); } catch(e) {} _howlMusic = null; }
-          // Update GainNode if it exists
-          if (AUD.musicGain) AUD.musicGain.gain.setValueAtTime(AUD.musicVol, AUD.ctx ? AUD.ctx.currentTime : 0);
-          // Force current to null so playTrack doesn't bail out on same-track check
-          AUD.current = null;
-          playTrack(cur);
-        }, 400);
-      }
-    } else {
-      // Non-iOS: standard in-place volume update works fine
-      if (AUD.musicGain) AUD.musicGain.gain.setValueAtTime(AUD.musicVol, AUD.ctx ? AUD.ctx.currentTime : 0);
-      if (_howlMusic) _howlMusic.volume(AUD.musicVol);
-      if (window.Howler) Howler.volume(AUD.musicVol);
-    }
+    // Live in-place volume update — works on iOS too, matching puzzle-master's behavior.
+    if (AUD.musicGain) AUD.musicGain.gain.setValueAtTime(AUD.musicVol, AUD.ctx ? AUD.ctx.currentTime : 0);
+    if (_howlMusic) _howlMusic.volume(AUD.musicVol);
+    if (window.Howler) Howler.volume(AUD.musicVol);
     // HTML Audio fallback always
     if (AUD.tracks) Object.keys(AUD.tracks).forEach(function(k) { var t = AUD.tracks[k]; if (t) t.volume = AUD.musicVol; });
     if (AUD.currentEl) AUD.currentEl.volume = AUD.musicVol;
@@ -48522,23 +48501,74 @@ DDStore.whenReady().then(function() {
     }, 400);
   }
 
-  // Resume Web Audio context when app comes back from background
-  // iOS suspends the audio context when app is backgrounded or screen locks
+  // Resume Web Audio context + restart playback when app comes back from background.
+  // iOS suspends (and sometimes silently kills) the audio context when the app is
+  // backgrounded or the screen locks, and WKWebView can leave AudioContext.state
+  // reporting 'running' even though it is actually dead — so always try to resume/
+  // recreate rather than trusting the reported state.
+  function _ddResumeAudioOnForeground() {
+    if (!AUD) return;
+    var cur = AUD.current;
+    var ambKey = AUD._pausedAmbientKey;
+    AUD._pausedAmbientKey = null;
+    function restartPlayback() {
+      if (AUD.musicOn && cur && !AUD.currentSource) {
+        AUD.current = null;
+        playTrack(cur);
+      }
+      if (AUD.ambientOn && ambKey) {
+        try { playAmbient(ambKey); } catch(e) {}
+      }
+    }
+    if (AUD.ctx) {
+      AUD.ctx.resume().then(function() {
+        if (AUD.ctx.state === 'running') {
+          restartPlayback();
+        } else {
+          // Context is stuck (iOS killed the audio hardware session) — rebuild it.
+          try { AUD.ctx.close(); } catch(e) {}
+          AUD.ctx = null;
+          _webAudioReady = false;
+          initWebAudio();
+          restartPlayback();
+        }
+      }).catch(function(e) {
+        console.warn('[DD Audio] Failed to resume context, rebuilding:', e);
+        try { AUD.ctx && AUD.ctx.close(); } catch(e2) {}
+        AUD.ctx = null;
+        _webAudioReady = false;
+        initWebAudio();
+        restartPlayback();
+      });
+    } else {
+      restartPlayback();
+    }
+  }
+
+  function _ddSuspendAudioOnBackground() {
+    if (!AUD) return;
+    // Remember what was playing so we can restore it exactly on foreground
+    AUD._pausedAmbientKey = _ambientTrack;
+    if (AUD.currentSource) {
+      try { AUD.currentSource.stop(); } catch(e) {}
+      AUD.currentSource = null;
+    }
+    if (AUD.ctx && AUD.ctx.state === 'running') {
+      AUD.ctx.suspend().catch(function() {});
+    }
+    try { stopAmbient(); } catch(e) {}
+    try { stopHunterMusic(); } catch(e) {}
+    try {
+      if (window._hunterMusicEl) { _hunterMusicEl.pause(); }
+      if (window._heartbeatEl) { _heartbeatEl.pause(); }
+    } catch(e) {}
+  }
+
   document.addEventListener('visibilitychange', function() {
     if (document.visibilityState === 'visible') {
-      // App came back to foreground
-      if (AUD.ctx && AUD.ctx.state === 'suspended') {
-        AUD.ctx.resume().then(function() {
-          // If music was playing before, restart it
-          if (AUD.musicOn && AUD.current && !AUD.currentSource) {
-            var cur = AUD.current;
-            AUD.current = null;
-            playTrack(cur);
-          }
-        }).catch(function(e) {
-          console.warn('[DD Audio] Failed to resume context on visibility change:', e);
-        });
-      }
+      _ddResumeAudioOnForeground();
+    } else {
+      _ddSuspendAudioOnBackground();
     }
   });
 
@@ -48546,38 +48576,9 @@ DDStore.whenReady().then(function() {
   if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
     window.Capacitor.Plugins.App.addListener('appStateChange', function(state) {
       if (state.isActive) {
-        // App came to foreground — resume audio context and restart music
-        if (AUD && AUD.ctx && AUD.ctx.state === 'suspended') {
-          AUD.ctx.resume().then(function() {
-            if (AUD.musicOn && AUD.current && !AUD.currentSource) {
-              var cur = AUD.current;
-              AUD.current = null;
-              playTrack(cur);
-            }
-          }).catch(function() {});
-        }
+        _ddResumeAudioOnForeground();
       } else {
-        // App went to background — stop all audio immediately
-        // Stop music source
-        if (AUD) {
-          if (AUD.currentSource) {
-            try { AUD.currentSource.stop(); } catch(e) {}
-            AUD.currentSource = null;
-          }
-          // Suspend audio context to free resources
-          if (AUD.ctx && AUD.ctx.state === 'running') {
-            AUD.ctx.suspend().catch(function() {});
-          }
-        }
-        // Stop ambient
-        try { stopAmbient(); } catch(e) {}
-        // Stop hunter music if running
-        try { stopHunterMusic(); } catch(e) {}
-        // Stop any looping HTML audio elements
-        try {
-          if (window._hunterMusicEl) { _hunterMusicEl.pause(); }
-          if (window._heartbeatEl) { _heartbeatEl.pause(); }
-        } catch(e) {}
+        _ddSuspendAudioOnBackground();
       }
     });
   }
@@ -48685,7 +48686,7 @@ DDStore.whenReady().then(function() {
         // Save data to Firestore
         window._fbSaveData = async function(uid, data) {
           try {
-            await _db.collection('saves').doc(uid).set(data, { merge: true });
+            await window._fbDb.collection('saves').doc(uid).set(data, { merge: true });
             return true;
           } catch(e) {
             console.warn('Firestore save error:', e);
@@ -48696,7 +48697,7 @@ DDStore.whenReady().then(function() {
         // Load data from Firestore
         window._fbLoadData = async function(uid) {
           try {
-            var doc = await _db.collection('saves').doc(uid).get();
+            var doc = await window._fbDb.collection('saves').doc(uid).get();
             return doc.exists ? doc.data() : null;
           } catch(e) {
             console.warn('Firestore load error:', e);
@@ -48709,7 +48710,7 @@ DDStore.whenReady().then(function() {
           var user = window._fbAuth.currentUser;
           if (!user) return;
           try {
-            await _db.collection('saves').doc(user.uid).delete();
+            await window._fbDb.collection('saves').doc(user.uid).delete();
             await user.delete();
           } catch(e) {
             console.warn('Delete error:', e);
