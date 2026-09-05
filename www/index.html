@@ -2572,6 +2572,15 @@ var DDStore = (function() {
           </div>
         </button>
 
+        <button class="dungeon-card locked" id="shadowworld-dungeon-card" role="radio" aria-checked="false" data-dungeon="The Shadow World" onclick="handleShadowWorldClick()" aria-label="The Shadow World, locked. Complete The Abyssal Deep to unlock.">
+          <span class="dungeon-icon" aria-hidden="true">🌑</span>
+          <div style="flex:1;">
+            <div class="dungeon-name" style="color:#9966cc;">The Shadow World</div>
+            <div style="font-family:Cinzel,serif;font-size:0.62rem;color:#3d2060;font-style:italic;line-height:1.5;">It has existed for 3000 years beneath a cursed forest. It does not obey your rules. The Shapeshifter waits at the end — wearing your face, using your skills, knowing your every move. Nothing that enters here leaves unchanged.</div>
+            <div class="dungeon-unlock-note" style="color:#9966cc;" aria-hidden="true">🔒 Complete The Abyssal Deep to unlock</div>
+          </div>
+        </button>
+
         </div>
         <div class="btn-row"><button class="btn btn-secondary" onclick="cStep(4)">← Back</button><button class="btn btn-primary" id="cbtn-5" onclick="cStep(6)">Continue to Fate →</button></div>
       </section>
@@ -2996,6 +3005,7 @@ var DDStore = (function() {
         <div class="dg-your-hp-label">Your Health</div>
         <div class="dg-hp-bar-wrap"><div class="dg-hp-bar dg-player-hp-bar" id="dg-player-bar" style="width:100%"></div></div>
         <div class="dg-hp-text" id="dg-player-hp" aria-live="polite" aria-label="Your health: 100 of 100">HP: 100/100</div>
+        <div id="dg-shadow-corruption" style="display:none;font-family:Cinzel,serif;font-size:0.65rem;color:#9966cc;margin-top:4px;" aria-live="assertive"></div>
       </div>
       <div class="dg-combat-log" id="dg-combat-log" role="log" aria-live="polite" aria-label="Combat log"></div>
       <div class="dg-combat-actions" role="group" aria-label="Combat actions">
@@ -3004,6 +3014,7 @@ var DDStore = (function() {
         <button type="button" class="dg-combat-btn" id="cbtn-defend" onclick="doFight('defend')" aria-label="Defend, reduces incoming damage">🛡 Defend</button>
         <button type="button" class="dg-combat-btn" id="cbtn-potion" onclick="doFight('potion')" aria-label="Use a health potion">🧪 Potion</button>
         <button type="button" class="dg-combat-btn" id="cbtn-flee" onclick="doFight('flee')" aria-label="Attempt to flee combat">🏃 Flee</button>
+        <button type="button" class="dg-combat-btn" id="cbtn-purge" onclick="doFight('purge')" aria-label="Purge shadow corruption. Costs 4 SP." style="display:none;border-color:#9966cc;color:#cc88ff;">✨ Purge</button>
         <button type="button" class="dg-combat-btn" id="cbtn-examine" onclick="examineEnemy()" aria-label="Examine enemy to learn their weakness and abilities" style="border-color:#4444aa;color:#8888ff;">🔍 Examine</button>
         <button type="button" class="dg-combat-btn" id="cbtn-eagles-cry" onclick="activateEaglesCry()" aria-label="Eagle's Cry — Fourth of July skill, reduces enemy attack 30% for 3 turns" style="display:none;border-color:#cc4444;color:#ff6644;">🦅 Eagle's Cry</button>
         <button type="button" class="dg-combat-btn" id="cbtn-soul-trap" onclick="doFight('soul-trap')" aria-label="Use Soul Trap to capture this enemy as a minion" style="display:none;border-color:#44aa44;color:#44ff88;">🪤 Soul Trap</button>
@@ -3259,6 +3270,7 @@ var DDStore = (function() {
         <button class="quest-tab" id="be-filter-type-spirit" role="tab" aria-selected="false" onclick="filterBestiary('type-spirit')" aria-label="Show spirit enemies">👻 Spirit</button>
         <button class="quest-tab" id="be-filter-infernal" role="tab" aria-selected="false" onclick="filterBestiary('infernal')" aria-label="Show The Infernal enemies">🔥 Infernal</button>
       <button class="quest-tab" id="be-filter-abyssal" role="tab" aria-selected="false" onclick="filterBestiary('abyssal')" aria-label="Show The Abyssal Deep enemies">🌊 Abyssal</button>
+      <button class="quest-tab" id="be-filter-shadow" role="tab" aria-selected="false" onclick="filterBestiary('shadow')" aria-label="Show The Shadow World enemies">🌑 Shadow</button>
         <button class="quest-tab" id="be-filter-builder" role="tab" aria-selected="false" onclick="openSpiritBuilder()" aria-label="Spirit Builder — craft your own spirit companion">🔮 Builder</button>
         <button class="quest-tab" id="be-filter-special" role="tab" aria-selected="false" onclick="filterBestiary('special')" aria-label="Special enemies — Void Mode, Boss Rush, AFK, and seasonal">⭐ Special</button>
       </div>
@@ -3334,8 +3346,24 @@ var DDStore = (function() {
       <button class="back-btn" onclick="goTo('menu')" aria-label="Back to main menu">← Menu</button>
       <h2 class="screen-title">What's New</h2>
     </div>
-    <div class="version-block latest" tabindex="0" aria-label="Version 11.0">
-      <div class="version-num">v11.0 — Latest</div>
+    <div class="version-block latest" tabindex="0" aria-label="Version 11.1">
+      <div class="version-num">v11.1 — Latest</div>
+      <div class="version-date">The Shadow World Update</div>
+      <ul class="version-changes">
+        <li>🌑 The Shadow World — 9th dungeon. 3000 years of darkness. 14 enemies with unique mechanics. Shadow Corruption builds per hit — at 3 stacks your damage is halved. Use Purge (4 SP) to clear it.</li>
+        <li>🌑 Shadow enemies — The Mimic (surprise double attack), The Lurker (hides first turn, critical second), The Reflection (mirrors your last action), Sorrow Hound (fear debuff -20% damage), Void Weaver (corruption web, break with Heavy Strike), The Twice Dead (returns at 50% HP after first kill), Shadow Archon (all enemies deal 15% more damage while alive)</li>
+        <li>🌑 Shadow Ambush — echoes of enemies you already killed this run return from the dark. Every echo adds corruption on hit.</li>
+        <li>🌑 The Shapeshifter — 4 phase boss. Phase 2 copies your weapon damage. Phase 3 matches your exact HP. Phase 4 corrupts on every hit. The hardest boss in the game.</li>
+        <li>🌑 The Void Reaper rebuilt on Firebase RTDB — date no longer resets on app reopen. Shared HP pool persists properly across all sessions.</li>
+        <li>📱 iOS — Audio overlap fixed. Startup audio on first touch. VoiceOver detection via native ScreenReader plugin. Shake to attack permission fixed. Notifications now fire correctly with custom sound.</li>
+        <li>🔔 Notifications — New preferences panel with 13 toggles. Weekly events (XP Weekend, Void Week, Blood Moon, Architect Week). New seasonal events (Brazil Day, Valentine's, St. Patrick's, Friday 13th, Ambush Day).</li>
+        <li>🎮 Bug fixes — Duplicate weapons no longer drop. Scrolls work correctly. Confirm dialogs replaced with accessible modals. Ambush combat button freeze fixed. getShopDiscount crash fixed. renderActionButtons crash fixed.</li>
+        <li>🎵 Shadow World music system — 7 tracks registered and wired into all audio systems. Shadow World tab in Music Player.</li>
+        <li>📋 Bestiary — Shadow World tab with 16 entries.</li>
+      </ul>
+    </div>
+    <div class="version-block" tabindex="0" aria-label="Version 11.0">
+      <div class="version-num">v11.0 — The Community Update</div>
       <div class="version-date">The Community Update</div>
       <ul class="version-changes">
         <li>💬 Global Chat — talk to players around the world in real time. Pick a username, send messages, see them appear instantly. Accessible via main menu. New Chat category in Settings to manage your username and toggle the dungeon chat button.</li>
@@ -8381,7 +8409,15 @@ var TRACK_FILES = {
   'infernal-boss':      _audioUrl('music-infernal-boss.mp3'),
   'infernal-battle':    _audioUrl('music-infernal-battle.mp3'),
   'ambient-infernal':   _audioUrl('ambient-infernal.mp3'),
-  'codex':              _audioUrl('codex.mp3')
+  'codex':              _audioUrl('codex.mp3'),
+  // ── THE SHADOW WORLD ──
+  'shadow1':            _audioUrl('music-shadow1.mp3'),
+  'shadow2':            _audioUrl('music-shadow2.mp3'),
+  'shadow3':            _audioUrl('music-shadow3.mp3'),
+  'shadow-boss':        _audioUrl('music-shadow-boss.mp3'),
+  'shadow-battle':      _audioUrl('music-shadow-battle.mp3'),
+  'ambient-shadow':     _audioUrl('ambient-shadow.mp3'),
+  'shadow-stalker':     _audioUrl('music-shadow-stalker.mp3'), // Stalker Floor tension music
 };
 
 // Ambient sound tracks per dungeon
@@ -8449,6 +8485,13 @@ function exploTrackForFloor(floor) {
     if (floor >= 10)              return 'infernal-boss';
     return 'infernal1';
   }
+  if (dungeon === 'The Shadow World') {
+    if (floor <= 3)               return 'shadow1';
+    if (floor >= 4 && floor <= 6) return 'shadow2';
+    if (floor >= 7 && floor <= 9) return 'shadow3';
+    if (floor >= 10)              return 'shadow-boss';
+    return 'shadow1';
+  }
   if (floor === 1)               return 'floor1';
   if (floor >= 2 && floor <= 4)  return 'floor2';
   if (floor >= 5 && floor <= 6)  return 'floor3';
@@ -8466,6 +8509,7 @@ function battleTrack() {
   if (DS && DS.dungeon === 'The Whispering Forest') return 'whisper-battle';
   if (DS && DS.dungeon === 'The Infernal Descent')   return 'infernal-battle';
   if (DS && DS.dungeon === 'The Abyssal Deep')         return 'abyssal-battle';
+  if (DS && DS.dungeon === 'The Shadow World')         return 'shadow-battle';
   return 'battle';
 }
 
@@ -8798,6 +8842,8 @@ function getAmbientKey() {
   if (DS.dungeon === 'The Whispering Forest') return 'ambient-whisper';
   if (DS.dungeon === 'The Infernal Descent')   return 'ambient-infernal';
   if (DS.dungeon === 'The Abyssal Deep')         return 'ambient-abyssal';
+  if (DS.dungeon === 'The Shadow World')         return 'ambient-shadow';
+  if (DS.dungeon === 'The Shadow World')         return 'ambient-whisper'; // placeholder until shadow ambient added
   return 'crypt';
 }
 
@@ -10888,6 +10934,47 @@ function refreshAbyssalCard() {
   }
 }
 
+// ── THE SHADOW WORLD ─────────────────────────────────────────────────────────
+function isShadowWorldUnlocked() {
+  if (DDStore.getItem('dd_dev_mode') === '1') return true;
+  if (DDStore.getItem('dd_shadowworld_unlocked') === '1') return true;
+  // Unlocks after completing The Abyssal Deep
+  var cleared = JSON.parse(DDStore.getItem('dd_cleared_dungeons') || '[]');
+  if (cleared.includes('The Abyssal Deep')) {
+    DDStore.setItem('dd_shadowworld_unlocked', '1');
+    return true;
+  }
+  return false;
+}
+
+function handleShadowWorldClick() {
+  if (isShadowWorldUnlocked()) {
+    var card = document.getElementById('shadowworld-dungeon-card');
+    if (card) {
+      card.classList.remove('locked');
+      card.disabled = false;
+      card.setAttribute('aria-disabled', 'false');
+      pickDungeon(card);
+    }
+    return;
+  }
+  say('The Shadow World is sealed. It has waited 3000 years. Complete The Abyssal Deep first to break the seal.');
+  showToast('🌑 Complete The Abyssal Deep to unlock The Shadow World.', 'purple');
+}
+
+function refreshShadowWorldCard() {
+  var card = document.getElementById('shadowworld-dungeon-card');
+  if (!card) return;
+  if (isShadowWorldUnlocked()) {
+    card.classList.remove('locked');
+    card.disabled = false;
+    card.setAttribute('aria-disabled', 'false');
+    card.setAttribute('aria-label', 'The Shadow World. Unlocked. The Shapeshifter awaits.');
+    var note = card.querySelector('.dungeon-unlock-note');
+    if (note) note.style.display = 'none';
+  }
+}
+
 // ── ABYSSAL DEEP — COMBAT MECHANICS ─────────────────────────────────────────
 
 function applyAbyssalEnemyMechanics(enemy, action) {
@@ -11084,6 +11171,7 @@ function refreshDungeonUnlocks() {
   // Auto-refresh infernal and abyssal cards
   setTimeout(function(){ if(typeof refreshInfernalCard==='function') refreshInfernalCard(); }, 100);
   setTimeout(function(){ if(typeof refreshAbyssalCard==='function') refreshAbyssalCard(); }, 150);
+  setTimeout(function(){ if(typeof refreshShadowWorldCard==='function') refreshShadowWorldCard(); }, 200);
   var cards = document.querySelectorAll('.dungeon-card');
   cards.forEach(function(card) {
     var dName = card.getAttribute('data-dungeon');
@@ -12440,6 +12528,7 @@ var SPECIAL_ROOMS = [
                : DS.dungeon === 'The Whispering Forest' ? WHISPER_ENEMIES
                : DS.dungeon === 'The Infernal Descent' ? INFERNAL_ENEMIES
                : DS.dungeon === 'The Abyssal Deep' ? ABYSSAL_ENEMIES
+               : DS.dungeon === 'The Shadow World' ? SHADOW_ENEMIES
                : ENEMIES;
       // Safety — make sure pool has entries
       if (!pool || !pool.length) pool = ENEMIES;
@@ -13002,10 +13091,11 @@ function enterRoom() {
   var isHollow    = DS.dungeon === 'The Hollow';
   var isInfernal  = DS.dungeon === 'The Infernal';
   var isWhisper   = DS.dungeon === 'The Whispering Forest';
+  var isShadow    = DS.dungeon === 'The Shadow World';
   var isNightmare = DS.diff === 'Nightmare';
-  var roomDescs  = isAsh ? ASH_ROOM_DESCS  : isFrost ? FROST_ROOM_DESCS  : isSunken ? SUNKEN_ROOM_DESCS  : isHollow ? HOLLOW_ROOM_DESCS  : isInfernal ? INFERNAL_ROOM_DESCS  : isWhisper ? WHISPER_ROOM_DESCS : ROOM_DESCS;
-  var floorNames = isAsh ? ASH_FLOOR_NAMES : isFrost ? FROST_FLOOR_NAMES : isSunken ? SUNKEN_FLOOR_NAMES : isHollow ? HOLLOW_FLOOR_NAMES : isInfernal ? INFERNAL_FLOOR_NAMES : isWhisper ? WHISPER_FLOOR_NAMES : FLOOR_NAMES;
-  var lootPool   = isAsh ? ASH_LOOT : isFrost ? FROST_LOOT : isSunken ? SUNKEN_LOOT : isHollow ? HOLLOW_LOOT : isInfernal ? INFERNAL_LOOT : isWhisper ? WHISPER_LOOT : LOOT;
+  var roomDescs  = isAsh ? ASH_ROOM_DESCS  : isFrost ? FROST_ROOM_DESCS  : isSunken ? SUNKEN_ROOM_DESCS  : isHollow ? HOLLOW_ROOM_DESCS  : isInfernal ? INFERNAL_ROOM_DESCS  : isWhisper ? WHISPER_ROOM_DESCS : isShadow ? SHADOW_ROOM_DESCS : ROOM_DESCS;
+  var floorNames = isAsh ? ASH_FLOOR_NAMES : isFrost ? FROST_FLOOR_NAMES : isSunken ? SUNKEN_FLOOR_NAMES : isHollow ? HOLLOW_FLOOR_NAMES : isInfernal ? INFERNAL_FLOOR_NAMES : isWhisper ? WHISPER_FLOOR_NAMES : isShadow ? SHADOW_FLOOR_NAMES : FLOOR_NAMES;
+  var lootPool   = isAsh ? ASH_LOOT : isFrost ? FROST_LOOT : isSunken ? SUNKEN_LOOT : isHollow ? HOLLOW_LOOT : isInfernal ? INFERNAL_LOOT : isWhisper ? WHISPER_LOOT : isShadow ? SHADOW_LOOT : LOOT;
   var enemyPool  = isNightmare ? NIGHTMARE_ENEMIES
                  : isAsh       ? ASH_ENEMIES
                  : isFrost     ? FROST_ENEMIES
@@ -13317,6 +13407,8 @@ function enterRoom() {
         ? WHISPER_ENEMIES[tier]
         : DS.dungeon === 'The Abyssal Deep'
         ? ABYSSAL_ENEMIES[tier]
+        : DS.dungeon === 'The Shadow World'
+        ? ABYSSAL_ENEMIES[tier]
         : enemyPool[tier];
       var base = spawnElite
         ? elitePool[Math.floor(Math.random() * elitePool.length)]
@@ -13430,9 +13522,23 @@ function enterRoom() {
             lootItem = applyRarityToWeapon(lootItem, dropRarity);
           }
         }
-        DS.inventory.push(lootItem);
-        applyItem(lootItem);
-        sfx('sfx-loot'); vibe(VIBE.loot);
+        // Prevent duplicate weapons — if already in inventory, skip
+        if (lootItem.type === 'weapon' || lootItem.type === 'armor') {
+          var alreadyHas = DS.inventory.find(function(inv){ return inv.name === lootItem.name; });
+          if (alreadyHas) {
+            addLog('You already carry a ' + lootItem.name + '. The duplicate fades back into the dark.');
+            say('You already have a ' + lootItem.name + '.');
+            applyItem(lootItem); // still apply any passive effects
+          } else {
+            DS.inventory.push(lootItem);
+            applyItem(lootItem);
+            sfx('sfx-loot'); vibe(VIBE.loot);
+          }
+        } else {
+          DS.inventory.push(lootItem);
+          applyItem(lootItem);
+          sfx('sfx-loot'); vibe(VIBE.loot);
+        }
         // Lucky Descent — first loot of run is always rare
         if (DS._luckyDescent && !DS._luckyDescentUsed && lootItem.type === 'weapon') {
           DS._luckyDescentUsed = true;
@@ -13577,6 +13683,13 @@ function advanceFloor() {
   DS.floor++;
   DS._blackBoxThisFloor = false;
   DS._killStreak = 0; // reset kill streak on new floor
+  // Reset Shadow World per-run state on floor 1
+  if (DS.floor === 1 && DS.dungeon === 'The Shadow World') {
+    DS._shadowCorruption = 0;
+    DS._shadowKilledEnemies = [];
+    DS._fearTurns = 0;
+    updateCorruptionDisplay();
+  }
   if (typeof applyTraitPerFloor === 'function') applyTraitPerFloor();
   DS.roomsOnFloor = 0;
   // Hunter Mode — phase up on floor 2, give small distance mercy on each new floor
@@ -13864,13 +13977,31 @@ function searchRoom() {
 function startCombat(isBoss) {
   setTimeout(function(){ showDungeonTip(isBoss ? 'first-boss' : 'first-combat'); }, 800);
   DS.inCombat = true; DS.defending = false;
-  if (isBoss) DS._eliteKilledFloor10 = false; // clear elite guard now that boss is actually starting
+  if (isBoss) DS._eliteKilledFloor10 = false;
   try { updateCombatSpellBtn(); } catch(e2) {}
   if (DS.cls === 'Ranger') DS.rangerFirstHit = true;
-  // Hunter's Mark — first attack is always a crit
   if (DS._huntersMark) DS._huntersMarkReady = true;
-  // Apply tier scaling to enemy before combat starts
   if (DS.enemy) DS.enemy = applyTierScaling(DS.enemy);
+
+  // Shadow World — Mimic surprise attack
+  if (DS.dungeon === 'The Shadow World' && DS.enemy && DS.enemy.mimicSurprise && !DS.enemy._mimicRevealed) {
+    DS.enemy._mimicRevealed = true;
+    setTimeout(function() {
+      var surprise = Math.round(rnd(DS.enemy.atk[0], DS.enemy.atk[1]) * 2);
+      DS.hp = Math.max(0, DS.hp - surprise);
+      updatePlayerBar();
+      addLog('📦 The Mimic reveals itself! Surprise attack deals ' + surprise + ' damage!');
+      say('The Mimic! Surprise attack. ' + surprise + ' damage.');
+      vibe && vibe([200, 100, 200]);
+    }, 500);
+  }
+
+  // Shadow World — Lurker hides first turn
+  if (DS.dungeon === 'The Shadow World' && DS.enemy && DS.enemy.lurkerHide) {
+    DS.enemy._lurkerHiding = true;
+    addLog('👁️ ' + DS.enemy.name + ' hides in the shadows. It will strike with full power next turn.');
+    say(DS.enemy.name + ' hides. It will strike with guaranteed critical next turn.');
+  }
   // Boss gets boss music, normal enemies get battle music
   playTrack(isBoss ? exploTrackForFloor(10) : battleTrack());
   if (isBoss) {
@@ -13886,6 +14017,7 @@ function startCombat(isBoss) {
              : DS.dungeon === 'The Whispering Forest' ? WHISPER_ENEMIES.bossPool
              : DS.dungeon === 'The Infernal Descent'  ? INFERNAL_ENEMIES.bossPool
              : DS.dungeon === 'The Abyssal Deep'      ? ABYSSAL_ENEMIES.bossPool
+             : DS.dungeon === 'The Shadow World'      ? SHADOW_ENEMIES.bossPool
              : ENEMIES.bossPool;
     var bossTemplate = pool[Math.floor(Math.random() * pool.length)];
     // Show boss preview before spawning
@@ -13918,7 +14050,26 @@ function startCombat(isBoss) {
       phase2Desc: bossTemplate.phase2Desc || null,
       phase3Desc: bossTemplate.phase3Desc || null,
       weakPoints: bossTemplate.weakPoints || null,
+      // Shadow World specific
+      isShapeshifter: bossTemplate.isShapeshifter || false,
+      isEcho:     bossTemplate.isEcho     || false,
     };
+    // Shapeshifter — 4 phase boss, announce dramatically
+    if (bossTemplate.isShapeshifter) {
+      DS.enemy.fourPhase = true;
+      DS.enemy.phase3Hp = Math.round(_bossHp * 0.15);
+      setTimeout(function() {
+        addLog('🌑 The Shapeshifter appears — wearing your face. Using your name. It knows every move you will make.');
+        say('The Shapeshifter. It looks exactly like you. Same class, same level, same weapon. This is the final boss of The Shadow World.');
+      }, 800);
+    }
+    // Echo boss — announce as copy of a fallen enemy
+    if (bossTemplate.isEcho) {
+      setTimeout(function() {
+        addLog('🔄 The Echo takes shape — a memory of something you defeated. It has learned from your methods.');
+        say('The Echo. A shadow copy of an enemy you defeated. It remembers the fight. It will not make the same mistakes.');
+      }, 800);
+    }
     showBossPhaseBar(1);
     say('The boss appears — ' + bossTemplate.name + '. Prepare yourself.');
     // Start boss timer
@@ -13963,6 +14114,10 @@ function startCombat(isBoss) {
 var _combatBtnSafetyTimer = null;
 
 function setCombatBtns(on) {
+  // Show Purge button only in Shadow World
+  var purgeBtn = document.getElementById('cbtn-purge');
+  if (purgeBtn) purgeBtn.style.display = (DS && DS.dungeon === 'The Shadow World') ? '' : 'none';
+
   ['cbtn-attack','cbtn-heavy','cbtn-defend','cbtn-potion','cbtn-flee','cbtn-examine'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el) el.disabled = !on;
@@ -14373,6 +14528,13 @@ function doFight(action) {
       DS.enemy = null;
       DS.kills = (DS.kills || 0) + 1;
       DS._killStreak = (DS._killStreak || 0) + 1;
+      // Shadow World — track for echo ambush
+      if (DS.dungeon === 'The Shadow World' && DS.enemy && !DS.enemy.isEcho && !DS.enemy.isBoss) {
+        if (!DS._shadowKilledEnemies) DS._shadowKilledEnemies = [];
+        var _shadowKilledCopy = Object.assign({}, DS.enemy);
+        _shadowKilledCopy.maxHp = DS.enemy.maxHp || DS.enemy.hp;
+        DS._shadowKilledEnemies.push(_shadowKilledCopy);
+      }
       setCombatBtns(false);
       setTimeout(function(){
         showDgPanels(true, false, false);
@@ -14402,6 +14564,18 @@ function doFight(action) {
   sfx('sfx-select');
   var e = DS.enemy;
   var baseAtk = rnd(DS.atk[0], DS.atk[1]) + DS.atkBonus;
+  // Shadow World fear penalty
+  if (DS._fearTurns && DS._fearTurns > 0) {
+    baseAtk = Math.round(baseAtk * 0.8);
+    DS._fearTurns--;
+    if (DS._fearTurns <= 0) { addLog('😤 The fear fades. Your damage returns to normal.'); say('Fear fades. Damage restored.'); }
+    else addLog('😨 Sorrow Hound fear — damage reduced 20%. ' + DS._fearTurns + ' turn' + (DS._fearTurns !== 1 ? 's' : '') + ' remaining.');
+  }
+  // Shadow World corruption damage penalty
+  if (DS.dungeon === 'The Shadow World' && DS._shadowCorruption >= 3) {
+    baseAtk = Math.round(baseAtk * getCorruptionDamageMult());
+    if (DS._shadowCorruption >= 3) addLog('🌑 Corrupted — half damage! Use Purge to clear stacks.');
+  }
   // Rage Tonic — triple ATK for duration
   if (DS._rageTurns && DS._rageTurns > 0) {
     baseAtk = Math.round(baseAtk * 3);
@@ -14568,6 +14742,12 @@ function doFight(action) {
       playerDmg = Math.round(baseAtk * 1.7);
       sfx('sfx-heavy-hit');
       addLog('Heavy strike lands for ' + playerDmg + ' damage!');
+      // Shadow World — heavy strike breaks Void Weaver web
+      if (DS.dungeon === 'The Shadow World' && DS.enemy && DS.enemy.corruptWeb && DS.enemy._webActive) {
+        DS.enemy._webActive = false;
+        addLog('🕸️ Heavy strike shatters the Void Web! Passive damage stopped.');
+        say('Void Web broken. No more passive shadow damage.');
+      }
     }
 
   } else if (action === 'defend') {
@@ -14841,11 +15021,20 @@ function sanitizeGold() {
 }
 
 function enemyDead() {
-  // Snapshot the dying enemy up front — DS.enemy gets nulled out further down,
-  // and everything in this function (alchemy drops, Cupid's Love Potion, kill
-  // messages, etc.) needs to keep referring to the enemy that was just killed.
   var e = DS.enemy;
   try { resetGunState(); } catch(e2) {}
+
+  // Shadow World — Twice Dead mechanic
+  if (DS.dungeon === 'The Shadow World' && e && e.twiceDead && !e._diedOnce) {
+    e._diedOnce = true;
+    e.hp = Math.round((e.maxHp || 80) * 0.5);
+    updateEnemyBar();
+    addLog('💀 ' + e.name + ' refuses to stay dead! Returns at ' + e.hp + ' HP!');
+    say(e.name + ' refuses to stay dead. It returns at ' + e.hp + ' HP. Kill it again.');
+    vibe && vibe([100, 50, 100]);
+    setCombatBtns(true); updateSkillButtons();
+    return; // don't complete the kill yet
+  }
   setCombatBtns(true);
   vibe(VIBE.victory);
   // Clear Friday the 13th bad luck flag
@@ -15339,7 +15528,173 @@ function updatePlayerBar() {
   document.getElementById('dg-player-bar').style.width = pct + '%';
   document.getElementById('dg-player-hp').textContent = 'HP: ' + DS.hp + ' / ' + DS.maxHp;
   document.getElementById('dg-player-hp').setAttribute('aria-label', 'Your health: ' + DS.hp + ' of ' + DS.maxHp);
+  // Show corruption stacks in Shadow World
+  updateShadowCorruptionDisplay();
 }
+
+// ── SHADOW WORLD — CORRUPTION SYSTEM ─────────────────────────────────────────
+// Named distinctly from addCorruption()/updateCorruptionDisplay() below —
+// those belong to the unrelated Whispering Forest sanity meter and the
+// per-character corruptionMode bar, and a same-name collision would silently
+// shadow this entire mechanic (later declaration in the file wins).
+function addShadowCorruption(stacks, source) {
+  if (DS.dungeon !== 'The Shadow World') return;
+  DS._shadowCorruption = (DS._shadowCorruption || 0) + stacks;
+  var msg = '🌑 Shadow Corruption +' + stacks + (source ? ' (' + source + ')' : '') + '. Stacks: ' + DS._shadowCorruption + '.';
+  addLog(msg);
+  if (DS._shadowCorruption >= 3) {
+    say('Shadow Corruption at ' + DS._shadowCorruption + ' stacks. Your attacks deal half damage. Use Purge to clear it.');
+  } else {
+    say('Shadow Corruption ' + DS._shadowCorruption + ' stack' + (DS._shadowCorruption > 1 ? 's' : '') + '.');
+  }
+  updateShadowCorruptionDisplay();
+}
+
+function purgeCorruption() {
+  if (!DS._shadowCorruption || DS._shadowCorruption === 0) {
+    say('No corruption to purge.');
+    return false;
+  }
+  var cost = 4; // SP cost
+  if (DS.sp < cost) {
+    say('Not enough SP to purge. Need ' + cost + ' SP.');
+    return false;
+  }
+  DS.sp = Math.max(0, DS.sp - cost);
+  var cleared = DS._shadowCorruption;
+  DS._shadowCorruption = 0;
+  addLog('✨ Shadow Purge — ' + cleared + ' corruption stack' + (cleared > 1 ? 's' : '') + ' cleared! Costs ' + cost + ' SP.');
+  say('Purge. Corruption cleared. ' + cost + ' SP spent.');
+  updateShadowCorruptionDisplay();
+  updatePlayerBar();
+  return true;
+}
+
+function getCorruptionDamageMult() {
+  if (!DS._shadowCorruption || DS._shadowCorruption < 3) return 1;
+  // Each 3 stacks = 50% damage reduction, cap at 75%
+  var stacks = DS._shadowCorruption;
+  if (stacks >= 9) return 0.25;
+  if (stacks >= 6) return 0.5;
+  return 0.5; // 3+ stacks = half damage
+}
+
+function updateShadowCorruptionDisplay() {
+  var el = document.getElementById('dg-shadow-corruption');
+  if (!el) return;
+  var stacks = DS._shadowCorruption || 0;
+  if (DS.dungeon === 'The Shadow World' && stacks > 0) {
+    el.style.display = '';
+    el.textContent = '🌑 Corruption: ' + stacks + (stacks >= 3 ? ' — HALF DAMAGE' : '');
+    el.setAttribute('aria-label', 'Shadow corruption ' + stacks + ' stack' + (stacks !== 1 ? 's' : '') + (stacks >= 3 ? '. Your attacks deal half damage.' : '.'));
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+// Apply shadow enemy mechanics — called in applyEnemyMechanicsOnTurn
+function applyShadowEnemyMechanics(e, dmgToPlayer) {
+  if (DS.dungeon !== 'The Shadow World') return dmgToPlayer;
+
+  // Lurker — guaranteed critical second turn
+  if (e.lurkerHide && e._lurkerHiding) {
+    e._lurkerHiding = false;
+    e._lurkerStrike = true;
+  }
+  if (e._lurkerStrike) {
+    e._lurkerStrike = false;
+    dmgToPlayer = Math.round(dmgToPlayer * 2.5);
+    addLog('👁️ The Lurker strikes from the shadows! Critical hit for ' + dmgToPlayer + '!');
+    say('Lurker critical hit! ' + dmgToPlayer + ' damage.');
+  }
+
+  // Reflection — mirrors last player action
+  if (e.reflection && DS._lastCombatAction) {
+    if (DS._lastCombatAction === 'defend') {
+      // Player defended — Reflection heals instead of attacking
+      var heal = 15;
+      e.hp = Math.min(e.maxHp || e.hp, e.hp + heal);
+      updateEnemyBar();
+      addLog('🪞 The Reflection mirrors your defense — it heals ' + heal + ' HP!');
+      say('Reflection mirrors your defense and heals ' + heal + ' HP.');
+      return 0; // no damage to player
+    }
+  }
+
+  // corruptOnHit — adds corruption stacks
+  if (e.corruptOnHit) {
+    addShadowCorruption(e.corruptOnHit, e.name);
+  }
+
+  // Void Weaver — corruption web passive damage
+  if (e.corruptWeb && e._webActive) {
+    DS.hp = Math.max(0, DS.hp - 8);
+    updatePlayerBar();
+    addLog('🕸️ Void Web deals 8 shadow damage!');
+    say('Shadow web burns. 8 damage.');
+    if (DS.hp <= 0) { setTimeout(function(){ handleDeath(); }, 300); return 0; }
+  }
+
+  // Sorrow Hound — fear on first turn
+  if (e.fearHowl && !e._howled) {
+    e._howled = true;
+    DS._fearTurns = 3;
+    addLog('🐕 ' + e.name + ' howls! Your damage is reduced 20% for 3 turns.');
+    say(e.name + ' howls with sorrow. Your damage reduced 20% for 3 turns.');
+  }
+
+  // Void Weaver — activate web on first turn
+  if (e.corruptWeb && !e._webActive && !e._webActivated) {
+    e._webActive = true;
+    e._webActivated = true;
+    addLog('🕸️ ' + e.name + ' weaves a shadow web! 8 passive damage per turn until destroyed by Heavy Strike.');
+    say(e.name + ' weaves a shadow corruption web. 8 damage per turn. Use Heavy Strike to destroy it.');
+  }
+
+  return dmgToPlayer;
+}
+
+// Shadow World ambush — echoes of enemies already killed this run
+function spawnShadowAmbush() {
+  // Get enemies killed this run
+  var killed = DS._shadowKilledEnemies || [];
+
+  if (killed.length >= 2) {
+    // Echo ambush — resurrect copies of killed enemies
+    var count = Math.min(killed.length, DS.floor >= 7 ? 3 : 2);
+    var shuffled = killed.slice().sort(function(){ return Math.random() - 0.5; });
+    var enemies = shuffled.slice(0, count).map(function(e) {
+      var echo = Object.assign({}, e);
+      echo.name = 'Echo of ' + e.name;
+      echo.hp = Math.round(e.maxHp * 0.75); // echoes have 75% HP
+      echo.maxHp = echo.hp;
+      echo.isEcho = true;
+      echo.corruptOnHit = 1; // echoes always add corruption
+      return echo;
+    });
+    addLog('🔄 The shadows stir — echoes of the fallen rise again!');
+    say('Shadow ambush. Echoes of enemies you defeated return from the dark.');
+    startMultiCombat(enemies);
+    return true;
+  }
+
+  // Not enough kills yet — regular shadow enemies
+  var tier = DS.floor <= 3 ? 't1' : DS.floor <= 6 ? 't2' : 't3';
+  var pool = (SHADOW_ENEMIES[tier] || []).filter(function(e){ return !e.isBoss; });
+  if (pool.length < 2) return false;
+  var count = DS.floor >= 7 ? 3 : 2;
+  var enemies = [];
+  for (var i = 0; i < count; i++) {
+    var e = pool[Math.floor(Math.random() * pool.length)];
+    var enemy = Object.assign({}, e);
+    enemy.maxHp = enemy.hp;
+    enemies.push(enemy);
+  }
+  startMultiCombat(enemies);
+  return true;
+}
+
+// ── END SHADOW WORLD MECHANICS ────────────────────────────────────────────────
 
 function addLog(msg) {
   var log = document.getElementById('dg-combat-log');
@@ -15899,6 +16254,42 @@ function useItem(i) {
     else say('Unknown rune.');
     setCombatBtns(true); updateSkillButtons(); return;
   } else if (item.type === 'scroll') {
+    // Spell scroll — has a spellId, teaches the spell
+    if (item.spellId) {
+      if (!DS.inCombat) {
+        // Learn the spell outside combat
+        if (!DS.spells) DS.spells = [];
+        var alreadyKnows = DS.spells.find(function(s){ return s.id === item.spellId; });
+        if (alreadyKnows) {
+          say('You already know ' + item.name + '. Sell or drop it.');
+        } else {
+          var spellData = SPELLS ? SPELLS.find(function(s){ return s.id === item.spellId; }) : null;
+          if (spellData) {
+            DS.spells.push(JSON.parse(JSON.stringify(spellData)));
+            DS.inventory.splice(i, 1);
+            addLog('📜 ' + item.name + ' learned! Spell added to your book.');
+            say(item.name + ' learned. Spell added to your book.');
+            renderInv(); saveProgress(); updateTopBar();
+          } else {
+            say('Cannot read this scroll right now.');
+          }
+        }
+      } else {
+        // Use spell scroll in combat — cast the spell directly
+        var combatSpell = SPELLS ? SPELLS.find(function(s){ return s.id === item.spellId; }) : null;
+        if (combatSpell && DS.sp >= combatSpell.sp) {
+          DS.inventory.splice(i, 1);
+          castSpell(combatSpell);
+          renderInv(); saveProgress();
+        } else if (combatSpell) {
+          say('Not enough SP to cast ' + combatSpell.name + '. Need ' + combatSpell.sp + ' SP.');
+        } else {
+          say('Cannot cast this spell.');
+        }
+      }
+      setCombatBtns(true); updateSkillButtons(); return;
+    }
+    // Regular scroll — Reveal, Smite, Mending, Knowledge
     var scrollDef = SCROLL_DEFS.find(function(s){ return s.id === item.id; });
     if (scrollDef) { scrollDef.apply(); DS.inventory.splice(i,1); renderInv(); saveProgress(); updateTopBar(); }
     else say('Unknown scroll.');
@@ -18125,6 +18516,23 @@ var BESTIARY_DATA = [
   { id:'abyss-sunken-titan',name:'Sunken Titan',  icon:'⚓', tier:'Abyssal 4-7',  dungeon:'abyssal', desc:'Something the ocean floor could not hold down anymore. It rose. The ocean floor has not recovered from the loss.' },
   { id:'abyss-void-swimmer',name:'Void Swimmer',  icon:'🦈', tier:'Abyssal 5-8',  dungeon:'abyssal', desc:'Evolved to move through the void between the deep and the deeper. Has no natural predators. Has no natural anything. It simply is.' },
   { id:'abyss-pressure-wraith',name:'Pressure Wraith',icon:'💀',tier:'Abyssal 6-9',dungeon:'abyssal', desc:'Created by the weight of the water above. Too much pressure for too long does things to matter. This is one of those things.' },
+  // ── THE SHADOW WORLD ──
+  { id:'shadow-mimic',       name:'The Mimic',        icon:'📦', tier:'Shadow 1-3',  dungeon:'shadow', desc:'It has been a chest for so long it has forgotten it is not one. The surprise when you open it is mutual.' },
+  { id:'shadow-pup',         name:'Shadow Pup',        icon:'🐾', tier:'Shadow 1-3',  dungeon:'shadow', desc:'A small piece of darkness that learned to move. It never travels alone. It does not know how.' },
+  { id:'shadow-drifter',     name:'The Drifter',       icon:'🌫️', tier:'Shadow 1-3',  dungeon:'shadow', desc:'Exists partially in the shadow plane. The half you can see is not the dangerous half.' },
+  { id:'shadow-null-frag',   name:'Null Fragment',     icon:'⬛', tier:'Shadow 1-4',  dungeon:'shadow', desc:'A piece of something that was completely erased. It does not know what it used to be. It is angry about this.' },
+  { id:'shadow-smear',       name:'The Smear',         icon:'🖤', tier:'Shadow 1-4',  dungeon:'shadow', desc:'Corruption given form. It leaves a mark on everything it touches. The mark stays long after the Smear is gone.' },
+  { id:'shadow-null-knight', name:'Null Knight',       icon:'🗡️', tier:'Shadow 3-6',  dungeon:'shadow', desc:'Someone wore this armor into the Shadow World and did not come back out. The armor did. Something else is wearing it now.' },
+  { id:'shadow-reflection',  name:'The Reflection',    icon:'🪞', tier:'Shadow 3-6',  dungeon:'shadow', desc:'A mirror with opinions. It has studied you carefully. It will use what it has learned.' },
+  { id:'shadow-sorrow-hound',name:'Sorrow Hound',      icon:'🐕', tier:'Shadow 3-6',  dungeon:'shadow', desc:'A dog that has been in the dark too long. Its howl carries 3000 years of accumulated sadness. You will feel it.' },
+  { id:'shadow-lurker',      name:'The Lurker',        icon:'👁️', tier:'Shadow 3-6',  dungeon:'shadow', desc:'Has been in this room longer than you have. Has been waiting longer than you have been alive. Patience is its primary weapon.' },
+  { id:'shadow-void-weaver', name:'Void Weaver',       icon:'🕸️', tier:'Shadow 4-7',  dungeon:'shadow', desc:'Spins webs from compressed shadow. The webs are not for catching prey. They are for corrupting it slowly.' },
+  { id:'shadow-twice-dead',  name:'The Twice Dead',    icon:'💀', tier:'Shadow 7-9',  dungeon:'shadow', desc:'Died once and did not accept it. The Shadow World does not argue with things that refuse to stay dead. Neither should you.' },
+  { id:'shadow-archon',      name:'Shadow Archon',     icon:'👑', tier:'Shadow 7-9',  dungeon:'shadow', desc:'Has ruled this section of the Shadow World for longer than recorded history. The shadows obey it. You are in its domain.' },
+  { id:'shadow-unborn',      name:'The Unborn',        icon:'🌑', tier:'Shadow 7-9',  dungeon:'shadow', desc:'Never existed in the physical world. Has no frame of reference for physics. Physical laws do not apply to what was never physical.' },
+  { id:'shadow-remnant',     name:'The Remnant',       icon:'🔮', tier:'Shadow 7-9',  dungeon:'shadow', desc:'What is left when something violent happens and the energy does not dissipate. It has been accumulating for 3000 years.' },
+  { id:'shadow-echo',        name:'The Echo',          icon:'🔄', tier:'Shadow Boss', dungeon:'shadow', desc:'A perfect copy of something you already killed. It remembers the fight. It remembers what you did. It will not make the same mistakes.' },
+  { id:'shadow-shapeshifter',name:'The Shapeshifter',  icon:'🌑', tier:'Shadow Boss', dungeon:'shadow', desc:'Has waited 3000 years for someone worth copying. It wears your face now. Uses your skills. Knows every move before you make it. You are fighting yourself and yourself is very good at this.' },
   // ── THE WHISPERING FOREST extras ──
   { id:'whisper-root-walker',name:'Root Walker',  icon:'🌿', tier:'Forest 1-3',   dungeon:'whisper', desc:'The forest walks. This is one of its feet. There are others.' },
   { id:'whisper-shadow-stag',name:'Shadow Stag',  icon:'🦌', tier:'Forest 1-4',   dungeon:'whisper', desc:'A deer that stepped into a shadow and did not come back out correctly. Still looks like a deer from certain angles. From other angles it does not.' },
@@ -20945,6 +21353,56 @@ function checkBossPhase() {
   var e = DS.enemy;
   if (!e || !e.isMultiPhase) return false;
 
+  // ── THE SHAPESHIFTER — Shadow World 4-phase boss ──
+  if (e.isShapeshifter && DS.dungeon === 'The Shadow World') {
+    var ch = _charIdx !== null ? CHARS[_charIdx] : null;
+    var maxHp = e.maxHp || 500;
+
+    if (DS.bossPhase === 1 && e.hp <= Math.round(maxHp * 0.75)) {
+      DS.bossPhase = 2;
+      showBossPhaseBar(2, 4);
+      // Copy player's weapon damage
+      if (DS.atk) {
+        e._originalAtk = e.atk.slice();
+        e.atk = [DS.atk[0] + 5, DS.atk[1] + 8];
+      }
+      var msg = e.phaseMsg2 || 'The Shapeshifter copies your weapon — attacks now deal your weapon damage!';
+      addLog('🌑 PHASE 2 — ' + msg);
+      say('Phase 2. The Shapeshifter copies your weapon. Its attacks grow stronger.');
+      showPhaseTransitionModal('🌑 PHASE 2', msg, '#9966cc');
+      return true;
+    }
+
+    if (DS.bossPhase === 2 && e.hp <= Math.round(maxHp * 0.50)) {
+      DS.bossPhase = 3;
+      showBossPhaseBar(3, 4);
+      // Match player's current HP
+      e.hp = Math.max(1, DS.hp);
+      e.maxHp = Math.max(1, DS.hp);
+      updateEnemyBar();
+      var msg3 = e.phaseMsg3 || 'The Shapeshifter matches your current HP. It will not let you outlast it.';
+      addLog('🌑 PHASE 3 — ' + msg3);
+      say('Phase 3. The Shapeshifter now has ' + DS.hp + ' HP — matching yours exactly.');
+      showPhaseTransitionModal('🌑 PHASE 3', msg3, '#6633aa');
+      return true;
+    }
+
+    if (DS.bossPhase === 3 && e.hp <= Math.round(Math.max(1, DS.hp) * 0.50)) {
+      DS.bossPhase = 4;
+      showBossPhaseBar(4, 4);
+      // Use player's skills — add corruption on every hit
+      e.corruptOnHit = 2;
+      e.atk = e.atk.map(function(v){ return Math.round(v * 1.5); });
+      var msg4 = e.phaseMsg4 || 'Final Form — The Shapeshifter uses ALL your skills. Fight yourself.';
+      addLog('💀 FINAL FORM — ' + msg4);
+      say('Final form. The Shapeshifter unleashes everything. Every hit adds 2 corruption. Use Purge.');
+      showPhaseTransitionModal('💀 FINAL FORM', msg4, '#330055');
+      vibe && vibe([300, 100, 300, 100, 300]);
+      return true;
+    }
+    return false;
+  }
+
   // ── THE HARD VOID special phase system ──
   if (e.phase2Hp !== undefined && e.phase3Hp !== undefined && (DS.dungeon === 'The Infernal Descent' || DS.dungeon === 'The Infernal')) {
     if (DS.bossPhase === 1 && e.hp <= e.phase2Hp) {
@@ -21329,6 +21787,7 @@ var VR_PUNISH_HOURS  = 24;        // Hours enemies are 50% stronger if failed
 
 var _vrListener      = null;      // RTDB listener handle
 var _vrState         = null;      // Latest cached RTDB state
+var _vrSeeding       = false;     // Prevents double-seed on temporary disconnect
 var _vrChatListener  = null;      // VR screen reuses global chat listener ref
 
 function getVRRef() {
@@ -21486,9 +21945,26 @@ function updateVRMenuBanner() {
       banner.textContent = '🌑 The Void — Initializing...';
       banner.style.display = 'block';
       btn.style.display = 'none';
-      // Seed if truly empty after short delay
+      // Only seed if RTDB confirms truly empty — not just temporarily unloaded
       setTimeout(function() {
-        if (!_vrState) vrSeedState();
+        if (!_vrState && !_vrSeeding) {
+          _vrSeeding = true;
+          // Double-check RTDB directly before seeding to avoid overwriting existing data
+          var ref = getVRRef();
+          if (ref) {
+            ref.once('value', function(snap) {
+              if (!snap.val()) {
+                // Truly empty — safe to seed
+                vrSeedState();
+              } else {
+                // Data exists — just not loaded yet, don't overwrite
+                _vrState = snap.val();
+                updateVRMenuBanner();
+              }
+              _vrSeeding = false;
+            });
+          }
+        }
       }, 3000);
     }
     return;
@@ -28840,6 +29316,12 @@ function applyEnemyMechanicsOnHit(e, playerDmg) {
 function applyEnemyMechanicsOnTurn(e, dmgToPlayer) {
   if (!e) return dmgToPlayer;
 
+  // Shadow World mechanics
+  if (DS.dungeon === 'The Shadow World') {
+    dmgToPlayer = applyShadowEnemyMechanics(e, dmgToPlayer);
+  }
+
+
   // Coward enemies — flee if player is too strong
   if (e.coward) {
     var hpPct = DS.hp / DS.maxHp;
@@ -31897,7 +32379,7 @@ function devResetSRPrompt() {
 }
 
 // ── WHATS NEW ──
-var CURRENT_VERSION = '11.0';
+var CURRENT_VERSION = '11.1';
 function checkWhatsNew() {
   var vtag = document.querySelector('.version-tag');
   if (vtag) vtag.textContent = 'v' + CURRENT_VERSION + ' · Release';
@@ -31934,7 +32416,7 @@ function showMigrationAnimation(onComplete) {
   overlay.style.cssText = 'position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;font-family:Cinzel,serif;';
 
   var lines = [
-    { t: 0,    text: '⚙️ Dungeon Descent v11.0', size: '1.1rem', color: '#c9a227' },
+    { t: 0,    text: '⚙️ Dungeon Descent v11.1', size: '1.1rem', color: '#c9a227' },
     { t: 500,  text: 'Initialising IndexedDB storage engine...', size: '0.78rem', color: '#888' },
     { t: 1400, text: 'Reading save data from localStorage...', size: '0.78rem', color: '#888' },
     { t: 2300, text: 'Copying to IndexedDB — do not close the app', size: '0.78rem', color: '#aaa' },
@@ -34838,6 +35320,7 @@ var DUNGEON_INTROS = {
   'The Whispering Forest':  { eyebrow:'Entering the Forest',   text:'The trees do not move in the wind here. There is no wind. The sound you hear is not the wind. The forest would like you to know that.' },
   'The Infernal':           { eyebrow:'Entering the Infernal', text:'Everything here has already burned. It burns still. The things that live in the fire have stopped noticing the fire. They will notice you.' },
   'The Abyssal Deep':       { eyebrow:'Descending into the Deep', text:'The deepest dungeon. Every boss here has four phases and at least 600 HP. It hits harder than anything you have faced. Stock every potion. Use every skill. Cast every spell. You have been warned.' },
+  'The Shadow World':       { eyebrow:'Entering the Shadow World', text:'It has existed for 3000 years beneath a cursed forest. It does not obey your rules. The Shapeshifter waits at the end — wearing your face, using your skills, knowing your every move. Nothing that enters here leaves unchanged.' },
 };
 var _dungeonIntroShown = {};
 
@@ -34888,7 +35371,7 @@ function filterBestiary(filter) {
   _bestiaryVisibleCount = _bestiaryPageSize;
   var input = document.getElementById('be-search');
   if (input) input.value = '';
-  ['all','crypt','ash','frost','sunken','hollow','nightmare','elite','whisper','spire','infernal','abyssal','special','type-undead','type-beast','type-demon','type-elemental','type-spirit'].forEach(function(f) {
+  ['all','crypt','ash','frost','sunken','hollow','nightmare','elite','whisper','spire','infernal','abyssal','shadow','special','type-undead','type-beast','type-demon','type-elemental','type-spirit'].forEach(function(f) {
     var tab = document.getElementById('be-filter-' + f);
     if (tab) {
       tab.classList.toggle('active', f === filter);
@@ -34898,7 +35381,7 @@ function filterBestiary(filter) {
   // Hide community section if switching away
   document.getElementById('bestiary-grid').style.display = '';
   renderBestiary();
-  var labels = {all:'All enemies',crypt:'Crypt',ash:'Ashbound',frost:'Frosthold',sunken:'Archives',hollow:'Hollow',nightmare:'Nightmare',elite:'Elite',whisper:'Whispering Forest',spire:'The Spire',infernal:'The Infernal',abyssal:'The Abyssal Deep',special:'Special enemies','type-undead':'Undead enemies','type-beast':'Beast enemies','type-demon':'Demon enemies','type-elemental':'Elemental enemies','type-spirit':'Spirit enemies'};
+  var labels = {all:'All enemies',crypt:'Crypt',ash:'Ashbound',frost:'Frosthold',sunken:'Archives',hollow:'Hollow',nightmare:'Nightmare',elite:'Elite',whisper:'Whispering Forest',spire:'The Spire',infernal:'The Infernal',abyssal:'The Abyssal Deep',shadow:'The Shadow World',special:'Special enemies','type-undead':'Undead enemies','type-beast':'Beast enemies','type-demon':'Demon enemies','type-elemental':'Elemental enemies','type-spirit':'Spirit enemies'};
   say('Showing ' + (labels[filter]||filter) + ' enemies.');
 }
 
@@ -37400,6 +37883,82 @@ var ABYSSAL_ENEMIES = {
   ],
 };
 
+// ── THE SHADOW WORLD ──────────────────────────────────────────────────────────
+var SHADOW_ENEMIES = {
+  t1: [
+    { name:'The Mimic',       icon:'📦', hp:28, atk:[6,11],  gold:[3,6],  desc:'Looks like a chest until engaged. Surprise attack first turn deals double damage.', mimicSurprise:true },
+    { name:'Shadow Pup',      icon:'🐾', hp:18, atk:[5,9],   gold:[2,4],  desc:'Weak alone. Always spawns with a second Shadow Pup.', spawnsPair:true },
+    { name:'The Drifter',     icon:'🌫️', hp:22, atk:[5,10],  gold:[2,5],  desc:'Phases between shadow and reality. Dodges every other hit.', dodgeEvery:2 },
+    { name:'Null Fragment',   icon:'⬛', hp:16, atk:[4,8],   gold:[1,4],  desc:'A piece of something that was erased. Adds 1 corruption stack on every hit.', corruptOnHit:1 },
+    { name:'The Smear',       icon:'🖤', hp:20, atk:[4,9],   gold:[2,4],  desc:'Leaves corruption wherever it goes. Adds 1 corruption stack on every hit.', corruptOnHit:1 },
+  ],
+  t2: [
+    { name:'Null Knight',     icon:'🗡️', hp:42, atk:[9,16],  gold:[5,9],  desc:'Corrupted armor with nothing inside. Immune to the first hit every combat.', immuneFirstHit:true },
+    { name:'The Reflection',  icon:'🪞', hp:38, atk:[8,15],  gold:[4,8],  desc:'Mirrors your last action. If you attacked, it attacks. If you defended, it heals 15 HP.', reflection:true },
+    { name:'Sorrow Hound',    icon:'🐕', hp:36, atk:[8,14],  gold:[4,8],  desc:'Howls first turn applying fear — your damage is reduced 20% for 3 turns.', fearHowl:true },
+    { name:'The Lurker',      icon:'👁️', hp:34, atk:[7,13],  gold:[4,8],  desc:'Hides first turn. Guaranteed critical second turn.', lurkerHide:true },
+    { name:'Void Weaver',     icon:'🕸️', hp:44, atk:[9,16],  gold:[5,10], desc:'Weaves a corruption web — passive 8 damage per turn until destroyed with a Heavy Strike.', corruptWeb:true },
+  ],
+  t3: [
+    { name:'The Twice Dead',  icon:'💀', hp:70, atk:[12,20], gold:[9,16], desc:'Refuses to stay dead. Returns at 50% HP after the first kill. Must be defeated twice.', twiceDead:true },
+    { name:'Shadow Archon',   icon:'👑', hp:65, atk:[11,19], gold:[8,15], desc:'Commands the shadows. All enemies deal 15% more damage while it lives.', shadowCommand:true },
+    { name:'The Unborn',      icon:'🌑', hp:60, atk:[12,21], gold:[9,16], desc:'Never existed in the physical world. Weapons deal half damage. Only spells damage it fully.', spiritOnly:true },
+    { name:'The Remnant',     icon:'🔮', hp:55, atk:[13,22], gold:[9,17], desc:'What remains after violent death. Gains +4 ATK every turn it survives. Burst it down fast.', grows:true },
+  ],
+  bossPool: [
+    { name:'The Echo',        icon:'🔄', hp:120, atk:[14,22], gold:[18,28], isBoss:true,
+      desc:'A shadow copy of an enemy you already killed this run. Same mechanics. Same hunger. Returns from the dark wearing a familiar face.',
+      phaseMsg2:'The Echo shifts — it remembers everything you did to it.', isEcho:true },
+    { name:'The Shapeshifter',icon:'🌑', hp:500, atk:[18,28], gold:[80,120], isBoss:true,
+      desc:'It has waited 3000 years for someone worth copying. Now it wears your face. Uses your skills. Knows your every move.',
+      phaseMsg2:'The Shapeshifter copies your equipped weapon — attacks now deal your weapon damage!',
+      phaseMsg3:'Phase 3 — The Shapeshifter matches your current HP. It will not let you outlast it.',
+      phaseMsg4:'Final Form — The Shapeshifter uses ALL your skills. Fight yourself.',
+      isShapeshifter:true },
+  ],
+  elites: [
+    { name:'The Hollow Echo',  icon:'🔄', hp:120, atk:[16,25], gold:[22,38], isElite:true, eliteAbility:'Returns once at full HP after first kill.' },
+    { name:'Null Sovereign',   icon:'⬛', hp:110, atk:[15,24], gold:[20,35], isElite:true, eliteAbility:'Adds 2 corruption stacks on every hit.' },
+    { name:'The Shapeless',    icon:'🌫️', hp:105, atk:[14,23], gold:[18,32], isElite:true, eliteAbility:'Copies your equipped weapon damage on every attack.' },
+  ],
+};
+
+var SHADOW_FLOOR_NAMES = [
+  'The Place That Wasn\'t', 'Where Light Forgot', 'The 3000th Year',
+  'Hall of Erased Things', 'The Corridor of What Remains',
+  'Chamber of the Twice Dead', 'The Mirror Room', 'Where You End',
+  'The Shapeshifter\'s Approach', 'The Final Reflection'
+];
+
+var SHADOW_ROOM_DESCS = [
+  'The air here feels like it is breathing you instead of the other way around.',
+  'Your shadow is moving independently. It has been for three steps now.',
+  'Something is watching from a direction that does not exist.',
+  'The walls are made of compressed darkness. They are warm.',
+  'You hear your own voice from somewhere ahead. You said nothing.',
+  'A corridor stretches behind you that was not there when you entered.',
+  'The floor shows your footprints going the wrong direction.',
+  'Something in here remembers you from a time you have not lived yet.',
+  'The silence here has weight. It presses against your chest.',
+  'You see yourself standing at the far end of the room. It waves.',
+  'The room shifts slightly every time you look away.',
+  'Whatever died here left its shape in the air. You walk through it.',
+  'Your heartbeat echoes twice. The second one is not yours.',
+  'The darkness between the torches moves with purpose.',
+  'Time feels wrong here. You cannot tell if you have been walking for seconds or hours.',
+];
+
+var SHADOW_LOOT = [
+  { name:'Shadow Blade',      icon:'🗡️', type:'weapon', atk:18, desc:'Deals bonus damage equal to 10% of the enemy\'s missing HP. Punishes the weakened.' },
+  { name:'The Null Shield',   icon:'🛡️', type:'armor',  def:14, desc:'Absorbs the first hit of every combat completely. Then it is just armor.' },
+  { name:'Void Cloth',        icon:'🌑', type:'armor',  def:10, desc:'Gets stronger as shadow corruption builds. Turns the dungeon\'s curse into defense.' },
+  { name:'Echo Staff',        icon:'🔮', type:'weapon', atk:15, desc:'Spells cast twice — second cast deals 50% damage. Everything echoes here.' },
+  { name:'Shapeshifter\'s Mask', icon:'🎭', type:'relic', desc:'Copy one enemy ability per dungeon. Use it once. Make it yours.' },
+  { name:'Shadow Cloak',      icon:'🌫️', type:'armor',  def:12, desc:'25% chance to phase through an attack entirely. You learned from the Drifter.' },
+  { name:'The Erased Blade',  icon:'⬛', type:'weapon', atk:20, desc:'Deals true damage — ignores all enemy defense. As if the enemy never had any.' },
+  { name:'Null Potion',       icon:'🌑', type:'potion', heal:55, desc:'Made from compressed shadow. Restores 55 HP and removes all corruption stacks.' },
+];
+
 // ── ABYSSAL ROOM DESCRIPTIONS ──
 var ABYSSAL_ROOM_DESCS = [
   'The water here is ankle deep. Cold. Very cold. Something moves below the surface.',
@@ -38260,6 +38819,12 @@ var MUSIC_CATALOGUE = [
   { key:'infernal3',       label:'Void and Flame — The Infernal Descent',         dungeon:'The Infernal Descent' },
   { key:'infernal-boss',   label:'The Infernal King — Infernal Boss',             dungeon:'The Infernal Descent' },
   { key:'infernal-battle', label:'Hellfire — Infernal Battle',                    dungeon:'The Infernal Descent' },
+  { key:'shadow1',         label:'3000 Years of Dark — The Shadow World',         dungeon:'The Shadow World' },
+  { key:'shadow2',         label:'The Place That Wasn\'t — The Shadow World',     dungeon:'The Shadow World' },
+  { key:'shadow3',         label:'Where You End — The Shadow World',              dungeon:'The Shadow World' },
+  { key:'shadow-boss',     label:'The Shapeshifter — Final Reflection',           dungeon:'The Shadow World' },
+  { key:'shadow-battle',   label:'Echo of a Fight — Shadow Battle',               dungeon:'The Shadow World' },
+  { key:'shadow-stalker',  label:'Something Is Close — Stalker Floor',            dungeon:'The Shadow World' },
   { key:'raid',            label:'No Retreat — Daily Raid',                   dungeon:'Special' },
   { key:'raid-victory',    label:'Still Standing — Raid Victory',             dungeon:'Special' },
   { key:'void-reaper',     label:'The Void Stirs — Void Reaper Theme',        dungeon:'Special' },
@@ -46232,6 +46797,15 @@ function doFightMulti(action) {
     multiEnemiesTakeTurns();
     return;
   }
+  // Track last action for Reflection mechanic
+  DS._lastCombatAction = action;
+
+  if (action === 'purge') {
+    purgeCorruption();
+    setCombatBtns(true); updateSkillButtons();
+    return;
+  }
+
   if (action === 'flee') {
     vibe(VIBE.flee);
     addLog('You attempt to flee...');
@@ -46511,6 +47085,10 @@ function shouldSpawnMultiEnemy() {
 }
 
 function spawnAmbush() {
+  // Shadow World uses its own echo ambush system
+  if (DS.dungeon === 'The Shadow World') {
+    return spawnShadowAmbush();
+  }
   var pool = getEnemyPool();
   if (!pool || pool.length < 2) {
     // Pool too small for ambush — fall back to normal single combat
@@ -46543,6 +47121,7 @@ function getEnemyPool() {
   else if (dungeon === 'The Whispering Forest') pool = WHISPER_ENEMIES[tier] || [];
   else if (dungeon === 'The Infernal Descent' || dungeon === 'The Infernal') pool = INFERNAL_ENEMIES ? (INFERNAL_ENEMIES[tier] || INFERNAL_ENEMIES.normal || []) : [];
   else if (dungeon === 'The Abyssal Deep') pool = ABYSSAL_ENEMIES[tier] || [];
+  else if (dungeon === 'The Shadow World') pool = SHADOW_ENEMIES[tier] || [];
   else pool = ENEMIES[tier] || ENEMIES.normal || [];
   // Fallback to crypt enemies if pool is empty
   if (!pool || pool.length === 0) pool = ENEMIES[tier] || ENEMIES.t1 || [];
@@ -49756,6 +50335,27 @@ function spireReturnToMenu() {
 
 
 <!-- v10.7 UPDATE POPUP -->
+<div id="v111-popup" role="dialog" aria-modal="true" aria-label="Version 11.1 update" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99006;align-items:center;justify-content:center;padding:20px;">
+  <div style="max-width:420px;width:100%;background:#080808;border:2px solid #9966cc;padding:28px;text-align:center;max-height:90vh;overflow-y:auto;">
+    <div style="font-size:1.6rem;margin-bottom:12px;" aria-hidden="true">🌑</div>
+    <div style="font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.4em;color:#9966cc;text-transform:uppercase;margin-bottom:8px;">Version 11.1</div>
+    <h2 style="font-family:Cinzel,serif;font-size:1.1rem;color:#cc88ff;margin-bottom:6px;">The Shadow World Update</h2>
+    <div style="width:50px;height:1px;background:linear-gradient(90deg,transparent,#9966cc,transparent);margin:0 auto 20px;"></div>
+    <div style="text-align:left;font-family:Cinzel,serif;font-size:0.7rem;color:#888;line-height:1.9;margin-bottom:20px;">
+      <div style="color:#9966cc;margin-bottom:6px;">🌑 The Shadow World — 9th Dungeon</div>
+      It has existed for 3000 years beneath a cursed forest. 14 enemies. Shadow corruption mechanic. The Shapeshifter boss — wearing your face, using your skills. Unlocks after The Abyssal Deep.<br><br>
+      <div style="color:#9966cc;margin-bottom:6px;">🌑 The Void Reaper — Now on RTDB</div>
+      The Global Void Reaper is now fully rebuilt on Firebase Realtime Database. Shared HP pool. All players worldwide chip away at the same boss. Persistent across sessions.<br><br>
+      <div style="color:#9966cc;margin-bottom:6px;">📱 iOS — Major Improvements</div>
+      Audio overlap fixed. Startup audio unlocks on first touch. Screen transitions faster. VoiceOver detection via native plugin. Shake to attack fixed. Notifications overhauled with proper scheduling. Custom notification sound.<br><br>
+      <div style="color:#9966cc;margin-bottom:6px;">🔔 Notification Preferences</div>
+      New Notifications tab in Settings. Choose exactly what the game notifies you about — daily dungeon, streak, night mode, weekly events, seasonal events, and more.<br><br>
+      <div style="color:#555;font-size:0.62rem;">+ Corruption stack system, Shadow World ambush (echoes of the dead), Shapeshifter 4-phase boss, Void Weaver web mechanic, Twice Dead, Lurker, Mimic surprise, Sorrow Hound fear, duplicate weapon prevention, scroll use fix, Void Reaper date persistence fix, and many more bug fixes.</div>
+    </div>
+    <button type="button" onclick="dismissV111Popup()" style="width:100%;padding:14px;background:#0a0008;border:2px solid #9966cc;color:#cc88ff;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;" aria-label="Got it — enter the Shadow World">🌑 Enter the Shadow. Descend.</button>
+  </div>
+</div>
+
 <div id="v110-popup" role="dialog" aria-modal="true" aria-label="Version 11.0 update" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99005;align-items:center;justify-content:center;padding:20px;">
   <div style="max-width:420px;width:100%;background:#080808;border:2px solid #c9a227;padding:28px;text-align:center;max-height:90vh;overflow-y:auto;">
     <div style="font-size:1.6rem;margin-bottom:12px;" aria-hidden="true">💬</div>
@@ -51771,6 +52371,25 @@ function handleHardcoreDeath() {
 // ── END COMPANION SYSTEM ──
 
 // -- v11.0 UPDATE POPUP --
+function showV111PopupIfNeeded() {
+  if (DDStore.getItem('dd_v111_seen')) return;
+  var el = document.getElementById('v111-popup');
+  if (!el) return;
+  el.style.display = 'flex';
+  setTimeout(function() {
+    var btn = el.querySelector('button');
+    if (btn) btn.focus();
+    say('Version 11.1 — The Shadow World Update. A new dungeon with 14 enemies and The Shapeshifter boss. iOS improvements, notification overhaul, Void Reaper rebuilt on RTDB, and many more bug fixes. Press Enter the Shadow to continue.');
+  }, 300);
+}
+
+function dismissV111Popup() {
+  DDStore.setItem('dd_v111_seen', '1');
+  var el = document.getElementById('v111-popup');
+  if (el) el.style.display = 'none';
+  say('Welcome to version 11.1. The Shadow World awaits.');
+}
+
 function showV110PopupIfNeeded() {
   if (DDStore.getItem('dd_v110_seen')) return;
   var el = document.getElementById('v110-popup');
@@ -51984,8 +52603,9 @@ window.addEventListener('load', function() {
     DDStore.setItem('dd_v107_seen', '1');
     DDStore.setItem('dd_v108_seen', '1');
     DDStore.setItem('dd_v109_seen', '1');
-    // Show v11.0 popup
-    showV110PopupIfNeeded();
+    DDStore.setItem('dd_v110_seen', '1');
+    // Show v11.1 popup
+    showV111PopupIfNeeded();
   }, 500);
 });
 // ── END v10.2 UPDATE POPUP ──
