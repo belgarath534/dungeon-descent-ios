@@ -8417,7 +8417,7 @@ var TRACK_FILES = {
   'shadow-boss':        _audioUrl('music-shadow-boss.mp3'),
   'shadow-battle':      _audioUrl('music-shadow-battle.mp3'),
   'ambient-shadow':     _audioUrl('ambient-shadow.mp3'),
-  'shadow-stalker':     _audioUrl('music-shadow-stalker.mp3'), // Stalker Floor tension music
+  'shadow-stalker':     _audioUrl('shadow-world-thriller-score.mp3'), // Stalker Floor tension music
 };
 
 // Ambient sound tracks per dungeon
@@ -8673,6 +8673,8 @@ function playTrack(name) {
   if (!AUD.loaded) return;
   if (!AUD.musicOn) { AUD.current = name; return; }
   if (_customTrackActive || _ytActive) { AUD.current = name; return; }
+  // Update music player now playing display
+  try { if (typeof mpUpdateNowPlaying === 'function') setTimeout(mpUpdateNowPlaying, 300); } catch(e) {}
   // Don't restart if same track is already playing — check both Web Audio and Howler
   if (AUD.current === name) {
     // Web Audio: BufferSource is active if it exists and hasn't ended
@@ -13043,12 +13045,13 @@ function enterRoom() {
     return;
   }
   // CRITICAL — never enter a new room during an active Chimera fight
-  // The Chimera uses _chimeraParts instead of DS.enemy, so the check above misses it
   if (_chimeraActive) {
     say('Cannot enter room during combat.');
     renderChimeraScreen();
     return;
   }
+  // Shadow World — check for Stalker Floor before anything else
+  if (DS.dungeon === 'The Shadow World' && checkStalkerFloor()) return;
   if (typeof tryNPCEncounter !== 'undefined' && tryNPCEncounter()) return;
   if (DS.hunterMode && DS.hunterAlive) {
     DS.hunterIdleTurns = 0;
@@ -13400,7 +13403,9 @@ function enterRoom() {
 
       // 12% elite chance on floors 4+
       var eliteKey = DS.diff === 'Nightmare' ? 'Nightmare' : DS.dungeon;
-      var elitePool = (DS.dungeon === 'The Whispering Forest' ? WHISPER_ELITES : null) || ELITE_ENEMIES[eliteKey] || [];
+      var elitePool = (DS.dungeon === 'The Whispering Forest' ? WHISPER_ELITES : null) ||
+                      (DS.dungeon === 'The Shadow World' ? SHADOW_ENEMIES.elites : null) ||
+                      ELITE_ENEMIES[eliteKey] || [];
       var spawnElite = DS.floor >= 4 && elitePool.length > 0 && Math.random() < 0.15;
       var tier = DS.floor <= 3 ? 't1' : DS.floor <= 6 ? 't2' : 't3';
       var pool = DS.dungeon === 'The Whispering Forest'
@@ -13408,7 +13413,7 @@ function enterRoom() {
         : DS.dungeon === 'The Abyssal Deep'
         ? ABYSSAL_ENEMIES[tier]
         : DS.dungeon === 'The Shadow World'
-        ? ABYSSAL_ENEMIES[tier]
+        ? SHADOW_ENEMIES[tier]
         : enemyPool[tier];
       var base = spawnElite
         ? elitePool[Math.floor(Math.random() * elitePool.length)]
@@ -13528,10 +13533,11 @@ function enterRoom() {
           if (alreadyHas) {
             addLog('You already carry a ' + lootItem.name + '. The duplicate fades back into the dark.');
             say('You already have a ' + lootItem.name + '.');
-            applyItem(lootItem); // still apply any passive effects
+            applyItem(lootItem);
           } else {
             DS.inventory.push(lootItem);
             applyItem(lootItem);
+            addToGlobalInventory(lootItem); // save to persistent inventory so Blacksmith can see it
             sfx('sfx-loot'); vibe(VIBE.loot);
           }
         } else {
@@ -13688,6 +13694,7 @@ function advanceFloor() {
     DS._shadowCorruption = 0;
     DS._shadowKilledEnemies = [];
     DS._fearTurns = 0;
+    DS._shadowEchoDefeated = false;
     updateCorruptionDisplay();
   }
   if (typeof applyTraitPerFloor === 'function') applyTraitPerFloor();
@@ -14003,7 +14010,8 @@ function startCombat(isBoss) {
     say(DS.enemy.name + ' hides. It will strike with guaranteed critical next turn.');
   }
   // Boss gets boss music, normal enemies get battle music
-  playTrack(isBoss ? exploTrackForFloor(10) : battleTrack());
+  var _bossTrack = isBoss ? exploTrackForFloor(10) : battleTrack();
+  playTrack(_bossTrack);
   if (isBoss) {
     // 2% chance — DDDI Grand Overseer appears instead of normal boss
     if (Math.random() < 0.02 && !DS.dddiDefeated) {
@@ -14017,7 +14025,14 @@ function startCombat(isBoss) {
              : DS.dungeon === 'The Whispering Forest' ? WHISPER_ENEMIES.bossPool
              : DS.dungeon === 'The Infernal Descent'  ? INFERNAL_ENEMIES.bossPool
              : DS.dungeon === 'The Abyssal Deep'      ? ABYSSAL_ENEMIES.bossPool
-             : DS.dungeon === 'The Shadow World'      ? SHADOW_ENEMIES.bossPool
+             : DS.dungeon === 'The Shadow World'      ? (function() {
+               // Shadow World — always Echo first, then Shapeshifter
+               if (!DS._shadowEchoDefeated) {
+                 return [SHADOW_ENEMIES.bossPool[0]]; // The Echo
+               } else {
+                 return [SHADOW_ENEMIES.bossPool[1]]; // The Shapeshifter
+               }
+             })()
              : ENEMIES.bossPool;
     var bossTemplate = pool[Math.floor(Math.random() * pool.length)];
     // Show boss preview before spawning
@@ -14054,7 +14069,7 @@ function startCombat(isBoss) {
       isShapeshifter: bossTemplate.isShapeshifter || false,
       isEcho:     bossTemplate.isEcho     || false,
     };
-    // Shapeshifter — 4 phase boss, announce dramatically
+    // Shadow World — Shapeshifter needs 4 phases, announce dramatically
     if (bossTemplate.isShapeshifter) {
       DS.enemy.fourPhase = true;
       DS.enemy.phase3Hp = Math.round(_bossHp * 0.15);
@@ -14063,8 +14078,16 @@ function startCombat(isBoss) {
         say('The Shapeshifter. It looks exactly like you. Same class, same level, same weapon. This is the final boss of The Shadow World.');
       }, 800);
     }
-    // Echo boss — announce as copy of a fallen enemy
+    // Echo boss — when defeated, spawn Shapeshifter next
     if (bossTemplate.isEcho) {
+      DS.enemy._onDeathCallback = function() {
+        DS._shadowEchoDefeated = true;
+        setTimeout(function() {
+          addLog('🌑 The Echo falls. But something else stirs in the darkness...');
+          say('The Echo is defeated. Something darker takes its place.');
+          setTimeout(function() { startCombat(true); }, 2000);
+        }, 1000);
+      };
       setTimeout(function() {
         addLog('🔄 The Echo takes shape — a memory of something you defeated. It has learned from your methods.');
         say('The Echo. A shadow copy of an enemy you defeated. It remembers the fight. It will not make the same mistakes.');
@@ -15024,6 +15047,16 @@ function enemyDead() {
   var e = DS.enemy;
   try { resetGunState(); } catch(e2) {}
 
+  // Shadow World — _onDeathCallback (Echo → Shapeshifter sequence)
+  if (e && e._onDeathCallback) {
+    var cb = e._onDeathCallback;
+    e._onDeathCallback = null;
+    DS.enemy = null;
+    DS.inCombat = false;
+    cb();
+    return;
+  }
+
   // Shadow World — Twice Dead mechanic
   if (DS.dungeon === 'The Shadow World' && e && e.twiceDead && !e._diedOnce) {
     e._diedOnce = true;
@@ -15339,6 +15372,8 @@ function enemyDead() {
 
 function handleDeath() {
   vibe(VIBE.death);
+  // Clean up Stalker Floor if active
+  if (_stalkerActive) { _stalkerActive = false; hideStalkerUI(); }
   setTimeout(companionOnDeath, 1000);
   // Check one-time class survival abilities BEFORE hardcore deletion.
   // These are intentional "cheat death once" mechanics that should work in hardcore.
@@ -15695,6 +15730,329 @@ function spawnShadowAmbush() {
 }
 
 // ── END SHADOW WORLD MECHANICS ────────────────────────────────────────────────
+
+// ── THE STALKER FLOOR — DARKNESS SWALLOWER ────────────────────────────────────
+var _stalkerActive = false;
+var _stalkerGrid = { playerX:2, playerY:2, enemyX:0, enemyY:0 }; // 5x5 grid
+var _stalkerEscapes = 0; // how many times player has escaped
+var _stalkerMaxEscapes = 3;
+var _stalkerCaught = false;
+
+function initStalkerFloor() {
+  _stalkerActive = true;
+  _stalkerEscapes = 0;
+  _stalkerCaught = false;
+
+  // Player starts center, enemy at random edge
+  _stalkerGrid.playerX = 2;
+  _stalkerGrid.playerY = 2;
+  var edges = [{x:0,y:0},{x:4,y:0},{x:0,y:4},{x:4,y:4},{x:2,y:0},{x:2,y:4},{x:0,y:2},{x:4,y:2}];
+  var startEdge = edges[Math.floor(Math.random() * edges.length)];
+  _stalkerGrid.enemyX = startEdge.x;
+  _stalkerGrid.enemyY = startEdge.y;
+
+  // Hide ALL normal dungeon panels — pure stalker mode only
+  showDgPanels(false, false, false);
+  DS.inCombat = false;
+
+  // Stop ALL current audio before switching to stalker music
+  try { stopAmbient(); } catch(e) {}
+  if (AUD) {
+    if (AUD.currentSource) { try { AUD.currentSource.stop(); } catch(e) {} AUD.currentSource = null; }
+    if (AUD.ctx && AUD.ctx.state === 'running') AUD.ctx.suspend().then(function(){ AUD.ctx.resume(); }).catch(function(){});
+  }
+  if (_howlMusic) { try { _howlMusic.stop(); } catch(e) {} }
+  AUD.current = null;
+  setTimeout(function() { playTrack('shadow-stalker'); }, 600);
+
+  // Show stalker UI
+  showStalkerUI();
+  updateStalkerDisplay();
+
+  say('Something stirs in the darkness. The music shifts. Move carefully — the Darkness Swallower is somewhere in this room with you. It is ' + getStalkerDistance() + ' step' + (getStalkerDistance() !== 1 ? 's' : '') + ' away. Move north, south, east, or west to reach the exit. Escape three times to leave this room. If it gets too close you can choose to fight or flee.');
+}
+
+function getStalkerDistance() {
+  var dx = Math.abs(_stalkerGrid.playerX - _stalkerGrid.enemyX);
+  var dy = Math.abs(_stalkerGrid.playerY - _stalkerGrid.enemyY);
+  return dx + dy; // Manhattan distance
+}
+
+function getStalkerDirection() {
+  var dx = _stalkerGrid.enemyX - _stalkerGrid.playerX;
+  var dy = _stalkerGrid.enemyY - _stalkerGrid.playerY;
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    return dx > 0 ? 'right' : 'left';
+  } else {
+    return dy > 0 ? 'behind' : 'ahead';
+  }
+}
+
+function playSpatialGrowl(direction) {
+  try {
+    if (!AUD || !AUD.sfxOn) return;
+    var dist = getStalkerDistance();
+    var vol = Math.max(0.2, 1 - (dist * 0.15));
+
+    // Try Web Audio spatial path first
+    if (_webAudioReady && AUD.ctx && AUD.ctx.state !== 'closed') {
+      if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
+      var panner = AUD.ctx.createPanner();
+      panner.panningModel = 'equalpower';
+      panner.distanceModel = 'inverse';
+      panner.refDistance = 1;
+      panner.rolloffFactor = 1;
+      switch(direction) {
+        case 'left':   panner.setPosition(-3, 0, -1); break;
+        case 'right':  panner.setPosition(3, 0, -1);  break;
+        case 'ahead':  panner.setPosition(0, 0, -3);  break;
+        case 'behind': panner.setPosition(0, 0, 3);   break;
+        default:       panner.setPosition(0, 0, -2);  break;
+      }
+      panner.connect(AUD.ctx.destination);
+      loadAudioBuffer(_SHADOW_AUDIO.growl, AUD.buffers, 'shadow-growl', function(buffer) {
+        if (!buffer || !_stalkerActive) {
+          // Buffer failed — fall back to simple Audio element
+          playGrowlFallback(direction, vol);
+          return;
+        }
+        var source = AUD.ctx.createBufferSource();
+        source.buffer = buffer;
+        var gainNode = AUD.ctx.createGain();
+        gainNode.gain.value = vol * (AUD.sfxVol || 0.8);
+        source.connect(gainNode);
+        gainNode.connect(panner);
+        source.start(0);
+      });
+    } else {
+      playGrowlFallback(direction, vol);
+    }
+  } catch(e) {
+    console.warn('[DD] Spatial growl failed:', e);
+    playGrowlFallback(direction, 0.7);
+  }
+}
+
+function playGrowlFallback(direction, vol) {
+  try {
+    console.log('[DD] Growl fallback — direction:', direction, 'vol:', vol, 'url:', _SHADOW_AUDIO.growl);
+    var audio = new Audio(_SHADOW_AUDIO.growl);
+    audio.volume = Math.min(1, (vol || 0.7) * (AUD ? (AUD.sfxVol || 0.8) : 0.8));
+    var playPromise = audio.play();
+    if (playPromise) {
+      playPromise.then(function(){ console.log('[DD] Growl fallback playing OK'); })
+                 .catch(function(e){ console.warn('[DD] Growl fallback play failed:', e); });
+    }
+  } catch(e) {
+    console.warn('[DD] Growl fallback error:', e);
+  }
+}
+
+function stalkerMove(dir) {
+  if (!_stalkerActive) return;
+
+  // Move player
+  if (dir === 'north' && _stalkerGrid.playerY > 0) _stalkerGrid.playerY--;
+  if (dir === 'south' && _stalkerGrid.playerY < 4) _stalkerGrid.playerY++;
+  if (dir === 'west'  && _stalkerGrid.playerX > 0) _stalkerGrid.playerX--;
+  if (dir === 'east'  && _stalkerGrid.playerX < 4) _stalkerGrid.playerX++;
+
+  // Play footstep sfx
+  sfx('sfx-stairs');
+
+  // Move enemy toward player (one step)
+  var dx = _stalkerGrid.playerX - _stalkerGrid.enemyX;
+  var dy = _stalkerGrid.playerY - _stalkerGrid.enemyY;
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    _stalkerGrid.enemyX += dx > 0 ? 1 : -1;
+  } else {
+    _stalkerGrid.enemyY += dy > 0 ? 1 : -1;
+  }
+
+  var dist = getStalkerDistance();
+  var dir2 = getStalkerDirection();
+
+  // Play spatial growl
+  playSpatialGrowl(dir2);
+
+  // Check caught FIRST — before exit check
+  if (dist === 0) {
+    stalkerCaught();
+    return;
+  }
+
+  // Check if player reached exit (edge of grid)
+  var atExit = _stalkerGrid.playerX === 0 || _stalkerGrid.playerX === 4 ||
+               _stalkerGrid.playerY === 0 || _stalkerGrid.playerY === 4;
+
+  if (atExit) {
+    _stalkerEscapes++;
+    if (_stalkerEscapes >= _stalkerMaxEscapes) {
+      stalkerEscaped();
+      return;
+    }
+    // Reset positions for next escape attempt
+    _stalkerGrid.playerX = 2; _stalkerGrid.playerY = 2;
+    addLog('You slip away — temporarily. ' + (_stalkerMaxEscapes - _stalkerEscapes) + ' more escape' + (_stalkerMaxEscapes - _stalkerEscapes !== 1 ? 's' : '') + ' needed.');
+    say('You escape — for now. ' + (_stalkerMaxEscapes - _stalkerEscapes) + ' more escape' + (_stalkerMaxEscapes - _stalkerEscapes !== 1 ? 's' : '') + ' needed to leave this room.');
+    updateStalkerDisplay();
+    return;
+  }
+
+  // Getting close — warn player
+  if (dist === 1) {
+    addLog('💀 The Darkness Swallower is right next to you. You can hear it breathe.');
+    say('It is right next to you. One step away. The darkness breathes.');
+    vibe && vibe([300, 100, 300]);
+    showStalkerFightOption();
+  } else if (dist === 2) {
+    addLog('⚠️ It is 2 steps away — ' + dir2 + '.');
+    say('It is 2 steps away — ' + dir2 + ' of you.');
+  } else {
+    addLog('👣 ' + dir + '. The Darkness Swallower is ' + dist + ' step' + (dist !== 1 ? 's' : '') + ' away — ' + dir2 + '.');
+    say('You move ' + dir + '. It is ' + dist + ' steps away — ' + dir2 + ' of you.');
+  }
+
+  updateStalkerDisplay();
+}
+
+function stalkerCaught() {
+  _stalkerActive = false;
+  hideStalkerUI();
+  // Play jumpscare
+  try {
+    var js = new Audio(_SHADOW_AUDIO.jumpscare);
+    js.volume = AUD ? (AUD.sfxVol || 0.8) : 0.8;
+    js.play().catch(function(){});
+  } catch(e) {}
+  vibe && vibe([500, 100, 500, 100, 500]);
+  // Deal heavy damage
+  var dmg = Math.round(DS.maxHp * 0.35);
+  DS.hp = Math.max(1, DS.hp - dmg);
+  updatePlayerBar();
+  addLog('💀 THE DARKNESS SWALLOWER CATCHES YOU! ' + dmg + ' shadow damage!');
+  say('Caught! The Darkness Swallower strikes. ' + dmg + ' damage. You barely survive.');
+  // Resume normal dungeon — restore panels then enter next room
+  setTimeout(function() {
+    playTrack(exploTrackForFloor(DS.floor));
+    showDgPanels(true, false, false);
+    enterRoom();
+  }, 2000);
+}
+
+function stalkerEscaped() {
+  _stalkerActive = false;
+  hideStalkerUI();
+  addLog('✨ You escaped the Darkness Swallower! Rare loot awarded.');
+  say('You escaped! The Darkness Swallower retreats into the shadows. Rare loot for your survival.');
+  // Reward
+  var lootOptions = SHADOW_LOOT.filter(function(l){ return l.type === 'weapon' || l.type === 'armor'; });
+  if (lootOptions.length > 0 && DS.inventory) {
+    var reward = Object.assign({}, lootOptions[Math.floor(Math.random() * lootOptions.length)]);
+    DS.inventory.push(reward);
+    addLog('📦 Found: ' + reward.name + '!');
+  }
+  DS.gold += 150;
+  updateTopBar();
+  sfx('sfx-victory');
+  vibe && vibe(VIBE.bossKill);
+  // Resume normal dungeon — restore panels then enter next room
+  setTimeout(function() {
+    playTrack(exploTrackForFloor(DS.floor));
+    showDgPanels(true, false, false);
+    enterRoom();
+  }, 1500);
+}
+
+function stalkerChooseFight() {
+  hideStalkerFightOption();
+  _stalkerActive = false;
+  hideStalkerUI();
+  // Restore combat panel
+  showDgPanels(false, true, false);
+  playTrack(battleTrack());
+  // Spawn the Darkness Swallower as a very hard enemy
+  DS.enemy = {
+    name: 'The Darkness Swallower',
+    icon: '🌑',
+    hp: Math.round(DS.maxHp * 1.5),
+    maxHp: Math.round(DS.maxHp * 1.5),
+    atk: [Math.round(DS.atk ? DS.atk[1] * 1.2 : 20), Math.round(DS.atk ? DS.atk[1] * 1.8 : 30)],
+    gold: [80, 150],
+    isBoss: false,
+    corruptOnHit: 2,
+    desc: 'It has been waiting in this room for 3000 years. You chose to fight it. That was very brave. Possibly very stupid.'
+  };
+  DS.enemy = applyTierScaling(DS.enemy);
+  DS.inCombat = true;
+  DS.defending = false;
+  addLog('⚔ You turn to face the Darkness Swallower!');
+  say('You face the Darkness Swallower. It hits hard and adds 2 corruption per hit. Use Purge.');
+  updateEnemyBar();
+  updatePlayerBar();
+  setCombatBtns(true);
+  updateSkillButtons();
+}
+
+function showStalkerUI() {
+  var existing = document.getElementById('stalker-overlay');
+  if (existing) existing.remove();
+  var ov = document.createElement('div');
+  ov.id = 'stalker-overlay';
+  ov.setAttribute('role', 'region');
+  ov.setAttribute('aria-label', 'Stalker Floor — Darkness Swallower');
+  ov.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#050005;border-top:2px solid #9966cc;padding:12px 16px;z-index:500;';
+  ov.innerHTML =
+    '<div id="stalker-status" style="font-family:Cinzel,serif;font-size:0.72rem;color:#cc88ff;margin-bottom:10px;text-align:center;" aria-live="assertive"></div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">' +
+      '<button onclick="stalkerMove(\'north\')" style="padding:10px;background:#0a0008;border:1px solid #9966cc;color:#cc88ff;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;" aria-label="Move north">↑ North</button>' +
+      '<button onclick="stalkerMove(\'south\')" style="padding:10px;background:#0a0008;border:1px solid #9966cc;color:#cc88ff;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;" aria-label="Move south">↓ South</button>' +
+      '<button onclick="stalkerMove(\'west\')"  style="padding:10px;background:#0a0008;border:1px solid #9966cc;color:#cc88ff;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;" aria-label="Move west">← West</button>' +
+      '<button onclick="stalkerMove(\'east\')"  style="padding:10px;background:#0a0008;border:1px solid #9966cc;color:#cc88ff;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;" aria-label="Move east">→ East</button>' +
+    '</div>' +
+    '<div id="stalker-fight-option" style="display:none;">' +
+      '<button onclick="stalkerChooseFight()" style="width:100%;padding:10px;background:#1a0022;border:1px solid #ff4444;color:#ff8888;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;margin-top:4px;" aria-label="Fight the Darkness Swallower">⚔ Face It</button>' +
+    '</div>';
+  document.body.appendChild(ov);
+}
+
+function hideStalkerUI() {
+  var ov = document.getElementById('stalker-overlay');
+  if (ov) ov.remove();
+}
+
+function hideStalkerFightOption() {
+  var el = document.getElementById('stalker-fight-option');
+  if (el) el.style.display = 'none';
+}
+
+function showStalkerFightOption() {
+  var el = document.getElementById('stalker-fight-option');
+  if (el) el.style.display = '';
+}
+
+function updateStalkerDisplay() {
+  var el = document.getElementById('stalker-status');
+  if (!el) return;
+  var dist = getStalkerDistance();
+  var dir = getStalkerDirection();
+  var escStr = 'Escapes: ' + _stalkerEscapes + ' / ' + _stalkerMaxEscapes;
+  el.textContent = '🌑 ' + dist + ' step' + (dist !== 1 ? 's' : '') + ' away — ' + dir + '.  ' + escStr;
+  el.setAttribute('aria-label', 'Darkness Swallower ' + dist + ' steps away to the ' + dir + '. ' + escStr);
+}
+
+// Check if Stalker Floor should trigger — called from enterRoom
+function checkStalkerFloor() {
+  if (DS.dungeon !== 'The Shadow World') return false;
+  if (DS.floor < 3) return false;
+  if (_stalkerActive) return false;
+  if (DS.inCombat) return false;
+  // 10% chance per floor
+  if (Math.random() > 0.10) return false;
+  setTimeout(function() { initStalkerFloor(); }, 800);
+  return true;
+}
+// ── END STALKER FLOOR ─────────────────────────────────────────────────────────
 
 function addLog(msg) {
   var log = document.getElementById('dg-combat-log');
@@ -25898,137 +26256,137 @@ var DAILY_QUESTS = [
 ];
 
 var ACHIEVEMENTS = [
-  { gold:50, trophies:1, id:'ach-first-blood', gpId:'CgkI0uiuoZcDEAIQAQ', name:'First Blood',    icon:'🗡️', desc:'Blood has been drawn. The dungeon takes notice.',              check:function(s){return s.totalKills>=1;}        },
-  { gold:50, trophies:1, id:'ach-dungeon-1', gpId:'CgkI0uiuoZcDEAIQAg',   name:'Descender',      icon:'🏰', desc:'You went in. You came back out. Most do not.',           check:function(s){return s.dungeonsComplete>=1;}  },
-  { gold:150, trophies:3, id:'ach-ironblood', gpId:'CgkI0uiuoZcDEAIQAw',   name:'Iron Will',      icon:'🩸', desc:'You bled for every floor. The dungeon respected that.',       check:function(s){return s.ironbloodWins>=1;}     },
-  { gold:150, trophies:3, id:'ach-condemned', gpId:'CgkI0uiuoZcDEAIQBA',   name:'Condemned',      icon:'🔴', desc:'Condemned by name. Victorious by choice.',       check:function(s){return s.condemnedWins>=1;}     },
-  { gold:400, trophies:7, id:'ach-forsaken', gpId:'CgkI0uiuoZcDEAIQBQ',    name:'The Forsaken',   icon:'💀', desc:'Abandoned by fate. Not by will.',        check:function(s){return s.forsakenWins>=1;}      },
-  { gold:50, trophies:1, id:'ach-raids-1', gpId:'CgkI0uiuoZcDEAIQBg',     name:'Raider',         icon:'⚔️', desc:'The call came. You answered.',        check:function(s){return s.raidsComplete>=1;}     },
-  { gold:150, trophies:3, id:'ach-raids-5', gpId:'CgkI0uiuoZcDEAIQBw',     name:'Veteran Raider', icon:'🏆', desc:'Five raids. Five returns. That is not luck — that is skill.',               check:function(s){return s.raidsComplete>=5;}     },
-  { gold:50, trophies:1, id:'ach-level-5', gpId:'CgkI0uiuoZcDEAIQCA',     name:'Battle-Hardened',icon:'⬆', desc:'Halfway to legend. Keep climbing.',        check:function(s){return s.maxLevel>=5;}          },
-  { gold:150, trophies:3, id:'ach-level-10', gpId:'CgkI0uiuoZcDEAIQHQ',    name:'Legendary',      icon:'👑', desc:'Maximum power reached. The dungeon fears what you have become.',       check:function(s){return s.maxLevel>=10;}         },
-  { gold:50, trophies:1, id:'ach-kills-50', gpId:'CgkI0uiuoZcDEAIQHw',    name:'Reaper',         icon:'🌑', desc:'Fifty lives ended by your hand. The dungeon counts every one.',check:function(s){return s.totalKills>=50;}     },
-  { gold:150, trophies:3, id:'ach-kills-100', gpId:'CgkI0uiuoZcDEAIQXQ',   name:'Harbinger',      icon:'☠️', desc:'One hundred. The dungeon stopped keeping count. You did not.',             check:function(s){return s.totalKills>=100;}      },
-  { gold:150, trophies:3, id:'ach-skills', gpId:'CgkI0uiuoZcDEAIQRg',      name:'Skill Master',   icon:'✨', desc:'Five skills mastered in a single descent. You are no ordinary adventurer.',    check:function(s){return s.allSkillsUnlocked;}    },
-  { gold:150, trophies:3, id:'ach-ashbound', gpId:'CgkI0uiuoZcDEAIQSw',    name:'Ashen Victor',   icon:'🔥', desc:'You walked through ash and came out the other side. Scarred but standing.',         check:function(s){return s.ashboundComplete>=1;}  },
-  { gold:150, trophies:3, id:'ach-boss-all', gpId:'CgkI0uiuoZcDEAIQKQ',    name:'Boss Hunter',    icon:'🎯', desc:'Three bosses. Three battles. Three victories. They will not be forgotten.',            check:function(s){return s.uniqueBossKills>=3;}   },
-  { gold:150, trophies:3, id:'ach-frosthold', gpId:'CgkI0uiuoZcDEAIQCw',   name:'Cold Victor',    icon:'❄️', desc:'The cold tried to stop you. It failed.',           check:function(s){return s.frostholdComplete>=1;} },
-  { gold:400, trophies:7, id:'ach-trilogy', gpId:'CgkI0uiuoZcDEAIQSg',     name:'The Descent',    icon:'🏆', desc:'Seven trials. Seven victories. The dungeon calls you master.',              check:function(s){return s.dungeonsComplete>=5;}  },
-  { gold:150, trophies:3, id:'ach-nightmare', gpId:'CgkI0uiuoZcDEAIQFw',   name:'Nightmare Slayer',icon:'🟣', desc:'Nightmare difficulty. You did not wake up — you won.',    check:function(s){return s.nightmareWins>=1;}     },
-  { gold:400, trophies:7, id:'ach-nightmare-all', gpId:'CgkI0uiuoZcDEAIQSQ',name:'Beyond Fear',   icon:'⬛', desc:'Three nightmares faced. None survived.',           check:function(s){return s.nightmareBossKills>=3;}},
-  { gold:400, trophies:7, id:'ach-bossrush', gpId:'CgkI0uiuoZcDEAIQXg',    name:'Boss Rush Legend',icon:'👑', desc:'Nine bosses. One run. Zero mercy.',         check:function(s){return s.bossRushComplete;}    },
-  { gold:150, trophies:3, id:'ach-sunken', gpId:'CgkI0uiuoZcDEAIQPg',      name:'Archivist',       icon:'📚', desc:'The archives held secrets older than memory. Now they are yours.',               check:function(s){ return (s.sunkenComplete||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-hollow', gpId:'CgkI0uiuoZcDEAIQDQ',      name:'The Hollow',      icon:'🕯️', desc:'The hollow was empty of everything except danger. You filled it with victory.',                       check:function(s){ return (s.hollowComplete||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-dddi-boss', gpId:'CgkI0uiuoZcDEAIQRA',   name:'Non-Compliant',   icon:'⚖️', desc:'Non-compliant. Victorious. The DDDI will not recover from this.',     check:function(s){ return (s.dddiDefeated||0)>=1; } },
-  { gold:50, trophies:1, id:'ach-julio', gpId:'CgkI0uiuoZcDEAIQUQ',       name:'You Found Him',   icon:'❓', desc:'You found him. He was not supposed to be found.',             check:function(s){ return (s.julioFound||0)>=1; } },
-  { gold:50, trophies:1, id:'ach-elite-kill', gpId:'CgkI0uiuoZcDEAIQYw',  name:'Elite Slayer',    icon:'★',  desc:'Elite enemies exist to end runs. This one ended yours instead.',             check:function(s){ return (s.eliteKills||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-elite-5', gpId:'CgkI0uiuoZcDEAIQKw',     name:'Elite Hunter',    icon:'🏹', desc:'Five elite kills. You are becoming something the dungeon respects.',                    check:function(s){ return (s.eliteKills||0)>=5; } },
-  { gold:50, trophies:1, id:'ach-spirit-earn', gpId:'CgkI0uiuoZcDEAIQUA', name:'Spirit Bound',    icon:'✨', desc:'A spirit chose you. That does not happen by accident.',      check:function(s){ return (s.spiritsEarned||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-ngplus', gpId:'CgkI0uiuoZcDEAIQPw',      name:'Returning',       icon:'🔄', desc:'You finished the dungeon. Then you went back. That says everything.',              check:function(s){ return (s.ngPlusComplete||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-ngplus3', gpId:'CgkI0uiuoZcDEAIQIQ',     name:'Unreasonable',    icon:'💀', desc:'Three times over. The dungeon gave up trying to stop you.',                   check:function(s){ return (s.ngPlusMaxCount||0)>=3; } },
-  { gold:150, trophies:3, id:'ach-lore-reader', gpId:'CgkI0uiuoZcDEAIQUg', name:'Lore Keeper',     icon:'📖', desc:'Five stories read. The dungeon has more history than it admits.',                   check:function(s){ return (s.storiesRead||0)>=5; } },
-  { gold:250, trophies:2, id:'ach-found-julio', gpId:'CgkI0uiuoZcDEAIQLg',    name:'Found Him',         icon:'🏷️', desc:'Every fragment recovered. The full truth of Julio is finally yours.',       check:function(s){ return (s.julioStoryUnlocked||0)>=1; } },
-  { gold:250, trophies:2, id:'ach-medusa-mercy', gpId:'CgkI0uiuoZcDEAIQOw',   name:'Lower the Shield',   icon:'🐍', desc:'You lowered the shield. Most would not have.',                          check:function(s){ return (s.medusaMercy||0)>=1; } },
-  { gold:250, trophies:2, id:'ach-medusa-found', gpId:'CgkI0uiuoZcDEAIQKg',   name:'Found',              icon:'💚', desc:'Against all odds, they found each other again. You made that possible.',               check:function(s){ return (s.medusaReunion||0)>=1; } },
-  { gold:250, trophies:2, id:'ach-medusa-lost', gpId:'CgkI0uiuoZcDEAIQQg',    name:'She Still Looks',    icon:'😢', desc:'She still looks for him. That is on you.', check:function(s){ return (s.medusaStillLooks||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-tournament-win', gpId:'CgkI0uiuoZcDEAIQRw',   name:'Champion',        icon:'🏆', desc:'The tournament had one rule — survive. You did more than that.',              check:function(s){ return (s.tournamentWins||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-tournament-top', gpId:'CgkI0uiuoZcDEAIQEw',   name:'Top of the Board', icon:'🥇', desc:'Top three in the entire tournament. Your name belongs there.', check:function(s){ return (s.tournamentTop3||0)>=1; } },
-  { gold:250, trophies:5, id:'ach-witness', gpId:'CgkI0uiuoZcDEAIQNw',         name:'The Witnessed',       icon:'🦈', desc:'Something ancient watched you and decided you were worthy. Few are.', check: function(s){ return s.witnessFound; } },
-  { gold:400, trophies:7, id:'ach-abyssal-boss', gpId:'CgkI0uiuoZcDEAIQMw',    name:'Depth Conqueror',     icon:'🌊', desc:'The deepest creature in the deepest dungeon. Yours now.', check: function(s){ return s.abyssalBossDefeated; } },
-  { gold:400, trophies:7, id:'ach-void-reaper', gpId:'CgkI0uiuoZcDEAIQZA',     name:'Void Slayer',      icon:'🌑', desc:'The Void Reaper was supposed to be unkillable. You did not know that.',                    check:function(s){ return (s.voidReaperDefeated||0)>=1; } },
-  { gold:250, trophies:2, id:'ach-void-survivor', gpId:'CgkI0uiuoZcDEAIQHg',   name:'Still Standing',   icon:'💜', desc:'You faced the Void Reaper and walked away. That alone is remarkable.', check:function(s){ return (s.voidReaperDefeated||0)>=1 || (s.voidAttempts||0)>=1; } },
-  { gold:50, trophies:1, id:'ach-riddle-correct', gpId:'CgkI0uiuoZcDEAIQKA',  name:'The Riddled',      icon:'❓', desc:'Brains and brawn. The dungeon did not expect both.',           check:function(s){ return (s.riddlesCorrect||0)>=1; } },
-  { gold:50, trophies:1, id:'ach-riddle-wrong', gpId:'CgkI0uiuoZcDEAIQVQ',    name:'Wrong Answer',     icon:'💥', desc:'Wrong answer. Right result. Sometimes force is the solution.',  check:function(s){ return (s.riddlesWrong||0)>=1 && (s.bossDefeated||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-timer-beaten', gpId:'CgkI0uiuoZcDEAIQVA',    name:'Beat The Clock',   icon:'⏱',  desc:'Against the clock and winning. That is pressure. That is you.', check:function(s){ return (s.bossTimerBeaten||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-boss-enrage', gpId:'CgkI0uiuoZcDEAIQFA',     name:'Took Too Long',    icon:'⚠️', desc:'The boss got angrier. You got a trophy. Fair trade.',                 check:function(s){ return (s.bossEnrages||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-formal-warning', gpId:'CgkI0uiuoZcDEAIQIw', name:'Formally Warned',  icon:'⚖️', desc:'You read the warning. Compliance was never an option.',   check:function(s){ return (s['storyRead_formal-warning']||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-first-descent', gpId:'CgkI0uiuoZcDEAIQMQ', name:'Origin Seeker',    icon:'🏔️', desc:'The first dungeon existed long before you. Now you know why.',                   check:function(s){ return (s['storyRead_first-descent']||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-real-story', gpId:'CgkI0uiuoZcDEAIQFg',    name:'The Real Story',   icon:'🏷️', desc:'The real story. Behind the game. Behind everything.',           check:function(s){ return (s['storyRead_real-story']||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-all-stories', gpId:'CgkI0uiuoZcDEAIQTw', gpId:'CgkI0uiuoZcDEAIQTw', name:'The Archivist',   icon:'📜', desc:'Every story. Every secret. The dungeon has no more to hide from you.',          check:function(s){ return (s.storiesRead||0)>=18; } },
-  { gold:150, trophies:3, id:'ach-lullaby', gpId:'CgkI0uiuoZcDEAIQTQ',     name:'Lullaby',         icon:'😢', desc:'In the middle of a dungeon you stopped to help a child. That matters.',    check:function(s){ return (s.wepingChildSoothed||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-all-dungeons', gpId:'CgkI0uiuoZcDEAIQJw',name:'All Floors',      icon:'🗺️', desc:'Seven trials completed. The dungeon bows to no one — except you.',              check:function(s){ return (s.cryptComplete||0)>=1&&(s.ashboundComplete||0)>=1&&(s.frostholdComplete||0)>=1&&(s.sunkenComplete||0)>=1&&(s.hollowComplete||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-reunion', gpId:'CgkI0uiuoZcDEAIQGA',     name:'Rest Now',        icon:'🕯️', desc:'Two souls found each other because of you. Rest now.',check:function(s){ return (s.motherReunion||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-twin-killed', gpId:'CgkI0uiuoZcDEAIQPQ', name:'Mirror Broken',   icon:'👤', desc:'The mirror is broken. Whatever it showed — it cannot haunt you now.',                          check:function(s){ return (s.twinKilled||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-music-box', gpId:'CgkI0uiuoZcDEAIQXw',   name:'The Last Note',   icon:'🎵', desc:'The last note played. You were still standing when it did.',                    check:function(s){ return (s.musicBoxDefeated||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-kills-1000', gpId:'CgkI0uiuoZcDEAIQMg',  name:'One Thousand',    icon:'💀', desc:'One thousand lives ended. The dungeon has run out of things to throw at you.',                check:function(s){ return (s.totalKills||0)>=1000; } },
-  { gold:150, trophies:3, id:'ach-kills-500', gpId:'CgkI0uiuoZcDEAIQTA',   name:'Five Hundred',    icon:'⚔️', desc:'Five hundred. Half a thousand. The dungeon is running low on volunteers.',                check:function(s){ return (s.totalKills||0)>=500; } },
-  { gold:150, trophies:3, id:'ach-hollow-50', gpId:'CgkI0uiuoZcDEAIQNQ',   name:'Haunted',         icon:'👻', desc:'Fifty Hollow Shades. The Hollow is quieter now.',           check:function(s){ return (s.hollowShadeKills||0)>=50; } },
-  { gold:50, trophies:1, id:'ach-floor-9', gpId:'CgkI0uiuoZcDEAIQGQ',     name:'The Penultimate', icon:'9️⃣', desc:'One floor away from the boss. The dungeon holds its breath.',            check:function(s){ return (s.maxFloorReached||0)>=9; } },
-  { gold:50, trophies:1, id:'ach-no-damage', gpId:'CgkI0uiuoZcDEAIQNg',   name:'Untouched',       icon:'🛡️', desc:'Perfect. Not a scratch. The enemies never stood a chance.',  check:function(s){ return (s.noDmgFloors||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-gold-1000', gpId:'CgkI0uiuoZcDEAIQPA',   name:'The Merchant',    icon:'💰', desc:'One thousand gold in a single run. The dungeon paid well today.',       check:function(s){ return (s.bestGoldRun||0)>=1000; } },
-  { gold:400, trophies:7, id:'ach-all-spirits', gpId:'CgkI0uiuoZcDEAIQaA', name:'Spirit Master',   icon:'✨', desc:'All eight spirits. They chose you because there was no one else worthy.',       check:function(s){ return (s.spiritsEarned||0)>=8; } },
-  { gold:150, trophies:3, id:'ach-daily-7', gpId:'CgkI0uiuoZcDEAIQDg',     name:'Dedicated',       icon:'☀️', desc:'Seven days of dedication. The dungeon noticed you coming back.',                 check:function(s){ return (s.dailyQuestsComplete||0)>=7; } },
-  { gold:400, trophies:7, id:'ach-weeping-both', gpId:'CgkI0uiuoZcDEAIQLw',name:'Family',          icon:'👨‍👩‍👦', desc:'Both done. A family whole again. The dungeon will remember this kindness.', check:function(s){ return (s.wepingChildSoothed||0)>=1&&(s.motherReunion||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-all-quests', gpId:'CgkI0uiuoZcDEAIQWg',  name:'The Completionist',icon:'🏆',desc:'Thirty daily quests. You are more committed to this dungeon than anyone.',               check:function(s){ return (s.dailyQuestsComplete||0)>=30; } },
-  { gold:400, trophies:7, id:'gauntlet_champion', gpId:'CgkI0uiuoZcDEAIQQQ', name:'Gauntlet Champion', icon:'⚔️', desc:'Six dungeons. One life. Zero deaths. The Gauntlet has never seen anything like you.', check:function(s){ return (s.gauntletClears||0)>=1; } },
-  { gold:50, trophies:1, id:'ach-daily-dungeon', gpId:'CgkI0uiuoZcDEAIQEg', name:'Daily Challenger',  icon:'📅', desc:'The daily challenge answered. Come back tomorrow. The dungeon will be waiting.',   check:function(s){ return (s.dailyDungeonClears||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-infernal-trial', gpId:'CgkI0uiuoZcDEAIQGg', name:'Trial by Void',    icon:'🔥', desc:'The trial was designed to break you. You passed anyway.', check:function(s){ return (s.infernalTrialWon||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-infernal-riddles', gpId:'CgkI0uiuoZcDEAIQRQ', name:'Keeper of Secrets', icon:'🔍', desc:'Five hidden riddles solved. The dungeon did not think anyone would find them all.', check:function(s){ return (s.infernalRiddlesSolved||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-void-conqueror', gpId:'CgkI0uiuoZcDEAIQLA', gpId:'CgkI0uiuoZcDEAIQLA', name:'Void Conqueror', icon:'🌑', desc:'Five void waves. Five victories. The void has nothing left to offer.', check:function(s){ return (s.voidConqueror||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-enemy-creator', gpId:'CgkI0uiuoZcDEAIQYA', name:'World Builder', icon:'⚗️', desc:'You built something and gave it to the world. That is what creators do.', check:function(s){ return (s.enemyCreated||0)>=1; } },
-  { gold:200, trophies:5, id:'ach-deep-miner', gpId:'CgkI0uiuoZcDEAIQbw', name:'Deep Miner', icon:'⛏️', desc:'Depth 50 in the Mine. You did not just descend — you carved your own path through the rock.', check:function(s){ return (s.mineMaxDepth||0)>=50; } },
-  { gold:150, trophies:3, id:'ach-spirit-forger', gpId:'CgkI0uiuoZcDEAIQbA', name:'Spirit Forger', icon:'🔮', desc:'You looked at raw soul fragments and saw something worth building. Then you built it.', check:function(s){ return (s.customSpiritBuilt||0)>=1; } },
-  { gold:50, trophies:1, id:'ach-first-sale', gpId:'CgkI0uiuoZcDEAIQGw', name:'First Sale', icon:'💰', desc:'First sale made. The Blacksmith nods approvingly.', check:function(){ return parseInt(DDStore.getItem('dd_total_sells')||'0')>=1; } },
-  { gold:50, trophies:1, id:'ach-merchant', gpId:'CgkI0uiuoZcDEAIQIg', name:'Merchant', icon:'🏪', desc:'Five sales. The Blacksmith is starting to recognize you.', check:function(){ return parseInt(DDStore.getItem('dd_total_sells')||'0')>=5; } },
-  { gold:150, trophies:3, id:'ach-black-market', gpId:'CgkI0uiuoZcDEAIQUw', name:'Black Market', icon:'🖤', desc:'Twenty items sold. You are practically running the place.', check:function(){ return parseInt(DDStore.getItem('dd_total_sells')||'0')>=20; } },
-  { gold:50, trophies:1, id:'ach-gold-hoarder', gpId:'CgkI0uiuoZcDEAIQVg', name:'Gold Hoarder', icon:'💛', desc:'Three hundred gold in hand. The weight of it feels good.', check:function(){ return getGlobalGold()>=300; } },
-  { gold:150, trophies:3, id:'ach-big-spender', gpId:'CgkI0uiuoZcDEAIQJg', name:'Big Spender', icon:'💸', desc:'Six hundred gold spent. The Blacksmith has a new favorite customer.', check:function(){ return parseInt(DDStore.getItem('dd_total_gold_spent')||'0')>=600; } },
-  { gold:400, trophies:7, id:'ach-whale', gpId:'CgkI0uiuoZcDEAIQYQ', name:'Whale', icon:'🐋', desc:'Seven thousand gold. The Blacksmith built a second floor just for you.', check:function(){ return parseInt(DDStore.getItem('dd_total_gold_spent')||'0')>=7000; } },
-  { gold:150, trophies:3, id:'ach-gold-rich', gpId:'CgkI0uiuoZcDEAIQDw', name:'Gold Baron', icon:'👑', desc:'One thousand gold. Enough to buy your way out of almost anything.', check:function(){ return getGlobalGold()>=1000; } },
+  { gold:50, trophies:1, id:'ach-first-blood', appleId:'DD_FIRST_BLOOD', gpId:'CgkI0uiuoZcDEAIQAQ', name:'First Blood',    icon:'🗡️', desc:'Blood has been drawn. The dungeon takes notice.',              check:function(s){return s.totalKills>=1;}        },
+  { gold:50, trophies:1, id:'ach-dungeon-1', appleId:'DD_DUNGEON_1', gpId:'CgkI0uiuoZcDEAIQAg',   name:'Descender',      icon:'🏰', desc:'You went in. You came back out. Most do not.',           check:function(s){return s.dungeonsComplete>=1;}  },
+  { gold:150, trophies:3, id:'ach-ironblood', appleId:'DD_IRONBLOOD', gpId:'CgkI0uiuoZcDEAIQAw',   name:'Iron Will',      icon:'🩸', desc:'You bled for every floor. The dungeon respected that.',       check:function(s){return s.ironbloodWins>=1;}     },
+  { gold:150, trophies:3, id:'ach-condemned', appleId:'DD_CONDEMNED', gpId:'CgkI0uiuoZcDEAIQBA',   name:'Condemned',      icon:'🔴', desc:'Condemned by name. Victorious by choice.',       check:function(s){return s.condemnedWins>=1;}     },
+  { gold:400, trophies:7, id:'ach-forsaken', appleId:'DD_FORSAKEN', gpId:'CgkI0uiuoZcDEAIQBQ',    name:'The Forsaken',   icon:'💀', desc:'Abandoned by fate. Not by will.',        check:function(s){return s.forsakenWins>=1;}      },
+  { gold:50, trophies:1, id:'ach-raids-1', appleId:'DD_RAIDS_1', gpId:'CgkI0uiuoZcDEAIQBg',     name:'Raider',         icon:'⚔️', desc:'The call came. You answered.',        check:function(s){return s.raidsComplete>=1;}     },
+  { gold:150, trophies:3, id:'ach-raids-5', appleId:'DD_RAIDS_5', gpId:'CgkI0uiuoZcDEAIQBw',     name:'Veteran Raider', icon:'🏆', desc:'Five raids. Five returns. That is not luck — that is skill.',               check:function(s){return s.raidsComplete>=5;}     },
+  { gold:50, trophies:1, id:'ach-level-5', appleId:'DD_LEVEL_5', gpId:'CgkI0uiuoZcDEAIQCA',     name:'Battle-Hardened',icon:'⬆', desc:'Halfway to legend. Keep climbing.',        check:function(s){return s.maxLevel>=5;}          },
+  { gold:150, trophies:3, id:'ach-level-10', appleId:'DD_LEVEL_10', gpId:'CgkI0uiuoZcDEAIQHQ',    name:'Legendary',      icon:'👑', desc:'Maximum power reached. The dungeon fears what you have become.',       check:function(s){return s.maxLevel>=10;}         },
+  { gold:50, trophies:1, id:'ach-kills-50', appleId:'DD_KILLS_50', gpId:'CgkI0uiuoZcDEAIQHw',    name:'Reaper',         icon:'🌑', desc:'Fifty lives ended by your hand. The dungeon counts every one.',check:function(s){return s.totalKills>=50;}     },
+  { gold:150, trophies:3, id:'ach-kills-100', appleId:'DD_KILLS_100', gpId:'CgkI0uiuoZcDEAIQXQ',   name:'Harbinger',      icon:'☠️', desc:'One hundred. The dungeon stopped keeping count. You did not.',             check:function(s){return s.totalKills>=100;}      },
+  { gold:150, trophies:3, id:'ach-skills', appleId:'DD_SKILLS', gpId:'CgkI0uiuoZcDEAIQRg',      name:'Skill Master',   icon:'✨', desc:'Five skills mastered in a single descent. You are no ordinary adventurer.',    check:function(s){return s.allSkillsUnlocked;}    },
+  { gold:150, trophies:3, id:'ach-ashbound', appleId:'DD_ASHBOUND', gpId:'CgkI0uiuoZcDEAIQSw',    name:'Ashen Victor',   icon:'🔥', desc:'You walked through ash and came out the other side. Scarred but standing.',         check:function(s){return s.ashboundComplete>=1;}  },
+  { gold:150, trophies:3, id:'ach-boss-all', appleId:'DD_BOSS_ALL', gpId:'CgkI0uiuoZcDEAIQKQ',    name:'Boss Hunter',    icon:'🎯', desc:'Three bosses. Three battles. Three victories. They will not be forgotten.',            check:function(s){return s.uniqueBossKills>=3;}   },
+  { gold:150, trophies:3, id:'ach-frosthold', appleId:'DD_FROSTHOLD', gpId:'CgkI0uiuoZcDEAIQCw',   name:'Cold Victor',    icon:'❄️', desc:'The cold tried to stop you. It failed.',           check:function(s){return s.frostholdComplete>=1;} },
+  { gold:400, trophies:7, id:'ach-trilogy', appleId:'DD_TRILOGY', gpId:'CgkI0uiuoZcDEAIQSg',     name:'The Descent',    icon:'🏆', desc:'Seven trials. Seven victories. The dungeon calls you master.',              check:function(s){return s.dungeonsComplete>=5;}  },
+  { gold:150, trophies:3, id:'ach-nightmare', appleId:'DD_NIGHTMARE', gpId:'CgkI0uiuoZcDEAIQFw',   name:'Nightmare Slayer',icon:'🟣', desc:'Nightmare difficulty. You did not wake up — you won.',    check:function(s){return s.nightmareWins>=1;}     },
+  { gold:400, trophies:7, id:'ach-nightmare-all', appleId:'DD_NIGHTMARE_ALL', gpId:'CgkI0uiuoZcDEAIQSQ',name:'Beyond Fear',   icon:'⬛', desc:'Three nightmares faced. None survived.',           check:function(s){return s.nightmareBossKills>=3;}},
+  { gold:400, trophies:7, id:'ach-bossrush', appleId:'DD_BOSSRUSH', gpId:'CgkI0uiuoZcDEAIQXg',    name:'Boss Rush Legend',icon:'👑', desc:'Nine bosses. One run. Zero mercy.',         check:function(s){return s.bossRushComplete;}    },
+  { gold:150, trophies:3, id:'ach-sunken', appleId:'DD_SUNKEN', gpId:'CgkI0uiuoZcDEAIQPg',      name:'Archivist',       icon:'📚', desc:'The archives held secrets older than memory. Now they are yours.',               check:function(s){ return (s.sunkenComplete||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-hollow', appleId:'DD_HOLLOW', gpId:'CgkI0uiuoZcDEAIQDQ',      name:'The Hollow',      icon:'🕯️', desc:'The hollow was empty of everything except danger. You filled it with victory.',                       check:function(s){ return (s.hollowComplete||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-dddi-boss', appleId:'DD_DDDI_BOSS', gpId:'CgkI0uiuoZcDEAIQRA',   name:'Non-Compliant',   icon:'⚖️', desc:'Non-compliant. Victorious. The DDDI will not recover from this.',     check:function(s){ return (s.dddiDefeated||0)>=1; } },
+  { gold:50, trophies:1, id:'ach-julio', appleId:'DD_JULIO', gpId:'CgkI0uiuoZcDEAIQUQ',       name:'You Found Him',   icon:'❓', desc:'You found him. He was not supposed to be found.',             check:function(s){ return (s.julioFound||0)>=1; } },
+  { gold:50, trophies:1, id:'ach-elite-kill', appleId:'DD_ELITE_KILL', gpId:'CgkI0uiuoZcDEAIQYw',  name:'Elite Slayer',    icon:'★',  desc:'Elite enemies exist to end runs. This one ended yours instead.',             check:function(s){ return (s.eliteKills||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-elite-5', appleId:'DD_ELITE_5', gpId:'CgkI0uiuoZcDEAIQKw',     name:'Elite Hunter',    icon:'🏹', desc:'Five elite kills. You are becoming something the dungeon respects.',                    check:function(s){ return (s.eliteKills||0)>=5; } },
+  { gold:50, trophies:1, id:'ach-spirit-earn', appleId:'DD_SPIRIT_EARN', gpId:'CgkI0uiuoZcDEAIQUA', name:'Spirit Bound',    icon:'✨', desc:'A spirit chose you. That does not happen by accident.',      check:function(s){ return (s.spiritsEarned||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-ngplus', appleId:'DD_NGPLUS', gpId:'CgkI0uiuoZcDEAIQPw',      name:'Returning',       icon:'🔄', desc:'You finished the dungeon. Then you went back. That says everything.',              check:function(s){ return (s.ngPlusComplete||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-ngplus3', appleId:'DD_NGPLUS3', gpId:'CgkI0uiuoZcDEAIQIQ',     name:'Unreasonable',    icon:'💀', desc:'Three times over. The dungeon gave up trying to stop you.',                   check:function(s){ return (s.ngPlusMaxCount||0)>=3; } },
+  { gold:150, trophies:3, id:'ach-lore-reader', appleId:'DD_LORE_READER', gpId:'CgkI0uiuoZcDEAIQUg', name:'Lore Keeper',     icon:'📖', desc:'Five stories read. The dungeon has more history than it admits.',                   check:function(s){ return (s.storiesRead||0)>=5; } },
+  { gold:250, trophies:2, id:'ach-found-julio', appleId:'DD_FOUND_JULIO', gpId:'CgkI0uiuoZcDEAIQLg',    name:'Found Him',         icon:'🏷️', desc:'Every fragment recovered. The full truth of Julio is finally yours.',       check:function(s){ return (s.julioStoryUnlocked||0)>=1; } },
+  { gold:250, trophies:2, id:'ach-medusa-mercy', appleId:'DD_MEDUSA_MERCY', gpId:'CgkI0uiuoZcDEAIQOw',   name:'Lower the Shield',   icon:'🐍', desc:'You lowered the shield. Most would not have.',                          check:function(s){ return (s.medusaMercy||0)>=1; } },
+  { gold:250, trophies:2, id:'ach-medusa-found', appleId:'DD_MEDUSA_FOUND', gpId:'CgkI0uiuoZcDEAIQKg',   name:'Found',              icon:'💚', desc:'Against all odds, they found each other again. You made that possible.',               check:function(s){ return (s.medusaReunion||0)>=1; } },
+  { gold:250, trophies:2, id:'ach-medusa-lost', appleId:'DD_MEDUSA_LOST', gpId:'CgkI0uiuoZcDEAIQQg',    name:'She Still Looks',    icon:'😢', desc:'She still looks for him. That is on you.', check:function(s){ return (s.medusaStillLooks||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-tournament-win', appleId:'DD_TOURNAMENT_WIN', gpId:'CgkI0uiuoZcDEAIQRw',   name:'Champion',        icon:'🏆', desc:'The tournament had one rule — survive. You did more than that.',              check:function(s){ return (s.tournamentWins||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-tournament-top', appleId:'DD_TOURNAMENT_TOP', gpId:'CgkI0uiuoZcDEAIQEw',   name:'Top of the Board', icon:'🥇', desc:'Top three in the entire tournament. Your name belongs there.', check:function(s){ return (s.tournamentTop3||0)>=1; } },
+  { gold:250, trophies:5, id:'ach-witness', appleId:'DD_WITNESS', gpId:'CgkI0uiuoZcDEAIQNw',         name:'The Witnessed',       icon:'🦈', desc:'Something ancient watched you and decided you were worthy. Few are.', check: function(s){ return s.witnessFound; } },
+  { gold:400, trophies:7, id:'ach-abyssal-boss', appleId:'DD_ABYSSAL_BOSS', gpId:'CgkI0uiuoZcDEAIQMw',    name:'Depth Conqueror',     icon:'🌊', desc:'The deepest creature in the deepest dungeon. Yours now.', check: function(s){ return s.abyssalBossDefeated; } },
+  { gold:400, trophies:7, id:'ach-void-reaper', appleId:'DD_VOID_REAPER', gpId:'CgkI0uiuoZcDEAIQZA',     name:'Void Slayer',      icon:'🌑', desc:'The Void Reaper was supposed to be unkillable. You did not know that.',                    check:function(s){ return (s.voidReaperDefeated||0)>=1; } },
+  { gold:250, trophies:2, id:'ach-void-survivor', appleId:'DD_VOID_SURVIVOR', gpId:'CgkI0uiuoZcDEAIQHg',   name:'Still Standing',   icon:'💜', desc:'You faced the Void Reaper and walked away. That alone is remarkable.', check:function(s){ return (s.voidReaperDefeated||0)>=1 || (s.voidAttempts||0)>=1; } },
+  { gold:50, trophies:1, id:'ach-riddle-correct', appleId:'DD_RIDDLE_CORRECT', gpId:'CgkI0uiuoZcDEAIQKA',  name:'The Riddled',      icon:'❓', desc:'Brains and brawn. The dungeon did not expect both.',           check:function(s){ return (s.riddlesCorrect||0)>=1; } },
+  { gold:50, trophies:1, id:'ach-riddle-wrong', appleId:'DD_RIDDLE_WRONG', gpId:'CgkI0uiuoZcDEAIQVQ',    name:'Wrong Answer',     icon:'💥', desc:'Wrong answer. Right result. Sometimes force is the solution.',  check:function(s){ return (s.riddlesWrong||0)>=1 && (s.bossDefeated||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-timer-beaten', appleId:'DD_TIMER_BEATEN', gpId:'CgkI0uiuoZcDEAIQVA',    name:'Beat The Clock',   icon:'⏱',  desc:'Against the clock and winning. That is pressure. That is you.', check:function(s){ return (s.bossTimerBeaten||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-boss-enrage', appleId:'DD_BOSS_ENRAGE', gpId:'CgkI0uiuoZcDEAIQFA',     name:'Took Too Long',    icon:'⚠️', desc:'The boss got angrier. You got a trophy. Fair trade.',                 check:function(s){ return (s.bossEnrages||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-formal-warning', appleId:'DD_FORMAL_WARNING', gpId:'CgkI0uiuoZcDEAIQIw', name:'Formally Warned',  icon:'⚖️', desc:'You read the warning. Compliance was never an option.',   check:function(s){ return (s['storyRead_formal-warning']||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-first-descent', appleId:'DD_FIRST_DESCENT', gpId:'CgkI0uiuoZcDEAIQMQ', name:'Origin Seeker',    icon:'🏔️', desc:'The first dungeon existed long before you. Now you know why.',                   check:function(s){ return (s['storyRead_first-descent']||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-real-story', appleId:'DD_REAL_STORY', gpId:'CgkI0uiuoZcDEAIQFg',    name:'The Real Story',   icon:'🏷️', desc:'The real story. Behind the game. Behind everything.',           check:function(s){ return (s['storyRead_real-story']||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-all-stories', appleId:'DD_ALL_STORIES', gpId:'CgkI0uiuoZcDEAIQTw', gpId:'CgkI0uiuoZcDEAIQTw', name:'The Archivist',   icon:'📜', desc:'Every story. Every secret. The dungeon has no more to hide from you.',          check:function(s){ return (s.storiesRead||0)>=18; } },
+  { gold:150, trophies:3, id:'ach-lullaby', appleId:'DD_LULLABY', gpId:'CgkI0uiuoZcDEAIQTQ',     name:'Lullaby',         icon:'😢', desc:'In the middle of a dungeon you stopped to help a child. That matters.',    check:function(s){ return (s.wepingChildSoothed||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-all-dungeons', appleId:'DD_ALL_DUNGEONS', gpId:'CgkI0uiuoZcDEAIQJw',name:'All Floors',      icon:'🗺️', desc:'Seven trials completed. The dungeon bows to no one — except you.',              check:function(s){ return (s.cryptComplete||0)>=1&&(s.ashboundComplete||0)>=1&&(s.frostholdComplete||0)>=1&&(s.sunkenComplete||0)>=1&&(s.hollowComplete||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-reunion', appleId:'DD_REUNION', gpId:'CgkI0uiuoZcDEAIQGA',     name:'Rest Now',        icon:'🕯️', desc:'Two souls found each other because of you. Rest now.',check:function(s){ return (s.motherReunion||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-twin-killed', appleId:'DD_TWIN_KILLED', gpId:'CgkI0uiuoZcDEAIQPQ', name:'Mirror Broken',   icon:'👤', desc:'The mirror is broken. Whatever it showed — it cannot haunt you now.',                          check:function(s){ return (s.twinKilled||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-music-box', appleId:'DD_MUSIC_BOX', gpId:'CgkI0uiuoZcDEAIQXw',   name:'The Last Note',   icon:'🎵', desc:'The last note played. You were still standing when it did.',                    check:function(s){ return (s.musicBoxDefeated||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-kills-1000', appleId:'DD_KILLS_1000', gpId:'CgkI0uiuoZcDEAIQMg',  name:'One Thousand',    icon:'💀', desc:'One thousand lives ended. The dungeon has run out of things to throw at you.',                check:function(s){ return (s.totalKills||0)>=1000; } },
+  { gold:150, trophies:3, id:'ach-kills-500', appleId:'DD_KILLS_500', gpId:'CgkI0uiuoZcDEAIQTA',   name:'Five Hundred',    icon:'⚔️', desc:'Five hundred. Half a thousand. The dungeon is running low on volunteers.',                check:function(s){ return (s.totalKills||0)>=500; } },
+  { gold:150, trophies:3, id:'ach-hollow-50', appleId:'DD_HOLLOW_50', gpId:'CgkI0uiuoZcDEAIQNQ',   name:'Haunted',         icon:'👻', desc:'Fifty Hollow Shades. The Hollow is quieter now.',           check:function(s){ return (s.hollowShadeKills||0)>=50; } },
+  { gold:50, trophies:1, id:'ach-floor-9', appleId:'DD_FLOOR_9', gpId:'CgkI0uiuoZcDEAIQGQ',     name:'The Penultimate', icon:'9️⃣', desc:'One floor away from the boss. The dungeon holds its breath.',            check:function(s){ return (s.maxFloorReached||0)>=9; } },
+  { gold:50, trophies:1, id:'ach-no-damage', appleId:'DD_NO_DAMAGE', gpId:'CgkI0uiuoZcDEAIQNg',   name:'Untouched',       icon:'🛡️', desc:'Perfect. Not a scratch. The enemies never stood a chance.',  check:function(s){ return (s.noDmgFloors||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-gold-1000', appleId:'DD_GOLD_1000', gpId:'CgkI0uiuoZcDEAIQPA',   name:'The Merchant',    icon:'💰', desc:'One thousand gold in a single run. The dungeon paid well today.',       check:function(s){ return (s.bestGoldRun||0)>=1000; } },
+  { gold:400, trophies:7, id:'ach-all-spirits', appleId:'DD_ALL_SPIRITS', gpId:'CgkI0uiuoZcDEAIQaA', name:'Spirit Master',   icon:'✨', desc:'All eight spirits. They chose you because there was no one else worthy.',       check:function(s){ return (s.spiritsEarned||0)>=8; } },
+  { gold:150, trophies:3, id:'ach-daily-7', appleId:'DD_DAILY_7', gpId:'CgkI0uiuoZcDEAIQDg',     name:'Dedicated',       icon:'☀️', desc:'Seven days of dedication. The dungeon noticed you coming back.',                 check:function(s){ return (s.dailyQuestsComplete||0)>=7; } },
+  { gold:400, trophies:7, id:'ach-weeping-both', appleId:'DD_WEEPING_BOTH', gpId:'CgkI0uiuoZcDEAIQLw',name:'Family',          icon:'👨‍👩‍👦', desc:'Both done. A family whole again. The dungeon will remember this kindness.', check:function(s){ return (s.wepingChildSoothed||0)>=1&&(s.motherReunion||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-all-quests', appleId:'DD_ALL_QUESTS', gpId:'CgkI0uiuoZcDEAIQWg',  name:'The Completionist',icon:'🏆',desc:'Thirty daily quests. You are more committed to this dungeon than anyone.',               check:function(s){ return (s.dailyQuestsComplete||0)>=30; } },
+  { gold:400, trophies:7, id:'gauntlet_champion', appleId:'DD_GAUNTLET_CHAMPION', gpId:'CgkI0uiuoZcDEAIQQQ', name:'Gauntlet Champion', icon:'⚔️', desc:'Six dungeons. One life. Zero deaths. The Gauntlet has never seen anything like you.', check:function(s){ return (s.gauntletClears||0)>=1; } },
+  { gold:50, trophies:1, id:'ach-daily-dungeon', appleId:'DD_DAILY_DUNGEON', gpId:'CgkI0uiuoZcDEAIQEg', name:'Daily Challenger',  icon:'📅', desc:'The daily challenge answered. Come back tomorrow. The dungeon will be waiting.',   check:function(s){ return (s.dailyDungeonClears||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-infernal-trial', appleId:'DD_INFERNAL_TRIAL', gpId:'CgkI0uiuoZcDEAIQGg', name:'Trial by Void',    icon:'🔥', desc:'The trial was designed to break you. You passed anyway.', check:function(s){ return (s.infernalTrialWon||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-infernal-riddles', appleId:'DD_INFERNAL_RIDDLES', gpId:'CgkI0uiuoZcDEAIQRQ', name:'Keeper of Secrets', icon:'🔍', desc:'Five hidden riddles solved. The dungeon did not think anyone would find them all.', check:function(s){ return (s.infernalRiddlesSolved||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-void-conqueror', appleId:'DD_VOID_CONQUEROR', gpId:'CgkI0uiuoZcDEAIQLA', gpId:'CgkI0uiuoZcDEAIQLA', name:'Void Conqueror', icon:'🌑', desc:'Five void waves. Five victories. The void has nothing left to offer.', check:function(s){ return (s.voidConqueror||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-enemy-creator', appleId:'DD_ENEMY_CREATOR', gpId:'CgkI0uiuoZcDEAIQYA', name:'World Builder', icon:'⚗️', desc:'You built something and gave it to the world. That is what creators do.', check:function(s){ return (s.enemyCreated||0)>=1; } },
+  { gold:200, trophies:5, id:'ach-deep-miner', appleId:'DD_DEEP_MINER', gpId:'CgkI0uiuoZcDEAIQbw', name:'Deep Miner', icon:'⛏️', desc:'Depth 50 in the Mine. You did not just descend — you carved your own path through the rock.', check:function(s){ return (s.mineMaxDepth||0)>=50; } },
+  { gold:150, trophies:3, id:'ach-spirit-forger', appleId:'DD_SPIRIT_FORGER', gpId:'CgkI0uiuoZcDEAIQbA', name:'Spirit Forger', icon:'🔮', desc:'You looked at raw soul fragments and saw something worth building. Then you built it.', check:function(s){ return (s.customSpiritBuilt||0)>=1; } },
+  { gold:50, trophies:1, id:'ach-first-sale', appleId:'DD_FIRST_SALE', gpId:'CgkI0uiuoZcDEAIQGw', name:'First Sale', icon:'💰', desc:'First sale made. The Blacksmith nods approvingly.', check:function(){ return parseInt(DDStore.getItem('dd_total_sells')||'0')>=1; } },
+  { gold:50, trophies:1, id:'ach-merchant', appleId:'DD_MERCHANT', gpId:'CgkI0uiuoZcDEAIQIg', name:'Merchant', icon:'🏪', desc:'Five sales. The Blacksmith is starting to recognize you.', check:function(){ return parseInt(DDStore.getItem('dd_total_sells')||'0')>=5; } },
+  { gold:150, trophies:3, id:'ach-black-market', appleId:'DD_BLACK_MARKET', gpId:'CgkI0uiuoZcDEAIQUw', name:'Black Market', icon:'🖤', desc:'Twenty items sold. You are practically running the place.', check:function(){ return parseInt(DDStore.getItem('dd_total_sells')||'0')>=20; } },
+  { gold:50, trophies:1, id:'ach-gold-hoarder', appleId:'DD_GOLD_HOARDER', gpId:'CgkI0uiuoZcDEAIQVg', name:'Gold Hoarder', icon:'💛', desc:'Three hundred gold in hand. The weight of it feels good.', check:function(){ return getGlobalGold()>=300; } },
+  { gold:150, trophies:3, id:'ach-big-spender', appleId:'DD_BIG_SPENDER', gpId:'CgkI0uiuoZcDEAIQJg', name:'Big Spender', icon:'💸', desc:'Six hundred gold spent. The Blacksmith has a new favorite customer.', check:function(){ return parseInt(DDStore.getItem('dd_total_gold_spent')||'0')>=600; } },
+  { gold:400, trophies:7, id:'ach-whale', appleId:'DD_WHALE', gpId:'CgkI0uiuoZcDEAIQYQ', name:'Whale', icon:'🐋', desc:'Seven thousand gold. The Blacksmith built a second floor just for you.', check:function(){ return parseInt(DDStore.getItem('dd_total_gold_spent')||'0')>=7000; } },
+  { gold:150, trophies:3, id:'ach-gold-rich', appleId:'DD_GOLD_RICH', gpId:'CgkI0uiuoZcDEAIQDw', name:'Gold Baron', icon:'👑', desc:'One thousand gold. Enough to buy your way out of almost anything.', check:function(){ return getGlobalGold()>=1000; } },
 
   // ── NEW DUNGEON COMPLETIONS ──
-  { gold:150, trophies:3, id:'ach-whisper', gpId:'CgkI0uiuoZcDEAIQTQ',      name:'Forest Walker',     icon:'🌲', desc:'The forest whispered warnings the entire way. You ignored every one.',         check:function(s){ return (s.whisperComplete||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-infernal', gpId:'CgkI0uiuoZcDEAIQGg',     name:'Infernal Survivor', icon:'🔥', desc:'The infernal descent tried to break your spirit. It miscalculated.',          check:function(s){ return (s.infernalComplete||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-chaos', gpId:'CgkI0uiuoZcDEAIQRQ',         name:'Chaos Accepted',    icon:'🌀', desc:'You found the code. The dungeon was never meant to be played this way. Good.', check:function(){ return DDStore.getItem('dd_chaos_mode')==='1'; } },
-  { gold:400, trophies:7, id:'ach-abyssal', gpId:'CgkI0uiuoZcDEAIQaQ',      name:'Into the Deep',     icon:'🌊', desc:'The deepest dungeon cleared. Whatever lives in the deep knows your name now.',             check:function(s){ return (s.abyssalComplete||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-all-8', gpId:'CgkI0uiuoZcDEAIQEQ',        name:'The True Descent',  icon:'🗺️', desc:'All eight dungeons conquered. You are the Dungeon Master. This title is permanent.',               check:function(s){ return (s.cryptComplete||0)>=1&&(s.ashboundComplete||0)>=1&&(s.frostholdComplete||0)>=1&&(s.sunkenComplete||0)>=1&&(s.hollowComplete||0)>=1&&(s.whisperComplete||0)>=1&&(s.infernalComplete||0)>=1&&(s.abyssalComplete||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-whisper', appleId:'DD_WHISPER', gpId:'CgkI0uiuoZcDEAIQTQ',      name:'Forest Walker',     icon:'🌲', desc:'The forest whispered warnings the entire way. You ignored every one.',         check:function(s){ return (s.whisperComplete||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-infernal', appleId:'DD_INFERNAL', gpId:'CgkI0uiuoZcDEAIQGg',     name:'Infernal Survivor', icon:'🔥', desc:'The infernal descent tried to break your spirit. It miscalculated.',          check:function(s){ return (s.infernalComplete||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-chaos', appleId:'DD_CHAOS', gpId:'CgkI0uiuoZcDEAIQRQ',         name:'Chaos Accepted',    icon:'🌀', desc:'You found the code. The dungeon was never meant to be played this way. Good.', check:function(){ return DDStore.getItem('dd_chaos_mode')==='1'; } },
+  { gold:400, trophies:7, id:'ach-abyssal', appleId:'DD_ABYSSAL', gpId:'CgkI0uiuoZcDEAIQaQ',      name:'Into the Deep',     icon:'🌊', desc:'The deepest dungeon cleared. Whatever lives in the deep knows your name now.',             check:function(s){ return (s.abyssalComplete||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-all-8', appleId:'DD_ALL_8', gpId:'CgkI0uiuoZcDEAIQEQ',        name:'The True Descent',  icon:'🗺️', desc:'All eight dungeons conquered. You are the Dungeon Master. This title is permanent.',               check:function(s){ return (s.cryptComplete||0)>=1&&(s.ashboundComplete||0)>=1&&(s.frostholdComplete||0)>=1&&(s.sunkenComplete||0)>=1&&(s.hollowComplete||0)>=1&&(s.whisperComplete||0)>=1&&(s.infernalComplete||0)>=1&&(s.abyssalComplete||0)>=1; } },
 
   // ── SPIRE ──
-  { gold:150, trophies:3, id:'ach-spire-100', gpId:'CgkI0uiuoZcDEAIQCg',    name:'Tower Climber',     icon:'🗼', desc:'One hundred floors up. The ground is far below. Keep going.',          check:function(s){ return (s.spireBestFloor||0)>=100 || (getSpireSave()&&getSpireSave().bestFloor||0)>=100; } },
-  { gold:150, trophies:3, id:'ach-spire-300', gpId:'CgkI0uiuoZcDEAIQSA',    name:'The Ascent',        icon:'🗼', desc:'Three hundred floors. Most adventurers stop long before this.',          check:function(s){ return (s.spireBestFloor||0)>=300 || (getSpireSave()&&getSpireSave().bestFloor||0)>=300; } },
-  { gold:400, trophies:7, id:'ach-spire-500', gpId:'CgkI0uiuoZcDEAIQQA',    name:'Halfway There',     icon:'🗼', desc:'Halfway up The Spire. The air is thin. Your will is not.',          check:function(s){ return (s.spireBestFloor||0)>=500 || (getSpireSave()&&getSpireSave().bestFloor||0)>=500; } },
-  { gold:400, trophies:7, id:'ach-spire-1000', gpId:'CgkI0uiuoZcDEAIQJQ',   name:'The Thousand',      icon:'🗼', desc:'Floor one thousand. The Spire did not think anyone would make it this far.',         check:function(s){ return (s.spireBestFloor||0)>=1000 || (getSpireSave()&&getSpireSave().bestFloor||0)>=1000; } },
-  { gold:400, trophies:7, id:'ach-spire-1800', gpId:'CgkI0uiuoZcDEAIQVw',   name:'The Time Eater',    icon:'⏳', desc:'The Time Eater consumed centuries. You consumed The Time Eater.',   check:function(s){ return (s.timeEaterDefeated||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-spire-100', appleId:'DD_SPIRE_100', gpId:'CgkI0uiuoZcDEAIQCg',    name:'Tower Climber',     icon:'🗼', desc:'One hundred floors up. The ground is far below. Keep going.',          check:function(s){ return (s.spireBestFloor||0)>=100 || (getSpireSave()&&getSpireSave().bestFloor||0)>=100; } },
+  { gold:150, trophies:3, id:'ach-spire-300', appleId:'DD_SPIRE_300', gpId:'CgkI0uiuoZcDEAIQSA',    name:'The Ascent',        icon:'🗼', desc:'Three hundred floors. Most adventurers stop long before this.',          check:function(s){ return (s.spireBestFloor||0)>=300 || (getSpireSave()&&getSpireSave().bestFloor||0)>=300; } },
+  { gold:400, trophies:7, id:'ach-spire-500', appleId:'DD_SPIRE_500', gpId:'CgkI0uiuoZcDEAIQQA',    name:'Halfway There',     icon:'🗼', desc:'Halfway up The Spire. The air is thin. Your will is not.',          check:function(s){ return (s.spireBestFloor||0)>=500 || (getSpireSave()&&getSpireSave().bestFloor||0)>=500; } },
+  { gold:400, trophies:7, id:'ach-spire-1000', appleId:'DD_SPIRE_1000', gpId:'CgkI0uiuoZcDEAIQJQ',   name:'The Thousand',      icon:'🗼', desc:'Floor one thousand. The Spire did not think anyone would make it this far.',         check:function(s){ return (s.spireBestFloor||0)>=1000 || (getSpireSave()&&getSpireSave().bestFloor||0)>=1000; } },
+  { gold:400, trophies:7, id:'ach-spire-1800', appleId:'DD_SPIRE_1800', gpId:'CgkI0uiuoZcDEAIQVw',   name:'The Time Eater',    icon:'⏳', desc:'The Time Eater consumed centuries. You consumed The Time Eater.',   check:function(s){ return (s.timeEaterDefeated||0)>=1; } },
 
   // ── MINION SYSTEM ──
-  { gold:50,  trophies:1, id:'ach-first-minion', gpId:'CgkI0uiuoZcDEAIQWA', name:'Collector',         icon:'👾', desc:'Your first captured soul. It will serve you well — willingly or not.', check:function(){ return JSON.parse(DDStore.getItem('dd_minions')||'[]').length>=1; } },
-  { gold:150, trophies:3, id:'ach-five-minions', gpId:'CgkI0uiuoZcDEAIQLQ', name:'Army of One',       icon:'👾', desc:'Five souls bound to your will. The dungeon calls this an army.',           check:function(){ return JSON.parse(DDStore.getItem('dd_minions')||'[]').length>=5; } },
-  { gold:400, trophies:7, id:'ach-eight-minions', gpId:'CgkI0uiuoZcDEAIQOg',name:'The Menagerie',     icon:'👾', desc:'Eight minions. A full menagerie of captured dungeon creatures. Impressive.',               check:function(){ return JSON.parse(DDStore.getItem('dd_minions')||'[]').length>=8; } },
+  { gold:50,  trophies:1, id:'ach-first-minion', appleId:'DD_FIRST_MINION', gpId:'CgkI0uiuoZcDEAIQWA', name:'Collector',         icon:'👾', desc:'Your first captured soul. It will serve you well — willingly or not.', check:function(){ return JSON.parse(DDStore.getItem('dd_minions')||'[]').length>=1; } },
+  { gold:150, trophies:3, id:'ach-five-minions', appleId:'DD_FIVE_MINIONS', gpId:'CgkI0uiuoZcDEAIQLQ', name:'Army of One',       icon:'👾', desc:'Five souls bound to your will. The dungeon calls this an army.',           check:function(){ return JSON.parse(DDStore.getItem('dd_minions')||'[]').length>=5; } },
+  { gold:400, trophies:7, id:'ach-eight-minions', appleId:'DD_EIGHT_MINIONS', gpId:'CgkI0uiuoZcDEAIQOg',name:'The Menagerie',     icon:'👾', desc:'Eight minions. A full menagerie of captured dungeon creatures. Impressive.',               check:function(){ return JSON.parse(DDStore.getItem('dd_minions')||'[]').length>=8; } },
 
   // ── WEAPON FORGE ──
-  { gold:50,  trophies:1, id:'ach-first-forge', gpId:'CgkI0uiuoZcDEAIQYg',  name:'The Forger',        icon:'🔨', desc:'Your first creation. The Forge recognizes a new craftsman.',  check:function(){ return parseInt(DDStore.getItem('dd_forge_count')||'0')>=1; } },
-  { gold:150, trophies:3, id:'ach-five-forge', gpId:'CgkI0uiuoZcDEAIQXA',   name:'Master Forger',     icon:'🔨', desc:'Five weapons forged. Your hands know the work now.',          check:function(){ return parseInt(DDStore.getItem('dd_forge_count')||'0')>=5; } },
+  { gold:50,  trophies:1, id:'ach-first-forge', appleId:'DD_FIRST_FORGE', gpId:'CgkI0uiuoZcDEAIQYg',  name:'The Forger',        icon:'🔨', desc:'Your first creation. The Forge recognizes a new craftsman.',  check:function(){ return parseInt(DDStore.getItem('dd_forge_count')||'0')>=1; } },
+  { gold:150, trophies:3, id:'ach-five-forge', appleId:'DD_FIVE_FORGE', gpId:'CgkI0uiuoZcDEAIQXA',   name:'Master Forger',     icon:'🔨', desc:'Five weapons forged. Your hands know the work now.',          check:function(){ return parseInt(DDStore.getItem('dd_forge_count')||'0')>=5; } },
 
   // ── RUNS AND PROGRESSION ──
-  { gold:150, trophies:3, id:'ach-dungeons-10', gpId:'CgkI0uiuoZcDEAIQDA',  name:'Seasoned',          icon:'⚔️', desc:'Ten complete runs. The dungeon has started expecting you.',        check:function(s){ return (s.dungeonsComplete||0)>=10; } },
-  { gold:400, trophies:7, id:'ach-dungeons-25', gpId:'CgkI0uiuoZcDEAIQWQ',  name:'Veteran',           icon:'⚔️', desc:'Twenty-five runs. You have spent more time in dungeons than most spend alive.',        check:function(s){ return (s.dungeonsComplete||0)>=25; } },
-  { gold:50,  trophies:1, id:'ach-first-death', gpId:'CgkI0uiuoZcDEAIQIA',  name:'Lesson Learned',    icon:'💀', desc:'Your first death. Learn from it. The dungeon already has.',                check:function(s){ return (s.totalDeaths||0)>=1; } },
-  { gold:150, trophies:3, id:'ach-deaths-10', gpId:'CgkI0uiuoZcDEAIQOQ',    name:'Death Wish',        icon:'💀', desc:'Ten deaths and still here. What you lack in survival you make up for in stubbornness.',                    check:function(s){ return (s.totalDeaths||0)>=10; } },
-  { gold:400, trophies:7, id:'ach-flawless', gpId:'CgkI0uiuoZcDEAIQTg',     name:'Flawless',          icon:'🛡️', desc:'Not a single death. The dungeon never found an opening. Perfect.', check:function(s){ return (s.flawlessRuns||0)>=1; } },
-  { gold:400, trophies:7, id:'ach-speedrun', gpId:'CgkI0uiuoZcDEAIQNA',     name:'Speed Runner',      icon:'⚡', desc:'Ten minutes. The dungeon barely had time to react before you were gone.',check:function(s){ return (s.speedRuns||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-dungeons-10', appleId:'DD_DUNGEONS_10', gpId:'CgkI0uiuoZcDEAIQDA',  name:'Seasoned',          icon:'⚔️', desc:'Ten complete runs. The dungeon has started expecting you.',        check:function(s){ return (s.dungeonsComplete||0)>=10; } },
+  { gold:400, trophies:7, id:'ach-dungeons-25', appleId:'DD_DUNGEONS_25', gpId:'CgkI0uiuoZcDEAIQWQ',  name:'Veteran',           icon:'⚔️', desc:'Twenty-five runs. You have spent more time in dungeons than most spend alive.',        check:function(s){ return (s.dungeonsComplete||0)>=25; } },
+  { gold:50,  trophies:1, id:'ach-first-death', appleId:'DD_FIRST_DEATH', gpId:'CgkI0uiuoZcDEAIQIA',  name:'Lesson Learned',    icon:'💀', desc:'Your first death. Learn from it. The dungeon already has.',                check:function(s){ return (s.totalDeaths||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-deaths-10', appleId:'DD_DEATHS_10', gpId:'CgkI0uiuoZcDEAIQOQ',    name:'Death Wish',        icon:'💀', desc:'Ten deaths and still here. What you lack in survival you make up for in stubbornness.',                    check:function(s){ return (s.totalDeaths||0)>=10; } },
+  { gold:400, trophies:7, id:'ach-flawless', appleId:'DD_FLAWLESS', gpId:'CgkI0uiuoZcDEAIQTg',     name:'Flawless',          icon:'🛡️', desc:'Not a single death. The dungeon never found an opening. Perfect.', check:function(s){ return (s.flawlessRuns||0)>=1; } },
+  { gold:400, trophies:7, id:'ach-speedrun', appleId:'DD_SPEEDRUN', gpId:'CgkI0uiuoZcDEAIQNA',     name:'Speed Runner',      icon:'⚡', desc:'Ten minutes. The dungeon barely had time to react before you were gone.',check:function(s){ return (s.speedRuns||0)>=1; } },
 
   // ── CLASS/VARIETY ──
-  { gold:150, trophies:3, id:'ach-classes-5', gpId:'CgkI0uiuoZcDEAIQZQ',    name:'Shapeshifter',      icon:'🎭', desc:'Five different classes. You adapt. The dungeon cannot predict you.', check:function(s){ return (s.uniqueClassesWon||0)>=5; } },
-  { gold:400, trophies:7, id:'ach-classes-all', gpId:'CgkI0uiuoZcDEAIQZg',  name:'Master of All',     icon:'🎭', desc:'Ten classes mastered. There is no version of this dungeon you cannot handle.', check:function(s){ return (s.uniqueClassesWon||0)>=10; } },
+  { gold:150, trophies:3, id:'ach-classes-5', appleId:'DD_CLASSES_5', gpId:'CgkI0uiuoZcDEAIQZQ',    name:'Shapeshifter',      icon:'🎭', desc:'Five different classes. You adapt. The dungeon cannot predict you.', check:function(s){ return (s.uniqueClassesWon||0)>=5; } },
+  { gold:400, trophies:7, id:'ach-classes-all', appleId:'DD_CLASSES_ALL', gpId:'CgkI0uiuoZcDEAIQZg',  name:'Master of All',     icon:'🎭', desc:'Ten classes mastered. There is no version of this dungeon you cannot handle.', check:function(s){ return (s.uniqueClassesWon||0)>=10; } },
 
   // ── KILLS MILESTONES ──
-  { gold:400, trophies:7, id:'ach-kills-2500', gpId:'CgkI0uiuoZcDEAIQWw',   name:'The Unstoppable',   icon:'⚔️', desc:'Two thousand five hundred. At this point the dungeon is recycling enemies.',             check:function(s){ return (s.totalKills||0)>=2500; } },
-  { gold:400, trophies:7, id:'ach-kills-5000', gpId:'CgkI0uiuoZcDEAIQWw',   name:'Extinction Event',  icon:'☠️', desc:'Five thousand enemies defeated. You are not a player anymore. You are a force of nature.',             check:function(s){ return (s.totalKills||0)>=5000; } },
+  { gold:400, trophies:7, id:'ach-kills-2500', appleId:'DD_KILLS_2500', gpId:'CgkI0uiuoZcDEAIQWw',   name:'The Unstoppable',   icon:'⚔️', desc:'Two thousand five hundred. At this point the dungeon is recycling enemies.',             check:function(s){ return (s.totalKills||0)>=2500; } },
+  { gold:400, trophies:7, id:'ach-kills-5000', appleId:'DD_KILLS_5000', gpId:'CgkI0uiuoZcDEAIQWw',   name:'Extinction Event',  icon:'☠️', desc:'Five thousand enemies defeated. You are not a player anymore. You are a force of nature.',             check:function(s){ return (s.totalKills||0)>=5000; } },
 
   // ── TROPHIES MILESTONE ──
-  { gold:400, trophies:5, id:'ach-trophies-50', gpId:'CgkI0uiuoZcDEAIQOA',  name:'Trophy Hunter',     icon:'🏆', desc:'Fifty trophies earned. The shelf is filling up.',                      check:function(){ return getTrophies()>=50; } },
-  { gold:400, trophies:5, id:'ach-trophies-100', gpId:'CgkI0uiuoZcDEAIQEA', name:'The Collector',     icon:'🏆', desc:'One hundred trophies. The dungeon runs out of ways to challenge you.',                     check:function(){ return getTrophies()>=100; } },
-  { gold:400, trophies:5, id:'ach-trophies-200', gpId:'CgkI0uiuoZcDEAIQHA', name:'Legend',            icon:'🏆', desc:'Two hundred trophies. A collection that speaks for itself.',                     check:function(){ return getTrophies()>=200; } },
+  { gold:400, trophies:5, id:'ach-trophies-50', appleId:'DD_TROPHIES_50', gpId:'CgkI0uiuoZcDEAIQOA',  name:'Trophy Hunter',     icon:'🏆', desc:'Fifty trophies earned. The shelf is filling up.',                      check:function(){ return getTrophies()>=50; } },
+  { gold:400, trophies:5, id:'ach-trophies-100', appleId:'DD_TROPHIES_100', gpId:'CgkI0uiuoZcDEAIQEA', name:'The Collector',     icon:'🏆', desc:'One hundred trophies. The dungeon runs out of ways to challenge you.',                     check:function(){ return getTrophies()>=100; } },
+  { gold:400, trophies:5, id:'ach-trophies-200', appleId:'DD_TROPHIES_200', gpId:'CgkI0uiuoZcDEAIQHA', name:'Legend',            icon:'🏆', desc:'Two hundred trophies. A collection that speaks for itself.',                     check:function(){ return getTrophies()>=200; } },
 
   // ── FLOOR 10 ACHIEVEMENT ──
-  { gold:200, trophies:4, id:'ach-echoes-of-void', gpId:'CgkI0uiuoZcDEAIQZw', name:'Echoes of the Void', icon:'🌑', desc:'The darkness remembers you.', check:function(s){ return (s.maxFloorReached||0)>=10; } },
+  { gold:200, trophies:4, id:'ach-echoes-of-void', appleId:'DD_ECHOES_OF_VOID', gpId:'CgkI0uiuoZcDEAIQZw', name:'Echoes of the Void', icon:'🌑', desc:'The darkness remembers you.', check:function(s){ return (s.maxFloorReached||0)>=10; } },
 
   // ── VOID CHILD QUESTLINE ──
-  { gold:100, trophies:5,  id:'ach-phase4-reached', gpId:'CgkI0uiuoZcDEAIQFQ',   name:'Into The Abyss',    icon:'🌊', desc:'You reached Phase 4 of The Leviathan. The abyss has awakened.', check: function(s){ return s.phase4Reached; } },
-  { gold:150, trophies:7,  id:'ach-rhythm-win', gpId:'CgkI0uiuoZcDEAIQJA',       name:'In Perfect Time',   icon:'🎵', desc:'You answered the call of the abyss. The rhythm was yours.', check: function(s){ return s.rhythmWon; } },
-  { gold:300, trophies:7,  id:'ach-abyss-blinked', gpId:'CgkI0uiuoZcDEAIQQw',    name:'The Abyss Blinked', icon:'🐉', desc:'The Leviathan fell. It had never fallen before. It will not forget.', check: function(s){ return s.abyssalBossDefeated; } },
-  { gold:500, trophies:10, id:'ach-deeper-than-deep', gpId:'CgkI0uiuoZcDEAIQMA',  name:'Deeper Than Deep',  icon:'💀', desc:'You defeated The Leviathan in Hardcore Mode. The abyss will not forget you.', check: function(s){ return s.abyssalHardcoreWin; } },
-  { gold:500, trophies:10, id:'ach-void-child-complete', gpId:'CgkI0uiuoZcDEAIQCQ', name:'What She Was'    , icon:'👁️', desc:'Collected all 25 Void Fragments. The truth is in the library now.', check:function(){ return parseInt(DDStore.getItem('dd_void_fragments')||'0')>=25; } },
+  { gold:100, trophies:5,  id:'ach-phase4-reached', appleId:'DD_PHASE4_REACHED', gpId:'CgkI0uiuoZcDEAIQFQ',   name:'Into The Abyss',    icon:'🌊', desc:'You reached Phase 4 of The Leviathan. The abyss has awakened.', check: function(s){ return s.phase4Reached; } },
+  { gold:150, trophies:7,  id:'ach-rhythm-win', appleId:'DD_RHYTHM_WIN', gpId:'CgkI0uiuoZcDEAIQJA',       name:'In Perfect Time',   icon:'🎵', desc:'You answered the call of the abyss. The rhythm was yours.', check: function(s){ return s.rhythmWon; } },
+  { gold:300, trophies:7,  id:'ach-abyss-blinked', appleId:'DD_ABYSS_BLINKED', gpId:'CgkI0uiuoZcDEAIQQw',    name:'The Abyss Blinked', icon:'🐉', desc:'The Leviathan fell. It had never fallen before. It will not forget.', check: function(s){ return s.abyssalBossDefeated; } },
+  { gold:500, trophies:10, id:'ach-deeper-than-deep', appleId:'DD_DEEPER_THAN_DEEP', gpId:'CgkI0uiuoZcDEAIQMA',  name:'Deeper Than Deep',  icon:'💀', desc:'You defeated The Leviathan in Hardcore Mode. The abyss will not forget you.', check: function(s){ return s.abyssalHardcoreWin; } },
+  { gold:500, trophies:10, id:'ach-void-child-complete', appleId:'DD_VOID_CHILD_COMPLETE', gpId:'CgkI0uiuoZcDEAIQCQ', name:'What She Was'    , icon:'👁️', desc:'Collected all 25 Void Fragments. The truth is in the library now.', check:function(){ return parseInt(DDStore.getItem('dd_void_fragments')||'0')>=25; } },
 ];
 
 function getAchievementStats() {
@@ -26057,18 +26415,21 @@ function awardAchievement(id) {
   sfx(getAchSound());
   showAchievementPopup(ach, gold, trophies);
   updateTrophyDisplay();
-  // ── Google Play Games unlock ──
-  if (ach.gpId) {
+  // ── Game Center (iOS) / Google Play Games (Android) unlock ──
+  // Same plugin, same method — just a different vendor ID string per platform.
+  var isIOSPlatform = window.Capacitor && Capacitor.getPlatform && Capacitor.getPlatform() === 'ios';
+  var platformAchId = isIOSPlatform ? ach.appleId : ach.gpId;
+  if (platformAchId) {
     try {
-      var gpPlugin = (window.Capacitor && Capacitor.Plugins) ? 
+      var gpPlugin = (window.Capacitor && Capacitor.Plugins) ?
         (Capacitor.Plugins.GameConnect || Capacitor.Plugins.CapacitorGameConnect) : null;
       if (gpPlugin) {
-        gpPlugin.unlockAchievement({ achievementID: ach.gpId })
-          .catch(function(e){ console.warn('[DD] GPG achievement failed:', e); });
+        gpPlugin.unlockAchievement({ achievementID: platformAchId })
+          .catch(function(e){ console.warn('[DD] Game Center/GPG achievement failed:', e); });
       } else {
         console.warn('[DD] GameConnect plugin not found. Available plugins:', window.Capacitor ? Object.keys(Capacitor.Plugins) : 'no Capacitor');
       }
-    } catch(e) { console.warn('[DD] GPG achievement error:', e); }
+    } catch(e) { console.warn('[DD] Game Center/GPG achievement error:', e); }
   }
 }
 
@@ -29837,8 +30198,8 @@ function rollDungeonEvent() {
   DUNGEON_EVENTS.forEach(function(e){
     // Dungeon-specific events — only appear in their dungeon
     if (e.dungeons && e.dungeons.indexOf(DS.dungeon) === -1) return;
-    // Non-specific events should not appear in Abyssal Deep (it has its own)
-    if (!e.dungeons && DS.dungeon === 'The Abyssal Deep') return;
+    // Non-specific events should not appear in Abyssal Deep or Shadow World (they have their own)
+    if (!e.dungeons && (DS.dungeon === 'The Abyssal Deep' || DS.dungeon === 'The Shadow World')) return;
     var w = (e.getWeight ? e.getWeight() : e.weight) || 1;
     for(var i=0;i<w;i++) pool.push(e);
   });
@@ -31446,6 +31807,8 @@ var BOSS_INTROS = {
   'The Drowned God':        'It was worshipped once. Then the sea rose. It is still waiting for the prayers to resume.',
   'The Abyssal Crown':      'Something at the bottom of everything decided it wanted to be in charge.',
   'The Deep Archivist':     'It has catalogued every creature that ever drowned. You are about to become an entry.',
+  'The Echo':               'A perfect copy of something you already killed this run. It remembers every mistake you made. It will not repeat them.',
+  'The Shapeshifter':       'It has waited 3000 years for someone worth copying. It wears your face now. Uses your weapon. Knows every move before you make it. You are fighting yourself. And yourself is very good at this.',
 };
 
 function showBossPreview(bossTemplate) {
@@ -31483,7 +31846,8 @@ function showBossPreview(bossTemplate) {
   }
   var lvl = DS.level || 1;
   var bossHp = Math.round(bossTemplate.hp * (1 + (lvl-1) * 0.15));
-  bpExtra.innerHTML = '<div style="font-family:Cinzel,serif;font-size:0.68rem;color:#cc4444;margin-bottom:14px;">HP: ' + bossHp + ' — 3 Phases — Grows stronger each phase</div>' +
+  var phaseCount = (bossTemplate.isShapeshifter || bossTemplate.fourPhase) ? '4 Phases' : '3 Phases';
+  bpExtra.innerHTML = '<div style="font-family:Cinzel,serif;font-size:0.68rem;color:#cc4444;margin-bottom:14px;">HP: ' + bossHp + ' — ' + phaseCount + ' — Grows stronger each phase</div>' +
     '<button type="button" onclick="dismissBossPreview()" style="padding:12px 28px;background:#1a0000;border:2px solid #cc0000;color:#ff6644;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;" aria-label="Face the boss">⚔ Face It</button>';
 
   overlay.classList.add('open');
@@ -32334,10 +32698,14 @@ function devUnlockAll() {
   };
   DDStore.setItem('dd_unlocks', JSON.stringify(u));
   DDStore.setItem('dd_infernal_unlocked', '1');
+  DDStore.setItem('dd_abyssal_unlocked', '1');
+  DDStore.setItem('dd_shadowworld_unlocked', '1');
   DDStore.setItem('dd_dev_mode', '1');
   refreshDungeonUnlocks();
   refreshInfernalCard();
-  say('Dev: all dungeons unlocked including The Infernal Descent.');
+  refreshAbyssalCard();
+  refreshShadowWorldCard();
+  say('Dev: all dungeons unlocked including The Infernal Descent, The Abyssal Deep, and The Shadow World.');
 }
 
 function refreshInfernalCard() {
@@ -38856,12 +39224,25 @@ function renderMusicPlayer() {
   var player = document.createElement('div');
   player.className = 'music-player';
   player.innerHTML =
-    '<div class="mp-now-playing">NOW PLAYING</div>' +
-    '<div class="mp-track-name" id="mp-track-name">Select a track below</div>' +
+    '<div class="mp-now-playing" aria-live="polite">NOW PLAYING</div>' +
+    '<div class="mp-track-name" id="mp-track-name" aria-live="polite">Select a track below</div>' +
     '<div class="mp-controls">' +
+      '<button class="mp-btn" onclick="mpPrev()" aria-label="Previous track">⏮</button>' +
       '<button class="mp-btn" onclick="mpPlay()" aria-label="Play selected track">▶ Play</button>' +
       '<button class="mp-btn" onclick="mpStop()" aria-label="Stop music">■ Stop</button>' +
-      '<button class="mp-btn" id="mp-loop-btn" onclick="toggleMusicLoop()" aria-label="Loop all songs, currently off" aria-pressed="false">🔁 Loop All: Off</button>' +
+      '<button class="mp-btn" onclick="mpNext()" aria-label="Next track">⏭</button>' +
+    '</div>' +
+    '<div class="mp-controls" style="margin-bottom:8px;">' +
+      '<button class="mp-btn" id="mp-loop-btn" onclick="toggleMusicLoop()" aria-label="Loop all songs, currently off" aria-pressed="false">🔁 Loop: Off</button>' +
+      '<button class="mp-btn" id="mp-shuffle-btn" onclick="toggleMpShuffle()" aria-label="Shuffle, currently off" aria-pressed="false">🔀 Shuffle: Off</button>' +
+    '</div>' +
+    '<div style="display:flex;align-items:center;gap:10px;padding:0 2px;margin-bottom:4px;">' +
+      '<span style="font-family:Cinzel,serif;font-size:0.6rem;color:var(--text-dim);">🔈</span>' +
+      '<input type="range" id="mp-volume-slider" min="0" max="100" value="' + Math.round((AUD.musicVol || 0.5) * 100) + '" ' +
+        'style="flex:1;accent-color:var(--gold);" aria-label="Music volume" ' +
+        'oninput="mpSetVolume(this.value)">' +
+      '<span style="font-family:Cinzel,serif;font-size:0.6rem;color:var(--text-dim);">🔊</span>' +
+      '<span id="mp-vol-pct" style="font-family:Cinzel,serif;font-size:0.6rem;color:var(--gold-dim);min-width:32px;">' + Math.round((AUD.musicVol || 0.5) * 100) + '%</span>' +
     '</div>';
   panel.appendChild(player);
 
@@ -38878,6 +39259,9 @@ function renderMusicPlayer() {
     section.className = 'mp-section';
     var title = document.createElement('div');
     title.className = 'mp-section-title';
+    title.setAttribute('role', 'heading');
+    title.setAttribute('aria-level', '2');
+    title.setAttribute('aria-label', dungeon + ' tracks');
     title.textContent = dungeon.toUpperCase();
     section.appendChild(title);
 
@@ -38900,6 +39284,8 @@ function renderMusicPlayer() {
   mySection.className = 'mp-section';
   var myTitle = document.createElement('div');
   myTitle.className = 'mp-section-title';
+  myTitle.setAttribute('role', 'heading');
+  myTitle.setAttribute('aria-level', '2');
   myTitle.textContent = 'MY TRACKS';
   mySection.appendChild(myTitle);
   var myTracksDiv = document.createElement('div');
@@ -38909,7 +39295,8 @@ function renderMusicPlayer() {
   panel.appendChild(mySection);
   renderMyTracks();
 
-  say('Music Player. ' + MUSIC_CATALOGUE.length + ' tracks available. Select a track then press Play. My Tracks section at the bottom shows your saved custom tracks.');
+  var sectionNames = order.join(', ');
+  say('Music Player. ' + MUSIC_CATALOGUE.length + ' tracks available across ' + order.length + ' sections: ' + sectionNames + '. Select a track then press Play.');
 }
 
 
@@ -38983,6 +39370,61 @@ function mpPlay() {
   } catch(e) {
     say('Audio error: ' + e.message);
   }
+}
+
+var _mpShuffle = false;
+
+function toggleMpShuffle() {
+  _mpShuffle = !_mpShuffle;
+  var btn = document.getElementById('mp-shuffle-btn');
+  if (btn) {
+    btn.textContent = '🔀 Shuffle: ' + (_mpShuffle ? 'On' : 'Off');
+    btn.classList.toggle('active', _mpShuffle);
+    btn.setAttribute('aria-pressed', String(_mpShuffle));
+  }
+  say('Shuffle ' + (_mpShuffle ? 'on' : 'off') + '.');
+}
+
+function mpNext() {
+  var keys = MUSIC_CATALOGUE.map(function(t){ return t.key; });
+  if (!keys.length) return;
+  if (_mpShuffle) {
+    var idx = Math.floor(Math.random() * keys.length);
+    mpSelect(keys[idx]);
+    return;
+  }
+  var cur = keys.indexOf(_mpCurrentKey);
+  var next = (cur + 1) % keys.length;
+  mpSelect(keys[next]);
+}
+
+function mpPrev() {
+  var keys = MUSIC_CATALOGUE.map(function(t){ return t.key; });
+  if (!keys.length) return;
+  var cur = keys.indexOf(_mpCurrentKey);
+  var prev = (cur - 1 + keys.length) % keys.length;
+  mpSelect(keys[prev]);
+}
+
+function mpSetVolume(val) {
+  var vol = parseInt(val) / 100;
+  if (AUD) {
+    AUD.musicVol = vol;
+    if (AUD.musicGain) AUD.musicGain.gain.setValueAtTime(vol, AUD.ctx ? AUD.ctx.currentTime : 0);
+    saveAudioPrefs();
+  }
+  var pct = document.getElementById('mp-vol-pct');
+  if (pct) pct.textContent = Math.round(vol * 100) + '%';
+}
+
+function mpUpdateNowPlaying() {
+  // Auto-update the now playing display when game music changes
+  var nameEl = document.getElementById('mp-track-name');
+  if (!nameEl) return;
+  var current = AUD && AUD.current;
+  if (!current || _mpPlaying) return; // don't overwrite if player is active
+  var track = MUSIC_CATALOGUE.find(function(t){ return t.key === current; });
+  if (track) nameEl.textContent = '♪ ' + track.label;
 }
 
 function mpStop() {
@@ -51506,6 +51948,15 @@ var _heartbeatInterval = null;
 // Add hunter-theme to TRACK_FILES now that _HUNTER_AUDIO is defined
 try { if (typeof TRACK_FILES !== 'undefined') TRACK_FILES['hunter-theme'] = _HUNTER_AUDIO.music; } catch(e) {}
 
+// ── SHADOW WORLD AUDIO ──
+var _SHADOW_AUDIO = {
+  growl:     _audioUrl('monster-growl.mp3'),    // Darkness Swallower spatial growl
+  jumpscare: _audioUrl('hunter-jumpscare.mp3'), // Reuse hunter jumpscare for catch moment
+  stalker:   _audioUrl('shadow-world-thriller-score.mp3'), // Stalker Floor music
+};
+var _shadowGrowlEl = null;  // spatial audio element for growl
+var _stalkerMusicEl = null; // stalker floor music element
+
 function initHunterAudio() {
   // Heartbeat element — short SFX, plain Audio is fine
   if (!_heartbeatEl) {
@@ -51553,12 +52004,17 @@ function stopHunterMusic() {
     _hunterMusicEl.pause();
     _hunterMusicEl.currentTime = 0;
   }
-  // Resume dungeon music
+  // Stop Web Audio source too
+  if (AUD && AUD.currentSource) {
+    try { AUD.currentSource.stop(); } catch(e) {}
+    AUD.currentSource = null;
+  }
+  // Resume correct dungeon exploration music
   if (AUD && AUD.musicOn) {
     try {
-      var currentTrack = AUD.tracks[AUD.current];
-      if (currentTrack) { currentTrack.currentTime = 0; currentTrack.play().catch(function(){}); }
-      else { playTrack(getMenuTrack ? getMenuTrack() : 'floor1'); }
+      var resumeTrack = DS && DS.dungeon ? exploTrackForFloor(DS.floor || 1) : getMenuTrack();
+      AUD.current = null; // force playTrack to actually reload
+      playTrack(resumeTrack);
     } catch(e) {}
   }
 }
