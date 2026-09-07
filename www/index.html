@@ -8417,7 +8417,7 @@ var TRACK_FILES = {
   'shadow-boss':        _audioUrl('music-shadow-boss.mp3'),
   'shadow-battle':      _audioUrl('music-shadow-battle.mp3'),
   'ambient-shadow':     _audioUrl('ambient-shadow.mp3'),
-  'shadow-stalker':     _audioUrl('music-shadow-stalker.mp3'), // Stalker Floor tension music
+  'shadow-stalker':     _audioUrl('shadow-world-thriller-score.mp3'), // Stalker Floor tension music
 };
 
 // Ambient sound tracks per dungeon
@@ -8673,6 +8673,8 @@ function playTrack(name) {
   if (!AUD.loaded) return;
   if (!AUD.musicOn) { AUD.current = name; return; }
   if (_customTrackActive || _ytActive) { AUD.current = name; return; }
+  // Update music player now playing display
+  try { if (typeof mpUpdateNowPlaying === 'function') setTimeout(mpUpdateNowPlaying, 300); } catch(e) {}
   // Don't restart if same track is already playing — check both Web Audio and Howler
   if (AUD.current === name) {
     // Web Audio: BufferSource is active if it exists and hasn't ended
@@ -13043,12 +13045,13 @@ function enterRoom() {
     return;
   }
   // CRITICAL — never enter a new room during an active Chimera fight
-  // The Chimera uses _chimeraParts instead of DS.enemy, so the check above misses it
   if (_chimeraActive) {
     say('Cannot enter room during combat.');
     renderChimeraScreen();
     return;
   }
+  // Shadow World — check for Stalker Floor before anything else
+  if (DS.dungeon === 'The Shadow World' && checkStalkerFloor()) return;
   if (typeof tryNPCEncounter !== 'undefined' && tryNPCEncounter()) return;
   if (DS.hunterMode && DS.hunterAlive) {
     DS.hunterIdleTurns = 0;
@@ -13400,7 +13403,9 @@ function enterRoom() {
 
       // 12% elite chance on floors 4+
       var eliteKey = DS.diff === 'Nightmare' ? 'Nightmare' : DS.dungeon;
-      var elitePool = (DS.dungeon === 'The Whispering Forest' ? WHISPER_ELITES : null) || ELITE_ENEMIES[eliteKey] || [];
+      var elitePool = (DS.dungeon === 'The Whispering Forest' ? WHISPER_ELITES : null) ||
+                      (DS.dungeon === 'The Shadow World' ? SHADOW_ENEMIES.elites : null) ||
+                      ELITE_ENEMIES[eliteKey] || [];
       var spawnElite = DS.floor >= 4 && elitePool.length > 0 && Math.random() < 0.15;
       var tier = DS.floor <= 3 ? 't1' : DS.floor <= 6 ? 't2' : 't3';
       var pool = DS.dungeon === 'The Whispering Forest'
@@ -13408,7 +13413,7 @@ function enterRoom() {
         : DS.dungeon === 'The Abyssal Deep'
         ? ABYSSAL_ENEMIES[tier]
         : DS.dungeon === 'The Shadow World'
-        ? ABYSSAL_ENEMIES[tier]
+        ? SHADOW_ENEMIES[tier]
         : enemyPool[tier];
       var base = spawnElite
         ? elitePool[Math.floor(Math.random() * elitePool.length)]
@@ -13528,10 +13533,11 @@ function enterRoom() {
           if (alreadyHas) {
             addLog('You already carry a ' + lootItem.name + '. The duplicate fades back into the dark.');
             say('You already have a ' + lootItem.name + '.');
-            applyItem(lootItem); // still apply any passive effects
+            applyItem(lootItem);
           } else {
             DS.inventory.push(lootItem);
             applyItem(lootItem);
+            addToGlobalInventory(lootItem); // save to persistent inventory so Blacksmith can see it
             sfx('sfx-loot'); vibe(VIBE.loot);
           }
         } else {
@@ -13688,6 +13694,7 @@ function advanceFloor() {
     DS._shadowCorruption = 0;
     DS._shadowKilledEnemies = [];
     DS._fearTurns = 0;
+    DS._shadowEchoDefeated = false;
     updateCorruptionDisplay();
   }
   if (typeof applyTraitPerFloor === 'function') applyTraitPerFloor();
@@ -14003,7 +14010,8 @@ function startCombat(isBoss) {
     say(DS.enemy.name + ' hides. It will strike with guaranteed critical next turn.');
   }
   // Boss gets boss music, normal enemies get battle music
-  playTrack(isBoss ? exploTrackForFloor(10) : battleTrack());
+  var _bossTrack = isBoss ? exploTrackForFloor(10) : battleTrack();
+  playTrack(_bossTrack);
   if (isBoss) {
     // 2% chance — DDDI Grand Overseer appears instead of normal boss
     if (Math.random() < 0.02 && !DS.dddiDefeated) {
@@ -14017,7 +14025,14 @@ function startCombat(isBoss) {
              : DS.dungeon === 'The Whispering Forest' ? WHISPER_ENEMIES.bossPool
              : DS.dungeon === 'The Infernal Descent'  ? INFERNAL_ENEMIES.bossPool
              : DS.dungeon === 'The Abyssal Deep'      ? ABYSSAL_ENEMIES.bossPool
-             : DS.dungeon === 'The Shadow World'      ? SHADOW_ENEMIES.bossPool
+             : DS.dungeon === 'The Shadow World'      ? (function() {
+               // Shadow World — always Echo first, then Shapeshifter
+               if (!DS._shadowEchoDefeated) {
+                 return [SHADOW_ENEMIES.bossPool[0]]; // The Echo
+               } else {
+                 return [SHADOW_ENEMIES.bossPool[1]]; // The Shapeshifter
+               }
+             })()
              : ENEMIES.bossPool;
     var bossTemplate = pool[Math.floor(Math.random() * pool.length)];
     // Show boss preview before spawning
@@ -14054,7 +14069,7 @@ function startCombat(isBoss) {
       isShapeshifter: bossTemplate.isShapeshifter || false,
       isEcho:     bossTemplate.isEcho     || false,
     };
-    // Shapeshifter — 4 phase boss, announce dramatically
+    // Shadow World — Shapeshifter needs 4 phases, announce dramatically
     if (bossTemplate.isShapeshifter) {
       DS.enemy.fourPhase = true;
       DS.enemy.phase3Hp = Math.round(_bossHp * 0.15);
@@ -14063,8 +14078,16 @@ function startCombat(isBoss) {
         say('The Shapeshifter. It looks exactly like you. Same class, same level, same weapon. This is the final boss of The Shadow World.');
       }, 800);
     }
-    // Echo boss — announce as copy of a fallen enemy
+    // Echo boss — when defeated, spawn Shapeshifter next
     if (bossTemplate.isEcho) {
+      DS.enemy._onDeathCallback = function() {
+        DS._shadowEchoDefeated = true;
+        setTimeout(function() {
+          addLog('🌑 The Echo falls. But something else stirs in the darkness...');
+          say('The Echo is defeated. Something darker takes its place.');
+          setTimeout(function() { startCombat(true); }, 2000);
+        }, 1000);
+      };
       setTimeout(function() {
         addLog('🔄 The Echo takes shape — a memory of something you defeated. It has learned from your methods.');
         say('The Echo. A shadow copy of an enemy you defeated. It remembers the fight. It will not make the same mistakes.');
@@ -15024,6 +15047,16 @@ function enemyDead() {
   var e = DS.enemy;
   try { resetGunState(); } catch(e2) {}
 
+  // Shadow World — _onDeathCallback (Echo → Shapeshifter sequence)
+  if (e && e._onDeathCallback) {
+    var cb = e._onDeathCallback;
+    e._onDeathCallback = null;
+    DS.enemy = null;
+    DS.inCombat = false;
+    cb();
+    return;
+  }
+
   // Shadow World — Twice Dead mechanic
   if (DS.dungeon === 'The Shadow World' && e && e.twiceDead && !e._diedOnce) {
     e._diedOnce = true;
@@ -15339,6 +15372,8 @@ function enemyDead() {
 
 function handleDeath() {
   vibe(VIBE.death);
+  // Clean up Stalker Floor if active
+  if (_stalkerActive) { _stalkerActive = false; hideStalkerUI(); }
   setTimeout(companionOnDeath, 1000);
   // Check one-time class survival abilities BEFORE hardcore deletion.
   // These are intentional "cheat death once" mechanics that should work in hardcore.
@@ -15695,6 +15730,329 @@ function spawnShadowAmbush() {
 }
 
 // ── END SHADOW WORLD MECHANICS ────────────────────────────────────────────────
+
+// ── THE STALKER FLOOR — DARKNESS SWALLOWER ────────────────────────────────────
+var _stalkerActive = false;
+var _stalkerGrid = { playerX:2, playerY:2, enemyX:0, enemyY:0 }; // 5x5 grid
+var _stalkerEscapes = 0; // how many times player has escaped
+var _stalkerMaxEscapes = 3;
+var _stalkerCaught = false;
+
+function initStalkerFloor() {
+  _stalkerActive = true;
+  _stalkerEscapes = 0;
+  _stalkerCaught = false;
+
+  // Player starts center, enemy at random edge
+  _stalkerGrid.playerX = 2;
+  _stalkerGrid.playerY = 2;
+  var edges = [{x:0,y:0},{x:4,y:0},{x:0,y:4},{x:4,y:4},{x:2,y:0},{x:2,y:4},{x:0,y:2},{x:4,y:2}];
+  var startEdge = edges[Math.floor(Math.random() * edges.length)];
+  _stalkerGrid.enemyX = startEdge.x;
+  _stalkerGrid.enemyY = startEdge.y;
+
+  // Hide ALL normal dungeon panels — pure stalker mode only
+  showDgPanels(false, false, false);
+  DS.inCombat = false;
+
+  // Stop ALL current audio before switching to stalker music
+  try { stopAmbient(); } catch(e) {}
+  if (AUD) {
+    if (AUD.currentSource) { try { AUD.currentSource.stop(); } catch(e) {} AUD.currentSource = null; }
+    if (AUD.ctx && AUD.ctx.state === 'running') AUD.ctx.suspend().then(function(){ AUD.ctx.resume(); }).catch(function(){});
+  }
+  if (_howlMusic) { try { _howlMusic.stop(); } catch(e) {} }
+  AUD.current = null;
+  setTimeout(function() { playTrack('shadow-stalker'); }, 600);
+
+  // Show stalker UI
+  showStalkerUI();
+  updateStalkerDisplay();
+
+  say('Something stirs in the darkness. The music shifts. Move carefully — the Darkness Swallower is somewhere in this room with you. It is ' + getStalkerDistance() + ' step' + (getStalkerDistance() !== 1 ? 's' : '') + ' away. Move north, south, east, or west to reach the exit. Escape three times to leave this room. If it gets too close you can choose to fight or flee.');
+}
+
+function getStalkerDistance() {
+  var dx = Math.abs(_stalkerGrid.playerX - _stalkerGrid.enemyX);
+  var dy = Math.abs(_stalkerGrid.playerY - _stalkerGrid.enemyY);
+  return dx + dy; // Manhattan distance
+}
+
+function getStalkerDirection() {
+  var dx = _stalkerGrid.enemyX - _stalkerGrid.playerX;
+  var dy = _stalkerGrid.enemyY - _stalkerGrid.playerY;
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    return dx > 0 ? 'right' : 'left';
+  } else {
+    return dy > 0 ? 'behind' : 'ahead';
+  }
+}
+
+function playSpatialGrowl(direction) {
+  try {
+    if (!AUD || !AUD.sfxOn) return;
+    var dist = getStalkerDistance();
+    var vol = Math.max(0.2, 1 - (dist * 0.15));
+
+    // Try Web Audio spatial path first
+    if (_webAudioReady && AUD.ctx && AUD.ctx.state !== 'closed') {
+      if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
+      var panner = AUD.ctx.createPanner();
+      panner.panningModel = 'equalpower';
+      panner.distanceModel = 'inverse';
+      panner.refDistance = 1;
+      panner.rolloffFactor = 1;
+      switch(direction) {
+        case 'left':   panner.setPosition(-3, 0, -1); break;
+        case 'right':  panner.setPosition(3, 0, -1);  break;
+        case 'ahead':  panner.setPosition(0, 0, -3);  break;
+        case 'behind': panner.setPosition(0, 0, 3);   break;
+        default:       panner.setPosition(0, 0, -2);  break;
+      }
+      panner.connect(AUD.ctx.destination);
+      loadAudioBuffer(_SHADOW_AUDIO.growl, AUD.buffers, 'shadow-growl', function(buffer) {
+        if (!buffer || !_stalkerActive) {
+          // Buffer failed — fall back to simple Audio element
+          playGrowlFallback(direction, vol);
+          return;
+        }
+        var source = AUD.ctx.createBufferSource();
+        source.buffer = buffer;
+        var gainNode = AUD.ctx.createGain();
+        gainNode.gain.value = vol * (AUD.sfxVol || 0.8);
+        source.connect(gainNode);
+        gainNode.connect(panner);
+        source.start(0);
+      });
+    } else {
+      playGrowlFallback(direction, vol);
+    }
+  } catch(e) {
+    console.warn('[DD] Spatial growl failed:', e);
+    playGrowlFallback(direction, 0.7);
+  }
+}
+
+function playGrowlFallback(direction, vol) {
+  try {
+    console.log('[DD] Growl fallback — direction:', direction, 'vol:', vol, 'url:', _SHADOW_AUDIO.growl);
+    var audio = new Audio(_SHADOW_AUDIO.growl);
+    audio.volume = Math.min(1, (vol || 0.7) * (AUD ? (AUD.sfxVol || 0.8) : 0.8));
+    var playPromise = audio.play();
+    if (playPromise) {
+      playPromise.then(function(){ console.log('[DD] Growl fallback playing OK'); })
+                 .catch(function(e){ console.warn('[DD] Growl fallback play failed:', e); });
+    }
+  } catch(e) {
+    console.warn('[DD] Growl fallback error:', e);
+  }
+}
+
+function stalkerMove(dir) {
+  if (!_stalkerActive) return;
+
+  // Move player
+  if (dir === 'north' && _stalkerGrid.playerY > 0) _stalkerGrid.playerY--;
+  if (dir === 'south' && _stalkerGrid.playerY < 4) _stalkerGrid.playerY++;
+  if (dir === 'west'  && _stalkerGrid.playerX > 0) _stalkerGrid.playerX--;
+  if (dir === 'east'  && _stalkerGrid.playerX < 4) _stalkerGrid.playerX++;
+
+  // Play footstep sfx
+  sfx('sfx-stairs');
+
+  // Move enemy toward player (one step)
+  var dx = _stalkerGrid.playerX - _stalkerGrid.enemyX;
+  var dy = _stalkerGrid.playerY - _stalkerGrid.enemyY;
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    _stalkerGrid.enemyX += dx > 0 ? 1 : -1;
+  } else {
+    _stalkerGrid.enemyY += dy > 0 ? 1 : -1;
+  }
+
+  var dist = getStalkerDistance();
+  var dir2 = getStalkerDirection();
+
+  // Play spatial growl
+  playSpatialGrowl(dir2);
+
+  // Check caught FIRST — before exit check
+  if (dist === 0) {
+    stalkerCaught();
+    return;
+  }
+
+  // Check if player reached exit (edge of grid)
+  var atExit = _stalkerGrid.playerX === 0 || _stalkerGrid.playerX === 4 ||
+               _stalkerGrid.playerY === 0 || _stalkerGrid.playerY === 4;
+
+  if (atExit) {
+    _stalkerEscapes++;
+    if (_stalkerEscapes >= _stalkerMaxEscapes) {
+      stalkerEscaped();
+      return;
+    }
+    // Reset positions for next escape attempt
+    _stalkerGrid.playerX = 2; _stalkerGrid.playerY = 2;
+    addLog('You slip away — temporarily. ' + (_stalkerMaxEscapes - _stalkerEscapes) + ' more escape' + (_stalkerMaxEscapes - _stalkerEscapes !== 1 ? 's' : '') + ' needed.');
+    say('You escape — for now. ' + (_stalkerMaxEscapes - _stalkerEscapes) + ' more escape' + (_stalkerMaxEscapes - _stalkerEscapes !== 1 ? 's' : '') + ' needed to leave this room.');
+    updateStalkerDisplay();
+    return;
+  }
+
+  // Getting close — warn player
+  if (dist === 1) {
+    addLog('💀 The Darkness Swallower is right next to you. You can hear it breathe.');
+    say('It is right next to you. One step away. The darkness breathes.');
+    vibe && vibe([300, 100, 300]);
+    showStalkerFightOption();
+  } else if (dist === 2) {
+    addLog('⚠️ It is 2 steps away — ' + dir2 + '.');
+    say('It is 2 steps away — ' + dir2 + ' of you.');
+  } else {
+    addLog('👣 ' + dir + '. The Darkness Swallower is ' + dist + ' step' + (dist !== 1 ? 's' : '') + ' away — ' + dir2 + '.');
+    say('You move ' + dir + '. It is ' + dist + ' steps away — ' + dir2 + ' of you.');
+  }
+
+  updateStalkerDisplay();
+}
+
+function stalkerCaught() {
+  _stalkerActive = false;
+  hideStalkerUI();
+  // Play jumpscare
+  try {
+    var js = new Audio(_SHADOW_AUDIO.jumpscare);
+    js.volume = AUD ? (AUD.sfxVol || 0.8) : 0.8;
+    js.play().catch(function(){});
+  } catch(e) {}
+  vibe && vibe([500, 100, 500, 100, 500]);
+  // Deal heavy damage
+  var dmg = Math.round(DS.maxHp * 0.35);
+  DS.hp = Math.max(1, DS.hp - dmg);
+  updatePlayerBar();
+  addLog('💀 THE DARKNESS SWALLOWER CATCHES YOU! ' + dmg + ' shadow damage!');
+  say('Caught! The Darkness Swallower strikes. ' + dmg + ' damage. You barely survive.');
+  // Resume normal dungeon — restore panels then enter next room
+  setTimeout(function() {
+    playTrack(exploTrackForFloor(DS.floor));
+    showDgPanels(true, false, false);
+    enterRoom();
+  }, 2000);
+}
+
+function stalkerEscaped() {
+  _stalkerActive = false;
+  hideStalkerUI();
+  addLog('✨ You escaped the Darkness Swallower! Rare loot awarded.');
+  say('You escaped! The Darkness Swallower retreats into the shadows. Rare loot for your survival.');
+  // Reward
+  var lootOptions = SHADOW_LOOT.filter(function(l){ return l.type === 'weapon' || l.type === 'armor'; });
+  if (lootOptions.length > 0 && DS.inventory) {
+    var reward = Object.assign({}, lootOptions[Math.floor(Math.random() * lootOptions.length)]);
+    DS.inventory.push(reward);
+    addLog('📦 Found: ' + reward.name + '!');
+  }
+  DS.gold += 150;
+  updateTopBar();
+  sfx('sfx-victory');
+  vibe && vibe(VIBE.bossKill);
+  // Resume normal dungeon — restore panels then enter next room
+  setTimeout(function() {
+    playTrack(exploTrackForFloor(DS.floor));
+    showDgPanels(true, false, false);
+    enterRoom();
+  }, 1500);
+}
+
+function stalkerChooseFight() {
+  hideStalkerFightOption();
+  _stalkerActive = false;
+  hideStalkerUI();
+  // Restore combat panel
+  showDgPanels(false, true, false);
+  playTrack(battleTrack());
+  // Spawn the Darkness Swallower as a very hard enemy
+  DS.enemy = {
+    name: 'The Darkness Swallower',
+    icon: '🌑',
+    hp: Math.round(DS.maxHp * 1.5),
+    maxHp: Math.round(DS.maxHp * 1.5),
+    atk: [Math.round(DS.atk ? DS.atk[1] * 1.2 : 20), Math.round(DS.atk ? DS.atk[1] * 1.8 : 30)],
+    gold: [80, 150],
+    isBoss: false,
+    corruptOnHit: 2,
+    desc: 'It has been waiting in this room for 3000 years. You chose to fight it. That was very brave. Possibly very stupid.'
+  };
+  DS.enemy = applyTierScaling(DS.enemy);
+  DS.inCombat = true;
+  DS.defending = false;
+  addLog('⚔ You turn to face the Darkness Swallower!');
+  say('You face the Darkness Swallower. It hits hard and adds 2 corruption per hit. Use Purge.');
+  updateEnemyBar();
+  updatePlayerBar();
+  setCombatBtns(true);
+  updateSkillButtons();
+}
+
+function showStalkerUI() {
+  var existing = document.getElementById('stalker-overlay');
+  if (existing) existing.remove();
+  var ov = document.createElement('div');
+  ov.id = 'stalker-overlay';
+  ov.setAttribute('role', 'region');
+  ov.setAttribute('aria-label', 'Stalker Floor — Darkness Swallower');
+  ov.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#050005;border-top:2px solid #9966cc;padding:12px 16px;z-index:500;';
+  ov.innerHTML =
+    '<div id="stalker-status" style="font-family:Cinzel,serif;font-size:0.72rem;color:#cc88ff;margin-bottom:10px;text-align:center;" aria-live="assertive"></div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">' +
+      '<button onclick="stalkerMove(\'north\')" style="padding:10px;background:#0a0008;border:1px solid #9966cc;color:#cc88ff;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;" aria-label="Move north">↑ North</button>' +
+      '<button onclick="stalkerMove(\'south\')" style="padding:10px;background:#0a0008;border:1px solid #9966cc;color:#cc88ff;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;" aria-label="Move south">↓ South</button>' +
+      '<button onclick="stalkerMove(\'west\')"  style="padding:10px;background:#0a0008;border:1px solid #9966cc;color:#cc88ff;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;" aria-label="Move west">← West</button>' +
+      '<button onclick="stalkerMove(\'east\')"  style="padding:10px;background:#0a0008;border:1px solid #9966cc;color:#cc88ff;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;" aria-label="Move east">→ East</button>' +
+    '</div>' +
+    '<div id="stalker-fight-option" style="display:none;">' +
+      '<button onclick="stalkerChooseFight()" style="width:100%;padding:10px;background:#1a0022;border:1px solid #ff4444;color:#ff8888;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;margin-top:4px;" aria-label="Fight the Darkness Swallower">⚔ Face It</button>' +
+    '</div>';
+  document.body.appendChild(ov);
+}
+
+function hideStalkerUI() {
+  var ov = document.getElementById('stalker-overlay');
+  if (ov) ov.remove();
+}
+
+function hideStalkerFightOption() {
+  var el = document.getElementById('stalker-fight-option');
+  if (el) el.style.display = 'none';
+}
+
+function showStalkerFightOption() {
+  var el = document.getElementById('stalker-fight-option');
+  if (el) el.style.display = '';
+}
+
+function updateStalkerDisplay() {
+  var el = document.getElementById('stalker-status');
+  if (!el) return;
+  var dist = getStalkerDistance();
+  var dir = getStalkerDirection();
+  var escStr = 'Escapes: ' + _stalkerEscapes + ' / ' + _stalkerMaxEscapes;
+  el.textContent = '🌑 ' + dist + ' step' + (dist !== 1 ? 's' : '') + ' away — ' + dir + '.  ' + escStr;
+  el.setAttribute('aria-label', 'Darkness Swallower ' + dist + ' steps away to the ' + dir + '. ' + escStr);
+}
+
+// Check if Stalker Floor should trigger — called from enterRoom
+function checkStalkerFloor() {
+  if (DS.dungeon !== 'The Shadow World') return false;
+  if (DS.floor < 3) return false;
+  if (_stalkerActive) return false;
+  if (DS.inCombat) return false;
+  // 10% chance per floor
+  if (Math.random() > 0.10) return false;
+  setTimeout(function() { initStalkerFloor(); }, 800);
+  return true;
+}
+// ── END STALKER FLOOR ─────────────────────────────────────────────────────────
 
 function addLog(msg) {
   var log = document.getElementById('dg-combat-log');
@@ -29837,8 +30195,8 @@ function rollDungeonEvent() {
   DUNGEON_EVENTS.forEach(function(e){
     // Dungeon-specific events — only appear in their dungeon
     if (e.dungeons && e.dungeons.indexOf(DS.dungeon) === -1) return;
-    // Non-specific events should not appear in Abyssal Deep (it has its own)
-    if (!e.dungeons && DS.dungeon === 'The Abyssal Deep') return;
+    // Non-specific events should not appear in Abyssal Deep or Shadow World (they have their own)
+    if (!e.dungeons && (DS.dungeon === 'The Abyssal Deep' || DS.dungeon === 'The Shadow World')) return;
     var w = (e.getWeight ? e.getWeight() : e.weight) || 1;
     for(var i=0;i<w;i++) pool.push(e);
   });
@@ -31446,6 +31804,8 @@ var BOSS_INTROS = {
   'The Drowned God':        'It was worshipped once. Then the sea rose. It is still waiting for the prayers to resume.',
   'The Abyssal Crown':      'Something at the bottom of everything decided it wanted to be in charge.',
   'The Deep Archivist':     'It has catalogued every creature that ever drowned. You are about to become an entry.',
+  'The Echo':               'A perfect copy of something you already killed this run. It remembers every mistake you made. It will not repeat them.',
+  'The Shapeshifter':       'It has waited 3000 years for someone worth copying. It wears your face now. Uses your weapon. Knows every move before you make it. You are fighting yourself. And yourself is very good at this.',
 };
 
 function showBossPreview(bossTemplate) {
@@ -31483,7 +31843,8 @@ function showBossPreview(bossTemplate) {
   }
   var lvl = DS.level || 1;
   var bossHp = Math.round(bossTemplate.hp * (1 + (lvl-1) * 0.15));
-  bpExtra.innerHTML = '<div style="font-family:Cinzel,serif;font-size:0.68rem;color:#cc4444;margin-bottom:14px;">HP: ' + bossHp + ' — 3 Phases — Grows stronger each phase</div>' +
+  var phaseCount = (bossTemplate.isShapeshifter || bossTemplate.fourPhase) ? '4 Phases' : '3 Phases';
+  bpExtra.innerHTML = '<div style="font-family:Cinzel,serif;font-size:0.68rem;color:#cc4444;margin-bottom:14px;">HP: ' + bossHp + ' — ' + phaseCount + ' — Grows stronger each phase</div>' +
     '<button type="button" onclick="dismissBossPreview()" style="padding:12px 28px;background:#1a0000;border:2px solid #cc0000;color:#ff6644;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;" aria-label="Face the boss">⚔ Face It</button>';
 
   overlay.classList.add('open');
@@ -32334,10 +32695,14 @@ function devUnlockAll() {
   };
   DDStore.setItem('dd_unlocks', JSON.stringify(u));
   DDStore.setItem('dd_infernal_unlocked', '1');
+  DDStore.setItem('dd_abyssal_unlocked', '1');
+  DDStore.setItem('dd_shadowworld_unlocked', '1');
   DDStore.setItem('dd_dev_mode', '1');
   refreshDungeonUnlocks();
   refreshInfernalCard();
-  say('Dev: all dungeons unlocked including The Infernal Descent.');
+  refreshAbyssalCard();
+  refreshShadowWorldCard();
+  say('Dev: all dungeons unlocked including The Infernal Descent, The Abyssal Deep, and The Shadow World.');
 }
 
 function refreshInfernalCard() {
@@ -38856,12 +39221,25 @@ function renderMusicPlayer() {
   var player = document.createElement('div');
   player.className = 'music-player';
   player.innerHTML =
-    '<div class="mp-now-playing">NOW PLAYING</div>' +
-    '<div class="mp-track-name" id="mp-track-name">Select a track below</div>' +
+    '<div class="mp-now-playing" aria-live="polite">NOW PLAYING</div>' +
+    '<div class="mp-track-name" id="mp-track-name" aria-live="polite">Select a track below</div>' +
     '<div class="mp-controls">' +
+      '<button class="mp-btn" onclick="mpPrev()" aria-label="Previous track">⏮</button>' +
       '<button class="mp-btn" onclick="mpPlay()" aria-label="Play selected track">▶ Play</button>' +
       '<button class="mp-btn" onclick="mpStop()" aria-label="Stop music">■ Stop</button>' +
-      '<button class="mp-btn" id="mp-loop-btn" onclick="toggleMusicLoop()" aria-label="Loop all songs, currently off" aria-pressed="false">🔁 Loop All: Off</button>' +
+      '<button class="mp-btn" onclick="mpNext()" aria-label="Next track">⏭</button>' +
+    '</div>' +
+    '<div class="mp-controls" style="margin-bottom:8px;">' +
+      '<button class="mp-btn" id="mp-loop-btn" onclick="toggleMusicLoop()" aria-label="Loop all songs, currently off" aria-pressed="false">🔁 Loop: Off</button>' +
+      '<button class="mp-btn" id="mp-shuffle-btn" onclick="toggleMpShuffle()" aria-label="Shuffle, currently off" aria-pressed="false">🔀 Shuffle: Off</button>' +
+    '</div>' +
+    '<div style="display:flex;align-items:center;gap:10px;padding:0 2px;margin-bottom:4px;">' +
+      '<span style="font-family:Cinzel,serif;font-size:0.6rem;color:var(--text-dim);">🔈</span>' +
+      '<input type="range" id="mp-volume-slider" min="0" max="100" value="' + Math.round((AUD.musicVol || 0.5) * 100) + '" ' +
+        'style="flex:1;accent-color:var(--gold);" aria-label="Music volume" ' +
+        'oninput="mpSetVolume(this.value)">' +
+      '<span style="font-family:Cinzel,serif;font-size:0.6rem;color:var(--text-dim);">🔊</span>' +
+      '<span id="mp-vol-pct" style="font-family:Cinzel,serif;font-size:0.6rem;color:var(--gold-dim);min-width:32px;">' + Math.round((AUD.musicVol || 0.5) * 100) + '%</span>' +
     '</div>';
   panel.appendChild(player);
 
@@ -38878,6 +39256,9 @@ function renderMusicPlayer() {
     section.className = 'mp-section';
     var title = document.createElement('div');
     title.className = 'mp-section-title';
+    title.setAttribute('role', 'heading');
+    title.setAttribute('aria-level', '2');
+    title.setAttribute('aria-label', dungeon + ' tracks');
     title.textContent = dungeon.toUpperCase();
     section.appendChild(title);
 
@@ -38900,6 +39281,8 @@ function renderMusicPlayer() {
   mySection.className = 'mp-section';
   var myTitle = document.createElement('div');
   myTitle.className = 'mp-section-title';
+  myTitle.setAttribute('role', 'heading');
+  myTitle.setAttribute('aria-level', '2');
   myTitle.textContent = 'MY TRACKS';
   mySection.appendChild(myTitle);
   var myTracksDiv = document.createElement('div');
@@ -38909,7 +39292,8 @@ function renderMusicPlayer() {
   panel.appendChild(mySection);
   renderMyTracks();
 
-  say('Music Player. ' + MUSIC_CATALOGUE.length + ' tracks available. Select a track then press Play. My Tracks section at the bottom shows your saved custom tracks.');
+  var sectionNames = order.join(', ');
+  say('Music Player. ' + MUSIC_CATALOGUE.length + ' tracks available across ' + order.length + ' sections: ' + sectionNames + '. Select a track then press Play.');
 }
 
 
@@ -38983,6 +39367,61 @@ function mpPlay() {
   } catch(e) {
     say('Audio error: ' + e.message);
   }
+}
+
+var _mpShuffle = false;
+
+function toggleMpShuffle() {
+  _mpShuffle = !_mpShuffle;
+  var btn = document.getElementById('mp-shuffle-btn');
+  if (btn) {
+    btn.textContent = '🔀 Shuffle: ' + (_mpShuffle ? 'On' : 'Off');
+    btn.classList.toggle('active', _mpShuffle);
+    btn.setAttribute('aria-pressed', String(_mpShuffle));
+  }
+  say('Shuffle ' + (_mpShuffle ? 'on' : 'off') + '.');
+}
+
+function mpNext() {
+  var keys = MUSIC_CATALOGUE.map(function(t){ return t.key; });
+  if (!keys.length) return;
+  if (_mpShuffle) {
+    var idx = Math.floor(Math.random() * keys.length);
+    mpSelect(keys[idx]);
+    return;
+  }
+  var cur = keys.indexOf(_mpCurrentKey);
+  var next = (cur + 1) % keys.length;
+  mpSelect(keys[next]);
+}
+
+function mpPrev() {
+  var keys = MUSIC_CATALOGUE.map(function(t){ return t.key; });
+  if (!keys.length) return;
+  var cur = keys.indexOf(_mpCurrentKey);
+  var prev = (cur - 1 + keys.length) % keys.length;
+  mpSelect(keys[prev]);
+}
+
+function mpSetVolume(val) {
+  var vol = parseInt(val) / 100;
+  if (AUD) {
+    AUD.musicVol = vol;
+    if (AUD.musicGain) AUD.musicGain.gain.setValueAtTime(vol, AUD.ctx ? AUD.ctx.currentTime : 0);
+    saveAudioPrefs();
+  }
+  var pct = document.getElementById('mp-vol-pct');
+  if (pct) pct.textContent = Math.round(vol * 100) + '%';
+}
+
+function mpUpdateNowPlaying() {
+  // Auto-update the now playing display when game music changes
+  var nameEl = document.getElementById('mp-track-name');
+  if (!nameEl) return;
+  var current = AUD && AUD.current;
+  if (!current || _mpPlaying) return; // don't overwrite if player is active
+  var track = MUSIC_CATALOGUE.find(function(t){ return t.key === current; });
+  if (track) nameEl.textContent = '♪ ' + track.label;
 }
 
 function mpStop() {
@@ -51506,6 +51945,15 @@ var _heartbeatInterval = null;
 // Add hunter-theme to TRACK_FILES now that _HUNTER_AUDIO is defined
 try { if (typeof TRACK_FILES !== 'undefined') TRACK_FILES['hunter-theme'] = _HUNTER_AUDIO.music; } catch(e) {}
 
+// ── SHADOW WORLD AUDIO ──
+var _SHADOW_AUDIO = {
+  growl:     _audioUrl('monster-growl.mp3'),    // Darkness Swallower spatial growl
+  jumpscare: _audioUrl('hunter-jumpscare.mp3'), // Reuse hunter jumpscare for catch moment
+  stalker:   _audioUrl('shadow-world-thriller-score.mp3'), // Stalker Floor music
+};
+var _shadowGrowlEl = null;  // spatial audio element for growl
+var _stalkerMusicEl = null; // stalker floor music element
+
 function initHunterAudio() {
   // Heartbeat element — short SFX, plain Audio is fine
   if (!_heartbeatEl) {
@@ -51553,12 +52001,17 @@ function stopHunterMusic() {
     _hunterMusicEl.pause();
     _hunterMusicEl.currentTime = 0;
   }
-  // Resume dungeon music
+  // Stop Web Audio source too
+  if (AUD && AUD.currentSource) {
+    try { AUD.currentSource.stop(); } catch(e) {}
+    AUD.currentSource = null;
+  }
+  // Resume correct dungeon exploration music
   if (AUD && AUD.musicOn) {
     try {
-      var currentTrack = AUD.tracks[AUD.current];
-      if (currentTrack) { currentTrack.currentTime = 0; currentTrack.play().catch(function(){}); }
-      else { playTrack(getMenuTrack ? getMenuTrack() : 'floor1'); }
+      var resumeTrack = DS && DS.dungeon ? exploTrackForFloor(DS.floor || 1) : getMenuTrack();
+      AUD.current = null; // force playTrack to actually reload
+      playTrack(resumeTrack);
     } catch(e) {}
   }
 }
