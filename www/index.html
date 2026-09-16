@@ -1739,7 +1739,7 @@ var DDStore = (function() {
     <!-- Title -->
     <div class="loading-title" data-i18n="game-title" style="font-size:2.4rem;line-height:1.1;margin-bottom:6px;">Dungeon<br>Descent</div>
     <div class="loading-sub" data-i18n="game-subtitle" style="margin-bottom:6px;">Into the dark. Again.</div>
-    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.2</div>
+    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.3</div>
 
     <!-- Loading bar -->
     <div class="loading-bar-wrap">
@@ -1913,7 +1913,7 @@ var DDStore = (function() {
         <span data-i18n="btn-quit">🕯 Quit</span>
       </button>
     </nav>
-    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 2, Release">v11.2 · Release</p>
+    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 3, Release">v11.3 · Release</p>
     <p id="menu-online-count" style="font-family:Cinzel,serif;font-size:0.55rem;color:#444;margin-top:4px;letter-spacing:0.1em;" aria-live="polite" aria-label="Players currently online"></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#ffdd44;margin-top:6px;" aria-label="Your global gold" aria-live="polite"><span data-i18n="lbl-gold">💰 </span><span class="global-gold-display">0</span></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#88ddff;margin-top:2px;" aria-label="Your diamonds" aria-live="polite">💎 <span class="global-diamond-display">0</span></p>
@@ -3368,8 +3368,26 @@ var DDStore = (function() {
       <button class="back-btn" onclick="goTo('menu')" aria-label="Back to main menu">← Menu</button>
       <h2 class="screen-title">What's New</h2>
     </div>
-    <div class="version-block latest" tabindex="0" aria-label="Version 11.2">
-      <div class="version-num">v11.2 — Latest</div>
+    <div class="version-block latest" tabindex="0" aria-label="Version 11.3">
+      <div class="version-num">v11.3 — Latest</div>
+      <div class="version-date">The Halloween Update</div>
+      <ul class="version-changes">
+        <li>⚔ Boss Retry System — die to a boss and get one chance to try again. Retry costs 15% of your gold and restores you to 50% HP. The boss resets to full strength. One retry per run.</li>
+        <li>📷 Security Room — new Shadow World event. Four cameras (N/S/E/W), 15-second timer. The Darkness Swallower is on one feed — find it by sight or by growl, then escape the opposite direction. Wrong direction or time's up: 30% max HP damage and 1 corruption stack.</li>
+        <li>🧟 The Risen — new Hollow tier 1 enemy. Zombie that revives once at 20% HP when killed. You have to kill it twice.</li>
+        <li>🧛 The Pale Guest — new Hollow tier 2 enemy. Vampire that heals 8 HP every time it hits you. Kill it fast.</li>
+        <li>👻 The Unfinished — new Hollow tier 3 enemy. Ghost with a 30% chance to phase through your attacks entirely. Each with unique entrance sound effects.</li>
+        <li>⚔ Pre-Boss Gauntlet — 1 or 2 waves of buffed dungeon minions now spawn between the floor 10 elite and the final boss.</li>
+        <li>📦 Inventory stacking — identical items now show as a single row with a count. 59 enchanters = one button. Massive accessibility improvement for screen reader users.</li>
+        <li>🎭 Equipment tab — new inventory category for masks, relics, and unique items like the Shapeshifter's Mask.</li>
+        <li>🛡 Armor tab — armor now has its own inventory tab, separate from weapons.</li>
+        <li>🔍 Inventory search fix — typing in the search box no longer yanks focus away after every letter.</li>
+        <li>🐛 Stalker Floor direction bug fixed — ahead/behind labels were swapped on the Y axis. Now correctly reports which direction the Darkness Swallower is.</li>
+        <li>🌍 Portuguese translation complete — the game is now fully translated into Portuguese.</li>
+      </ul>
+    </div>
+    <div class="version-block" tabindex="0" aria-label="Version 11.2">
+      <div class="version-num">v11.2</div>
       <div class="version-date">The Shadow World Improvement Update</div>
       <ul class="version-changes">
         <li>🌑 Shadow World loot — 4 new items: Mirror Fragment (purge all corruption instantly), Echo Bone (relic, +25% vs Echo/Shapeshifter), Offering Cloth (relic, guarantees good Offering outcome), Door Key (relic, guarantees good Two Doors outcome)</li>
@@ -7921,7 +7939,7 @@ var DDStore = (function() {
     <!-- Game Version -->
     <div class="access-option" style="cursor:default;">
       <div class="access-option-label">Game Version</div>
-      <div class="access-option-desc" id="general-version-display">Dungeon Descent v11.2</div>
+      <div class="access-option-desc" id="general-version-display">Dungeon Descent v11.3</div>
     </div>
 
     <!-- Command Center Toggle -->
@@ -28881,36 +28899,51 @@ function translateVisibleText(root) {
   var langTable = T[_translationLang];
   if (!langTable) return;
   root = root || document.body;
-  if (root.nodeType === 3) {
-    var trimmed0 = root.nodeValue.trim();
-    if (trimmed0 && langTable[trimmed0]) root.nodeValue = root.nodeValue.replace(trimmed0, langTable[trimmed0]);
-    return;
-  }
-  if (root.nodeType !== 1 && root.nodeType !== 9) return;
-  var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-    acceptNode: function(node) {
-      var p = node.parentNode;
-      if (!p) return NodeFilter.FILTER_REJECT;
-      var tag = p.nodeName;
-      if (tag === 'SCRIPT' || tag === 'STYLE') return NodeFilter.FILTER_REJECT;
-      return NodeFilter.FILTER_ACCEPT;
+  // BUGFIX: this function's own DOM writes (nodeValue/aria-label changes) are
+  // themselves mutations. If the translation MutationObserver is active while
+  // this runs, each write it makes gets queued and replayed back through the
+  // observer's callback, which calls this function again on each mutated
+  // node's parent, walking (and querySelectorAll-ing) that subtree again. On
+  // a full document.body pass across every screen in this SPA that fans out
+  // into thousands of redundant re-scans and pins the main thread for
+  // minutes, presenting as a frozen/blank page. Disconnect while writing so
+  // our own writes never re-enter the observer, then restore it after.
+  var _obs = _translationObserver;
+  if (_obs) _obs.disconnect();
+  try {
+    if (root.nodeType === 3) {
+      var trimmed0 = root.nodeValue.trim();
+      if (trimmed0 && langTable[trimmed0]) root.nodeValue = root.nodeValue.replace(trimmed0, langTable[trimmed0]);
+      return;
     }
-  });
-  var node;
-  while ((node = walker.nextNode())) {
-    var trimmed = node.nodeValue.trim();
-    if (!trimmed) continue;
-    if (langTable[trimmed]) node.nodeValue = node.nodeValue.replace(trimmed, langTable[trimmed]);
-  }
-  if (root.nodeType === 1 && root.hasAttribute && root.hasAttribute('aria-label')) {
-    var cur = root.getAttribute('aria-label');
-    if (cur && langTable[cur]) root.setAttribute('aria-label', langTable[cur]);
-  }
-  if (root.querySelectorAll) {
-    root.querySelectorAll('[aria-label]').forEach(function(el) {
-      var current = el.getAttribute('aria-label');
-      if (current && langTable[current]) el.setAttribute('aria-label', langTable[current]);
+    if (root.nodeType !== 1 && root.nodeType !== 9) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(node) {
+        var p = node.parentNode;
+        if (!p) return NodeFilter.FILTER_REJECT;
+        var tag = p.nodeName;
+        if (tag === 'SCRIPT' || tag === 'STYLE') return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
     });
+    var node;
+    while ((node = walker.nextNode())) {
+      var trimmed = node.nodeValue.trim();
+      if (!trimmed) continue;
+      if (langTable[trimmed]) node.nodeValue = node.nodeValue.replace(trimmed, langTable[trimmed]);
+    }
+    if (root.nodeType === 1 && root.hasAttribute && root.hasAttribute('aria-label')) {
+      var cur = root.getAttribute('aria-label');
+      if (cur && langTable[cur]) root.setAttribute('aria-label', langTable[cur]);
+    }
+    if (root.querySelectorAll) {
+      root.querySelectorAll('[aria-label]').forEach(function(el) {
+        var current = el.getAttribute('aria-label');
+        if (current && langTable[current]) el.setAttribute('aria-label', langTable[current]);
+      });
+    }
+  } finally {
+    if (_obs) _obs.observe(document.body, { childList: true, subtree: true, characterData: true });
   }
 }
 
@@ -33988,7 +34021,7 @@ function showSecurityRoomEvent() {
     '<div style="font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:0.4em;color:#9966cc;margin-bottom:10px;">THE SHADOW WORLD</div>' +
     '<div style="font-family:Cinzel,serif;font-size:1rem;color:#cc88ff;margin-bottom:6px;">Security Room</div>' +
     '<div style="font-family:Cinzel,serif;font-size:0.65rem;color:#666;max-width:320px;line-height:1.7;margin-bottom:14px;">Four cameras. The Darkness Swallower is on one feed. Find it — then escape the opposite direction.</div>' +
-    '<div style="font-family:Cinzel,serif;font-size:1.1rem;color:#ff4444;margin-bottom:14px;" id="sec-timer" aria-live="assertive" aria-atomic="true">:15</div>' +
+    '<div style="font-family:Cinzel,serif;font-size:1.1rem;color:#ff4444;margin-bottom:14px;" id="sec-timer" aria-live="off">:15</div>' +
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:340px;margin-bottom:16px;">' +
       makeCameraHTML('north') +
       makeCameraHTML('south') +
@@ -34037,6 +34070,9 @@ function showSecurityRoomEvent() {
       timerEl.textContent = ':' + (timeLeft < 10 ? '0' : '') + timeLeft;
       if (timeLeft <= 5) timerEl.style.color = '#ff2222';
     }
+    // Only announce at 10 and 5 seconds — not every second
+    if (timeLeft === 10) say('10 seconds remaining.');
+    if (timeLeft === 5) say('5 seconds. Hurry.');
     if (timeLeft <= 0) {
       clearInterval(_securityRoomTimer);
       _securityRoomTimer = null;
@@ -35770,6 +35806,9 @@ function showBossPreview(bossTemplate) {
   overlay.classList.add('open');
   say('Boss encounter. ' + name + '. ' + desc + ' HP: ' + bossHp + '. Three phases. Grows stronger each phase. Press Face It to begin.');
 
+  // Boss entrance sound — evil laugh
+  setTimeout(function() { sfx('sfx-vampire-laugh'); }, 400);
+
   // Focus dismiss button
   setTimeout(function() {
     var btn = overlay.querySelector('button');
@@ -36660,7 +36699,7 @@ function devResetSRPrompt() {
 }
 
 // ── WHATS NEW ──
-var CURRENT_VERSION = '11.2';
+var CURRENT_VERSION = '11.3';
 function checkWhatsNew() {
   // Update ALL version displays from single source of truth
   var vtag = document.querySelector('.version-tag');
@@ -54694,6 +54733,29 @@ function spireReturnToMenu() {
 
 
 <!-- v10.7 UPDATE POPUP -->
+<div id="v113-popup" role="dialog" aria-modal="true" aria-label="Version 11.3 update" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99007;align-items:center;justify-content:center;padding:20px;">
+  <div style="max-width:420px;width:100%;background:#080800;border:2px solid #cc8800;padding:28px;text-align:center;max-height:90vh;overflow-y:auto;">
+    <div style="font-size:1.6rem;margin-bottom:12px;" aria-hidden="true">🎃</div>
+    <div style="font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.4em;color:#cc8800;text-transform:uppercase;margin-bottom:8px;">Version 11.3</div>
+    <h2 style="font-family:Cinzel,serif;font-size:1.1rem;color:#ffaa33;margin-bottom:6px;">The Halloween Update</h2>
+    <div style="width:50px;height:1px;background:linear-gradient(90deg,transparent,#cc8800,transparent);margin:0 auto 20px;"></div>
+    <div style="text-align:left;font-family:Cinzel,serif;font-size:0.7rem;color:#888;line-height:1.9;margin-bottom:20px;">
+      <div style="color:#ffaa33;margin-bottom:6px;">⚔ Boss Retry System</div>
+      Die to a boss and get one second chance. Retry at 50% HP — costs 15% of your gold. Boss resets to full strength. One retry per run.<br><br>
+      <div style="color:#ffaa33;margin-bottom:6px;">📷 Security Room</div>
+      New Shadow World event. Four cameras, 15 seconds. Find the Darkness Swallower by sight or growl — then escape the opposite direction.<br><br>
+      <div style="color:#ffaa33;margin-bottom:6px;">🧟🧛👻 Three New Hollow Enemies</div>
+      The Risen (zombie, revives once), The Pale Guest (vampire, heals on hit), The Unfinished (ghost, 30% phase dodge). Each with unique entrance sounds.<br><br>
+      <div style="color:#ffaa33;margin-bottom:6px;">⚔ Pre-Boss Gauntlet</div>
+      1-2 waves of minions now stand between the floor 10 elite and the final boss.<br><br>
+      <div style="color:#ffaa33;margin-bottom:6px;">🌍 Portuguese Complete</div>
+      The game is now fully translated into Portuguese.<br><br>
+      <div style="color:#555;font-size:0.62rem;">+ Inventory stacking · Equipment tab · Search fix · Stalker direction bug fixed.</div>
+    </div>
+    <button type="button" onclick="dismissV113Popup()" style="width:100%;padding:14px;background:#0a0800;border:2px solid #cc8800;color:#ffaa33;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;" aria-label="Got it — descend into the updated dungeon">🎃 The Hollow Stirs. Descend.</button>
+  </div>
+</div>
+
 <div id="v112-popup" role="dialog" aria-modal="true" aria-label="Version 11.2 update" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99006;align-items:center;justify-content:center;padding:20px;">
   <div style="max-width:420px;width:100%;background:#080008;border:2px solid #9966cc;padding:28px;text-align:center;max-height:90vh;overflow-y:auto;">
     <div style="font-size:1.6rem;margin-bottom:12px;" aria-hidden="true">🌑</div>
@@ -56730,6 +56792,25 @@ function handleHardcoreDeath() {
 // ── END COMPANION SYSTEM ──
 
 // -- v11.0 UPDATE POPUP --
+function showV113PopupIfNeeded() {
+  if (DDStore.getItem('dd_v113_seen')) return;
+  var el = document.getElementById('v113-popup');
+  if (!el) return;
+  el.style.display = 'flex';
+  setTimeout(function() {
+    var btn = el.querySelector('button');
+    if (btn) btn.focus();
+    say('Version 11.3 — The Halloween Update. Boss retry system. Security Room camera event. Three new Hollow enemies. Pre-boss minion gauntlet. Full Portuguese translation. Inventory stacking and Equipment tab. Press The Hollow Stirs to continue.');
+  }, 300);
+}
+
+function dismissV113Popup() {
+  DDStore.setItem('dd_v113_seen', '1');
+  var el = document.getElementById('v113-popup');
+  if (el) el.style.display = 'none';
+  say('Welcome to version 11.3. The Hollow stirs. Descend.');
+}
+
 function showV112PopupIfNeeded() {
   if (DDStore.getItem('dd_v112_seen')) return;
   var el = document.getElementById('v112-popup');
@@ -56982,8 +57063,9 @@ window.addEventListener('load', function() {
     DDStore.setItem('dd_v108_seen', '1');
     DDStore.setItem('dd_v109_seen', '1');
     DDStore.setItem('dd_v110_seen', '1');
-    // Show v11.1 popup
-    showV112PopupIfNeeded();
+    DDStore.setItem('dd_v112_seen', '1');
+    // Show v11.3 popup
+    showV113PopupIfNeeded();
   }, 500);
 });
 // ── END v10.2 UPDATE POPUP ──
