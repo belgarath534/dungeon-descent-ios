@@ -8697,7 +8697,11 @@ function loadAudio() {
    'sfx-hurt','sfx-death','sfx-enemy-die','sfx-potion','sfx-purchase',
    'sfx-stairs','sfx-victory','sfx-gameover','sfx-unlock','sfx-levelup',
    'sfx-sanity-warning','sfx-sanity-critical','sfx-eagle-cry','sfx-firework',
-   'sfx-zombie-groan','sfx-vampire-laugh','sfx-ghost-scream'];
+   'sfx-zombie-groan','sfx-vampire-laugh','sfx-ghost-scream',
+   'sfx-enemy-undead','sfx-enemy-fire','sfx-enemy-ice','sfx-enemy-aquatic',
+   'sfx-enemy-horror','sfx-enemy-beast','sfx-enemy-demon','sfx-enemy-leviathan','sfx-enemy-shadow',
+   'sfx-boss-undead','sfx-boss-fire','sfx-boss-ice','sfx-boss-aquatic',
+   'sfx-boss-horror','sfx-boss-beast','sfx-boss-demon','sfx-boss-leviathan','sfx-boss-shadow'];
 
   sfxNames.forEach(function(n) {
     try {
@@ -14132,6 +14136,34 @@ function searchRoom() {
 }
 
 // ── COMBAT ──
+// One shared entrance sound per dungeon (regular enemies) and a punchier variant for bosses.
+// 402 unique enemies exist across the combat tables — too many to give each a unique sound,
+// so sound is themed by dungeon instead. Files must be uploaded to the R2 audio bucket.
+var DUNGEON_ENEMY_SFX = {
+  'Crypt of Malachar':     'sfx-enemy-undead',
+  'The Ashbound Wastes':   'sfx-enemy-fire',
+  'Frosthold Abyss':       'sfx-enemy-ice',
+  'The Sunken Archives':   'sfx-enemy-aquatic',
+  'The Hollow':            'sfx-enemy-horror',
+  'The Whispering Forest': 'sfx-enemy-beast',
+  'The Infernal Descent':  'sfx-enemy-demon',
+  'The Infernal':          'sfx-enemy-demon',
+  'The Abyssal Deep':      'sfx-enemy-leviathan',
+  'The Shadow World':      'sfx-enemy-shadow',
+};
+var DUNGEON_BOSS_SFX = {
+  'Crypt of Malachar':     'sfx-boss-undead',
+  'The Ashbound Wastes':   'sfx-boss-fire',
+  'Frosthold Abyss':       'sfx-boss-ice',
+  'The Sunken Archives':   'sfx-boss-aquatic',
+  'The Hollow':            'sfx-boss-horror',
+  'The Whispering Forest': 'sfx-boss-beast',
+  'The Infernal Descent':  'sfx-boss-demon',
+  'The Infernal':          'sfx-boss-demon',
+  'The Abyssal Deep':      'sfx-boss-leviathan',
+  'The Shadow World':      'sfx-boss-shadow',
+};
+
 function startCombat(isBoss) {
   setTimeout(function(){ showDungeonTip(isBoss ? 'first-boss' : 'first-combat'); }, 800);
   DS.inCombat = true; DS.defending = false;
@@ -14287,6 +14319,15 @@ function startCombat(isBoss) {
       addLog('👻 The air goes cold. Something steps through the wall. Your attacks may pass right through it.');
       say(e.name + '. 30 percent chance your attacks phase through it entirely.');
     }, 600);
+  } else {
+    // ── DUNGEON-THEMED ENEMY ENTRANCE SOUND ──
+    // Every enemy gets an entrance sound keyed by which dungeon it's from (one shared
+    // sound per dungeon rather than one per enemy — 402 unique enemies across the game
+    // makes truly unique-per-enemy audio impractical). Bosses use a punchier variant.
+    var _archetypeSfx = e.isBoss ? DUNGEON_BOSS_SFX[DS.dungeon] : DUNGEON_ENEMY_SFX[DS.dungeon];
+    if (_archetypeSfx) {
+      setTimeout(function() { sfx(_archetypeSfx); }, e.isBoss ? 400 : 300);
+    }
   }
 }
 
