@@ -3377,7 +3377,9 @@ var DDStore = (function() {
         <li>🗺 Elixirs drop in dungeons — each dungeon now has a unique rare elixir that can drop from floor rooms. Volcanic, Void, Sylvan, Hollow, Shadow, and more.</li>
         <li>🏆 Golden Elixir — combine any 3 elixirs from the Potions tab to brew a Golden Elixir. Fully restores HP and grants +8 ATK for 3 turns.</li>
         <li>🧪 New achievement: The Alchemist — drink 10 elixirs across your runs to unlock it.</li>
+        <li>🏪 Elixir Vendor — a new shop in the Home screen's Alchemy tab. Sell spare elixirs for gold, or buy a rotating daily elixir once per day.</li>
         <li>🐛 Fixed ATK and DEF boost potions never actually expiring — temporary attack and defense buffs now correctly wear off after their stated number of turns instead of lasting the rest of the run.</li>
+        <li>♿ Accessibility — translated 939 missing aria-labels to Portuguese, including the Security Room's escape directions and most combat, navigation, and menu labels. VoiceOver users should now hear far less untranslated English.</li>
       </ul>
     </div>
     <div class="version-block" tabindex="0" aria-label="Version 11.4">
@@ -6900,6 +6902,16 @@ var DDStore = (function() {
       <div id="alchemy-result" style="display:none;background:#0a000a;border:1px solid #cc88ff;padding:14px;margin-bottom:10px;">
         <div style="font-family:Cinzel,serif;font-size:0.65rem;letter-spacing:0.15em;color:#cc88ff;margin-bottom:8px;">⚗️ BREWED!</div>
         <div id="alchemy-result-text" style="font-family:Cinzel,serif;font-size:0.68rem;color:#aaa;line-height:1.8;"></div>
+      </div>
+
+      <!-- Elixir Vendor -->
+      <div style="background:#080808;border:1px solid #443300;padding:12px;margin-bottom:10px;">
+        <div style="font-family:Cinzel,serif;font-size:0.65rem;letter-spacing:0.15em;color:#ffcc66;margin-bottom:4px;">🏪 ELIXIR VENDOR</div>
+        <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#555;margin-bottom:10px;font-style:italic;">Sell the elixirs weighing down your pack, or buy today's special.</div>
+        <div style="font-family:Cinzel,serif;font-size:0.6rem;color:#888;margin-bottom:6px;">Sell your elixirs</div>
+        <div id="elixir-vendor-sell-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-family:Cinzel,serif;font-size:0.62rem;color:#555;">No spare elixirs to sell. Find them on dungeon floors.</div>
+        <div style="font-family:Cinzel,serif;font-size:0.6rem;color:#888;margin-bottom:6px;">Today's elixir</div>
+        <div id="elixir-vendor-daily"></div>
       </div>
     </div><!-- end htab-panel-alchemy -->
 
@@ -32410,6 +32422,16 @@ var T = {
   'Your health: 100 of 100': 'Sua vida: 100 de 100',
   'Register for today\'s Daily Challenge': 'Registrar-se para o Desafio Diário de hoje',
   'Version 11.5, Release': 'Versão 11.5, Lançamento',
+
+  // Batch 17: Elixir Vendor feature (v11.5 expansion)
+  '🏪 ELIXIR VENDOR': '🏪 VENDEDOR DE ELIXIRES',
+  "Sell the elixirs weighing down your pack, or buy today's special.": 'Venda os elixires que estão pesando sua mochila, ou compre a oferta de hoje.',
+  'Sell your elixirs': 'Venda seus elixires',
+  'No spare elixirs to sell. Find them on dungeon floors.': 'Nenhum elixir sobrando para vender. Encontre-os nos andares das masmorras.',
+  "Today's elixir": 'Elixir de hoje',
+  '✓ Bought Today': '✓ Comprado Hoje',
+  "Already bought today's elixir. Come back tomorrow.": 'Você já comprou o elixir de hoje. Volte amanhã.',
+  "Already bought the elixir vendor's special today. Come back tomorrow.": 'Você já comprou a oferta especial do vendedor de elixires hoje. Volte amanhã.'
 }
 };
 
@@ -49032,6 +49054,109 @@ function renderAlchemyTab() {
       recEl.appendChild(row);
     });
   }
+
+  renderElixirVendor();
+}
+
+// ── ELIXIR VENDOR — sell spare elixirs, buy a rotating daily elixir ──
+var VENDOR_ELIXIRS = [
+  { name:'Volcanic Elixir', icon:'🌋', healPct:0.65, desc:'Restores 65% of max HP. A rare find in the wastes.' },
+  { name:'Void Elixir', icon:'🌑', healPct:0.65, desc:'Restores 65% of max HP. Brewed from the abyss itself.' },
+  { name:'Elixir of the Depths', icon:'💧', healPct:0.60, desc:'Restores 60% of max HP. Drawn from an eternal spring below the Archives.' },
+  { name:'Hollow Elixir', icon:'🩶', healPct:0.55, desc:'Restores 55% of max HP. Left behind by someone who no longer needs it.' },
+  { name:'Hellfire Elixir', icon:'🔱', healPct:0.65, desc:'Restores 65% of max HP. Distilled from infernal flame — somehow healing.' },
+  { name:'Sylvan Elixir', icon:'🌿', healPct:0.60, desc:'Restores 60% of max HP. Pressed from the oldest flowers in the forest.' },
+  { name:'Shadow Elixir', icon:'🌑', healPct:0.65, desc:'Restores 65% of max HP. Brewed from the dark between worlds. Glows faintly wrong.' },
+];
+var VENDOR_ELIXIR_SELL_PRICE = 25;
+var VENDOR_ELIXIR_BUY_PRICE = 55;
+
+function getVendorDailyElixir() {
+  var d = new Date();
+  var dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+  return VENDOR_ELIXIRS[dayOfYear % VENDOR_ELIXIRS.length];
+}
+
+function vendorBoughtToday() {
+  return DDStore.getItem('dd_elixir_vendor_last_buy') === todayKey();
+}
+
+function renderElixirVendor() {
+  var listEl = document.getElementById('elixir-vendor-sell-list');
+  if (listEl && DS && DS.inventory) {
+    var counts = {};
+    DS.inventory.forEach(function(item) {
+      if (item.type === 'elixir') counts[item.name] = (counts[item.name] || 0) + 1;
+    });
+    var names = Object.keys(counts);
+    if (names.length === 0) {
+      listEl.textContent = 'No spare elixirs to sell. Find them on dungeon floors.';
+    } else {
+      listEl.innerHTML = '';
+      names.forEach(function(name) {
+        var item = DS.inventory.find(function(i){ return i.type === 'elixir' && i.name === name; });
+        var row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px;background:#0a000a;border:1px solid #2a002a;';
+        row.innerHTML =
+          '<span style="font-size:1.1rem;" aria-hidden="true">' + item.icon + '</span>' +
+          '<div style="flex:1;font-family:Cinzel,serif;font-size:0.65rem;color:#ffcc66;">' + item.name + ' <span style="color:#555;">×' + counts[name] + '</span></div>' +
+          '<button onclick="sellVendorElixir(\'' + name.replace(/'/g, "\\'") + '\')" aria-label="Sell ' + name + ' for ' + VENDOR_ELIXIR_SELL_PRICE + ' gold" style="padding:4px 10px;background:#1a1000;border:1px solid #ffcc66;color:#ffcc66;font-family:Cinzel,serif;font-size:0.58rem;cursor:pointer;">' + VENDOR_ELIXIR_SELL_PRICE + 'g</button>';
+        listEl.appendChild(row);
+      });
+    }
+  }
+
+  var dailyEl = document.getElementById('elixir-vendor-daily');
+  if (dailyEl) {
+    var daily = getVendorDailyElixir();
+    var bought = vendorBoughtToday();
+    dailyEl.innerHTML =
+      '<div style="display:flex;align-items:center;gap:8px;padding:8px;background:#0a000a;border:1px solid #443300;margin-bottom:8px;">' +
+        '<span style="font-size:1.3rem;" aria-hidden="true">' + daily.icon + '</span>' +
+        '<div style="flex:1;">' +
+          '<div style="font-family:Cinzel,serif;font-size:0.65rem;color:#ffcc66;">' + daily.name + '</div>' +
+          '<div style="font-family:Cinzel,serif;font-size:0.58rem;color:#555;">' + daily.desc + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<button onclick="buyVendorDailyElixir()" ' + (bought ? 'disabled' : '') + ' aria-label="' +
+        (bought ? 'Already bought today\'s elixir. Come back tomorrow.' : 'Buy today\'s elixir, ' + daily.name + ', for ' + VENDOR_ELIXIR_BUY_PRICE + ' gold') +
+        '" style="width:100%;padding:8px;background:' + (bought ? '#080808' : '#1a1000') + ';border:1px solid ' + (bought ? '#333' : '#ffcc66') + ';color:' + (bought ? '#444' : '#ffcc66') + ';font-family:Cinzel,serif;font-size:0.62rem;cursor:' + (bought ? 'default' : 'pointer') + ';">' +
+        (bought ? '✓ Bought Today' : '🛒 Buy — ' + VENDOR_ELIXIR_BUY_PRICE + 'g') + '</button>';
+  }
+}
+
+function sellVendorElixir(name) {
+  if (!DS || !DS.inventory) return;
+  var idx = DS.inventory.findIndex(function(i){ return i.type === 'elixir' && i.name === name; });
+  if (idx === -1) return;
+  DS.inventory.splice(idx, 1);
+  addGlobalGold(VENDOR_ELIXIR_SELL_PRICE);
+  sfx('sfx-select');
+  say('Sold ' + name + ' for ' + VENDOR_ELIXIR_SELL_PRICE + ' gold.');
+  renderElixirVendor();
+  updateTopBar();
+}
+
+function buyVendorDailyElixir() {
+  if (vendorBoughtToday()) { say('Already bought the elixir vendor\'s special today. Come back tomorrow.'); return; }
+  var gold = getGlobalGold();
+  if (gold < VENDOR_ELIXIR_BUY_PRICE) { say('Not enough gold. Need ' + VENDOR_ELIXIR_BUY_PRICE + 'g.'); return; }
+  var daily = getVendorDailyElixir();
+  spendGlobalGold(VENDOR_ELIXIR_BUY_PRICE);
+  DDStore.setItem('dd_elixir_vendor_last_buy', todayKey());
+  var elixir = { name: daily.name, icon: daily.icon, type: 'elixir', healPct: daily.healPct, desc: daily.desc };
+  if (DS && DS.inventory) {
+    DS.inventory.push(elixir);
+    renderInv();
+  } else {
+    var stored = JSON.parse(DDStore.getItem('dd_alchemy_stored') || '[]');
+    stored.push(elixir);
+    DDStore.setItem('dd_alchemy_stored', JSON.stringify(stored));
+  }
+  sfx('sfx-confirm');
+  say('Bought ' + daily.name + ' from the vendor.');
+  renderElixirVendor();
+  updateTopBar();
 }
 
 function buyAlchemyIngredient(id) {
@@ -58304,7 +58429,9 @@ function spireReturnToMenu() {
       <div style="color:#4488ff;margin-bottom:6px;">🏆 Golden Elixir</div>
       Combine any 3 elixirs from the Potions tab to brew a Golden Elixir — a full heal plus +8 ATK for 3 turns.<br><br>
       <div style="color:#4488ff;margin-bottom:6px;">🧪 New Achievement: The Alchemist</div>
-      Drink 10 elixirs across your runs to unlock it.
+      Drink 10 elixirs across your runs to unlock it.<br><br>
+      <div style="color:#4488ff;margin-bottom:6px;">🏪 Elixir Vendor</div>
+      New shop in the Home screen's Alchemy tab. Sell spare elixirs for gold, or buy a rotating daily elixir once per day.
     </div>
     <button type="button" onclick="dismissV115Popup()" style="width:100%;padding:14px;background:#010408;border:2px solid #2255cc;color:#4488ff;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;" aria-label="Got it — elixirs go to inventory now">🧪 Save Your Elixirs. Descend.</button>
   </div>
@@ -60395,7 +60522,7 @@ function showV115PopupIfNeeded() {
   setTimeout(function() {
     var btn = el.querySelector('button');
     if (btn) btn.focus();
-    say('Version 11.5 — The Elixir Update. Elixirs now go to your inventory instead of being used instantly. A new Potions tab holds all potions and elixirs. Each dungeon now has a unique elixir that can drop on dungeon floors. Combine any three elixirs to brew a Golden Elixir. Drink ten elixirs to unlock The Alchemist achievement. Press the button to descend.');
+    say('Version 11.5 — The Elixir Update. Elixirs now go to your inventory instead of being used instantly. A new Potions tab holds all potions and elixirs. Each dungeon now has a unique elixir that can drop on dungeon floors. Combine any three elixirs to brew a Golden Elixir. Drink ten elixirs to unlock The Alchemist achievement. A new Elixir Vendor in the Home screen buys spare elixirs and sells a rotating daily elixir. Press the button to descend.');
   }, 300);
 }
 
