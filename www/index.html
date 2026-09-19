@@ -1739,7 +1739,7 @@ var DDStore = (function() {
     <!-- Title -->
     <div class="loading-title" data-i18n="game-title" style="font-size:2.4rem;line-height:1.1;margin-bottom:6px;">Dungeon<br>Descent</div>
     <div class="loading-sub" data-i18n="game-subtitle" style="margin-bottom:6px;">Into the dark. Again.</div>
-    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.3</div>
+    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.5</div>
 
     <!-- Loading bar -->
     <div class="loading-bar-wrap">
@@ -1913,7 +1913,7 @@ var DDStore = (function() {
         <span data-i18n="btn-quit">🕯 Quit</span>
       </button>
     </nav>
-    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 3, Release">v11.3 · Release</p>
+    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 5, Release">v11.5 · Release</p>
     <p id="menu-online-count" style="font-family:Cinzel,serif;font-size:0.55rem;color:#444;margin-top:4px;letter-spacing:0.1em;" aria-live="polite" aria-label="Players currently online"></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#ffdd44;margin-top:6px;" aria-label="Your global gold" aria-live="polite"><span data-i18n="lbl-gold">💰 </span><span class="global-gold-display">0</span></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#88ddff;margin-top:2px;" aria-label="Your diamonds" aria-live="polite">💎 <span class="global-diamond-display">0</span></p>
@@ -3368,8 +3368,36 @@ var DDStore = (function() {
       <button class="back-btn" onclick="goTo('menu')" aria-label="Back to main menu">← Menu</button>
       <h2 class="screen-title">What's New</h2>
     </div>
-    <div class="version-block latest" tabindex="0" aria-label="Version 11.3">
-      <div class="version-num">v11.3 — Latest</div>
+    <div class="version-block latest" tabindex="0" aria-label="Version 11.5">
+      <div class="version-num">v11.5 — Latest</div>
+      <div class="version-date">The Elixir Update</div>
+      <ul class="version-changes">
+        <li>🧪 Elixirs go to inventory — buying an elixir from the shop no longer uses it immediately. It goes to your Potions tab to save for when you need it most.</li>
+        <li>🗂 Potions tab now includes elixirs — all healing consumables live together in the Potions tab. Tap Use when you want to drink one.</li>
+        <li>🗺 Elixirs drop in dungeons — each dungeon now has a unique rare elixir that can drop from floor rooms. Volcanic, Void, Sylvan, Hollow, Shadow, and more.</li>
+        <li>🏆 Golden Elixir — combine any 3 elixirs from the Potions tab to brew a Golden Elixir. Fully restores HP and grants +8 ATK for 3 turns.</li>
+        <li>🧪 New achievement: The Alchemist — drink 10 elixirs across your runs to unlock it.</li>
+        <li>🐛 Fixed ATK and DEF boost potions never actually expiring — temporary attack and defense buffs now correctly wear off after their stated number of turns instead of lasting the rest of the run.</li>
+      </ul>
+    </div>
+    <div class="version-block" tabindex="0" aria-label="Version 11.4">
+      <div class="version-num">v11.4</div>
+      <div class="version-date">The Boss Loot Update</div>
+      <ul class="version-changes">
+        <li>🏆 Boss Loot — every dungeon boss now drops a unique relic when defeated. Eight relics total, one per dungeon, each with a passive effect that changes how you play the rest of the run.</li>
+        <li>👑 Malachar's Crown Fragment (Crypt) — +15 max HP and a one-time death prevention. If the Crown is active and you would die, it shatters instead and brings you back at 20% HP.</li>
+        <li>❤️‍🔥 Ember Heart (Ashbound) — burns enemies for 3 bonus damage on every attack you land.</li>
+        <li>🧊 Frostbite Shard (Frosthold) — 20% chance to freeze the enemy on hit, skipping their next attack.</li>
+        <li>📖 Drowned Tome (Sunken Archives) — +20 max SP and all skill costs reduced by 1.</li>
+        <li>🎭 Hollow Mask (The Hollow) — 15% dodge chance on every enemy hit, plus 3 floors of immunity from the Darkness Swallower in the Shadow World.</li>
+        <li>🌿 Sylvan Heart (Whispering Forest) — heals 3 HP every room you enter.</li>
+        <li>🔱 Infernal Brand (Infernal Descent) — +8 ATK and fire damage amplified by 25%.</li>
+        <li>🐉 Leviathan Scale (Abyssal Deep) — +25 max HP and reduces all incoming damage by 3.</li>
+        <li>🌑 Shadow Tear (Shadow World) — all player damage boosted by 12%.</li>
+      </ul>
+    </div>
+    <div class="version-block" tabindex="0" aria-label="Version 11.3">
+      <div class="version-num">v11.3</div>
       <div class="version-date">The Halloween Update</div>
       <ul class="version-changes">
         <li>⚔ Boss Retry System — die to a boss and get one chance to try again. Retry costs 15% of your gold and restores you to 50% HP. The boss resets to full strength. One retry per run.</li>
@@ -7939,7 +7967,7 @@ var DDStore = (function() {
     <!-- Game Version -->
     <div class="access-option" style="cursor:default;">
       <div class="access-option-label">Game Version</div>
-      <div class="access-option-desc" id="general-version-display">Dungeon Descent v11.3</div>
+      <div class="access-option-desc" id="general-version-display">Dungeon Descent v11.5</div>
     </div>
 
     <!-- Command Center Toggle -->
@@ -11680,7 +11708,8 @@ var ASH_LOOT = [
   { name:'Ember Shield',   icon:'🛡️', type:'armor',   defBonus:4,   desc:'Reduces damage by 4. Made from the hide of a creature that could not burn.' },
   { name:'Cinder Ring',    icon:'💍', type:'ring',    effect:'flee', desc:'Wreathed in heat haze. Makes you harder to follow.' },
   { name:'Slag Ingot',     icon:'🔴', type:'gem',     gold:18,       desc:'Melted ore from the collapse. Worth 18 gold.' },
-  { name:'Char Potion',    icon:'🌋', type:'potion',  heal:35,       desc:'Smells terrible. Tastes worse. Restores 35 HP.' }
+  { name:'Char Potion',    icon:'🌋', type:'potion',  heal:35,       desc:'Smells terrible. Tastes worse. Restores 35 HP.' },
+  { name:'Volcanic Elixir', icon:'🌋', type:'elixir', healPct:0.65, desc:'Restores 65% of max HP. A rare find in the wastes.' }
 ];
 
 // ── ASHBOUND SHOP STOCK ──
@@ -11811,7 +11840,8 @@ var FROST_LOOT = [
   { name:'Glacial Ward',       icon:'🛡️', type:'armor',   defBonus:4,   desc:'Reduces damage by 4. Cold slows attackers.' },
   { name:'Frost Ring',         icon:'💍', type:'ring',    effect:'flee', desc:'Leaves no footprints. Makes fleeing easier.' },
   { name:'Ice Shard',          icon:'🧊', type:'gem',     gold:17,      desc:'A perfect ice formation. Worth 17 gold.' },
-  { name:'Void Potion',        icon:'🌑', type:'potion',  heal:38,      desc:'From the deep dark below the ice. Restores 38 HP.' }
+  { name:'Void Potion',        icon:'🌑', type:'potion',  heal:38,      desc:'From the deep dark below the ice. Restores 38 HP.' },
+  { name:'Void Elixir',       icon:'🌑', type:'elixir',  healPct:0.65, desc:'Restores 65% of max HP. Brewed from the abyss itself.' }
 ];
 
 // ── FROSTHOLD SHOP STOCK ──
@@ -11937,6 +11967,7 @@ var SUNKEN_LOOT = [
   { name:'Depth Charge',        icon:'💣', type:'gem',    gold:18,       desc:'Worth 18 gold.' },
   { name:'Pearl of the Deep',   icon:'🦪', type:'gem',    gold:25,       desc:'Worth 25 gold. Still warm somehow.' },
   { name:'Inkstone',            icon:'🖤', type:'gem',    gold:14,       desc:'Worth 14 gold. Black as void.' },
+  { name:'Elixir of the Depths', icon:'💧', type:'elixir', healPct:0.60, desc:'Restores 60% of max HP. Drawn from an eternal spring below the Archives.' },
 ];
 
 // Sunken Archives lore fragments — found when searching rooms
@@ -12172,6 +12203,7 @@ var HOLLOW_LOOT = [
   { name:'Mourning Ring',      icon:'💍', type:'ring',   effect:'atk', gold:0, desc:'+3 attack. Cold to the touch.' },
   { name:'Old Locket',         icon:'💛', type:'gem',    gold:20,       desc:'Worth 20 gold. Something inside it moves.' },
   { name:'Funeral Coin',       icon:'🪙', type:'gem',    gold:15,       desc:'Worth 15 gold. Not currency from any known place.' },
+  { name:'Hollow Elixir',     icon:'🩶', type:'elixir', healPct:0.55,  desc:'Restores 55% of max HP. Left behind by someone who no longer needs it.' },
 ];
 
 var HOLLOW_SHOP_STOCK = [
@@ -12344,6 +12376,7 @@ var INFERNAL_LOOT = [
   { id:'rune-strength',   name:'Rune of Strength',icon:'🔴', type:'rune',   desc:'+6 attack this run.' },
   { id:'scroll-smite',    name:'Scroll of Smite', icon:'⚡', type:'scroll', desc:'80 unblockable damage.' },
   { name:'Infernal Gem',  icon:'🔶', type:'gem', gold:25, desc:'Worth 25 gold.' },
+  { name:'Hellfire Elixir', icon:'🔱', type:'elixir', healPct:0.65, desc:'Restores 65% of max HP. Distilled from infernal flame — somehow healing.' },
 ];
 
 // ── WHISPERING FOREST ──
@@ -12420,6 +12453,7 @@ var WHISPER_LOOT = [
   { id:'root-staff',   name:'Root Staff',    icon:'🪵', type:'weapon', weaponType:'staff',  level:1, atkBase:[6,12], isEquippable:true, desc:'The roots shift when no one watches.' },
   { id:'bark-shield',  name:'Bark Armor',    icon:'🛡️', type:'armor',  armorType:'light',  level:1, defBase:3, isEquippable:true, desc:'Hardened cursed bark. Warm to the touch.' },
   { name:'Forest Gem', icon:'💚', type:'gem', gold:18, desc:'Worth 18 gold. Glows faintly green.' },
+  { name:'Sylvan Elixir', icon:'🌿', type:'elixir', healPct:0.60, desc:'Restores 60% of max HP. Pressed from the oldest flowers in the forest.' },
 ];
 
 var WHISPER_ENEMIES = {
@@ -12789,6 +12823,7 @@ var LOOT = [
   { id:'scroll-reveal',   name:'Scroll of Reveal',   icon:'📜', type:'scroll', desc:'Reveals the next 3 room types.' },
   { id:'scroll-smite',    name:'Scroll of Smite',    icon:'⚡', type:'scroll', desc:'80 unblockable damage to current enemy.' },
   { id:'scroll-mending',  name:'Scroll of Mending',  icon:'✨', type:'scroll', desc:'Heals 50% max HP outside combat.' },
+  { name:'Elixir of Life', icon:'✨', type:'elixir', healPct:0.60, desc:'Restores 60% of max HP. A rare treasure worth saving.' },
 ];
 
 var HP_MAP = { Warrior:120, Monk:90, Assassin:80, Paladin:130, Naturalist:85, Sorcerer:70, Necromancer:75, Berserker:110, Bard:80, Alchemist:85, BloodKnight:100, Druid:95, Warlock:75, DeathKnight:115, Ranger:90, Sentinel:145, Cleric:105, Wizard:60 };
@@ -13156,6 +13191,11 @@ function enterRoom() {
   try { updateRoomTracker(); } catch(e2) {}
   // Druid — heal on room enter
   if (DS._druid) { DS.hp = Math.min(DS.maxHp, DS.hp + 6); updatePlayerBar(); }
+  // Sylvan Heart relic — room heal
+  if (DS.inventory && DS.inventory.some(function(i){ return i.roomHealBonus; })) {
+    var sylvHeal = DS.inventory.reduce(function(sum, i){ return sum + (i.roomHealBonus || 0); }, 0);
+    if (sylvHeal > 0) { DS.hp = Math.min(DS.maxHp, DS.hp + sylvHeal); updatePlayerBar(); addLog('🌿 Sylvan Heart pulses — +'+ sylvHeal +' HP.'); }
+  }
   // Bomb Thrower — recharge bomb each floor
   if (DS._bombThrower && DS.roomsOnFloor === 1) DS._bombReady = true;
   // Dungeon weather room HP loss — deferred so it does not interfere with combat init
@@ -14682,7 +14722,12 @@ function doFight(action) {
   setCombatBtns(false);
   sfx('sfx-select');
   var e = DS.enemy;
-  var baseAtk = rnd(DS.atk[0], DS.atk[1]) + DS.atkBonus;
+  var baseAtk = rnd(DS.atk[0], DS.atk[1]) + DS.atkBonus + (DS._bossRelicAtkBonus || 0);
+  // Shadow Tear relic — +12% damage amp
+  if (DS.inventory && DS.inventory.some(function(i){ return i.dmgAmp; })) {
+    var _shadowAmp = DS.inventory.reduce(function(sum, i){ return sum + (i.dmgAmp || 0); }, 0);
+    if (_shadowAmp > 0) baseAtk = Math.round(baseAtk * (1 + _shadowAmp));
+  }
   // Shadow Notes — guaranteed critical from the handwriting event
   if (DS._shadowNotes) {
     DS._shadowNotes = false;
@@ -14856,6 +14901,18 @@ function doFight(action) {
       addCorruption(1, 'Mask');
       addLog('🎭 Mask: Corruption spreads to the enemy... and back to you. +1 stack.');
     }
+    // Ember Heart relic — burn bonus on each attack
+    if (e.hp > 0 && DS.inventory && DS.inventory.some(function(i){ return i.ashBurn; })) {
+      var emberBurn = DS.inventory.reduce(function(sum, i){ return sum + (i.ashBurn || 0); }, 0);
+      if (emberBurn > 0) { e.hp = Math.max(0, e.hp - emberBurn); addLog('❤️‍🔥 Ember Heart burns for ' + emberBurn + ' extra damage!'); updateEnemyBar(); }
+    }
+    // Frostbite Shard relic — 20% chance to freeze (enemy skips next turn)
+    if (e.hp > 0 && DS.inventory && DS.inventory.some(function(i){ return i.frostChance; }) && Math.random() < 0.20) {
+      e._stunned = true; addLog('🧊 Frostbite Shard freezes ' + e.name + '! They skip their next attack.'); say(e.name + ' frozen!');
+    }
+    // Hollow Mask relic — extra 15% dodge (applied in applyEnemyMechanicsOnHit above; checked on incoming enemy attacks)
+    // Shadow Tear relic — damage amp
+    if (e.hp > 0 && DS._shadowTearAmp) { /* applied at baseAtk level — no-op here */ }
     // Leech Brew — heal for 30% of damage dealt
     if (DS._leechTurns && DS._leechTurns > 0) {
       var leechHeal = Math.round(playerDmg * (DS._leechPct || 0.30));
@@ -15081,6 +15138,15 @@ function doFight(action) {
     // Apply taunted
     if (DS.taunted && DS.taunted > 0) { rawDmg = Math.round(rawDmg * 0.50); DS.taunted--; }
     if (DS.frostSpriteAura && DS.frostSpriteAura > 0) { rawDmg = Math.round(rawDmg * 0.90); DS.frostSpriteAura--; }
+    // Tick temporary ATK/DEF boosts from potions and elixirs (e.g. Golden Elixir)
+    if (DS._atkBoostTurns && DS._atkBoostTurns > 0) {
+      DS._atkBoostTurns--;
+      if (DS._atkBoostTurns <= 0) { DS.atkBonus = Math.max(0, (DS.atkBonus||0) - (DS._lastAtkBoost||0)); DS._lastAtkBoost = 0; addLog('ATK boost expired.'); }
+    }
+    if (DS._defBoostTurns && DS._defBoostTurns > 0) {
+      DS._defBoostTurns--;
+      if (DS._defBoostTurns <= 0) { DS.defBonus = Math.max(0, (DS.defBonus||0) - (DS._lastDefBoost||0)); DS._lastDefBoost = 0; addLog('DEF boost expired.'); }
+    }
     // Void Moth — 15% chance to negate damage entirely
     if (DS.activeSpirit && DS.activeSpirit.id === 'void-moth' && DS.level >= 5 && Math.random() < 0.15) {
       sayLog('Void Moth intercepts the attack — damage negated!');
@@ -15139,6 +15205,17 @@ function doFight(action) {
       addLog('🥷 Monk dodges the attack completely!');
       say('Dodged!');
       setCombatBtns(true); updateSkillButtons(); return;
+    }
+    // Hollow Mask relic — 15% dodge chance
+    if (DS.inventory && DS.inventory.some(function(i){ return i.hollowDodge; }) && Math.random() < 0.15) {
+      addLog('🎭 Hollow Mask — you slip through the shadows! Attack dodged!');
+      say('Hollow Mask dodge! Attack missed!');
+      setCombatBtns(true); updateSkillButtons(); return;
+    }
+    // Leviathan Scale relic — flat damage reduction
+    if (DS.inventory && DS.inventory.some(function(i){ return i.dmgReduction; })) {
+      var scaleDR = DS.inventory.reduce(function(sum, i){ return sum + (i.dmgReduction || 0); }, 0);
+      if (scaleDR > 0) taken = Math.max(1, taken - scaleDR);
     }
     // Mana shield
     if (DS.manaShield && DS.manaShield > 0) {
@@ -15446,6 +15523,36 @@ function enemyDead() {
     addLog('💎 The boss drops ' + diamondDrop + ' diamond' + (diamondDrop > 1 ? 's' : '') + '!');
     say('The boss dropped ' + diamondDrop + ' diamond' + (diamondDrop > 1 ? 's' : '') + '!');
   }
+  // 🏆 BOSS LOOT — guaranteed unique relic drop based on dungeon
+  if (e.isBoss) {
+    var bossRelicTable = {
+      'Crypt of Malachar':      { name:"Malachar's Crown Fragment", icon:'👑', type:'relic', desc:'A shard of the Undying King\'s crown. Grants +15 max HP and 10% chance to ignore death once per run.', maxHpBonus:15, hasCrownShield:true },
+      'The Ashbound Wastes':    { name:'Ember Heart', icon:'❤️‍🔥', type:'relic', desc:'The smoldering core of the Ash boss. Burns enemies for 3 extra damage each turn you attack.', ashBurn:3 },
+      'Frosthold Abyss':        { name:'Frostbite Shard', icon:'🧊', type:'relic', desc:'A frozen splinter from the Frost boss. Each attack has 20% chance to freeze the enemy, skipping their next turn.', frostChance:0.20 },
+      'The Sunken Archives':    { name:'Drowned Tome', icon:'📖', type:'relic', desc:'A waterlogged grimoire. Grants +20 max SP and spells cost 1 fewer SP.', maxSpBonus:20, spellDiscount:1 },
+      'The Hollow':             { name:'Hollow Mask', icon:'🎭', type:'relic', isShadowItem:true, desc:'A mask worn by the Hollow boss. Grants 15% dodge chance and makes you invisible to the Stalker for 3 floors.', hollowDodge:0.15, stalkerImmunity:3 },
+      'The Whispering Forest':  { name:'Sylvan Heart', icon:'🌿', type:'relic', desc:'The forest boss\'s life essence. Heals 3 HP every room you enter.', roomHealBonus:3 },
+      'The Infernal Descent':   { name:'Infernal Brand', icon:'🔱', type:'relic', desc:'Seared into your palm by the Infernal boss. Grants +8 ATK and makes all fire damage deal 25% more.', atkBonus:8, fireAmp:0.25 },
+      'The Abyssal Deep':       { name:'Leviathan Scale', icon:'🐉', type:'relic', desc:'A scale from the deep boss. Grants +25 max HP and reduces all incoming damage by 3.', maxHpBonus:25, dmgReduction:3 },
+      'The Shadow World':       { name:'Shadow Tear', icon:'🌑', type:'relic', isShadowItem:true, desc:'A crystallized drop of shadow. Boosts all damage by 12% and makes the Stalker hesitate once.', dmgAmp:0.12, stalkerHesitate:true },
+    };
+    var bossRelic = bossRelicTable[DS.dungeon];
+    if (bossRelic) {
+      var relicCopy = Object.assign({}, bossRelic);
+      // Apply immediate stat bonuses
+      if (relicCopy.maxHpBonus) { DS.maxHp = (DS.maxHp || 100) + relicCopy.maxHpBonus; DS.hp = Math.min(DS.hp + relicCopy.maxHpBonus, DS.maxHp); }
+      if (relicCopy.maxSpBonus) { DS.maxSp = (DS.maxSp || 50) + relicCopy.maxSpBonus; DS.sp = Math.min(DS.sp + relicCopy.maxSpBonus, DS.maxSp); }
+      if (relicCopy.atkBonus)   { DS._bossRelicAtkBonus = (DS._bossRelicAtkBonus || 0) + relicCopy.atkBonus; }
+      if (relicCopy.hasCrownShield) DS._crownShieldActive = true;
+      if (relicCopy.stalkerImmunity) DS._stalkerImmunityFloors = (DS._stalkerImmunityFloors || 0) + relicCopy.stalkerImmunity;
+      DS.inventory.push(relicCopy);
+      updatePlayerBar();
+      renderInv();
+      addLog('🏆 ' + relicCopy.icon + ' Boss drops: ' + relicCopy.name + '! ' + relicCopy.desc);
+      say('Boss relic acquired! ' + relicCopy.name + '. ' + relicCopy.desc);
+      sfx('sfx-unlock');
+    }
+  }
   // 🔩 Gun part drop — any enemy, 8% chance
   if (Math.random() < 0.08) {
     var partDefs = GUN_PARTS_DEFS;
@@ -15589,6 +15696,17 @@ function handleDeath() {
     updatePlayerBar();
     addLog('💜 Undying! Death refused you — you survive at 1 HP!');
     say('Undying passive! You survive death at 1 HP. This can only happen once.');
+    setCombatBtns(true);
+    return;
+  }
+  // Crown Fragment relic — 10% chance to ignore death once per run
+  if (DS._crownShieldActive && !DS._crownShieldUsed) {
+    DS._crownShieldUsed = true;
+    DS._crownShieldActive = false;
+    DS.hp = Math.round(DS.maxHp * 0.20);
+    updatePlayerBar();
+    addLog('👑 Malachar\'s Crown Fragment shines — death is refused! You survive at 20% HP!');
+    say('Crown Fragment activates! Death refused. You survive at 20 percent HP. The relic is spent.');
     setCombatBtns(true);
     return;
   }
@@ -16420,6 +16538,12 @@ function checkStalkerFloor() {
   if (DS.floor < 3) return false;
   if (_stalkerActive) return false;
   if (DS.inCombat) return false;
+  // Hollow Mask relic — grants immunity for N floors
+  if (DS._stalkerImmunityFloors && DS._stalkerImmunityFloors > 0) {
+    DS._stalkerImmunityFloors--;
+    addLog('🎭 Hollow Mask hides you from the Darkness Swallower. (' + DS._stalkerImmunityFloors + ' protection floor' + (DS._stalkerImmunityFloors !== 1 ? 's' : '') + ' left)');
+    return false;
+  }
   if (Math.random() > 0.10) return false;
   setTimeout(function() { initStalkerFloor(); }, 800);
   return true;
@@ -16477,7 +16601,7 @@ function toggleInv() {
 function getInvCategory(item) {
   if (item.type === 'weapon') return 'weapons';
   if (item.type === 'armor') return 'armor';
-  if (['potion','sp-potion','luck-potion','fire-potion','curse-potion','swift-potion','def-potion','atk-potion',
+  if (['potion','elixir','sp-potion','luck-potion','fire-potion','curse-potion','swift-potion','def-potion','atk-potion',
        'cursed','mirror-flask','phantom-potion','gravity-tonic','leech-brew','rage-tonic','fog-flask',
        'time-potion','corruption-flask','love-potion'].indexOf(item.type) !== -1) return 'potions';
   if (item.type === 'material' || ['iron-scrap','bone-shard','wolf-fang','goblin-gem','frost-crystal','fire-ember','shadow-dust','void-fragment','dragon-scale'].indexOf(item.id) !== -1) return 'materials';
@@ -16556,6 +16680,28 @@ function onInvSearchClear() {
   var inp = document.getElementById('inv-search');
   if (inp) { inp.value = ''; inp.focus(); }
   renderInv();
+}
+
+// Combine 3 elixirs (any dungeon, any type) into 1 Golden Elixir — full heal + temporary ATK buff.
+function combineElixirs() {
+  var elixirIndices = [];
+  DS.inventory.forEach(function(item, idx) { if (item.type === 'elixir') elixirIndices.push(idx); });
+  if (elixirIndices.length < 3) {
+    say('You need at least 3 elixirs to combine. You have ' + elixirIndices.length + '.');
+    return;
+  }
+  var toRemove = elixirIndices.slice(0, 3).sort(function(a, b) { return b - a; });
+  toRemove.forEach(function(idx) { DS.inventory.splice(idx, 1); });
+  DS.inventory.push({
+    name: 'Golden Elixir', icon: '🏆', type: 'potion', heal: 9999,
+    applyEffect: 'atk-boost', atkBoost: 8, boostTurns: 3,
+    desc: 'A perfect elixir, brewed from three lesser ones. Fully restores HP and grants +8 ATK for 3 turns.'
+  });
+  try { incrementAchievementStat('elixirsCombined', 1); } catch(eAch) {}
+  updateTopBar(); renderInv(); saveProgress();
+  addLog('🏆 Three elixirs combine into a single Golden Elixir!');
+  say('Three elixirs combined into one Golden Elixir. It fully restores HP and boosts attack when used.');
+  setEvent('good', '🏆 The elixirs swirl together and settle into something new — a Golden Elixir, gleaming faintly.');
 }
 
 function renderInv() {
@@ -16637,6 +16783,20 @@ function renderInv() {
     }
   }
 
+  // Potions tab: offer to combine 3 elixirs into 1 Golden Elixir once you have enough
+  if (_invTab === 'potions') {
+    var _elixirCount = DS.inventory.filter(function(i) { return i.type === 'elixir'; }).length;
+    if (_elixirCount >= 3) {
+      var combineBtn = document.createElement('button');
+      combineBtn.className = 'btn-ghost';
+      combineBtn.style.cssText = 'width:100%;padding:8px;margin-bottom:8px;font-size:0.68rem;border-color:#cc9944;color:#ffdd66;';
+      combineBtn.textContent = '🏆 Combine 3 Elixirs into a Golden Elixir';
+      combineBtn.setAttribute('aria-label', 'Combine three elixirs into one Golden Elixir. You have ' + _elixirCount + ' elixirs.');
+      combineBtn.onclick = function() { combineElixirs(); };
+      grid.appendChild(combineBtn);
+    }
+  }
+
   // Filter by tab AND search, sort favorites to top
   var filteredItems = DS.inventory.filter(function(item) {
     var isFav = _invFavorites.indexOf(item.name) !== -1;
@@ -16703,7 +16863,7 @@ function renderInv() {
     var item = entry.item;
     var count = entry.count;
     var i = entry.indices[0]; // index of first instance for use/drop
-    var isUsable = item.type === 'potion' || item.type === 'enchanter' || item.type === 'music-player' || item.type === 'luck-potion' || item.type === 'fire-potion' || item.type === 'curse-potion' || item.type === 'swift-potion' || item.type === 'def-potion' || item.type === 'atk-potion' || item.type === 'cursed' || item.type === 'rune' || item.type === 'scroll' || item.type === 'skill-orb' || item.type === 'soul-trap' || item.type === 'sp-potion' || item.type === 'gamblers-spirit' || item.type === 'mirror-flask' || item.type === 'phantom-potion' || item.type === 'gravity-tonic' || item.type === 'leech-brew' || item.type === 'rage-tonic' || item.type === 'fog-flask' || item.type === 'time-potion' || item.type === 'corruption-flask' || item.type === 'love-potion' || item.type === 'consumable';
+    var isUsable = item.type === 'potion' || item.type === 'elixir' || item.type === 'enchanter' || item.type === 'music-player' || item.type === 'luck-potion' || item.type === 'fire-potion' || item.type === 'curse-potion' || item.type === 'swift-potion' || item.type === 'def-potion' || item.type === 'atk-potion' || item.type === 'cursed' || item.type === 'rune' || item.type === 'scroll' || item.type === 'skill-orb' || item.type === 'soul-trap' || item.type === 'sp-potion' || item.type === 'gamblers-spirit' || item.type === 'mirror-flask' || item.type === 'phantom-potion' || item.type === 'gravity-tonic' || item.type === 'leech-brew' || item.type === 'rage-tonic' || item.type === 'fog-flask' || item.type === 'time-potion' || item.type === 'corruption-flask' || item.type === 'love-potion' || item.type === 'consumable';
     var isRelic = item.type === 'relic';
     var isEquippable = item.isEquippable && (item.type === 'weapon' || item.type === 'armor');
     var row = document.createElement('div');
@@ -16869,12 +17029,25 @@ function useItem(i) {
     setEvent('good', '🪞 The Mirror Fragment shatters in your hand. The corruption inside you fractures with it. ' + cleared + ' stack' + (cleared > 1 ? 's' : '') + ' purged.');
     return;
   }
+  if (item.type === 'elixir') {
+    var elixHeal = Math.round(DS.maxHp * item.healPct);
+    if (DS.hp >= DS.maxHp) { say('Your health is already full. Save the elixir for when you need it.'); return; }
+    DS.hp = Math.min(DS.maxHp, DS.hp + elixHeal);
+    DS.inventory.splice(i, 1);
+    try { incrementAchievementStat('elixirsUsed', 1); } catch(eAch) {}
+    updatePlayerBar(); updateTopBar(); renderInv(); saveProgress();
+    addLog(item.icon + ' ' + item.name + ' — restored ' + elixHeal + ' HP!');
+    say('Elixir used. ' + item.name + '. Restored ' + elixHeal + ' HP. Current HP: ' + DS.hp + ' of ' + DS.maxHp + '.');
+    setEvent('good', item.icon + ' You uncork the ' + item.name + ' and drink deep. +' + elixHeal + ' HP. The warmth spreads through you instantly.');
+    return;
+  }
   if (item.type === 'potion') {
     // Handle full restore (Elixir of Life)
     if (item.heal >= 9999) {
       DS.hp = DS.maxHp;
       if (item.restoreSP) DS.sp = DS.maxSp;
       DS.inventory.splice(i, 1);
+      if (item.name === 'Golden Elixir') { try { incrementAchievementStat('elixirsUsed', 1); } catch(eAch2) {} }
       updateTopBar(); renderInv(); saveProgress();
       updatePlayerBar();
       say('Used ' + item.name + '. Fully restored!');
@@ -18439,10 +18612,9 @@ function buyItem(i) {
     document.getElementById('shop-msg').textContent = 'Purchased ' + item.name + '. Added to inventory.';
     say('Bought ' + item.name + '. Gold remaining: ' + DS.gold + '.');
   } else if (item.type === 'heal') {
-    var healAmt = Math.round(DS.maxHp * item.healPct);
-    DS.hp = Math.min(DS.maxHp, DS.hp + healAmt);
-    document.getElementById('shop-msg').textContent = 'You drink the elixir. +' + healAmt + ' HP restored.';
-    say('Elixir used. Restored ' + healAmt + ' HP. Current HP: ' + DS.hp + ' of ' + DS.maxHp + '.');
+    DS.inventory.push({ name:item.name, icon:item.icon, type:'elixir', healPct:item.healPct, desc:item.desc });
+    document.getElementById('shop-msg').textContent = 'Purchased ' + item.name + '. Added to your Potions inventory.';
+    say('Bought ' + item.name + '. Elixir added to inventory. Gold remaining: ' + DS.gold + '.');
   } else if (item.type === 'weapon') {
     var weaponItem = Object.assign({}, item);
     DS.inventory.push(weaponItem);
@@ -21188,12 +21360,13 @@ function useSkill(idx) {
     if (_wasMulti) setCombatBtns = _origSetCombatBtns;
     say('Your skills are silenced!'); return; 
   }
-  var actualCost = (DS.unlimitedPower && DS.unlimitedPower > 0) ? 0 : Math.max(0, skill.spCost - (DS.tinkererDiscount||0) - traitDisc - gnomeDisc - _weatherSpDiscount - _abyssalSpDiscount - (DS._soulSurge ? 1 : 0));
+  var _drownedTomeDisc = DS.inventory ? DS.inventory.reduce(function(sum, i){ return sum + (i.spellDiscount || 0); }, 0) : 0;
+  var actualCost = (DS.unlimitedPower && DS.unlimitedPower > 0) ? 0 : Math.max(0, skill.spCost - (DS.tinkererDiscount||0) - traitDisc - gnomeDisc - _weatherSpDiscount - _abyssalSpDiscount - (DS._soulSurge ? 1 : 0) - _drownedTomeDisc);
   if (DS.unlimitedPower && DS.unlimitedPower > 0) DS.unlimitedPower--;
   DS.sp -= actualCost;
   updateXPBar();
   var e = DS.enemy;
-  var baseAtk = rnd(DS.atk[0], DS.atk[1]) + DS.atkBonus;
+  var baseAtk = rnd(DS.atk[0], DS.atk[1]) + DS.atkBonus + (DS._bossRelicAtkBonus || 0);
   var _evBns2 = getEventBonuses();
   if (_evBns2 && _evBns2.atkBoost) baseAtk = Math.round(baseAtk * (1 + _evBns2.atkBoost));
   if (DS.dailyChallenge === 'glassCannon') baseAtk = Math.round(baseAtk * 2.0);
@@ -25261,7 +25434,11 @@ var T = {
     'Dungeon intro sequence — atmospheric text on first visit to each dungeon. The Hollow: the house knows you are here.': 'Sequência de introdução da masmorra — texto atmosférico na primeira visita a cada masmorra. O Vazio: a casa sabe que você está aqui.',
     'Bestiary filter tabs — filter enemies by dungeon: All, Crypt, Ashbound, Frosthold, Archives, Hollow, Nightmare, Elite': 'Abas de filtro do bestiário — filtre inimigos por masmorra: Todos, Cripta, Terras Cinzentas, Congelado, Arquivos, Vazio, Pesadelo, Elite',
     'v4.7': 'v4.7',
-    // Batch 11: What's New patch notes archive v11.3 down through v8.6
+    // Batch 11: What's New patch notes archive v11.4 down through v8.6
+    'v11.4 — Latest': 'v11.4 — Mais Recente',
+    'The Elixir Update': 'A Atualização dos Elixires',
+    'The Boss Loot Update': 'A Atualização de Saque dos Chefes',
+    '🏆 Boss Loot — 8 Unique Relics': '🏆 Saque dos Chefes — 8 Relíquias Únicas',
     'v11.3 — Latest': 'v11.3 — Mais Recente',
     'The Halloween Update': 'A Atualização de Halloween',
     '⚔ Boss Retry System — die to a boss and get one chance to try again. Retry costs 15% of your gold and restores you to 50% HP. The boss resets to full strength. One retry per run.': '⚔ Sistema de Nova Tentativa contra Chefes — morra para um chefe e ganhe uma chance de tentar novamente. A nova tentativa custa 15% do seu ouro e restaura você para 50% de HP. O chefe volta à força total. Uma nova tentativa por partida.',
@@ -26828,6 +27005,7 @@ var T = {
     '⛏ The Mine': '⛏ A Mina',
     '📖 Codex': '📖 Códex',
     '⚔ Enemy Creator': '⚔ Criador de Inimigos',
+    'v11.4 · Release': 'v11.4 · Lançamento',
     'v11.3 · Release': 'v11.3 · Lançamento',
     'Game language and translation': 'Idioma do jogo e tradução',
     'Show Chat in Dungeon': 'Mostrar Chat na Masmorra',
@@ -26895,6 +27073,7 @@ var T = {
     'Current: Classic Unlock': 'Atual: Desbloqueio Clássico',
     'Your progress and data are never deleted. Items can be re-enabled here at any time.': 'Seu progresso e dados nunca são excluídos. Itens podem ser reativados aqui a qualquer momento.',
     'Game Version': 'Versão do Jogo',
+    'Dungeon Descent v11.4': 'Dungeon Descent v11.4',
     'Dungeon Descent v11.3': 'Dungeon Descent v11.3',
     'Show the Command Center button on the main menu. Lets you type or speak commands to control the game, schedule AFK runs, and create characters.': 'Mostra o botão do Centro de Comando no menu principal. Permite digitar ou falar comandos para controlar o jogo, agendar partidas AFK e criar personagens.',
     'Enter Reward Code': 'Digite o Código de Recompensa',
@@ -31279,7 +31458,19 @@ var T = {
   '🛍️ Seasonal Shop': '🛍️ Loja Sazonal',
   'Descent Shop': 'Loja da Descida',
   '⚙ Settings': '⚙ Configurações',
-  'Choose a category to customize your experience.': 'Escolha uma categoria para personalizar sua experiência.'
+  'Choose a category to customize your experience.': 'Escolha uma categoria para personalizar sua experiência.',
+
+  // Batch 15: Golden Elixir crafting feature (v11.5 expansion)
+  'Golden Elixir': 'Elixir Dourado',
+  'A perfect elixir, brewed from three lesser ones. Fully restores HP and grants +8 ATK for 3 turns.': 'Um elixir perfeito, preparado a partir de três menores. Restaura totalmente o HP e concede +8 de ATQ por 3 turnos.',
+  '🏆 Combine 3 Elixirs into a Golden Elixir': '🏆 Combinar 3 Elixires em um Elixir Dourado',
+  '🏆 Three elixirs combine into a single Golden Elixir!': '🏆 Três elixires se combinam em um único Elixir Dourado!',
+  'Three elixirs combined into one Golden Elixir. It fully restores HP and boosts attack when used.': 'Três elixires foram combinados em um Elixir Dourado. Ele restaura totalmente o HP e aumenta o ataque quando usado.',
+  '🏆 The elixirs swirl together and settle into something new — a Golden Elixir, gleaming faintly.': '🏆 Os elixires se misturam e se transformam em algo novo — um Elixir Dourado, brilhando suavemente.',
+  'The Alchemist': 'O Alquimista',
+  'Ten elixirs consumed. You have learned the old recipes.': 'Dez elixires consumidos. Você aprendeu as receitas antigas.',
+  'ATK boost expired.': 'Aumento de ATQ expirou.',
+  'DEF boost expired.': 'Aumento de DEF expirou.'
 }
 };
 
@@ -32132,6 +32323,7 @@ var ACHIEVEMENTS = [
   { gold:400, trophies:7, id:'ach-abyssal-boss', gpId:'CgkI0uiuoZcDEAIQMw',    name:'Depth Conqueror',     icon:'🌊', desc:'The deepest creature in the deepest dungeon. Yours now.', check: function(s){ return s.abyssalBossDefeated; } },
   { gold:400, trophies:7, id:'ach-void-reaper', gpId:'CgkI0uiuoZcDEAIQZA',     name:'Void Slayer',      icon:'🌑', desc:'The Void Reaper was supposed to be unkillable. You did not know that.',                    check:function(s){ return (s.voidReaperDefeated||0)>=1; } },
   { gold:250, trophies:2, id:'ach-void-survivor', gpId:'CgkI0uiuoZcDEAIQHg',   name:'Still Standing',   icon:'💜', desc:'You faced the Void Reaper and walked away. That alone is remarkable.', check:function(s){ return (s.voidReaperDefeated||0)>=1 || (s.voidAttempts||0)>=1; } },
+  { gold:150, trophies:3, id:'ach-alchemist',        name:'The Alchemist',    icon:'🧪', desc:'Ten elixirs consumed. You have learned the old recipes.',      check:function(s){ return (s.elixirsUsed||0)>=10; } },
   { gold:50, trophies:1, id:'ach-riddle-correct', gpId:'CgkI0uiuoZcDEAIQKA',  name:'The Riddled',      icon:'❓', desc:'Brains and brawn. The dungeon did not expect both.',           check:function(s){ return (s.riddlesCorrect||0)>=1; } },
   { gold:50, trophies:1, id:'ach-riddle-wrong', gpId:'CgkI0uiuoZcDEAIQVQ',    name:'Wrong Answer',     icon:'💥', desc:'Wrong answer. Right result. Sometimes force is the solution.',  check:function(s){ return (s.riddlesWrong||0)>=1 && (s.bossDefeated||0)>=1; } },
   { gold:150, trophies:3, id:'ach-timer-beaten', gpId:'CgkI0uiuoZcDEAIQVA',    name:'Beat The Clock',   icon:'⏱',  desc:'Against the clock and winning. That is pressure. That is you.', check:function(s){ return (s.bossTimerBeaten||0)>=1; } },
@@ -39120,7 +39312,7 @@ function devResetSRPrompt() {
 }
 
 // ── WHATS NEW ──
-var CURRENT_VERSION = '11.3';
+var CURRENT_VERSION = '11.5';
 function checkWhatsNew() {
   // Update ALL version displays from single source of truth
   var vtag = document.querySelector('.version-tag');
@@ -44709,6 +44901,7 @@ var SHADOW_LOOT = [
   { name:'Echo Bone',         icon:'🦴', type:'relic', shadowItem:'echoBone', desc:'Carved from an Echo. Deals +25% damage to any Echo or Shapeshifter variant. The hunter becomes the hunted.' },
   { name:'Offering Cloth',    icon:'🩶', type:'relic', shadowItem:'offeringCloth', desc:'The wrapping from The Offering. The shadow now guarantees its gifts are real. Offering events always give loot or gold.' },
   { name:'Door Key',          icon:'🗝️', type:'relic', shadowItem:'doorKey', desc:'Found beyond a door that should not open. The Two Doors event always reveals the good path.' },
+  { name:'Shadow Elixir',    icon:'🌑', type:'elixir', healPct:0.65, isShadowItem:true, desc:'Restores 65% of max HP. Brewed from the dark between worlds. Glows faintly wrong.' },
 ];
 
 // ── ABYSSAL ROOM DESCRIPTIONS ──
@@ -47983,6 +48176,7 @@ function applyPotionEffect(potion) {
     case 'atk-boost':
       DS.atkBonus = (DS.atkBonus || 0) + (potion.atkBoost || 10);
       DS._atkBoostTurns = (DS._atkBoostTurns || 0) + (potion.boostTurns || 4);
+      DS._lastAtkBoost = potion.atkBoost || 10;
       addLog('💢 ATK +'  + potion.atkBoost + ' for ' + potion.boostTurns + ' turns!');
       say('ATK boosted by ' + potion.atkBoost + ' for ' + potion.boostTurns + ' turns.');
       updatePlayerBar();
@@ -47990,6 +48184,7 @@ function applyPotionEffect(potion) {
     case 'def-boost':
       DS.defBonus = (DS.defBonus || 0) + (potion.defBoost || 10);
       DS._defBoostTurns = (DS._defBoostTurns || 0) + (potion.boostTurns || 4);
+      DS._lastDefBoost = potion.defBoost || 10;
       addLog('⚙️ DEF +' + potion.defBoost + ' for ' + potion.boostTurns + ' turns!');
       say('DEF boosted by ' + potion.defBoost + ' for ' + potion.boostTurns + ' turns.');
       updatePlayerBar();
@@ -57154,6 +57349,46 @@ function spireReturnToMenu() {
 
 
 <!-- v10.7 UPDATE POPUP -->
+<div id="v115-popup" role="dialog" aria-modal="true" aria-label="Version 11.5 update" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99009;align-items:center;justify-content:center;padding:20px;">
+  <div style="max-width:420px;width:100%;background:#010408;border:2px solid #2255cc;padding:28px;text-align:center;max-height:90vh;overflow-y:auto;">
+    <div style="font-size:1.6rem;margin-bottom:12px;" aria-hidden="true">🧪</div>
+    <div style="font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.4em;color:#2255cc;text-transform:uppercase;margin-bottom:8px;">Version 11.5</div>
+    <h2 style="font-family:Cinzel,serif;font-size:1.1rem;color:#4488ff;margin-bottom:6px;">The Elixir Update</h2>
+    <div style="width:50px;height:1px;background:linear-gradient(90deg,transparent,#2255cc,transparent);margin:0 auto 20px;"></div>
+    <div style="text-align:left;font-family:Cinzel,serif;font-size:0.7rem;color:#888;line-height:1.9;margin-bottom:20px;">
+      <div style="color:#4488ff;margin-bottom:6px;">🧪 Elixirs Go to Inventory</div>
+      Elixirs no longer vanish the moment you buy them. They go to your inventory so you can save them for when you really need them.<br><br>
+      <div style="color:#4488ff;margin-bottom:6px;">🗂 Potions Tab</div>
+      All potions and elixirs now show up together under the Potions tab. Find it in your inventory during any run.<br><br>
+      <div style="color:#4488ff;margin-bottom:6px;">🗺 Elixirs as Dungeon Drops</div>
+      Each dungeon now has a rare elixir that can drop from floor rooms — Volcanic, Void, Sylvan, Shadow, and more. Keep your eyes open.<br><br>
+      <div style="color:#4488ff;margin-bottom:6px;">🏆 Golden Elixir</div>
+      Combine any 3 elixirs from the Potions tab to brew a Golden Elixir — a full heal plus +8 ATK for 3 turns.<br><br>
+      <div style="color:#4488ff;margin-bottom:6px;">🧪 New Achievement: The Alchemist</div>
+      Drink 10 elixirs across your runs to unlock it.
+    </div>
+    <button type="button" onclick="dismissV115Popup()" style="width:100%;padding:14px;background:#010408;border:2px solid #2255cc;color:#4488ff;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;" aria-label="Got it — elixirs go to inventory now">🧪 Save Your Elixirs. Descend.</button>
+  </div>
+</div>
+
+<div id="v114-popup" role="dialog" aria-modal="true" aria-label="Version 11.4 update" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99008;align-items:center;justify-content:center;padding:20px;">
+  <div style="max-width:420px;width:100%;background:#010a04;border:2px solid #22aa55;padding:28px;text-align:center;max-height:90vh;overflow-y:auto;">
+    <div style="font-size:1.6rem;margin-bottom:12px;" aria-hidden="true">🏆</div>
+    <div style="font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.4em;color:#22aa55;text-transform:uppercase;margin-bottom:8px;">Version 11.4</div>
+    <h2 style="font-family:Cinzel,serif;font-size:1.1rem;color:#44dd88;margin-bottom:6px;">The Boss Loot Update</h2>
+    <div style="width:50px;height:1px;background:linear-gradient(90deg,transparent,#22aa55,transparent);margin:0 auto 20px;"></div>
+    <div style="text-align:left;font-family:Cinzel,serif;font-size:0.7rem;color:#888;line-height:1.9;margin-bottom:20px;">
+      <div style="color:#44dd88;margin-bottom:6px;">🏆 Boss Loot — 8 Unique Relics</div>
+      Every dungeon boss now drops a relic on defeat. Each one is unique to its dungeon and has a passive effect for the rest of your run.<br><br>
+      <div style="color:#44dd88;margin-bottom:6px;">Crypt · Ashbound · Frosthold · Archives</div>
+      Crown Fragment (death prevention) · Ember Heart (burn damage) · Frostbite Shard (freeze chance) · Drowned Tome (+SP + spell discount)<br><br>
+      <div style="color:#44dd88;margin-bottom:6px;">Hollow · Forest · Infernal · Abyssal · Shadow</div>
+      Hollow Mask (dodge + Stalker immunity) · Sylvan Heart (room heal) · Infernal Brand (+ATK) · Leviathan Scale (+HP + damage reduction) · Shadow Tear (+12% damage)<br>
+    </div>
+    <button type="button" onclick="dismissV114Popup()" style="width:100%;padding:14px;background:#010a04;border:2px solid #22aa55;color:#44dd88;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;" aria-label="Got it — hunt the boss for their loot">🏆 The Bosses Drop Loot Now. Descend.</button>
+  </div>
+</div>
+
 <div id="v113-popup" role="dialog" aria-modal="true" aria-label="Version 11.3 update" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99007;align-items:center;justify-content:center;padding:20px;">
   <div style="max-width:420px;width:100%;background:#080800;border:2px solid #cc8800;padding:28px;text-align:center;max-height:90vh;overflow-y:auto;">
     <div style="font-size:1.6rem;margin-bottom:12px;" aria-hidden="true">🎃</div>
@@ -59213,6 +59448,46 @@ function handleHardcoreDeath() {
 // ── END COMPANION SYSTEM ──
 
 // -- v11.0 UPDATE POPUP --
+function showV115PopupIfNeeded() {
+  if (DDStore.getItem('dd_v115_seen')) return;
+  var el = document.getElementById('v115-popup');
+  if (!el) return;
+  el.style.display = 'flex';
+  setTimeout(function() {
+    var btn = el.querySelector('button');
+    if (btn) btn.focus();
+    say('Version 11.5 — The Elixir Update. Elixirs now go to your inventory instead of being used instantly. A new Potions tab holds all potions and elixirs. Each dungeon now has a unique elixir that can drop on dungeon floors. Combine any three elixirs to brew a Golden Elixir. Drink ten elixirs to unlock The Alchemist achievement. Press the button to descend.');
+  }, 300);
+}
+
+function dismissV115Popup() {
+  DDStore.setItem('dd_v115_seen', '1');
+  var el = document.getElementById('v115-popup');
+  if (el) el.style.display = 'none';
+  say('Welcome to version 11.5. Your elixirs are waiting in inventory. Descend.');
+  showV114PopupIfNeeded();
+}
+
+function showV114PopupIfNeeded() {
+  if (DDStore.getItem('dd_v114_seen')) return;
+  var el = document.getElementById('v114-popup');
+  if (!el) return;
+  el.style.display = 'flex';
+  setTimeout(function() {
+    var btn = el.querySelector('button');
+    if (btn) btn.focus();
+    say('Version 11.4 — The Boss Loot Update. Every dungeon boss now drops a unique relic. Eight relics total. Crown Fragment prevents death. Ember Heart burns enemies. Frostbite Shard freezes. Drowned Tome boosts SP. Hollow Mask grants dodge. Sylvan Heart heals each room. Infernal Brand boosts attack. Leviathan Scale reduces damage. Shadow Tear amplifies all damage. Press the button to descend.');
+  }, 300);
+}
+
+function dismissV114Popup() {
+  DDStore.setItem('dd_v114_seen', '1');
+  var el = document.getElementById('v114-popup');
+  if (el) el.style.display = 'none';
+  say('Welcome to version 11.4. Go beat some bosses for their loot. Descend.');
+  showV113PopupIfNeeded();
+}
+
 function showV113PopupIfNeeded() {
   if (DDStore.getItem('dd_v113_seen')) return;
   var el = document.getElementById('v113-popup');
@@ -59485,8 +59760,10 @@ window.addEventListener('load', function() {
     DDStore.setItem('dd_v109_seen', '1');
     DDStore.setItem('dd_v110_seen', '1');
     DDStore.setItem('dd_v112_seen', '1');
-    // Show v11.3 popup
-    showV113PopupIfNeeded();
+    DDStore.setItem('dd_v113_seen', '1');
+    DDStore.setItem('dd_v114_seen', '1');
+    // Show v11.5 popup
+    showV115PopupIfNeeded();
   }, 500);
 });
 // ── END v10.2 UPDATE POPUP ──
