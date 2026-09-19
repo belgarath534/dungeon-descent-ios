@@ -3378,7 +3378,7 @@ var DDStore = (function() {
         <li>🏆 Golden Elixir — combine any 3 elixirs from the Potions tab to brew a Golden Elixir. Fully restores HP and grants +8 ATK for 3 turns.</li>
         <li>🧪 New achievement: The Alchemist — drink 10 elixirs across your runs to unlock it.</li>
         <li>🏪 Elixir Vendor — a new shop with its own tab in the Home screen. Sell spare elixirs for gold, or buy a rotating daily elixir once per day.</li>
-        <li>🌋 3 new vendor-exclusive elixirs — Gravebound, Frostbound, and Tidal, bringing the vendor's rotation to 10 elixirs.</li>
+        <li>🌋 3 new elixirs — Gravebound, Frostbound, and Tidal, bringing the vendor's rotation to 10 elixirs. Gravebound and Tidal also now drop and sell in the Crypt of Malachar and the Abyssal Deep; Frostbound stays vendor-exclusive.</li>
         <li>📅 Daily Descent expanded from a 7-day loop to a 30-day cycle of unique rewards — gold, potions, soul fragments, mystery coins, and elixirs — before it repeats.</li>
         <li>🐛 Fixed ATK and DEF boost potions never actually expiring — temporary attack and defense buffs now correctly wear off after their stated number of turns instead of lasting the rest of the run.</li>
         <li>♿ Accessibility — translated 939 missing aria-labels to Portuguese, including the Security Room's escape directions and most combat, navigation, and menu labels. VoiceOver users should now hear far less untranslated English.</li>
@@ -12842,6 +12842,8 @@ var LOOT = [
   { id:'scroll-smite',    name:'Scroll of Smite',    icon:'⚡', type:'scroll', desc:'80 unblockable damage to current enemy.' },
   { id:'scroll-mending',  name:'Scroll of Mending',  icon:'✨', type:'scroll', desc:'Heals 50% max HP outside combat.' },
   { name:'Elixir of Life', icon:'✨', type:'elixir', healPct:0.60, desc:'Restores 60% of max HP. A rare treasure worth saving.' },
+  { name:'Gravebound Elixir', icon:'💀', type:'elixir', healPct:0.60, desc:'Restores 60% of max HP. Bottled in the Crypt of Malachar.' },
+  { name:'Tidal Elixir', icon:'🌊', type:'elixir', healPct:0.60, desc:'Restores 60% of max HP. Drawn from the Abyssal Deep.' },
 ];
 
 var HP_MAP = { Warrior:120, Monk:90, Assassin:80, Paladin:130, Naturalist:85, Sorcerer:70, Necromancer:75, Berserker:110, Bard:80, Alchemist:85, BloodKnight:100, Druid:95, Warlock:75, DeathKnight:115, Ranger:90, Sentinel:145, Cleric:105, Wizard:60 };
@@ -18491,6 +18493,8 @@ var SHOP_STOCK = [
   { name:'Time Potion',       icon:'⌛', type:'time-potion',           cost:45, desc:'2 free attacks this turn. Enemy cannot respond.' },
   { name:'Corruption Flask',  icon:'💜', type:'corruption-flask',      cost:33, desc:'Deals 20 corruption damage to enemy each turn for 4 turns.' },
   { name:'Elixir of Life',    icon:'✨', type:'heal',        healPct:0.6, cost:35, desc:'Restores 60% of max HP instantly.' },
+  { name:'Gravebound Elixir', icon:'💀', type:'heal',        healPct:0.6, cost:35, desc:'Restores 60% of max HP instantly.' },
+  { name:'Tidal Elixir',      icon:'🌊', type:'heal',        healPct:0.6, cost:35, desc:'Restores 60% of max HP instantly.' },
   { name:'Bloodstone',        icon:'🔴', type:'gem',         gold:20,  cost:0,  desc:'Worth 20 gold. Sell it at the Blacksmith.' },
   // Weapons
   { id:'shop-iron-sword',    name:'Iron Sword',    icon:'⚔️', type:'weapon', weaponType:'sword',  level:1, atkBase:[5,10], cost:45,  isEquippable:true, desc:'A reliable sword.' },
@@ -32457,9 +32461,9 @@ var T = {
   'Restores 65% of max HP. Distilled from infernal flame — somehow healing.': 'Restaura 65% do HP máximo. Destilado de chama infernal — de alguma forma cura.',
   'Restores 60% of max HP. Pressed from the oldest flowers in the forest.': 'Restaura 60% do HP máximo. Extraído das flores mais antigas da floresta.',
   'Restores 65% of max HP. Brewed from the dark between worlds. Glows faintly wrong.': 'Restaura 65% do HP máximo. Preparado a partir da escuridão entre os mundos. Brilha de um jeito sutilmente errado.',
-  'Restores 60% of max HP. Bottled in the Crypt of Malachar. Vendor exclusive.': 'Restaura 60% do HP máximo. Engarrafado na Cripta de Malachar. Exclusivo do vendedor.',
-  'Restores 65% of max HP. Chipped from the Frosthold Abyss. Vendor exclusive.': 'Restaura 65% do HP máximo. Extraído do Abismo Glacial. Exclusivo do vendedor.',
-  'Restores 60% of max HP. Drawn from the Abyssal Deep. Vendor exclusive.': 'Restaura 60% do HP máximo. Retirado do Abismo Profundo. Exclusivo do vendedor.',
+  'Restores 60% of max HP. Bottled in the Crypt of Malachar.': 'Restaura 60% do HP máximo. Engarrafado na Cripta de Malachar.',
+  'Restores 60% of max HP. Drawn from the Abyssal Deep.': 'Restaura 60% do HP máximo. Retirado do Abismo Profundo.',
+  'Restores 65% of max HP. Brewed by the vendor from ice they swear came from the Frosthold Abyss. Vendor exclusive.': 'Restaura 65% do HP máximo. Preparado pelo vendedor com gelo que ele jura ter vindo do Abismo Glacial. Exclusivo do vendedor.',
   '25 Gold': '25 de Ouro',
   '40 Gold + Health Potion': '40 de Ouro + Poção de Vida',
   '55 Gold + 5 Soul Fragments': '55 de Ouro + 5 Fragmentos de Alma',
@@ -49188,9 +49192,9 @@ var VENDOR_ELIXIRS = [
   { name:'Hellfire Elixir', icon:'🔱', healPct:0.65, desc:'Restores 65% of max HP. Distilled from infernal flame — somehow healing.' },
   { name:'Sylvan Elixir', icon:'🌿', healPct:0.60, desc:'Restores 60% of max HP. Pressed from the oldest flowers in the forest.' },
   { name:'Shadow Elixir', icon:'🌑', healPct:0.65, desc:'Restores 65% of max HP. Brewed from the dark between worlds. Glows faintly wrong.' },
-  { name:'Gravebound Elixir', icon:'💀', healPct:0.60, desc:'Restores 60% of max HP. Bottled in the Crypt of Malachar. Vendor exclusive.' },
-  { name:'Frostbound Elixir', icon:'🧊', healPct:0.65, desc:'Restores 65% of max HP. Chipped from the Frosthold Abyss. Vendor exclusive.' },
-  { name:'Tidal Elixir', icon:'🌊', healPct:0.60, desc:'Restores 60% of max HP. Drawn from the Abyssal Deep. Vendor exclusive.' },
+  { name:'Gravebound Elixir', icon:'💀', healPct:0.60, desc:'Restores 60% of max HP. Bottled in the Crypt of Malachar.' },
+  { name:'Frostbound Elixir', icon:'🧊', healPct:0.65, desc:'Restores 65% of max HP. Brewed by the vendor from ice they swear came from the Frosthold Abyss. Vendor exclusive.' },
+  { name:'Tidal Elixir', icon:'🌊', healPct:0.60, desc:'Restores 60% of max HP. Drawn from the Abyssal Deep.' },
 ];
 var VENDOR_ELIXIR_SELL_PRICE = 25;
 var VENDOR_ELIXIR_BUY_PRICE = 55;
@@ -58556,7 +58560,7 @@ function spireReturnToMenu() {
       <div style="color:#4488ff;margin-bottom:6px;">🧪 New Achievement: The Alchemist</div>
       Drink 10 elixirs across your runs to unlock it.<br><br>
       <div style="color:#4488ff;margin-bottom:6px;">🏪 Elixir Vendor</div>
-      New shop with its own tab in the Home screen. Sell spare elixirs for gold, or buy a rotating daily elixir — now 10 elixirs deep, including 3 vendor-exclusive ones.<br><br>
+      New shop with its own tab in the Home screen. Sell spare elixirs for gold, or buy a rotating daily elixir — now 10 elixirs deep. Gravebound and Tidal also drop and sell in the Crypt of Malachar and Abyssal Deep.<br><br>
       <div style="color:#4488ff;margin-bottom:6px;">📅 Daily Descent — 30-Day Cycle</div>
       The daily login reward now runs a 30-day cycle of unique rewards before it repeats, instead of looping every 7 days.
     </div>
