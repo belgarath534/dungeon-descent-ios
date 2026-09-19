@@ -3377,7 +3377,9 @@ var DDStore = (function() {
         <li>🗺 Elixirs drop in dungeons — each dungeon now has a unique rare elixir that can drop from floor rooms. Volcanic, Void, Sylvan, Hollow, Shadow, and more.</li>
         <li>🏆 Golden Elixir — combine any 3 elixirs from the Potions tab to brew a Golden Elixir. Fully restores HP and grants +8 ATK for 3 turns.</li>
         <li>🧪 New achievement: The Alchemist — drink 10 elixirs across your runs to unlock it.</li>
-        <li>🏪 Elixir Vendor — a new shop in the Home screen's Alchemy tab. Sell spare elixirs for gold, or buy a rotating daily elixir once per day.</li>
+        <li>🏪 Elixir Vendor — a new shop with its own tab in the Home screen. Sell spare elixirs for gold, or buy a rotating daily elixir once per day.</li>
+        <li>🌋 3 new vendor-exclusive elixirs — Gravebound, Frostbound, and Tidal, bringing the vendor's rotation to 10 elixirs.</li>
+        <li>📅 Daily Descent expanded from a 7-day loop to a 30-day cycle of unique rewards — gold, potions, soul fragments, mystery coins, and elixirs — before it repeats.</li>
         <li>🐛 Fixed ATK and DEF boost potions never actually expiring — temporary attack and defense buffs now correctly wear off after their stated number of turns instead of lasting the rest of the run.</li>
         <li>♿ Accessibility — translated 939 missing aria-labels to Portuguese, including the Security Room's escape directions and most combat, navigation, and menu labels. VoiceOver users should now hear far less untranslated English.</li>
       </ul>
@@ -6763,6 +6765,7 @@ var DDStore = (function() {
       <button onclick="switchHomeTab('minions')" id="htab-minions" style="flex:1;padding:8px 4px;background:#080808;border:1px solid #333;color:#666;font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.08em;cursor:pointer;border-radius:2px;" aria-label="Minions tab">👾 MINIONS</button>
       <button onclick="switchHomeTab('forge')" id="htab-forge" style="flex:1;padding:8px 4px;background:#080808;border:1px solid #333;color:#666;font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.08em;cursor:pointer;border-radius:2px;" aria-label="Forge tab">🔨 FORGE</button>
       <button onclick="switchHomeTab('alchemy')" id="htab-alchemy" style="flex:1;padding:8px 4px;background:#080808;border:1px solid #333;color:#666;font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.08em;cursor:pointer;border-radius:2px;" aria-label="Alchemy tab">⚗️ ALCHEMY</button>
+      <button onclick="switchHomeTab('elixirs')" id="htab-elixirs" style="flex:1;padding:8px 4px;background:#080808;border:1px solid #333;color:#666;font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.08em;cursor:pointer;border-radius:2px;" aria-label="Elixir Vendor tab">🏪 VENDOR</button>
       <button onclick="switchHomeTab('gunshop')" id="htab-gunshop" style="flex:1;padding:8px 4px;background:#080808;border:1px solid #333;color:#666;font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.08em;cursor:pointer;border-radius:2px;" aria-label="Gun Workshop tab">🔫 GUNS</button>
     </div>
 
@@ -6904,7 +6907,10 @@ var DDStore = (function() {
         <div id="alchemy-result-text" style="font-family:Cinzel,serif;font-size:0.68rem;color:#aaa;line-height:1.8;"></div>
       </div>
 
-      <!-- Elixir Vendor -->
+    </div><!-- end htab-panel-alchemy -->
+
+    <!-- TAB: ELIXIR VENDOR -->
+    <div id="htab-panel-elixirs" style="display:none;">
       <div style="background:#080808;border:1px solid #443300;padding:12px;margin-bottom:10px;">
         <div style="font-family:Cinzel,serif;font-size:0.65rem;letter-spacing:0.15em;color:#ffcc66;margin-bottom:4px;">🏪 ELIXIR VENDOR</div>
         <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#555;margin-bottom:10px;font-style:italic;">Sell the elixirs weighing down your pack, or buy today's special.</div>
@@ -6913,7 +6919,7 @@ var DDStore = (function() {
         <div style="font-family:Cinzel,serif;font-size:0.6rem;color:#888;margin-bottom:6px;">Today's elixir</div>
         <div id="elixir-vendor-daily"></div>
       </div>
-    </div><!-- end htab-panel-alchemy -->
+    </div><!-- end htab-panel-elixirs -->
 
     <!-- TAB: GUN WORKSHOP -->
     <div id="htab-panel-gunshop" style="display:none;">
@@ -32431,7 +32437,84 @@ var T = {
   "Today's elixir": 'Elixir de hoje',
   '✓ Bought Today': '✓ Comprado Hoje',
   "Already bought today's elixir. Come back tomorrow.": 'Você já comprou o elixir de hoje. Volte amanhã.',
-  "Already bought the elixir vendor's special today. Come back tomorrow.": 'Você já comprou a oferta especial do vendedor de elixires hoje. Volte amanhã.'
+  "Already bought the elixir vendor's special today. Come back tomorrow.": 'Você já comprou a oferta especial do vendedor de elixires hoje. Volte amanhã.',
+
+  // Batch 18: Elixir Vendor tab, new elixir names/descs, 30-day Daily Descent cycle
+  'Sylvan Elixir': 'Elixir Silvestre',
+  'Hollow Elixir': 'Elixir do Vazio Oco',
+  'Hellfire Elixir': 'Elixir do Fogo Infernal',
+  'Shadow Elixir': 'Elixir das Sombras',
+  'Elixir of the Depths': 'Elixir das Profundezas',
+  'Gravebound Elixir': 'Elixir da Sepultura',
+  'Frostbound Elixir': 'Elixir Congelante',
+  'Tidal Elixir': 'Elixir das Marés',
+  'Superior Potion': 'Poção Superior',
+  'Elixir Vendor tab': 'Aba do Vendedor de Elixires',
+  'Restores 65% of max HP. A rare find in the wastes.': 'Restaura 65% do HP máximo. Um achado raro nas terras devastadas.',
+  'Restores 65% of max HP. Brewed from the abyss itself.': 'Restaura 65% do HP máximo. Preparado a partir do próprio abismo.',
+  'Restores 60% of max HP. Drawn from an eternal spring below the Archives.': 'Restaura 60% do HP máximo. Retirado de uma fonte eterna sob os Arquivos.',
+  'Restores 55% of max HP. Left behind by someone who no longer needs it.': 'Restaura 55% do HP máximo. Deixado para trás por alguém que não precisa mais dele.',
+  'Restores 65% of max HP. Distilled from infernal flame — somehow healing.': 'Restaura 65% do HP máximo. Destilado de chama infernal — de alguma forma cura.',
+  'Restores 60% of max HP. Pressed from the oldest flowers in the forest.': 'Restaura 60% do HP máximo. Extraído das flores mais antigas da floresta.',
+  'Restores 65% of max HP. Brewed from the dark between worlds. Glows faintly wrong.': 'Restaura 65% do HP máximo. Preparado a partir da escuridão entre os mundos. Brilha de um jeito sutilmente errado.',
+  'Restores 60% of max HP. Bottled in the Crypt of Malachar. Vendor exclusive.': 'Restaura 60% do HP máximo. Engarrafado na Cripta de Malachar. Exclusivo do vendedor.',
+  'Restores 65% of max HP. Chipped from the Frosthold Abyss. Vendor exclusive.': 'Restaura 65% do HP máximo. Extraído do Abismo Glacial. Exclusivo do vendedor.',
+  'Restores 60% of max HP. Drawn from the Abyssal Deep. Vendor exclusive.': 'Restaura 60% do HP máximo. Retirado do Abismo Profundo. Exclusivo do vendedor.',
+  '25 Gold': '25 de Ouro',
+  '40 Gold + Health Potion': '40 de Ouro + Poção de Vida',
+  '55 Gold + 5 Soul Fragments': '55 de Ouro + 5 Fragmentos de Alma',
+  '70 Gold + 8 Soul Fragments': '70 de Ouro + 8 Fragmentos de Alma',
+  '90 Gold + Mystery Coin': '90 de Ouro + Moeda Misteriosa',
+  '110 Gold + Greater Potion': '110 de Ouro + Poção Maior',
+  '130 Gold + Volcanic Elixir': '130 de Ouro + Elixir Vulcânico',
+  '150 Gold + 10 Soul Fragments': '150 de Ouro + 10 Fragmentos de Alma',
+  '170 Gold + Health Potion': '170 de Ouro + Poção de Vida',
+  '190 Gold + Mystery Coin': '190 de Ouro + Moeda Misteriosa',
+  '210 Gold + Void Elixir': '210 de Ouro + Elixir do Vazio',
+  '230 Gold + 12 Soul Fragments': '230 de Ouro + 12 Fragmentos de Alma',
+  '250 Gold + Greater Potion': '250 de Ouro + Poção Maior',
+  '270 Gold + 2 Mystery Coins': '270 de Ouro + 2 Moedas Misteriosas',
+  '300 Gold + Sylvan Elixir': '300 de Ouro + Elixir Silvestre',
+  '320 Gold + 15 Soul Fragments': '320 de Ouro + 15 Fragmentos de Alma',
+  '340 Gold + Health Potion': '340 de Ouro + Poção de Vida',
+  '360 Gold + Mystery Coin': '360 de Ouro + Moeda Misteriosa',
+  '380 Gold + Hollow Elixir': '380 de Ouro + Elixir do Vazio Oco',
+  '400 Gold + 18 Soul Fragments': '400 de Ouro + 18 Fragmentos de Alma',
+  '420 Gold + Greater Potion': '420 de Ouro + Poção Maior',
+  '440 Gold + 2 Mystery Coins': '440 de Ouro + 2 Moedas Misteriosas',
+  '460 Gold + Hellfire Elixir': '460 de Ouro + Elixir do Fogo Infernal',
+  '480 Gold + 20 Soul Fragments': '480 de Ouro + 20 Fragmentos de Alma',
+  '500 Gold + Superior Potion': '500 de Ouro + Poção Superior',
+  '520 Gold + 2 Mystery Coins': '520 de Ouro + 2 Moedas Misteriosas',
+  '540 Gold + Shadow Elixir': '540 de Ouro + Elixir das Sombras',
+  '560 Gold + 25 Soul Fragments': '560 de Ouro + 25 Fragmentos de Alma',
+  '580 Gold + 3 Mystery Coins': '580 de Ouro + 3 Moedas Misteriosas',
+  '700 Gold + 5 Mystery Coins + 50 Soul Fragments': '700 de Ouro + 5 Moedas Misteriosas + 50 Fragmentos de Alma',
+  'A soul fragment stirs. Something down here is rooting for you.': 'Um fragmento de alma se agita. Algo aqui embaixo está na sua torcida.',
+  'A full week. The vendor sends a Volcanic Elixir down with the delivery.': 'Uma semana completa. O vendedor manda um Elixir Vulcânico junto com a entrega.',
+  'Eight days. The fragments are starting to add up.': 'Oito dias. Os fragmentos estão começando a se acumular.',
+  'Nine days. The dungeon keeps a tab, and you are owed.': 'Nove dias. A masmorra mantém uma conta, e você tem crédito.',
+  'Ten days. A milestone most never reach.': 'Dez dias. Um marco que a maioria nunca alcança.',
+  'The vendor has heard of your streak and sends a Void Elixir.': 'O vendedor ouviu falar da sua sequência e manda um Elixir do Vazio.',
+  'Twelve days. Your resolve is starting to show.': 'Doze dias. Sua determinação está começando a aparecer.',
+  'Thirteen days. Unlucky for the dungeon, not for you.': 'Treze dias. Azar para a masmorra, não para você.',
+  'Two full weeks. The merchant is impressed.': 'Duas semanas completas. O mercador está impressionado.',
+  'Halfway through the month. The vendor sends a Sylvan Elixir.': 'Na metade do mês. O vendedor manda um Elixir Silvestre.',
+  'Sixteen days. The fragments hum with stored power.': 'Dezesseis dias. Os fragmentos zumbem com poder acumulado.',
+  'Seventeen days. Still here. Still descending.': 'Dezessete dias. Ainda aqui. Ainda descendo.',
+  'Eighteen days. The dungeon has stopped being surprised.': 'Dezoito dias. A masmorra parou de se surpreender.',
+  'The vendor sends a Hollow Elixir. Left behind by someone who no longer needs it.': 'O vendedor manda um Elixir do Vazio Oco. Deixado por alguém que não precisa mais dele.',
+  'Twenty days. A number that means something.': 'Vinte dias. Um número que significa algo.',
+  'Three weeks. The dungeon has run out of ways to test you.': 'Três semanas. A masmorra ficou sem formas de testar você.',
+  'Twenty-two days. Close now.': 'Vinte e dois dias. Cada vez mais perto.',
+  'The vendor sends a Hellfire Elixir, distilled from infernal flame.': 'O vendedor manda um Elixir do Fogo Infernal, destilado de chama infernal.',
+  'Twenty-four days. Almost a month.': 'Vinte e quatro dias. Quase um mês.',
+  'Twenty-five days. The dungeon brews something stronger for you.': 'Vinte e cinco dias. A masmorra prepara algo mais forte para você.',
+  'Twenty-six days. The merchant no longer asks your name.': 'Vinte e seis dias. O mercador não pergunta mais seu nome.',
+  'The vendor sends a Shadow Elixir, brewed from the dark between worlds.': 'O vendedor manda um Elixir das Sombras, preparado a partir da escuridão entre os mundos.',
+  'Four full weeks. The fragments could almost speak.': 'Quatro semanas completas. Os fragmentos quase poderiam falar.',
+  'Twenty-nine days. One more.': 'Vinte e nove dias. Só mais um.',
+  'A full month. The dungeon bows. This reward will not come again until you have earned it again.': 'Um mês completo. A masmorra se curva. Esta recompensa não virá de novo até que você a conquiste novamente.',
 }
 };
 
@@ -42248,21 +42331,44 @@ var THANKSGIVING_ENEMIES = [
 // DAILY DESCENT — Daily Login Rewards
 //═════════════════
 var DAILY_REWARDS = [
-  { day:1, gold:25,  icon:'💰', name:'25 Gold',                    desc:'A small offering from the dungeon. Every descent begins here.' },
-  { day:2, gold:50,  icon:'💰', name:'50 Gold',                    desc:'The dungeon remembers you returned. It rewards consistency.', bonus:{ type:'potion', name:'Health Potion', icon:'🧪', heal:40 } },
-  { day:3, gold:75,  icon:'💰', name:'75 Gold + Potion',           desc:'Three days. The dungeon is starting to respect you.', bonus:{ type:'fragment', amount:5 } },
-  { day:4, gold:100, icon:'💰', name:'100 Gold + Soul Fragment',    desc:'A full soul fragment. Something down here is rooting for you.', bonus:{ type:'fragment', amount:10 } },
-  { day:5, gold:150, icon:'🪙', name:'150 Gold + Mystery Coin',    desc:'Five days. The merchant left something for you at the entrance.', bonus:{ type:'coin', amount:1 } },
-  { day:6, gold:200, icon:'💰', name:'200 Gold + Rare Potion',     desc:'Six days without stopping. The dungeon yields more than usual.', bonus:{ type:'potion', name:'Greater Potion', icon:'💊', heal:80 } },
-  { day:7, gold:300, icon:'👑', name:'300 Gold + Mystery Coin + Soul Fragments', desc:'A full week. The dungeon bows. This reward will not come again until you have earned it again.', bonus:{ type:'weekly', coins:1, fragments:25 } },
+  { day:1,  gold:25,  icon:'💰', name:'25 Gold',                     desc:'A small offering from the dungeon. Every descent begins here.' },
+  { day:2,  gold:40,  icon:'🧪', name:'40 Gold + Health Potion',      desc:'The dungeon remembers you returned. It rewards consistency.', bonus:{ type:'potion', name:'Health Potion', icon:'🧪', heal:40 } },
+  { day:3,  gold:55,  icon:'✨', name:'55 Gold + 5 Soul Fragments',   desc:'Three days. The dungeon is starting to respect you.', bonus:{ type:'fragment', amount:5 } },
+  { day:4,  gold:70,  icon:'✨', name:'70 Gold + 8 Soul Fragments',   desc:'A soul fragment stirs. Something down here is rooting for you.', bonus:{ type:'fragment', amount:8 } },
+  { day:5,  gold:90,  icon:'🪙', name:'90 Gold + Mystery Coin',       desc:'Five days. The merchant left something for you at the entrance.', bonus:{ type:'coin', amount:1 } },
+  { day:6,  gold:110, icon:'💊', name:'110 Gold + Greater Potion',    desc:'Six days without stopping. The dungeon yields more than usual.', bonus:{ type:'potion', name:'Greater Potion', icon:'💊', heal:80 } },
+  { day:7,  gold:130, icon:'🌋', name:'130 Gold + Volcanic Elixir',   desc:'A full week. The vendor sends a Volcanic Elixir down with the delivery.', bonus:{ type:'elixir', name:'Volcanic Elixir', icon:'🌋', healPct:0.65 } },
+  { day:8,  gold:150, icon:'✨', name:'150 Gold + 10 Soul Fragments', desc:'Eight days. The fragments are starting to add up.', bonus:{ type:'fragment', amount:10 } },
+  { day:9,  gold:170, icon:'🧪', name:'170 Gold + Health Potion',     desc:'Nine days. The dungeon keeps a tab, and you are owed.', bonus:{ type:'potion', name:'Health Potion', icon:'🧪', heal:40 } },
+  { day:10, gold:190, icon:'🪙', name:'190 Gold + Mystery Coin',      desc:'Ten days. A milestone most never reach.', bonus:{ type:'coin', amount:1 } },
+  { day:11, gold:210, icon:'🌑', name:'210 Gold + Void Elixir',       desc:'The vendor has heard of your streak and sends a Void Elixir.', bonus:{ type:'elixir', name:'Void Elixir', icon:'🌑', healPct:0.65 } },
+  { day:12, gold:230, icon:'✨', name:'230 Gold + 12 Soul Fragments', desc:'Twelve days. Your resolve is starting to show.', bonus:{ type:'fragment', amount:12 } },
+  { day:13, gold:250, icon:'💊', name:'250 Gold + Greater Potion',    desc:'Thirteen days. Unlucky for the dungeon, not for you.', bonus:{ type:'potion', name:'Greater Potion', icon:'💊', heal:80 } },
+  { day:14, gold:270, icon:'🪙', name:'270 Gold + 2 Mystery Coins',   desc:'Two full weeks. The merchant is impressed.', bonus:{ type:'coin', amount:2 } },
+  { day:15, gold:300, icon:'🌿', name:'300 Gold + Sylvan Elixir',     desc:'Halfway through the month. The vendor sends a Sylvan Elixir.', bonus:{ type:'elixir', name:'Sylvan Elixir', icon:'🌿', healPct:0.60 } },
+  { day:16, gold:320, icon:'✨', name:'320 Gold + 15 Soul Fragments', desc:'Sixteen days. The fragments hum with stored power.', bonus:{ type:'fragment', amount:15 } },
+  { day:17, gold:340, icon:'🧪', name:'340 Gold + Health Potion',     desc:'Seventeen days. Still here. Still descending.', bonus:{ type:'potion', name:'Health Potion', icon:'🧪', heal:40 } },
+  { day:18, gold:360, icon:'🪙', name:'360 Gold + Mystery Coin',      desc:'Eighteen days. The dungeon has stopped being surprised.', bonus:{ type:'coin', amount:1 } },
+  { day:19, gold:380, icon:'🩶', name:'380 Gold + Hollow Elixir',     desc:'The vendor sends a Hollow Elixir. Left behind by someone who no longer needs it.', bonus:{ type:'elixir', name:'Hollow Elixir', icon:'🩶', healPct:0.55 } },
+  { day:20, gold:400, icon:'✨', name:'400 Gold + 18 Soul Fragments', desc:'Twenty days. A number that means something.', bonus:{ type:'fragment', amount:18 } },
+  { day:21, gold:420, icon:'💊', name:'420 Gold + Greater Potion',    desc:'Three weeks. The dungeon has run out of ways to test you.', bonus:{ type:'potion', name:'Greater Potion', icon:'💊', heal:80 } },
+  { day:22, gold:440, icon:'🪙', name:'440 Gold + 2 Mystery Coins',   desc:'Twenty-two days. Close now.', bonus:{ type:'coin', amount:2 } },
+  { day:23, gold:460, icon:'🔱', name:'460 Gold + Hellfire Elixir',   desc:'The vendor sends a Hellfire Elixir, distilled from infernal flame.', bonus:{ type:'elixir', name:'Hellfire Elixir', icon:'🔱', healPct:0.65 } },
+  { day:24, gold:480, icon:'✨', name:'480 Gold + 20 Soul Fragments', desc:'Twenty-four days. Almost a month.', bonus:{ type:'fragment', amount:20 } },
+  { day:25, gold:500, icon:'⭐', name:'500 Gold + Superior Potion',   desc:'Twenty-five days. The dungeon brews something stronger for you.', bonus:{ type:'potion', name:'Superior Potion', icon:'⭐', heal:120 } },
+  { day:26, gold:520, icon:'🪙', name:'520 Gold + 2 Mystery Coins',   desc:'Twenty-six days. The merchant no longer asks your name.', bonus:{ type:'coin', amount:2 } },
+  { day:27, gold:540, icon:'🌑', name:'540 Gold + Shadow Elixir',    desc:'The vendor sends a Shadow Elixir, brewed from the dark between worlds.', bonus:{ type:'elixir', name:'Shadow Elixir', icon:'🌑', healPct:0.65 } },
+  { day:28, gold:560, icon:'✨', name:'560 Gold + 25 Soul Fragments', desc:'Four full weeks. The fragments could almost speak.', bonus:{ type:'fragment', amount:25 } },
+  { day:29, gold:580, icon:'🪙', name:'580 Gold + 3 Mystery Coins',   desc:'Twenty-nine days. One more.', bonus:{ type:'coin', amount:3 } },
+  { day:30, gold:700, icon:'👑', name:'700 Gold + 5 Mystery Coins + 50 Soul Fragments', desc:'A full month. The dungeon bows. This reward will not come again until you have earned it again.', bonus:{ type:'monthly', coins:5, fragments:50 } },
 ];
 
 function getDailyRewardForDay(day) {
-  var idx = ((day - 1) % 7);
+  var idx = ((day - 1) % 30);
   var reward = JSON.parse(JSON.stringify(DAILY_REWARDS[idx]));
-  // Bonus gold per completed week
-  var weeksCompleted = Math.floor((day - 1) / 7);
-  if (weeksCompleted > 0) reward.gold += weeksCompleted * 25;
+  // Bonus gold per completed 30-day cycle
+  var cyclesCompleted = Math.floor((day - 1) / 30);
+  if (cyclesCompleted > 0) reward.gold += cyclesCompleted * 50;
   reward.day = day;
   return reward;
 }
@@ -42377,11 +42483,16 @@ function showDailyDescentPopup(state, reward, today) {
   var rewards = [{ icon:'💰', label:reward.gold + 'g' }];
   if (reward.bonus) {
     if (reward.bonus.type === 'potion') rewards.push({ icon:reward.bonus.icon, label:reward.bonus.name });
+    if (reward.bonus.type === 'elixir') rewards.push({ icon:reward.bonus.icon, label:reward.bonus.name });
     if (reward.bonus.type === 'fragment') rewards.push({ icon:'✨', label:reward.bonus.amount + ' Soul Fragments' });
-    if (reward.bonus.type === 'coin') rewards.push({ icon:'🪙', label:'1 Mystery Coin' });
+    if (reward.bonus.type === 'coin') rewards.push({ icon:'🪙', label:reward.bonus.amount + ' Mystery Coin' + (reward.bonus.amount === 1 ? '' : 's') });
     if (reward.bonus.type === 'weekly') {
       rewards.push({ icon:'🪙', label:'1 Mystery Coin' });
       rewards.push({ icon:'✨', label:'25 Soul Fragments' });
+    }
+    if (reward.bonus.type === 'monthly') {
+      rewards.push({ icon:'🪙', label:reward.bonus.coins + ' Mystery Coins' });
+      rewards.push({ icon:'✨', label:reward.bonus.fragments + ' Soul Fragments' });
     }
   }
   rewards.forEach(function(r) {
@@ -42392,15 +42503,18 @@ function showDailyDescentPopup(state, reward, today) {
     preview.appendChild(chip);
   });
 
-  // Week progress dots
+  // Week progress dots — shows position within the current 7-day block of the 30-day reward cycle
   var weekProg = document.getElementById('dd-week-progress');
   weekProg.innerHTML = '';
+  var posInWeek = ((state.streak - 1) % 7) + 1;
+  var isCycleFinale = ((state.streak - 1) % 30) === 29; // day 30 of the cycle
   for (var i = 1; i <= 7; i++) {
     var dot = document.createElement('div');
-    var filled = i < state.streak || (i === state.streak);
-    var isToday = i === ((state.streak - 1) % 7 + 1);
+    var filled = i <= posInWeek;
+    var isToday = i === posInWeek;
+    var showCrown = isToday && isCycleFinale;
     dot.style.cssText = 'width:28px;height:28px;border-radius:50%;border:1px solid ' + (filled ? 'var(--gold)' : '#333') + ';background:' + (filled ? 'rgba(201,162,39,0.2)' : '#0a0a0a') + ';display:flex;align-items:center;justify-content:center;font-size:0.6rem;font-family:Cinzel,serif;color:' + (filled ? 'var(--gold)' : '#444') + ';' + (isToday ? 'box-shadow:0 0 8px rgba(201,162,39,0.6);' : '');
-    dot.textContent = i === 7 ? '👑' : i;
+    dot.textContent = showCrown ? '👑' : i;
     dot.setAttribute('aria-label', 'Day ' + i + (filled ? ' completed' : '') + (isToday ? ' today' : ''));
     weekProg.appendChild(dot);
   }
@@ -42440,12 +42554,15 @@ function claimDailyDescent() {
     if (reward.bonus.type === 'potion') {
       addToGlobalInventory({ name:reward.bonus.name, icon:reward.bonus.icon, type:'potion', heal:reward.bonus.heal, desc:'Daily Descent reward.' });
     }
+    if (reward.bonus.type === 'elixir') {
+      addToGlobalInventory({ name:reward.bonus.name, icon:reward.bonus.icon, type:'elixir', healPct:reward.bonus.healPct, desc:'Daily Descent reward.' });
+    }
     if (reward.bonus.type === 'fragment') {
       var frags = parseInt(DDStore.getItem('dd_soul_fragments') || '0') + reward.bonus.amount;
       DDStore.setItem('dd_soul_fragments', String(frags));
     }
     if (reward.bonus.type === 'coin') {
-      var coins = parseInt(DDStore.getItem('dd_mystery_coins') || '0') + 1;
+      var coins = parseInt(DDStore.getItem('dd_mystery_coins') || '0') + reward.bonus.amount;
       DDStore.setItem('dd_mystery_coins', String(coins));
     }
     if (reward.bonus.type === 'weekly') {
@@ -42453,6 +42570,12 @@ function claimDailyDescent() {
       DDStore.setItem('dd_mystery_coins', String(coins2));
       var frags2 = parseInt(DDStore.getItem('dd_soul_fragments') || '0') + reward.bonus.fragments;
       DDStore.setItem('dd_soul_fragments', String(frags2));
+    }
+    if (reward.bonus.type === 'monthly') {
+      var coins3 = parseInt(DDStore.getItem('dd_mystery_coins') || '0') + reward.bonus.coins;
+      DDStore.setItem('dd_mystery_coins', String(coins3));
+      var frags3 = parseInt(DDStore.getItem('dd_soul_fragments') || '0') + reward.bonus.fragments;
+      DDStore.setItem('dd_soul_fragments', String(frags3));
     }
   }
 
@@ -49054,8 +49177,6 @@ function renderAlchemyTab() {
       recEl.appendChild(row);
     });
   }
-
-  renderElixirVendor();
 }
 
 // ── ELIXIR VENDOR — sell spare elixirs, buy a rotating daily elixir ──
@@ -49067,6 +49188,9 @@ var VENDOR_ELIXIRS = [
   { name:'Hellfire Elixir', icon:'🔱', healPct:0.65, desc:'Restores 65% of max HP. Distilled from infernal flame — somehow healing.' },
   { name:'Sylvan Elixir', icon:'🌿', healPct:0.60, desc:'Restores 60% of max HP. Pressed from the oldest flowers in the forest.' },
   { name:'Shadow Elixir', icon:'🌑', healPct:0.65, desc:'Restores 65% of max HP. Brewed from the dark between worlds. Glows faintly wrong.' },
+  { name:'Gravebound Elixir', icon:'💀', healPct:0.60, desc:'Restores 60% of max HP. Bottled in the Crypt of Malachar. Vendor exclusive.' },
+  { name:'Frostbound Elixir', icon:'🧊', healPct:0.65, desc:'Restores 65% of max HP. Chipped from the Frosthold Abyss. Vendor exclusive.' },
+  { name:'Tidal Elixir', icon:'🌊', healPct:0.60, desc:'Restores 60% of max HP. Drawn from the Abyssal Deep. Vendor exclusive.' },
 ];
 var VENDOR_ELIXIR_SELL_PRICE = 25;
 var VENDOR_ELIXIR_BUY_PRICE = 55;
@@ -51469,7 +51593,7 @@ function mineStart(charIdx) {
 var _homeTab = 'home';
 function switchHomeTab(tab) {
   _homeTab = tab;
-  var tabs = ['home','spirits','minions','forge','alchemy','gunshop'];
+  var tabs = ['home','spirits','minions','forge','alchemy','elixirs','gunshop'];
   tabs.forEach(function(t) {
     var btn = document.getElementById('htab-' + t);
     var panel = document.getElementById('htab-panel-' + t);
@@ -51484,6 +51608,7 @@ function switchHomeTab(tab) {
   if (tab === 'minions') renderMinionList();
   if (tab === 'forge') { renderForgeTab(); document.getElementById('forge-result').style.display='none'; }
   if (tab === 'alchemy') renderAlchemyTab();
+  if (tab === 'elixirs') renderElixirVendor();
   if (tab === 'gunshop') renderHomeGunWorkshop();
 }
 
@@ -58431,7 +58556,9 @@ function spireReturnToMenu() {
       <div style="color:#4488ff;margin-bottom:6px;">🧪 New Achievement: The Alchemist</div>
       Drink 10 elixirs across your runs to unlock it.<br><br>
       <div style="color:#4488ff;margin-bottom:6px;">🏪 Elixir Vendor</div>
-      New shop in the Home screen's Alchemy tab. Sell spare elixirs for gold, or buy a rotating daily elixir once per day.
+      New shop with its own tab in the Home screen. Sell spare elixirs for gold, or buy a rotating daily elixir — now 10 elixirs deep, including 3 vendor-exclusive ones.<br><br>
+      <div style="color:#4488ff;margin-bottom:6px;">📅 Daily Descent — 30-Day Cycle</div>
+      The daily login reward now runs a 30-day cycle of unique rewards before it repeats, instead of looping every 7 days.
     </div>
     <button type="button" onclick="dismissV115Popup()" style="width:100%;padding:14px;background:#010408;border:2px solid #2255cc;color:#4488ff;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;" aria-label="Got it — elixirs go to inventory now">🧪 Save Your Elixirs. Descend.</button>
   </div>
@@ -60522,7 +60649,7 @@ function showV115PopupIfNeeded() {
   setTimeout(function() {
     var btn = el.querySelector('button');
     if (btn) btn.focus();
-    say('Version 11.5 — The Elixir Update. Elixirs now go to your inventory instead of being used instantly. A new Potions tab holds all potions and elixirs. Each dungeon now has a unique elixir that can drop on dungeon floors. Combine any three elixirs to brew a Golden Elixir. Drink ten elixirs to unlock The Alchemist achievement. A new Elixir Vendor in the Home screen buys spare elixirs and sells a rotating daily elixir. Press the button to descend.');
+    say('Version 11.5 — The Elixir Update. Elixirs now go to your inventory instead of being used instantly. A new Potions tab holds all potions and elixirs. Each dungeon now has a unique elixir that can drop on dungeon floors. Combine any three elixirs to brew a Golden Elixir. Drink ten elixirs to unlock The Alchemist achievement. A new Elixir Vendor in the Home screen buys spare elixirs and sells a rotating daily elixir. The Daily Descent login reward now runs a thirty day cycle instead of repeating every seven days. Press the button to descend.');
   }, 300);
 }
 
