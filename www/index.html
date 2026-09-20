@@ -13192,6 +13192,15 @@ function enterRoom() {
     renderChimeraScreen();
     return;
   }
+  // CRITICAL — never enter a new room while the Weeping Child event is unresolved.
+  // Nothing previously blocked this, so a second enterRoom() call (retry tap, nav
+  // race) could roll a brand new encounter — including combat — on top of the
+  // still-active Weeping Child state instead of just re-showing its choices.
+  if (DS.wepingChildActive) {
+    say('Cannot enter room. Choose how to respond to the Weeping Child first.');
+    triggerWeepingChild();
+    return;
+  }
   // Shadow World — check for Stalker Floor before anything else
   if (DS.dungeon === 'The Shadow World' && checkStalkerFloor()) return;
   if (typeof tryNPCEncounter !== 'undefined' && tryNPCEncounter()) return;
@@ -13979,11 +13988,18 @@ function setEvent(type, text) {
   if (!text) { el.style.display = 'none'; return; }
   el.className = 'dg-event' + (type ? ' ' + type : '');
   el.style.display = 'block';
+  el.innerHTML = '';
+  var textSpan = document.createElement('span');
+  textSpan.className = 'dg-event-text';
+  textSpan.textContent = text;
+  el.appendChild(textSpan);
   if (typeof _translationEnabled !== 'undefined' && _translationEnabled) {
-    el.textContent = text; // show English immediately
-    translateText(text).then(function(t) { el.textContent = t; });
-  } else {
-    el.textContent = text;
+    // Only the narration span is updated here — callers routinely append choice
+    // buttons to dg-event right after calling setEvent() (Weeping Child, Weeping
+    // Mother, generic dungeon events). Writing el.textContent used to wipe those
+    // buttons out the instant this callback resolved, since it replaces every
+    // child. Updating textSpan instead leaves anything appended afterward intact.
+    translateText(text).then(function(t) { textSpan.textContent = t; });
   }
 }
 
