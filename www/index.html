@@ -13201,6 +13201,19 @@ function enterRoom() {
     triggerWeepingChild();
     return;
   }
+  // CRITICAL — never enter a new room while any other choice-driven special
+  // encounter is unresolved (Weeping Mother, Medusa, Lord Phorcys, generic
+  // dungeon events from rollDungeonEvent, Easter Bunny, etc.). None of these
+  // register a state flag the way Chimera/Weeping Child do, so detect it
+  // generically instead of hand-tracking every one: if the event box is
+  // visible and still has an unresolved choice button in it, block re-entry.
+  // (Their outcome handlers clear/replace #dg-event's content on resolution,
+  // so this never false-positives after a choice has actually been made.)
+  var _dgEventEl = document.getElementById('dg-event');
+  if (_dgEventEl && _dgEventEl.style.display !== 'none' && _dgEventEl.querySelector('button')) {
+    say('Cannot enter room. Resolve the current event first.');
+    return;
+  }
   // Shadow World — check for Stalker Floor before anything else
   if (DS.dungeon === 'The Shadow World' && checkStalkerFloor()) return;
   if (typeof tryNPCEncounter !== 'undefined' && tryNPCEncounter()) return;
