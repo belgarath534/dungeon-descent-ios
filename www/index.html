@@ -13201,6 +13201,18 @@ function enterRoom() {
     triggerWeepingChild();
     return;
   }
+  // CRITICAL — never enter a new room while the floor-complete overlay is showing.
+  // Once DS.roomsOnFloor reaches floorRoomsNeeded, every enterRoom() call hits that
+  // branch again unconditionally (nothing resets those counters until Descend or
+  // Wander is actually pressed) — confirmed this stacked a new full-screen overlay
+  // on the page on every single call, unbounded. showFloorCompleteScreen() itself
+  // is now deduped too; this stops the room-roll logic from even running.
+  if (document.getElementById('floor-complete-overlay')) {
+    var _fcBtn = document.querySelector('#floor-complete-overlay button');
+    if (_fcBtn) _fcBtn.focus();
+    say('Cannot enter room. Choose to descend or wander first.');
+    return;
+  }
   // CRITICAL — never enter a new room while any other choice-driven special
   // encounter is unresolved (Weeping Mother, Medusa, Lord Phorcys, generic
   // dungeon events from rollDungeonEvent, Easter Bunny, etc.). None of these
@@ -13769,6 +13781,19 @@ function applyItem(item) {
 
 // ── FLOOR COMPLETE SCREEN ──
 function showFloorCompleteScreen() {
+  // Never stack a duplicate overlay — enterRoom() re-triggers this unconditionally
+  // every time it's called once DS.roomsOnFloor >= floorRoomsNeeded, since nothing
+  // resets those until the player actually picks Descend or Wander. Without this
+  // guard, each additional "move" attempt appended a brand new full-screen overlay
+  // on top of the last one (document.body.appendChild, never removed/deduped),
+  // growing without bound — a real path to crashing the tab on a device with less
+  // memory headroom than this was ever tested against.
+  var existing = document.getElementById('floor-complete-overlay');
+  if (existing) {
+    var btn = existing.querySelector('button');
+    if (btn) btn.focus();
+    return;
+  }
   // Collect floor stats
   var kills = DS._floorKills || 0;
   var dmgDealt = DS._floorDmgDealt || 0;
