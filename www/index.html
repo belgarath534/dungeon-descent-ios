@@ -13237,12 +13237,17 @@ function enterRoom() {
   // it, or in NPC Encounter's case, silently do nothing to stop the overlay
   // itself from ever being cleaned up. Each show*() function below is now
   // deduped too; this just stops enterRoom() from proceeding at all.
+  // 'dungeon-intro-overlay' is also the id of a static, permanently-present
+  // div (used by the older showDungeonIntro()) that's hidden via CSS
+  // display:none by default — checking mere existence made this block
+  // enterRoom() forever, on every room, since that div is always in the DOM.
+  // Check actual visibility instead so a hidden/closed overlay never blocks.
   var _BLOCKING_OVERLAY_IDS = ['npc-encounter-overlay', 'two-doors-overlay',
     'security-room-overlay', 'ov-infernal-phase', 'boss-death-cinematic',
     'dungeon-intro-overlay', 'dungeon-intro-overlay2'];
   for (var _boi = 0; _boi < _BLOCKING_OVERLAY_IDS.length; _boi++) {
     var _boEl = document.getElementById(_BLOCKING_OVERLAY_IDS[_boi]);
-    if (_boEl) {
+    if (_boEl && getComputedStyle(_boEl).display !== 'none') {
       var _boBtn = _boEl.querySelector('button');
       if (_boBtn) _boBtn.focus();
       say('Cannot enter room. Resolve the current event first.');
@@ -60633,7 +60638,11 @@ function resolveNPCChoice(npcId, choiceIdx) {
 
 // ── DUNGEON INTRO SEQUENTIAL POPUPS ──
 function showDungeonIntroPopups(weather, ch) {
-  if (document.getElementById('dungeon-intro-overlay')) return;
+  // Check visibility, not mere existence — 'dungeon-intro-overlay' is also
+  // the id of a static, permanently-present div (used by the older
+  // showDungeonIntro()) that's hidden via CSS display:none by default.
+  var _diExisting = document.getElementById('dungeon-intro-overlay');
+  if (_diExisting && getComputedStyle(_diExisting).display !== 'none') return;
   // Step 1: Show weather popup
   if (weather && weather.effect !== 'No special effects.') {
     var ov = document.createElement('div');
