@@ -13226,6 +13226,29 @@ function enterRoom() {
     say('Cannot enter room. Resolve the current event first.');
     return;
   }
+  // CRITICAL — same class of bug as the floor-complete overlay, for every other
+  // full-screen encounter overlay that's built by hand (document.createElement +
+  // document.body.appendChild) instead of reusing #dg-event: NPC Encounter, The
+  // Two Doors, the Security Room, the Infernal boss phase alert, the boss death
+  // cinematic, and the two dungeon-intro popups. None of these had a dedup check
+  // in their own show function OR a guard here, so a second enterRoom() call
+  // while one was still up (retry tap, nav race — the same trigger that caused
+  // the floor-complete stacking) would let the room-roll logic run underneath
+  // it, or in NPC Encounter's case, silently do nothing to stop the overlay
+  // itself from ever being cleaned up. Each show*() function below is now
+  // deduped too; this just stops enterRoom() from proceeding at all.
+  var _BLOCKING_OVERLAY_IDS = ['npc-encounter-overlay', 'two-doors-overlay',
+    'security-room-overlay', 'ov-infernal-phase', 'boss-death-cinematic',
+    'dungeon-intro-overlay', 'dungeon-intro-overlay2'];
+  for (var _boi = 0; _boi < _BLOCKING_OVERLAY_IDS.length; _boi++) {
+    var _boEl = document.getElementById(_BLOCKING_OVERLAY_IDS[_boi]);
+    if (_boEl) {
+      var _boBtn = _boEl.querySelector('button');
+      if (_boBtn) _boBtn.focus();
+      say('Cannot enter room. Resolve the current event first.');
+      return;
+    }
+  }
   // Shadow World — check for Stalker Floor before anything else
   if (DS.dungeon === 'The Shadow World' && checkStalkerFloor()) return;
   if (typeof tryNPCEncounter !== 'undefined' && tryNPCEncounter()) return;
@@ -17763,6 +17786,7 @@ function restoreMidRun(ch) {
 
 // ── VICTORY ──
 function showBossDeathCinematic(callback) {
+  if (document.getElementById('boss-death-cinematic')) return;
   window._cinematicInProgress = true;
   window._cinematicStartedAt = Date.now();
   var bossName = DS.enemy ? DS.enemy.name : 'The Boss';
@@ -22658,6 +22682,7 @@ function checkBossPhase() {
 
 // ── THE HARD VOID PHASE ALERT SYSTEM ──
 function showInfernalPhaseAlert(phase, message) {
+  if (document.getElementById('ov-infernal-phase')) return;
   // Pause combat buttons
   setCombatBtns(false);
   sfx('sfx-sanity-warning');
@@ -37699,6 +37724,8 @@ var _DOOR_DESCS = [
 ];
 
 function showTwoDoorsEvent() {
+  var _existing = document.getElementById('two-doors-overlay');
+  if (_existing) { var _eb = _existing.querySelector('button'); if (_eb) _eb.focus(); return; }
   // Hide dungeon panels completely
   showDgPanels(false, false, false);
 
@@ -37736,6 +37763,8 @@ var _securityRoomTimer = null;
 var _securityRoomSwallowerDir = null;
 
 function showSecurityRoomEvent() {
+  var _existing = document.getElementById('security-room-overlay');
+  if (_existing) { var _eb = _existing.querySelector('button'); if (_eb) _eb.focus(); return; }
   showDgPanels(false, false, false);
   _activeEvent = null;
 
@@ -60471,6 +60500,8 @@ function tryNPCEncounter() {
 }
 
 function showNPCEncounter(npc) {
+  var _existing = document.getElementById('npc-encounter-overlay');
+  if (_existing) { var _eb = _existing.querySelector('button'); if (_eb) _eb.focus(); return; }
   var ov = document.createElement('div');
   ov.id = 'npc-encounter-overlay';
   ov.setAttribute('role', 'dialog');
@@ -60602,6 +60633,7 @@ function resolveNPCChoice(npcId, choiceIdx) {
 
 // ── DUNGEON INTRO SEQUENTIAL POPUPS ──
 function showDungeonIntroPopups(weather, ch) {
+  if (document.getElementById('dungeon-intro-overlay')) return;
   // Step 1: Show weather popup
   if (weather && weather.effect !== 'No special effects.') {
     var ov = document.createElement('div');
@@ -60637,6 +60669,7 @@ function dismissDungeonIntroStep1() {
 
 function showClassTraitIntroPopup(ch) {
   if (!ch || !ch.cls) return;
+  if (document.getElementById('dungeon-intro-overlay2')) return;
   // Get class trait description
   var traitDescs = {
     'Warrior': 'Heavy strikes have a 25% chance to stun enemies for one turn.',
