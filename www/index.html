@@ -13177,7 +13177,21 @@ function initDungeon(ch) {
   DS._hunterCaught = false;
 }
 
+var _roomResolving = false;
 function enterRoom() {
+  // CRITICAL — never enter a new room while a previous enterRoom() call is
+  // still deciding what's in the room it already entered. Normal rooms show
+  // the nav panel immediately, then resolve combat/event/nothing ~400ms
+  // later via setTimeout — nothing blocked a second tap during that window,
+  // so a fast double-tap (or a VoiceOver double-activation) could call
+  // enterRoom() again mid-resolution: DS.roomsOnFloor/totalRooms increment
+  // twice, and two pending resolutions can land on conflicting outcomes
+  // (e.g. one starts combat while the other declares the floor complete),
+  // corrupting run state. Block re-entry for that window instead.
+  if (_roomResolving) {
+    say('Cannot enter room. Please wait.');
+    return;
+  }
   // CRITICAL — never enter a new room while combat is still active
   if (DS.inCombat && DS.enemy && DS.enemy.hp > 0) {
     say('Cannot enter room during combat.');
@@ -13336,7 +13350,8 @@ function enterRoom() {
     updateTopBar();
     showDgPanels(true, false, false);
     updateSearchBadge(false);
-    setTimeout(function() { specialRoom.run(); }, 400);
+    _roomResolving = true;
+    setTimeout(function() { try { specialRoom.run(); } finally { _roomResolving = false; } }, 400);
     return;
   }
 
@@ -13372,7 +13387,9 @@ function enterRoom() {
   var _hw = getHollowWeather();
   if (_hw && _hw.combatBonus && DS.dungeon === 'The Hollow') combatChance += _hw.combatBonus;
 
+  _roomResolving = true;
   setTimeout(function() {
+   try {
     // Friday the 13th — Black Box encounter (20% chance per room, floor 2+)
     if (getActiveEvent() === 'friday13' && DS.floor >= 2 && Math.random() < 0.20 && !DS._blackBoxThisFloor) {
       DS._blackBoxThisFloor = true;
@@ -13782,6 +13799,7 @@ function enterRoom() {
         setEvent(null, null);
       }
     }
+   } finally { _roomResolving = false; }
   }, 400);
 }
 
