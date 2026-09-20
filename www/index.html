@@ -1500,6 +1500,49 @@ var DDStore = (function() {
     return Object.prototype.hasOwnProperty.call(cache, key) ? cache[key] : null;
   }
 
+  // BUGFIX: setItem() used to open a brand-new IndexedDB readwrite transaction
+  // for every single call. Autosaves fire very frequently during normal play
+  // (every room, every search, every combat action) and some of the values
+  // being written (dd_chars especially) can be hundreds of KB — a burst of
+  // game state changes close together (finishing a floor, descending, the
+  // shop opening) could fire several of these large writes within the same
+  // second, each its own transaction. That's exactly the kind of write
+  // pressure real WebKit/IndexedDB has known crash-prone edges around, in a
+  // way a desktop testing environment's different IndexedDB implementation
+  // never reproduces. Batch rapid writes into one transaction instead.
+  var pendingWrites = {};
+  var flushTimer = null;
+  var FLUSH_DELAY = 400;
+
+  function scheduleFlush() {
+    if (flushTimer) return;
+    flushTimer = setTimeout(flushPending, FLUSH_DELAY);
+  }
+
+  function flushPending() {
+    flushTimer = null;
+    if (!db) return;
+    var keys = Object.keys(pendingWrites);
+    if (!keys.length) return;
+    var batch = pendingWrites;
+    pendingWrites = {};
+    try {
+      var tx = db.transaction(STORE_NAME, 'readwrite');
+      var store = tx.objectStore(STORE_NAME);
+      keys.forEach(function(k) {
+        var v = batch[k];
+        if (v === null) store.delete(k);
+        else store.put(v, k);
+      });
+      tx.onerror = function() { console.warn('[DDStore] batch write failed for', keys.join(',')); };
+    } catch (e) { console.warn('[DDStore] batch write exception:', e.message); }
+  }
+
+  function flushPendingNow() {
+    if (flushTimer) { clearTimeout(flushTimer); flushTimer = null; }
+    flushPending();
+  }
+
   function setItem(key, value) {
     value = String(value);
     cache[key] = value;
@@ -1524,19 +1567,14 @@ var DDStore = (function() {
 
   function idbPut(key, value) {
     if (!db) return;
-    try {
-      var tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).put(value, key);
-      tx.onerror = function() { console.warn('[DDStore] write failed for', key); };
-    } catch (e) { console.warn('[DDStore] write exception:', e.message); }
+    pendingWrites[key] = value;
+    scheduleFlush();
   }
 
   function idbDelete(key) {
     if (!db) return;
-    try {
-      var tx = db.transaction(STORE_NAME, 'readwrite');
-      tx.objectStore(STORE_NAME).delete(key);
-    } catch (e) { console.warn('[DDStore] delete exception:', e.message); }
+    pendingWrites[key] = null;
+    scheduleFlush();
   }
 
   function migrateFromLocalStorage() {
@@ -1645,12 +1683,29 @@ var DDStore = (function() {
   // ── CRITICAL DATA BACKUP ──
   // Mirror dd_chars to localStorage every time it's saved so we can restore
   // if IndexedDB gets evicted by the browser under storage pressure.
+  // BUGFIX: this used to write synchronously to localStorage on every single
+  // save — dd_chars alone can run hundreds of KB on a long-lived save, and a
+  // real device's synchronous localStorage write cost for a large value is
+  // nontrivial main-thread work, repeated on essentially every room/action.
+  // Debounced the same way the IndexedDB write below is batched.
+  var _backupPending = {};
+  var _backupTimer = null;
+  var BACKUP_FLUSH_DELAY = 400;
+  function flushBackupsNow() {
+    if (_backupTimer) { clearTimeout(_backupTimer); _backupTimer = null; }
+    var keys = Object.keys(_backupPending);
+    keys.forEach(function(k) {
+      try { window.localStorage.setItem('dd_backup_' + k, _backupPending[k]); } catch(e) {}
+    });
+    _backupPending = {};
+  }
   var _origSetItem = setItem;
   function setItemWithBackup(k, v) {
     _origSetItem(k, v);
     // Keep a localStorage backup of the most critical keys
     if (k === 'dd_chars' || k === 'dd_global_gold' || k === 'dd_diamonds' || k === 'dd_achievements' || k === 'dd_global_stats' || k === 'dd_owned_guns' || k === 'dd_audio') {
-      try { window.localStorage.setItem('dd_backup_' + k, v); } catch(e) {}
+      _backupPending[k] = v;
+      if (!_backupTimer) _backupTimer = setTimeout(flushBackupsNow, BACKUP_FLUSH_DELAY);
     }
   }
   setItem = setItemWithBackup;
@@ -1682,7 +1737,10 @@ var DDStore = (function() {
     keysList: keysList,
     get length() { return keysList().length; },
     isReady: function() { return ready; },
-    whenReady: function() { return readyPromise; }
+    whenReady: function() { return readyPromise; },
+    // Force any debounced IndexedDB/localStorage-backup writes out immediately —
+    // call before the page might actually go away (unload, backgrounding).
+    flushNow: function() { flushPendingNow(); flushBackupsNow(); }
   };
 })();
 </script>
@@ -42341,7 +42399,14 @@ function updatePlaytimeDisplay() {
 }
 
 setInterval(function() { try { savePlaytime(); } catch(e) {} }, 30000);
-window.addEventListener('beforeunload', function() { try { savePlaytime(); } catch(e) {} });
+window.addEventListener('beforeunload', function() { try { savePlaytime(); } catch(e) {} try { DDStore.flushNow(); } catch(e) {} });
+// iOS Safari doesn't reliably fire beforeunload — pagehide and a tab going
+// hidden are the events that actually fire there, so flush debounced saves
+// on those too instead of risking losing the last few seconds of progress.
+window.addEventListener('pagehide', function() { try { DDStore.flushNow(); } catch(e) {} });
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'hidden') { try { DDStore.flushNow(); } catch(e) {} }
+});
 
 // ── MENU EVENT BANNER ──
 function updateMenuEventBanner() {
