@@ -8474,11 +8474,30 @@ function initWebAudio() {
 }
 
 // Fetch and decode an audio file into an AudioBuffer (cached)
+// BUGFIX: no size ceiling here meant a bad/oversized upload (one hosted track
+// was found to be 60MB+ — 3x+ every other track in the game) would still get
+// fully fetched and handed to decodeAudioData(), which on a real device
+// expands a compressed MP3 into a raw PCM buffer many times larger still —
+// a huge, sudden memory spike with no JS-catchable failure mode if it tips
+// the browser over a resource limit. Skip decoding anything abnormally large
+// and fail soft (silent track) instead of risking a crash.
+var MAX_AUDIO_BUFFER_BYTES = 25 * 1024 * 1024; // largest legitimate track seen is ~18.5MB
 function loadAudioBuffer(url, cache, key, callback) {
   if (cache[key]) { callback(cache[key]); return; }
   fetch(url)
-    .then(function(r) { return r.arrayBuffer(); })
-    .then(function(ab) { return AUD.ctx.decodeAudioData(ab); })
+    .then(function(r) {
+      var len = parseInt(r.headers.get('content-length'), 10);
+      if (len && len > MAX_AUDIO_BUFFER_BYTES) {
+        throw new Error('Track "' + key + '" is ' + Math.round(len / 1024 / 1024) + 'MB — over the ' + Math.round(MAX_AUDIO_BUFFER_BYTES / 1024 / 1024) + 'MB safety limit, skipping to avoid a decode-time memory spike.');
+      }
+      return r.arrayBuffer();
+    })
+    .then(function(ab) {
+      if (ab.byteLength > MAX_AUDIO_BUFFER_BYTES) {
+        throw new Error('Track "' + key + '" body is ' + Math.round(ab.byteLength / 1024 / 1024) + 'MB — over the safety limit, skipping.');
+      }
+      return AUD.ctx.decodeAudioData(ab);
+    })
     .then(function(buffer) {
       cache[key] = buffer;
       callback(buffer);
