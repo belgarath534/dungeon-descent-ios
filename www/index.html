@@ -13932,14 +13932,24 @@ function showFloorCompleteScreen() {
 }
 
 function floorDescend() {
+  // CRITICAL — same double-invocation class as every other fixed overlay this
+  // session, just without a stacked element to detect: a fast double-tap (or a
+  // VoiceOver double-activation) on this button fires floorDescend() twice.
+  // Nothing stopped the second call from also removing (a no-op by then) and
+  // calling advanceFloor() again — which increments the floor a second time,
+  // re-runs every floor-start side effect twice (including scheduling openShop()
+  // twice), and can leave DS in a state nothing else here was written to expect.
   var ov = document.getElementById('floor-complete-overlay');
-  if (ov) ov.remove();
+  if (!ov) return; // already handled — nothing left to descend from
+  ov.remove();
   advanceFloor();
 }
 
 function floorWander() {
+  // Same double-invocation guard as floorDescend() above.
   var ov = document.getElementById('floor-complete-overlay');
-  if (ov) ov.remove();
+  if (!ov) return;
+  ov.remove();
   // Add 3 more rooms to the current floor
   DS.floorRoomsNeeded = (DS.floorRoomsNeeded || 5) + 3;
   say('Wandering floor ' + DS.floor + '. 3 more rooms added. Explore carefully.');
