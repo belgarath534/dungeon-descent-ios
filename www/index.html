@@ -9811,14 +9811,54 @@ function saveGlobalInventory(inv) {
 function addToGlobalInventory(item) {
   var inv = getGlobalInventory();
   // Prevent duplicates for singleton item types (music-player, enchanter, soul-trap, skill-orb)
-  // These should never stack in global inventory
-  var singletonTypes = ['music-player'];
+  // These should never stack in global inventory.
+  // BUGFIX: this array only ever listed 'music-player', so every run completion
+  // re-added the player's ENTIRE current weapon/armor/enchanter/soul-trap
+  // collection into global inventory unconditionally (initDungeon() seeds a new
+  // run's inventory FROM global inventory, so that collection already contained
+  // everything from every prior run). Each completed run roughly doubled these
+  // counts, compounding over time into inventories with thousands of duplicate
+  // entries of the same handful of items — real memory/serialization weight on
+  // every autosave, and a plausible cause of crashes on long-running saves.
+  var singletonTypes = ['music-player', 'enchanter', 'soul-trap', 'skill-orb'];
   if (singletonTypes.indexOf(item.type) !== -1) {
     var alreadyExists = inv.some(function(i){ return i.type === item.type; });
     if (alreadyExists) return; // don't add another one
   }
+  // Weapons and armor are unique by name — same rule searchRoom() already
+  // applies when loot is found directly, now applied consistently here too.
+  if (item.type === 'weapon' || item.type === 'armor') {
+    var alreadyHasNamed = inv.some(function(i){ return i.type === item.type && i.name === item.name; });
+    if (alreadyHasNamed) return;
+  }
   inv.push(item);
   saveGlobalInventory(inv);
+}
+
+// One-time cleanup for inventories already bloated by the addToGlobalInventory
+// dedup bug above — collapses repeated weapon/armor/singleton-type entries down
+// to one each, keeping every other item (potions, materials, etc.) untouched.
+// Safe to call on any inventory array; a clean array passes through unchanged.
+function dedupeInventoryArray(arr) {
+  if (!arr || !arr.length) return arr || [];
+  var singletonTypes = ['music-player', 'enchanter', 'soul-trap', 'skill-orb'];
+  var seenSingleton = {};
+  var seenNamed = {};
+  var out = [];
+  for (var i = 0; i < arr.length; i++) {
+    var item = arr[i];
+    if (!item) continue;
+    if (singletonTypes.indexOf(item.type) !== -1) {
+      if (seenSingleton[item.type]) continue;
+      seenSingleton[item.type] = true;
+    } else if (item.type === 'weapon' || item.type === 'armor') {
+      var key = item.type + '::' + item.name;
+      if (seenNamed[key]) continue;
+      seenNamed[key] = true;
+    }
+    out.push(item);
+  }
+  return out;
 }
 // ── END GLOBAL GOLD SYSTEM ──
 var _deleteIdx = null;
@@ -12859,6 +12899,12 @@ var DS = {};
 
 function initDungeon(ch) {
   var maxHp = HP_MAP[ch.cls] || 100;
+  // Clean up any weapon/armor/enchanter/soul-trap duplicates left over from the
+  // addToGlobalInventory() dedup bug, and persist the cleanup so it doesn't
+  // have to redo this every run start.
+  var _rawGlobalInv = getGlobalInventory();
+  var _cleanGlobalInv = dedupeInventoryArray(_rawGlobalInv);
+  if (_cleanGlobalInv.length !== _rawGlobalInv.length) saveGlobalInventory(_cleanGlobalInv);
   DS = {
     name: ch.name, cls: ch.cls, race: ch.race, prof: ch.prof,
     dungeon: ch.dungeon, diff: ch.difficulty,
@@ -12868,7 +12914,7 @@ function initDungeon(ch) {
     lives: LIVES_MAP[ch.difficulty] || 1,
     atk: ATK_MAP[ch.cls] || [6,12],
     def: DEF_MAP[ch.cls] || 0,
-    gold: 0, inventory: getGlobalInventory(),
+    gold: 0, inventory: _cleanGlobalInv,
     equippedWeapon: null, equippedArmor: null,
     atkBonus: 0, defBonus: 0,
     defending: false, inCombat: false, enemy: null,
@@ -17682,14 +17728,36 @@ function saveProgress(completed) {
       updateAchievementStat('infernalTrialWon', (getAchievementStats().infernalTrialWon||0) + 1);
     }
     if (DS.dungeon === 'The Abyssal Deep') { updateAchievementStat('abyssalComplete', (getAchievementStats().abyssalComplete||0) + 1); updateAchievementStat('abyssalBossDefeated', 1); if (DS.hardcoreMode) updateAchievementStat('abyssalHardcoreWin', 1); }
-    // Transfer usable items from dungeon inventory to global inventory on run complete
+    // Transfer usable items from dungeon inventory to global inventory on run complete.
+    // BUGFIX: this used to call addToGlobalInventory() once per item, each call
+    // re-parsing/re-saving the whole global inventory array (O(n) work times n
+    // items = O(n^2)) — punishing on a save with thousands of items. Merge in
+    // memory once and save once instead. Dedup is still addToGlobalInventory()'s
+    // job (singleton types, weapon/armor by name); this just batches the writes.
     if (DS.inventory && DS.inventory.length > 0) {
       var keepTypes = ['enchanter','soul-trap','music-player','skill-orb','rune','scroll','sp-potion'];
-      DS.inventory.forEach(function(item) {
-        if (keepTypes.indexOf(item.type) !== -1 || item.type === 'weapon' || item.type === 'armor') {
-          addToGlobalInventory(item);
-        }
+      var _globalInv = getGlobalInventory();
+      var _singletonTypesSeen = {};
+      _globalInv.forEach(function(i) {
+        if (['music-player','enchanter','soul-trap','skill-orb'].indexOf(i.type) !== -1) _singletonTypesSeen[i.type] = true;
       });
+      var _namedSeen = {};
+      _globalInv.forEach(function(i) {
+        if (i.type === 'weapon' || i.type === 'armor') _namedSeen[i.type + '::' + i.name] = true;
+      });
+      DS.inventory.forEach(function(item) {
+        if (keepTypes.indexOf(item.type) === -1 && item.type !== 'weapon' && item.type !== 'armor') return;
+        if (['music-player','enchanter','soul-trap','skill-orb'].indexOf(item.type) !== -1) {
+          if (_singletonTypesSeen[item.type]) return;
+          _singletonTypesSeen[item.type] = true;
+        } else if (item.type === 'weapon' || item.type === 'armor') {
+          var key = item.type + '::' + item.name;
+          if (_namedSeen[key]) return;
+          _namedSeen[key] = true;
+        }
+        _globalInv.push(item);
+      });
+      saveGlobalInventory(_globalInv);
       DS.inventory = [];
     }
     saveChars();
@@ -17771,7 +17839,9 @@ function restoreMidRun(ch) {
   DS._subclass = s._subclass || null;
   DS._subclassName = s._subclassName || null;
   DS._subclassIcon = s._subclassIcon || null;
-  DS.inventory = s.inventory || [];
+  // Same dedup cleanup as initDungeon() — a mid-run save can carry the same
+  // accumulated weapon/armor/enchanter/soul-trap duplicates.
+  DS.inventory = dedupeInventoryArray(s.inventory || []);
   DS.unlockedSkills = s.unlockedSkills || [];
   DS.skillPool = s.skillPool || [];
   DS.usedPotion = s.usedPotion || false;
