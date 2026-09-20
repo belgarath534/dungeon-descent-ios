@@ -8659,10 +8659,11 @@ function exploTrackForFloor(floor) {
     return 'sunken1';
   }
   if (dungeon === 'The Hollow') {
-    if (floor <= 3)               return 'hollow1';
-    if (floor >= 4 && floor <= 6) return 'hollow2';
-    if (floor >= 7 && floor <= 9) return 'hollow3';
-    if (floor >= 10)              return 'hollow-boss';
+    // TEMP: music-hollow2.mp3 is the broken 60MB+ upload that was crashing
+    // the page — reuse hollow1 for the rest of the exploration floors until
+    // a correctly-sized hollow2 (and hollow3, same rollout) is uploaded.
+    if (floor <= 9)  return 'hollow1';
+    if (floor >= 10) return 'hollow-boss';
     return 'hollow1';
   }
   if (dungeon === 'The Whispering Forest') {
