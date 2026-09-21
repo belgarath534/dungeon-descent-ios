@@ -1866,6 +1866,9 @@ var DDStore = (function() {
       <button class="menu-btn" onclick="goTo('multiplayer')" aria-label="PVP Arena, fight another player in real time turn based combat" style="border-color:#4466ff;color:#88aaff;">
         <span aria-hidden="true">⚔️👥</span> Multiplayer <span style="font-size:0.6rem;opacity:0.7;">BETA</span>
       </button>
+      <button class="menu-btn" onclick="goTo('hideseek')" aria-label="Hide and Seek, something is chasing you, find the way out" style="border-color:#663399;color:#bb88ee;">
+        <span aria-hidden="true">🕯️</span> Hide and Seek <span style="font-size:0.6rem;opacity:0.7;">BETA</span>
+      </button>
       <div class="menu-sep" aria-hidden="true"></div>
       <button class="menu-btn" onclick="window.open('https://www.youtube.com/@leo09393','_blank')" aria-label="Visit Leo Audio Gaming on YouTube, opens in new tab" style="border-color:#ff0000;color:#ff4444;">
         <span aria-hidden="true">🎬</span><span data-i18n="btn-leoaudio">Leo Audio Gaming</span>
@@ -2052,6 +2055,52 @@ var DDStore = (function() {
     <button class="btn-ghost" onclick="mpLeave()" aria-label="Leave arena and return to main menu" style="width:100%;">← Leave Arena</button>
   </div>
 </div>
+
+<!-- SCREEN: HIDE AND SEEK -->
+<div id="screen-hideseek" class="screen" role="main" aria-label="Hide and Seek">
+  <div style="max-width:420px;margin:0 auto;padding:24px 16px;">
+    <div class="screen-header">
+      <button class="back-btn" onclick="hsLeave()" aria-label="Leave Hide and Seek and return to main menu">← Menu</button>
+      <h2 class="screen-title">🕯️ Hide and Seek</h2>
+    </div>
+
+    <!-- Intro / start panel -->
+    <div id="hs-intro">
+      <p class="screen-subtitle">Something is in here with you. Find the way out before it finds you first. BETA — single player.</p>
+      <button class="btn-gold" onclick="hsStart()" aria-label="Begin Hide and Seek" style="width:100%;margin-top:12px;">▶ Begin</button>
+    </div>
+
+    <!-- Play panel -->
+    <div id="hs-play" style="display:none;">
+      <div id="hs-status-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.15em;color:rgba(255,255,255,0.4);" id="hs-progress">Room 1</span>
+        <span id="hs-distance-badge" aria-live="off" style="font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.1em;padding:3px 9px;border:1px solid #663333;color:#cc8888;">— rooms away</span>
+      </div>
+
+      <section class="dg-room" aria-label="Current room">
+        <p class="dg-room-desc" id="hs-room-desc">You stand still, listening.</p>
+        <div id="hs-event" aria-live="assertive" style="display:none;font-family:Cinzel,serif;font-size:0.72rem;color:#e0a0a0;margin-top:8px;"></div>
+      </section>
+
+      <div class="dg-actions" role="group" aria-label="Hide and Seek actions" style="margin-top:14px;">
+        <button type="button" class="dg-btn" onclick="hsMove('north')" aria-label="Move north">▲ North</button>
+        <button type="button" class="dg-btn" onclick="hsMove('west')" aria-label="Move west">◄ West</button>
+        <button type="button" class="dg-btn" onclick="hsMove('east')" aria-label="Move east">East ►</button>
+        <button type="button" class="dg-btn" onclick="hsMove('south')" aria-label="Move south">▼ South</button>
+        <button type="button" class="dg-btn accent" onclick="hsHide()" aria-label="Hide and try to lose the thing following you" style="border-color:#663399;color:#bb88ee;">🫥 Hide</button>
+      </div>
+    </div>
+
+    <!-- Caught / escaped end panel -->
+    <div id="hs-end" style="display:none;text-align:center;">
+      <div id="hs-end-title" style="font-family:'Cinzel Decorative',cursive;font-size:1.1rem;color:var(--gold);margin-bottom:10px;"></div>
+      <p id="hs-end-text" style="font-family:Cinzel,serif;font-size:0.75rem;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:18px;"></p>
+      <button class="btn-gold" onclick="hsStart()" aria-label="Try again" style="width:100%;margin-bottom:8px;">↻ Try Again</button>
+      <button class="btn-ghost" onclick="hsLeave()" aria-label="Return to main menu" style="width:100%;">← Menu</button>
+    </div>
+  </div>
+</div>
+
 <div id="screen-charlist" class="screen" role="main" aria-label="Character selection">
   <div class="charlist-wrap">
     <div class="screen-header">
@@ -41379,6 +41428,160 @@ function mpLeave() {
   goTo('menu');
   sfx('sfx-select');
 }
+
+// ═══════════════════════════════════════════════════════
+// HIDE AND SEEK — single player (BETA)
+// Standalone mode — deliberately not built on DS/Hunter Mode, which are
+// dungeon-run specific. Placeholder music: Whisper Forest floor 1/2 tracks
+// (confirmed hosted and safely sized) until dedicated tracks are uploaded.
+// ═══════════════════════════════════════════════════════
+var HS = null;
+var HS_EXPLORE_TRACK = 'whisper1';
+var HS_CHASE_TRACK = 'whisper2';
+var HS_CHASE_THRESHOLD = 4; // distance at or below this switches to chase music
+var HS_ROOM_DESCS = [
+  'A narrow hallway stretches ahead. The air is cold.',
+  'You pass a door hanging off one hinge.',
+  'Something scratches at the walls, far off.',
+  'The floorboards creak with every step. You wince.',
+  'A broken window lets in a sliver of moonlight.',
+  'You hear breathing that is not yours.',
+  'Dust hangs in the air, undisturbed until now.',
+  'A hallway splits ahead. You pick one at random.',
+  'Something moved, just at the edge of your hearing.',
+  'The silence presses in on you.',
+  'A chair lies on its side. You do not remember knocking it over.',
+  'The walls narrow here. There is not much room to run.'
+];
+
+function hsNewState() {
+  return {
+    active: true,
+    room: 1,
+    exitAt: 10 + Math.floor(Math.random() * 4), // 10-13 rooms to find the exit
+    distance: 10, // rooms between you and it — 0 means caught
+    phase: 1, // 1 = quiet, 2 = chase music
+    hideCooldown: 0
+  };
+}
+
+function hsStart() {
+  HS = hsNewState();
+  document.getElementById('hs-intro').style.display = 'none';
+  document.getElementById('hs-end').style.display = 'none';
+  document.getElementById('hs-play').style.display = 'block';
+  var ev = document.getElementById('hs-event');
+  ev.style.display = 'none'; ev.textContent = '';
+  document.getElementById('hs-room-desc').textContent = 'You stand still, listening.';
+  goTo('hideseek');
+  hsUpdateUI();
+  playTrack(HS_EXPLORE_TRACK);
+  sfx('sfx-select');
+  say('Hide and Seek begins. Something is in here with you. Find the way out before it finds you. Use North, South, East, or West to move, or Hide to try to lose it.');
+}
+
+function hsLeave() {
+  HS = null;
+  playTrack(getMenuTrack());
+  goTo('menu');
+  sfx('sfx-select');
+}
+
+function hsUpdateUI() {
+  if (!HS) return;
+  document.getElementById('hs-progress').textContent = 'Room ' + HS.room + ' of ' + HS.exitAt;
+  var badge = document.getElementById('hs-distance-badge');
+  badge.textContent = HS.distance + (HS.distance === 1 ? ' room away' : ' rooms away');
+  badge.style.borderColor = HS.phase === 2 ? '#cc3333' : '#663333';
+  badge.style.color = HS.phase === 2 ? '#ff8888' : '#cc8888';
+}
+
+function hsCheckPhase() {
+  if (!HS) return;
+  var wantPhase = HS.distance <= HS_CHASE_THRESHOLD ? 2 : 1;
+  if (wantPhase !== HS.phase) {
+    HS.phase = wantPhase;
+    playTrack(wantPhase === 2 ? HS_CHASE_TRACK : HS_EXPLORE_TRACK);
+  }
+}
+
+function hsAnnounceDistance() {
+  if (!HS) return;
+  var msgs = { 6: 'You can hear it somewhere behind you.',
+    4: 'It is getting closer. You should move faster.',
+    2: 'It is right behind you. Hide, or run.',
+    1: 'It is almost on you.' };
+  if (msgs[HS.distance]) say(msgs[HS.distance]);
+}
+
+function hsMove(dir) {
+  if (!HS || !HS.active) return;
+  sfx('sfx-footstep');
+  HS.room++;
+  if (HS.hideCooldown > 0) HS.hideCooldown--;
+  // Closes in most moves, but not guaranteed every time — keeps Hide meaningful
+  if (Math.random() < 0.65) HS.distance = Math.max(0, HS.distance - 1);
+  var desc = HS_ROOM_DESCS[Math.floor(Math.random() * HS_ROOM_DESCS.length)];
+  document.getElementById('hs-room-desc').textContent = desc;
+  var ev = document.getElementById('hs-event');
+  ev.style.display = 'none'; ev.textContent = '';
+  hsCheckPhase();
+  hsUpdateUI();
+  if (HS.distance <= 0) { hsCaught(); return; }
+  if (HS.room >= HS.exitAt) { hsEscape(); return; }
+  say('Moving ' + dir + '. ' + desc);
+  hsAnnounceDistance();
+}
+
+function hsHide() {
+  if (!HS || !HS.active) return;
+  if (HS.hideCooldown > 0) {
+    say('You just hid. Give it a moment before trying again.');
+    return;
+  }
+  sfx('sfx-select');
+  HS.hideCooldown = 2;
+  var ev = document.getElementById('hs-event');
+  ev.style.display = 'block';
+  if (Math.random() < 0.55) {
+    var gain = 2 + Math.floor(Math.random() * 2);
+    HS.distance = Math.min(10, HS.distance + gain);
+    ev.textContent = '🫥 You hold your breath. It passes by, closer than you\'d like.';
+    say('You hid successfully. It passed by. Now ' + HS.distance + (HS.distance === 1 ? ' room' : ' rooms') + ' away.');
+  } else {
+    HS.distance = Math.max(0, HS.distance - 1);
+    ev.textContent = '🫥 You hide, but it senses you anyway.';
+    say('It sensed you. Now ' + HS.distance + (HS.distance === 1 ? ' room' : ' rooms') + ' away.');
+  }
+  hsCheckPhase();
+  hsUpdateUI();
+  if (HS.distance <= 0) { hsCaught(); return; }
+}
+
+function hsCaught() {
+  HS.active = false;
+  sfx('sfx-death');
+  vibe(VIBE.hunterCatch);
+  document.getElementById('hs-play').style.display = 'none';
+  document.getElementById('hs-end').style.display = 'block';
+  document.getElementById('hs-end-title').textContent = 'Caught';
+  document.getElementById('hs-end-text').textContent = 'It found you. Try again — the way out is different every time.';
+  playTrack(getMenuTrack());
+  say('Caught. It found you. Try again, or return to the menu.');
+}
+
+function hsEscape() {
+  HS.active = false;
+  sfx('sfx-confirm');
+  vibe(VIBE.fleeSuccess);
+  document.getElementById('hs-play').style.display = 'none';
+  document.getElementById('hs-end').style.display = 'block';
+  document.getElementById('hs-end-title').textContent = 'Escaped';
+  document.getElementById('hs-end-text').textContent = 'You made it out. It is still in there, waiting for the next one.';
+  playTrack(getMenuTrack());
+  say('You escaped. You made it out alive.');
+}
+// ── END HIDE AND SEEK ──
 
 // -- SPELL SYSTEM --
 
