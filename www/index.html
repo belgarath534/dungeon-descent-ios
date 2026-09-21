@@ -6378,6 +6378,7 @@ var DDStore = (function() {
   <div class="ach-popup-eyebrow">Achievement Unlocked</div>
   <div class="ach-popup-icon" id="ach-popup-icon">🏆</div>
   <div class="ach-popup-name" id="ach-popup-name"></div>
+  <div id="ach-popup-tier" style="font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.25em;margin:2px 0 6px;"></div>
   <div class="ach-popup-desc" id="ach-popup-desc"></div>
 </div>
 
@@ -8829,20 +8830,25 @@ function loadAudio() {
    'sfx-enemy-undead','sfx-enemy-fire','sfx-enemy-ice','sfx-enemy-aquatic',
    'sfx-enemy-horror','sfx-enemy-beast','sfx-enemy-demon','sfx-enemy-leviathan','sfx-enemy-shadow',
    'sfx-boss-undead','sfx-boss-fire','sfx-boss-ice','sfx-boss-aquatic',
-   'sfx-boss-horror','sfx-boss-beast','sfx-boss-demon','sfx-boss-leviathan','sfx-boss-shadow'];
+   'sfx-boss-horror','sfx-boss-beast','sfx-boss-demon','sfx-boss-leviathan','sfx-boss-shadow',
+   'sfx-ach-gold','sfx-ach-silver','sfx-ach-special'];
+
+  // Most sfx are hosted as .mp3 — these specific ones are .wav on the host.
+  var SFX_WAV_NAMES = ['sfx-ach-special'];
 
   sfxNames.forEach(function(n) {
+    var ext = SFX_WAV_NAMES.indexOf(n) !== -1 ? '.wav' : '.mp3';
     try {
       // Use Howler if available — fixes iOS volume control
       if (window.Howl) {
         AUD.howls[n] = new Howl({
-          src: [_audioUrl(n + '.mp3')],
+          src: [_audioUrl(n + ext)],
           volume: AUD.sfxVol,
           preload: true,
           onloaderror: function() {
             // Fallback to regular Audio on load error
             try {
-              var local = new Audio('audio/' + n + '.mp3');
+              var local = new Audio('audio/' + n + ext);
               local.volume = AUD.sfxVol;
               AUD.sfx[n] = local;
             } catch(e2) {}
@@ -8850,11 +8856,11 @@ function loadAudio() {
         });
       } else {
         // Fallback to regular Audio
-        var sfxAudio = new Audio(_audioUrl(n + '.mp3'));
+        var sfxAudio = new Audio(_audioUrl(n + ext));
         sfxAudio.volume = AUD.sfxVol;
         sfxAudio.onerror = function() {
           try {
-            var local = new Audio('audio/' + n + '.mp3');
+            var local = new Audio('audio/' + n + ext);
             local.volume = AUD.sfxVol;
             AUD.sfx[n] = local;
           } catch(e2) {}
@@ -33840,7 +33846,7 @@ function awardAchievement(id) {
   var trophies = ach.trophies || 1;
   addGlobalGold(gold);
   addTrophies(trophies);
-  sfx(getAchSound());
+  playAchievementUnlockSound(ach);
   showAchievementPopup(ach, gold, trophies);
   updateTrophyDisplay();
   // ── Google Play Games unlock ──
@@ -33935,7 +33941,14 @@ function checkAchievements() {
   });
   if (newUnlocks.length > 0) {
     saveUnlockedAchievements(unlocked);
-    sfx(getAchSound());
+    // Multiple achievements can unlock in the same check — play the sound
+    // for whichever one is the highest tier, not just the first found.
+    var tierRank = { normal: 0, bronze: 1, silver: 2, gold: 3, special: 4 };
+    var best = newUnlocks[0];
+    newUnlocks.forEach(function(a) {
+      if (tierRank[getAchievementTier(a)] > tierRank[getAchievementTier(best)]) best = a;
+    });
+    playAchievementUnlockSound(best);
     newUnlocks.forEach(function(ach) {
       awardScore('achievements', 250);
       showAchievementPopup(ach);
@@ -44243,9 +44256,11 @@ function dismissAchPopup() {
   var nameEl = document.getElementById('ach-popup-name');
   var descEl = document.getElementById('ach-popup-desc');
   var iconEl = document.getElementById('ach-popup-icon');
+  var tierEl = document.getElementById('ach-popup-tier');
   if (nameEl) nameEl.textContent = '';
   if (descEl) descEl.textContent = '';
   if (iconEl) iconEl.textContent = '';
+  if (tierEl) tierEl.textContent = '';
   var ann = document.getElementById('ach-announce');
   if (ann) ann.textContent = '';
   _achPopupShowing = false;
@@ -44262,6 +44277,12 @@ function processAchPopupQueue() {
   document.getElementById('ach-popup-icon').textContent = ach.icon || '🏆';
   document.getElementById('ach-popup-name').textContent = ach.name;
   document.getElementById('ach-popup-desc').textContent = (ach.desc || '') + ' · +' + (ach._popupGold||50) + 'g · +' + (ach._popupTrophies||1) + ' 🏆';
+  var tier = getAchievementTier(ach);
+  var tierEl = document.getElementById('ach-popup-tier');
+  if (tierEl) {
+    tierEl.textContent = (ACH_TIER_LABELS[tier] || 'Normal').toUpperCase();
+    tierEl.style.color = ACH_TIER_COLORS[tier] || '#999';
+  }
 
   var notifOn = !ACCESS.notificationsOff;
   if (notifOn) {
@@ -44271,13 +44292,14 @@ function processAchPopupQueue() {
 
   setTimeout(function() {
     var ann = document.getElementById('ach-announce');
+    var tierPrefix = (ACH_TIER_LABELS[tier] || 'Normal') + ' achievement unlocked. ';
     if (ann) {
       ann.textContent = '';
       setTimeout(function() {
-        ann.textContent = 'Achievement unlocked. ' + ach.name + (ach.desc ? '. ' + ach.desc : '') + '.';
+        ann.textContent = tierPrefix + ach.name + (ach.desc ? '. ' + ach.desc : '') + '.';
       }, 50);
     }
-    say('Achievement unlocked. ' + ach.name + (ach.desc ? '. ' + ach.desc : '') + '.');
+    say(tierPrefix + ach.name + (ach.desc ? '. ' + ach.desc : '') + '.');
   }, 100);
 
   // Auto dismiss after 4 seconds — shorter than before
@@ -49149,6 +49171,39 @@ function loadAchSoundSetting() {
 
 function getAchSound() {
   return DDStore.getItem('dd_ach_sound') || 'sfx-unlock';
+}
+
+// ── ACHIEVEMENT TIERS ──
+// A handful of the rarest, most narratively significant achievements are
+// hand-picked as 'special' regardless of their reward value. Everything else
+// is derived from its existing gold reward, which already tracked rarity
+// loosely (50/150/250/400) — this just makes that grouping explicit.
+var ACH_SPECIAL_IDS = ['ach-void-reaper', 'ach-witness', 'ach-dddi-boss', 'ach-bossrush',
+  'ach-ngplus3', 'ach-all-stories', 'ach-trilogy', 'ach-kills-1000', 'ach-abyssal-boss'];
+
+function getAchievementTier(ach) {
+  if (!ach) return 'normal';
+  if (ach.id && ACH_SPECIAL_IDS.indexOf(ach.id) !== -1) return 'special';
+  var gold = ach.gold || 50;
+  if (gold >= 300) return 'gold';
+  if (gold >= 200) return 'silver';
+  if (gold >= 100) return 'bronze';
+  return 'normal';
+}
+
+var ACH_TIER_LABELS = { normal: 'Normal', bronze: 'Bronze', silver: 'Silver', gold: 'Gold', special: 'Special' };
+var ACH_TIER_COLORS = { normal: '#999', bronze: '#cd7f32', silver: '#c0c0c0', gold: '#e0c080', special: '#cc88ff' };
+
+// Bronze/Normal reuse an existing in-game sound (respects the player's sound
+// pack preference via getAchSound()); Silver/Gold/Special get their own
+// dedicated stingers.
+function playAchievementUnlockSound(ach) {
+  var tier = getAchievementTier(ach);
+  if (tier === 'special') sfx('sfx-ach-special');
+  else if (tier === 'gold') sfx('sfx-ach-gold');
+  else if (tier === 'silver') sfx('sfx-ach-silver');
+  else sfx(getAchSound());
+  return tier;
 }
 
 
