@@ -41484,7 +41484,8 @@ function hsNewState() {
     phase: 1,                     // 1 = quiet, 2 = chase music
     hideCooldown: 0,
     hidSuccessPending: false,     // your last Hide worked — skip its next move
-    items: 0                      // hiding spots found along the way
+    items: 0,                     // hiding spots found along the way
+    moveLocked: false             // waiting out its footstep beat — far away only
   };
 }
 
@@ -41517,6 +41518,7 @@ function hsStart() {
   ev.style.display = 'none'; ev.textContent = '';
   document.getElementById('hs-room-desc').textContent = 'You stand still, listening.';
   goTo('hideseek');
+  hsSetMoveButtonsEnabled(true); // reset in case a prior run left them locked mid-wait
   hsUpdateUI();
   playTrack(HS_EXPLORE_TRACK);
   sfx('sfx-select');
@@ -41618,8 +41620,67 @@ function hsStopGrowlLoop() {
   _hsGrowlGain = null; _hsGrowlPanner = null;
 }
 
+// One discrete step sound for the Swallower's own advance — spatial, same
+// technique as Stalker Floor's playSwallowerFootstep(), separate from the
+// continuous growl loop above.
+function hsPlayMonsterFootstep() {
+  if (!HS) return;
+  try {
+    if (!AUD || !AUD.ctx) return;
+    if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
+    var dist = hsDistance();
+    var dir = hsDirection();
+    var vol = Math.max(0.15, 1 - (dist * 0.08));
+    var gainNode = AUD.ctx.createGain();
+    gainNode.gain.value = vol * (AUD.sfxVol || 0.8);
+    var panner = AUD.ctx.createStereoPanner ? AUD.ctx.createStereoPanner() : null;
+    if (panner) {
+      panner.pan.value = dir === 'right' ? 0.8 : dir === 'left' ? -0.8 : 0;
+      gainNode.connect(panner);
+      panner.connect(AUD.ctx.destination);
+    } else {
+      gainNode.connect(AUD.ctx.destination);
+    }
+    fetch(_audioUrl('monster-footstep.mp3')).then(function(r){ return r.arrayBuffer(); })
+      .then(function(buf){ return AUD.ctx.decodeAudioData(buf); })
+      .then(function(buffer){
+        if (!HS) return;
+        var source = AUD.ctx.createBufferSource();
+        source.buffer = buffer;
+        source.connect(gainNode);
+        source.start(0);
+      }).catch(function(e){ console.warn('[HS] footstep load failed:', e); });
+  } catch(e) { console.warn('[HS] playMonsterFootstep error:', e); }
+}
+
+var HS_MOVE_LOCK_MS = 2200; // how long you wait out its footstep before moving again
+var HS_MOVE_LOCK_FOOTSTEP_DELAY = 700;
+
+function hsSetMoveButtonsEnabled(enabled) {
+  document.querySelectorAll('#hs-play .dg-btn[onclick^="hsMove"]').forEach(function(b) { b.disabled = !enabled; });
+}
+
+// Forces a listening beat after a move — but only while it's far enough that
+// the pause is atmosphere, not a penalty. Once it's close (chase phase),
+// locking you out of moving while it closes in would just feel like the game
+// cheating you out of a reaction — so it's skipped entirely there.
+function hsApplyMoveLock() {
+  if (!HS || !HS.active || HS.phase !== 1) return;
+  HS.moveLocked = true;
+  hsSetMoveButtonsEnabled(false);
+  setTimeout(function() {
+    if (!HS || !HS.active) return;
+    hsPlayMonsterFootstep();
+  }, HS_MOVE_LOCK_FOOTSTEP_DELAY);
+  setTimeout(function() {
+    if (!HS || !HS.active) return;
+    HS.moveLocked = false;
+    hsSetMoveButtonsEnabled(true);
+  }, HS_MOVE_LOCK_MS);
+}
+
 function hsMove(dir) {
-  if (!HS || !HS.active) return;
+  if (!HS || !HS.active || HS.moveLocked) return;
   sfx('sfx-footstep');
   if (HS.hideCooldown > 0) HS.hideCooldown--;
   var moved = true;
@@ -41654,6 +41715,7 @@ function hsMove(dir) {
   if (HS.px === HS.ex && HS.py === HS.ey) { hsEscape(); return; }
   say('Moving ' + dir + '. ' + desc + (foundItem ? ' You spot a ' + item.name + '. ' + item.desc + ' It will help you hide.' : ''));
   hsAnnounceDistance(dist);
+  hsApplyMoveLock();
 }
 
 var HS_HIDE_BASE_CHANCE = 0.55;
