@@ -2072,8 +2072,9 @@ var DDStore = (function() {
 
     <!-- Play panel -->
     <div id="hs-play" style="display:none;">
-      <div id="hs-status-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <div id="hs-status-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;">
         <span style="font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.15em;color:rgba(255,255,255,0.4);" id="hs-progress">Room 1</span>
+        <span id="hs-items-badge" aria-live="off" style="font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.1em;padding:3px 9px;border:1px solid #446633;color:#88cc88;display:none;">🫥 0</span>
         <span id="hs-distance-badge" aria-live="off" style="font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.1em;padding:3px 9px;border:1px solid #663333;color:#cc8888;">— rooms away</span>
       </div>
 
@@ -41436,8 +41437,12 @@ function mpLeave() {
 // (confirmed hosted and safely sized) until dedicated tracks are uploaded.
 // ═══════════════════════════════════════════════════════
 var HS = null;
-var HS_EXPLORE_TRACK = 'whisper1';
-var HS_CHASE_TRACK = 'whisper2';
+// Frosthold Abyss's TRACK_FILES entries actually point at music-frosthold1/2.mp3
+// on the host — confirmed hosted and safely sized (1.2MB / 6.1MB). ('frost1'
+// was briefly assumed to map to a nonexistent music-frost1.mp3 and swapped to
+// a Whisper Forest placeholder — that assumption was wrong; frost1/frost2 work.)
+var HS_EXPLORE_TRACK = 'frost1';
+var HS_CHASE_TRACK = 'frost2';
 var HS_CHASE_THRESHOLD = 4; // distance at or below this switches to chase music
 var HS_ROOM_DESCS = [
   'A narrow hallway stretches ahead. The air is cold.',
@@ -41454,6 +41459,12 @@ var HS_ROOM_DESCS = [
   'The walls narrow here. There is not much room to run.'
 ];
 
+var HS_HIDE_ITEMS = [
+  { name: 'Torn Curtain', icon: '🧥', desc: 'Something to pull over yourself.' },
+  { name: 'Loose Floorboard', icon: '🪵', desc: 'A gap just big enough to slip into.' },
+  { name: 'Old Coat Closet', icon: '🚪', desc: 'Cracked open. Room for one.' }
+];
+
 function hsNewState() {
   return {
     active: true,
@@ -41461,7 +41472,8 @@ function hsNewState() {
     exitAt: 10 + Math.floor(Math.random() * 4), // 10-13 rooms to find the exit
     distance: 10, // rooms between you and it — 0 means caught
     phase: 1, // 1 = quiet, 2 = chase music
-    hideCooldown: 0
+    hideCooldown: 0,
+    items: 0 // hiding spots found along the way — each one boosts your next Hide
   };
 }
 
@@ -41494,6 +41506,13 @@ function hsUpdateUI() {
   badge.textContent = HS.distance + (HS.distance === 1 ? ' room away' : ' rooms away');
   badge.style.borderColor = HS.phase === 2 ? '#cc3333' : '#663333';
   badge.style.color = HS.phase === 2 ? '#ff8888' : '#cc8888';
+  var itemsBadge = document.getElementById('hs-items-badge');
+  if (HS.items > 0) {
+    itemsBadge.style.display = '';
+    itemsBadge.textContent = '🫥 ' + HS.items;
+  } else {
+    itemsBadge.style.display = 'none';
+  }
 }
 
 function hsCheckPhase() {
@@ -41521,33 +41540,59 @@ function hsMove(dir) {
   if (HS.hideCooldown > 0) HS.hideCooldown--;
   // Closes in most moves, but not guaranteed every time — keeps Hide meaningful
   if (Math.random() < 0.65) HS.distance = Math.max(0, HS.distance - 1);
+  // Placeholder for the monster's own footsteps/growl — Stalker Floor's real
+  // monster-growl.mp3 does full spatial panning; this is the simple version.
+  if (HS.phase === 2 && Math.random() < 0.45) sfx('sfx-zombie-groan');
   var desc = HS_ROOM_DESCS[Math.floor(Math.random() * HS_ROOM_DESCS.length)];
   document.getElementById('hs-room-desc').textContent = desc;
   var ev = document.getElementById('hs-event');
   ev.style.display = 'none'; ev.textContent = '';
+  var foundItem = false;
+  var item = null;
+  if (HS.items < 2 && Math.random() < 0.20) {
+    foundItem = true;
+    item = HS_HIDE_ITEMS[Math.floor(Math.random() * HS_HIDE_ITEMS.length)];
+    HS.items++;
+    ev.style.display = 'block';
+    ev.textContent = item.icon + ' You spot a ' + item.name + '. ' + item.desc;
+  }
   hsCheckPhase();
   hsUpdateUI();
   if (HS.distance <= 0) { hsCaught(); return; }
   if (HS.room >= HS.exitAt) { hsEscape(); return; }
-  say('Moving ' + dir + '. ' + desc);
+  say('Moving ' + dir + '. ' + desc + (foundItem ? ' You spot a ' + item.name + '. ' + item.desc + ' It will help you hide.' : ''));
   hsAnnounceDistance();
 }
 
+var HS_HIDE_BASE_CHANCE = 0.55;
+var HS_HIDE_ITEM_BONUS = 0.25;
+
 function hsHide() {
   if (!HS || !HS.active) return;
+  var ev = document.getElementById('hs-event');
   if (HS.hideCooldown > 0) {
+    // BUGFIX: this used to return without touching the event box, so a prior
+    // failed Hide's "it senses you anyway" message just sat there — every
+    // repeat tap while on cooldown looked like ANOTHER failure, when nothing
+    // had actually happened yet. Show the cooldown state explicitly instead.
+    ev.style.display = 'block';
+    ev.textContent = '⏳ Still catching your breath from last time.';
     say('You just hid. Give it a moment before trying again.');
     return;
   }
   sfx('sfx-select');
   HS.hideCooldown = 2;
-  var ev = document.getElementById('hs-event');
+  var usedItem = HS.items > 0;
+  var chance = HS_HIDE_BASE_CHANCE + (usedItem ? HS_HIDE_ITEM_BONUS : 0);
+  if (usedItem) HS.items--;
   ev.style.display = 'block';
-  if (Math.random() < 0.55) {
+  if (Math.random() < chance) {
     var gain = 2 + Math.floor(Math.random() * 2);
     HS.distance = Math.min(10, HS.distance + gain);
-    ev.textContent = '🫥 You hold your breath. It passes by, closer than you\'d like.';
-    say('You hid successfully. It passed by. Now ' + HS.distance + (HS.distance === 1 ? ' room' : ' rooms') + ' away.');
+    ev.textContent = usedItem
+      ? '🫥 You duck out of sight and wait. It passes right by. It gained nothing.'
+      : '🫥 You hold your breath. It passes by, closer than you\'d like.';
+    say((usedItem ? 'You hid using what you found. ' : 'You hid successfully. ') + 'It passed by. Now ' + HS.distance + (HS.distance === 1 ? ' room' : ' rooms') + ' away.');
   } else {
     HS.distance = Math.max(0, HS.distance - 1);
     ev.textContent = '🫥 You hide, but it senses you anyway.';
