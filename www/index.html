@@ -8844,13 +8844,17 @@ function loadAudio() {
   // Most sfx are hosted as .mp3 — these specific ones are .wav on the host.
   var SFX_WAV_NAMES = ['sfx-ach-special'];
 
+  // Some sfx are hosted on R2 without the "sfx-" prefix — map internal name to actual R2 filename.
+  var SFX_FILE_OVERRIDES = { 'sfx-ghost-scream': 'ghost-scream', 'sfx-zombie-groan': 'zombie-groan' };
+
   sfxNames.forEach(function(n) {
     var ext = SFX_WAV_NAMES.indexOf(n) !== -1 ? '.wav' : '.mp3';
+    var fileBase = SFX_FILE_OVERRIDES[n] || n;
     try {
       // Use Howler if available — fixes iOS volume control
       if (window.Howl) {
         AUD.howls[n] = new Howl({
-          src: [_audioUrl(n + ext)],
+          src: [_audioUrl(fileBase + ext)],
           volume: AUD.sfxVol,
           preload: true,
           onloaderror: function() {
@@ -8864,7 +8868,7 @@ function loadAudio() {
         });
       } else {
         // Fallback to regular Audio
-        var sfxAudio = new Audio(_audioUrl(n + ext));
+        var sfxAudio = new Audio(_audioUrl(fileBase + ext));
         sfxAudio.volume = AUD.sfxVol;
         sfxAudio.onerror = function() {
           try {
