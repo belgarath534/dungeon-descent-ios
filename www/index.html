@@ -41438,12 +41438,11 @@ function mpLeave() {
 // ═══════════════════════════════════════════════════════
 var HS = null;
 // Frosthold Abyss's TRACK_FILES entries actually point at music-frosthold1/2.mp3
-// on the host — confirmed hosted and safely sized (1.2MB / 6.1MB). ('frost1'
-// was briefly assumed to map to a nonexistent music-frost1.mp3 and swapped to
-// a Whisper Forest placeholder — that assumption was wrong; frost1/frost2 work.)
+// on the host — confirmed hosted and safely sized (1.2MB / 6.1MB).
 var HS_EXPLORE_TRACK = 'frost1';
 var HS_CHASE_TRACK = 'frost2';
 var HS_CHASE_THRESHOLD = 4; // distance at or below this switches to chase music
+var HS_GRID_SIZE = 7; // 0-6 both axes — real 2D chase, not an abstract counter
 var HS_ROOM_DESCS = [
   'A narrow hallway stretches ahead. The air is cold.',
   'You pass a door hanging off one hinge.',
@@ -41465,16 +41464,48 @@ var HS_HIDE_ITEMS = [
   { name: 'Old Coat Closet', icon: '🚪', desc: 'Cracked open. Room for one.' }
 ];
 
+// A few far-from-start points to open on, for variety
+var HS_MONSTER_STARTS = [
+  { x: HS_GRID_SIZE - 1, y: 0 },
+  { x: 0, y: HS_GRID_SIZE - 1 },
+  { x: HS_GRID_SIZE - 1, y: HS_GRID_SIZE - 1 },
+  { x: HS_GRID_SIZE - 1, y: Math.floor(HS_GRID_SIZE / 2) },
+  { x: Math.floor(HS_GRID_SIZE / 2), y: HS_GRID_SIZE - 1 }
+];
+
 function hsNewState() {
+  var m = HS_MONSTER_STARTS[Math.floor(Math.random() * HS_MONSTER_STARTS.length)];
   return {
     active: true,
-    room: 1,
-    exitAt: 10 + Math.floor(Math.random() * 4), // 10-13 rooms to find the exit
-    distance: 10, // rooms between you and it — 0 means caught
-    phase: 1, // 1 = quiet, 2 = chase music
+    moves: 0,
+    px: 0, py: 0,                 // you
+    ex: HS_GRID_SIZE - 1, ey: HS_GRID_SIZE - 1, // the exit
+    mx: m.x, my: m.y,             // it
+    phase: 1,                     // 1 = quiet, 2 = chase music
     hideCooldown: 0,
-    items: 0 // hiding spots found along the way — each one boosts your next Hide
+    hidSuccessPending: false,     // your last Hide worked — skip its next move
+    items: 0                      // hiding spots found along the way
   };
+}
+
+// Real chase distance/direction on the grid — not RNG. Every unhidden move
+// it takes closes the gap on whichever axis is further, same model as the
+// proven Stalker Floor mechanic (getStalkerDistance/getStalkerDirection).
+function hsDistance() {
+  if (!HS) return 99;
+  return Math.abs(HS.px - HS.mx) + Math.abs(HS.py - HS.my);
+}
+function hsDirection() {
+  var dx = HS.mx - HS.px, dy = HS.my - HS.py;
+  if (dx === 0 && dy === 0) return 'here';
+  if (Math.abs(dx) >= Math.abs(dy)) return dx > 0 ? 'right' : 'left';
+  return dy > 0 ? 'ahead' : 'behind';
+}
+function hsMonsterAdvance() {
+  var dx = HS.px - HS.mx, dy = HS.py - HS.my;
+  if (dx === 0 && dy === 0) return;
+  if (Math.abs(dx) >= Math.abs(dy)) HS.mx += dx > 0 ? 1 : -1;
+  else HS.my += dy > 0 ? 1 : -1;
 }
 
 function hsStart() {
@@ -41489,10 +41520,12 @@ function hsStart() {
   hsUpdateUI();
   playTrack(HS_EXPLORE_TRACK);
   sfx('sfx-select');
-  say('Hide and Seek begins. Something is in here with you. Find the way out before it finds you. Use North, South, East, or West to move, or Hide to try to lose it.');
+  say('Hide and Seek begins. Something is in here with you — the Darkness Swallower. Find the way out before it finds you. Use North, South, East, or West to move, or Hide to try to lose it. Use headphones — you can hear which direction it is in.');
+  setTimeout(function() { hsStartGrowlLoop(); }, 1500);
 }
 
 function hsLeave() {
+  hsStopGrowlLoop();
   HS = null;
   playTrack(getMenuTrack());
   goTo('menu');
@@ -41501,9 +41534,10 @@ function hsLeave() {
 
 function hsUpdateUI() {
   if (!HS) return;
-  document.getElementById('hs-progress').textContent = 'Room ' + HS.room + ' of ' + HS.exitAt;
+  document.getElementById('hs-progress').textContent = 'Move ' + HS.moves;
+  var dist = hsDistance();
   var badge = document.getElementById('hs-distance-badge');
-  badge.textContent = HS.distance + (HS.distance === 1 ? ' room away' : ' rooms away');
+  badge.textContent = dist + (dist === 1 ? ' room away' : ' rooms away');
   badge.style.borderColor = HS.phase === 2 ? '#cc3333' : '#663333';
   badge.style.color = HS.phase === 2 ? '#ff8888' : '#cc8888';
   var itemsBadge = document.getElementById('hs-items-badge');
@@ -41517,32 +41551,89 @@ function hsUpdateUI() {
 
 function hsCheckPhase() {
   if (!HS) return;
-  var wantPhase = HS.distance <= HS_CHASE_THRESHOLD ? 2 : 1;
+  var wantPhase = hsDistance() <= HS_CHASE_THRESHOLD ? 2 : 1;
   if (wantPhase !== HS.phase) {
     HS.phase = wantPhase;
     playTrack(wantPhase === 2 ? HS_CHASE_TRACK : HS_EXPLORE_TRACK);
   }
 }
 
-function hsAnnounceDistance() {
+function hsAnnounceDistance(dist) {
   if (!HS) return;
   var msgs = { 6: 'You can hear it somewhere behind you.',
     4: 'It is getting closer. You should move faster.',
     2: 'It is right behind you. Hide, or run.',
     1: 'It is almost on you.' };
-  if (msgs[HS.distance]) say(msgs[HS.distance]);
+  if (msgs[dist]) say(msgs[dist]);
+}
+
+// ── SPATIAL GROWL — Darkness Swallower, same technique as Stalker Floor's
+// startGrowlLoop/updateGrowlPosition (real StereoPannerNode panning, works on
+// iOS with headphones), namespaced separately so it never touches Stalker's
+// own state. This is the real signal: which direction it's in, and how close.
+var _hsGrowlGain = null, _hsGrowlPanner = null, _hsGrowlSource = null;
+
+function hsApplyGrowlPosition() {
+  if (!HS) return;
+  var dist = hsDistance();
+  var dir = hsDirection();
+  var vol = Math.max(0.15, 1 - (dist * 0.08));
+  if (_hsGrowlGain) _hsGrowlGain.gain.value = vol * (AUD.sfxVol || 0.8);
+  if (_hsGrowlPanner) {
+    _hsGrowlPanner.pan.value = dir === 'right' ? 0.8 : dir === 'left' ? -0.8 : 0;
+  }
+}
+
+function hsStartGrowlLoop() {
+  if (!HS || !HS.active) return;
+  try {
+    if (!AUD || !AUD.ctx) return;
+    if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
+    var gainNode = AUD.ctx.createGain();
+    var panner = AUD.ctx.createStereoPanner ? AUD.ctx.createStereoPanner() : null;
+    _hsGrowlGain = gainNode; _hsGrowlPanner = panner;
+    hsApplyGrowlPosition();
+    if (panner) { gainNode.connect(panner); panner.connect(AUD.ctx.destination); }
+    else gainNode.connect(AUD.ctx.destination);
+    fetch(_audioUrl('monster-growl.mp3')).then(function(r){ return r.arrayBuffer(); })
+      .then(function(buf){ return AUD.ctx.decodeAudioData(buf); })
+      .then(function(buffer){
+        if (!HS || !HS.active) return;
+        var source = AUD.ctx.createBufferSource();
+        source.buffer = buffer;
+        source.loop = true;
+        source.connect(gainNode);
+        source.start(0);
+        _hsGrowlSource = source;
+      }).catch(function(e){ console.warn('[HS] growl load failed:', e); });
+  } catch(e) { console.warn('[HS] startGrowlLoop error:', e); }
+}
+
+function hsUpdateGrowl() {
+  if (_hsGrowlGain || _hsGrowlPanner) hsApplyGrowlPosition();
+}
+
+function hsStopGrowlLoop() {
+  try { if (_hsGrowlSource) { _hsGrowlSource.stop(); _hsGrowlSource = null; } } catch(e) {}
+  _hsGrowlGain = null; _hsGrowlPanner = null;
 }
 
 function hsMove(dir) {
   if (!HS || !HS.active) return;
   sfx('sfx-footstep');
-  HS.room++;
   if (HS.hideCooldown > 0) HS.hideCooldown--;
-  // Closes in most moves, but not guaranteed every time — keeps Hide meaningful
-  if (Math.random() < 0.65) HS.distance = Math.max(0, HS.distance - 1);
-  // Placeholder for the monster's own footsteps/growl — Stalker Floor's real
-  // monster-growl.mp3 does full spatial panning; this is the simple version.
-  if (HS.phase === 2 && Math.random() < 0.45) sfx('sfx-zombie-groan');
+  var moved = true;
+  if (dir === 'north') { if (HS.py > 0) HS.py--; else moved = false; }
+  else if (dir === 'south') { if (HS.py < HS_GRID_SIZE - 1) HS.py++; else moved = false; }
+  else if (dir === 'west')  { if (HS.px > 0) HS.px--; else moved = false; }
+  else if (dir === 'east')  { if (HS.px < HS_GRID_SIZE - 1) HS.px++; else moved = false; }
+  if (!moved) { say('There is a wall that way. Try a different direction.'); return; }
+  HS.moves++;
+  // It closes in on every move — unless your last Hide bought you a free one
+  if (HS.hidSuccessPending) HS.hidSuccessPending = false;
+  else hsMonsterAdvance();
+  hsUpdateGrowl();
+
   var desc = HS_ROOM_DESCS[Math.floor(Math.random() * HS_ROOM_DESCS.length)];
   document.getElementById('hs-room-desc').textContent = desc;
   var ev = document.getElementById('hs-event');
@@ -41558,10 +41649,11 @@ function hsMove(dir) {
   }
   hsCheckPhase();
   hsUpdateUI();
-  if (HS.distance <= 0) { hsCaught(); return; }
-  if (HS.room >= HS.exitAt) { hsEscape(); return; }
+  var dist = hsDistance();
+  if (dist <= 0) { hsCaught(); return; }
+  if (HS.px === HS.ex && HS.py === HS.ey) { hsEscape(); return; }
   say('Moving ' + dir + '. ' + desc + (foundItem ? ' You spot a ' + item.name + '. ' + item.desc + ' It will help you hide.' : ''));
-  hsAnnounceDistance();
+  hsAnnounceDistance(dist);
 }
 
 var HS_HIDE_BASE_CHANCE = 0.55;
@@ -41581,30 +41673,32 @@ function hsHide() {
     return;
   }
   sfx('sfx-select');
-  HS.hideCooldown = 2;
+  HS.hideCooldown = 1; // shorter now — hiding has a real cost: no progress toward the exit
   var usedItem = HS.items > 0;
   var chance = HS_HIDE_BASE_CHANCE + (usedItem ? HS_HIDE_ITEM_BONUS : 0);
   if (usedItem) HS.items--;
   ev.style.display = 'block';
   if (Math.random() < chance) {
-    var gain = 2 + Math.floor(Math.random() * 2);
-    HS.distance = Math.min(10, HS.distance + gain);
+    HS.hidSuccessPending = true; // your next move skips its advance — it lost you
     ev.textContent = usedItem
-      ? '🫥 You duck out of sight and wait. It passes right by. It gained nothing.'
+      ? '🫥 You duck out of sight and wait. It passes right by, unaware.'
       : '🫥 You hold your breath. It passes by, closer than you\'d like.';
-    say((usedItem ? 'You hid using what you found. ' : 'You hid successfully. ') + 'It passed by. Now ' + HS.distance + (HS.distance === 1 ? ' room' : ' rooms') + ' away.');
+    say((usedItem ? 'You hid using what you found. ' : 'You hid successfully. ') + 'It lost your trail — your next move is safe.');
   } else {
-    HS.distance = Math.max(0, HS.distance - 1);
+    hsMonsterAdvance(); // hiding failed — it still closes in, right now
+    hsUpdateGrowl();
     ev.textContent = '🫥 You hide, but it senses you anyway.';
-    say('It sensed you. Now ' + HS.distance + (HS.distance === 1 ? ' room' : ' rooms') + ' away.');
+    var dist = hsDistance();
+    say('It sensed you. Now ' + dist + (dist === 1 ? ' room' : ' rooms') + ' away.');
   }
   hsCheckPhase();
   hsUpdateUI();
-  if (HS.distance <= 0) { hsCaught(); return; }
+  if (hsDistance() <= 0) { hsCaught(); return; }
 }
 
 function hsCaught() {
   HS.active = false;
+  hsStopGrowlLoop();
   sfx('sfx-death');
   vibe(VIBE.hunterCatch);
   document.getElementById('hs-play').style.display = 'none';
@@ -41617,6 +41711,7 @@ function hsCaught() {
 
 function hsEscape() {
   HS.active = false;
+  hsStopGrowlLoop();
   sfx('sfx-confirm');
   vibe(VIBE.fleeSuccess);
   document.getElementById('hs-play').style.display = 'none';
