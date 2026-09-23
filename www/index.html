@@ -7956,7 +7956,7 @@ var DDStore = (function() {
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
         <div>
           <div style="font-family:Cinzel,serif;font-size:0.72rem;color:#44ff88;margin-bottom:4px;">🧊 3D Mode</div>
-          <div style="font-family:Cinzel,serif;font-size:0.62rem;color:#555;line-height:1.7;">Explore the dungeon in a real 3D rendered view with full spatial audio — walk between rooms yourself instead of tapping directions, and find the way out by sound and sight. Currently in testing for Crypt of Malachar only. More dungeons coming as it's refined.</div>
+          <div style="font-family:Cinzel,serif;font-size:0.62rem;color:#555;line-height:1.7;">Explore the dungeon in a real 3D rendered view with full spatial audio — walk between rooms yourself instead of tapping directions, and find the way out by sound and sight. Now available in every dungeon, each with its own look and lighting.</div>
         </div>
         <button id="beta-3dmode-toggle" onclick="toggleBetaFeature('3dmode')" style="padding:8px 14px;background:#080808;border:1px solid #444;color:#666;font-family:Cinzel,serif;font-size:0.65rem;cursor:pointer;margin-left:12px;flex-shrink:0;border-radius:2px;" aria-label="Toggle 3D Mode">OFF</button>
       </div>
@@ -10837,7 +10837,7 @@ function updateBetaPanel() {
   }
   if (status) {
     status.textContent = on
-      ? '3D Mode active — Crypt of Malachar will load in 3D next time you enter it.'
+      ? '3D Mode active — every dungeon will load in 3D next time you enter it.'
       : 'Disabled — normal dungeon navigation.';
     status.style.color = on ? '#44aa44' : '#555';
   }
@@ -13011,7 +13011,7 @@ var SPECIAL_ROOMS = [
 ];
 
 // Generate a floor's room sequence procedurally
-// ── 3D MODE — SPATIAL ROOM GRAPH (Crypt of Malachar only, beta) ──
+// ── 3D MODE — SPATIAL ROOM GRAPH (beta, all dungeons) ──
 // The 2D game already has a complete, battle-tested room-resolution pipeline
 // in enterRoom() — combat, loot, events, floor completion, secret rooms, all
 // of it. 3D Mode does NOT reimplement any of that. It just adds a spatial
@@ -13019,8 +13019,26 @@ var SPECIAL_ROOMS = [
 // fires, instead of every button tap firing it unconditionally. Everything
 // downstream is the exact same code every other dungeon and every non-3D
 // player already relies on.
+// Wall/floor/ceiling/torch/fog palette per dungeon — keeps the same room
+// geometry and gameplay everywhere, just re-skinned to match each
+// dungeon's identity instead of every dungeon looking like crypt stone.
+var ROOM3D_THEMES = {
+  'Crypt of Malachar':   { wall:0x3a352e, floor:0x2a2620, ceil:0x1a1712, torch:0xff8833, fog:0x000000, fogDensity:0.090, ambient:0x1a1510 },
+  'The Ashbound Wastes': { wall:0x2e211c, floor:0x1f1512, ceil:0x140d0a, torch:0xff4411, fog:0x1a0800, fogDensity:0.100, ambient:0x241008 },
+  'Frosthold Abyss':     { wall:0x3a4a55, floor:0x2a3a45, ceil:0x1a2530, torch:0x88ccff, fog:0x0a1520, fogDensity:0.080, ambient:0x101f28 },
+  'The Sunken Archives': { wall:0x2a3a35, floor:0x1a2a25, ceil:0x101a18, torch:0x44ccaa, fog:0x001510, fogDensity:0.120, ambient:0x082018 },
+  'The Hollow':          { wall:0x4a453f, floor:0x35302a, ceil:0x201d1a, torch:0xccccdd, fog:0x1a1a1f, fogDensity:0.090, ambient:0x1c1c22 },
+  'The Whispering Forest': { wall:0x2f3a25, floor:0x22281a, ceil:0x161a10, torch:0x88cc44, fog:0x0a1005, fogDensity:0.100, ambient:0x141c0a },
+  'The Infernal Descent': { wall:0x3a1510, floor:0x2a0d08, ceil:0x1a0805, torch:0xff2200, fog:0x150300, fogDensity:0.110, ambient:0x280800 },
+  'The Abyssal Deep':    { wall:0x151a2a, floor:0x0d101c, ceil:0x080a12, torch:0x2299ff, fog:0x02040a, fogDensity:0.130, ambient:0x081020 },
+  'The Shadow World':    { wall:0x1a1520, floor:0x100d15, ceil:0x0a080d, torch:0x8844cc, fog:0x0a0510, fogDensity:0.100, ambient:0x140c1c }
+};
+function _room3DTheme() {
+  return (DS && ROOM3D_THEMES[DS.dungeon]) || ROOM3D_THEMES['Crypt of Malachar'];
+}
+
 function shouldUse3DMode() {
-  return !!(DS && DS.dungeon === 'Crypt of Malachar' && typeof isBetaOn === 'function' && isBetaOn('3dmode'));
+  return !!(DS && ROOM3D_THEMES.hasOwnProperty(DS.dungeon) && typeof isBetaOn === 'function' && isBetaOn('3dmode'));
 }
 
 function _room3DKey(gx, gy) { return gx + ',' + gy; }
@@ -13250,8 +13268,9 @@ function init3DView() {
 
 function _setup3DScene(THREE) {
   _room3D.THREE = THREE;
+  var theme = _room3DTheme();
   var scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x000000, 0.09);
+  scene.fog = new THREE.FogExp2(theme.fog, theme.fogDensity);
   var wrapEl = document.getElementById('dg-3d-canvas-wrap');
   var w = wrapEl.clientWidth || 300, h = wrapEl.clientHeight || 220;
   var camera = new THREE.PerspectiveCamera(70, w / h, 0.1, 60);
@@ -13263,11 +13282,27 @@ function _setup3DScene(THREE) {
   wrapEl.innerHTML = '';
   wrapEl.appendChild(renderer.domElement);
   _room3D.scene = scene; _room3D.camera = camera; _room3D.renderer = renderer;
-  var ambient = new THREE.AmbientLight(0x1a1510, 0.6);
+  var ambient = new THREE.AmbientLight(theme.ambient, 0.6);
   scene.add(ambient);
   _room3D.ambient = ambient;
+  _room3D.themeDungeon = DS.dungeon;
   _bind3DLook(renderer.domElement);
   window.addEventListener('resize', _resize3DView);
+}
+
+// The scene/renderer persist across dungeon runs within the same page
+// session (only rebuilt on first use), but scene-level things — fog color,
+// ambient light — are set once at setup time and won't pick up a new
+// dungeon's theme on their own the way per-room wall/torch materials do
+// (those are rebuilt fresh every room). Called at the top of every room
+// build so a run in a different dungeon always looks right immediately.
+function _sync3DTheme() {
+  if (!_room3D.scene || _room3D.themeDungeon === DS.dungeon) return;
+  var theme = _room3DTheme();
+  var THREE = _room3D.THREE;
+  _room3D.scene.fog = new THREE.FogExp2(theme.fog, theme.fogDensity);
+  if (_room3D.ambient) _room3D.ambient.color.setHex(theme.ambient);
+  _room3D.themeDungeon = DS.dungeon;
 }
 
 function _clear3DRoom() {
@@ -13285,12 +13320,14 @@ function _clear3DRoom() {
 function _build3DRoom(cell) {
   if (!cell || !_room3D.scene) return;
   var THREE = _room3D.THREE;
+  _sync3DTheme();
+  var theme = _room3DTheme();
   _clear3DRoom();
   var objs = _room3D.roomObjects;
   var ROOM_W = 10, ROOM_D = 12, ROOM_H = 4.2, DOOR_W = 2.4;
-  var floorMat = new THREE.MeshStandardMaterial({ color: 0x2a2620, roughness: 0.95, metalness: 0.05 });
-  var wallMat = new THREE.MeshStandardMaterial({ color: 0x3a352e, roughness: 0.9, metalness: 0.05 });
-  var ceilMat = new THREE.MeshStandardMaterial({ color: 0x1a1712, roughness: 1.0 });
+  var floorMat = new THREE.MeshStandardMaterial({ color: theme.floor, roughness: 0.95, metalness: 0.05 });
+  var wallMat = new THREE.MeshStandardMaterial({ color: theme.wall, roughness: 0.9, metalness: 0.05 });
+  var ceilMat = new THREE.MeshStandardMaterial({ color: theme.ceil, roughness: 1.0 });
   var shadowsOn = !!get3DSettings().shadows;
 
   var floorMesh = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_W, ROOM_D), floorMat);
@@ -13335,13 +13372,13 @@ function _build3DRoom(cell) {
   buildSide(cell.doors.E, 'x', 1);
 
   var torchGeo = new THREE.SphereGeometry(0.07, 8, 8);
-  var flameMat = new THREE.MeshBasicMaterial({ color: 0xffaa33 });
+  var flameMat = new THREE.MeshBasicMaterial({ color: theme.torch });
   var torchOffsets = [
     [-ROOM_W / 2 + 0.3, 2.1, -ROOM_D / 2 + 1.5], [ROOM_W / 2 - 0.3, 2.1, -ROOM_D / 2 + 1.5],
     [-ROOM_W / 2 + 0.3, 2.1, ROOM_D / 2 - 1.5], [ROOM_W / 2 - 0.3, 2.1, ROOM_D / 2 - 1.5]
   ];
   torchOffsets.forEach(function(p) {
-    var light = new THREE.PointLight(0xff8833, 1.5, 8, 2);
+    var light = new THREE.PointLight(theme.torch, 1.5, 8, 2);
     light.position.set(p[0], p[1], p[2]);
     light.castShadow = shadowsOn;
     _room3D.scene.add(light); objs.push(light);
