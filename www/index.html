@@ -7935,6 +7935,19 @@ var DDStore = (function() {
     <h2 class="settings-section-title">🧪 Beta Features</h2>
     <p style="font-family:Cinzel,serif;font-size:0.65rem;color:#555;margin-bottom:18px;line-height:1.8;">These features are experimental and still being tested. Turn them on to try them out. They may change or be removed in future updates.</p>
 
+    <!-- 3D Mode -->
+    <div style="background:#080808;border:1px solid #1a2a1a;padding:14px;margin-bottom:10px;border-radius:2px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div>
+          <div style="font-family:Cinzel,serif;font-size:0.72rem;color:#44ff88;margin-bottom:4px;">🧊 3D Mode</div>
+          <div style="font-family:Cinzel,serif;font-size:0.62rem;color:#555;line-height:1.7;">Explore the dungeon in a real 3D rendered view with full spatial audio — walk between rooms yourself instead of tapping directions, and find the way out by sound and sight. Currently in testing for Crypt of Malachar only. More dungeons coming as it's refined.</div>
+        </div>
+        <button id="beta-3dmode-toggle" onclick="toggleBetaFeature('3dmode')" style="padding:8px 14px;background:#080808;border:1px solid #444;color:#666;font-family:Cinzel,serif;font-size:0.65rem;cursor:pointer;margin-left:12px;flex-shrink:0;border-radius:2px;" aria-label="Toggle 3D Mode">OFF</button>
+      </div>
+      <div id="beta-3dmode-status" style="font-family:Cinzel,serif;font-size:0.6rem;color:#555;font-style:italic;" aria-live="polite">Disabled — normal dungeon navigation.</div>
+      <div id="beta-3dmode-srnote" style="font-family:Cinzel,serif;font-size:0.58rem;color:#886644;font-style:italic;margin-top:6px;display:none;">Screen Reader Mode is on — 3D Mode is built for the visual/spatial-audio experience and isn't tuned for screen readers yet. You can still turn it on if you'd like to try it.</div>
+    </div>
+
     <div style="background:#080808;border:1px solid #222;padding:14px;margin-bottom:10px;border-radius:2px;opacity:0.5;">
       <div style="font-family:Cinzel,serif;font-size:0.72rem;color:#666;margin-bottom:4px;">🔮 More beta features coming soon</div>
       <div style="font-family:Cinzel,serif;font-size:0.62rem;color:#444;">New experimental features will appear here as they are developed.</div>
@@ -10740,7 +10753,7 @@ function getChaosEnemyMult() {
 // --════════════════════════
 
 function getBetaFeatures() {
-  return JSON.parse(DDStore.getItem('dd_beta_features') || '{"subclass":true}');
+  return JSON.parse(DDStore.getItem('dd_beta_features') || '{"3dmode":false}');
 }
 
 function saveBetaFeatures(f) {
@@ -10748,7 +10761,7 @@ function saveBetaFeatures(f) {
 }
 
 function isBetaOn(id) {
-  return getBetaFeatures()[id] !== false;
+  return getBetaFeatures()[id] === true;
 }
 
 function toggleBetaFeature(id) {
@@ -10761,8 +10774,25 @@ function toggleBetaFeature(id) {
 }
 
 function updateBetaPanel() {
-  // Subclass System graduated out of Beta — no toggles to sync right now.
-  // Future beta features (e.g. 3D Mode) will sync their UI here.
+  var on = isBetaOn('3dmode');
+  var btn = document.getElementById('beta-3dmode-toggle');
+  var status = document.getElementById('beta-3dmode-status');
+  var srNote = document.getElementById('beta-3dmode-srnote');
+  if (btn) {
+    btn.textContent = on ? 'ON' : 'OFF';
+    btn.style.borderColor = on ? '#44aa44' : '#444';
+    btn.style.color = on ? '#44ff88' : '#666';
+    btn.style.background = on ? '#0a1a0a' : '#080808';
+  }
+  if (status) {
+    status.textContent = on
+      ? '3D Mode active — Crypt of Malachar will load in 3D next time you enter it.'
+      : 'Disabled — normal dungeon navigation.';
+    status.style.color = on ? '#44aa44' : '#555';
+  }
+  if (srNote) {
+    srNote.style.display = (ACCESS && ACCESS.srmode) ? 'block' : 'none';
+  }
 }
 
 // --════════════════════════
