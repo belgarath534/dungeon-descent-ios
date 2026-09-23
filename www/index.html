@@ -8494,7 +8494,7 @@ function _saySR(msg) {
   setTimeout(function() { el.textContent = msg; }, 60);
   // Additionally use native ScreenReader.speak() on Capacitor iOS if VoiceOver is active
   // This is more reliable than aria-live for native apps
-  if (window.Capacitor && _screenReaderActive && Capacitor.Plugins && Capacitor.Plugins.ScreenReader) {
+  if (window.Capacitor && typeof _screenReaderActive !== 'undefined' && _screenReaderActive && Capacitor.Plugins && Capacitor.Plugins.ScreenReader) {
     try {
       var srLang = (_translationLang === 'pt-BR') ? 'pt' : (_translationLang === 'es') ? 'es' : 'en';
       Capacitor.Plugins.ScreenReader.speak({ value: msg, language: srLang });
@@ -8629,7 +8629,12 @@ var _AUDIO_LOCAL = 'audio/';
 var _AUDIO_R2 = 'https://pub-a22a05b8dcb64f86b6bbb814578b93e4.r2.dev/';
 
 function _audioUrl(filename) {
-  // Serve from Cloudflare R2 public URL
+  // The iOS app bundles every track locally (www/audio/, synced into the
+  // native app by `npx cap sync ios`) so the game has real audio with zero
+  // internet — this is an audio-first accessibility game, so that matters.
+  // The web build at dungeon-descent.org doesn't ship 275MB of audio to
+  // every visitor, so it keeps streaming from Cloudflare R2 as before.
+  if (window.Capacitor) return _AUDIO_LOCAL + filename;
   return _AUDIO_R2 + filename;
 }
 
@@ -8893,7 +8898,7 @@ function loadAudio() {
           onloaderror: function() {
             // Fallback to regular Audio on load error
             try {
-              var local = new Audio('audio/' + n + ext);
+              var local = new Audio(_AUDIO_LOCAL + fileBase + ext);
               local.volume = AUD.sfxVol;
               AUD.sfx[n] = local;
             } catch(e2) {}
@@ -8905,7 +8910,7 @@ function loadAudio() {
         sfxAudio.volume = AUD.sfxVol;
         sfxAudio.onerror = function() {
           try {
-            var local = new Audio('audio/' + n + ext);
+            var local = new Audio(_AUDIO_LOCAL + fileBase + ext);
             local.volume = AUD.sfxVol;
             AUD.sfx[n] = local;
           } catch(e2) {}
@@ -13218,8 +13223,10 @@ function _load3DEngine() {
   if (_room3D.loading) return _room3D.loading;
   _room3D.loading = new Promise(function(resolve, reject) {
     var s = document.createElement('script');
-    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-    s.crossOrigin = 'anonymous';
+    // Bundled locally (www/lib/three.min.js) rather than fetched from a CDN —
+    // the iOS app ships this file in its bundle, so 3D Mode's visuals work
+    // fully offline just like the rest of the game now does.
+    s.src = 'lib/three.min.js';
     s.onload = function() { resolve(window.THREE); };
     s.onerror = function() { reject(new Error('3D engine failed to load')); };
     document.head.appendChild(s);
