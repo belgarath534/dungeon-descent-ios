@@ -9537,10 +9537,13 @@ function goTo(id) {
   } else if (id === 'graveyard') {
     playTrack('graveyard');
   } else if (id === 'dungeon') {
-    // Dungeon music is handled by the dungeon system itself via battleTrack()
-    // but make sure something is playing on screen entry
-    if (AUD.musicOn && typeof battleTrack === 'function') {
-      playTrack(battleTrack());
+    // Make sure something is playing on screen entry — the exploration
+    // track for the current floor. Combat overrides this with battleTrack()
+    // itself via startCombat(); this path should never reach for the battle
+    // track directly, or every dungeon entry (including just returning from
+    // Inventory/Settings, not just a fresh run) would open on battle music.
+    if (AUD.musicOn && DS && typeof exploTrackForFloor === 'function') {
+      playTrack(exploTrackForFloor(DS.floor));
     }
   } else if (id === 'runsummary' || id === 'deathlog') {
     // Stop all music on death/run end screens
