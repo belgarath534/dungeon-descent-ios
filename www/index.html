@@ -9395,6 +9395,7 @@ function goTo(id) {
   if (id === 'dungeon') {
     document.getElementById('dg-end').style.display = 'none';
     setTimeout(function(){ if (DS && !DS._floorRoomSequence) generateFloorRooms(); }, 100);
+    setTimeout(function(){ if (DS && shouldUse3DMode() && !DS._roomGraph) generate3DRoomGraph(); }, 100);
     setTimeout(function(){ try { initHomeButton(); } catch(e){} }, 200);
     keepAwakeOn(); // screen stays on during dungeon runs
   }
@@ -12977,6 +12978,134 @@ var SPECIAL_ROOMS = [
 ];
 
 // Generate a floor's room sequence procedurally
+// ── 3D MODE — SPATIAL ROOM GRAPH (Crypt of Malachar only, beta) ──
+// The 2D game already has a complete, battle-tested room-resolution pipeline
+// in enterRoom() — combat, loot, events, floor completion, secret rooms, all
+// of it. 3D Mode does NOT reimplement any of that. It just adds a spatial
+// gate in front of moveRoom(): real walls and doors decide WHEN enterRoom()
+// fires, instead of every button tap firing it unconditionally. Everything
+// downstream is the exact same code every other dungeon and every non-3D
+// player already relies on.
+function shouldUse3DMode() {
+  return !!(DS && DS.dungeon === 'Crypt of Malachar' && typeof isBetaOn === 'function' && isBetaOn('3dmode'));
+}
+
+function _room3DKey(gx, gy) { return gx + ',' + gy; }
+var ROOM3D_DIRS = [
+  { name:'N', dx:0, dy:-1, opp:'S', word:'north' },
+  { name:'S', dx:0, dy:1,  opp:'N', word:'south' },
+  { name:'E', dx:1, dy:0,  opp:'W', word:'east' },
+  { name:'W', dx:-1, dy:0, opp:'E', word:'west' }
+];
+
+// Random-walk connected room graph, sized to match the floor's real room
+// count (DS.floorRoomsNeeded) so floor pacing/difficulty is unaffected —
+// this is the same algorithm validated in the 3D Mode proof-of-concept
+// (200/200 generated layouts: fully connected, doors consistent both sides).
+function generate3DRoomGraph() {
+  var total = Math.max(2, DS.floorRoomsNeeded || 6);
+  var cells = {};
+  var order = [];
+  var startKey = _room3DKey(0, 0);
+  cells[startKey] = { gx:0, gy:0, doors:{N:false,S:false,E:false,W:false}, visited:true };
+  order.push(startKey);
+
+  var guard = 0;
+  while (order.length < total && guard < 2000) {
+    guard++;
+    var fromKey = order[Math.floor(Math.random() * order.length)];
+    var from = cells[fromKey];
+    var shuffled = ROOM3D_DIRS.slice().sort(function() { return Math.random() - 0.5; });
+    for (var i = 0; i < shuffled.length; i++) {
+      var d = shuffled[i];
+      var ngx = from.gx + d.dx, ngy = from.gy + d.dy;
+      var nKey = _room3DKey(ngx, ngy);
+      if (cells[nKey]) continue;
+      cells[nKey] = { gx:ngx, gy:ngy, doors:{N:false,S:false,E:false,W:false}, visited:false };
+      from.doors[d.name] = true;
+      cells[nKey].doors[d.opp] = true;
+      order.push(nKey);
+      break;
+    }
+  }
+  DS._roomGraph = { cells: cells };
+  DS._gridPos = { gx: 0, gy: 0 };
+}
+
+// Wander adds 3 rooms to the current floor's target — grow the graph to match
+// instead of leaving the player with nowhere new to walk.
+function extend3DRoomGraph(n) {
+  if (!DS._roomGraph) return generate3DRoomGraph();
+  var cells = DS._roomGraph.cells;
+  var order = Object.keys(cells);
+  var added = 0, guard = 0;
+  while (added < n && guard < 2000) {
+    guard++;
+    var fromKey = order[Math.floor(Math.random() * order.length)];
+    var from = cells[fromKey];
+    var shuffled = ROOM3D_DIRS.slice().sort(function() { return Math.random() - 0.5; });
+    for (var i = 0; i < shuffled.length; i++) {
+      var d = shuffled[i];
+      var ngx = from.gx + d.dx, ngy = from.gy + d.dy;
+      var nKey = _room3DKey(ngx, ngy);
+      if (cells[nKey]) continue;
+      cells[nKey] = { gx:ngx, gy:ngy, doors:{N:false,S:false,E:false,W:false}, visited:false };
+      from.doors[d.name] = true;
+      cells[nKey].doors[d.opp] = true;
+      order.push(nKey);
+      added++;
+      break;
+    }
+  }
+}
+
+function _room3DExitsText(cell) {
+  var exits = [];
+  ROOM3D_DIRS.forEach(function(d) { if (cell.doors[d.name]) exits.push(d.word); });
+  if (!exits.length) return 'No other doors from here.';
+  if (exits.length === 1) return 'A door to the ' + exits[0] + '.';
+  return 'Doors to the ' + exits.slice(0, -1).join(', ') + ' and ' + exits[exits.length - 1] + '.';
+}
+
+// The spatial gate itself — called from moveRoom() instead of the normal
+// unconditional-advance path when 3D Mode is active for this run.
+function moveRoom3D(dir) {
+  var dirWordToLetter = { north:'N', south:'S', east:'E', west:'W' };
+  var d = dirWordToLetter[dir];
+  var cur = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
+  if (!d || !cur || !cur.doors[d]) {
+    sfx('sfx-heavy-miss');
+    say('There is a wall to the ' + dir + '. ' + (cur ? _room3DExitsText(cur) : ''));
+    return;
+  }
+  var delta = ROOM3D_DIRS.filter(function(x){ return x.name === d; })[0];
+  var ngx = DS._gridPos.gx + delta.dx, ngy = DS._gridPos.gy + delta.dy;
+  var target = DS._roomGraph.cells[_room3DKey(ngx, ngy)];
+  if (!target) {
+    // Graph inconsistency safety net — should never happen given the generator's
+    // guarantees, but never let a bad cell crash movement.
+    sfx('sfx-heavy-miss');
+    say('There is a wall to the ' + dir + '.');
+    return;
+  }
+
+  DS._gridPos = { gx: ngx, gy: ngy };
+  sfx('sfx-footstep');
+  showDgPanels(true, false, false);
+
+  var wasVisited = target.visited;
+  target.visited = true;
+  var exitText = _room3DExitsText(target);
+
+  if (!wasVisited) {
+    say('Moving ' + dir + '. ' + exitText);
+    enterRoom(); // unchanged — same combat/loot/event/floor-completion pipeline every dungeon uses
+  } else {
+    say('Moving ' + dir + '. You are back in a room you already cleared. ' + exitText);
+  }
+  hunterTurn(false);
+}
+
 function generateFloorRooms() {
   var total = DS.floorRoomsNeeded || 7;
   var rooms = [];
@@ -14162,6 +14291,7 @@ function floorWander() {
   ov.remove();
   // Add 3 more rooms to the current floor
   DS.floorRoomsNeeded = (DS.floorRoomsNeeded || 5) + 3;
+  if (shouldUse3DMode() && DS._roomGraph) extend3DRoomGraph(3);
   say('Wandering floor ' + DS.floor + '. 3 more rooms added. Explore carefully.');
   addLog('🗺 You wander further. The floor opens up with more rooms to explore.');
   enterRoom();
@@ -14276,6 +14406,7 @@ function advanceFloor() {
   }
   // Generate procedural room sequence for this floor
   generateFloorRooms();
+  if (shouldUse3DMode()) generate3DRoomGraph();
   // Track no-damage floors for achievement
   if (DS.hpAtFloorStart && DS.hp >= DS.hpAtFloorStart) {
     incrementAchievementStat('noDmgFloors', 1);
@@ -14449,6 +14580,7 @@ function showDgPanels(nav, combat, inv) {
 // ── NAVIGATION ──
 function moveRoom(dir) {
   if (DS.inCombat) return;
+  if (shouldUse3DMode() && DS._roomGraph) { moveRoom3D(dir); return; }
   sfx('sfx-footstep');
   say('Moving ' + dir + '...');
   showDgPanels(true, false, false);
@@ -18005,6 +18137,9 @@ function saveProgress(completed) {
       ngPlus: DS.ngPlus,
       dailyChallenge: DS.dailyChallenge,
       roomsOnFloor: DS.roomsOnFloor,
+      floorRoomsNeeded: DS.floorRoomsNeeded,
+      _roomGraph: DS._roomGraph || null,
+      _gridPos: DS._gridPos || null,
       journalLog: DS.journalLog ? DS.journalLog.slice(-50) : [],
       runLog: DS.runLog ? DS.runLog.slice(-100) : [],
       wepingChildSoothedThisRun: DS.wepingChildSoothedThisRun || false,
@@ -18068,6 +18203,9 @@ function restoreMidRun(ch) {
   DS.ngPlus = s.ngPlus || false;
   DS.dailyChallenge = s.dailyChallenge || null;
   DS.roomsOnFloor = s.roomsOnFloor || 0;
+  if (s.floorRoomsNeeded) DS.floorRoomsNeeded = s.floorRoomsNeeded;
+  DS._roomGraph = s._roomGraph || null;
+  DS._gridPos = s._gridPos || null;
   DS.journalLog = s.journalLog || [];
   DS.runLog = s.runLog || [];
   DS.wepingChildSoothedThisRun = s.wepingChildSoothedThisRun || false;
