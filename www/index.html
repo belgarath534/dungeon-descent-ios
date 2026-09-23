@@ -3073,6 +3073,13 @@ var DDStore = (function() {
       <div class="boss-phase-pips" id="boss-phase-pips"></div>
     </div>
 
+    <div id="dg-3d-view" style="display:none;position:relative;width:100%;height:min(38vh,280px);background:#000;overflow:hidden;border-bottom:1px solid #2a1a1a;touch-action:none;" aria-hidden="true">
+      <div id="dg-3d-canvas-wrap" style="position:absolute;inset:0;"></div>
+      <div id="dg-3d-fade" style="position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity 0.26s;"></div>
+      <div id="dg-3d-fps" style="position:absolute;top:6px;right:8px;font-family:monospace;font-size:10px;color:#88ff88;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;display:none;"></div>
+      <div style="position:absolute;bottom:6px;left:8px;font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:0.08em;color:#886644;background:rgba(0,0,0,0.5);padding:3px 8px;border-radius:3px;">Drag to look around</div>
+    </div>
+
     <section class="dg-room" aria-label="Room description">
       <div class="dg-room-header">
         <span class="dg-room-name" id="dg-room-name">Chamber</span>
@@ -9399,6 +9406,7 @@ function goTo(id) {
       if (DS && shouldUse3DMode() && !DS._roomGraph) generate3DRoomGraph();
       if (DS && shouldUse3DMode() && DS._roomGraph) {
         var startCell = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
+        init3DView();
         setTimeout(function(){ play3DExitCues(startCell); }, 700);
       }
     }, 100);
@@ -13109,6 +13117,7 @@ function moveRoom3D(dir) {
   var wasVisited = target.visited;
   target.visited = true;
   var exitText = _room3DExitsText(target);
+  _transition3DRoom(target);
 
   if (!wasVisited) {
     say('Moving ' + dir + '. ' + exitText);
@@ -13174,6 +13183,243 @@ function play3DExitCues(cell) {
       }
     });
   });
+}
+
+// ── 3D MODE — VISUAL RENDERER (Three.js, lazy-loaded) ──
+// Renders only the room the player currently stands in, rebuilt behind a
+// quick fade on every move. This is a discrete, button-driven navigation
+// game (moveRoom3D(), not WASD free-roam), so there's no continuous
+// movement/collision to reconcile — a one-room-at-a-time scene with a fade
+// transition matches how the rest of the game already works and keeps
+// scene complexity flat no matter how large a floor's room graph gets.
+var _room3D = { loading:null, THREE:null, scene:null, camera:null, renderer:null,
+  ambient:null, torches:[], roomObjects:[], raf:null, yaw:0, pitch:0, built:false };
+
+function _room3DWantsVisual() {
+  return shouldUse3DMode() && !!(DS && DS._roomGraph);
+}
+
+function _load3DEngine() {
+  if (window.THREE) return Promise.resolve(window.THREE);
+  if (_room3D.loading) return _room3D.loading;
+  _room3D.loading = new Promise(function(resolve, reject) {
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    s.crossOrigin = 'anonymous';
+    s.onload = function() { resolve(window.THREE); };
+    s.onerror = function() { reject(new Error('3D engine failed to load')); };
+    document.head.appendChild(s);
+  });
+  return _room3D.loading;
+}
+
+function init3DView() {
+  if (!_room3DWantsVisual()) return;
+  var wrap = document.getElementById('dg-3d-view');
+  if (!wrap) return;
+  wrap.style.display = '';
+  _load3DEngine().then(function(THREE) {
+    if (!_room3DWantsVisual()) return; // player may have backed out before load finished
+    if (!_room3D.renderer) _setup3DScene(THREE);
+    var cell = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
+    _build3DRoom(cell);
+    _start3DLoop();
+  }).catch(function(e) { console.warn('[DD] 3D visual load failed:', e); wrap.style.display = 'none'; });
+}
+
+function _setup3DScene(THREE) {
+  _room3D.THREE = THREE;
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x000000, 0.09);
+  var wrapEl = document.getElementById('dg-3d-canvas-wrap');
+  var w = wrapEl.clientWidth || 300, h = wrapEl.clientHeight || 220;
+  var camera = new THREE.PerspectiveCamera(70, w / h, 0.1, 60);
+  camera.position.set(0, 1.6, 0);
+  var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = !!get3DSettings().shadows;
+  wrapEl.innerHTML = '';
+  wrapEl.appendChild(renderer.domElement);
+  _room3D.scene = scene; _room3D.camera = camera; _room3D.renderer = renderer;
+  var ambient = new THREE.AmbientLight(0x1a1510, 0.6);
+  scene.add(ambient);
+  _room3D.ambient = ambient;
+  _bind3DLook(renderer.domElement);
+  window.addEventListener('resize', _resize3DView);
+}
+
+function _clear3DRoom() {
+  var scene = _room3D.scene;
+  if (!scene) return;
+  _room3D.roomObjects.forEach(function(obj) {
+    scene.remove(obj);
+    if (obj.geometry) obj.geometry.dispose();
+    if (obj.material) obj.material.dispose();
+  });
+  _room3D.roomObjects = [];
+  _room3D.torches = [];
+}
+
+function _build3DRoom(cell) {
+  if (!cell || !_room3D.scene) return;
+  var THREE = _room3D.THREE;
+  _clear3DRoom();
+  var objs = _room3D.roomObjects;
+  var ROOM_W = 10, ROOM_D = 12, ROOM_H = 4.2, DOOR_W = 2.4;
+  var floorMat = new THREE.MeshStandardMaterial({ color: 0x2a2620, roughness: 0.95, metalness: 0.05 });
+  var wallMat = new THREE.MeshStandardMaterial({ color: 0x3a352e, roughness: 0.9, metalness: 0.05 });
+  var ceilMat = new THREE.MeshStandardMaterial({ color: 0x1a1712, roughness: 1.0 });
+  var shadowsOn = !!get3DSettings().shadows;
+
+  var floorMesh = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_W, ROOM_D), floorMat);
+  floorMesh.rotation.x = -Math.PI / 2;
+  floorMesh.receiveShadow = shadowsOn;
+  _room3D.scene.add(floorMesh); objs.push(floorMesh);
+
+  var ceilMesh = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_W, ROOM_D), ceilMat);
+  ceilMesh.rotation.x = Math.PI / 2;
+  ceilMesh.position.y = ROOM_H;
+  _room3D.scene.add(ceilMesh); objs.push(ceilMesh);
+
+  function addWallMesh(w, h, x, y, z, ry) {
+    var wall = new THREE.Mesh(new THREE.PlaneGeometry(w, h), wallMat);
+    wall.position.set(x, y, z);
+    wall.rotation.y = ry;
+    wall.receiveShadow = shadowsOn;
+    _room3D.scene.add(wall); objs.push(wall);
+  }
+  function buildSide(hasDoor, axis, sign) {
+    if (axis === 'z') {
+      var wallLen = ROOM_W, wz = sign * (ROOM_D / 2);
+      if (!hasDoor) { addWallMesh(wallLen, ROOM_H, 0, ROOM_H / 2, wz, sign > 0 ? Math.PI : 0); }
+      else {
+        var seg = (wallLen - DOOR_W) / 2;
+        addWallMesh(seg, ROOM_H, -(DOOR_W / 2 + seg / 2), ROOM_H / 2, wz, sign > 0 ? Math.PI : 0);
+        addWallMesh(seg, ROOM_H, (DOOR_W / 2 + seg / 2), ROOM_H / 2, wz, sign > 0 ? Math.PI : 0);
+      }
+    } else {
+      var wallLenX = ROOM_D, wx = sign * (ROOM_W / 2);
+      if (!hasDoor) { addWallMesh(wallLenX, ROOM_H, wx, ROOM_H / 2, 0, sign > 0 ? -Math.PI / 2 : Math.PI / 2); }
+      else {
+        var segX = (wallLenX - DOOR_W) / 2;
+        addWallMesh(segX, ROOM_H, wx, ROOM_H / 2, -(DOOR_W / 2 + segX / 2), sign > 0 ? -Math.PI / 2 : Math.PI / 2);
+        addWallMesh(segX, ROOM_H, wx, ROOM_H / 2, (DOOR_W / 2 + segX / 2), sign > 0 ? -Math.PI / 2 : Math.PI / 2);
+      }
+    }
+  }
+  buildSide(cell.doors.N, 'z', -1);
+  buildSide(cell.doors.S, 'z', 1);
+  buildSide(cell.doors.W, 'x', -1);
+  buildSide(cell.doors.E, 'x', 1);
+
+  var torchGeo = new THREE.SphereGeometry(0.07, 8, 8);
+  var flameMat = new THREE.MeshBasicMaterial({ color: 0xffaa33 });
+  var torchOffsets = [
+    [-ROOM_W / 2 + 0.3, 2.1, -ROOM_D / 2 + 1.5], [ROOM_W / 2 - 0.3, 2.1, -ROOM_D / 2 + 1.5],
+    [-ROOM_W / 2 + 0.3, 2.1, ROOM_D / 2 - 1.5], [ROOM_W / 2 - 0.3, 2.1, ROOM_D / 2 - 1.5]
+  ];
+  torchOffsets.forEach(function(p) {
+    var light = new THREE.PointLight(0xff8833, 1.5, 8, 2);
+    light.position.set(p[0], p[1], p[2]);
+    light.castShadow = shadowsOn;
+    _room3D.scene.add(light); objs.push(light);
+    var flame = new THREE.Mesh(torchGeo, flameMat);
+    flame.position.copy(light.position);
+    _room3D.scene.add(flame); objs.push(flame);
+    _room3D.torches.push({ light: light, baseIntensity: 1.5, phase: Math.random() * Math.PI * 2 });
+  });
+
+  // Face whichever door the room actually has — layouts are randomized, so a
+  // fixed starting orientation would sometimes face straight into a wall.
+  var yaw = 0;
+  if (cell.doors.S) yaw = Math.PI;
+  else if (cell.doors.E) yaw = Math.PI / 2;
+  else if (cell.doors.N) yaw = 0;
+  else if (cell.doors.W) yaw = -Math.PI / 2;
+  _room3D.yaw = yaw; _room3D.pitch = 0;
+  _room3D.built = true;
+}
+
+function _transition3DRoom(cell) {
+  if (!_room3DWantsVisual() || !_room3D.renderer) return;
+  var fade = document.getElementById('dg-3d-fade');
+  if (fade) fade.style.opacity = '1';
+  setTimeout(function() {
+    _build3DRoom(cell);
+    if (fade) setTimeout(function() { fade.style.opacity = '0'; }, 30);
+  }, 240);
+}
+
+function _bind3DLook(el) {
+  var dragging = false, lastX = 0, lastY = 0, activeId = null;
+  function onMove(x, y) {
+    var dx = x - lastX, dy = y - lastY;
+    lastX = x; lastY = y;
+    _room3D.yaw -= dx * 0.006;
+    _room3D.pitch = Math.max(-1.0, Math.min(1.0, _room3D.pitch - dy * 0.006));
+  }
+  el.addEventListener('touchstart', function(e) {
+    var t = e.changedTouches[0];
+    dragging = true; activeId = t.identifier; lastX = t.clientX; lastY = t.clientY;
+  }, { passive: true });
+  el.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      var t = e.changedTouches[i];
+      if (t.identifier === activeId) onMove(t.clientX, t.clientY);
+    }
+  }, { passive: true });
+  el.addEventListener('touchend', function() { dragging = false; });
+  el.addEventListener('touchcancel', function() { dragging = false; });
+  el.addEventListener('mousedown', function(e) { dragging = true; lastX = e.clientX; lastY = e.clientY; });
+  window.addEventListener('mousemove', function(e) { if (dragging) onMove(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', function() { dragging = false; });
+}
+
+function _start3DLoop() {
+  if (_room3D.raf || !_room3D.renderer) return;
+  var clock = new _room3D.THREE.Clock();
+  var frameCount = 0, fpsAccum = 0;
+  function loop() {
+    _room3D.raf = requestAnimationFrame(loop);
+    var dt = Math.min(clock.getDelta(), 0.1);
+    var t = clock.elapsedTime;
+    var s3 = get3DSettings();
+    if (s3.torchFlicker !== false) {
+      _room3D.torches.forEach(function(tc) {
+        var flick = Math.sin(t * 8 + tc.phase) * 0.15 + Math.sin(t * 23 + tc.phase) * 0.08;
+        tc.light.intensity = tc.baseIntensity + flick;
+      });
+    }
+    _room3D.camera.rotation.order = 'YXZ';
+    _room3D.camera.rotation.y = _room3D.yaw;
+    _room3D.camera.rotation.x = _room3D.pitch;
+    _room3D.renderer.render(_room3D.scene, _room3D.camera);
+    var fpsEl = document.getElementById('dg-3d-fps');
+    if (s3.fpsCounter) {
+      frameCount++; fpsAccum += dt;
+      if (fpsAccum >= 0.5) {
+        if (fpsEl) { fpsEl.style.display = ''; fpsEl.textContent = Math.round(frameCount / fpsAccum) + ' FPS'; }
+        frameCount = 0; fpsAccum = 0;
+      }
+    } else if (fpsEl) { fpsEl.style.display = 'none'; }
+  }
+  loop();
+}
+
+function _stop3DLoop() {
+  if (_room3D.raf) { cancelAnimationFrame(_room3D.raf); _room3D.raf = null; }
+}
+
+function _resize3DView() {
+  if (!_room3D.renderer) return;
+  var wrapEl = document.getElementById('dg-3d-canvas-wrap');
+  if (!wrapEl) return;
+  var w = wrapEl.clientWidth || 300, h = wrapEl.clientHeight || 220;
+  _room3D.camera.aspect = w / h;
+  _room3D.camera.updateProjectionMatrix();
+  _room3D.renderer.setSize(w, h);
 }
 
 function generateFloorRooms() {
@@ -14479,6 +14725,7 @@ function advanceFloor() {
   if (shouldUse3DMode()) {
     generate3DRoomGraph();
     var _newFloorStartCell = DS._roomGraph.cells[_room3DKey(0, 0)];
+    if (_room3D.built) _build3DRoom(_newFloorStartCell);
     setTimeout(function(){ play3DExitCues(_newFloorStartCell); }, 900);
   }
   // Track no-damage floors for achievement
@@ -14649,6 +14896,15 @@ function showDgPanels(nav, combat, inv) {
   if (examBtn) examBtn.style.display = combat ? '' : 'none';
   var eagleBtn2 = document.getElementById('cbtn-eagles-cry');
   if (eagleBtn2) eagleBtn2.style.display = (combat && getActiveEvent() === 'july4') ? '' : 'none';
+  // 3D Mode visual only makes sense during exploration — pause the render
+  // loop the rest of the time so it's not burning battery behind combat/inv.
+  var view3d = document.getElementById('dg-3d-view');
+  if (view3d && typeof _room3DWantsVisual === 'function' && _room3DWantsVisual()) {
+    if (nav) { view3d.style.display = ''; if (!_room3D.built) init3DView(); else _start3DLoop(); }
+    else { view3d.style.display = 'none'; _stop3DLoop(); }
+  } else if (view3d) {
+    view3d.style.display = 'none';
+  }
 }
 
 // ── NAVIGATION ──
