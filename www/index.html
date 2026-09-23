@@ -10857,6 +10857,20 @@ function toggle3DSetting(key) {
   update3DSettingsPanel();
   sfx('sfx-confirm');
   say(key + ' ' + (s[key] ? 'enabled' : 'disabled') + '.');
+  // Torch flicker and the FPS counter are re-read every animation frame, so
+  // those two already take effect immediately. The renderer's shadow map is
+  // only set up once when the 3D scene is first created — flipping the
+  // setting on the WebGLRenderer itself here (and rebuilding the current
+  // room so per-object castShadow/receiveShadow flags match) is what makes
+  // the Shadows toggle actually apply without needing to leave and re-enter
+  // the dungeon.
+  if (key === 'shadows' && _room3D.renderer) {
+    _room3D.renderer.shadowMap.enabled = !!s.shadows;
+    if (DS && DS._roomGraph && DS._gridPos) {
+      var _curCell = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
+      if (_curCell) _build3DRoom(_curCell);
+    }
+  }
 }
 
 function update3DSettingsPanel() {
