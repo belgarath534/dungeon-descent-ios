@@ -7778,6 +7778,15 @@ var DDStore = (function() {
         <span class="settings-cat-arrow" aria-hidden="true">›</span>
       </button>
 
+      <button class="settings-cat-btn" onclick="openSettingsPanel('3dmode')" aria-label="3D Settings — adjust graphics and performance for 3D Mode" id="btn-settings-3dmode" style="display:none;">
+        <span class="settings-cat-icon" aria-hidden="true">🧊</span>
+        <div class="settings-cat-info">
+          <div class="settings-cat-name">3D Settings</div>
+          <div class="settings-cat-desc">Graphics and performance options for 3D Mode</div>
+        </div>
+        <span class="settings-cat-arrow" aria-hidden="true">›</span>
+      </button>
+
       <button class="settings-cat-btn" onclick="openRedeemCode()" aria-label="Redeem Code — enter promo or birthday codes">
         <span class="settings-cat-icon" aria-hidden="true">🎁</span>
         <div class="settings-cat-info">
@@ -7952,6 +7961,24 @@ var DDStore = (function() {
       <div style="font-family:Cinzel,serif;font-size:0.72rem;color:#666;margin-bottom:4px;">🔮 More beta features coming soon</div>
       <div style="font-family:Cinzel,serif;font-size:0.62rem;color:#444;">New experimental features will appear here as they are developed.</div>
     </div>
+  </div>
+</div>
+
+<!-- SETTINGS PANEL: 3D SETTINGS (only reachable while 3D Mode beta is on) -->
+<div class="settings-panel" id="settings-panel-3dmode" role="dialog" aria-modal="true" aria-label="3D Settings">
+  <div class="settings-panel-wrap">
+    <button class="settings-back" onclick="closeSettingsPanel('3dmode')" aria-label="Back to settings">← Back</button>
+    <h2 class="settings-section-title">🧊 3D Settings</h2>
+    <p style="font-family:Cinzel,serif;font-size:0.65rem;color:#555;margin-bottom:18px;line-height:1.8;">Graphics and performance options for 3D Mode. Lower settings run smoother on older phones; higher settings look better on newer ones.</p>
+
+    <div class="setting-label"><span>Shadows</span><button class="toggle-btn" id="td-shadows-toggle" aria-pressed="false" onclick="toggle3DSetting('shadows')">Off</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Real-time torch shadows. Looks better, costs more performance — off by default since it's the single heaviest setting here.</div>
+
+    <div class="setting-label"><span>Torch Flicker</span><button class="toggle-btn on" id="td-flicker-toggle" aria-pressed="true" onclick="toggle3DSetting('torchFlicker')">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Animated flickering torchlight. A small, mostly-free effect — worth leaving on unless you're really scraping for performance.</div>
+
+    <div class="setting-label"><span>FPS Counter</span><button class="toggle-btn" id="td-fps-toggle" aria-pressed="false" onclick="toggle3DSetting('fpsCounter')">Off</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Shows a live frames-per-second counter, useful for judging whether other settings here are actually helping.</div>
   </div>
 </div>
 
@@ -10769,6 +10796,10 @@ function toggleBetaFeature(id) {
   f[id] = !f[id];
   saveBetaFeatures(f);
   updateBetaPanel();
+  if (id === '3dmode') {
+    var td3Btn = document.getElementById('btn-settings-3dmode');
+    if (td3Btn) td3Btn.style.display = f[id] ? '' : 'none';
+  }
   sfx('sfx-confirm');
   say(id + ' beta feature ' + (f[id] ? 'enabled' : 'disabled') + '.');
 }
@@ -10793,6 +10824,37 @@ function updateBetaPanel() {
   if (srNote) {
     srNote.style.display = (ACCESS && ACCESS.srmode) ? 'block' : 'none';
   }
+}
+
+// ── 3D SETTINGS (graphics/performance options for 3D Mode) ──
+function get3DSettings() {
+  return JSON.parse(DDStore.getItem('dd_3d_settings') || '{"shadows":false,"torchFlicker":true,"fpsCounter":false}');
+}
+
+function save3DSettings(s) {
+  DDStore.setItem('dd_3d_settings', JSON.stringify(s));
+}
+
+function toggle3DSetting(key) {
+  var s = get3DSettings();
+  s[key] = !s[key];
+  save3DSettings(s);
+  update3DSettingsPanel();
+  sfx('sfx-confirm');
+  say(key + ' ' + (s[key] ? 'enabled' : 'disabled') + '.');
+}
+
+function update3DSettingsPanel() {
+  var s = get3DSettings();
+  var map = { shadows: 'td-shadows-toggle', torchFlicker: 'td-flicker-toggle', fpsCounter: 'td-fps-toggle' };
+  Object.keys(map).forEach(function(key) {
+    var btn = document.getElementById(map[key]);
+    if (!btn) return;
+    var on = s[key];
+    btn.textContent = on ? 'On' : 'Off';
+    btn.classList.toggle('on', on);
+    btn.setAttribute('aria-pressed', String(on));
+  });
 }
 
 // --════════════════════════
@@ -39062,6 +39124,9 @@ function openSettings() {
   // Hide notification settings on web — only relevant on native app
   var notifBtn = document.getElementById('btn-settings-notifications');
   if (notifBtn) notifBtn.style.display = window.Capacitor ? '' : 'none';
+  // 3D Settings only appears once 3D Mode is turned on in Beta Features
+  var td3Btn = document.getElementById('btn-settings-3dmode');
+  if (td3Btn) td3Btn.style.display = isBetaOn('3dmode') ? '' : 'none';
   // Sync shake toggle to actual saved state
   var shakeBtn = document.getElementById('shake-toggle');
   if (shakeBtn) {
@@ -39088,6 +39153,7 @@ function closeSettings() {
 
 function openSettingsPanel(panel) {
   if (panel === 'beta') updateBetaPanel();
+  if (panel === '3dmode') update3DSettingsPanel();
   if (panel === 'notifications') syncNotifToggleUI();
   var el = document.getElementById('settings-panel-' + panel);
   if (el) el.classList.add('open');
