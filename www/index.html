@@ -1797,7 +1797,7 @@ var DDStore = (function() {
     <!-- Title -->
     <div class="loading-title" data-i18n="game-title" style="font-size:2.4rem;line-height:1.1;margin-bottom:6px;">Dungeon<br>Descent</div>
     <div class="loading-sub" data-i18n="game-subtitle" style="margin-bottom:6px;">Into the dark. Again.</div>
-    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.5</div>
+    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.6</div>
 
     <!-- Loading bar -->
     <div class="loading-bar-wrap">
@@ -1974,7 +1974,7 @@ var DDStore = (function() {
         <span data-i18n="btn-quit">🕯 Quit</span>
       </button>
     </nav>
-    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 5, Release">v11.5 · Release</p>
+    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 6, Release">v11.6 · Release</p>
     <p id="menu-online-count" style="font-family:Cinzel,serif;font-size:0.55rem;color:#444;margin-top:4px;letter-spacing:0.1em;" aria-live="polite" aria-label="Players currently online"></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#ffdd44;margin-top:6px;" aria-label="Your global gold" aria-live="polite"><span data-i18n="lbl-gold">💰 </span><span class="global-gold-display">0</span></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#88ddff;margin-top:2px;" aria-label="Your diamonds" aria-live="polite">💎 <span class="global-diamond-display">0</span></p>
@@ -3483,8 +3483,23 @@ var DDStore = (function() {
       <button class="back-btn" onclick="goTo('menu')" aria-label="Back to main menu">← Menu</button>
       <h2 class="screen-title">What's New</h2>
     </div>
-    <div class="version-block latest" tabindex="0" aria-label="Version 11.5">
-      <div class="version-num">v11.5 — Latest</div>
+    <div class="version-block latest" tabindex="0" aria-label="Version 11.6">
+      <div class="version-num">v11.6 — Latest</div>
+      <div class="version-date">The 3D Mode Update</div>
+      <ul class="version-changes">
+        <li>🧊 3D Mode (Beta) — explore every dungeon in a real 3D rendered view with full spatial audio. Walk between rooms yourself instead of tapping directions, and find the way out by sound and sight. Each dungeon has its own look: ashen lava for the Ashbound Wastes, ice blue for Frosthold Abyss, murky teal for the Sunken Archives, pale bone for the Hollow, mossy green for the Whispering Forest, hellfire red for the Infernal Descent, abyssal blue for the Abyssal Deep, and shadow purple for the Shadow World.</li>
+        <li>🎧 3D Mode works for screen reader players too — it's off by default when a screen reader is active, but you can turn it on yourself in Beta Features for enhanced spatial audio cues layered on top of the normal navigation.</li>
+        <li>⚙ New 3D Settings menu (appears once 3D Mode is on) — toggle Shadows, Torch Flicker, and an FPS Counter to balance visuals against performance on your device.</li>
+        <li>📴 Offline Support — this is an audio-first game, so it should work like one. Every sound effect, music track, and 3D Mode's visuals are now bundled directly into the app instead of streaming over the internet. Full gameplay, full audio, zero connection required.</li>
+        <li>🎖 Achievement Tiers — achievements now unlock in tiers with their own distinct unlock sounds, instead of one generic chime for everything.</li>
+        <li>🔊 Sound Overhaul — dozens of new and re-sourced sound effects across the game: per-dungeon enemy and boss combat stingers, core UI and gameplay sfx, Library narration, and a fixed footstep sound that was silently broken.</li>
+        <li>🐛 Fixed 6 music tracks that were silently broken — several dungeon battle themes (including Crypt of Malachar, the Ashbound Wastes, and Frosthold Abyss), the AFK theme, and the Christmas menu theme were corrupted files years oversized for what they should have been, tripping a safety limit and simply never playing. They're fixed and properly compressed now.</li>
+        <li>🐛 Fixed the shop's Refresh Items button crashing.</li>
+        <li>📜 Credits screen now properly attributes CC0 sound sources.</li>
+      </ul>
+    </div>
+    <div class="version-block" tabindex="0" aria-label="Version 11.5">
+      <div class="version-num">v11.5</div>
       <div class="version-date">The Elixir Update</div>
       <ul class="version-changes">
         <li>🧪 Elixirs go to inventory — buying an elixir from the shop no longer uses it immediately. It goes to your Potions tab to save for when you need it most.</li>
@@ -8135,7 +8150,7 @@ var DDStore = (function() {
     <!-- Game Version -->
     <div class="access-option" style="cursor:default;">
       <div class="access-option-label">Game Version</div>
-      <div class="access-option-desc" id="general-version-display">Dungeon Descent v11.5</div>
+      <div class="access-option-desc" id="general-version-display">Dungeon Descent v11.6</div>
     </div>
 
     <!-- Command Center Toggle -->
@@ -41335,7 +41350,7 @@ function devResetSRPrompt() {
 }
 
 // ── WHATS NEW ──
-var CURRENT_VERSION = '11.5';
+var CURRENT_VERSION = '11.6';
 function checkWhatsNew() {
   // Update ALL version displays from single source of truth
   var vtag = document.querySelector('.version-tag');
@@ -59921,6 +59936,27 @@ function spireReturnToMenu() {
 
 
 <!-- v10.7 UPDATE POPUP -->
+<div id="v116-popup" role="dialog" aria-modal="true" aria-label="Version 11.6 update" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99010;align-items:center;justify-content:center;padding:20px;">
+  <div style="max-width:420px;width:100%;background:#000808;border:2px solid #00aacc;padding:28px;text-align:center;max-height:90vh;overflow-y:auto;">
+    <div style="font-size:1.6rem;margin-bottom:12px;" aria-hidden="true">🧊</div>
+    <div style="font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.4em;color:#00aacc;text-transform:uppercase;margin-bottom:8px;">Version 11.6</div>
+    <h2 style="font-family:Cinzel,serif;font-size:1.1rem;color:#33ccee;margin-bottom:6px;">The 3D Mode Update</h2>
+    <div style="width:50px;height:1px;background:linear-gradient(90deg,transparent,#00aacc,transparent);margin:0 auto 20px;"></div>
+    <div style="text-align:left;font-family:Cinzel,serif;font-size:0.7rem;color:#888;line-height:1.9;margin-bottom:20px;">
+      <div style="color:#33ccee;margin-bottom:6px;">🧊 3D Mode (Beta) — Every Dungeon</div>
+      Walk the dungeon in a real 3D rendered view with full spatial audio instead of tapping directions. Each dungeon has its own look and lighting — turn it on in Beta Features.<br><br>
+      <div style="color:#33ccee;margin-bottom:6px;">🎧 Built for Screen Readers Too</div>
+      3D Mode stays off by default with a screen reader active, but you can opt in yourself for enhanced spatial audio cues on top of normal navigation.<br><br>
+      <div style="color:#33ccee;margin-bottom:6px;">📴 Offline Support</div>
+      This is an audio-first game — it should work like one. Every sound and 3D Mode's visuals are now bundled into the app. Full gameplay, full audio, zero connection required.<br><br>
+      <div style="color:#33ccee;margin-bottom:6px;">🎖 Achievement Tiers + Sound Overhaul</div>
+      Achievements now unlock in tiers with their own sounds. Dozens of new and fixed sound effects across the game, including several dungeon battle themes that were silently broken.<br><br>
+      <div style="color:#555;font-size:0.62rem;">+ Shop Refresh Items crash fixed. Credits screen now credits CC0 sound sources.</div>
+    </div>
+    <button type="button" onclick="dismissV116Popup()" style="width:100%;padding:14px;background:#000808;border:2px solid #00aacc;color:#33ccee;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;" aria-label="Got it — explore the dungeon in 3D">🧊 Step Into the Dark. Descend.</button>
+  </div>
+</div>
+
 <div id="v115-popup" role="dialog" aria-modal="true" aria-label="Version 11.5 update" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99009;align-items:center;justify-content:center;padding:20px;">
   <div style="max-width:420px;width:100%;background:#010408;border:2px solid #2255cc;padding:28px;text-align:center;max-height:90vh;overflow-y:auto;">
     <div style="font-size:1.6rem;margin-bottom:12px;" aria-hidden="true">🧪</div>
@@ -62032,6 +62068,25 @@ function handleHardcoreDeath() {
 // ── END COMPANION SYSTEM ──
 
 // -- v11.0 UPDATE POPUP --
+function showV116PopupIfNeeded() {
+  if (DDStore.getItem('dd_v116_seen')) return;
+  var el = document.getElementById('v116-popup');
+  if (!el) return;
+  el.style.display = 'flex';
+  setTimeout(function() {
+    var btn = el.querySelector('button');
+    if (btn) btn.focus();
+  }, 300);
+}
+
+function dismissV116Popup() {
+  DDStore.setItem('dd_v116_seen', '1');
+  var el = document.getElementById('v116-popup');
+  if (el) el.style.display = 'none';
+  say('Welcome to version 11.6. 3D Mode is here, and the whole game now works offline. Descend.');
+  showV115PopupIfNeeded();
+}
+
 function showV115PopupIfNeeded() {
   if (DDStore.getItem('dd_v115_seen')) return;
   var el = document.getElementById('v115-popup');
@@ -62346,8 +62401,8 @@ window.addEventListener('load', function() {
     DDStore.setItem('dd_v112_seen', '1');
     DDStore.setItem('dd_v113_seen', '1');
     DDStore.setItem('dd_v114_seen', '1');
-    // Show v11.5 popup
-    showV115PopupIfNeeded();
+    // Show v11.6 popup (chains down through any older unseen popups on dismiss)
+    showV116PopupIfNeeded();
   }, 500);
 });
 // ── END v10.2 UPDATE POPUP ──
