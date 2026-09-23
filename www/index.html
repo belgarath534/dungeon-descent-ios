@@ -13040,16 +13040,24 @@ var SPECIAL_ROOMS = [
 // Wall/floor/ceiling/torch/fog palette per dungeon — keeps the same room
 // geometry and gameplay everywhere, just re-skinned to match each
 // dungeon's identity instead of every dungeon looking like crypt stone.
+// Brightness note: an early build of these themes rendered far too dark on
+// a real phone screen — moody in a Three.js preview, but on-device the
+// rooms read as almost pure black with two faint torch dots, indistinguish-
+// able from "nothing rendered". Fixed by roughly doubling the wall/floor/
+// ceiling base colors (MeshStandardMaterial needs real light to reflect;
+// very dark base colors plus modest lighting just look black) and boosting
+// ambient/torch light intensity in _setup3DScene/_build3DRoom below. Keep
+// new theme colors and light levels in this brighter range.
 var ROOM3D_THEMES = {
-  'Crypt of Malachar':   { wall:0x3a352e, floor:0x2a2620, ceil:0x1a1712, torch:0xff8833, fog:0x000000, fogDensity:0.090, ambient:0x1a1510 },
-  'The Ashbound Wastes': { wall:0x2e211c, floor:0x1f1512, ceil:0x140d0a, torch:0xff4411, fog:0x1a0800, fogDensity:0.100, ambient:0x241008 },
-  'Frosthold Abyss':     { wall:0x3a4a55, floor:0x2a3a45, ceil:0x1a2530, torch:0x88ccff, fog:0x0a1520, fogDensity:0.080, ambient:0x101f28 },
-  'The Sunken Archives': { wall:0x2a3a35, floor:0x1a2a25, ceil:0x101a18, torch:0x44ccaa, fog:0x001510, fogDensity:0.120, ambient:0x082018 },
-  'The Hollow':          { wall:0x4a453f, floor:0x35302a, ceil:0x201d1a, torch:0xccccdd, fog:0x1a1a1f, fogDensity:0.090, ambient:0x1c1c22 },
-  'The Whispering Forest': { wall:0x2f3a25, floor:0x22281a, ceil:0x161a10, torch:0x88cc44, fog:0x0a1005, fogDensity:0.100, ambient:0x141c0a },
-  'The Infernal Descent': { wall:0x3a1510, floor:0x2a0d08, ceil:0x1a0805, torch:0xff2200, fog:0x150300, fogDensity:0.110, ambient:0x280800 },
-  'The Abyssal Deep':    { wall:0x151a2a, floor:0x0d101c, ceil:0x080a12, torch:0x2299ff, fog:0x02040a, fogDensity:0.130, ambient:0x081020 },
-  'The Shadow World':    { wall:0x1a1520, floor:0x100d15, ceil:0x0a080d, torch:0x8844cc, fog:0x0a0510, fogDensity:0.100, ambient:0x140c1c }
+  'Crypt of Malachar':   { wall:0x5a544a, floor:0x453f36, ceil:0x2e2822, torch:0xff8833, fog:0x000000, fogDensity:0.070, ambient:0x3a3025 },
+  'The Ashbound Wastes': { wall:0x4a352a, floor:0x352520, ceil:0x241813, torch:0xff4411, fog:0x1a0800, fogDensity:0.080, ambient:0x3a1c10 },
+  'Frosthold Abyss':     { wall:0x5a7080, floor:0x455a68, ceil:0x2e3d48, torch:0x88ccff, fog:0x0a1520, fogDensity:0.065, ambient:0x25384a },
+  'The Sunken Archives': { wall:0x455a52, floor:0x30453d, ceil:0x22322c, torch:0x44ccaa, fog:0x001510, fogDensity:0.095, ambient:0x1a3830 },
+  'The Hollow':          { wall:0x6a655a, floor:0x50493e, ceil:0x38332c, torch:0xccccdd, fog:0x1a1a1f, fogDensity:0.070, ambient:0x36363e },
+  'The Whispering Forest': { wall:0x4a5a3a, floor:0x3a422a, ceil:0x28301c, torch:0x88cc44, fog:0x0a1005, fogDensity:0.080, ambient:0x2a3818 },
+  'The Infernal Descent': { wall:0x5c2418, floor:0x452012, ceil:0x2e1208, torch:0xff2200, fog:0x150300, fogDensity:0.090, ambient:0x431408 },
+  'The Abyssal Deep':    { wall:0x2a3450, floor:0x1e2438, ceil:0x161c2a, torch:0x2299ff, fog:0x02040a, fogDensity:0.105, ambient:0x18243c },
+  'The Shadow World':    { wall:0x342a3e, floor:0x261f2e, ceil:0x1c1722, torch:0x8844cc, fog:0x0a0510, fogDensity:0.080, ambient:0x2c1c3a }
 };
 function _room3DTheme() {
   return (DS && ROOM3D_THEMES[DS.dungeon]) || ROOM3D_THEMES['Crypt of Malachar'];
@@ -13300,7 +13308,7 @@ function _setup3DScene(THREE) {
   wrapEl.innerHTML = '';
   wrapEl.appendChild(renderer.domElement);
   _room3D.scene = scene; _room3D.camera = camera; _room3D.renderer = renderer;
-  var ambient = new THREE.AmbientLight(theme.ambient, 0.6);
+  var ambient = new THREE.AmbientLight(theme.ambient, 1.4);
   scene.add(ambient);
   _room3D.ambient = ambient;
   _room3D.themeDungeon = DS.dungeon;
@@ -13396,14 +13404,14 @@ function _build3DRoom(cell) {
     [-ROOM_W / 2 + 0.3, 2.1, ROOM_D / 2 - 1.5], [ROOM_W / 2 - 0.3, 2.1, ROOM_D / 2 - 1.5]
   ];
   torchOffsets.forEach(function(p) {
-    var light = new THREE.PointLight(theme.torch, 1.5, 8, 2);
+    var light = new THREE.PointLight(theme.torch, 2.6, 11, 1.5);
     light.position.set(p[0], p[1], p[2]);
     light.castShadow = shadowsOn;
     _room3D.scene.add(light); objs.push(light);
     var flame = new THREE.Mesh(torchGeo, flameMat);
     flame.position.copy(light.position);
     _room3D.scene.add(flame); objs.push(flame);
-    _room3D.torches.push({ light: light, baseIntensity: 1.5, phase: Math.random() * Math.PI * 2 });
+    _room3D.torches.push({ light: light, baseIntensity: 2.6, phase: Math.random() * Math.PI * 2 });
   });
 
   // Face whichever door the room actually has — layouts are randomized, so a
