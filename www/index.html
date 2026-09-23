@@ -19190,8 +19190,8 @@ function renderShopItems() {
       '<div class="shop-item-info"><div class="shop-item-name">' + t(item.name) + '</div><div class="shop-item-desc">' + t(item.desc) + '</div></div>' +
       '<span class="shop-item-cost">' + (item.sold ? '✓ ' + t('Sold') : finalCost + 'g') + '</span>';
     if (!item.sold) {
-      div.onclick = function() { buyShopItem(i); };
-      div.onkeydown = function(e) { if (e.key === 'Enter' || e.key === ' ') buyShopItem(i); };
+      div.onclick = function() { buyItem(i); };
+      div.onkeydown = function(e) { if (e.key === 'Enter' || e.key === ' ') buyItem(i); };
     }
     list.appendChild(div);
   });
