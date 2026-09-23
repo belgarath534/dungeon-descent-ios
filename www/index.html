@@ -5699,11 +5699,11 @@ var DDStore = (function() {
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">Beta Features</div>
-        <div class="help-body">Found in Settings under Beta Features. These are experimental systems that can be toggled on or off. Currently one beta feature exists — the Subclass System. When enabled, at level 5 you are prompted to choose a subclass that specializes your character for the rest of the run. Toggle it off at any time to return to normal gameplay.</div>
+        <div class="help-body">Found in Settings under Beta Features. Experimental systems that can be toggled on or off, still being tested and may change in future updates. No beta features are active right now — new experimental systems will appear here as they are developed.</div>
       </div>
       <div class="help-entry" tabindex="0">
-        <div class="help-title" role="heading" aria-level="2">Subclass System (Beta)</div>
-        <div class="help-body">At level 5 a subclass selection screen appears. Every class has 2 subclasses to choose from. Your choice is permanent for that run and cannot be changed. Each subclass gives a unique passive ability, automatic stat bonuses, and changes how your class plays. Examples — Warrior can become a Warlord (gains ATK every kill) or Gladiator (crits hit 2.5x harder). Wizard can become Archmage (more SP, cheaper skills) or Spellblade (melee deals arcane damage). Assassin can become Shadow (guaranteed first crit every combat) or Poisoner (every attack poisons). Your subclass name appears next to your class in the dungeon top bar. Requires Beta Features to be enabled in Settings.</div>
+        <div class="help-title" role="heading" aria-level="2">Subclass System</div>
+        <div class="help-body">At level 5 a subclass selection screen appears. Every class has 2 subclasses to choose from. Your choice is permanent for that run and cannot be changed. Each subclass gives a unique passive ability, automatic stat bonuses, and changes how your class plays. Examples — Warrior can become a Warlord (gains ATK every kill) or Gladiator (crits hit 2.5x harder). Wizard can become Archmage (more SP, cheaper skills) or Spellblade (melee deals arcane damage). Assassin can become Shadow (guaranteed first crit every combat) or Poisoner (every attack poisons). Your subclass name appears next to your class in the dungeon top bar.</div>
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">6 Stats — Level Point System</div>
@@ -7934,18 +7934,6 @@ var DDStore = (function() {
     <button class="settings-back" onclick="closeSettingsPanel('beta')" aria-label="Back to settings">← Back</button>
     <h2 class="settings-section-title">🧪 Beta Features</h2>
     <p style="font-family:Cinzel,serif;font-size:0.65rem;color:#555;margin-bottom:18px;line-height:1.8;">These features are experimental and still being tested. Turn them on to try them out. They may change or be removed in future updates.</p>
-
-    <!-- Subclass System -->
-    <div style="background:#080808;border:1px solid #1a2a1a;padding:14px;margin-bottom:10px;border-radius:2px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-        <div>
-          <div style="font-family:Cinzel,serif;font-size:0.72rem;color:#44ff88;margin-bottom:4px;">⚔️ Subclass System</div>
-          <div style="font-family:Cinzel,serif;font-size:0.62rem;color:#555;line-height:1.7;">At level 5 choose a subclass that specializes your character. Each class has 2 unique subclasses with exclusive passives and skills.</div>
-        </div>
-        <button id="beta-subclass-toggle" onclick="toggleBetaFeature('subclass')" style="padding:8px 14px;background:#0a1a0a;border:1px solid #44aa44;color:#44ff88;font-family:Cinzel,serif;font-size:0.65rem;cursor:pointer;margin-left:12px;flex-shrink:0;border-radius:2px;" aria-label="Toggle subclass system">ON</button>
-      </div>
-      <div id="beta-subclass-status" style="font-family:Cinzel,serif;font-size:0.6rem;color:#44aa44;font-style:italic;" aria-live="polite">Active — subclass choice appears at level 5.</div>
-    </div>
 
     <div style="background:#080808;border:1px solid #222;padding:14px;margin-bottom:10px;border-radius:2px;opacity:0.5;">
       <div style="font-family:Cinzel,serif;font-size:0.72rem;color:#666;margin-bottom:4px;">🔮 More beta features coming soon</div>
@@ -10773,21 +10761,8 @@ function toggleBetaFeature(id) {
 }
 
 function updateBetaPanel() {
-  var f = getBetaFeatures();
-  var btn = document.getElementById('beta-subclass-toggle');
-  var status = document.getElementById('beta-subclass-status');
-  if (btn) {
-    btn.textContent = f.subclass !== false ? 'ON' : 'OFF';
-    btn.style.borderColor = f.subclass !== false ? '#44aa44' : '#444';
-    btn.style.color = f.subclass !== false ? '#44ff88' : '#666';
-    btn.style.background = f.subclass !== false ? '#0a1a0a' : '#080808';
-  }
-  if (status) {
-    status.textContent = f.subclass !== false
-      ? 'Active — subclass choice appears at level 5.'
-      : 'Disabled — normal gameplay, no subclass choice.';
-    status.style.color = f.subclass !== false ? '#44aa44' : '#555';
-  }
+  // Subclass System graduated out of Beta — no toggles to sync right now.
+  // Future beta features (e.g. 3D Mode) will sync their UI here.
 }
 
 // --════════════════════════
@@ -11078,7 +11053,6 @@ var SUBCLASSES = {
 function getActiveSubclass() { return DS._subclass || null; }
 
 function showSubclassChoice() {
-  if (!isBetaOn('subclass')) return;
   if (DS._subclass) return; // already chosen
   var options = SUBCLASSES[DS.cls];
   if (!options || options.length === 0) return;
@@ -22508,7 +22482,7 @@ function triggerLevelUp() {
   if (lvlOv) lvlOv.classList.add('open');
   say('Level up! You are now level ' + DS.level + '. You have ' + DS.levelPoints + ' Level Points. Spend them to increase your stats. Unspent points carry over.');
   // Show subclass choice at level 5
-  if (DS.level === 5 && isBetaOn('subclass') && !DS._subclass) {
+  if (DS.level === 5 && !DS._subclass) {
     setTimeout(function(){ showSubclassChoice(); }, 500);
   }
   addRunLog('Reached level ' + DS.level, 'good');
@@ -26846,9 +26820,9 @@ var T = {
     'Active July 1st through July 7th. All gold and XP drops are increased by 76 percent as a nod to 1776. Redcoat enemies invade all dungeons during the event. Enemies have a 15 percent chance to drop a Firework item — use it in combat for 80 plus level times 5 unblockable AoE damage. Every 3rd attack triggers the Sparkler buff dealing bonus fire damage equal to your level times 2.5. Eagle\'s Cry skill reduces enemy attack by 30 percent for 3 turns. The Fireworks Corner appears at Home — launch fireworks to earn bonus XP. The Independence Tournament sets a personal score target — reach it for first place gold and trophies. Type the number 4 in the Redeem Code box for a secret exclusive patriot minion only available during this event.': 'Ativo de 1 a 7 de julho. Todo ouro e XP obtidos são aumentados em 76 por cento em homenagem a 1776. Inimigos Casaca Vermelha invadem todas as masmorras durante o evento. Inimigos têm 15 por cento de chance de soltar um item Fogo de Artifício — use em combate para causar 80 mais o nível vezes 5 de dano em área imbloqueável. Cada 3º ataque ativa o bônus Vela Luminosa causando dano de fogo bônus igual ao seu nível vezes 2,5. A habilidade Grito da Águia reduz o ataque do inimigo em 30 por cento por 3 turnos. O Canto dos Fogos aparece na Casa — solte fogos de artifício para ganhar XP bônus. O Torneio da Independência define uma meta de pontuação pessoal — alcance-a para ouro e troféus de primeiro lugar. Digite o número 4 na caixa de Resgatar Código para um servo patriota secreto exclusivo disponível apenas durante este evento.',
     'Found in the main menu. The Siege is a fortress defense mode where you defend your base against 10 waves of enemies. Your base has durability instead of HP — if it reaches zero you lose. Before battle upgrade your base using gold and Wave Points. Your character gets a 20 percent HP bonus when entering The Siege. If your HP drops below 50, the enemy switches from attacking you to attacking your base. Heal up fast or your base will fall. Each wave the enemy is 20 percent stronger. Defeat enemies to earn gold and Wave Points — Wave Points are earned by dealing 50 or more damage per wave. Use the Repair Kit between runs to restore base durability. Upgrade your base to level 5 to increase maximum durability. Station captured minions to fight alongside you. If you lose your base falls back to 50 percent durability but you keep your level and Wave Points.': 'Encontrado no menu principal. O Cerco é um modo de defesa de fortaleza onde você defende sua base contra 10 ondas de inimigos. Sua base tem durabilidade em vez de HP — se chegar a zero você perde. Antes da batalha melhore sua base usando ouro e Pontos de Onda. Seu personagem recebe um bônus de 20 por cento de HP ao entrar no Cerco. Se seu HP cair abaixo de 50, o inimigo muda de te atacar para atacar sua base. Cure-se rápido ou sua base vai cair. A cada onda o inimigo fica 20 por cento mais forte. Derrote inimigos para ganhar ouro e Pontos de Onda — Pontos de Onda são ganhos causando 50 ou mais de dano por onda. Use o Kit de Reparo entre partidas para restaurar a durabilidade da base. Melhore sua base até o nível 5 para aumentar a durabilidade máxima. Estacione servos capturados para lutar ao seu lado. Se você perder, sua base cai para 50 por cento de durabilidade mas você mantém seu nível e Pontos de Onda.',
     'Found in the main menu. The Bounty Board presents 3 randomly generated bounties per day. Each bounty has a target objective, a specific dungeon, and a gold and trophy reward. Register for one bounty at a time by pressing the Register button. Your active bounty tracks progress automatically as you play — kills, floor reached, and boss defeats all count. Complete the bounty to instantly receive your reward. You can refresh the 3 bounties up to 5 times per day. You do not have to accept any bounty — it is completely optional. Abandon a bounty at any time from the Bounty Board screen.': 'Encontrado no menu principal. O Quadro de Recompensas apresenta 3 recompensas geradas aleatoriamente por dia. Cada recompensa tem um objetivo alvo, uma masmorra específica e uma recompensa de ouro e troféus. Registre-se para uma recompensa por vez pressionando o botão Registrar. Sua recompensa ativa rastreia o progresso automaticamente enquanto você joga — abates, andar alcançado e derrotas de chefe todos contam. Complete a recompensa para receber sua recompensa instantaneamente. Você pode atualizar as 3 recompensas até 5 vezes por dia. Você não precisa aceitar nenhuma recompensa — é completamente opcional. Abandone uma recompensa a qualquer momento na tela do Quadro de Recompensas.',
-    'Found in Settings under Beta Features. These are experimental systems that can be toggled on or off. Currently one beta feature exists — the Subclass System. When enabled, at level 5 you are prompted to choose a subclass that specializes your character for the rest of the run. Toggle it off at any time to return to normal gameplay.': 'Encontrado em Configurações em Recursos Beta. Estes são sistemas experimentais que podem ser ativados ou desativados. Atualmente existe um recurso beta — o Sistema de Subclasses. Quando ativado, no nível 5 você é solicitado a escolher uma subclasse que especializa seu personagem pelo resto da partida. Desative a qualquer momento para voltar à jogabilidade normal.',
-    'Subclass System (Beta)': 'Sistema de Subclasses (Beta)',
-    'At level 5 a subclass selection screen appears. Every class has 2 subclasses to choose from. Your choice is permanent for that run and cannot be changed. Each subclass gives a unique passive ability, automatic stat bonuses, and changes how your class plays. Examples — Warrior can become a Warlord (gains ATK every kill) or Gladiator (crits hit 2.5x harder). Wizard can become Archmage (more SP, cheaper skills) or Spellblade (melee deals arcane damage). Assassin can become Shadow (guaranteed first crit every combat) or Poisoner (every attack poisons). Your subclass name appears next to your class in the dungeon top bar. Requires Beta Features to be enabled in Settings.': 'No nível 5 uma tela de seleção de subclasse aparece. Toda classe tem 2 subclasses para escolher. Sua escolha é permanente para aquela partida e não pode ser mudada. Cada subclasse dá uma habilidade passiva única, bônus automáticos de atributos, e muda como sua classe joga. Exemplos — Guerreiro pode se tornar Senhor da Guerra (ganha ATQ a cada abate) ou Gladiador (críticos batem 2,5x mais forte). Mago pode se tornar Arquimago (mais SP, habilidades mais baratas) ou Lâmina Arcana (corpo a corpo causa dano arcano). Assassino pode se tornar Sombra (crítico garantido no primeiro golpe de cada combate) ou Envenenador (cada ataque envenena). O nome da sua subclasse aparece ao lado da sua classe na barra superior da masmorra. Requer que Recursos Beta esteja ativado em Configurações.',
+    'Found in Settings under Beta Features. Experimental systems that can be toggled on or off, still being tested and may change in future updates. No beta features are active right now — new experimental systems will appear here as they are developed.': 'Encontrado em Configurações em Recursos Beta. Sistemas experimentais que podem ser ativados ou desativados, ainda em teste e sujeitos a mudanças em atualizações futuras. Nenhum recurso beta está ativo no momento — novos sistemas experimentais aparecerão aqui conforme forem desenvolvidos.',
+    'At level 5 a subclass selection screen appears. Every class has 2 subclasses to choose from. Your choice is permanent for that run and cannot be changed. Each subclass gives a unique passive ability, automatic stat bonuses, and changes how your class plays. Examples — Warrior can become a Warlord (gains ATK every kill) or Gladiator (crits hit 2.5x harder). Wizard can become Archmage (more SP, cheaper skills) or Spellblade (melee deals arcane damage). Assassin can become Shadow (guaranteed first crit every combat) or Poisoner (every attack poisons). Your subclass name appears next to your class in the dungeon top bar.': 'No nível 5 uma tela de seleção de subclasse aparece. Toda classe tem 2 subclasses para escolher. Sua escolha é permanente para aquela partida e não pode ser mudada. Cada subclasse dá uma habilidade passiva única, bônus automáticos de atributos, e muda como sua classe joga. Exemplos — Guerreiro pode se tornar Senhor da Guerra (ganha ATQ a cada abate) ou Gladiador (críticos batem 2,5x mais forte). Mago pode se tornar Arquimago (mais SP, habilidades mais baratas) ou Lâmina Arcana (corpo a corpo causa dano arcano). Assassino pode se tornar Sombra (crítico garantido no primeiro golpe de cada combate) ou Envenenador (cada ataque envenena). O nome da sua subclasse aparece ao lado da sua classe na barra superior da masmorra.',
+    'Subclass System': 'Sistema de Subclasses',
     '6 Stats — Level Point System': '6 Atributos — Sistema de Pontos de Nível',
     'Every level up gives 3 points to spend across 6 stats. STR Strength adds 2 ATK. STA Stamina adds 10 max HP. DEF Defense adds 2 damage reduction. INT Intelligence adds 5 max SP. AGI Agility adds 3 percent crit chance and 5 percent flee chance. LCK Luck adds 10 percent gold drops. Unspent points carry over between levels. Subclasses at level 5 also grant automatic stat bonuses based on their specialization.': 'Cada subida de nível dá 3 pontos para gastar em 6 atributos. STR Força adiciona 2 ATQ. STA Vigor adiciona 10 de HP máximo. DEF Defesa adiciona 2 de redução de dano. INT Inteligência adiciona 5 de SP máximo. AGI Agilidade adiciona 3 por cento de chance de crítico e 5 por cento de chance de fuga. LCK Sorte adiciona 10 por cento de ouro obtido. Pontos não gastos são mantidos entre níveis. Subclasses no nível 5 também concedem bônus automáticos de atributos baseados em sua especialização.',
     'Hall of Records and Hall of Legends': 'Salão dos Registros e Salão das Lendas',
