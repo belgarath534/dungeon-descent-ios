@@ -9395,7 +9395,13 @@ function goTo(id) {
   if (id === 'dungeon') {
     document.getElementById('dg-end').style.display = 'none';
     setTimeout(function(){ if (DS && !DS._floorRoomSequence) generateFloorRooms(); }, 100);
-    setTimeout(function(){ if (DS && shouldUse3DMode() && !DS._roomGraph) generate3DRoomGraph(); }, 100);
+    setTimeout(function(){
+      if (DS && shouldUse3DMode() && !DS._roomGraph) generate3DRoomGraph();
+      if (DS && shouldUse3DMode() && DS._roomGraph) {
+        var startCell = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
+        setTimeout(function(){ play3DExitCues(startCell); }, 700);
+      }
+    }, 100);
     setTimeout(function(){ try { initHomeButton(); } catch(e){} }, 200);
     keepAwakeOn(); // screen stays on during dungeon runs
   }
@@ -13003,7 +13009,13 @@ var ROOM3D_DIRS = [
 // this is the same algorithm validated in the 3D Mode proof-of-concept
 // (200/200 generated layouts: fully connected, doors consistent both sides).
 function generate3DRoomGraph() {
-  var total = Math.max(2, DS.floorRoomsNeeded || 6);
+  // +1: the starting cell is pre-marked visited (the player didn't "enter" it,
+  // they just start there) and never calls enterRoom(), so it never counts
+  // toward DS.roomsOnFloor. Without the +1, the graph would only ever contain
+  // floorRoomsNeeded-1 enterable rooms — exploring all of them would leave
+  // roomsOnFloor permanently one short of the floor-complete threshold, a
+  // soft-lock with nowhere left to walk and no way to trigger completion.
+  var total = Math.max(2, (DS.floorRoomsNeeded || 6) + 1);
   var cells = {};
   var order = [];
   var startKey = _room3DKey(0, 0);
@@ -13076,6 +13088,7 @@ function moveRoom3D(dir) {
   if (!d || !cur || !cur.doors[d]) {
     sfx('sfx-heavy-miss');
     say('There is a wall to the ' + dir + '. ' + (cur ? _room3DExitsText(cur) : ''));
+    if (cur) play3DExitCues(cur);
     return;
   }
   var delta = ROOM3D_DIRS.filter(function(x){ return x.name === d; })[0];
@@ -13103,7 +13116,64 @@ function moveRoom3D(dir) {
   } else {
     say('Moving ' + dir + '. You are back in a room you already cleared. ' + exitText);
   }
+  play3DExitCues(target);
   hunterTurn(false);
+}
+
+// ── 3D MODE — DIRECTIONAL AUDIO CUES ──
+// Speech already tells the player which directions have doors ("Doors to the
+// north and east"); this adds a second, faster-to-parse signal on top —
+// reuses the exact Web Audio pattern the Stalker Floor growl already proved
+// out (StereoPannerNode, works reliably on iOS with headphones), but as a
+// short one-shot "blip" per open door instead of a continuous loop. Since
+// this text game has no camera "facing" to base left/right on, directions
+// map onto a fixed convention: West = panned left, East = panned right,
+// North = center but pitched up ("ahead"), South = center but pitched down
+// ("behind") — four audibly distinct signatures from one short sound.
+var _room3DBlipBuffer = null;
+var ROOM3D_DOOR_AUDIO = { N:{pan:0,pitch:1.18}, S:{pan:0,pitch:0.82}, E:{pan:0.8,pitch:1.0}, W:{pan:-0.8,pitch:1.0} };
+
+function _load3DBlipBuffer() {
+  if (_room3DBlipBuffer) return Promise.resolve(_room3DBlipBuffer);
+  if (!window.AUD || !AUD.ctx) return Promise.resolve(null);
+  return fetch(_audioUrl('sfx-hover.mp3')).then(function(r) { return r.arrayBuffer(); })
+    .then(function(buf) { return AUD.ctx.decodeAudioData(buf); })
+    .then(function(buffer) { _room3DBlipBuffer = buffer; return buffer; })
+    .catch(function(e) { console.warn('[DD] 3D exit blip load failed:', e); return null; });
+}
+
+function _play3DBlip(pan, pitch, delaySec) {
+  if (!window.AUD || !AUD.ctx || !_room3DBlipBuffer) return;
+  try {
+    if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
+    var source = AUD.ctx.createBufferSource();
+    source.buffer = _room3DBlipBuffer;
+    source.playbackRate.value = pitch;
+    var panner = AUD.ctx.createStereoPanner ? AUD.ctx.createStereoPanner() : null;
+    var gainNode = AUD.ctx.createGain();
+    gainNode.gain.value = (AUD.sfxVol || 0.8) * 0.7;
+    source.connect(gainNode);
+    if (panner) { panner.pan.value = pan; gainNode.connect(panner); panner.connect(AUD.ctx.destination); }
+    else { gainNode.connect(AUD.ctx.destination); }
+    source.start(AUD.ctx.currentTime + Math.max(0, delaySec));
+  } catch(e) {}
+}
+
+// Plays one panned/pitched blip per open door in the given room, staggered
+// slightly so each direction is distinguishable rather than one blended chord.
+function play3DExitCues(cell) {
+  if (!cell || !shouldUse3DMode()) return;
+  _load3DBlipBuffer().then(function(buf) {
+    if (!buf) return;
+    var i = 0;
+    ROOM3D_DIRS.forEach(function(d) {
+      if (cell.doors[d.name]) {
+        var cfg = ROOM3D_DOOR_AUDIO[d.name];
+        _play3DBlip(cfg.pan, cfg.pitch, i * 0.16);
+        i++;
+      }
+    });
+  });
 }
 
 function generateFloorRooms() {
@@ -14406,7 +14476,11 @@ function advanceFloor() {
   }
   // Generate procedural room sequence for this floor
   generateFloorRooms();
-  if (shouldUse3DMode()) generate3DRoomGraph();
+  if (shouldUse3DMode()) {
+    generate3DRoomGraph();
+    var _newFloorStartCell = DS._roomGraph.cells[_room3DKey(0, 0)];
+    setTimeout(function(){ play3DExitCues(_newFloorStartCell); }, 900);
+  }
   // Track no-damage floors for achievement
   if (DS.hpAtFloorStart && DS.hp >= DS.hpAtFloorStart) {
     incrementAchievementStat('noDmgFloors', 1);
