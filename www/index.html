@@ -2076,6 +2076,13 @@ var DDStore = (function() {
     <!-- Multiplayer lobby panel -->
     <div id="hs-mp-lobby" style="display:none;">
       <p class="screen-subtitle">Up to 5 players. Everyone shares hiding spots and can rescue each other if caught — but the Darkness Swallower only needs to catch everyone once.</p>
+      <!-- Character picker — only shown when the player has saved characters to choose from -->
+      <div id="hs-mp-char-section" style="display:none;margin-bottom:16px;">
+        <div style="font-family:Cinzel,serif;font-size:0.65rem;letter-spacing:0.2em;color:var(--gold-dim);margin-bottom:10px;">PLAY AS</div>
+        <div id="hs-mp-char-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+      <div id="hs-mp-selected-char" style="display:none;font-family:Cinzel,serif;font-size:0.7rem;color:#88aaff;border:1px solid #4466ff44;padding:10px 14px;margin-bottom:16px;"></div>
+
       <div style="display:flex;gap:8px;margin:12px 0;">
         <button class="btn-gold" onclick="hsMpCreateRoom()" id="hs-mp-create-btn" aria-label="Create a new Hide and Seek room and get a code to share" style="flex:1;">🏟️ Create Room</button>
       </div>
@@ -43268,7 +43275,7 @@ function hsShowMpLobby() {
     return;
   }
   _hsMP = { myId: mpGenId(), myName: _hsMpName(), code: null, roomRef: null, roomListener: null,
-    room: null, isHost: false, active: false, ended: false, lastSeenSeq: 0 };
+    room: null, isHost: false, active: false, ended: false, lastSeenSeq: 0, lobbySnapshot: {} };
   document.getElementById('hs-intro').style.display = 'none';
   document.getElementById('hs-mp-lobby').style.display = 'block';
   document.getElementById('hs-mp-status').textContent = '';
@@ -43276,8 +43283,57 @@ function hsShowMpLobby() {
   document.getElementById('hs-mp-ready-btn').style.display = 'none';
   document.getElementById('hs-mp-start-btn').style.display = 'none';
   document.getElementById('hs-mp-players-list').innerHTML = '';
+  document.getElementById('hs-mp-selected-char').style.display = 'none';
+  hsMpRenderCharList();
   sfx('sfx-select');
   say('Hide and Seek multiplayer. Up to five players. Create a room or join one with a code.');
+}
+
+// Reuses CHARS (the player's saved solo characters) the same way PVP Arena's
+// character picker does, but kept as its own copy rather than sharing PVP's
+// mp-char-list/_mpSelectedChar state — a player could have both screens'
+// state alive if they navigate between them, and keeping the two
+// multiplayer systems independent avoids any cross-contamination.
+function hsMpRenderCharList() {
+  var section = document.getElementById('hs-mp-char-section');
+  var createBtn = document.getElementById('hs-mp-create-btn');
+  var joinBtn = document.getElementById('hs-mp-join-btn');
+  var chars = (typeof CHARS !== 'undefined' ? CHARS : []).filter(function(c) { return !c.deleted; });
+  if (chars.length === 0) {
+    // Nothing to pick from — fall back to the generated name and let
+    // Create/Join work immediately rather than blocking on a picker that
+    // has nothing in it.
+    section.style.display = 'none';
+    createBtn.disabled = false;
+    joinBtn.disabled = false;
+    return;
+  }
+  section.style.display = 'block';
+  createBtn.disabled = true;
+  joinBtn.disabled = true;
+  var list = document.getElementById('hs-mp-char-list');
+  list.innerHTML = '';
+  chars.forEach(function(ch) {
+    var btn = document.createElement('button');
+    btn.className = 'btn-ghost';
+    btn.style.cssText = 'text-align:left;font-size:0.7rem;padding:10px 14px;';
+    btn.textContent = ch.name + ' — ' + ch.race + ' ' + ch.cls + ' · Lv ' + (ch.level || 1);
+    btn.setAttribute('aria-label', 'Play as ' + ch.name);
+    btn.onclick = function() { hsMpSelectChar(ch); };
+    list.appendChild(btn);
+  });
+}
+
+function hsMpSelectChar(ch) {
+  if (!_hsMP) return;
+  _hsMP.myName = ch.name;
+  var display = document.getElementById('hs-mp-selected-char');
+  display.style.display = 'block';
+  display.textContent = '✓ Playing as ' + ch.name + ' — ' + ch.race + ' ' + ch.cls;
+  document.getElementById('hs-mp-create-btn').disabled = false;
+  document.getElementById('hs-mp-join-btn').disabled = false;
+  sfx('sfx-select');
+  say(ch.name + ' selected.');
 }
 
 function hsMpCreateRoom() {
@@ -43358,6 +43414,15 @@ function hsMpHostStart() {
   var lobby = _hsMP.room.lobby || {};
   var ids = Object.keys(lobby);
   if (ids.length < 1) return;
+  // Not a hard minimum — five is only a max, and the host can technically
+  // start alone — but that's clearly not the point of this mode, so nudge
+  // rather than block: require one more press once nothing's changed.
+  if (ids.length === 1 && !_hsMP.soloStartConfirmed) {
+    _hsMP.soloStartConfirmed = true;
+    document.getElementById('hs-mp-status').textContent = 'Starting alone — Hide and Seek is built for playing with friends. Press Start again to go anyway.';
+    say('Starting alone. Hide and Seek is built for playing with friends. Press Start again to go anyway.');
+    return;
+  }
   var players = {};
   ids.forEach(function(id) {
     players[id] = { name: lobby[id].name, x: 0, y: 0, caught: false, escaped: false, hiddenUntil: 0, hideCooldownUntil: 0 };
@@ -43540,13 +43605,29 @@ function hsMpHandleRoomUpdate(room) {
 function hsMpRenderLobby(room) {
   var list = document.getElementById('hs-mp-players-list');
   if (!list) return;
-  var ids = Object.keys(room.lobby || {});
+  var lobby = room.lobby || {};
+  var ids = Object.keys(lobby);
+
+  // Announce joins/leaves by diffing against the last snapshot — the listener
+  // just re-delivers the whole lobby object on every change, so without this
+  // a new player showing up (or someone leaving) was completely silent.
+  var prev = _hsMP.lobbySnapshot || {};
+  ids.forEach(function(id) {
+    if (id !== _hsMP.myId && !prev[id]) say(lobby[id].name + ' joined the lobby.');
+  });
+  Object.keys(prev).forEach(function(id) {
+    if (id !== _hsMP.myId && !lobby[id]) say(prev[id] + ' left the lobby.');
+  });
+  var snapshot = {};
+  ids.forEach(function(id) { snapshot[id] = lobby[id].name; });
+  _hsMP.lobbySnapshot = snapshot;
+
   list.innerHTML = ids.map(function(id) {
-    var p = room.lobby[id];
+    var p = lobby[id];
     var you = id === _hsMP.myId ? ' (you)' : '';
     return '<div>' + (p.ready ? '✓' : '…') + ' ' + p.name + you + '</div>';
   }).join('');
-  document.getElementById('hs-mp-status').textContent = ids.length + ' of 5 players — ' + ids.filter(function(id){ return room.lobby[id].ready; }).length + ' ready.';
+  document.getElementById('hs-mp-status').textContent = ids.length + ' of 5 players — ' + ids.filter(function(id){ return lobby[id].ready; }).length + ' ready.';
 }
 
 function hsMpEnterPlayUI(room) {
