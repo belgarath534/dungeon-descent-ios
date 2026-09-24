@@ -3077,7 +3077,13 @@ var DDStore = (function() {
       <div id="dg-3d-canvas-wrap" style="position:absolute;inset:0;"></div>
       <div id="dg-3d-fade" style="position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity 0.26s;"></div>
       <div id="dg-3d-fps" style="position:absolute;top:6px;right:8px;font-family:monospace;font-size:10px;color:#88ff88;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;display:none;"></div>
-      <div style="position:absolute;bottom:6px;left:8px;font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:0.08em;color:#886644;background:rgba(0,0,0,0.5);padding:3px 8px;border-radius:3px;">Drag to look around</div>
+      <div style="position:absolute;top:6px;left:8px;font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:0.08em;color:#886644;background:rgba(0,0,0,0.5);padding:3px 8px;border-radius:3px;">Drag to look · Walk with the pad</div>
+      <div id="dg-3d-movepad" style="display:none;position:absolute;left:8px;bottom:8px;z-index:5;width:120px;height:120px;">
+        <button type="button" id="dg3d-mv-up" aria-label="Walk forward" style="position:absolute;left:40px;top:0;width:40px;height:40px;background:rgba(20,16,10,0.6);border:1px solid rgba(200,160,100,0.45);color:#e0c080;font-size:16px;border-radius:6px;padding:0;">▲</button>
+        <button type="button" id="dg3d-mv-left" aria-label="Strafe left" style="position:absolute;left:0;top:40px;width:40px;height:40px;background:rgba(20,16,10,0.6);border:1px solid rgba(200,160,100,0.45);color:#e0c080;font-size:16px;border-radius:6px;padding:0;">◀</button>
+        <button type="button" id="dg3d-mv-right" aria-label="Strafe right" style="position:absolute;left:80px;top:40px;width:40px;height:40px;background:rgba(20,16,10,0.6);border:1px solid rgba(200,160,100,0.45);color:#e0c080;font-size:16px;border-radius:6px;padding:0;">▶</button>
+        <button type="button" id="dg3d-mv-down" aria-label="Walk backward" style="position:absolute;left:40px;top:80px;width:40px;height:40px;background:rgba(20,16,10,0.6);border:1px solid rgba(200,160,100,0.45);color:#e0c080;font-size:16px;border-radius:6px;padding:0;">▼</button>
+      </div>
     </div>
 
     <section class="dg-room" aria-label="Room description">
@@ -10889,10 +10895,7 @@ function toggle3DSetting(key) {
   // the dungeon.
   if (key === 'shadows' && _room3D.renderer) {
     _room3D.renderer.shadowMap.enabled = !!s.shadows;
-    if (DS && DS._roomGraph && DS._gridPos) {
-      var _curCell = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
-      if (_curCell) _build3DRoom(_curCell);
-    }
+    _rebuildAllVisibleRooms();
   }
 }
 
@@ -13113,6 +13116,11 @@ function generate3DRoomGraph() {
   }
   DS._roomGraph = { cells: cells };
   DS._gridPos = { gx: 0, gy: 0 };
+  // A fresh graph always starts back at (0,0) with a brand new layout, but
+  // any rooms already built in the live scene belong to the PREVIOUS floor's
+  // layout — same grid keys, different doors. Wipe them so nothing stale
+  // lingers (or worse, gets silently reused as if it were correct).
+  if (_room3D.scene) _disposeAllRooms();
 }
 
 // Wander adds 3 rooms to the current floor's target — grow the graph to match
@@ -13180,7 +13188,7 @@ function moveRoom3D(dir) {
   var wasVisited = target.visited;
   target.visited = true;
   var exitText = _room3DExitsText(target);
-  _transition3DRoom(target);
+  _teleport3DTo(target);
 
   if (!wasVisited) {
     say('Moving ' + dir + '. ' + exitText);
@@ -13256,11 +13264,41 @@ function play3DExitCues(cell) {
 // transition matches how the rest of the game already works and keeps
 // scene complexity flat no matter how large a floor's room graph gets.
 var _room3D = { loading:null, THREE:null, scene:null, camera:null, renderer:null,
-  ambient:null, torches:[], roomObjects:[], raf:null, yaw:0, pitch:0, built:false };
+  ambient:null, raf:null, yaw:0, pitch:0, built:false,
+  builtRooms:{}, themeDungeon:null, lastCellKey:null,
+  move:{forward:false,backward:false,left:false,right:false},
+  moveTouch:{forward:false,backward:false,left:false,right:false},
+  footstepAccum:0,
+  ROOM_W:10, ROOM_D:12, ROOM_H:4.2, DOOR_W:2.4 };
 
 function _room3DWantsVisual() {
   return shouldUse3DMode() && !!(DS && DS._roomGraph);
 }
+
+// WASD/arrow-key movement — bound once, globally, guarded so it's a no-op
+// whenever the 3D view isn't actually the thing on screen (menus, combat,
+// typing in a text field, etc).
+function _room3DKeysActive() {
+  if (!_room3DWantsVisual() || !_room3D.renderer) return false;
+  var view = document.getElementById('dg-3d-view');
+  if (!view || getComputedStyle(view).display === 'none') return false;
+  var ae = document.activeElement;
+  if (ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable)) return false;
+  return true;
+}
+document.addEventListener('keydown', function(e) {
+  if (!_room3DKeysActive()) return;
+  if (e.code === 'KeyW' || e.code === 'ArrowUp') _room3D.move.forward = true;
+  if (e.code === 'KeyS' || e.code === 'ArrowDown') _room3D.move.backward = true;
+  if (e.code === 'KeyA' || e.code === 'ArrowLeft') _room3D.move.left = true;
+  if (e.code === 'KeyD' || e.code === 'ArrowRight') _room3D.move.right = true;
+});
+document.addEventListener('keyup', function(e) {
+  if (e.code === 'KeyW' || e.code === 'ArrowUp') _room3D.move.forward = false;
+  if (e.code === 'KeyS' || e.code === 'ArrowDown') _room3D.move.backward = false;
+  if (e.code === 'KeyA' || e.code === 'ArrowLeft') _room3D.move.left = false;
+  if (e.code === 'KeyD' || e.code === 'ArrowRight') _room3D.move.right = false;
+});
 
 function _load3DEngine() {
   if (window.THREE) return Promise.resolve(window.THREE);
@@ -13287,7 +13325,7 @@ function init3DView() {
     if (!_room3DWantsVisual()) return; // player may have backed out before load finished
     if (!_room3D.renderer) _setup3DScene(THREE);
     var cell = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
-    _build3DRoom(cell);
+    _placeCameraAt(cell);
     _start3DLoop();
   }).catch(function(e) { console.warn('[DD] 3D visual load failed:', e); wrap.style.display = 'none'; });
 }
@@ -13313,6 +13351,7 @@ function _setup3DScene(THREE) {
   _room3D.ambient = ambient;
   _room3D.themeDungeon = DS.dungeon;
   _bind3DLook(renderer.domElement);
+  _bind3DMovePad();
   window.addEventListener('resize', _resize3DView);
 }
 
@@ -13331,39 +13370,53 @@ function _sync3DTheme() {
   _room3D.themeDungeon = DS.dungeon;
 }
 
-function _clear3DRoom() {
-  var scene = _room3D.scene;
-  if (!scene) return;
-  _room3D.roomObjects.forEach(function(obj) {
-    scene.remove(obj);
+// ── MULTI-ROOM RENDERING ──
+// Free-roam walking means the player needs to see (and walk into) an
+// adjacent room before they're physically standing in it, so unlike the
+// original single-room-at-a-time renderer, this keeps the current room PLUS
+// its immediate grid-neighbors built at once — each placed at its own
+// world-space offset (cell.gx * ROOM_W, cell.gy * ROOM_D), same approach as
+// the original standalone POC. That bounds the always-live set to at most 5
+// rooms (~20 torches) regardless of how large a floor's graph gets, so
+// performance stays flat whether the floor has 6 rooms or 16.
+function _disposeRoom(key) {
+  var rec = _room3D.builtRooms[key];
+  if (!rec || !_room3D.scene) return;
+  rec.objects.forEach(function(obj) {
+    _room3D.scene.remove(obj);
     if (obj.geometry) obj.geometry.dispose();
     if (obj.material) obj.material.dispose();
   });
-  _room3D.roomObjects = [];
-  _room3D.torches = [];
+  delete _room3D.builtRooms[key];
 }
 
-function _build3DRoom(cell) {
-  if (!cell || !_room3D.scene) return;
+function _disposeAllRooms() {
+  Object.keys(_room3D.builtRooms).forEach(_disposeRoom);
+}
+
+function _ensureRoomBuilt(cell) {
+  var key = _room3DKey(cell.gx, cell.gy);
+  if (_room3D.builtRooms[key]) return _room3D.builtRooms[key];
   var THREE = _room3D.THREE;
-  _sync3DTheme();
   var theme = _room3DTheme();
-  _clear3DRoom();
-  var objs = _room3D.roomObjects;
-  var ROOM_W = 10, ROOM_D = 12, ROOM_H = 4.2, DOOR_W = 2.4;
+  var W = _room3D.ROOM_W, D = _room3D.ROOM_D, H = _room3D.ROOM_H, DW = _room3D.DOOR_W;
+  var ox = cell.gx * W, oz = cell.gy * D;
+  var objs = [], torches = [], wallSegments = [];
+  var shadowsOn = !!get3DSettings().shadows;
+
   var floorMat = new THREE.MeshStandardMaterial({ color: theme.floor, roughness: 0.95, metalness: 0.05 });
   var wallMat = new THREE.MeshStandardMaterial({ color: theme.wall, roughness: 0.9, metalness: 0.05 });
   var ceilMat = new THREE.MeshStandardMaterial({ color: theme.ceil, roughness: 1.0 });
-  var shadowsOn = !!get3DSettings().shadows;
 
-  var floorMesh = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_W, ROOM_D), floorMat);
+  var floorMesh = new THREE.Mesh(new THREE.PlaneGeometry(W, D), floorMat);
   floorMesh.rotation.x = -Math.PI / 2;
+  floorMesh.position.set(ox, 0, oz);
   floorMesh.receiveShadow = shadowsOn;
   _room3D.scene.add(floorMesh); objs.push(floorMesh);
 
-  var ceilMesh = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_W, ROOM_D), ceilMat);
+  var ceilMesh = new THREE.Mesh(new THREE.PlaneGeometry(W, D), ceilMat);
   ceilMesh.rotation.x = Math.PI / 2;
-  ceilMesh.position.y = ROOM_H;
+  ceilMesh.position.set(ox, H, oz);
   _room3D.scene.add(ceilMesh); objs.push(ceilMesh);
 
   function addWallMesh(w, h, x, y, z, ry) {
@@ -13373,22 +13426,31 @@ function _build3DRoom(cell) {
     wall.receiveShadow = shadowsOn;
     _room3D.scene.add(wall); objs.push(wall);
   }
+  function addSeg(x1, z1, x2, z2) { wallSegments.push({ x1:x1, z1:z1, x2:x2, z2:z2 }); }
   function buildSide(hasDoor, axis, sign) {
     if (axis === 'z') {
-      var wallLen = ROOM_W, wz = sign * (ROOM_D / 2);
-      if (!hasDoor) { addWallMesh(wallLen, ROOM_H, 0, ROOM_H / 2, wz, sign > 0 ? Math.PI : 0); }
-      else {
-        var seg = (wallLen - DOOR_W) / 2;
-        addWallMesh(seg, ROOM_H, -(DOOR_W / 2 + seg / 2), ROOM_H / 2, wz, sign > 0 ? Math.PI : 0);
-        addWallMesh(seg, ROOM_H, (DOOR_W / 2 + seg / 2), ROOM_H / 2, wz, sign > 0 ? Math.PI : 0);
+      var wallLen = W, wz = oz + sign * (D / 2);
+      if (!hasDoor) {
+        addWallMesh(wallLen, H, ox, H / 2, wz, sign > 0 ? Math.PI : 0);
+        addSeg(ox - wallLen / 2, wz, ox + wallLen / 2, wz);
+      } else {
+        var seg = (wallLen - DW) / 2;
+        addWallMesh(seg, H, ox - (DW / 2 + seg / 2), H / 2, wz, sign > 0 ? Math.PI : 0);
+        addWallMesh(seg, H, ox + (DW / 2 + seg / 2), H / 2, wz, sign > 0 ? Math.PI : 0);
+        addSeg(ox - wallLen / 2, wz, ox - DW / 2, wz);
+        addSeg(ox + DW / 2, wz, ox + wallLen / 2, wz);
       }
     } else {
-      var wallLenX = ROOM_D, wx = sign * (ROOM_W / 2);
-      if (!hasDoor) { addWallMesh(wallLenX, ROOM_H, wx, ROOM_H / 2, 0, sign > 0 ? -Math.PI / 2 : Math.PI / 2); }
-      else {
-        var segX = (wallLenX - DOOR_W) / 2;
-        addWallMesh(segX, ROOM_H, wx, ROOM_H / 2, -(DOOR_W / 2 + segX / 2), sign > 0 ? -Math.PI / 2 : Math.PI / 2);
-        addWallMesh(segX, ROOM_H, wx, ROOM_H / 2, (DOOR_W / 2 + segX / 2), sign > 0 ? -Math.PI / 2 : Math.PI / 2);
+      var wallLenX = D, wx = ox + sign * (W / 2);
+      if (!hasDoor) {
+        addWallMesh(wallLenX, H, wx, H / 2, oz, sign > 0 ? -Math.PI / 2 : Math.PI / 2);
+        addSeg(wx, oz - wallLenX / 2, wx, oz + wallLenX / 2);
+      } else {
+        var segX = (wallLenX - DW) / 2;
+        addWallMesh(segX, H, wx, H / 2, oz - (DW / 2 + segX / 2), sign > 0 ? -Math.PI / 2 : Math.PI / 2);
+        addWallMesh(segX, H, wx, H / 2, oz + (DW / 2 + segX / 2), sign > 0 ? -Math.PI / 2 : Math.PI / 2);
+        addSeg(wx, oz - wallLenX / 2, wx, oz - DW / 2);
+        addSeg(wx, oz + DW / 2, wx, oz + wallLenX / 2);
       }
     }
   }
@@ -13400,8 +13462,8 @@ function _build3DRoom(cell) {
   var torchGeo = new THREE.SphereGeometry(0.07, 8, 8);
   var flameMat = new THREE.MeshBasicMaterial({ color: theme.torch });
   var torchOffsets = [
-    [-ROOM_W / 2 + 0.3, 2.1, -ROOM_D / 2 + 1.5], [ROOM_W / 2 - 0.3, 2.1, -ROOM_D / 2 + 1.5],
-    [-ROOM_W / 2 + 0.3, 2.1, ROOM_D / 2 - 1.5], [ROOM_W / 2 - 0.3, 2.1, ROOM_D / 2 - 1.5]
+    [ox - W / 2 + 0.3, 2.1, oz - D / 2 + 1.5], [ox + W / 2 - 0.3, 2.1, oz - D / 2 + 1.5],
+    [ox - W / 2 + 0.3, 2.1, oz + D / 2 - 1.5], [ox + W / 2 - 0.3, 2.1, oz + D / 2 - 1.5]
   ];
   torchOffsets.forEach(function(p) {
     var light = new THREE.PointLight(theme.torch, 2.6, 11, 1.5);
@@ -13411,26 +13473,69 @@ function _build3DRoom(cell) {
     var flame = new THREE.Mesh(torchGeo, flameMat);
     flame.position.copy(light.position);
     _room3D.scene.add(flame); objs.push(flame);
-    _room3D.torches.push({ light: light, baseIntensity: 2.6, phase: Math.random() * Math.PI * 2 });
+    torches.push({ light: light, baseIntensity: 2.6, phase: Math.random() * Math.PI * 2 });
   });
 
-  // Face whichever door the room actually has — layouts are randomized, so a
-  // fixed starting orientation would sometimes face straight into a wall.
+  var record = { objects: objs, torches: torches, wallSegments: wallSegments };
+  _room3D.builtRooms[key] = record;
+  return record;
+}
+
+// Builds/disposes so exactly {center + its 4 grid-neighbors that exist in
+// the graph} stay live — called whenever the player's current cell changes,
+// whether via a button teleport or physically walking across a threshold.
+function _syncVisibleRooms(centerCell) {
+  if (!_room3D.scene) return;
+  _sync3DTheme();
+  var keep = {};
+  keep[_room3DKey(centerCell.gx, centerCell.gy)] = true;
+  ROOM3D_DIRS.forEach(function(d) {
+    var nKey = _room3DKey(centerCell.gx + d.dx, centerCell.gy + d.dy);
+    if (DS._roomGraph.cells[nKey]) keep[nKey] = true;
+  });
+  Object.keys(_room3D.builtRooms).forEach(function(key) {
+    if (!keep[key]) _disposeRoom(key);
+  });
+  Object.keys(keep).forEach(function(key) {
+    _ensureRoomBuilt(DS._roomGraph.cells[key]);
+  });
+  _room3D.built = true;
+}
+
+function _rebuildAllVisibleRooms() {
+  if (!_room3D.scene || !DS._roomGraph || !DS._gridPos) return;
+  _disposeAllRooms();
+  var cell = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
+  if (cell) _syncVisibleRooms(cell);
+}
+
+// Places the camera at a cell's center, facing whichever door it actually
+// has (layouts are randomized, so a fixed orientation would sometimes face
+// straight into a wall) — used for cold-start and floor-advance, where
+// there's no sense of "arriving from" a direction.
+function _placeCameraAt(cell) {
+  _syncVisibleRooms(cell);
+  var ox = cell.gx * _room3D.ROOM_W, oz = cell.gy * _room3D.ROOM_D;
+  _room3D.camera.position.set(ox, 1.6, oz);
   var yaw = 0;
   if (cell.doors.S) yaw = Math.PI;
   else if (cell.doors.E) yaw = Math.PI / 2;
   else if (cell.doors.N) yaw = 0;
   else if (cell.doors.W) yaw = -Math.PI / 2;
   _room3D.yaw = yaw; _room3D.pitch = 0;
-  _room3D.built = true;
+  _room3D.lastCellKey = _room3DKey(cell.gx, cell.gy);
 }
 
-function _transition3DRoom(cell) {
+// Button-tap movement still exists alongside free walking — it's the only
+// option for screen-reader players who opted into 3D Mode's audio without
+// the visual renderer, and a fast option for sighted players too. A fade
+// hides the instant camera jump between rooms.
+function _teleport3DTo(cell) {
   if (!_room3DWantsVisual() || !_room3D.renderer) return;
   var fade = document.getElementById('dg-3d-fade');
   if (fade) fade.style.opacity = '1';
   setTimeout(function() {
-    _build3DRoom(cell);
+    _placeCameraAt(cell);
     if (fade) setTimeout(function() { fade.style.opacity = '0'; }, 30);
   }, 240);
 }
@@ -13468,6 +13573,101 @@ function _bind3DLook(el) {
   window.addEventListener('mouseup', function() { dragging = false; });
 }
 
+// On-screen d-pad for touch devices — desktop gets WASD/arrows instead (see
+// the keydown/keyup listeners near the top of this section). Bound once;
+// the buttons are static DOM, not rebuilt per room.
+function _bind3DMovePad() {
+  var pad = document.getElementById('dg-3d-movepad');
+  if (!pad) return;
+  var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  if (isTouch) pad.style.display = 'block';
+  function bindHold(id, key) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.style.touchAction = 'none';
+    var start = function(e) { e.preventDefault(); _room3D.moveTouch[key] = true; };
+    var end = function(e) { if (e) e.preventDefault(); _room3D.moveTouch[key] = false; };
+    el.addEventListener('touchstart', start, { passive: false });
+    el.addEventListener('touchend', end, { passive: false });
+    el.addEventListener('touchcancel', end, { passive: false });
+    el.addEventListener('mousedown', start);
+    el.addEventListener('mouseup', end);
+    el.addEventListener('mouseleave', end);
+  }
+  bindHold('dg3d-mv-up', 'forward');
+  bindHold('dg3d-mv-down', 'backward');
+  bindHold('dg3d-mv-left', 'left');
+  bindHold('dg3d-mv-right', 'right');
+}
+
+// Circle-vs-segment collision against every built room's wall segments,
+// iterated a few passes so a fix against one wall doesn't reintroduce
+// overlap with another (matters most near corners and doorway edges) —
+// same approach validated in the standalone proof-of-concept.
+var ROOM3D_PLAYER_RADIUS = 0.4;
+function _resolve3DCollision(px, pz) {
+  var segs = [];
+  Object.keys(_room3D.builtRooms).forEach(function(key) {
+    segs = segs.concat(_room3D.builtRooms[key].wallSegments);
+  });
+  for (var pass = 0; pass < 4; pass++) {
+    var moved = false;
+    for (var i = 0; i < segs.length; i++) {
+      var s = segs[i];
+      var vx = s.x2 - s.x1, vz = s.z2 - s.z1;
+      var len2 = vx * vx + vz * vz;
+      var t = len2 > 0 ? ((px - s.x1) * vx + (pz - s.z1) * vz) / len2 : 0;
+      t = Math.max(0, Math.min(1, t));
+      var cx = s.x1 + t * vx, cz = s.z1 + t * vz;
+      var dx = px - cx, dz = pz - cz;
+      var dist = Math.sqrt(dx * dx + dz * dz);
+      if (dist < ROOM3D_PLAYER_RADIUS && dist > 0.0001) {
+        var push = (ROOM3D_PLAYER_RADIUS - dist);
+        px += (dx / dist) * push; pz += (dz / dist) * push;
+        moved = true;
+      }
+    }
+    if (!moved) break;
+  }
+  return { x: px, z: pz };
+}
+
+function _room3DWorldToCell(x, z) {
+  return { gx: Math.round(x / _room3D.ROOM_W), gy: Math.round(z / _room3D.ROOM_D) };
+}
+
+// Called every frame the player has physically moved. Walking across a
+// doorway threshold does exactly what a button tap does — updates
+// DS._gridPos, marks the room visited, announces it, and (for a room seen
+// for the first time) calls enterRoom(), the same combat/loot/event/floor-
+// completion pipeline every dungeon already uses. The only thing that
+// changes between "walked there" and "tapped a button to get there" is how
+// the camera arrived; everything downstream is identical.
+function _check3DCellCrossing() {
+  var pos = _room3DWorldToCell(_room3D.camera.position.x, _room3D.camera.position.z);
+  var key = _room3DKey(pos.gx, pos.gy);
+  if (key === _room3D.lastCellKey) return;
+  _room3D.lastCellKey = key;
+  var target = DS._roomGraph.cells[key];
+  // Shouldn't happen — collision only lets the player pass through an actual
+  // door, which only exists between two real graph cells — but never let a
+  // bad read crash movement.
+  if (!target) return;
+  DS._gridPos = { gx: pos.gx, gy: pos.gy };
+  var wasVisited = target.visited;
+  target.visited = true;
+  _syncVisibleRooms(target);
+  var exitText = _room3DExitsText(target);
+  if (!wasVisited) {
+    say('Entering. ' + exitText);
+    enterRoom();
+  } else {
+    say('Back in a cleared room. ' + exitText);
+  }
+  play3DExitCues(target);
+  hunterTurn(false);
+}
+
 function _start3DLoop() {
   if (_room3D.raf || !_room3D.renderer) return;
   var clock = new _room3D.THREE.Clock();
@@ -13478,11 +13678,46 @@ function _start3DLoop() {
     var t = clock.elapsedTime;
     var s3 = get3DSettings();
     if (s3.torchFlicker !== false) {
-      _room3D.torches.forEach(function(tc) {
-        var flick = Math.sin(t * 8 + tc.phase) * 0.15 + Math.sin(t * 23 + tc.phase) * 0.08;
-        tc.light.intensity = tc.baseIntensity + flick;
+      Object.keys(_room3D.builtRooms).forEach(function(key) {
+        _room3D.builtRooms[key].torches.forEach(function(tc) {
+          var flick = Math.sin(t * 8 + tc.phase) * 0.15 + Math.sin(t * 23 + tc.phase) * 0.08;
+          tc.light.intensity = tc.baseIntensity + flick;
+        });
       });
     }
+
+    // ── Free-roam walking (keyboard + touch d-pad) ──
+    // Frozen during combat/inventory/etc — showDgPanels() already stops this
+    // whole loop then, but DS.inCombat can flip true mid-frame (the instant
+    // a room-entry ambush fires), so this is a second, cheaper guard against
+    // the player sliding around during the frame combat actually starts.
+    if (!DS.inCombat) {
+      var mv = _room3D.move, mt = _room3D.moveTouch;
+      var dx = 0, dz = 0;
+      if (mv.forward || mt.forward) dz -= 1;
+      if (mv.backward || mt.backward) dz += 1;
+      if (mv.left || mt.left) dx -= 1;
+      if (mv.right || mt.right) dx += 1;
+      if (dx || dz) {
+        var len = Math.sqrt(dx * dx + dz * dz);
+        dx /= len; dz /= len;
+        var speed = 3.2 * dt;
+        var sinY = Math.sin(_room3D.yaw), cosY = Math.cos(_room3D.yaw);
+        var worldDx = dx * cosY - dz * sinY;
+        var worldDz = dx * sinY + dz * cosY;
+        var nx = _room3D.camera.position.x + worldDx * speed;
+        var nz = _room3D.camera.position.z + worldDz * speed;
+        var resolved = _resolve3DCollision(nx, nz);
+        _room3D.camera.position.x = resolved.x;
+        _room3D.camera.position.z = resolved.z;
+        _check3DCellCrossing();
+        _room3D.footstepAccum += dt;
+        if (_room3D.footstepAccum > 0.45) { _room3D.footstepAccum = 0; sfx('sfx-footstep'); }
+      } else {
+        _room3D.footstepAccum = 0;
+      }
+    }
+
     _room3D.camera.rotation.order = 'YXZ';
     _room3D.camera.rotation.y = _room3D.yaw;
     _room3D.camera.rotation.x = _room3D.pitch;
@@ -14816,7 +15051,7 @@ function advanceFloor() {
   if (shouldUse3DMode()) {
     generate3DRoomGraph();
     var _newFloorStartCell = DS._roomGraph.cells[_room3DKey(0, 0)];
-    if (_room3D.built) _build3DRoom(_newFloorStartCell);
+    if (_room3D.built) _placeCameraAt(_newFloorStartCell);
     setTimeout(function(){ play3DExitCues(_newFloorStartCell); }, 900);
   }
   // Track no-damage floors for achievement
