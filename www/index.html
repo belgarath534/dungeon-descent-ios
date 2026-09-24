@@ -24753,7 +24753,7 @@ function vrVictory(isKillingBlow) {
   var ch = CHARS[chIdx];
   if (ch) {
     ch.gold = (ch.gold || 0) + VR_GOLD_REWARD;
-    saveData();
+    saveChars();
   }
 
   incrementAchievementStat('voidReaperDefeated', 1);
