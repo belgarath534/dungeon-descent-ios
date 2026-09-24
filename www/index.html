@@ -3077,7 +3077,7 @@ var DDStore = (function() {
       <div id="dg-3d-canvas-wrap" style="position:absolute;inset:0;"></div>
       <div id="dg-3d-fade" style="position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity 0.26s;"></div>
       <div id="dg-3d-fps" style="position:absolute;top:6px;right:8px;font-family:monospace;font-size:10px;color:#88ff88;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;display:none;"></div>
-      <div style="position:absolute;top:6px;left:8px;font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:0.08em;color:#886644;background:rgba(0,0,0,0.5);padding:3px 8px;border-radius:3px;">Drag to look · Walk with the pad</div>
+      <div id="dg-3d-hint" style="position:absolute;top:6px;left:8px;font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:0.08em;color:#886644;background:rgba(0,0,0,0.5);padding:3px 8px;border-radius:3px;">Drag to look · Walk with the pad</div>
       <div id="dg-3d-movepad" style="display:none;position:absolute;left:8px;bottom:8px;z-index:5;width:120px;height:120px;">
         <button type="button" id="dg3d-mv-up" aria-label="Walk forward" style="position:absolute;left:40px;top:0;width:40px;height:40px;background:rgba(20,16,10,0.6);border:1px solid rgba(200,160,100,0.45);color:#e0c080;font-size:16px;border-radius:6px;padding:0;">▲</button>
         <button type="button" id="dg3d-mv-left" aria-label="Strafe left" style="position:absolute;left:0;top:40px;width:40px;height:40px;background:rgba(20,16,10,0.6);border:1px solid rgba(200,160,100,0.45);color:#e0c080;font-size:16px;border-radius:6px;padding:0;">◀</button>
@@ -13272,13 +13272,15 @@ var _room3D = { loading:null, THREE:null, scene:null, camera:null, renderer:null
   ROOM_W:10, ROOM_D:12, ROOM_H:4.2, DOOR_W:2.4 };
 
 function _room3DWantsVisual() {
-  // The visual canvas (and everything hanging off it — the move pad,
-  // drag-to-look, the FPS counter) is only useful to a sighted player. A
-  // screen-reader player who opts into 3D Mode still gets the full spatial
-  // audio experience (that's gated on shouldUse3DMode() alone, separately),
-  // they just never get a canvas they can't see, or a camera-relative move
-  // pad they have no way to aim.
-  return shouldUse3DMode() && !!(DS && DS._roomGraph) && !(ACCESS && ACCESS.srmode);
+  return shouldUse3DMode() && !!(DS && DS._roomGraph);
+}
+
+// A screen-reader player still wants the room to actually render — to show
+// a sighted friend looking at the same screen, for instance — they just
+// can't usefully aim a camera-relative move pad or a drag-to-look gesture
+// without sight. This hides only the aim controls, not the rendering.
+function _room3DWantsAimControls() {
+  return !(ACCESS && ACCESS.srmode);
 }
 
 // WASD/arrow-key movement — bound once, globally, guarded so it's a no-op
@@ -13358,6 +13360,12 @@ function _setup3DScene(THREE) {
   _room3D.themeDungeon = DS.dungeon;
   _bind3DLook(renderer.domElement);
   _bind3DMovePad();
+  // A screen-reader player can't aim a camera by sight, so the "drag to
+  // look / walk with the pad" hint is just clutter for them — but the room
+  // still renders and is theirs to show a sighted friend, so only this hint
+  // text (and the move pad itself, gated in _bind3DMovePad) get hidden.
+  var hint = document.getElementById('dg-3d-hint');
+  if (hint) hint.style.display = _room3DWantsAimControls() ? '' : 'none';
   window.addEventListener('resize', _resize3DView);
 }
 
@@ -13493,6 +13501,11 @@ function _ensureRoomBuilt(cell) {
 function _syncVisibleRooms(centerCell) {
   if (!_room3D.scene) return;
   _sync3DTheme();
+  var hint = document.getElementById('dg-3d-hint'), pad = document.getElementById('dg-3d-movepad');
+  var wantsAim = _room3DWantsAimControls();
+  var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  if (hint) hint.style.display = wantsAim ? '' : 'none';
+  if (pad) pad.style.display = (wantsAim && isTouch) ? 'block' : 'none';
   var keep = {};
   keep[_room3DKey(centerCell.gx, centerCell.gy)] = true;
   ROOM3D_DIRS.forEach(function(d) {
@@ -13586,7 +13599,7 @@ function _bind3DMovePad() {
   var pad = document.getElementById('dg-3d-movepad');
   if (!pad) return;
   var isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
-  if (isTouch) pad.style.display = 'block';
+  if (isTouch && _room3DWantsAimControls()) pad.style.display = 'block';
   function bindHold(id, key) {
     var el = document.getElementById(id);
     if (!el) return;
