@@ -2064,10 +2064,34 @@ var DDStore = (function() {
       <h2 class="screen-title">🕯️ Hide and Seek</h2>
     </div>
 
-    <!-- Intro / start panel -->
+    <!-- Intro / mode-select panel -->
     <div id="hs-intro">
-      <p class="screen-subtitle">Something is in here with you. Find the way out before it finds you first. BETA — single player.</p>
-      <button class="btn-gold" onclick="hsStart()" aria-label="Begin Hide and Seek" style="width:100%;margin-top:12px;">▶ Begin</button>
+      <p class="screen-subtitle">Something is in here with you. Find the way out before it finds you first. BETA.</p>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button class="btn-gold" onclick="hsStart()" aria-label="Begin Hide and Seek alone" style="flex:1;">▶ Single Player</button>
+        <button class="btn-ghost" onclick="hsShowMpLobby()" aria-label="Play Hide and Seek with friends, up to five players" style="flex:1;">👥 Multiplayer</button>
+      </div>
+    </div>
+
+    <!-- Multiplayer lobby panel -->
+    <div id="hs-mp-lobby" style="display:none;">
+      <p class="screen-subtitle">Up to 5 players. Everyone shares hiding spots and can rescue each other if caught — but the Darkness Swallower only needs to catch everyone once.</p>
+      <div style="display:flex;gap:8px;margin:12px 0;">
+        <button class="btn-gold" onclick="hsMpCreateRoom()" id="hs-mp-create-btn" aria-label="Create a new Hide and Seek room and get a code to share" style="flex:1;">🏟️ Create Room</button>
+      </div>
+      <div id="hs-mp-join-row" style="display:flex;gap:8px;margin-bottom:12px;">
+        <input id="hs-mp-code-input" type="text" maxlength="4" placeholder="Room code" aria-label="Enter 4 character room code to join friends" style="flex:1;background:#0a0a14;border:1px solid #333;color:#fff;font-family:Cinzel,serif;font-size:1.2rem;padding:10px 14px;letter-spacing:0.4em;text-align:center;"/>
+        <button class="btn-gold" onclick="hsMpJoinRoom()" id="hs-mp-join-btn" aria-label="Join room with code" style="padding:10px 16px;">Join</button>
+      </div>
+      <div id="hs-mp-room-code-display" style="display:none;text-align:center;margin-bottom:12px;">
+        <div style="font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:0.3em;color:rgba(255,255,255,0.3);margin-bottom:8px;">YOUR ROOM CODE</div>
+        <div id="hs-mp-room-code" style="font-family:Cinzel,serif;font-size:1.8rem;letter-spacing:0.4em;color:#e0c080;"></div>
+      </div>
+      <div id="hs-mp-players-list" aria-live="polite" style="margin-bottom:12px;font-family:Cinzel,serif;font-size:0.68rem;color:rgba(255,255,255,0.6);line-height:1.9;"></div>
+      <button class="btn-gold" onclick="hsMpReady()" id="hs-mp-ready-btn" aria-label="Mark yourself ready" style="display:none;width:100%;margin-bottom:8px;">✓ Ready</button>
+      <button class="btn-gold" onclick="hsMpHostStart()" id="hs-mp-start-btn" aria-label="Start the run for everyone in the room" style="display:none;width:100%;margin-bottom:8px;">▶ Start</button>
+      <div id="hs-mp-status" aria-live="polite" style="font-family:Cinzel,serif;font-size:0.68rem;color:rgba(255,255,255,0.5);text-align:center;margin-bottom:12px;"></div>
+      <button class="btn-ghost" onclick="hsMpLeaveLobby()" aria-label="Back to Hide and Seek menu" style="width:100%;">← Back</button>
     </div>
 
     <!-- Play panel -->
@@ -2087,6 +2111,8 @@ var DDStore = (function() {
         <span id="hs-distance-badge" aria-live="off" style="font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.1em;padding:3px 9px;border:1px solid #663333;color:#cc8888;">— rooms away</span>
       </div>
 
+      <div id="hs-mp-party-status" aria-live="polite" style="display:none;font-family:Cinzel,serif;font-size:0.62rem;color:rgba(255,255,255,0.6);line-height:1.9;margin-bottom:10px;padding:8px 10px;background:#0a0800;border:1px solid #2a2010;"></div>
+
       <section class="dg-room" aria-label="Current room">
         <p class="dg-room-desc" id="hs-room-desc">You stand still, listening.</p>
         <div id="hs-event" aria-live="assertive" style="display:none;font-family:Cinzel,serif;font-size:0.72rem;color:#e0a0a0;margin-top:8px;"></div>
@@ -2105,7 +2131,8 @@ var DDStore = (function() {
     <div id="hs-end" style="display:none;text-align:center;">
       <div id="hs-end-title" style="font-family:'Cinzel Decorative',cursive;font-size:1.1rem;color:var(--gold);margin-bottom:10px;"></div>
       <p id="hs-end-text" style="font-family:Cinzel,serif;font-size:0.75rem;color:rgba(255,255,255,0.6);line-height:1.7;margin-bottom:18px;"></p>
-      <button class="btn-gold" onclick="hsStart()" aria-label="Try again" style="width:100%;margin-bottom:8px;">↻ Try Again</button>
+      <div id="hs-mp-end-results" aria-live="polite" style="display:none;font-family:Cinzel,serif;font-size:0.68rem;color:rgba(255,255,255,0.6);line-height:1.9;margin-bottom:18px;text-align:left;padding:8px 10px;background:#0a0800;border:1px solid #2a2010;"></div>
+      <button class="btn-gold" id="hs-end-retry-btn" onclick="hsStart()" aria-label="Try again" style="width:100%;margin-bottom:8px;">↻ Try Again</button>
       <button class="btn-ghost" onclick="hsLeave()" aria-label="Return to main menu" style="width:100%;">← Menu</button>
     </div>
   </div>
@@ -42535,11 +42562,30 @@ function hsNewState() {
 // Real chase distance/direction on the grid — not RNG. Every unhidden move
 // it takes closes the gap on whichever axis is further, same model as the
 // proven Stalker Floor mechanic (getStalkerDistance/getStalkerDirection).
+// True while either a solo run or an active multiplayer run is in progress —
+// the growl/footstep audio pipeline below is shared between both modes, so
+// it checks this instead of the solo-only `HS` object directly.
+function _hsIsActive() {
+  return !!((HS && HS.active) || (_hsMP && _hsMP.active));
+}
 function hsDistance() {
+  if (_hsMP && _hsMP.active) {
+    var me = _hsMpMyPlayer(), mo = _hsMpMonster();
+    if (!me || !mo) return 99;
+    return Math.abs(me.x - mo.x) + Math.abs(me.y - mo.y);
+  }
   if (!HS) return 99;
   return Math.abs(HS.px - HS.mx) + Math.abs(HS.py - HS.my);
 }
 function hsDirection() {
+  if (_hsMP && _hsMP.active) {
+    var me = _hsMpMyPlayer(), mo = _hsMpMonster();
+    if (!me || !mo) return 'here';
+    var mdx = mo.x - me.x, mdy = mo.y - me.y;
+    if (mdx === 0 && mdy === 0) return 'here';
+    if (Math.abs(mdx) >= Math.abs(mdy)) return mdx > 0 ? 'right' : 'left';
+    return mdy > 0 ? 'ahead' : 'behind';
+  }
   var dx = HS.mx - HS.px, dy = HS.my - HS.py;
   if (dx === 0 && dy === 0) return 'here';
   if (Math.abs(dx) >= Math.abs(dy)) return dx > 0 ? 'right' : 'left';
@@ -42553,9 +42599,14 @@ function hsMonsterAdvance() {
 }
 
 function hsStart() {
+  if (_hsMP) { hsMpTeardown(); }
   HS = hsNewState();
   document.getElementById('hs-intro').style.display = 'none';
+  document.getElementById('hs-mp-lobby').style.display = 'none';
   document.getElementById('hs-end').style.display = 'none';
+  document.getElementById('hs-mp-end-results').style.display = 'none';
+  document.getElementById('hs-mp-party-status').style.display = 'none';
+  document.getElementById('hs-end-retry-btn').onclick = hsStart;
   document.getElementById('hs-play').style.display = 'block';
   var ev = document.getElementById('hs-event');
   ev.style.display = 'none'; ev.textContent = '';
@@ -42573,6 +42624,7 @@ function hsStart() {
 function hsLeave() {
   hsStopGrowlLoop();
   _stopHS3DLoop();
+  if (_hsMP) hsMpTeardown();
   var v3 = document.getElementById('hs-3d-view');
   if (v3) v3.style.display = 'none';
   HS = null;
@@ -42623,7 +42675,7 @@ function hsAnnounceDistance(dist) {
 var _hsGrowlGain = null, _hsGrowlPanner = null, _hsGrowlSource = null;
 
 function hsApplyGrowlPosition() {
-  if (!HS) return;
+  if (!_hsIsActive()) return;
   var dist = hsDistance();
   var dir = hsDirection();
   var vol = Math.max(0.15, 1 - (dist * 0.08));
@@ -42634,7 +42686,7 @@ function hsApplyGrowlPosition() {
 }
 
 function hsStartGrowlLoop() {
-  if (!HS || !HS.active) return;
+  if (!_hsIsActive()) return;
   try {
     if (!AUD || !AUD.ctx) return;
     if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
@@ -42647,7 +42699,7 @@ function hsStartGrowlLoop() {
     fetch(_audioUrl('monster-growl.mp3')).then(function(r){ return r.arrayBuffer(); })
       .then(function(buf){ return AUD.ctx.decodeAudioData(buf); })
       .then(function(buffer){
-        if (!HS || !HS.active) return;
+        if (!_hsIsActive()) return;
         var source = AUD.ctx.createBufferSource();
         source.buffer = buffer;
         source.loop = true;
@@ -42671,7 +42723,7 @@ function hsStopGrowlLoop() {
 // technique as Stalker Floor's playSwallowerFootstep(), separate from the
 // continuous growl loop above.
 function hsPlayMonsterFootstep() {
-  if (!HS) return;
+  if (!_hsIsActive()) return;
   try {
     if (!AUD || !AUD.ctx) return;
     if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
@@ -42691,7 +42743,7 @@ function hsPlayMonsterFootstep() {
     fetch(_audioUrl('monster-footstep.mp3')).then(function(r){ return r.arrayBuffer(); })
       .then(function(buf){ return AUD.ctx.decodeAudioData(buf); })
       .then(function(buffer){
-        if (!HS) return;
+        if (!_hsIsActive()) return;
         var source = AUD.ctx.createBufferSource();
         source.buffer = buffer;
         source.connect(gainNode);
@@ -42727,6 +42779,7 @@ function hsApplyMoveLock() {
 }
 
 function hsMove(dir) {
+  if (_hsMP && _hsMP.active) { hsMpMove(dir); return; }
   if (!HS || !HS.active || HS.moveLocked) return;
   sfx('sfx-footstep');
   if (HS.hideCooldown > 0) HS.hideCooldown--;
@@ -42770,6 +42823,7 @@ var HS_HIDE_BASE_CHANCE = 0.55;
 var HS_HIDE_ITEM_BONUS = 0.25;
 
 function hsHide() {
+  if (_hsMP && _hsMP.active) { hsMpHide(); return; }
   if (!HS || !HS.active) return;
   var ev = document.getElementById('hs-event');
   if (HS.hideCooldown > 0) {
@@ -43179,6 +43233,453 @@ function _renderHS3DMinimap() {
   ctx.beginPath(); ctx.arc(sx(HS.px), sy(HS.py), cell * 0.32, 0, Math.PI * 2); ctx.fill();
 }
 // ── END HIDE AND SEEK — 3D MODE ──
+
+// ── HIDE AND SEEK — MULTIPLAYER (co-op, up to 5 players) ──
+// Reuses the PVP Arena's exact room-code pattern (Firebase RTDB, 4-char
+// codes, ref.on('value') listeners) under its own hs_rooms/<code> path.
+// The monster has no single authoritative host — it always advances toward
+// whichever eligible player is nearest (ties broken by lowest player id),
+// which every client computes identically from the same synced state, and
+// every state change (a move, a hide) goes through a single Firebase
+// transaction() covering the whole `state` subtree (players + monster +
+// items together) so two players moving at once can't corrupt or
+// double-advance it: since the outcome is deterministic given the state,
+// even a transaction retry converges on the same answer.
+//
+// Caught is "down," not eliminated — walking onto a caught teammate's cell
+// rescues them. The run only ends once nobody is left both un-caught and
+// un-escaped.
+//
+// Scoped out of this pass: the 3D visual (animating up to 5 avatars in that
+// scene is real extra work of its own) and presence/disconnect detection
+// (if a player just closes the app mid-run, teammates only notice because
+// that player stops moving — there's no onDisconnect() cleanup yet).
+var _hsMP = null; // null when not in a multiplayer session
+
+function _hsMpName() {
+  var found = (typeof CHARS !== 'undefined' ? CHARS : []).filter(function(c) { return !c.deleted; })[0];
+  return (found && found.name) ? found.name : 'Player' + Math.floor(Math.random() * 900 + 100);
+}
+
+function hsShowMpLobby() {
+  if (!window._fbRtdb) {
+    say('Multiplayer unavailable. Firebase not connected.');
+    document.getElementById('hs-mp-status').textContent = 'Multiplayer unavailable. Firebase not connected.';
+    return;
+  }
+  _hsMP = { myId: mpGenId(), myName: _hsMpName(), code: null, roomRef: null, roomListener: null,
+    room: null, isHost: false, active: false, ended: false, lastSeenSeq: 0 };
+  document.getElementById('hs-intro').style.display = 'none';
+  document.getElementById('hs-mp-lobby').style.display = 'block';
+  document.getElementById('hs-mp-status').textContent = '';
+  document.getElementById('hs-mp-room-code-display').style.display = 'none';
+  document.getElementById('hs-mp-ready-btn').style.display = 'none';
+  document.getElementById('hs-mp-start-btn').style.display = 'none';
+  document.getElementById('hs-mp-players-list').innerHTML = '';
+  sfx('sfx-select');
+  say('Hide and Seek multiplayer. Up to five players. Create a room or join one with a code.');
+}
+
+function hsMpCreateRoom() {
+  if (!_hsMP) return;
+  var code = mpGenRoomCode();
+  _hsMP.code = code;
+  _hsMP.isHost = true;
+  var lobby = {};
+  lobby[_hsMP.myId] = { name: _hsMP.myName, ready: false };
+  var ref = window._fbRtdb.ref('hs_rooms/' + code);
+  ref.set({ code: code, hostId: _hsMP.myId, createdAt: Date.now(), status: 'waiting', lobby: lobby })
+    .then(function() {
+      _hsMP.roomRef = ref;
+      document.getElementById('hs-mp-room-code-display').style.display = 'block';
+      document.getElementById('hs-mp-room-code').textContent = code;
+      document.getElementById('hs-mp-ready-btn').style.display = 'block';
+      document.getElementById('hs-mp-start-btn').style.display = 'block';
+      document.getElementById('hs-mp-status').textContent = 'Room created! Share code ' + code + '.';
+      say('Room created. Your code is ' + code.split('').join(' ') + '. Share it with up to four friends.');
+      sfx('sfx-confirm');
+      hsMpListenRoom(code);
+      // Auto-delete if it never gets used
+      setTimeout(function() {
+        ref.once('value').then(function(snap) {
+          if (snap.exists() && snap.val().status === 'waiting') ref.remove();
+        }).catch(function() {});
+      }, 600000);
+    }).catch(function(err) {
+      document.getElementById('hs-mp-status').textContent = 'Failed to create room. Check your connection.';
+      console.error('[HS-MP] create room failed:', err);
+    });
+}
+
+function hsMpJoinRoom() {
+  if (!_hsMP) return;
+  var input = document.getElementById('hs-mp-code-input');
+  var code = input ? input.value.trim().toUpperCase() : '';
+  if (code.length !== 4) { document.getElementById('hs-mp-status').textContent = 'Enter a valid 4 character room code.'; return; }
+  var ref = window._fbRtdb.ref('hs_rooms/' + code);
+  ref.once('value').then(function(snap) {
+    if (!snap.exists()) { document.getElementById('hs-mp-status').textContent = 'Room not found.'; return; }
+    var room = snap.val();
+    if (room.status !== 'waiting') { document.getElementById('hs-mp-status').textContent = 'That run already started.'; return; }
+    var count = Object.keys(room.lobby || {}).length;
+    if (count >= 5) { document.getElementById('hs-mp-status').textContent = 'Room is full (5 players).'; return; }
+    _hsMP.code = code;
+    _hsMP.isHost = false;
+    _hsMP.roomRef = ref;
+    ref.child('lobby/' + _hsMP.myId).set({ name: _hsMP.myName, ready: false });
+    document.getElementById('hs-mp-ready-btn').style.display = 'block';
+    document.getElementById('hs-mp-status').textContent = 'Joined room ' + code + '.';
+    say('Joined room ' + code + '.');
+    sfx('sfx-confirm');
+    hsMpListenRoom(code);
+  }).catch(function(err) {
+    document.getElementById('hs-mp-status').textContent = 'Failed to join room. Check your connection.';
+    console.error('[HS-MP] join room failed:', err);
+  });
+}
+
+function hsMpListenRoom(code) {
+  if (_hsMP.roomListener) { try { window._fbRtdb.ref('hs_rooms/' + code).off('value', _hsMP.roomListener); } catch(e) {} }
+  _hsMP.roomListener = window._fbRtdb.ref('hs_rooms/' + code).on('value', function(snap) {
+    hsMpHandleRoomUpdate(snap.exists() ? snap.val() : null);
+  });
+}
+
+function hsMpReady() {
+  if (!_hsMP || !_hsMP.code || !_hsMP.roomRef) return;
+  _hsMP.roomRef.child('lobby/' + _hsMP.myId + '/ready').set(true);
+  var btn = document.getElementById('hs-mp-ready-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Ready'; }
+  sfx('sfx-confirm');
+}
+
+function hsMpHostStart() {
+  if (!_hsMP || !_hsMP.isHost || !_hsMP.room) return;
+  var lobby = _hsMP.room.lobby || {};
+  var ids = Object.keys(lobby);
+  if (ids.length < 1) return;
+  var players = {};
+  ids.forEach(function(id) {
+    players[id] = { name: lobby[id].name, x: 0, y: 0, caught: false, escaped: false, hiddenUntil: 0, hideCooldownUntil: 0 };
+  });
+  var m = HS_MONSTER_STARTS[Math.floor(Math.random() * HS_MONSTER_STARTS.length)];
+  _hsMP.roomRef.update({
+    status: 'started',
+    state: { players: players, monster: { x: m.x, y: m.y }, items: 0, moveSeq: 0, status: 'active', lastEvent: null }
+  }).catch(function(err) { console.error('[HS-MP] start failed:', err); });
+}
+
+function hsMpLeaveLobby() {
+  // _hsMP.code is set synchronously in hsMpCreateRoom()/hsMpJoinRoom() before
+  // their Firebase write resolves — roomRef only gets set once that write
+  // actually succeeds. Leaving right after a failed create (bad connection,
+  // a permission error) would otherwise crash here on a null roomRef.
+  if (_hsMP && _hsMP.code && _hsMP.roomRef) {
+    _hsMP.roomRef.child('lobby/' + _hsMP.myId).remove().catch(function(){});
+    if (_hsMP.isHost) {
+      // Host bailing before start — the room is useless without them, clean it up.
+      _hsMP.roomRef.once('value').then(function(snap) {
+        if (snap.exists() && snap.val().status === 'waiting') _hsMP.roomRef.remove();
+      }).catch(function(){});
+    }
+  }
+  hsMpTeardown();
+  document.getElementById('hs-mp-lobby').style.display = 'none';
+  document.getElementById('hs-intro').style.display = 'block';
+  sfx('sfx-select');
+}
+
+function hsMpTeardown() {
+  if (_hsMP && _hsMP.roomListener && _hsMP.code) {
+    try { window._fbRtdb.ref('hs_rooms/' + _hsMP.code).off('value', _hsMP.roomListener); } catch(e) {}
+  }
+  hsStopGrowlLoop();
+  _hsMP = null;
+}
+
+// ── Shared state helpers — used both by the transactions below and by the
+// reused hsDistance()/hsDirection() growl-audio functions. ──
+function _hsMpMyPlayer() {
+  if (!_hsMP || !_hsMP.room || !_hsMP.room.state) return null;
+  return _hsMP.room.state.players ? _hsMP.room.state.players[_hsMP.myId] : null;
+}
+function _hsMpMonster() {
+  return (_hsMP && _hsMP.room && _hsMP.room.state) ? _hsMP.room.state.monster : null;
+}
+function hsMpPlayerName(room, id) {
+  var p = room && room.state && room.state.players && room.state.players[id];
+  return (p && p.name) || 'A player';
+}
+
+// Nearest eligible (not caught, not escaped, not currently hidden for this
+// advance) player to the monster — pure function of `state`, so every
+// client's transaction callback computes the exact same answer given the
+// same inputs. Ties broken by lowest player id for full determinism.
+function _hsMpComputeNearestTarget(state, seq) {
+  var best = null, bestDist = Infinity;
+  Object.keys(state.players).sort().forEach(function(id) {
+    var p = state.players[id];
+    if (p.caught || p.escaped) return;
+    if (p.hiddenUntil && p.hiddenUntil > seq) return;
+    var d = Math.abs(p.x - state.monster.x) + Math.abs(p.y - state.monster.y);
+    if (d < bestDist) { bestDist = d; best = p; }
+  });
+  return best;
+}
+function _hsMpAdvanceMonsterToward(state, target) {
+  var caughtIds = [];
+  if (!target) return caughtIds;
+  var mo = state.monster;
+  var mdx = target.x - mo.x, mdy = target.y - mo.y;
+  if (mdx !== 0 || mdy !== 0) {
+    if (Math.abs(mdx) >= Math.abs(mdy)) mo.x += mdx > 0 ? 1 : -1;
+    else mo.y += mdy > 0 ? 1 : -1;
+  }
+  Object.keys(state.players).forEach(function(id) {
+    var p = state.players[id];
+    if (!p.escaped && !p.caught && p.x === mo.x && p.y === mo.y) { p.caught = true; caughtIds.push(id); }
+  });
+  return caughtIds;
+}
+function _hsMpAnyoneStillPlaying(state) {
+  return Object.keys(state.players).some(function(id) {
+    var p = state.players[id];
+    return !p.caught && !p.escaped;
+  });
+}
+
+function hsMpMove(dir) {
+  if (!_hsMP || !_hsMP.active || !_hsMP.roomRef) return;
+  sfx('sfx-footstep');
+  var myId = _hsMP.myId;
+  _hsMP.roomRef.child('state').transaction(function(state) {
+    if (!state || !state.players || !state.players[myId] || state.status === 'over') return state;
+    var me = state.players[myId];
+    if (me.caught || me.escaped) return state;
+    var nx = me.x, ny = me.y, moved = true;
+    if (dir === 'north') { if (ny > 0) ny--; else moved = false; }
+    else if (dir === 'south') { if (ny < HS_GRID_SIZE - 1) ny++; else moved = false; }
+    else if (dir === 'west')  { if (nx > 0) nx--; else moved = false; }
+    else if (dir === 'east')  { if (nx < HS_GRID_SIZE - 1) nx++; else moved = false; }
+    state.moveSeq = (state.moveSeq || 0) + 1;
+    if (!moved) { state.lastEvent = { type: 'wall', by: myId, seq: state.moveSeq }; return state; }
+    me.x = nx; me.y = ny;
+
+    var rescued = null;
+    Object.keys(state.players).forEach(function(id) {
+      if (id === myId) return;
+      var p = state.players[id];
+      if (p.caught && !p.escaped && p.x === nx && p.y === ny) { p.caught = false; rescued = id; }
+    });
+
+    var foundItem = false;
+    if ((state.items || 0) < 5 && Math.random() < 0.20) { state.items = (state.items || 0) + 1; foundItem = true; }
+
+    var escapedNow = false;
+    if (nx === HS_GRID_SIZE - 1 && ny === HS_GRID_SIZE - 1) { me.escaped = true; escapedNow = true; }
+
+    var target = _hsMpComputeNearestTarget(state, state.moveSeq);
+    var caughtIds = _hsMpAdvanceMonsterToward(state, target);
+
+    if (!_hsMpAnyoneStillPlaying(state)) state.status = 'over';
+    state.lastEvent = { type: 'move', by: myId, dir: dir, seq: state.moveSeq,
+      foundItem: foundItem, rescued: rescued, escaped: escapedNow, caught: caughtIds };
+    return state;
+  }, function(error) { if (error) console.warn('[HS-MP] move transaction failed:', error); });
+}
+
+function hsMpHide() {
+  if (!_hsMP || !_hsMP.active || !_hsMP.roomRef) return;
+  sfx('sfx-select');
+  var myId = _hsMP.myId;
+  _hsMP.roomRef.child('state').transaction(function(state) {
+    if (!state || !state.players || !state.players[myId] || state.status === 'over') return state;
+    var me = state.players[myId];
+    if (me.caught || me.escaped) return state;
+    if (me.hideCooldownUntil && me.hideCooldownUntil >= (state.moveSeq || 0)) {
+      state.lastEvent = { type: 'hide-cooldown', by: myId, seq: (state.moveSeq || 0) };
+      return state;
+    }
+    state.moveSeq = (state.moveSeq || 0) + 1;
+    me.hideCooldownUntil = state.moveSeq;
+    var usedItem = (state.items || 0) > 0;
+    var chance = 0.55 + (usedItem ? 0.25 : 0);
+    if (usedItem) state.items = (state.items || 0) - 1;
+    var caughtIds = [];
+    if (Math.random() < chance) {
+      me.hiddenUntil = state.moveSeq + 1;
+      state.lastEvent = { type: 'hide-success', by: myId, usedItem: usedItem, seq: state.moveSeq };
+    } else {
+      var target = _hsMpComputeNearestTarget(state, state.moveSeq);
+      caughtIds = _hsMpAdvanceMonsterToward(state, target);
+      state.lastEvent = { type: 'hide-fail', by: myId, seq: state.moveSeq, caught: caughtIds };
+    }
+    if (!_hsMpAnyoneStillPlaying(state)) state.status = 'over';
+    return state;
+  }, function(error) { if (error) console.warn('[HS-MP] hide transaction failed:', error); });
+}
+
+function hsMpHandleRoomUpdate(room) {
+  if (!_hsMP) return;
+  _hsMP.room = room;
+  if (!room) { say('The room was closed.'); hsMpLeaveLobby(); return; }
+  if (room.status === 'waiting') {
+    hsMpRenderLobby(room);
+    return;
+  }
+  if (!_hsMP.active) { _hsMP.active = true; hsMpEnterPlayUI(room); }
+  if (room.state && room.state.status === 'over') {
+    if (!_hsMP.ended) { _hsMP.ended = true; hsMpEnterEndUI(room); }
+    return;
+  }
+  hsMpHandleNewEvent(room);
+  hsMpRenderPartyStatus(room);
+  hsMpCheckPhase(room);
+}
+
+function hsMpRenderLobby(room) {
+  var list = document.getElementById('hs-mp-players-list');
+  if (!list) return;
+  var ids = Object.keys(room.lobby || {});
+  list.innerHTML = ids.map(function(id) {
+    var p = room.lobby[id];
+    var you = id === _hsMP.myId ? ' (you)' : '';
+    return '<div>' + (p.ready ? '✓' : '…') + ' ' + p.name + you + '</div>';
+  }).join('');
+  document.getElementById('hs-mp-status').textContent = ids.length + ' of 5 players — ' + ids.filter(function(id){ return room.lobby[id].ready; }).length + ' ready.';
+}
+
+function hsMpEnterPlayUI(room) {
+  document.getElementById('hs-mp-lobby').style.display = 'none';
+  document.getElementById('hs-end').style.display = 'none';
+  document.getElementById('hs-mp-party-status').style.display = 'block';
+  document.getElementById('hs-play').style.display = 'block';
+  document.getElementById('hs-3d-view').style.display = 'none'; // solo-only for now
+  document.getElementById('hs-room-desc').textContent = 'You stand still, listening.';
+  document.getElementById('hs-end-retry-btn').onclick = hsShowMpLobby;
+  var count = Object.keys((room.state && room.state.players) || {}).length;
+  goTo('hideseek');
+  _hsMP.currentTrack = HS_EXPLORE_TRACK;
+  playTrack(HS_EXPLORE_TRACK);
+  sfx('sfx-select');
+  say('Hide and Seek begins. ' + count + ' players. Find the way out together — walk onto a caught teammate to rescue them.');
+  setTimeout(function() { hsStartGrowlLoop(); }, 1500);
+  hsMpRenderPartyStatus(room);
+}
+
+function hsMpAnnounceDistance(dist) {
+  var msgs = { 6: 'You can hear it somewhere behind you.', 4: 'It is getting closer.', 2: 'It is right behind you. Hide, or run.', 1: 'It is almost on you.' };
+  if (msgs[dist]) say(msgs[dist]);
+}
+
+function hsMpHandleNewEvent(room) {
+  var ev = room.state && room.state.lastEvent;
+  if (!ev || ev.seq === _hsMP.lastSeenSeq) return;
+  _hsMP.lastSeenSeq = ev.seq;
+  var isMe = ev.by === _hsMP.myId;
+  var name = hsMpPlayerName(room, ev.by);
+  if (ev.type === 'wall') {
+    if (isMe) say('There is a wall that way.');
+  } else if (ev.type === 'move') {
+    if (isMe) {
+      var parts = ['Moving ' + ev.dir + '.'];
+      if (ev.foundItem) parts.push('You spot something that will help you hide.');
+      if (ev.escaped) parts.push('You made it to the exit! You escaped.');
+      say(parts.join(' '));
+      if (!ev.escaped) hsMpAnnounceDistance(hsDistance());
+    } else if (ev.escaped) {
+      say(name + ' escaped!');
+    }
+    if (ev.rescued) {
+      if (ev.rescued === _hsMP.myId) say('You were rescued' + (isMe ? '' : ' by ' + name) + '.');
+      else say(hsMpPlayerName(room, ev.rescued) + ' was rescued' + (isMe ? '' : ' by ' + name) + '.');
+    }
+    (ev.caught || []).forEach(function(id) {
+      if (id === _hsMP.myId) say('It caught you! Wait for a teammate to reach you.');
+      else say(hsMpPlayerName(room, id) + ' was caught!');
+    });
+  } else if (ev.type === 'hide-cooldown') {
+    if (isMe) say('Still catching your breath from last time.');
+  } else if (ev.type === 'hide-success') {
+    if (isMe) say('You hid successfully. The next advance will pass you by.');
+  } else if (ev.type === 'hide-fail') {
+    if (isMe) say('It sensed you.');
+    (ev.caught || []).forEach(function(id) {
+      if (id === _hsMP.myId) say('It caught you! Wait for a teammate to reach you.');
+      else say(hsMpPlayerName(room, id) + ' was caught!');
+    });
+  }
+  hsUpdateGrowl();
+}
+
+function hsMpRenderPartyStatus(room) {
+  var box = document.getElementById('hs-mp-party-status');
+  if (!box || !room.state || !room.state.players) return;
+  var players = room.state.players;
+  var lines = Object.keys(players).map(function(id) {
+    var p = players[id];
+    var you = id === _hsMP.myId ? ' (you)' : '';
+    var status = p.escaped ? '🚪 escaped' : p.caught ? '⛓️ caught' : '🚶 exploring';
+    return p.name + you + ' — ' + status;
+  });
+  box.innerHTML = '🫥 ' + (room.state.items || 0) + ' shared hiding spot' + (room.state.items === 1 ? '' : 's') + '<br>' + lines.join('<br>');
+  var badge = document.getElementById('hs-distance-badge');
+  if (badge && !_hsMpMyPlayer()) return;
+  if (badge) {
+    var me = _hsMpMyPlayer();
+    if (me && !me.caught && !me.escaped) {
+      var dist = hsDistance();
+      badge.textContent = dist + (dist === 1 ? ' room away' : ' rooms away');
+    } else if (me && me.caught) {
+      badge.textContent = 'caught — wait for rescue';
+    } else if (me && me.escaped) {
+      badge.textContent = 'escaped';
+    }
+  }
+}
+
+// Switches everyone's music the moment ANY active player is close — a
+// shared party threat cue rather than a purely personal one, since the
+// party succeeds or fails together.
+function hsMpCheckPhase(room) {
+  if (!room.state || !room.state.players || !room.state.monster) return;
+  var mo = room.state.monster;
+  var minDist = Infinity;
+  Object.keys(room.state.players).forEach(function(id) {
+    var p = room.state.players[id];
+    if (p.caught || p.escaped) return;
+    var d = Math.abs(p.x - mo.x) + Math.abs(p.y - mo.y);
+    if (d < minDist) minDist = d;
+  });
+  var wantChase = minDist <= HS_CHASE_THRESHOLD;
+  var wantTrack = wantChase ? HS_CHASE_TRACK : HS_EXPLORE_TRACK;
+  if (_hsMP.currentTrack !== wantTrack) { _hsMP.currentTrack = wantTrack; playTrack(wantTrack); }
+}
+
+function hsMpEnterEndUI(room) {
+  hsStopGrowlLoop();
+  document.getElementById('hs-play').style.display = 'none';
+  document.getElementById('hs-end').style.display = 'block';
+  var players = (room.state && room.state.players) || {};
+  var ids = Object.keys(players);
+  var escapedCount = ids.filter(function(id) { return players[id].escaped; }).length;
+  var allCaught = escapedCount === 0;
+  document.getElementById('hs-end-title').textContent = allCaught ? 'Caught' : (escapedCount === ids.length ? 'Escaped' : 'Some Made It Out');
+  document.getElementById('hs-end-text').textContent = allCaught
+    ? 'It found everyone. Try again — the way out is different every time.'
+    : 'The run is over. Here is how everyone fared:';
+  var resultsBox = document.getElementById('hs-mp-end-results');
+  resultsBox.style.display = 'block';
+  resultsBox.innerHTML = ids.map(function(id) {
+    var p = players[id];
+    var you = id === _hsMP.myId ? ' (you)' : '';
+    return (p.escaped ? '🚪' : '⛓️') + ' ' + p.name + you + ' — ' + (p.escaped ? 'escaped' : 'caught');
+  }).join('<br>');
+  playTrack(getMenuTrack());
+  sfx(allCaught ? 'sfx-death' : 'sfx-confirm');
+  say((allCaught ? 'Everyone was caught. ' : 'Run over. ') + escapedCount + ' of ' + ids.length + ' players escaped.');
+}
+// ── END HIDE AND SEEK — MULTIPLAYER ──
 
 // -- SPELL SYSTEM --
 
