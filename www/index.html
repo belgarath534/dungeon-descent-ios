@@ -3076,7 +3076,10 @@ var DDStore = (function() {
     <div id="dg-3d-view" style="display:none;position:relative;width:100%;height:min(38vh,280px);background:#000;overflow:hidden;border-bottom:1px solid #2a1a1a;touch-action:none;" aria-hidden="true">
       <div id="dg-3d-canvas-wrap" style="position:absolute;inset:0;"></div>
       <div id="dg-3d-fade" style="position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity 0.26s;"></div>
-      <div id="dg-3d-fps" style="position:absolute;top:6px;right:8px;font-family:monospace;font-size:10px;color:#88ff88;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;display:none;"></div>
+      <div id="dg-3d-fps" style="position:absolute;bottom:8px;right:8px;font-family:monospace;font-size:10px;color:#88ff88;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;display:none;"></div>
+      <div id="dg-3d-minimap" aria-hidden="true" style="display:none;position:absolute;top:6px;right:8px;width:84px;height:84px;background:rgba(0,0,0,0.55);border:1px solid rgba(200,160,100,0.35);border-radius:4px;overflow:hidden;">
+        <canvas id="dg-3d-minimap-canvas" width="84" height="84" style="display:block;width:84px;height:84px;"></canvas>
+      </div>
       <div id="dg-3d-hint" style="position:absolute;top:6px;left:8px;font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:0.08em;color:#886644;background:rgba(0,0,0,0.5);padding:3px 8px;border-radius:3px;">Drag to look · Walk with the pad</div>
       <div id="dg-3d-movepad" style="display:none;position:absolute;left:8px;bottom:8px;z-index:5;width:120px;height:120px;">
         <button type="button" id="dg3d-mv-up" aria-label="Walk forward" style="position:absolute;left:40px;top:0;width:40px;height:40px;background:rgba(20,16,10,0.6);border:1px solid rgba(200,160,100,0.45);color:#e0c080;font-size:16px;border-radius:6px;padding:0;">▲</button>
@@ -8009,6 +8012,9 @@ var DDStore = (function() {
 
     <div class="setting-label"><span>FPS Counter</span><button class="toggle-btn" id="td-fps-toggle" aria-pressed="false" onclick="toggle3DSetting('fpsCounter')">Off</button></div>
     <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">Shows a live frames-per-second counter, useful for judging whether other settings here are actually helping.</div>
+
+    <div class="setting-label"><span>Minimap</span><button class="toggle-btn on" id="td-minimap-toggle" aria-pressed="true" onclick="toggle3DSetting('minimap')">On</button></div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#444;margin:0 0 16px 0;">A small top-down map of rooms you've explored. Only ever shown for sighted play — screen reader sessions never display it.</div>
   </div>
 </div>
 
@@ -10882,7 +10888,14 @@ function updateBetaPanel() {
 
 // ── 3D SETTINGS (graphics/performance options for 3D Mode) ──
 function get3DSettings() {
-  return JSON.parse(DDStore.getItem('dd_3d_settings') || '{"shadows":false,"torchFlicker":true,"fpsCounter":false}');
+  // Merge onto the defaults rather than parsing the stored JSON directly —
+  // a settings object saved before the Minimap toggle existed has no
+  // "minimap" key at all, which would otherwise read as undefined (falsy)
+  // instead of defaulting on for those existing players.
+  var defaults = { shadows:false, torchFlicker:true, fpsCounter:false, minimap:true };
+  var saved = JSON.parse(DDStore.getItem('dd_3d_settings') || '{}');
+  for (var k in saved) defaults[k] = saved[k];
+  return defaults;
 }
 
 function save3DSettings(s) {
@@ -10907,11 +10920,12 @@ function toggle3DSetting(key) {
     _room3D.renderer.shadowMap.enabled = !!s.shadows;
     _rebuildAllVisibleRooms();
   }
+  if (key === 'minimap' && typeof _renderMinimap === 'function') _renderMinimap();
 }
 
 function update3DSettingsPanel() {
   var s = get3DSettings();
-  var map = { shadows: 'td-shadows-toggle', torchFlicker: 'td-flicker-toggle', fpsCounter: 'td-fps-toggle' };
+  var map = { shadows: 'td-shadows-toggle', torchFlicker: 'td-flicker-toggle', fpsCounter: 'td-fps-toggle', minimap: 'td-minimap-toggle' };
   Object.keys(map).forEach(function(key) {
     var btn = document.getElementById(map[key]);
     if (!btn) return;
@@ -13293,6 +13307,92 @@ function _room3DWantsAimControls() {
   return !(ACCESS && ACCESS.srmode);
 }
 
+// Same "sighted play only" rule as the aim controls, plus its own opt-out
+// setting — a top-down map is pure visual sugar with nothing a screen
+// reader session can act on, so it stays off whenever srmode is on
+// regardless of the setting.
+function _room3DWantsMinimap() {
+  return _room3DWantsAimControls() && !!get3DSettings().minimap;
+}
+
+// Top-down view of DS._roomGraph: filled squares for rooms actually visited,
+// a highlighted square for the current room, thin connecting lines for doors
+// between two visited rooms, and small dim dots for known-but-unvisited
+// neighbors (a door out of a visited room proves that neighbor exists, even
+// before you've walked into it — matches what the spoken exits text already
+// reveals, so it's not spoiling anything the audio doesn't already say).
+function _renderMinimap() {
+  var wrap = document.getElementById('dg-3d-minimap');
+  if (!wrap) return;
+  if (!_room3DWantsMinimap() || !DS || !DS._roomGraph || !DS._gridPos) {
+    wrap.style.display = 'none';
+    return;
+  }
+  var canvas = document.getElementById('dg-3d-minimap-canvas');
+  if (!canvas) return;
+  wrap.style.display = 'block';
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  var cells = DS._roomGraph.cells;
+  var visited = Object.keys(cells).map(function(k) { return cells[k]; }).filter(function(c) { return c.visited; });
+  if (!visited.length) return;
+
+  var known = {}; // visited cells + their known (doored) neighbors
+  visited.forEach(function(c) {
+    known[_room3DKey(c.gx, c.gy)] = { gx: c.gx, gy: c.gy, visited: true };
+    ROOM3D_DIRS.forEach(function(d) {
+      if (!c.doors[d.name]) return;
+      var nKey = _room3DKey(c.gx + d.dx, c.gy + d.dy);
+      if (!known[nKey]) known[nKey] = { gx: c.gx + d.dx, gy: c.gy + d.dy, visited: false };
+    });
+  });
+  var pts = Object.keys(known).map(function(k) { return known[k]; });
+
+  var minGx = Math.min.apply(null, pts.map(function(p) { return p.gx; }));
+  var maxGx = Math.max.apply(null, pts.map(function(p) { return p.gx; }));
+  var minGy = Math.min.apply(null, pts.map(function(p) { return p.gy; }));
+  var maxGy = Math.max.apply(null, pts.map(function(p) { return p.gy; }));
+  var spanX = Math.max(1, maxGx - minGx), spanY = Math.max(1, maxGy - minGy);
+  var pad = 10;
+  var cell = Math.min((W - pad * 2) / (spanX + 1), (H - pad * 2) / (spanY + 1));
+  function sx(gx) { return pad + (gx - minGx + 0.5) * cell; }
+  function sy(gy) { return pad + (gy - minGy + 0.5) * cell; }
+
+  // Door connections between two visited rooms
+  ctx.strokeStyle = 'rgba(200,160,100,0.55)';
+  ctx.lineWidth = 2;
+  visited.forEach(function(c) {
+    ROOM3D_DIRS.forEach(function(d) {
+      if (!c.doors[d.name]) return;
+      var nKey = _room3DKey(c.gx + d.dx, c.gy + d.dy);
+      var n = cells[nKey];
+      if (!n || !n.visited) return;
+      ctx.beginPath();
+      ctx.moveTo(sx(c.gx), sy(c.gy));
+      ctx.lineTo(sx(n.gx), sy(n.gy));
+      ctx.stroke();
+    });
+  });
+
+  var r = Math.max(2, cell * 0.28);
+  pts.forEach(function(p) {
+    if (p.visited) return; // draw known-but-unvisited dots first, under everything
+    ctx.fillStyle = 'rgba(160,130,90,0.35)';
+    ctx.beginPath();
+    ctx.arc(sx(p.gx), sy(p.gy), r * 0.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  visited.forEach(function(c) {
+    var isCurrent = c.gx === DS._gridPos.gx && c.gy === DS._gridPos.gy;
+    ctx.fillStyle = isCurrent ? '#ffcc44' : 'rgba(200,160,100,0.75)';
+    ctx.beginPath();
+    ctx.arc(sx(c.gx), sy(c.gy), isCurrent ? r * 1.3 : r, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
 // WASD/arrow-key movement — bound once, globally, guarded so it's a no-op
 // whenever the 3D view isn't actually the thing on screen (menus, combat,
 // typing in a text field, etc).
@@ -13529,6 +13629,7 @@ function _syncVisibleRooms(centerCell) {
     _ensureRoomBuilt(DS._roomGraph.cells[key]);
   });
   _room3D.built = true;
+  _renderMinimap();
 }
 
 function _rebuildAllVisibleRooms() {
