@@ -13272,7 +13272,13 @@ var _room3D = { loading:null, THREE:null, scene:null, camera:null, renderer:null
   ROOM_W:10, ROOM_D:12, ROOM_H:4.2, DOOR_W:2.4 };
 
 function _room3DWantsVisual() {
-  return shouldUse3DMode() && !!(DS && DS._roomGraph);
+  // The visual canvas (and everything hanging off it — the move pad,
+  // drag-to-look, the FPS counter) is only useful to a sighted player. A
+  // screen-reader player who opts into 3D Mode still gets the full spatial
+  // audio experience (that's gated on shouldUse3DMode() alone, separately),
+  // they just never get a canvas they can't see, or a camera-relative move
+  // pad they have no way to aim.
+  return shouldUse3DMode() && !!(DS && DS._roomGraph) && !(ACCESS && ACCESS.srmode);
 }
 
 // WASD/arrow-key movement — bound once, globally, guarded so it's a no-op
