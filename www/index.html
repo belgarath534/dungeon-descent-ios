@@ -13443,17 +13443,24 @@ function _bind3DLook(el) {
     _room3D.yaw -= dx * 0.006;
     _room3D.pitch = Math.max(-1.0, Math.min(1.0, _room3D.pitch - dy * 0.006));
   }
+  // passive:false + preventDefault() here is load-bearing — without it, a
+  // real device's native page-scroll / overscroll gesture competes with (and
+  // usually wins over) the camera look, so the drag "does nothing" visually
+  // even though the yaw/pitch math underneath is actually running correctly.
+  el.style.touchAction = 'none';
   el.addEventListener('touchstart', function(e) {
+    e.preventDefault();
     var t = e.changedTouches[0];
     dragging = true; activeId = t.identifier; lastX = t.clientX; lastY = t.clientY;
-  }, { passive: true });
+  }, { passive: false });
   el.addEventListener('touchmove', function(e) {
     if (!dragging) return;
+    e.preventDefault();
     for (var i = 0; i < e.changedTouches.length; i++) {
       var t = e.changedTouches[i];
       if (t.identifier === activeId) onMove(t.clientX, t.clientY);
     }
-  }, { passive: true });
+  }, { passive: false });
   el.addEventListener('touchend', function() { dragging = false; });
   el.addEventListener('touchcancel', function() { dragging = false; });
   el.addEventListener('mousedown', function(e) { dragging = true; lastX = e.clientX; lastY = e.clientY; });
