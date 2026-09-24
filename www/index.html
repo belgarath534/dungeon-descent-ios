@@ -2072,6 +2072,15 @@ var DDStore = (function() {
 
     <!-- Play panel -->
     <div id="hs-play" style="display:none;">
+      <div id="hs-3d-view" style="display:none;position:relative;width:100%;height:min(38vh,260px);background:#000;overflow:hidden;border-bottom:1px solid #2a1a1a;touch-action:none;margin-bottom:12px;" aria-hidden="true">
+        <div id="hs-3d-canvas-wrap" style="position:absolute;inset:0;"></div>
+        <div id="hs-3d-fade" style="position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity 0.22s;"></div>
+        <div id="hs-3d-fps" style="position:absolute;bottom:8px;right:8px;font-family:monospace;font-size:10px;color:#88ff88;background:rgba(0,0,0,0.5);padding:2px 6px;border-radius:3px;display:none;"></div>
+        <div id="hs-3d-minimap" aria-hidden="true" style="display:none;position:absolute;top:6px;right:8px;width:84px;height:84px;background:rgba(0,0,0,0.55);border:1px solid rgba(200,160,100,0.35);border-radius:4px;overflow:hidden;">
+          <canvas id="hs-3d-minimap-canvas" width="84" height="84" style="display:block;width:84px;height:84px;"></canvas>
+        </div>
+        <div id="hs-3d-hint" style="position:absolute;top:6px;left:8px;font-family:Cinzel,serif;font-size:0.55rem;letter-spacing:0.08em;color:#886644;background:rgba(0,0,0,0.5);padding:3px 8px;border-radius:3px;">Drag to look</div>
+      </div>
       <div id="hs-status-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;">
         <span style="font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.15em;color:rgba(255,255,255,0.4);" id="hs-progress">Room 1</span>
         <span id="hs-items-badge" aria-live="off" style="font-family:Cinzel,serif;font-size:0.62rem;letter-spacing:0.1em;padding:3px 9px;border:1px solid #446633;color:#88cc88;display:none;">🫥 0</span>
@@ -10921,6 +10930,7 @@ function toggle3DSetting(key) {
     _rebuildAllVisibleRooms();
   }
   if (key === 'minimap' && typeof _renderMinimap === 'function') _renderMinimap();
+  if (key === 'minimap' && typeof _renderHS3DMinimap === 'function') _renderHS3DMinimap();
 }
 
 function update3DSettingsPanel() {
@@ -42556,10 +42566,14 @@ function hsStart() {
   sfx('sfx-select');
   say('Hide and Seek begins. Something is in here with you — the Darkness Swallower. Find the way out before it finds you. Use North, South, East, or West to move, or Hide to try to lose it. Use headphones — you can hear which direction it is in.');
   setTimeout(function() { hsStartGrowlLoop(); }, 1500);
+  initHS3DView();
 }
 
 function hsLeave() {
   hsStopGrowlLoop();
+  _stopHS3DLoop();
+  var v3 = document.getElementById('hs-3d-view');
+  if (v3) v3.style.display = 'none';
   HS = null;
   playTrack(getMenuTrack());
   goTo('menu');
@@ -42742,6 +42756,7 @@ function hsMove(dir) {
   }
   hsCheckPhase();
   hsUpdateUI();
+  _placeHS3DCamera(false);
   var dist = hsDistance();
   if (dist <= 0) { hsCaught(); return; }
   if (HS.px === HS.ex && HS.py === HS.ey) { hsEscape(); return; }
@@ -42787,12 +42802,16 @@ function hsHide() {
   }
   hsCheckPhase();
   hsUpdateUI();
+  _refreshHS3DMonster();
   if (hsDistance() <= 0) { hsCaught(); return; }
 }
 
 function hsCaught() {
   HS.active = false;
   hsStopGrowlLoop();
+  _stopHS3DLoop();
+  var v3c = document.getElementById('hs-3d-view');
+  if (v3c) v3c.style.display = 'none';
   sfx('sfx-death');
   vibe(VIBE.hunterCatch);
   document.getElementById('hs-play').style.display = 'none';
@@ -42806,6 +42825,9 @@ function hsCaught() {
 function hsEscape() {
   HS.active = false;
   hsStopGrowlLoop();
+  _stopHS3DLoop();
+  var v3e = document.getElementById('hs-3d-view');
+  if (v3e) v3e.style.display = 'none';
   sfx('sfx-confirm');
   vibe(VIBE.fleeSuccess);
   document.getElementById('hs-play').style.display = 'none';
@@ -42816,6 +42838,346 @@ function hsEscape() {
   say('You escaped. You made it out alive.');
 }
 // ── END HIDE AND SEEK ──
+
+// ── HIDE AND SEEK — 3D MODE ──
+// HS is a free 7x7 grid with no interior walls and a discrete move-lock
+// pacing (a listening beat between moves) — nothing like a dungeon's room
+// graph. Rather than force it into _room3D, it gets its own small scene:
+// one open arena sized to the whole grid, a camera that teleports (with a
+// fade) to the player's cell on every hsMove()/hsHide() the same way the
+// original dungeon 3D Mode did before free-roam walking was added, and a
+// crude, deliberately underdetailed monster mesh — the blind player only
+// ever experiences the Swallower through the spatial growl/footstep audio
+// that already exists; this is purely something a sighted friend watching
+// the same screen can see, same as everywhere else 3D Mode shows up.
+var _hs3D = { THREE:null, scene:null, camera:null, renderer:null, raf:null,
+  yaw:0, pitch:0, ambient:null, monsterMesh:null, lamps:[] };
+var HS3D_TILE = 4;
+var HS3D_WALL_H = 3.2;
+
+function _hs3DWantsVisual() {
+  return !!(HS && HS.active) && typeof isBetaOn === 'function' && isBetaOn('3dmode');
+}
+// Same "sighted play only" rule used everywhere else in 3D Mode — a screen
+// reader player still gets the scene rendered (so they can show a friend),
+// just not controls or a map they can't use.
+function _hs3DWantsAimControls() {
+  return !(ACCESS && ACCESS.srmode);
+}
+function _hs3DWantsMinimap() {
+  return _hs3DWantsAimControls() && !!get3DSettings().minimap;
+}
+
+function initHS3DView() {
+  if (!_hs3DWantsVisual()) return;
+  var wrap = document.getElementById('hs-3d-view');
+  if (!wrap) return;
+  wrap.style.display = '';
+  // The scene/renderer persist across HS runs within the same page load (see
+  // below), so _setupHS3DScene only actually runs once — but srmode can
+  // differ between one hsStart() and the next, so the hint has to be
+  // re-synced on every call here rather than only the first time the scene
+  // is actually built.
+  var hint = document.getElementById('hs-3d-hint');
+  if (hint) hint.style.display = _hs3DWantsAimControls() ? '' : 'none';
+  _load3DEngine().then(function(THREE) {
+    if (!_hs3DWantsVisual()) return; // player may have left before load finished
+    if (!_hs3D.renderer) _setupHS3DScene(THREE);
+    _placeHS3DCamera(true);
+    _startHS3DLoop();
+  }).catch(function(e) { console.warn('[DD] HS 3D visual load failed:', e); wrap.style.display = 'none'; });
+}
+
+function _setupHS3DScene(THREE) {
+  _hs3D.THREE = THREE;
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x05050a, 0.045);
+  var wrapEl = document.getElementById('hs-3d-canvas-wrap');
+  var w = wrapEl.clientWidth || 300, h = wrapEl.clientHeight || 220;
+  var camera = new THREE.PerspectiveCamera(70, w / h, 0.1, 60);
+  camera.position.set(0, 1.6, 0);
+  var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  wrapEl.innerHTML = '';
+  wrapEl.appendChild(renderer.domElement);
+  _hs3D.scene = scene; _hs3D.camera = camera; _hs3D.renderer = renderer;
+
+  // Boosted well past what looked reasonable on a full-brightness desktop
+  // preview — a real screen renders MeshStandardMaterial much darker than
+  // it appears here, the same brightness gap the dungeon renderer hit
+  // earlier this session (fixed there by roughly doubling every value).
+  var ambient = new THREE.AmbientLight(0x453a4a, 1.25);
+  scene.add(ambient);
+  _hs3D.ambient = ambient;
+
+  // One open floor/ceiling plane and four perimeter walls sized to the whole
+  // HS_GRID_SIZE grid — matches hsMove()'s actual collision rule (only the
+  // outer boundary blocks movement; there are no interior walls to place).
+  var span = HS_GRID_SIZE * HS3D_TILE;
+  var center = span / 2 - HS3D_TILE / 2;
+  var floorMat = new THREE.MeshStandardMaterial({ color: 0x4a3c30, roughness: 0.95 });
+  var floor = new THREE.Mesh(new THREE.PlaneGeometry(span, span), floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.set(center, 0, center);
+  scene.add(floor);
+
+  var ceilMat = new THREE.MeshStandardMaterial({ color: 0x1c1814, roughness: 1 });
+  var ceil = new THREE.Mesh(new THREE.PlaneGeometry(span, span), ceilMat);
+  ceil.rotation.x = Math.PI / 2;
+  ceil.position.set(center, HS3D_WALL_H, center);
+  scene.add(ceil);
+
+  var wallMat = new THREE.MeshStandardMaterial({ color: 0x5c4c3a, roughness: 0.9 });
+  var wallGeoNS = new THREE.BoxGeometry(span + HS3D_TILE, HS3D_WALL_H, 0.3);
+  var wallGeoEW = new THREE.BoxGeometry(0.3, HS3D_WALL_H, span + HS3D_TILE);
+  [
+    [center, -HS3D_TILE / 2, wallGeoNS], [center, span - HS3D_TILE / 2, wallGeoNS],
+    [-HS3D_TILE / 2, center, wallGeoEW], [span - HS3D_TILE / 2, center, wallGeoEW]
+  ].forEach(function(w) {
+    var mesh = new THREE.Mesh(w[2], wallMat);
+    mesh.position.set(w[0], HS3D_WALL_H / 2, w[1]);
+    scene.add(mesh);
+  });
+
+  // A handful of flickering lamps scattered across the arena — bright enough
+  // to actually see the space by (the dungeon renderer's original pass at
+  // this looked fine in a full-brightness preview but rendered near-black on
+  // a real screen — same fix applied here up front instead of after the
+  // fact). One is always placed a tile off from the player's spawn point
+  // (not directly overhead — a light immediately above the camera blows out
+  // to solid white up close) so the opening view is never accidentally dark
+  // no matter how the random scatter lands.
+  _hs3D.lamps = [];
+  var lampSpots = [[HS3D_TILE, HS3D_TILE]];
+  for (var i = 0; i < 6; i++) {
+    lampSpots.push([Math.random() * (HS_GRID_SIZE - 1) * HS3D_TILE, Math.random() * (HS_GRID_SIZE - 1) * HS3D_TILE]);
+  }
+  lampSpots.forEach(function(p) {
+    var light = new THREE.PointLight(0xffaa55, 1.5, 9, 1.8);
+    light.position.set(p[0], 2.4, p[1]);
+    scene.add(light);
+    _hs3D.lamps.push({ light: light, base: 1.5, phase: Math.random() * Math.PI * 2 });
+  });
+
+  // Exit marker — visible from a distance for a spectator, even though the
+  // blind player is never told where it is ahead of reaching it.
+  var exitLight = new THREE.PointLight(0x66ffcc, 1.6, 9, 2);
+  exitLight.position.set(HS.ex * HS3D_TILE, 2, HS.ey * HS3D_TILE);
+  scene.add(exitLight);
+  var exitMesh = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.9, 0.9, 0.06, 20),
+    new THREE.MeshBasicMaterial({ color: 0x66ffcc, transparent: true, opacity: 0.5 })
+  );
+  exitMesh.position.set(HS.ex * HS3D_TILE, 0.04, HS.ey * HS3D_TILE);
+  scene.add(exitMesh);
+
+  // The Darkness Swallower — kept crude and silhouette-like on purpose. It's
+  // only ever hidden from a spectator's eyes by distance culling, never by
+  // detail; the blind player's real read on it stays entirely audio.
+  // A stretched sphere (not CapsuleGeometry — not present in the bundled
+  // Three.js build) gives a crude, faceless standing shape, fitting for
+  // something the game never really lets you see clearly anyway.
+  var monsterGroup = new THREE.Group();
+  var bodyMat = new THREE.MeshStandardMaterial({ color: 0x0a0508, roughness: 1 });
+  var body = new THREE.Mesh(new THREE.SphereGeometry(0.45, 12, 10), bodyMat);
+  body.scale.set(1, 1.6, 1);
+  body.position.y = 1.0;
+  monsterGroup.add(body);
+  var eyeMat = new THREE.MeshBasicMaterial({ color: 0xff2222 });
+  [[-0.15, 1.35, 0.4], [0.15, 1.35, 0.4]].forEach(function(p) {
+    var eye = new THREE.Mesh(new THREE.SphereGeometry(0.05, 8, 8), eyeMat);
+    eye.position.set(p[0], p[1], p[2]);
+    monsterGroup.add(eye);
+  });
+  scene.add(monsterGroup);
+  _hs3D.monsterMesh = monsterGroup;
+
+  _bindHS3DLook(renderer.domElement);
+  window.addEventListener('resize', _resizeHS3DView);
+}
+
+// Same load-bearing passive:false + preventDefault() as the dungeon's
+// _bind3DLook — without it a real device's native scroll competes with (and
+// usually wins over) the camera drag. Kept as its own small copy rather than
+// generalizing _bind3DLook, since that function hardcodes _room3D's yaw/pitch
+// and this scene has its own separate camera state.
+function _bindHS3DLook(el) {
+  var dragging = false, lastX = 0, lastY = 0, activeId = null;
+  function onMove(x, y) {
+    var dx = x - lastX, dy = y - lastY;
+    lastX = x; lastY = y;
+    _hs3D.yaw -= dx * 0.006;
+    _hs3D.pitch = Math.max(-1.0, Math.min(1.0, _hs3D.pitch - dy * 0.006));
+  }
+  el.style.touchAction = 'none';
+  el.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    var t = e.changedTouches[0];
+    dragging = true; activeId = t.identifier; lastX = t.clientX; lastY = t.clientY;
+  }, { passive: false });
+  el.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    e.preventDefault();
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      var t = e.changedTouches[i];
+      if (t.identifier === activeId) onMove(t.clientX, t.clientY);
+    }
+  }, { passive: false });
+  el.addEventListener('touchend', function() { dragging = false; });
+  el.addEventListener('touchcancel', function() { dragging = false; });
+  el.addEventListener('mousedown', function(e) { dragging = true; lastX = e.clientX; lastY = e.clientY; });
+  window.addEventListener('mousemove', function(e) { if (dragging) onMove(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', function() { dragging = false; });
+}
+
+function _hs3DCellCenter(gx, gy) { return { x: gx * HS3D_TILE, z: gy * HS3D_TILE }; }
+
+// Movement here is still the existing discrete North/South/East/West grid
+// step (not free-roam walking) — HS's listening-beat pacing depends on moves
+// being discrete, so the camera teleports behind a quick fade exactly like
+// dungeon 3D Mode did before free-roam walking was added there.
+function _placeHS3DCamera(instant) {
+  if (!HS) return;
+  var wrap = document.getElementById('hs-3d-view');
+  var isShowing = !!(wrap && wrap.style.display !== 'none');
+  if (!_hs3D.camera || !isShowing) {
+    // Same self-healing rule as the dungeon 3D fix earlier this session —
+    // initHS3DView() only ever gets called from hsStart(), so toggling 3D
+    // Mode on mid-run would otherwise leave every future move silently
+    // no-op-ing here forever. Checking isShowing (not just whether a
+    // camera object exists) matters because the scene/renderer persist
+    // across HS runs — a camera can already exist from an earlier session
+    // even though this run started with 3D Mode off and the view is
+    // currently hidden. initHS3DView() is async (loads Three.js) and safe
+    // to call repeatedly; once ready it places the camera itself, so this
+    // just kicks that off and returns rather than placing anything here.
+    if (_hs3DWantsVisual()) initHS3DView();
+    return;
+  }
+  var p = _hs3DCellCenter(HS.px, HS.py);
+  function place() {
+    _hs3D.camera.position.set(p.x, 1.6, p.z);
+    // A fixed yaw pointed the camera straight at the nearest boundary wall
+    // whenever the player was near a grid edge (spawn is a corner — two
+    // units from a wall in two directions). Facing the arena's center
+    // instead keeps the opening/every-move view looking into open space
+    // rather than a close-up wall face, in any cell.
+    var mid = (HS_GRID_SIZE - 1) / 2;
+    var centerWorld = _hs3DCellCenter(mid, mid);
+    var dx = centerWorld.x - p.x, dz = centerWorld.z - p.z;
+    _hs3D.yaw = (dx === 0 && dz === 0) ? 0 : Math.atan2(-dx, -dz);
+    _hs3D.pitch = 0;
+    _refreshHS3DMonster();
+  }
+  if (instant || !_hs3D.renderer) { place(); return; }
+  var fade = document.getElementById('hs-3d-fade');
+  if (fade) fade.style.opacity = '1';
+  setTimeout(function() {
+    place();
+    if (fade) setTimeout(function() { fade.style.opacity = '0'; }, 30);
+  }, 220);
+}
+
+// Repositions the monster mesh and refreshes the minimap without moving the
+// camera — used after Hide (the player didn't move, but the monster still
+// might have) as well as internally by _placeHS3DCamera.
+function _refreshHS3DMonster() {
+  if (!_hs3D.monsterMesh || !HS) { _renderHS3DMinimap(); return; }
+  var p = _hs3DCellCenter(HS.mx, HS.my);
+  _hs3D.monsterMesh.position.set(p.x, 0, p.z);
+  // Only rendered within a real distance — an open arena has no walls to
+  // hide behind, so distance culling is what keeps "is it close" a visual
+  // surprise for a spectator too, not just an audio one.
+  _hs3D.monsterMesh.visible = hsDistance() <= 5;
+  _renderHS3DMinimap();
+}
+
+function _startHS3DLoop() {
+  if (_hs3D.raf || !_hs3D.renderer) return;
+  var clock = new _hs3D.THREE.Clock();
+  var frameCount = 0, fpsAccum = 0;
+  function loop() {
+    _hs3D.raf = requestAnimationFrame(loop);
+    var dt = Math.min(clock.getDelta(), 0.1);
+    var t = clock.elapsedTime;
+    _hs3D.lamps.forEach(function(l) {
+      l.light.intensity = l.base + Math.sin(t * 6 + l.phase) * 0.15;
+    });
+    if (_hs3D.monsterMesh && _hs3D.monsterMesh.visible) {
+      _hs3D.monsterMesh.rotation.y = t * 0.6; // slow idle turn — kept crude on purpose, not a walk cycle
+    }
+    _hs3D.camera.rotation.order = 'YXZ';
+    _hs3D.camera.rotation.y = _hs3D.yaw;
+    _hs3D.camera.rotation.x = _hs3D.pitch;
+    _hs3D.renderer.render(_hs3D.scene, _hs3D.camera);
+    var s3 = get3DSettings();
+    var fpsEl = document.getElementById('hs-3d-fps');
+    if (s3.fpsCounter) {
+      frameCount++; fpsAccum += dt;
+      if (fpsAccum >= 0.5) {
+        if (fpsEl) { fpsEl.style.display = ''; fpsEl.textContent = Math.round(frameCount / fpsAccum) + ' FPS'; }
+        frameCount = 0; fpsAccum = 0;
+      }
+    } else if (fpsEl) { fpsEl.style.display = 'none'; }
+  }
+  loop();
+}
+
+function _stopHS3DLoop() {
+  if (_hs3D.raf) { cancelAnimationFrame(_hs3D.raf); _hs3D.raf = null; }
+}
+
+function _resizeHS3DView() {
+  if (!_hs3D.renderer) return;
+  var wrapEl = document.getElementById('hs-3d-canvas-wrap');
+  if (!wrapEl) return;
+  var w = wrapEl.clientWidth || 300, h = wrapEl.clientHeight || 220;
+  _hs3D.camera.aspect = w / h;
+  _hs3D.camera.updateProjectionMatrix();
+  _hs3D.renderer.setSize(w, h);
+}
+
+// Plain 7x7 grid map — no fog of war (there's nothing to hide; the whole
+// arena is one open room with no interior walls) — showing the exit and,
+// distance-gated the same as the 3D scene itself, the monster. A screen
+// reader player never sees this (see _hs3DWantsMinimap), so revealing the
+// exit ahead of time here isn't spoiling anything the blind playthrough
+// itself relies on discovering.
+function _renderHS3DMinimap() {
+  var wrap = document.getElementById('hs-3d-minimap');
+  if (!wrap) return;
+  if (!_hs3DWantsMinimap() || !HS) { wrap.style.display = 'none'; return; }
+  var canvas = document.getElementById('hs-3d-minimap-canvas');
+  if (!canvas) return;
+  wrap.style.display = 'block';
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+  var pad = 6;
+  var cell = (W - pad * 2) / HS_GRID_SIZE;
+  function sx(gx) { return pad + (gx + 0.5) * cell; }
+  function sy(gy) { return pad + (gy + 0.5) * cell; }
+
+  ctx.strokeStyle = 'rgba(120,100,80,0.18)';
+  ctx.lineWidth = 1;
+  for (var i = 0; i <= HS_GRID_SIZE; i++) {
+    ctx.beginPath(); ctx.moveTo(pad + i * cell, pad); ctx.lineTo(pad + i * cell, H - pad); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad, pad + i * cell); ctx.lineTo(W - pad, pad + i * cell); ctx.stroke();
+  }
+
+  ctx.fillStyle = '#66ffcc';
+  ctx.beginPath(); ctx.arc(sx(HS.ex), sy(HS.ey), cell * 0.28, 0, Math.PI * 2); ctx.fill();
+
+  if (hsDistance() <= 5) {
+    ctx.fillStyle = '#ff3333';
+    ctx.beginPath(); ctx.arc(sx(HS.mx), sy(HS.my), cell * 0.3, 0, Math.PI * 2); ctx.fill();
+  }
+
+  ctx.fillStyle = '#ffcc44';
+  ctx.beginPath(); ctx.arc(sx(HS.px), sy(HS.py), cell * 0.32, 0, Math.PI * 2); ctx.fill();
+}
+// ── END HIDE AND SEEK — 3D MODE ──
 
 // -- SPELL SYSTEM --
 
