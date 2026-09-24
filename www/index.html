@@ -15265,7 +15265,21 @@ function showDgPanels(nav, combat, inv) {
 // ── NAVIGATION ──
 function moveRoom(dir) {
   if (DS.inCombat) return;
-  if (shouldUse3DMode() && DS._roomGraph) { moveRoom3D(dir); return; }
+  if (shouldUse3DMode()) {
+    // Self-healing: _roomGraph is normally generated once, lazily, the
+    // moment the player first reaches the dungeon screen — but if 3D Mode
+    // gets toggled on mid-run (already past that point), or a save
+    // resumed without it for any reason, there was previously no recovery
+    // path at all. moveRoom() would just silently fall through to the old
+    // flat 2D system below forever: fresh flavor text on every move, no
+    // wall detection, no "already cleared" recognition — which read as
+    // "3D mode doesn't work in this dungeon" even though the toggle itself
+    // was on the whole time. Generating on demand here closes that gap
+    // regardless of what caused it.
+    if (!DS._roomGraph) generate3DRoomGraph();
+    moveRoom3D(dir);
+    return;
+  }
   sfx('sfx-footstep');
   say('Moving ' + dir + '...');
   showDgPanels(true, false, false);
