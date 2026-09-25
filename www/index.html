@@ -42936,12 +42936,12 @@ function hsEscape() {
 // that already exists; this is purely something a sighted friend watching
 // the same screen can see, same as everywhere else 3D Mode shows up.
 var _hs3D = { THREE:null, scene:null, camera:null, renderer:null, raf:null,
-  yaw:0, pitch:0, ambient:null, monsterMesh:null, lamps:[] };
+  yaw:0, pitch:0, ambient:null, monsterMesh:null, lamps:[], playerMeshes:{} };
 var HS3D_TILE = 4;
 var HS3D_WALL_H = 3.2;
 
 function _hs3DWantsVisual() {
-  return !!(HS && HS.active) && typeof isBetaOn === 'function' && isBetaOn('3dmode');
+  return (!!(HS && HS.active) || !!(_hsMP && _hsMP.active)) && typeof isBetaOn === 'function' && isBetaOn('3dmode');
 }
 // Same "sighted play only" rule used everywhere else in 3D Mode — a screen
 // reader player still gets the scene rendered (so they can show a friend),
@@ -43046,15 +43046,20 @@ function _setupHS3DScene(THREE) {
   });
 
   // Exit marker — visible from a distance for a spectator, even though the
-  // blind player is never told where it is ahead of reaching it.
+  // blind player is never told where it is ahead of reaching it. The exit is
+  // always the same grid corner in both solo and multiplayer (see hsMove()
+  // and hsMpMove()'s matching HS_GRID_SIZE-1 checks), so this uses that
+  // constant directly rather than HS.ex/HS.ey — HS itself is never
+  // initialized at all in a pure multiplayer session.
+  var exitGx = HS_GRID_SIZE - 1, exitGy = HS_GRID_SIZE - 1;
   var exitLight = new THREE.PointLight(0x66ffcc, 1.6, 9, 2);
-  exitLight.position.set(HS.ex * HS3D_TILE, 2, HS.ey * HS3D_TILE);
+  exitLight.position.set(exitGx * HS3D_TILE, 2, exitGy * HS3D_TILE);
   scene.add(exitLight);
   var exitMesh = new THREE.Mesh(
     new THREE.CylinderGeometry(0.9, 0.9, 0.06, 20),
     new THREE.MeshBasicMaterial({ color: 0x66ffcc, transparent: true, opacity: 0.5 })
   );
-  exitMesh.position.set(HS.ex * HS3D_TILE, 0.04, HS.ey * HS3D_TILE);
+  exitMesh.position.set(exitGx * HS3D_TILE, 0.04, exitGy * HS3D_TILE);
   scene.add(exitMesh);
 
   // The Darkness Swallower — kept crude and silhouette-like on purpose. It's
@@ -43123,7 +43128,10 @@ function _hs3DCellCenter(gx, gy) { return { x: gx * HS3D_TILE, z: gy * HS3D_TILE
 // being discrete, so the camera teleports behind a quick fade exactly like
 // dungeon 3D Mode did before free-roam walking was added there.
 function _placeHS3DCamera(instant) {
-  if (!HS) return;
+  var mySource = _hsMP && _hsMP.active ? _hsMpMyPlayer() : HS;
+  if (!mySource) return;
+  var myGx = _hsMP && _hsMP.active ? mySource.x : mySource.px;
+  var myGy = _hsMP && _hsMP.active ? mySource.y : mySource.py;
   var wrap = document.getElementById('hs-3d-view');
   var isShowing = !!(wrap && wrap.style.display !== 'none');
   if (!_hs3D.camera || !isShowing) {
@@ -43140,7 +43148,7 @@ function _placeHS3DCamera(instant) {
     if (_hs3DWantsVisual()) initHS3DView();
     return;
   }
-  var p = _hs3DCellCenter(HS.px, HS.py);
+  var p = _hs3DCellCenter(myGx, myGy);
   function place() {
     _hs3D.camera.position.set(p.x, 1.6, p.z);
     // A fixed yaw pointed the camera straight at the nearest boundary wall
@@ -43154,6 +43162,7 @@ function _placeHS3DCamera(instant) {
     _hs3D.yaw = (dx === 0 && dz === 0) ? 0 : Math.atan2(-dx, -dz);
     _hs3D.pitch = 0;
     _refreshHS3DMonster();
+    _refreshHS3DPlayers();
   }
   if (instant || !_hs3D.renderer) { place(); return; }
   var fade = document.getElementById('hs-3d-fade');
@@ -43168,14 +43177,72 @@ function _placeHS3DCamera(instant) {
 // camera — used after Hide (the player didn't move, but the monster still
 // might have) as well as internally by _placeHS3DCamera.
 function _refreshHS3DMonster() {
-  if (!_hs3D.monsterMesh || !HS) { _renderHS3DMinimap(); return; }
-  var p = _hs3DCellCenter(HS.mx, HS.my);
+  var monster = _hsMP && _hsMP.active ? _hsMpMonster() : (HS ? { x: HS.mx, y: HS.my } : null);
+  if (!_hs3D.monsterMesh || !monster) { _renderHS3DMinimap(); return; }
+  var p = _hs3DCellCenter(monster.x, monster.y);
   _hs3D.monsterMesh.position.set(p.x, 0, p.z);
   // Only rendered within a real distance — an open arena has no walls to
   // hide behind, so distance culling is what keeps "is it close" a visual
   // surprise for a spectator too, not just an audio one.
   _hs3D.monsterMesh.visible = hsDistance() <= 5;
   _renderHS3DMinimap();
+}
+
+// Multiplayer only — keeps one small colored avatar per teammate (never for
+// yourself; you ARE the camera) in sync with their live position. Unlike the
+// monster, teammates are never distance-culled: seeing where your party is
+// matters for coordinating, and there's no tension to protect by hiding them.
+function _hs3DColorForPlayerId(id) {
+  var hash = 0;
+  for (var i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
+  var palette = [0x66ccff, 0xff8866, 0x88ff66, 0xffdd44, 0xdd88ff, 0xff66aa];
+  return palette[hash % palette.length];
+}
+function _buildHS3DPlayerAvatar(id) {
+  var THREE = _hs3D.THREE;
+  var group = new THREE.Group();
+  var mat = new THREE.MeshStandardMaterial({ color: _hs3DColorForPlayerId(id), roughness: 0.8 });
+  var body = new THREE.Mesh(new THREE.SphereGeometry(0.35, 10, 8), mat);
+  body.scale.set(1, 1.5, 1);
+  body.position.y = 0.9;
+  group.add(body);
+  return group;
+}
+function _clearHS3DPlayerMeshes() {
+  if (_hs3D.scene) {
+    Object.keys(_hs3D.playerMeshes).forEach(function(id) { _hs3D.scene.remove(_hs3D.playerMeshes[id]); });
+  }
+  _hs3D.playerMeshes = {};
+}
+function _refreshHS3DPlayers() {
+  if (!_hs3D.scene || !_hsMP || !_hsMP.active || !_hsMP.room || !_hsMP.room.state) return;
+  var players = _hsMP.room.state.players || {};
+  var myId = _hsMP.myId;
+  var seen = {};
+  Object.keys(players).forEach(function(id) {
+    if (id === myId) return; // never render my own avatar — I'm the camera
+    seen[id] = true;
+    var p = players[id];
+    var mesh = _hs3D.playerMeshes[id];
+    if (!mesh) {
+      mesh = _buildHS3DPlayerAvatar(id);
+      _hs3D.scene.add(mesh);
+      _hs3D.playerMeshes[id] = mesh;
+    }
+    var pos = _hs3DCellCenter(p.x, p.y);
+    mesh.position.x = pos.x;
+    mesh.position.z = pos.z;
+    mesh.visible = !p.escaped; // escaped teammates have stepped out of the scene entirely
+    // A caught teammate crumples down rather than standing — a cheap, clear
+    // visual cue that doesn't need its own animation state.
+    mesh.rotation.z = p.caught ? Math.PI / 2.2 : 0;
+    mesh.position.y = p.caught ? 0.3 : 0;
+  });
+  // Drop meshes for anyone no longer in the room — shouldn't normally happen
+  // mid-run, but keeps this self-healing regardless.
+  Object.keys(_hs3D.playerMeshes).forEach(function(id) {
+    if (!seen[id]) { _hs3D.scene.remove(_hs3D.playerMeshes[id]); delete _hs3D.playerMeshes[id]; }
+  });
 }
 
 function _startHS3DLoop() {
@@ -43232,7 +43299,9 @@ function _resizeHS3DView() {
 function _renderHS3DMinimap() {
   var wrap = document.getElementById('hs-3d-minimap');
   if (!wrap) return;
-  if (!_hs3DWantsMinimap() || !HS) { wrap.style.display = 'none'; return; }
+  var mp = _hsMP && _hsMP.active;
+  var me = mp ? _hsMpMyPlayer() : HS;
+  if (!_hs3DWantsMinimap() || !me) { wrap.style.display = 'none'; return; }
   var canvas = document.getElementById('hs-3d-minimap-canvas');
   if (!canvas) return;
   wrap.style.display = 'block';
@@ -43252,15 +43321,30 @@ function _renderHS3DMinimap() {
   }
 
   ctx.fillStyle = '#66ffcc';
-  ctx.beginPath(); ctx.arc(sx(HS.ex), sy(HS.ey), cell * 0.28, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(sx(HS_GRID_SIZE - 1), sy(HS_GRID_SIZE - 1), cell * 0.28, 0, Math.PI * 2); ctx.fill();
 
-  if (hsDistance() <= 5) {
+  var monster = mp ? _hsMpMonster() : { x: HS.mx, y: HS.my };
+  if (monster && hsDistance() <= 5) {
     ctx.fillStyle = '#ff3333';
-    ctx.beginPath(); ctx.arc(sx(HS.mx), sy(HS.my), cell * 0.3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(sx(monster.x), sy(monster.y), cell * 0.3, 0, Math.PI * 2); ctx.fill();
   }
 
+  // Teammates — small colored dots matching their 3D avatar color, skipped
+  // once escaped (they've stepped out of the run entirely).
+  if (mp && _hsMP.room && _hsMP.room.state && _hsMP.room.state.players) {
+    var players = _hsMP.room.state.players;
+    Object.keys(players).forEach(function(id) {
+      if (id === _hsMP.myId) return;
+      var p = players[id];
+      if (p.escaped) return;
+      ctx.fillStyle = '#' + _hs3DColorForPlayerId(id).toString(16).padStart(6, '0');
+      ctx.beginPath(); ctx.arc(sx(p.x), sy(p.y), cell * 0.22, 0, Math.PI * 2); ctx.fill();
+    });
+  }
+
+  var myGx = mp ? me.x : me.px, myGy = mp ? me.y : me.py;
   ctx.fillStyle = '#ffcc44';
-  ctx.beginPath(); ctx.arc(sx(HS.px), sy(HS.py), cell * 0.32, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(sx(myGx), sy(myGy), cell * 0.32, 0, Math.PI * 2); ctx.fill();
 }
 // ── END HIDE AND SEEK — 3D MODE ──
 
@@ -43584,7 +43668,15 @@ function hsMpMove(dir) {
     state.lastEvent = { type: 'move', by: myId, dir: dir, seq: state.moveSeq,
       foundItem: foundItem, rescued: rescued, escaped: escapedNow, caught: caughtIds };
     return state;
-  }, function(error) { if (error) console.warn('[HS-MP] move transaction failed:', error); });
+  }, function(error, committed) {
+    if (error) { console.warn('[HS-MP] move transaction failed:', error); return; }
+    // Only MY OWN successful move should fade/reposition the camera — the
+    // realtime listener (hsMpRenderPartyStatus, on every room update)
+    // already keeps teammates' avatars and the monster in sync regardless
+    // of who moved; re-fading the camera on every teammate's move too would
+    // be jarring and wrong.
+    if (committed) _placeHS3DCamera(false);
+  });
 }
 
 function hsMpHide() {
@@ -43669,7 +43761,6 @@ function hsMpEnterPlayUI(room) {
   document.getElementById('hs-end').style.display = 'none';
   document.getElementById('hs-mp-party-status').style.display = 'block';
   document.getElementById('hs-play').style.display = 'block';
-  document.getElementById('hs-3d-view').style.display = 'none'; // solo-only for now
   document.getElementById('hs-room-desc').textContent = 'You stand still, listening.';
   document.getElementById('hs-end-retry-btn').onclick = hsShowMpLobby;
   var count = Object.keys((room.state && room.state.players) || {}).length;
@@ -43679,6 +43770,10 @@ function hsMpEnterPlayUI(room) {
   sfx('sfx-select');
   say('Hide and Seek begins. ' + count + ' players. Find the way out together — walk onto a caught teammate to rescue them.');
   setTimeout(function() { hsStartGrowlLoop(); }, 1500);
+  // Meshes from a previous room (different teammate ids) would otherwise
+  // linger forever in the shared, persistent scene.
+  _clearHS3DPlayerMeshes();
+  initHS3DView();
   hsMpRenderPartyStatus(room);
 }
 
@@ -43738,6 +43833,11 @@ function hsMpRenderPartyStatus(room) {
     return p.name + you + ' — ' + status;
   });
   box.innerHTML = '🫥 ' + (room.state.items || 0) + ' shared hiding spot' + (room.state.items === 1 ? '' : 's') + '<br>' + lines.join('<br>');
+  // Keeps every teammate's 3D avatar (position, caught/escaped state) and the
+  // monster in sync on every room update — not just after MY OWN moves —
+  // so teammates walking around actually show up moving in the scene.
+  _refreshHS3DPlayers();
+  _refreshHS3DMonster();
   var badge = document.getElementById('hs-distance-badge');
   if (badge && !_hsMpMyPlayer()) return;
   if (badge) {
@@ -43773,6 +43873,9 @@ function hsMpCheckPhase(room) {
 
 function hsMpEnterEndUI(room) {
   hsStopGrowlLoop();
+  _stopHS3DLoop();
+  var v3mp = document.getElementById('hs-3d-view');
+  if (v3mp) v3mp.style.display = 'none';
   document.getElementById('hs-play').style.display = 'none';
   document.getElementById('hs-end').style.display = 'block';
   var players = (room.state && room.state.players) || {};
