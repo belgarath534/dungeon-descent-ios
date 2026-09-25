@@ -42367,6 +42367,14 @@ function mpAction(action) {
     ref.update(updates);
     mpSetMyTurn(false);
     sfx(action === 'attack' ? 'sfx-attack' : action === 'heavy' ? 'sfx-heavy-hit' : action === 'skill' ? 'sfx-crit' : 'sfx-select');
+  }).catch(function(err) {
+    // No .catch() existed here at all — a failed read (network hiccup,
+    // permission error) meant the action vanished with no feedback:
+    // mpSetMyTurn(false) never ran, so the UI kept showing "YOUR TURN" and
+    // enabled attack buttons even though nothing had actually happened,
+    // with the player having no idea their action failed.
+    console.error('[PVP] action failed:', err);
+    mpSetStatus('Action failed — check your connection and try again.');
   });
 }
 
@@ -60161,10 +60169,16 @@ DDStore.whenReady().then(function() {
   // Hydrate the handful of top-level variables that used to read DDStore directly
   // at script-parse time (see their declarations above — each now starts with a
   // safe default and gets its real value here, once storage is actually ready).
-  CHARS = JSON.parse(DDStore.getItem('dd_chars') || '[]');
+  // Guarded the same way every OTHER CHARS-reload site in the file already is
+  // (e.g. the save-import fix elsewhere this session) — this is the single
+  // most critical one, since it gates this entire ~300-line startup block
+  // (ember spawn, audio init listeners, Firebase auth init, everything below).
+  // Malformed dd_chars JSON here used to throw synchronously and silently
+  // skip the whole block instead of just falling back to an empty roster.
+  try { CHARS = JSON.parse(DDStore.getItem('dd_chars') || '[]'); } catch(e) { CHARS = []; }
   _chaosMode = DDStore.getItem('dd_chaos_mode') === '1';
-  bestiaryKills = JSON.parse(DDStore.getItem('dd_bestiary') || '{}');
-  _earnedMilestones = JSON.parse(DDStore.getItem('dd_milestones') || '{}');
+  try { bestiaryKills = JSON.parse(DDStore.getItem('dd_bestiary') || '{}'); } catch(e) { bestiaryKills = {}; }
+  try { _earnedMilestones = JSON.parse(DDStore.getItem('dd_milestones') || '{}'); } catch(e) { _earnedMilestones = {}; }
   _musicBoxTutorialSeen = DDStore.getItem('dd_mb_tutorial') === '1';
   var _shakePref = DDStore.getItem('dd_shake');
   if (_shakePref !== null) _shakeEnabled = _shakePref === '1';
@@ -60452,6 +60466,14 @@ DDStore.whenReady().then(function() {
       console.warn('Firebase auth init error:', e);
     }
   })();
+}).catch(function(e) {
+  // DDStore.whenReady() itself structurally can't reject (its Promise
+  // constructor never calls reject — every IndexedDB failure mode already
+  // falls back to localStorage internally instead). This is purely a
+  // defense-in-depth net for anything else in this large startup block
+  // that might throw unexpectedly, so it at least surfaces in the console
+  // instead of vanishing as a silent unhandled rejection.
+  console.error('[DD] Startup hydration block threw:', e);
 });
 
 // --═
