@@ -34297,6 +34297,21 @@ function getTitleTag() {
   return DDStore.getItem('dd_title_tag') || null;
 }
 
+// checkUsername() was called from submitUsername() below but never actually
+// defined anywhere in the codebase — every username submission threw a
+// ReferenceError immediately, before ever reaching saveUsername() (which
+// only checks whether the name is already taken, not whether it's a
+// reasonable name at all). The 20-character cap matches what the Firebase
+// rules already enforce server-side for chat usernames.
+function checkUsername(name) {
+  if (!name || !name.trim()) return 'Enter a username.';
+  name = name.trim();
+  if (name.length < 3) return 'Username must be at least 3 characters.';
+  if (name.length > 20) return 'Username must be 20 characters or fewer.';
+  if (!/^[A-Za-z0-9_]+$/.test(name)) return 'Username can only contain letters, numbers, and underscores.';
+  return null;
+}
+
 async function saveUsername(username) {
   var user = getFirebaseUser();
   if (!user || !window._fbDb) return false;
@@ -44354,7 +44369,11 @@ function applySpellEffect(spellId, spellName) {
           }
           DS._fireballReturn = 0;
           updatePlayerBar();
-          checkPlayerDeath();
+          // checkPlayerDeath() doesn't exist anywhere in this codebase —
+          // every other combat-damage site uses this exact guarded
+          // handleDeath() pattern instead. Without it, a fatal fireball
+          // backfire threw a ReferenceError instead of ending the run.
+          if (DS.hp <= 0) { handleDeath(); }
         }, 2000);
         setCombatBtns(true);
         updatePlayerBar();
@@ -52812,7 +52831,11 @@ function executeCommand() {
     return;
   }
   if (cmd === 'stop music' || cmd === 'mute music' || cmd === 'pause music') {
-    stopMusic && stopMusic();
+    // stopMusic doesn't exist anywhere — as a bare undeclared identifier
+    // (not a property access), referencing it at all threw a ReferenceError
+    // immediately, even inside this && short-circuit. This is the same
+    // inline pause pattern used everywhere else in the file.
+    if (AUD && AUD.current && AUD.tracks && AUD.tracks[AUD.current]) { try { AUD.tracks[AUD.current].pause(); } catch(e){} }
     ccPrint('Music stopped.', 'cc-line-ok');
     say('Music stopped.');
     return;
@@ -55024,7 +55047,7 @@ function initKeyCommands() {
         case 'l': e.preventDefault(); goTo('chronicles'); say('Chronicles.'); break;
         case 'i':
           e.preventDefault();
-          if (inDungeon) { try { openInventory(); say('Inventory.'); } catch(e2){} }
+          if (inDungeon) { try { toggleInv(); say('Inventory.'); } catch(e2){} } // openInventory() doesn't exist — toggleInv() is the real function, used everywhere else including the same shortcut elsewhere
           break;
         case 'k':
           e.preventDefault();
@@ -57095,7 +57118,13 @@ function importSaveCode() {
           var result = document.getElementById('import-result');
           if (result) { result.style.color = '#44ff88'; result.textContent = imported + ' entries imported successfully.'; }
           say(imported + ' save entries imported. Reloading your data now.');
-          loadChars(); loadHighScore(); updateGlobalGoldDisplay();
+          // loadChars() doesn't exist anywhere in this codebase — every
+          // other reload site uses this exact inline pattern instead.
+          // Since it's the first statement here, the ReferenceError was
+          // also silently skipping loadHighScore() and
+          // updateGlobalGoldDisplay() right after it on the same line.
+          try { CHARS = JSON.parse(DDStore.getItem('dd_chars') || '[]'); } catch(e) { CHARS = []; }
+          loadHighScore(); updateGlobalGoldDisplay();
         }},
         { label: 'Cancel', action: function() { say('Import cancelled.'); } }
       ]
@@ -58646,7 +58675,7 @@ function timeDescenderClockHit(action) {
     if (action === 'heavy') base = Math.round(base * 1.6);
     dmg = base;
     DS.enemy.hp = Math.max(0, DS.enemy.hp - dmg);
-    renderEnemy();
+    updateEnemyBar(); // renderEnemy() doesn't exist — this is the real function, used everywhere else
     addLog('You strike the clock for ' + dmg + '. Clock HP: ' + DS.enemy.hp + '/' + DS.enemy.maxHp + '.');
     say('Struck the clock for ' + dmg + '. Clock HP: ' + DS.enemy.hp + '.');
   }
@@ -58688,7 +58717,7 @@ function timeDescenderClockHit(action) {
 function timeDescenderPhaseTwo() {
   DS._timeDescenderPhase = 2;
   DS.enemy = { name:'The Clock', icon:'\ud83d\udd70\ufe0f', hp:79, maxHp:79, atk:[18,28], gold:[0,0], isTimeDescender:true, isClock:true, phase:2 };
-  renderEnemy();
+  updateEnemyBar(); // renderEnemy() doesn't exist \u2014 this is the real function, used everywhere else
   setCombatBtns(false);
   addLog('\u26a1 Switching to Phase 2.');
   say('Switching to Phase 2.');
@@ -61117,7 +61146,7 @@ function spireVictory() {
       expires: discountExpiry,
       source: 'Time Eater'
     }));
-    saveGame();
+    saveChars(); // saveGame() doesn't exist — same class of bug as the Void Reaper fix earlier
     awardAchievement('ach-time-eater');
   }
 
