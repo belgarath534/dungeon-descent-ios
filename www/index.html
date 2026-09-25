@@ -42398,17 +42398,40 @@ function mpEmote(emote) {
 
 function mpRematch() {
   if (!_mpRoomCode || !_mpRoomRef) return;
-  var charData = mpGetCharData(_mpSelectedChar);
-  var updates = {};
-  updates[_mpRole] = { id: _mpMyId, char: charData, ready: false };
-  updates['status'] = 'full';
-  updates['battleStarted'] = false;
-  updates['turn'] = null;
-  updates['log'] = ['🔄 Rematch requested! Both players press Ready to begin.'];
-  updates['winnerId'] = null;
-  updates['winnerName'] = null;
-  updates['loserName'] = null;
-  _mpRoomRef.update(updates);
+  // A battle in progress flattens room.p1/p2 from {id, char:{...}, ready}
+  // down to the stats merged directly onto the entry (see the "both ready —
+  // start battle" branch in mpHandleRoomUpdate). This used to only reset
+  // the PRESSER's own slot back to the pre-battle shape — the opponent's
+  // slot, and their stale ready:true from the finished battle, was left
+  // untouched. The very next "both ready" check could then fire again using
+  // Object.assign({}, room[role].char, ...) against an opponent entry that
+  // no longer HAD a .char property at all, filling their stats with
+  // undefined and effectively breaking the room for good — matching
+  // "rematch doesn't start a new one, only a refresh fixes it."
+  _mpRoomRef.once('value').then(function(snap) {
+    if (!snap.exists()) return;
+    var room = snap.val();
+    var oppRole = _mpRole === 'p1' ? 'p2' : 'p1';
+    var oppEntry = room[oppRole];
+    var oppChar = oppEntry ? (oppEntry.char || oppEntry) : null;
+    var updates = {};
+    updates[_mpRole] = { id: _mpMyId, char: mpGetCharData(_mpSelectedChar), ready: false };
+    if (oppEntry && oppChar) {
+      updates[oppRole] = {
+        id: oppEntry.id,
+        char: Object.assign({}, oppChar, { hp: oppChar.maxHp, sp: oppChar.maxSp, alive: true, defending: false }),
+        ready: false
+      };
+    }
+    updates['status'] = 'full';
+    updates['battleStarted'] = false;
+    updates['turn'] = null;
+    updates['log'] = ['🔄 Rematch requested! Both players press Ready to begin.'];
+    updates['winnerId'] = null;
+    updates['winnerName'] = null;
+    updates['loserName'] = null;
+    _mpRoomRef.update(updates);
+  }).catch(function(err) { console.error('[PVP] rematch failed:', err); });
 
   // Reset UI fully — hide combat, show ready button
   var rematch = document.getElementById('mp-rematch-section');
@@ -43273,6 +43296,17 @@ function hsShowMpLobby() {
     say('Multiplayer unavailable. Firebase not connected.');
     document.getElementById('hs-mp-status').textContent = 'Multiplayer unavailable. Firebase not connected.';
     return;
+  }
+  // This is also the "Try Again" destination after a multiplayer run ends,
+  // which left a real bug: _hsMP just got overwritten with a fresh object
+  // here without ever detaching the FINISHED room's listener first. That
+  // orphaned listener stays attached to the old (over) room and, if
+  // Firebase resends the current value on socket reconnect (which it does),
+  // fires again and stomps the brand new session's state with the old
+  // room's — making a new game look like it silently refuses to start,
+  // recoverable only by a full page refresh.
+  if (_hsMP && _hsMP.roomListener && _hsMP.code) {
+    try { window._fbRtdb.ref('hs_rooms/' + _hsMP.code).off('value', _hsMP.roomListener); } catch(e) {}
   }
   _hsMP = { myId: mpGenId(), myName: _hsMpName(), code: null, roomRef: null, roomListener: null,
     room: null, isHost: false, active: false, ended: false, lastSeenSeq: 0, lobbySnapshot: {} };
