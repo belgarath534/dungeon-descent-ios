@@ -3225,6 +3225,7 @@ var DDStore = (function() {
         <span></span>
       </div>
       <div class="dg-actions" role="group" aria-label="Dungeon actions">
+        <button type="button" class="dg-act-btn" onclick="echoLocate()" aria-label="Echo-locate — sense the walls and doors of the room you're in, using 3D Mode's room layout data. Alt plus E.">📡 Echo-locate</button>
         <button type="button" class="dg-act-btn" onclick="toggleInv()" aria-label="Toggle inventory">🎒 Inventory</button>
         <button type="button" class="dg-act-btn" onclick="showStats()" aria-label="View character stats">📊 Stats</button>
         <button type="button" class="dg-act-btn" onclick="openSkillBook()" aria-label="Open skill book, view and reorder your unlocked skills">📖 Skills</button>
@@ -13352,6 +13353,80 @@ function play3DExitCues(cell) {
       }
     });
   });
+}
+
+// ── ECHO-LOCATION ── a player-triggered sonar pulse: a central ping, then
+// one panned tone per direction — a short sharp "tik" where there's a wall,
+// a longer soft tone that fades outward where there's an open door. Built
+// on the same room-graph data as the 3D visual (walls/doors per cell), but
+// it's a pure Web Audio synth (no sample files), so it works for anyone
+// with 3D Mode on regardless of whether they want the visual rendered —
+// it's an audio tool first.
+var _echoLocateCooldownUntil = 0;
+function _echoOsc(type, freq, pan, startDelay, durSec, peakVol) {
+  if (!window.AUD || !AUD.ctx) return;
+  try {
+    var ctx = AUD.ctx;
+    var t0 = ctx.currentTime + startDelay;
+    var osc = ctx.createOscillator();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, t0);
+    var gainNode = ctx.createGain();
+    var vol = (AUD.sfxVol || 0.8) * peakVol;
+    gainNode.gain.setValueAtTime(0.0001, t0);
+    gainNode.gain.linearRampToValueAtTime(vol, t0 + 0.015);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, t0 + durSec);
+    osc.connect(gainNode);
+    if (ctx.createStereoPanner) {
+      var panner = ctx.createStereoPanner();
+      panner.pan.value = pan;
+      gainNode.connect(panner);
+      panner.connect(ctx.destination);
+    } else {
+      gainNode.connect(ctx.destination);
+    }
+    osc.start(t0);
+    osc.stop(t0 + durSec + 0.05);
+  } catch (e) {}
+}
+function echoLocate() {
+  if (!DS) return;
+  if (DS.inCombat) { say('Echo-location only works while exploring, not during combat.'); return; }
+  if (!shouldUse3DMode() || !DS._roomGraph) {
+    say('Echo-location needs 3D Mode turned on in Settings — it uses the room layout data 3D Mode tracks.');
+    return;
+  }
+  var now = Date.now();
+  if (now < _echoLocateCooldownUntil) { return; }
+  _echoLocateCooldownUntil = now + 1400;
+
+  var cell = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
+  if (!cell) return;
+
+  // Central ping — a quick rising sweep, unpanned, marks the start of the pulse
+  _echoOsc('sine', 300, 0, 0, 0.16, 0.55);
+  _echoOsc('sine', 900, 0, 0.05, 0.12, 0.35);
+  vibe && vibe([40]);
+
+  var openWords = [], wallWords = [];
+  ROOM3D_DIRS.forEach(function(d, i) {
+    var cfg = ROOM3D_DOOR_AUDIO[d.name];
+    var delay = 0.22 + i * 0.11;
+    if (cell.doors[d.name]) {
+      openWords.push(d.word);
+      // Open — a longer, softer tone that fades away, implying space beyond
+      _echoOsc('sine', 420 * cfg.pitch, cfg.pan, delay, 0.32, 0.30);
+    } else {
+      wallWords.push(d.word);
+      // Wall — a short, sharp, higher click, implying a close reflection
+      _echoOsc('square', 950 * cfg.pitch, cfg.pan, delay, 0.07, 0.22);
+    }
+  });
+
+  var summary = openWords.length
+    ? ('Echo-location: open to the ' + openWords.join(', ') + '.' + (wallWords.length ? ' Wall to the ' + wallWords.join(', ') + '.' : ''))
+    : 'Echo-location: walls on every side.';
+  say(summary);
 }
 
 // ── 3D MODE — VISUAL RENDERER (Three.js, lazy-loaded) ──
@@ -55264,6 +55339,7 @@ function initKeyCommands() {
     if (alt && inDungeon && !DS.inCombat) {
       switch(key.toLowerCase()) {
         case 'n': e.preventDefault(); if(typeof enterRoom==='function'){enterRoom();say('Next room.');} break;
+        case 'e': e.preventDefault(); if(typeof echoLocate==='function'){echoLocate();} break;
         case 'i': e.preventDefault(); toggleInv(); say('Inventory.'); break;
         case 's': e.preventDefault(); if(typeof manualSave==='function'){manualSave();} break;
         case 'k': e.preventDefault(); var sb2=document.getElementById('skill-book-btn'); if(sb2){sb2.click();say('Skill book.');} break;
