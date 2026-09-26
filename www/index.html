@@ -15879,7 +15879,7 @@ function gunAction() {
     // Enemy counter-attack
     setTimeout(function() {
       if (!DS.inCombat || !DS.enemy || DS.enemy.hp <= 0) return;
-      try { enemyAttacks(); } catch(e) {}
+      doFight('_gunCounter'); // enemyAttacks() doesn't exist — reuse doFight's counter-attack, same pattern as raidFight('_gunCounter')
     }, 600);
   }
 }
@@ -16129,6 +16129,24 @@ function doFight(action) {
   setCombatBtns(false);
   sfx('sfx-select');
   var e = DS.enemy;
+  if (action === '_gunCounter') {
+    // Gun mechanic already dealt the player's damage separately (see
+    // gunAction()) — this call only triggers the enemy's counter-attack,
+    // mirroring raidFight's identical '_gunCounter' handling.
+    setTimeout(function() {
+      if (e && e.hp > 0) {
+        var rawDmg = rnd(e.atk[0], e.atk[1]);
+        var def = (DS.defBonus || 0) + (DS.equippedArmorDef || 0);
+        var dmg = Math.max(1, rawDmg - def);
+        DS.hp = Math.max(0, DS.hp - dmg);
+        updatePlayerBar();
+        addLog(e.name + ' counter-attacks for ' + dmg + ' damage.');
+        if (DS.hp <= 0) { handleDeath(); return; }
+      }
+      setCombatBtns(true);
+    }, 200);
+    return;
+  }
   var baseAtk = rnd(DS.atk[0], DS.atk[1]) + DS.atkBonus + (DS._bossRelicAtkBonus || 0);
   // Shadow Tear relic — +12% damage amp
   if (DS.inventory && DS.inventory.some(function(i){ return i.dmgAmp; })) {
