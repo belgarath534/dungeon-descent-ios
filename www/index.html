@@ -8305,7 +8305,7 @@ var DDStore = (function() {
       <div class="setting-label"><span id="sl-music">Music</span><button class="toggle-btn on" id="music-toggle" aria-pressed="true" onclick="toggleMusic()" aria-label="Music toggle currently on">On</button></div>
       <div id="ios-vol-notice" style="display:none;font-family:Cinzel,serif;font-size:0.65rem;color:#888;padding:10px;background:#080808;border:1px solid #333;margin-bottom:8px;line-height:1.7;" aria-live="polite">📱 On iPhone and iPad, the music volume slider restarts the track when you stop dragging — this is normal. Your setting is saved and will be remembered on the next launch.</div>
       <div class="vol-row"><span class="vol-prefix">VOL</span><input type="range" class="vol-slider" id="music-vol" min="0" max="100" value="50" aria-label="Music volume 50 percent" oninput="updateVol('music-vol','music-vol-val','music')" onchange="updateVol('music-vol','music-vol-val','music')"><span class="vol-val" id="music-vol-val" aria-hidden="true">50%</span></div>
-      <div id="ios-vol-notice" style="display:none;font-family:Cinzel,serif;font-size:0.6rem;color:#666;margin:4px 0 8px;line-height:1.6;">📱 On iPhone, use your device volume buttons to control audio levels.</div>
+      <div id="ios-vol-notice-2" style="display:none;font-family:Cinzel,serif;font-size:0.6rem;color:#666;margin:4px 0 8px;line-height:1.6;">📱 On iPhone, use your device volume buttons to control audio levels.</div>
     </div>
     <div class="setting-div"></div>
     <div class="setting-row">
@@ -8921,6 +8921,11 @@ function loadAudioPrefs() {
   var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   var iosNotice = document.getElementById('ios-vol-notice');
   if (iosNotice && isIOS) iosNotice.style.display = '';
+  // Second iOS-only tip (device volume buttons) — was given the same id as
+  // the one above, so getElementById('ios-vol-notice') always resolved to
+  // the FIRST div and this one could never be shown by any code.
+  var iosNotice2 = document.getElementById('ios-vol-notice-2');
+  if (iosNotice2 && isIOS) iosNotice2.style.display = '';
   try {
     var rawPrefs = DDStore.getItem('dd_audio');
     // If DDStore missed it (e.g. IndexedDB evicted on iOS), try the localStorage backup
