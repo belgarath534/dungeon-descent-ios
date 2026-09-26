@@ -58,5 +58,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Dungeon Descent uses speech recognition so you can play hands-free — say things like "attack", "defend", or "north" instead of tapping buttons.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Dungeon Descent needs the microphone to hear your voice commands during combat and exploration.</string>
 </dict>
 </plist>

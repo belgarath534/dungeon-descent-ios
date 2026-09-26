@@ -3193,6 +3193,7 @@ var DDStore = (function() {
       </div>
       <div class="dg-combat-log" id="dg-combat-log" role="log" aria-live="polite" aria-label="Combat log"></div>
       <div class="dg-combat-actions" role="group" aria-label="Combat actions">
+        <button type="button" class="dg-combat-btn" onclick="voiceCommand()" aria-label="Speak a combat command — say attack, heavy, defend, potion, flee, or skill" style="border-color:#44aacc;color:#66ccff;">🎤 Voice</button>
         <button type="button" class="dg-combat-btn" id="cbtn-attack" onclick="doFight('attack')" aria-label="Attack">⚔ Attack</button>
         <button type="button" class="dg-combat-btn" id="cbtn-heavy" onclick="doFight('heavy')" aria-label="Heavy strike, powerful but can miss">💥 Heavy</button>
         <button type="button" class="dg-combat-btn" id="cbtn-defend" onclick="doFight('defend')" aria-label="Defend, reduces incoming damage">🛡 Defend</button>
@@ -3225,6 +3226,7 @@ var DDStore = (function() {
         <span></span>
       </div>
       <div class="dg-actions" role="group" aria-label="Dungeon actions">
+        <button type="button" class="dg-act-btn" onclick="voiceCommand()" aria-label="Speak a command — say north, south, east, west, search, echo-locate, or inventory" style="border-color:#44aacc;color:#66ccff;">🎤 Voice</button>
         <button type="button" class="dg-act-btn" onclick="echoLocate()" aria-label="Echo-locate — sense the walls and doors of the room you're in, using 3D Mode's room layout data. Alt plus E.">📡 Echo-locate</button>
         <button type="button" class="dg-act-btn" onclick="toggleInv()" aria-label="Toggle inventory">🎒 Inventory</button>
         <button type="button" class="dg-act-btn" onclick="showStats()" aria-label="View character stats">📊 Stats</button>
@@ -13430,6 +13432,133 @@ function echoLocate() {
     ? ('Echo-location: open to the ' + openWords.join(', ') + '.' + (wallWords.length ? ' Wall to the ' + wallWords.join(', ') + '.' : ''))
     : 'Echo-location: walls on every side.';
   say(summary);
+}
+
+// ── VOICE COMMANDS ──
+// One entry point (voiceCommand()) used from both the combat and
+// exploration action panels — it picks its command table from DS.inCombat
+// at the moment it's called. Two backends: the native
+// @capacitor-community/speech-recognition plugin (real on-device speech
+// recognition, used on iOS/Android) and the browser's own
+// webkitSpeechRecognition (used on the web build, which runs in a normal
+// Chrome/Edge tab, not a WebView). Neither is guaranteed present — iOS's
+// WKWebView in particular has never implemented the Web Speech API's
+// recognition side, which is exactly why this needs the native plugin
+// there rather than trying to reuse the same speechSynthesis-only API
+// say() already relies on for output.
+var _voiceListening = false;
+
+function _voiceRecognitionMode() {
+  if (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.SpeechRecognition) return 'native';
+  if (window.SpeechRecognition || window.webkitSpeechRecognition) return 'web';
+  return null;
+}
+
+var VOICE_COMMANDS_COMBAT = [
+  { words: ['heavy strike', 'heavy attack', 'heavy'], action: function(){ doFight('heavy'); } },
+  { words: ['defend', 'block', 'guard'], action: function(){ doFight('defend'); } },
+  { words: ['potion', 'drink potion', 'heal'], action: function(){ doFight('potion'); } },
+  { words: ['flee', 'run away', 'escape', 'run'], action: function(){ doFight('flee'); } },
+  { words: ['skill book', 'skills', 'skill', 'spell', 'cast'], action: function(){ var b = document.getElementById('skill-book-btn'); if (b) b.click(); } },
+  { words: ['attack', 'hit', 'strike', 'fight'], action: function(){ doFight('attack'); } },
+];
+var VOICE_COMMANDS_EXPLORE = [
+  { words: ['echo locate', 'echolocate', 'echo location', 'echo', 'sonar', 'ping'], action: function(){ echoLocate(); } },
+  { words: ['inventory', 'bag', 'items'], action: function(){ toggleInv(); } },
+  { words: ['search', 'search room'], action: function(){ searchRoom(); } },
+  { words: ['north'], action: function(){ moveRoom('north'); } },
+  { words: ['south'], action: function(){ moveRoom('south'); } },
+  { words: ['east'], action: function(){ moveRoom('east'); } },
+  { words: ['west'], action: function(){ moveRoom('west'); } },
+];
+
+function _handleVoiceMatches(matches) {
+  var table = (DS && DS.inCombat) ? VOICE_COMMANDS_COMBAT : VOICE_COMMANDS_EXPLORE;
+  // Longer phrases are checked first within each candidate transcript so
+  // "heavy attack" matches heavy, not the bare "attack" fallback further down.
+  var sorted = table.slice().sort(function(a, b) {
+    var la = Math.max.apply(null, a.words.map(function(w){ return w.length; }));
+    var lb = Math.max.apply(null, b.words.map(function(w){ return w.length; }));
+    return lb - la;
+  });
+  for (var m = 0; m < (matches || []).length; m++) {
+    var text = (matches[m] || '').toLowerCase().trim();
+    if (!text) continue;
+    for (var c = 0; c < sorted.length; c++) {
+      for (var w = 0; w < sorted[c].words.length; w++) {
+        if (text.indexOf(sorted[c].words[w]) !== -1) {
+          say('Voice command: ' + sorted[c].words[w] + '.');
+          sorted[c].action();
+          return;
+        }
+      }
+    }
+  }
+  var heard = (matches && matches[0]) ? ('"' + matches[0] + '"') : 'anything';
+  say('Did not recognize ' + heard + '. Try attack, defend, heavy, potion, flee' +
+    ((DS && DS.inCombat) ? '' : ', a direction, search, or echo locate') + '.');
+}
+
+async function voiceCommand() {
+  if (_voiceListening) return;
+  var mode = _voiceRecognitionMode();
+  if (!mode) {
+    say('Voice commands are not available on this device or browser.');
+    return;
+  }
+  if (mode === 'native') { await _voiceCommandNative(); }
+  else { _voiceCommandWeb(); }
+}
+
+async function _voiceCommandNative() {
+  var SR = Capacitor.Plugins.SpeechRecognition;
+  try {
+    var perm = await SR.checkPermissions();
+    if (perm.speechRecognition !== 'granted') {
+      perm = await SR.requestPermissions();
+      if (perm.speechRecognition !== 'granted') {
+        say('Voice commands need microphone and speech recognition permission. Enable it in your device Settings.');
+        return;
+      }
+    }
+    var avail = await SR.available();
+    if (avail && avail.available === false) {
+      say('Speech recognition is not available on this device.');
+      return;
+    }
+    _voiceListening = true;
+    vibe && vibe(VIBE.echoPing);
+    say('Listening.');
+    var result = await SR.start({ language: 'en-US', maxResults: 3, popup: false, partialResults: false });
+    _voiceListening = false;
+    _handleVoiceMatches(result && result.matches ? result.matches : []);
+  } catch (e) {
+    _voiceListening = false;
+    console.warn('[DD] Voice command (native) failed:', e);
+    say('Could not hear that. Try again.');
+  }
+}
+
+function _voiceCommandWeb() {
+  var Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var rec = new Rec();
+  rec.lang = 'en-US';
+  rec.maxAlternatives = 3;
+  rec.interimResults = false;
+  _voiceListening = true;
+  vibe && vibe(VIBE.echoPing);
+  say('Listening.');
+  rec.onresult = function(e) {
+    var matches = [];
+    for (var i = 0; i < e.results[0].length; i++) matches.push(e.results[0][i].transcript);
+    _handleVoiceMatches(matches);
+  };
+  rec.onerror = function(e) {
+    console.warn('[DD] Voice command (web) error:', e.error);
+    say('Could not hear that. Try again.');
+  };
+  rec.onend = function() { _voiceListening = false; };
+  try { rec.start(); } catch (e) { _voiceListening = false; say('Could not start listening.'); }
 }
 
 // ── 3D MODE — VISUAL RENDERER (Three.js, lazy-loaded) ──
