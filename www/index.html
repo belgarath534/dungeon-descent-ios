@@ -6828,7 +6828,7 @@ var DDStore = (function() {
         <div style="font-size:0.7rem;color:#888;font-family:'Cinzel',serif;">Signed in as</div>
         <div id="account-email-display" style="font-size:0.85rem;color:#aaffaa;font-family:'Cinzel',serif;margin-top:4px;"></div>
       </div>
-      <button onclick="syncToCloud().then(function(){say('Sync complete.');})" style="width:100%;padding:12px;background:#0a1a0a;border:1px solid #336633;color:#aaffaa;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;margin-bottom:8px;" aria-label="Sync save to cloud now">
+      <button onclick="syncToCloud()" style="width:100%;padding:12px;background:#0a1a0a;border:1px solid #336633;color:#aaffaa;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;margin-bottom:8px;" aria-label="Sync save to cloud now">
         ☁ Sync Save to Cloud
       </button>
       <div id="account-title-display" style="text-align:center;font-family:'Cinzel',serif;font-size:0.72rem;color:#ffdd44;margin-bottom:8px;padding:6px;background:#1a1400;border:1px solid #333;"></div>
@@ -16327,6 +16327,9 @@ function raidGunAction() {
 
 function doFight(action) {
   if (!DS.inCombat) return;
+  // The Clock (Time Descender phase 2) runs its own attack-window combat loop —
+  // route attack/heavy/defend clicks there instead of the normal resolution below.
+  if (DS.enemy && DS.enemy.isClock) { timeDescenderClockHit(action); return; }
   try { tickSpellCooldown(); } catch(e2) {}
   // Charmed by The Heartbreaker — skip this turn
   if (DS._playerCharmed && (action === 'attack' || action === 'heavy' || action === 'skill')) {
@@ -16976,6 +16979,18 @@ function sanitizeGold() {
 function enemyDead() {
   var e = DS.enemy;
   try { resetGunState(); } catch(e2) {}
+
+  // Time Descender — every kill path (attack, heavy, skills, DoT ticks, guns,
+  // scrolls, potions) ends up here since enemyDead() reads DS.enemy directly,
+  // so one check covers all of them instead of patching each site. Phase 1
+  // transitions into phase 2 ("The Clock"); if phase 2 itself is somehow
+  // killed through one of those side paths instead of its own attack-window
+  // loop, still route to the real victory payout rather than generic loot.
+  if (e && e.isTimeDescender) {
+    if (e.phase === 2) { setTimeout(function() { timeDescenderVictory(); }, 300); return; }
+    setTimeout(function() { timeDescenderPhaseTwo(); }, 300);
+    return;
+  }
 
   // hollowZombie — revives once at 20% HP
   if (e && e.hollowZombie && !e._zombieRevived) {
@@ -18978,6 +18993,7 @@ function useItem(i) {
     var te = DS.enemy;
     if (!te) { say('No enemy to capture. Use a Soul Trap during combat.'); return; }
     if (te.isBoss) { say('You cannot capture bosses.'); return; }
+    if (te.isTimeDescender) { say('The Time Descender cannot be captured. It must be fought.'); return; }
     var captured = captureMinion({ id: (te.id || te.name.toLowerCase().replace(/ /g,'_')), name: te.name, icon: te.icon || '👾', atk: te.atk ? (Array.isArray(te.atk) ? te.atk[1] : te.atk) : 5 });
     if (captured) {
       DS.inventory.splice(i, 1);
@@ -55521,14 +55537,49 @@ function applyCustomSpiritAbility(abilityId, trigger) {
   return dmg;
 }
 
-// rollTimeDescender and triggerTimeDescender stubs
+// Time Descender — rare two-phase floor-6+ encounter (see version notes):
+// defeat the Descender itself here, then survive The Clock (phase 2, handled
+// by timeDescenderPhaseTwo()/timeDescenderClockHit() further down). These two
+// were stub passthroughs to checkTimeDescender()/showTimeDescender() — neither
+// function existed anywhere in the codebase, so rollTimeDescender() always
+// returned false and the whole advertised encounter could never fire. Mirrors
+// rollMedusaSpawn()/triggerMedusa()'s pattern immediately above it in the roll order.
 function rollTimeDescender() {
-  if (typeof checkTimeDescender === 'function') return checkTimeDescender();
-  return false;
+  if (DS.timeDescenderEncounteredThisRun) return false;
+  var inRaid = (typeof RD !== 'undefined' && RD.active);
+  if (inRaid) return false;
+  if (DS.floor < 6) return false;
+  return Math.random() < 0.15;
 }
 
 function triggerTimeDescender() {
-  if (typeof showTimeDescender === 'function') showTimeDescender();
+  DS.timeDescenderEncounteredThisRun = true;
+  DS._inTimeDescenderFight = true;
+  DS._timeDescenderPhase = 1;
+
+  var hp = 70 + (DS.floor * 4);
+  DS.enemy = {
+    name: 'The Time Descender',
+    icon: '⏳',
+    hp: hp, maxHp: hp,
+    atk: [14, 24],
+    gold: [0, 0],
+    isTimeDescender: true,
+    phase: 1,
+  };
+
+  DS.inCombat = true;
+  showDgPanels(false, true, false);
+  document.getElementById('dg-combat-title').textContent = '⏳ ' + t('The Time Descender');
+  document.getElementById('dg-enemy-icon').textContent = '⏳';
+  document.getElementById('dg-enemy-name').textContent = t('The Time Descender');
+  document.getElementById('dg-combat-log').innerHTML = '';
+  updateEnemyBar(); updatePlayerBar();
+  setCombatBtns(true);
+  addLog('⏳ Time fractures. The Time Descender emerges, unbound by the dungeon\'s usual rules.');
+  addRunLog('Encountered the Time Descender.', 'special');
+  say('The Time Descender appears. A rare encounter. Defeat it to force its second phase, The Clock. Attack, heavy, defend, or flee.');
+  setTimeout(function() { document.getElementById('cbtn-attack').focus(); }, 100);
 }
 
 
