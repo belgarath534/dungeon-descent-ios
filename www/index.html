@@ -41704,6 +41704,10 @@ function devCopyCode() {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(code).then(function() {
       say('Code copied: ' + code);
+    }).catch(function() {
+      // Clipboard permission can be denied (common in embedded WebViews) —
+      // without this, the write silently fails and the user hears nothing.
+      say('Your code is: ' + code);
     });
   } else {
     say('Your code is: ' + code);
@@ -42438,7 +42442,7 @@ function mpEmote(emote) {
     var charData = mpGetCharData(_mpSelectedChar);
     log.push('💬 ' + (charData ? charData.name : 'Player') + ': ' + msg);
     ref.set(log);
-  });
+  }).catch(function(err) { console.error('[PVP] emote failed:', err); });
   sfx('sfx-select');
 }
 
@@ -57489,6 +57493,10 @@ function copyVoidCode() {
   if (navigator.clipboard) {
     navigator.clipboard.writeText(code).then(function() {
       say('Code copied: ' + code + '. Share it with anyone. They can enter it in Settings → General → Enter Code.');
+    }).catch(function() {
+      // Clipboard permission can be denied (common in embedded WebViews) —
+      // without this, the write silently fails and the user hears nothing.
+      say('Your code is: ' + code + '. Go to Settings, General, Enter Code to redeem it.');
     });
   } else {
     say('Your code is: ' + code + '. Go to Settings, General, Enter Code to redeem it.');
