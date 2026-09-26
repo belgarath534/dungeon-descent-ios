@@ -1824,7 +1824,7 @@ var DDStore = (function() {
     <!-- Title -->
     <div class="loading-title" data-i18n="game-title" style="font-size:2.4rem;line-height:1.1;margin-bottom:6px;">Dungeon<br>Descent</div>
     <div class="loading-sub" data-i18n="game-subtitle" style="margin-bottom:6px;">Into the dark. Again.</div>
-    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.6</div>
+    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.7</div>
 
     <!-- Loading bar -->
     <div class="loading-bar-wrap">
@@ -2001,7 +2001,7 @@ var DDStore = (function() {
         <span data-i18n="btn-quit">🕯 Quit</span>
       </button>
     </nav>
-    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 6, Release">v11.6 · Release</p>
+    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 7, Release">v11.7 · Release</p>
     <p id="menu-online-count" style="font-family:Cinzel,serif;font-size:0.55rem;color:#444;margin-top:4px;letter-spacing:0.1em;" aria-live="polite" aria-label="Players currently online"></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#ffdd44;margin-top:6px;" aria-label="Your global gold" aria-live="polite"><span data-i18n="lbl-gold">💰 </span><span class="global-gold-display">0</span></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#88ddff;margin-top:2px;" aria-label="Your diamonds" aria-live="polite">💎 <span class="global-diamond-display">0</span></p>
@@ -3565,8 +3565,30 @@ var DDStore = (function() {
       <button class="back-btn" onclick="goTo('menu')" aria-label="Back to main menu">← Menu</button>
       <h2 class="screen-title">What's New</h2>
     </div>
-    <div class="version-block latest" tabindex="0" aria-label="Version 11.6">
-      <div class="version-num">v11.6 — Latest</div>
+    <div class="version-block latest" tabindex="0" aria-label="Version 11.7">
+      <div class="version-num">v11.7 — Latest</div>
+      <div class="version-date">The Accessibility & Fix Sweep</div>
+      <ul class="version-changes">
+        <li>🕯️ Hide and Seek — in case it slipped past you: a tense chase mode against the Darkness Swallower, solo or with up to 5 friends in a shared room. Find the exit before it finds you. Been in the game for a while — it just never got its own mention here until now.</li>
+        <li>🎧 Echo-Location — a sonar-ping tool in 3D Mode. Fires a central ping then a panned tone per open door — a sharp tik where there's a wall, a soft fading tone where a door is. Pure audio, works even with the 3D visual off.</li>
+        <li>🎤 Voice Commands — play combat and exploration completely hands-free. Say "attack," "north," "defend," and more instead of tapping buttons. Native speech recognition on iOS and Android.</li>
+        <li>🏆 Trophy Room — a dedicated 3D space to browse everything you've earned.</li>
+        <li>📳 Expanded Haptic Vocabulary — dozens of new named vibration patterns (mimic reveals, undead rising, boss phase transitions, 3D Mode wall bumps, and more), and vibration duration is now actually respected instead of every buzz being the same fixed-length tap.</li>
+        <li>📖 Interactive Tutorial — the Combat step now has a real practice fight against a harmless training enemy, with live tips as you try Attack, Heavy Strike, and Defend. New step covering Voice Commands, Haptic Feedback, and 3D Mode/Echo-Location — features that existed but were never actually explained to new players.</li>
+        <li>🐛 Fixed the character list showing "undefined" instead of class, race, profession, or dungeon for characters saved before those fields existed — both browsing the list and importing an old save code.</li>
+        <li>🐛 Fixed the Command Center (text-command play style) character creator being badly out of date — 6 missing classes, a missing dungeon, and an entirely missing Profession step that silently gave every terminal-created character "Wanderer" instead of a real profession.</li>
+        <li>🐛 The Time Descender — this rare two-phase encounter could never actually occur due to a broken spawn check that's been in the game for a couple of versions. Fixed — it's a real, findable encounter now, legendary Chrono Armor drop and all.</li>
+        <li>🐛 Fixed gun counter-attacks silently never firing due to a call to a function that didn't exist.</li>
+        <li>🐛 Fixed Portuguese translation gaps across Siege, Raid, Boss Rush, Tournament, and Mine combat logs — these never translated anything, not even static text.</li>
+        <li>🐛 Added unlock hints to every locked achievement, so it's clear what to do instead of just "keep playing."</li>
+        <li>🐛 Fixed missing profession bonus descriptions for Street Rat, Warden, and Tinkerer.</li>
+        <li>🐛 Hardened save-data loading — corrupted or truncated storage (an interrupted save, an old format) now falls back safely instead of potentially crashing a screen.</li>
+        <li>🐛 Fixed the Sync to Cloud button announcing "Sync complete" even when the sync had just failed.</li>
+        <li>🐛 Fixed a missing error catch on multiplayer emotes, so a failed send no longer disappears silently.</li>
+      </ul>
+    </div>
+    <div class="version-block" tabindex="0" aria-label="Version 11.6">
+      <div class="version-num">v11.6</div>
       <div class="version-date">The 3D Mode Update</div>
       <ul class="version-changes">
         <li>🧊 3D Mode (Beta) — explore every dungeon in a real 3D rendered view with full spatial audio. Walk between rooms yourself instead of tapping directions, and find the way out by sound and sight. Each dungeon has its own look: ashen lava for the Ashbound Wastes, ice blue for Frosthold Abyss, murky teal for the Sunken Archives, pale bone for the Hollow, mossy green for the Whispering Forest, hellfire red for the Infernal Descent, abyssal blue for the Abyssal Deep, and shadow purple for the Shadow World.</li>
@@ -4184,7 +4206,7 @@ var DDStore = (function() {
       <div class="version-date">The Tutorial Update</div>
       <ul class="version-changes">
         <li>Interactive tutorial — 8 step guided walkthrough for first time players. Shows after character creation on your very first run.</li>
-        <li>The Shade — a tutorial-only enemy. 12 HP, hits for 1-2 damage. Spawns only during the tutorial fight step. Never appears in real dungeons.</li>
+        <li>Training Shade — a tutorial-only enemy. Hits for 1-2 damage. Spawns only during the tutorial's practice fight. Never appears in real dungeons.</li>
         <li>Tutorial checks your progress — if you already have characters, kills, or achievements it skips entirely. Experienced players never see it.</li>
         <li>Progress pips show which step you are on. Skip button always visible. Once skipped or completed it never shows again.</li>
         <li>JAWS reads every tutorial step fully — the whole system is accessible from the start.</li>
@@ -7642,8 +7664,8 @@ var DDStore = (function() {
     <div class="tutorial-pips" id="tutorial-pips" aria-hidden="true"></div>
 
     <!-- Step 1: Welcome -->
-    <div class="tutorial-step active" id="tut-1" aria-label="Tutorial step 1 of 7">
-      <p class="tutorial-num">Welcome — Step 1 of 7</p>
+    <div class="tutorial-step active" id="tut-1" aria-label="Tutorial step 1 of 8">
+      <p class="tutorial-num">Welcome — Step 1 of 8</p>
       <h2 class="tutorial-title" id="tutorial-title-el">Welcome to Dungeon Descent</h2>
       <div class="tutorial-body">
         <p>You are about to descend into one of the darkest games ever made for screen reader users.</p>
@@ -7661,8 +7683,8 @@ var DDStore = (function() {
     </div>
 
     <!-- Step 2: Character Creation -->
-    <div class="tutorial-step" id="tut-2" aria-label="Tutorial step 2 of 7">
-      <p class="tutorial-num">Character Creation — Step 2 of 7</p>
+    <div class="tutorial-step" id="tut-2" aria-label="Tutorial step 2 of 8">
+      <p class="tutorial-num">Character Creation — Step 2 of 8</p>
       <h2 class="tutorial-title">Building Your Character</h2>
       <div class="tutorial-body">
         <p>Before you descend, you build your character across <strong>10 steps</strong>.</p>
@@ -7682,8 +7704,8 @@ var DDStore = (function() {
     </div>
 
     <!-- Step 3: Dungeon Navigation -->
-    <div class="tutorial-step" id="tut-3" aria-label="Tutorial step 3 of 7">
-      <p class="tutorial-num">Navigation — Step 3 of 7</p>
+    <div class="tutorial-step" id="tut-3" aria-label="Tutorial step 3 of 8">
+      <p class="tutorial-num">Navigation — Step 3 of 8</p>
       <h2 class="tutorial-title">Moving Through the Dungeon</h2>
       <div class="tutorial-body">
         <p>The dungeon has <strong>10 floors</strong>. Each floor has <strong>5 rooms</strong>. After room 5 you reach a shop, then descend to the next floor.</p>
@@ -7736,7 +7758,7 @@ var DDStore = (function() {
       </div>
       <div class="tutorial-tip" id="tut-5-practice-tip">
         <div class="tutorial-tip-label">🗡 Try it yourself</div>
-        A harmless training Shade will appear. Practice Attack, Heavy Strike, and Defend against it — it can barely scratch you, and you cannot actually die to it.
+        A harmless Training Shade will appear. Practice Attack, Heavy Strike, and Defend against it — it can barely scratch you, and you cannot actually die to it.
       </div>
       <div class="tutorial-btns">
         <button class="btn-ghost" onclick="tutStep(4)" aria-label="Previous step">← Back</button>
@@ -16350,7 +16372,7 @@ function doFight(action) {
   // The Clock (Time Descender phase 2) runs its own attack-window combat loop —
   // route attack/heavy/defend clicks there instead of the normal resolution below.
   if (DS.enemy && DS.enemy.isClock) { timeDescenderClockHit(action); return; }
-  // Interactive tutorial practice fight (The Shade) — narrate each action the
+  // Interactive tutorial practice fight (Training Shade) — narrate each action the
   // first time it's used, then let real combat resolve normally below.
   if (DS.enemy && DS.enemy.isTutorialEnemy) { _tutCombatOnAction(action); }
   try { tickSpellCooldown(); } catch(e2) {}
@@ -17015,11 +17037,11 @@ function enemyDead() {
     return;
   }
 
-  // Interactive tutorial practice fight (The Shade) — no loot/XP, just resume
+  // Interactive tutorial practice fight (Training Shade) — no loot/XP, just resume
   // the tutorial overlay at the next step once the player's had their reps in.
   if (e && e.isTutorialEnemy) {
     DS.inCombat = false;
-    addLog('✨ The Shade dissolves. Practice complete!');
+    addLog('✨ The Training Shade dissolves. Practice complete!');
     say('Practice fight complete! Continuing the tutorial.');
     showDgPanels(true, false, false);
     setTimeout(function() { resumeTutorialAfterCombat(); }, 1000);
@@ -26945,7 +26967,7 @@ var T = {
     'v7.9': 'v7.9',
     'The Tutorial Update': 'A Atualização do Tutorial',
     'Interactive tutorial — 8 step guided walkthrough for first time players. Shows after character creation on your very first run.': 'Tutorial interativo — passo a passo guiado de 8 etapas para jogadores de primeira viagem. Aparece após a criação do personagem na sua primeiríssima partida.',
-    'The Shade — a tutorial-only enemy. 12 HP, hits for 1-2 damage. Spawns only during the tutorial fight step. Never appears in real dungeons.': 'A Sombra — um inimigo exclusivo do tutorial. 12 HP, causa 1-2 de dano. Aparece apenas durante o passo de luta do tutorial. Nunca aparece em masmorras reais.',
+    'Training Shade — a tutorial-only enemy. Hits for 1-2 damage. Spawns only during the tutorial\'s practice fight. Never appears in real dungeons.': 'Sombra de Treino — um inimigo exclusivo do tutorial. Causa 1-2 de dano. Aparece apenas na luta de prática do tutorial. Nunca aparece em masmorras reais.',
     'Tutorial checks your progress — if you already have characters, kills, or achievements it skips entirely. Experienced players never see it.': 'O tutorial verifica seu progresso — se você já tem personagens, abates ou conquistas ele é completamente pulado. Jogadores experientes nunca o veem.',
     'Progress pips show which step you are on. Skip button always visible. Once skipped or completed it never shows again.': 'Marcadores de progresso mostram em qual passo você está. Botão pular sempre visível. Uma vez pulado ou completado ele nunca mais aparece.',
     'JAWS reads every tutorial step fully — the whole system is accessible from the start.': 'O JAWS lê cada passo do tutorial completamente — todo o sistema é acessível desde o início.',
@@ -27830,13 +27852,27 @@ var T = {
     'New Skill Unlocked': 'Nova Habilidade Desbloqueada',
     'Skill Name': 'Nome da Habilidade',
     'Cost: 10 SP': 'Custo: 10 SP',
-    'Welcome — Step 1 of 7': 'Bem-vindo — Passo 1 de 7',
+    'Welcome — Step 1 of 8': 'Bem-vindo — Passo 1 de 8',
+    'Accessibility — Step 4 of 8': 'Acessibilidade — Passo 4 de 8',
+    'Your screen reader announcements work automatically — nothing to enable there. But a few opt-in features are easy to miss.': 'Os anúncios do seu leitor de tela funcionam automaticamente — nada para ativar aí. Mas alguns recursos opcionais são fáceis de perder.',
+    'Voice Commands': 'Comandos de Voz',
+    '— a microphone button appears during exploration and combat. Say things like "attack," "north," or "defend" to play hands-free. Enable it in Settings.': '— um botão de microfone aparece durante a exploração e o combate. Diga coisas como "atacar", "norte" ou "defender" para jogar sem as mãos. Ative isso nas Configurações.',
+    'Haptic Feedback': 'Feedback Háptico',
+    '— distinct vibration patterns for hits, crits, level-ups, and danger. On by default — adjust intensity in Settings under Accessibility.': '— padrões de vibração distintos para acertos, críticos, subidas de nível e perigo. Ativado por padrão — ajuste a intensidade nas Configurações em Acessibilidade.',
+    '3D Mode & Echo-Location': 'Modo 3D e Ecolocalização',
+    '— an optional spatial-audio layer for exploring rooms. Turn it on in Settings under Beta Features, then use the Echo-Location button (or Alt+E) to sonar-ping a room for walls and doors.': '— uma camada opcional de áudio espacial para explorar salas. Ative nas Configurações em Recursos Beta, depois use o botão de Ecolocalização (ou Alt+E) para enviar um sonar pela sala em busca de paredes e portas.',
+    '💡 Command Center': '💡 Central de Comandos',
+    'Prefer typing? The Command Center lets you play the entire game — including character creation — with text commands instead of buttons.': 'Prefere digitar? A Central de Comandos permite jogar o jogo inteiro — incluindo a criação de personagem — com comandos de texto em vez de botões.',
+    '🗡 Try it yourself': '🗡 Experimente você mesmo',
+    'A harmless Training Shade will appear. Practice Attack, Heavy Strike, and Defend against it — it can barely scratch you, and you cannot actually die to it.': 'Uma Sombra de Treino inofensiva vai aparecer. Pratique Atacar, Golpe Pesado e Defender contra ela — ela quase não consegue te arranhar, e você não pode realmente morrer para ela.',
+    'Start a practice fight against a harmless training enemy': 'Iniciar uma luta de prática contra um inimigo de treino inofensivo',
+    '🗡 Start Practice Fight': '🗡 Iniciar Luta de Prática',
     'You are about to descend into one of the darkest games ever made for screen reader users.': 'Você está prestes a descer em um dos jogos mais sombrios já feitos para usuários de leitores de tela.',
     'Dungeon Descent is fully accessible. Every button, every enemy, every room description — all announced by your screen reader automatically.': 'Dungeon Descent é totalmente acessível. Cada botão, cada inimigo, cada descrição de sala — tudo anunciado automaticamente pelo seu leitor de tela.',
     'This quick guide will show you how everything works. You can skip it anytime.': 'Este guia rápido vai te mostrar como tudo funciona. Você pode pulá-lo a qualquer momento.',
     '💡 Built for JAWS and VoiceOver': '💡 Construído para JAWS e VoiceOver',
     'Every action in the game is announced. Combat damage, loot found, floor descriptions — your screen reader reads it all.': 'Cada ação no jogo é anunciada. Dano de combate, saque encontrado, descrições de andar — seu leitor de tela lê tudo.',
-    'Character Creation — Step 2 of 7': 'Criação de Personagem — Passo 2 de 7',
+    'Character Creation — Step 2 of 8': 'Criação de Personagem — Passo 2 de 8',
     'Before you descend, you build your character across': 'Antes de descer, você constrói seu personagem em',
     '— 18 classes available. Warrior, Monk, Assassin, Paladin, Naturalist, Sorcerer, Necromancer, Berserker, Bard, Alchemist, BloodKnight, Druid, Warlock, DeathKnight, Ranger, Sentinel, Cleric, Wizard. Each plays completely differently.': '— 18 classes disponíveis. Guerreiro, Monge, Assassino, Paladino, Naturalista, Feiticeiro, Necromante, Berserker, Bardo, Alquimista, Cavaleiro de Sangue, Druida, Bruxo, Cavaleiro da Morte, Arqueiro, Sentinela, Clérigo, Mago. Cada uma joga de forma completamente diferente.',
     '— 11 races. Human is balanced. Orc hits hardest. Vampire heals on every kill. Angel gains a second life. Goblin finds 25% more gold. Merfolk get bonus HP in the Sunken Archives.': '— 11 raças. Humano é equilibrado. Orc bate mais forte. Vampiro cura em cada abate. Anjo ganha uma segunda vida. Goblin encontra 25% mais ouro. Sereiano ganha HP bônus nos Arquivos Submersos.',
@@ -27844,7 +27880,7 @@ var T = {
     '— every class now begins with their signature skill already unlocked on floor 1.': '— toda classe agora começa com sua habilidade característica já desbloqueada no andar 1.',
     '💡 Tip for new players': '💡 Dica para novos jogadores',
     'Start with Warrior class, Dwarf race, Herbalist profession on Wanderer difficulty. This gives you the most survivability for your first run.': 'Comece com a classe Guerreiro, raça Anão, profissão Herbalista na dificuldade Andarilho. Isso te dá a maior sobrevivência para sua primeira partida.',
-    'Navigation — Step 3 of 7': 'Navegação — Passo 3 de 7',
+    'Navigation — Step 3 of 8': 'Navegação — Passo 3 de 8',
     'The dungeon has': 'A masmorra tem',
     '. Each floor has': '. Cada andar tem',
     '. After room 5 you reach a shop, then descend to the next floor.': '. Depois da sala 5 você chega a uma loja, depois desce para o próximo andar.',
@@ -27857,7 +27893,7 @@ var T = {
     '. You never know what waits ahead.': '. Você nunca sabe o que espera adiante.',
     '💡 Special Events': '💡 Eventos Especiais',
     'About 1 in 10 rooms triggers a special event — an ancient shrine, a mysterious chest, a wounded adventurer, or an inscription. These give rewards if you interact with them.': 'Cerca de 1 em 10 salas dispara um evento especial — um santuário antigo, um baú misterioso, um aventureiro ferido ou uma inscrição. Eles dão recompensas se você interagir com eles.',
-    'Combat — Step 4 of 7': 'Combate — Passo 4 de 7',
+    'Combat — Step 5 of 8': 'Combate — Passo 5 de 8',
     'Combat is': 'O combate é',
     'turn-based': 'por turnos',
     '. You act, then the enemy acts.': '. Você age, depois o inimigo age.',
@@ -27869,7 +27905,7 @@ var T = {
     '— if you have one in your inventory, a Soul Trap button appears in combat. Use it to capture the enemy as a permanent minion instead of killing it.': '— se você tem uma no inventário, um botão de Armadilha de Alma aparece em combate. Use-a para capturar o inimigo como um servo permanente em vez de matá-lo.',
     '💡 Boss Fights': '💡 Lutas Contra Chefes',
     'The boss on floor 10 has 3 phases. Each phase it gets stronger and changes its attack pattern. Defeat all 3 phases to complete the dungeon.': 'O chefe no andar 10 tem 3 fases. Em cada fase ele fica mais forte e muda seu padrão de ataque. Derrote as 3 fases para completar a masmorra.',
-    'Progression — Step 5 of 7': 'Progressão — Passo 5 de 7',
+    'Progression — Step 6 of 8': 'Progressão — Passo 6 de 8',
     'You earn': 'Você ganha',
     'from every kill. Level up to gain HP, attack power, and skill unlocks. Every level gives 3 points to spend on stats.': 'de cada abate. Suba de nível para ganhar HP, poder de ataque e desbloqueios de habilidade. Cada nível dá 3 pontos para gastar em atributos.',
     'SP (Skill Points)': 'SP (Pontos de Habilidade)',
@@ -27880,7 +27916,7 @@ var T = {
     '— earned from achievements. Reaching 100 trophies unlocks The Infernal Descent.': '— conquistados por realizações. Alcançar 100 troféus desbloqueia A Descida Infernal.',
     '💡 Minions and Forge': '💡 Servos e Forja',
     'Use a Soul Trap in combat to capture enemies as permanent minions. Collect materials from kills and craft custom weapons at the Forge inside your Home. Both are accessed from the Home screen between fights.': 'Use uma Armadilha de Alma em combate para capturar inimigos como servos permanentes. Colete materiais de abates e crie armas personalizadas na Forja dentro da sua Casa. Ambos são acessados pela tela da Casa entre lutas.',
-    'Blacksmith — Step 6 of 7': 'Ferreiro — Passo 6 de 7',
+    'Blacksmith — Step 7 of 8': 'Ferreiro — Passo 7 de 8',
     'appears inside dungeons and lets you do two things.': 'aparece dentro das masmorras e permite fazer duas coisas.',
     '— spend gold to upgrade your currently equipped weapon or armor. Higher level gear deals more damage and has better defense.': '— gaste ouro para melhorar sua arma ou armadura atualmente equipada. Equipamento de nível mais alto causa mais dano e tem melhor defesa.',
     '— browse a selection of weapons available for purchase with gold. Your': '— navegue por uma seleção de armas disponíveis para compra com ouro. Sua',
@@ -27889,7 +27925,7 @@ var T = {
     'Weapons you buy go straight into your inventory. Open your inventory to equip them.': 'Armas que você compra vão direto para o seu inventário. Abra seu inventário para equipá-las.',
     '💡 Blacksmith Profession': '💡 Profissão Ferreiro',
     'If you pick Blacksmith as your profession during character creation, you get a 10% discount on all upgrades. Great for long runs.': 'Se você escolher Ferreiro como sua profissão durante a criação do personagem, você recebe 10% de desconto em todas as melhorias. Ótimo para partidas longas.',
-    'Ready — Step 7 of 7': 'Pronto — Passo 7 de 7',
+    'Ready — Step 8 of 8': 'Pronto — Passo 8 de 8',
     'That is everything you need to know. The rest you will learn in the dark.': 'Isso é tudo que você precisa saber. O resto você vai aprender na escuridão.',
     'Check the': 'Verifique o',
     'to track every enemy you encounter. Visit': 'para rastrear cada inimigo que você encontra. Visite',
@@ -28947,8 +28983,15 @@ var T = {
     'Triple XP for next 2 floors activated.': 'XP triplo ativado para os próximos 2 andares.',
     'True ending reset. Clear any dungeon to trigger it.': 'Final verdadeiro reiniciado. Complete qualquer masmorra para ativá-lo.',
     'Tutorial closed. Welcome to Dungeon Descent.': 'Tutorial encerrado. Bem-vindo ao Dungeon Descent.',
-    'Tutorial combat. The Shade. 12 HP. Use Attack to defeat it.': 'Combate tutorial. A Sombra. 12 HP. Use Atacar para derrotá-la.',
-    'Tutorial. Step 1 of 12. Welcome to Dungeon Descent. Press Next to continue or Skip Tutorial to go straight to the game.': 'Tutorial. Passo 1 de 12. Bem-vindo ao Dungeon Descent. Pressione Próximo para continuar ou Pular Tutorial para ir direto ao jogo.',
+    'Tutorial combat. Training Shade. 50 HP. It barely hits back. Use Attack to defeat it.': 'Combate tutorial. Sombra de Treino. 50 HP. Quase não bate de volta. Use Atacar para derrotá-la.',
+    'Tutorial. Step 1 of ': 'Tutorial. Passo 1 de ',
+    '. Welcome to Dungeon Descent. Press Next to continue or Skip Tutorial to go straight to the game.': '. Bem-vindo ao Dungeon Descent. Pressione Próximo para continuar ou Pular Tutorial para ir direto ao jogo.',
+    'Tutorial step ': 'Passo do tutorial ',
+    ' of ': ' de ',
+    'Ready to Descend': 'Pronto para Descer',
+    'Welcome': 'Bem-vindo',
+    'Character Creation': 'Criação de Personagem',
+    'Progression': 'Progressão',
     'Undying Resolve. You refuse to die. 1 HP. This will not happen again.': 'Resolução Imortal. Você se recusa a morrer. 1 HP. Isso não vai acontecer novamente.',
     'Undying passive! You survive death at 1 HP. This can only happen once.': 'Passiva Imortal! Você sobrevive à morte com 1 HP. Isso só pode acontecer uma vez.',
     'Unknown code. Type HELP for hints.': 'Código desconhecido. Digite HELP para dicas.',
@@ -29823,7 +29866,7 @@ var T = {
     '5. 4. 3. 2. 1.': '5. 4. 3. 2. 1.',
     '500 gold added.': '500 de ouro adicionados.',
     '99 of every gun part added.': '99 de cada peça de arma adicionadas.',
-    'A Shade materialises. It is weak. A tutorial enemy. Defeat it.': 'Uma Sombra se materializa. É fraca. Um inimigo tutorial. Derrote-a.',
+    'A Training Shade materialises. It is weak. A tutorial enemy. Defeat it.': 'Uma Sombra de Treino se materializa. É fraca. Um inimigo tutorial. Derrote-a.',
     'A rare figure steps from the shadows of the Hollow. Medusa. Her eyes are closed. For now.': 'Uma figura rara emerge das sombras da Cova. Medusa. Seus olhos estão fechados. Por agora.',
     'A shark appears. It circles you. It is watching. It has been watching this entire time.': 'Um tubarão aparece. Ele circula você. Está observando. Tem observado o tempo todo.',
     'A strange sign has appeared somewhere on screen. Find it and press it to answer a riddle.': 'Um sinal estranho apareceu em algum lugar na tela. Encontre-o e pressione-o para responder a um enigma.',
@@ -34125,13 +34168,14 @@ var T = {
   'Try again': 'Tentar novamente',
   'Try again with the same character': 'Tentar novamente com o mesmo personagem',
   'Try the trial again': 'Tentar o julgamento novamente',
-  'Tutorial step 1 of 7': 'Etapa do tutorial 1 de 7',
-  'Tutorial step 2 of 7': 'Etapa do tutorial 2 de 7',
-  'Tutorial step 3 of 7': 'Etapa do tutorial 3 de 7',
-  'Tutorial step 4 of 7': 'Etapa do tutorial 4 de 7',
-  'Tutorial step 5 of 7': 'Etapa do tutorial 5 de 7',
-  'Tutorial step 6 of 7': 'Etapa do tutorial 6 de 7',
-  'Tutorial step 7 of 7': 'Etapa do tutorial 7 de 7',
+  'Tutorial step 1 of 8': 'Etapa do tutorial 1 de 8',
+  'Tutorial step 4 of 8': 'Etapa do tutorial 4 de 8',
+  'Tutorial step 2 of 8': 'Etapa do tutorial 2 de 8',
+  'Tutorial step 3 of 8': 'Etapa do tutorial 3 de 8',
+  'Tutorial step 5 of 8': 'Etapa do tutorial 5 de 8',
+  'Tutorial step 6 of 8': 'Etapa do tutorial 6 de 8',
+  'Tutorial step 7 of 8': 'Etapa do tutorial 7 de 8',
+  'Tutorial step 8 of 8': 'Etapa do tutorial 8 de 8',
   'Unequip ': 'Desequipar ',
   'Unlock all dungeons': 'Desbloquear todas as masmorras',
   'Unlock all guns': 'Desbloquear todas as armas',
@@ -40310,7 +40354,7 @@ function openTutorial() {
     if (el) el.classList.toggle('active', i === 1);
   }
   document.getElementById('tutorial-overlay').classList.add('open');
-  say('Tutorial. Step 1 of ' + TUTORIAL_STEPS + '. Welcome to Dungeon Descent. Press Next to continue or Skip Tutorial to go straight to the game.');
+  say(t('Tutorial. Step 1 of ') + TUTORIAL_STEPS + t('. Welcome to Dungeon Descent. Press Next to continue or Skip Tutorial to go straight to the game.'));
   setTimeout(function() {
     var btn = document.querySelector('#tut-1 .btn-gold');
     if (btn) btn.focus();
@@ -40325,7 +40369,7 @@ function tutStep(n) {
   if (next) next.classList.add('active');
   renderTutPips();
   var titles = ['','Welcome','Character Creation','Navigation','Accessibility','Combat','Progression','Blacksmith','Ready to Descend'];
-  say('Tutorial step ' + n + ' of ' + TUTORIAL_STEPS + '. ' + (titles[n] || ''));
+  say(t('Tutorial step ') + n + t(' of ') + TUTORIAL_STEPS + t('. ') + t(titles[n] || ''));
   setTimeout(function() {
     var btn = document.querySelector('#tut-' + n + ' .btn-gold');
     if (btn) btn.focus();
@@ -42334,7 +42378,7 @@ function devResetSRPrompt() {
 }
 
 // ── WHATS NEW ──
-var CURRENT_VERSION = '11.6';
+var CURRENT_VERSION = '11.7';
 function checkWhatsNew() {
   // Update ALL version displays from single source of truth
   var vtag = document.querySelector('.version-tag');
@@ -51281,14 +51325,14 @@ function spawnTutorialShade() {
   // hp raised from the original 12 to 50 — at 12 HP most builds one- or
   // two-shot it, leaving no room to actually demonstrate Heavy Strike and
   // Defend before it dies. atk stays trivial ([1,2]) so it's still harmless.
-  DS.enemy = { name:'The Shade', icon:'👤', hp:50, maxHp:50, atk:[1,2], gold:[0,0], isTutorialEnemy:true };
+  DS.enemy = { name:'Training Shade', icon:'👤', hp:50, maxHp:50, atk:[1,2], gold:[0,0], isTutorialEnemy:true };
   DS.inCombat = true; DS.defending = false;
   showDgPanels(false, true, false);
   document.getElementById('dg-enemy-icon').textContent = '👤';
-  document.getElementById('dg-enemy-name').textContent = t('The Shade');
+  document.getElementById('dg-enemy-name').textContent = t('Training Shade');
   updateEnemyBar(); updatePlayerBar(); setCombatBtns(true); updateSkillButtons();
-  addLog('A Shade materialises. It is weak. A tutorial enemy. Defeat it.');
-  say('Tutorial combat. The Shade. 50 HP. It barely hits back. Use Attack to defeat it.');
+  addLog('A Training Shade materialises. It is weak. A tutorial enemy. Defeat it.');
+  say('Tutorial combat. Training Shade. 50 HP. It barely hits back. Use Attack to defeat it.');
 }
 
 // ── INTERACTIVE COMBAT PRACTICE (Tutorial Step 5) ──
@@ -51312,7 +51356,7 @@ function startTutorialCombatPractice() {
   document.getElementById('tutorial-overlay').classList.remove('open');
   DS._tutCombatBeats = {};
   spawnTutorialShade();
-  addLog('📖 Tutorial: try Attack, Heavy Strike, and Defend against this training Shade.');
+  addLog('📖 Tutorial: try Attack, Heavy Strike, and Defend against this Training Shade.');
 }
 
 function _tutCombatOnAction(action) {
