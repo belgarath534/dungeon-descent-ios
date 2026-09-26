@@ -42390,26 +42390,63 @@ function checkWhatsNew() {
   var loadingAnim = document.querySelector('.loading-animation-text');
   // loading animation text is JS-generated so handled separately below
   var seen = DDStore.getItem('dd_version_seen');
+  if (!seen) {
+    // Fresh install — nothing to compare against, so there's no "what's new"
+    // for them yet. Record the version silently instead of popping this in
+    // front of a brand-new player before they've even made a character.
+    DDStore.setItem('dd_version_seen', CURRENT_VERSION);
+    return;
+  }
   if (seen !== CURRENT_VERSION) {
-    // Show migration animation first if upgrading from older version, then popup
-    var hadPrevVersion = seen && seen !== CURRENT_VERSION;
+    // Returning player on an older version — show the migration animation
+    // first, then the popup.
     setTimeout(function() {
-      if (hadPrevVersion) {
-        showMigrationAnimation(function() {
-          showWhatsNewPopup();
-        });
-      } else {
+      showMigrationAnimation(function() {
         showWhatsNewPopup();
-      }
+      });
     }, 1200);
   }
 }
 function showWhatsNewPopup() {
+  // The #whats-new-popup CSS rule (fixed overlay, flex-centered) existed, but
+  // no element with that id was ever added to the page — this function just
+  // silently no-op'd via the `if (popup)` guard. Built here instead, reusing
+  // the same content already written for the full What's New screen's latest
+  // version block, so it stays in sync automatically on every future version.
   var popup = document.getElementById('whats-new-popup');
-  if (popup) {
-    popup.style.display = 'flex';
-    say('What is new in version ' + CURRENT_VERSION + '. Press the button to start playing.');
+  if (!popup) {
+    popup = document.createElement('div');
+    popup.id = 'whats-new-popup';
+    popup.setAttribute('role', 'dialog');
+    popup.setAttribute('aria-modal', 'true');
+    document.body.appendChild(popup);
   }
+  var latestBlock = document.querySelector('.version-block.latest');
+  var titleText = 'v' + CURRENT_VERSION;
+  var dateText = '';
+  var changesHtml = '';
+  if (latestBlock) {
+    var numEl = latestBlock.querySelector('.version-num');
+    var dateEl = latestBlock.querySelector('.version-date');
+    var changesEl = latestBlock.querySelector('.version-changes');
+    if (numEl) titleText = numEl.textContent.replace('— Latest', '').trim();
+    if (dateEl) dateText = dateEl.textContent;
+    if (changesEl) changesHtml = changesEl.outerHTML;
+  }
+  popup.setAttribute('aria-label', 'What is new in ' + titleText);
+  popup.innerHTML =
+    '<div style="max-width:480px;width:100%;max-height:80vh;overflow-y:auto;background:#0a0a0a;border:1px solid #443300;padding:24px;box-sizing:border-box;">' +
+      '<div style="text-align:center;font-family:\'Cinzel Decorative\',cursive;font-size:1.15rem;color:var(--gold-bright);margin-bottom:4px;">🎉 ' + titleText + '</div>' +
+      (dateText ? '<div style="text-align:center;font-family:Cinzel,serif;font-size:0.62rem;color:var(--text-dim);letter-spacing:0.15em;margin-bottom:16px;">' + dateText + '</div>' : '') +
+      changesHtml +
+      '<button class="btn-gold" onclick="closeWhatsNew()" aria-label="Continue to the game" style="width:100%;margin-top:18px;padding:14px;font-family:Cinzel,serif;font-size:0.8rem;background:var(--gold);cursor:pointer;">⚔ Continue</button>' +
+    '</div>';
+  popup.style.display = 'flex';
+  say('What is new in version ' + CURRENT_VERSION + '. Press the button to start playing.');
+  setTimeout(function() {
+    var btn = popup.querySelector('.btn-gold');
+    if (btn) btn.focus();
+  }, 100);
 }
 
 // ── MIGRATION ANIMATION ──
@@ -60921,6 +60958,12 @@ DDStore.whenReady().then(function() {
   _musicBoxTutorialSeen = DDStore.getItem('dd_mb_tutorial') === '1';
   var _shakePref = DDStore.getItem('dd_shake');
   if (_shakePref !== null) _shakeEnabled = _shakePref === '1';
+
+  // checkWhatsNew() was fully built — version tag updates, migration animation,
+  // the What's New popup itself — but never actually called from anywhere, so
+  // the popup could never show. Called here now that storage is actually ready
+  // (it reads dd_version_seen), same as everything else hydrated above it.
+  checkWhatsNew();
 
   spawnEmbers();
   setTimeout(function(){ try { cleanupMusicPlayers(); } catch(e){} }, 1000);
