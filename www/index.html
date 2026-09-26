@@ -10575,7 +10575,7 @@ function pickProf(el) {
 }
 
 var _PROFS = ['Blacksmith','Herbalist','Scholar','Mercenary','Gravedigger','Thief','Pilgrim','Grave Robber'];
-var _profDescs = {Blacksmith:'Armor and Weapon Durability',Herbalist:'Potions twice as effective',Scholar:'Trap and Curse Detection',Mercenary:'Starting Gold +1 Weapon',Gravedigger:'Undead Resistance',Thief:'Hidden Loot Discovery',Pilgrim:'Holy Relic · +15% XP','Grave Robber':'Start with 50g · Bonus loot'};
+var _profDescs = {Blacksmith:'Armor and Weapon Durability',Herbalist:'Potions twice as effective',Scholar:'Trap and Curse Detection',Mercenary:'Starting Gold +1 Weapon',Gravedigger:'Undead Resistance',Thief:'Hidden Loot Discovery',Pilgrim:'Holy Relic · +15% XP','Grave Robber':'Start with 50g · Bonus loot','Street Rat':'Free Smoke Bomb · +20% Flee Chance',Warden:'+3 Defense · Debuff Immunity',Tinkerer:'2 Free Potions · Skills Cost 2 Less SP'};
 var _profIdx = 0;
 function stepProf(dir) {
   _profIdx = (_profIdx + dir + _PROFS.length) % _PROFS.length;
@@ -20657,7 +20657,7 @@ function updateRaidHp(){
 
 function rLog(msg){
   var log=document.getElementById('rw-log');
-  var l=document.createElement('div'); l.textContent=msg;
+  var l=document.createElement('div'); l.textContent=(typeof t === 'function') ? t(msg) : msg;
   log.appendChild(l); log.scrollTop=log.scrollHeight;
 }
 
@@ -20688,7 +20688,7 @@ function raidFight(action){
     var crit=Math.random()<(0.10+(DS.critBonus||0));
     pdmg=crit?Math.round(baseAtk*1.8):baseAtk;
     sfx(crit?'sfx-crit':'sfx-attack');
-    rLog(crit?'CRITICAL HIT on '+e.name+' for '+pdmg+'!':'You attack '+e.name+' for '+pdmg+'.');
+    rLog(crit?t('CRITICAL HIT on ')+e.name+t(' for ')+pdmg+'!':t('You attack ')+e.name+t(' for ')+pdmg+'.');
   } else if(action==='heavy'){
     if(Math.random()<0.30){
       sfx('sfx-heavy-miss');
@@ -20755,8 +20755,8 @@ function raidFight(action){
     var taken=Math.max(1,raw-blk);
     RD.hp=Math.max(0,RD.hp-taken);
     sfx('sfx-hurt'); updateRaidHp();
-    rLog(e.name+' strikes you for '+taken+' damage. HP: '+RD.hp+'/'+RD.maxHp+'.');
-    say(e.name+' dealt '+taken+'. Your HP: '+RD.hp+'.');
+    rLog(e.name+t(' strikes you for ')+taken+t(' damage. HP: ')+RD.hp+'/'+RD.maxHp+'.');
+    say(e.name+t(' dealt ')+taken+t('. Your HP: ')+RD.hp+'.');
     if(RD.hp<=0){ setTimeout(function(){raidDefeat();},500); }
     else { setRaidBtns(true); }
   },650);
@@ -26015,11 +26015,11 @@ function tnAttack(type) {
   // Contribute to global VR
   TN.turnsUsed++;
 
-  var msg = type === 'heavy' && base > 0 ? 'Heavy strike — ' + base + ' damage!' :
-            type === 'defend' ? 'Defend and counter — ' + base + ' damage.' :
-            'Attack — ' + base + ' damage!';
+  var msg = type === 'heavy' && base > 0 ? t('Heavy strike — ') + base + t(' damage!') :
+            type === 'defend' ? t('Defend and counter — ') + base + t(' damage.') :
+            t('Attack — ') + base + t(' damage!');
   addTNLog(msg, 'good');
-  say(msg + ' Boss HP: ' + TN.bossHp + '. Total damage: ' + TN.damageDealt + '.');
+  say(msg + t(' Boss HP: ') + TN.bossHp + t('. Total damage: ') + TN.damageDealt + '.');
 
   // Phase transitions
   if (TN.bossHp <= Math.round(TN.bossTotalHp * 0.66) && TN.phase === 1) {
@@ -26048,8 +26048,8 @@ function tnAttack(type) {
   if (type === 'defend') bAtk = Math.max(1, Math.round(bAtk * 0.4));
   var taken = Math.max(1, bAtk - def);
   TN.hp = Math.max(0, TN.hp - taken);
-  addTNLog(TN.boss.name + ' strikes for ' + taken + '.', 'bad');
-  say(TN.boss.name + ' attacks for ' + taken + '. Your HP: ' + TN.hp + '.');
+  addTNLog(TN.boss.name + t(' strikes for ') + taken + '.', 'bad');
+  say(TN.boss.name + t(' attacks for ') + taken + t('. Your HP: ') + TN.hp + '.');
 
   renderTNCombat();
 
@@ -26061,7 +26061,7 @@ function addTNLog(msg, type) {
   if (!log) return;
   var div = document.createElement('div');
   div.style.color = type === 'good' ? '#a0e0ff' : type === 'bad' ? '#ff8888' : '#aaa';
-  div.textContent = msg;
+  div.textContent = (typeof t === 'function') ? t(msg) : msg;
   log.insertBefore(div, log.firstChild);
 }
 
@@ -34247,6 +34247,48 @@ var T = {
   ' — you absorb ': ' — você absorve ',
   '. You take ': '. Você sofre ',
   ' attacks for ': ' ataca causando ',
+  // Combat log fragments for Siege/Raid/Tournament/Boss Rush/Mine, plus a
+  // few pre-existing shop-UI strings that had no pt-BR entry at all.
+  ' Boss HP: ': ' HP do Chefe: ',
+  ' HP left)': ' HP restante)',
+  ' HP left.': ' HP restante.',
+  ' attacks you for ': ' ataca você por ',
+  ' damage to ': ' de dano em ',
+  ' damage. (': ' de dano. (',
+  ' damage. Enemy has ': ' de dano. Inimigo tem ',
+  ' damage. HP: ': ' de dano. HP: ',
+  ' damage. You have ': ' de dano. Você tem ',
+  ' damage. Your HP: ': ' de dano. Seu HP: ',
+  ' dealt ': ' causou ',
+  ' for ': ' por ',
+  ' hits you for ': ' acerta você por ',
+  ' strikes you for ': ' golpeia você por ',
+  '. (': '. (',
+  '. HP: ': '. HP: ',
+  '. Total damage: ': '. Dano total: ',
+  '. Your HP: ': '. Seu HP: ',
+  'Already owned': 'Já possui',
+  'Attack — ': 'Ataque — ',
+  'CRITICAL HIT for ': 'ACERTO CRÍTICO por ',
+  'CRITICAL HIT on ': 'ACERTO CRÍTICO em ',
+  'CRITICAL! ': 'CRÍTICO! ',
+  'Claim Free': 'Resgatar Grátis',
+  'Claim free': 'Resgatar grátis',
+  'Claimed': 'Resgatado',
+  'Critical hit! ': 'Acerto crítico! ',
+  'Defend and counter — ': 'Defender e contra-atacar — ',
+  'Enemy deals ': 'Inimigo causa ',
+  'FREE': 'GRÁTIS',
+  'Heavy strike — ': 'Golpe pesado — ',
+  'Heavy strike! You hit ': 'Golpe pesado! Você acerta ',
+  'Press to select': 'Pressione para selecionar',
+  'You attack ': 'Você ataca ',
+  'You deal ': 'Você causa ',
+  'You hit ': 'Você acerta ',
+  'already claimed': 'já resgatado',
+  'for': 'por',
+  '💥 HEAVY STRIKE! You slam ': '💥 GOLPE PESADO! Você esmaga ',
+
 }
 };
 
@@ -36488,7 +36530,7 @@ function updateBRSkillButtons() {
 
 function brLog(msg){
   var log=document.getElementById('br-log');
-  var l=document.createElement('div'); l.textContent=msg;
+  var l=document.createElement('div'); l.textContent=(typeof t === 'function') ? t(msg) : msg;
   log.appendChild(l); log.scrollTop=log.scrollHeight;
 }
 
@@ -36505,7 +36547,7 @@ function brFight(action) {
     if(BR.markedKill){BR.markedKill=false; brLog('Marked Kill activates!');}
     pdmg=crit?Math.round(baseAtk*1.8):baseAtk;
     sfx(crit?'sfx-crit':'sfx-attack');
-    brLog(crit?'CRITICAL HIT for '+pdmg+'!':'You attack for '+pdmg+'.');
+    brLog(crit?t('CRITICAL HIT for ')+pdmg+'!':t('You attack for ')+pdmg+'.');
   } else if(action==='heavy'){
     if(Math.random()<0.30){sfx('sfx-heavy-miss');brLog('Heavy strike misses!');}
     else{pdmg=Math.round(baseAtk*1.7);sfx('sfx-heavy-hit');brLog('Heavy strike: '+pdmg+'!');}
@@ -36557,8 +36599,8 @@ function brFight(action) {
     var taken=Math.max(1,raw-blocked);
     if(BR.manaShield&&BR.manaShield>0){var abs=Math.min(BR.manaShield,taken);taken-=abs;BR.manaShield-=abs;brLog('Mana Shield absorbs '+abs+'.');}
     BR.hp=Math.max(0,BR.hp-taken); sfx('sfx-hurt'); updateBRBars();
-    brLog(e.name+' strikes for '+taken+'. HP: '+BR.hp+'/'+BR.maxHp+'.');
-    say(e.name+' dealt '+taken+'. HP: '+BR.hp+'.');
+    brLog(e.name+t(' strikes for ')+taken+t('. HP: ')+BR.hp+'/'+BR.maxHp+'.');
+    say(e.name+t(' dealt ')+taken+t('. HP: ')+BR.hp+'.');
     if(BR.hp<=0){setTimeout(function(){brDefeat();},500);}
     else{setBRBtns(true);}
   },700);
@@ -36588,7 +36630,7 @@ function brUseSkill(idx) {
     var raw=rnd(e.atk[0],e.atk[1]);
     var taken=Math.max(1,raw-Math.min(BR.def+BR.defBonus,Math.floor(raw*0.55)));
     BR.hp=Math.max(0,BR.hp-taken); sfx('sfx-hurt'); updateBRBars();
-    brLog(e.name+' strikes for '+taken+'.');
+    brLog(e.name+t(' strikes for ')+taken+'.');
     if(BR.hp<=0){setTimeout(function(){brDefeat();},500);}
     else{setBRBtns(true);}
   },700);
@@ -48202,7 +48244,9 @@ function siegeLog(msg) {
   var log = document.getElementById('siege-log');
   if (!log) return;
   var line = document.createElement('div');
-  line.textContent = msg;
+  // Never translated at all (unlike the main dungeon's addLog()) — every
+  // Siege combat message stayed English regardless of language setting.
+  line.textContent = (typeof t === 'function') ? t(msg) : msg;
   log.appendChild(line);
   log.scrollTop = log.scrollHeight;
 }
@@ -48231,8 +48275,8 @@ function siegeAttack(type) {
   } else {
     SG.enemy.hp -= dmg;
     SG.damageDealtThisWave += dmg;
-    siegeLog((crit ? 'CRITICAL! ' : '') + 'You deal ' + dmg + ' damage to ' + SG.enemy.name + '. (' + Math.max(0,SG.enemy.hp) + ' HP left)');
-    say((crit?'Critical hit! ':'') + dmg + ' damage. Enemy has ' + Math.max(0,SG.enemy.hp) + ' HP left.');
+    siegeLog((crit ? t('CRITICAL! ') : '') + t('You deal ') + dmg + t(' damage to ') + SG.enemy.name + t('. (') + Math.max(0,SG.enemy.hp) + t(' HP left)'));
+    say((crit?t('Critical hit! '):'') + dmg + t(' damage. Enemy has ') + Math.max(0,SG.enemy.hp) + t(' HP left.'));
   }
 
   updateSiegeBattleUI();
@@ -48295,8 +48339,8 @@ function siegeEnemyAttack() {
     }
   } else {
     SG.hp -= eDmg;
-    siegeLog(SG.enemy.name + ' attacks you for ' + eDmg + ' damage. (' + Math.max(0,SG.hp) + ' HP left)');
-    say('Enemy deals ' + eDmg + ' damage. You have ' + Math.max(0,SG.hp) + ' HP left.');
+    siegeLog(SG.enemy.name + t(' attacks you for ') + eDmg + t(' damage. (') + Math.max(0,SG.hp) + t(' HP left)'));
+    say(t('Enemy deals ') + eDmg + t(' damage. You have ') + Math.max(0,SG.hp) + t(' HP left.'));
 
     if (SG.hp <= 50) {
       siegeLog('⚠️ HP dropped below 50! Enemy will now target your base!');
@@ -54289,7 +54333,7 @@ function mineAddLog(text, color) {
   if (!log) return;
   var line = document.createElement('div');
   line.style.color = color || '#888';
-  line.textContent = text;
+  line.textContent = (typeof t === 'function') ? t(text) : text;
   log.appendChild(line);
   log.scrollTop = log.scrollHeight;
   // Keep page scroll position — don't let DOM changes jump to top
@@ -54304,7 +54348,7 @@ function mineCombatLog(text, color) {
   if (!log) return;
   var line = document.createElement('div');
   line.style.color = color || '#aaa';
-  line.textContent = text;
+  line.textContent = (typeof t === 'function') ? t(text) : text;
   log.appendChild(line);
   log.scrollTop = log.scrollHeight;
 }
@@ -54491,16 +54535,16 @@ function mineCombatAction(action) {
     if (_mineState._buffed) { dmg = Math.floor(dmg * 2); _mineState._buffed = false; }
     _mineState.enemy.hp = Math.max(0, _mineState.enemy.hp - dmg);
     mineUpdateEnemyBar();
-    mineCombatLog('⚔ You hit ' + _mineState.enemy.name + ' for ' + dmg + ' damage!', '#ffdd44');
-    say('You hit ' + _mineState.enemy.name + ' for ' + dmg + ' damage.');
+    mineCombatLog('⚔ ' + t('You hit ') + _mineState.enemy.name + t(' for ') + dmg + t(' damage!'), '#ffdd44');
+    say(t('You hit ') + _mineState.enemy.name + t(' for ') + dmg + t(' damage.'));
 
   } else if (action === 'heavy') {
     // Heavy strike — 1.8x damage but enemy hits back harder
     var heavyDmg = Math.floor(baseDmg * 1.8);
     _mineState.enemy.hp = Math.max(0, _mineState.enemy.hp - heavyDmg);
     mineUpdateEnemyBar();
-    mineCombatLog('💥 HEAVY STRIKE! You slam ' + _mineState.enemy.name + ' for ' + heavyDmg + ' damage!', '#ff9900');
-    say('Heavy strike! You hit ' + _mineState.enemy.name + ' for ' + heavyDmg + ' damage.');
+    mineCombatLog(t('💥 HEAVY STRIKE! You slam ') + _mineState.enemy.name + t(' for ') + heavyDmg + t(' damage!'), '#ff9900');
+    say(t('Heavy strike! You hit ') + _mineState.enemy.name + t(' for ') + heavyDmg + t(' damage.'));
     _mineState._heavyPenalty = true; // enemy hits harder this turn
 
   } else if (action === 'defend') {
@@ -54652,8 +54696,8 @@ function mineCombatAction(action) {
     if (_mineState._defending) { eDmg = Math.floor(eDmg * 0.4); _mineState._defending = false; }
     _mineState.hp = Math.max(0, _mineState.hp - eDmg);
     mineUpdatePlayerBar();
-    mineCombatLog('💥 ' + _mineState.enemy.name + ' hits you for ' + eDmg + '!', '#cc4444');
-    say(_mineState.enemy.name + ' hits you for ' + eDmg + ' damage. Your HP: ' + _mineState.hp);
+    mineCombatLog('💥 ' + _mineState.enemy.name + t(' hits you for ') + eDmg + '!', '#cc4444');
+    say(_mineState.enemy.name + t(' hits you for ') + eDmg + t(' damage. Your HP: ') + _mineState.hp);
     if (_mineState.hp <= 0) {
       mineCombatLog('💀 You were defeated. Surfacing...', '#cc2222');
       say('You were defeated in the mine. Surfacing with chest items only.');
