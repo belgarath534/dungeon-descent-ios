@@ -24743,6 +24743,20 @@ function vrCheckServerTransitions() {
   var now = Date.now();
   var s = _vrState;
 
+  // Defeated, but the cycle never restarted — this used to depend entirely
+  // on the killing-blow player's own client staying open for 10 more seconds
+  // after victory (see vrVictory()'s setTimeout below). If they closed the
+  // app before that fired — which is exactly what most players do right
+  // after "Victory!" — nothing else in the game ever rechecked this state,
+  // so the shared world boss stayed stuck on "Dormant. The cycle resets."
+  // forever, for every player, until a dev manually reset it. Any client
+  // that next opens the menu now restarts it instead, same as every other
+  // transition here already works.
+  if (s.defeated) {
+    vrRestartCycle();
+    return;
+  }
+
   // Time to awaken?
   if (!s.awake && !s.defeated && s.targetWakeDate && now >= s.targetWakeDate) {
     ref.update({ awake: true, awakenedAt: now });
