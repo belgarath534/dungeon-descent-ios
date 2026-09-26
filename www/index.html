@@ -1491,6 +1491,16 @@ body.large-text .be-name,.large-text .ach-name{font-size:0.95rem;}
 // If this browser has no IndexedDB support at all, DDStore transparently falls
 // back to using localStorage directly as the store, so the game still works —
 // just bound by localStorage's normal quota, same as before IndexedDB existed.
+// Parses a value read from storage, falling back safely if it's missing OR corrupted
+// (a raw `JSON.parse(x || fallback)` only guards a missing key, not malformed content).
+function _jsonParseSafe(str, fallbackStr) {
+  try { return JSON.parse(str || fallbackStr); }
+  catch (e) {
+    try { return JSON.parse(fallbackStr); }
+    catch (e2) { return null; }
+  }
+}
+
 var DDStore = (function() {
   var DB_NAME = 'dd_game_db';
   var STORE_NAME = 'kv';
@@ -7382,7 +7392,7 @@ var DDStore = (function() {
         <div class="access-option-name" style="color:#cc88ff;">👑 Check True Ending State</div>
         <div class="access-option-desc" style="color:#555;">Shows which dungeons are cleared and whether the ending has been seen.</div>
       </div>
-      <button class="btn-ghost" onclick="(function(){ var cleared = JSON.parse(DDStore.getItem('dd_cleared_dungeons')||'[]'); var seen = DDStore.getItem('dd_true_ending_seen'); alert('Cleared dungeons (' + cleared.length + '/8):\n' + (cleared.join('\n')||'none') + '\n\nEnding seen: ' + (seen ? 'YES' : 'NO')); })();" style="border-color:#cc88ff;color:#cc88ff;">Check</button>
+      <button class="btn-ghost" onclick="(function(){ var cleared = _jsonParseSafe(DDStore.getItem('dd_cleared_dungeons'), '[]'); var seen = DDStore.getItem('dd_true_ending_seen'); alert('Cleared dungeons (' + cleared.length + '/8):\n' + (cleared.join('\n')||'none') + '\n\nEnding seen: ' + (seen ? 'YES' : 'NO')); })();" style="border-color:#cc88ff;color:#cc88ff;">Check</button>
     </div>
     <div class="access-option">
       <div class="access-option-info">
@@ -9453,7 +9463,7 @@ function goTo(id) {
     try {
       // Ensure CHARS is hydrated before rendering
       if (!CHARS || !CHARS.length) {
-        try { CHARS = JSON.parse(DDStore.getItem('dd_chars') || '[]'); } catch(e) { CHARS = []; }
+        try { CHARS = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]'); } catch(e) { CHARS = []; }
       }
       mineInitScreen();
     } catch(e) { console.warn('[Mine] init error:', e); }
@@ -9492,13 +9502,13 @@ function goTo(id) {
           updateAchievementStat('spireBestFloor', spSave.bestFloor);
         }
         // Retroactive won classes check
-        var wonCls = JSON.parse(DDStore.getItem('dd_won_classes') || '[]');
+        var wonCls = _jsonParseSafe(DDStore.getItem('dd_won_classes'), '[]');
         if (wonCls.length > 0) updateAchievementStat('uniqueClassesWon', wonCls.length);
         // Retroactive forge count
         var fc2 = parseInt(DDStore.getItem('dd_forge_count')||'0');
         if (fc2 > 0) checkAchievements();
         // Retroactive minion count
-        var minions = JSON.parse(DDStore.getItem('dd_minions')||'[]');
+        var minions = _jsonParseSafe(DDStore.getItem('dd_minions'), '[]');
         if (minions.length > 0) checkAchievements();
         // Retroactive trophy milestone check
         checkAchievements();
@@ -9580,7 +9590,7 @@ function goTo(id) {
       });
       // Step 3: Render score data
       try {
-        var s = JSON.parse(DDStore.getItem('dd_score') || '{"total":0,"breakdown":{}}');
+        var s = _jsonParseSafe(DDStore.getItem('dd_score'), '{"total":0,"breakdown":{}}');
         var total = s.total || 0;
         var rank = SCORE_RANKS[0];
         for (var i=0;i<SCORE_RANKS.length;i++){ if(total>=SCORE_RANKS[i].min) rank=SCORE_RANKS[i]; }
@@ -9805,7 +9815,7 @@ function updateDiamondDisplay() {
 
 // ── GUN PARTS (crafting materials) ──
 function getGunParts() {
-  try { return JSON.parse(DDStore.getItem('dd_gun_parts') || '{}'); } catch(e) { return {}; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_gun_parts'), '{}'); } catch(e) { return {}; }
 }
 function saveGunParts(parts) {
   try { DDStore.setItem('dd_gun_parts', JSON.stringify(parts)); } catch(e) { console.warn('[DD] saveGunParts failed:', e); }
@@ -10042,7 +10052,7 @@ function getGunDef(id) {
 
 // ── OWNED GUNS ──
 function getOwnedGuns() {
-  try { return JSON.parse(DDStore.getItem('dd_owned_guns') || '[]'); } catch(e) { return []; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_owned_guns'), '[]'); } catch(e) { return []; }
 }
 function saveOwnedGuns(guns) {
   try { DDStore.setItem('dd_owned_guns', JSON.stringify(guns)); } catch(e) { console.warn('[DD] saveOwnedGuns failed:', e); }
@@ -10072,7 +10082,7 @@ function unequipGun() {
 
 // Global inventory — shared across all modes
 function getGlobalInventory() {
-  try { return JSON.parse(DDStore.getItem('dd_global_inv') || '[]'); } catch(e) { return []; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_global_inv'), '[]'); } catch(e) { return []; }
 }
 function cleanupLocalStorage() {
   try {
@@ -10080,7 +10090,7 @@ function cleanupLocalStorage() {
     var g = getGraveyard();
     if (g.length > 10) saveGraveyard(g.slice(0, 10));
     // Trim run logs
-    var chars = JSON.parse(DDStore.getItem('dd_chars') || '[]');
+    var chars = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]');
     chars.forEach(function(ch) {
       if (ch.runLog && ch.runLog.length > 20) ch.runLog = ch.runLog.slice(-20);
       if (ch.journalLog && ch.journalLog.length > 20) ch.journalLog = ch.journalLog.slice(-20);
@@ -10683,7 +10693,7 @@ var DUNGEON_UNLOCK_INFO = {
 
 function checkDungeonUnlockPopups() {
   var unlocked = getUnlockedDungeons();
-  var seen = JSON.parse(DDStore.getItem('dd_dungeon_popup_seen') || '[]');
+  var seen = _jsonParseSafe(DDStore.getItem('dd_dungeon_popup_seen'), '[]');
   // Also check infernal
   if (isInfernalUnlocked()) {
     if (unlocked.indexOf('The Infernal Descent') === -1) unlocked.push('The Infernal Descent');
@@ -10932,7 +10942,7 @@ function getChaosEnemyMult() {
 // --════════════════════════
 
 function getBetaFeatures() {
-  return JSON.parse(DDStore.getItem('dd_beta_features') || '{"3dmode":false}');
+  return _jsonParseSafe(DDStore.getItem('dd_beta_features'), '{"3dmode":false}');
 }
 
 function saveBetaFeatures(f) {
@@ -10985,7 +10995,7 @@ function get3DSettings() {
   // "minimap" key at all, which would otherwise read as undefined (falsy)
   // instead of defaulting on for those existing players.
   var defaults = { shadows:false, torchFlicker:true, fpsCounter:false, minimap:true };
-  var saved = JSON.parse(DDStore.getItem('dd_3d_settings') || '{}');
+  var saved = _jsonParseSafe(DDStore.getItem('dd_3d_settings'), '{}');
   for (var k in saved) defaults[k] = saved[k];
   return defaults;
 }
@@ -11492,7 +11502,7 @@ function isShadowWorldUnlocked() {
   if (DDStore.getItem('dd_dev_mode') === '1') return true;
   if (DDStore.getItem('dd_shadowworld_unlocked') === '1') return true;
   // Unlocks after completing The Abyssal Deep
-  var cleared = JSON.parse(DDStore.getItem('dd_cleared_dungeons') || '[]');
+  var cleared = _jsonParseSafe(DDStore.getItem('dd_cleared_dungeons'), '[]');
   if (cleared.includes('The Abyssal Deep')) {
     DDStore.setItem('dd_shadowworld_unlocked', '1');
     return true;
@@ -11904,7 +11914,7 @@ function finalizeChar() {
 function getUnlockedDungeons() {
   // Auto-repair: scan completed characters and unlock their next dungeons
   repairDungeonUnlocks();
-  var u = JSON.parse(DDStore.getItem('dd_unlocks') || '{}');
+  var u = _jsonParseSafe(DDStore.getItem('dd_unlocks'), '{}');
   var list = ['Crypt of Malachar'];
   if (u['The Ashbound Wastes']) list.push('The Ashbound Wastes');
   if (u['Frosthold Abyss']) list.push('Frosthold Abyss');
@@ -11929,7 +11939,7 @@ function openResetGame() {
 
 function repairDungeonUnlocks() {
   var dungeonOrder = ['Crypt of Malachar','The Ashbound Wastes','Frosthold Abyss','The Sunken Archives','The Hollow','The Whispering Forest','The Infernal Descent','The Abyssal Deep'];
-  var unlocksData = JSON.parse(DDStore.getItem('dd_unlocks') || '{}');
+  var unlocksData = _jsonParseSafe(DDStore.getItem('dd_unlocks'), '{}');
   var changed = false;
   CHARS.forEach(function(ch) {
     // Check multiple completion signals — completed flag, floor 10, or has death log entries (ran full dungeon)
@@ -14534,7 +14544,7 @@ function initDungeon(ch) {
   }
   // Load stored alchemy potions crafted at home
   try {
-    var _storedPotions = JSON.parse(DDStore.getItem('dd_alchemy_stored') || '[]');
+    var _storedPotions = _jsonParseSafe(DDStore.getItem('dd_alchemy_stored'), '[]');
     if (_storedPotions.length > 0) {
       _storedPotions.forEach(function(p){ DS.inventory.push(p); });
       DDStore.removeItem('dd_alchemy_stored');
@@ -18325,7 +18335,7 @@ function toggleFavorite(itemName) {
 }
 
 function loadFavorites() {
-  try { _invFavorites = JSON.parse(DDStore.getItem('dd_inv_favorites') || '[]'); } catch(e) { _invFavorites = []; }
+  try { _invFavorites = _jsonParseSafe(DDStore.getItem('dd_inv_favorites'), '[]'); } catch(e) { _invFavorites = []; }
 }
 
 function autoSortInventory() {
@@ -19186,7 +19196,7 @@ function saveProgress(completed) {
     var dungeonOrder = ['Crypt of Malachar','The Ashbound Wastes','Frosthold Abyss','The Sunken Archives','The Hollow','The Whispering Forest','The Infernal Descent','The Abyssal Deep'];
     var doneIdx = dungeonOrder.indexOf(DS.dungeon || CHARS[_charIdx].dungeon);
     if (doneIdx >= 0 && doneIdx < dungeonOrder.length - 1) {
-      var unlocksData = JSON.parse(DDStore.getItem('dd_unlocks') || '{}');
+      var unlocksData = _jsonParseSafe(DDStore.getItem('dd_unlocks'), '{}');
       unlocksData[dungeonOrder[doneIdx + 1]] = true;
       DDStore.setItem('dd_unlocks', JSON.stringify(unlocksData));
     }
@@ -19197,7 +19207,7 @@ function saveProgress(completed) {
     // Track speed run (under 10 minutes)
     if (_runStartTime && (Date.now() - _runStartTime) < 600000) updateAchievementStat('speedRuns', (getAchievementStats().speedRuns||0) + 1);
     // Track unique classes won
-    var wonClasses = JSON.parse(DDStore.getItem('dd_won_classes') || '[]');
+    var wonClasses = _jsonParseSafe(DDStore.getItem('dd_won_classes'), '[]');
     if (DS.cls && wonClasses.indexOf(DS.cls) === -1) {
       wonClasses.push(DS.cls);
       DDStore.setItem('dd_won_classes', JSON.stringify(wonClasses));
@@ -19421,7 +19431,7 @@ var ALL_DUNGEONS = [
 function checkTrueEnding() {
   // Get all cleared dungeons from localStorage
   try {
-    var cleared = JSON.parse(DDStore.getItem('dd_cleared_dungeons') || '[]');
+    var cleared = _jsonParseSafe(DDStore.getItem('dd_cleared_dungeons'), '[]');
     // Add current dungeon
     if (DS.dungeon && cleared.indexOf(DS.dungeon) === -1) {
       cleared.push(DS.dungeon);
@@ -19640,7 +19650,7 @@ function showVictory() {
 
   // Track cleared dungeon and check true ending — outside try/catch so it always runs
   try {
-    var _ve_cleared = JSON.parse(DDStore.getItem('dd_cleared_dungeons') || '[]');
+    var _ve_cleared = _jsonParseSafe(DDStore.getItem('dd_cleared_dungeons'), '[]');
     if (DS.dungeon && _ve_cleared.indexOf(DS.dungeon) === -1) {
       _ve_cleared.push(DS.dungeon);
       DDStore.setItem('dd_cleared_dungeons', JSON.stringify(_ve_cleared));
@@ -19690,7 +19700,7 @@ function showVictory() {
   incrementAchievementStat('dungeonsComplete', 1);
   // Track cleared dungeon for true ending
   try {
-    var _cleared = JSON.parse(DDStore.getItem('dd_cleared_dungeons') || '[]');
+    var _cleared = _jsonParseSafe(DDStore.getItem('dd_cleared_dungeons'), '[]');
     if (DS.dungeon && _cleared.indexOf(DS.dungeon) === -1) {
       _cleared.push(DS.dungeon);
       DDStore.setItem('dd_cleared_dungeons', JSON.stringify(_cleared));
@@ -20598,7 +20608,7 @@ var RAID_BOSS_TEMPLATE = {name:'The Undying Legion',icon:'💀',hp:150,atk:[14,2
 var RD = {};
 
 function todayKey(){var d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();}
-function getRaidSave(){return JSON.parse(DDStore.getItem('dd_raid')||'{}');}
+function getRaidSave(){return _jsonParseSafe(DDStore.getItem('dd_raid'), '{}');}
 function setRaidSave(o){DDStore.setItem('dd_raid',JSON.stringify(o));}
 function raidDoneToday(){return getRaidSave().completedDate===todayKey();}
 
@@ -21663,7 +21673,7 @@ var CODEX_ARTIFACTS = [
     id: 'codex-a-guns',
     title: 'Guns in the Dungeon — An Inquiry',
     icon: '🔫',
-    unlockCondition: function() { try { var guns = JSON.parse(DDStore.getItem('dd_owned_guns') || '[]'); return guns.length >= 1; } catch(e) { return false; } },
+    unlockCondition: function() { try { var guns = _jsonParseSafe(DDStore.getItem('dd_owned_guns'), '[]'); return guns.length >= 1; } catch(e) { return false; } },
     unlockHint: 'Acquire a gun to unlock.',
     body: 'The presence of firearms in environments that predate gunpowder by several centuries has been a subject of significant academic debate. The dungeons were built — or grew, or arrived, depending on the dungeon — before any form of projectile weapon more sophisticated than a crossbow. And yet guns appear in them reliably: in chests, on defeated enemies, in rooms that have been sealed for centuries.\n\nThe current consensus, such as it is, is that the dungeons do not experience time in the conventional sense. A gun placed in the Crypt of Malachar in the present would, from the Crypt\'s perspective, have always been there. The Crypt is not confused by this. The Crypt does not experience confusion. The Crypt experiences something closer to patience.\n\nThe guns function normally. This is perhaps the strangest part. Whatever rules the dungeons operate under, they have decided that guns are acceptable. Nobody has asked why.'
   },
@@ -25142,7 +25152,7 @@ function vrChatSend() {
 //═════════════════
 
 function getMedusaSave() {
-  return JSON.parse(DDStore.getItem('dd_medusa') || '{}');
+  return _jsonParseSafe(DDStore.getItem('dd_medusa'), '{}');
 }
 function saveMedusa(o) { DDStore.setItem('dd_medusa', JSON.stringify(o)); }
 
@@ -25445,7 +25455,7 @@ async function loadFromCloud() {
     if (data.accessSettings) DDStore.setItem('dd_access', data.accessSettings);
     // Reload CHARS into memory from localStorage
     try {
-      var freshChars = JSON.parse(DDStore.getItem('dd_chars') || '[]');
+      var freshChars = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]');
       CHARS.length = 0;
       freshChars.forEach(function(c){ CHARS.push(c); });
     } catch(e2) { console.error('CHARS reload error:', e2); }
@@ -25887,7 +25897,7 @@ function getTournamentSeason() {
 }
 
 function getTournamentSave() {
-  return JSON.parse(DDStore.getItem('dd_tournament') || '{}');
+  return _jsonParseSafe(DDStore.getItem('dd_tournament'), '{}');
 }
 function saveTournament(o) { DDStore.setItem('dd_tournament', JSON.stringify(o)); }
 
@@ -35211,9 +35221,9 @@ var ACHIEVEMENTS = [
   { gold:400, trophies:7, id:'ach-spire-1800', gpId:'CgkI0uiuoZcDEAIQVw',   name:'The Time Eater',    icon:'⏳', desc:'The Time Eater consumed centuries. You consumed The Time Eater.',   hint:'Defeat the Time Eater in The Spire.', check:function(s){ return (s.timeEaterDefeated||0)>=1; } },
 
   // ── MINION SYSTEM ──
-  { gold:50,  trophies:1, id:'ach-first-minion', gpId:'CgkI0uiuoZcDEAIQWA', name:'Collector',         icon:'👾', desc:'Your first captured soul. It will serve you well — willingly or not.', hint:'Capture 1 minion with a Soul Trap.', check:function(){ return JSON.parse(DDStore.getItem('dd_minions')||'[]').length>=1; } },
-  { gold:150, trophies:3, id:'ach-five-minions', gpId:'CgkI0uiuoZcDEAIQLQ', name:'Army of One',       icon:'👾', desc:'Five souls bound to your will. The dungeon calls this an army.',           hint:'Capture 5 minions.', check:function(){ return JSON.parse(DDStore.getItem('dd_minions')||'[]').length>=5; } },
-  { gold:400, trophies:7, id:'ach-eight-minions', gpId:'CgkI0uiuoZcDEAIQOg',name:'The Menagerie',     icon:'👾', desc:'Eight minions. A full menagerie of captured dungeon creatures. Impressive.',               hint:'Capture 8 minions.', check:function(){ return JSON.parse(DDStore.getItem('dd_minions')||'[]').length>=8; } },
+  { gold:50,  trophies:1, id:'ach-first-minion', gpId:'CgkI0uiuoZcDEAIQWA', name:'Collector',         icon:'👾', desc:'Your first captured soul. It will serve you well — willingly or not.', hint:'Capture 1 minion with a Soul Trap.', check:function(){ return _jsonParseSafe(DDStore.getItem('dd_minions'), '[]').length>=1; } },
+  { gold:150, trophies:3, id:'ach-five-minions', gpId:'CgkI0uiuoZcDEAIQLQ', name:'Army of One',       icon:'👾', desc:'Five souls bound to your will. The dungeon calls this an army.',           hint:'Capture 5 minions.', check:function(){ return _jsonParseSafe(DDStore.getItem('dd_minions'), '[]').length>=5; } },
+  { gold:400, trophies:7, id:'ach-eight-minions', gpId:'CgkI0uiuoZcDEAIQOg',name:'The Menagerie',     icon:'👾', desc:'Eight minions. A full menagerie of captured dungeon creatures. Impressive.',               hint:'Capture 8 minions.', check:function(){ return _jsonParseSafe(DDStore.getItem('dd_minions'), '[]').length>=8; } },
 
   // ── WEAPON FORGE ──
   { gold:50,  trophies:1, id:'ach-first-forge', gpId:'CgkI0uiuoZcDEAIQYg',  name:'The Forger',        icon:'🔨', desc:'Your first creation. The Forge recognizes a new craftsman.',  hint:'Forge 1 weapon at the Blacksmith.', check:function(){ return parseInt(DDStore.getItem('dd_forge_count')||'0')>=1; } },
@@ -35252,10 +35262,10 @@ var ACHIEVEMENTS = [
 ];
 
 function getAchievementStats() {
-  return JSON.parse(DDStore.getItem('dd_ach_stats') || '{}');
+  return _jsonParseSafe(DDStore.getItem('dd_ach_stats'), '{}');
 }
 function saveAchievementStats(s) { try { DDStore.setItem('dd_ach_stats', JSON.stringify(s)); } catch(e) { console.warn('[DD] saveAchievementStats failed:', e); } }
-function getUnlockedAchievements() { try { return JSON.parse(DDStore.getItem('dd_achievements') || '[]'); } catch(e) { return []; } }
+function getUnlockedAchievements() { try { return _jsonParseSafe(DDStore.getItem('dd_achievements'), '[]'); } catch(e) { return []; } }
 function saveUnlockedAchievements(a) { try { DDStore.setItem('dd_achievements', JSON.stringify(a)); } catch(e) { console.warn('[DD] saveUnlockedAchievements failed:', e); } }
 
 function getTrophies() { return parseInt(DDStore.getItem('dd_trophies') || '0'); }
@@ -35294,7 +35304,7 @@ function awardAchievement(id) {
 
 // Retroactive trophy + gold check — runs on game load
 function retroactiveAchievementRewards() {
-  var rewarded = JSON.parse(DDStore.getItem('dd_ach_rewarded') || '[]');
+  var rewarded = _jsonParseSafe(DDStore.getItem('dd_ach_rewarded'), '[]');
   var unlocked = getUnlockedAchievements();
   var totalGold = 0; var totalTrophies = 0;
   unlocked.forEach(function(id) {
@@ -35512,7 +35522,7 @@ function incrementAchievementStat(key, amt) {
 }
 
 function getDailyQuest() {
-  var save = JSON.parse(DDStore.getItem('dd_daily_quest') || '{}');
+  var save = _jsonParseSafe(DDStore.getItem('dd_daily_quest'), '{}');
   var today = todayKey();
   if (save.date !== today) {
     // Deterministic rotation based on date — same quest for all players on same day
@@ -35844,9 +35854,9 @@ function beginRaid(){
   // Apply equipped weapon/armor
   var _weaponBonus = 0, _armorBonus = 0;
   try {
-    var _rw = JSON.parse(DDStore.getItem('dd_equipped_weapon') || 'null');
+    var _rw = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null');
     if (_rw) { var _rwAtk = getWeaponAtk(_rw); if (Array.isArray(_rwAtk)) _weaponBonus = Math.floor((_rwAtk[0]+_rwAtk[1])/2); }
-    var _ra = JSON.parse(DDStore.getItem('dd_equipped_armor') || 'null');
+    var _ra = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null');
     if (_ra) _armorBonus = _ra.defBase || _ra.defBonus || 0;
   } catch(e) {}
 
@@ -36129,7 +36139,7 @@ var COIN_UPGRADES = [
   { id:'cu-night-blessing', name:'Night Blessing',    icon:'🌙', desc:'During Night Mode gain +5 ATK and +10% gold on all runs.', cost:25 },
 ];
 
-function getCoinUpgradesSave() { return JSON.parse(DDStore.getItem('dd_coin_upgrades') || '{}'); }
+function getCoinUpgradesSave() { return _jsonParseSafe(DDStore.getItem('dd_coin_upgrades'), '{}'); }
 function saveCoinUpgrades(o) { DDStore.setItem('dd_coin_upgrades', JSON.stringify(o)); }
 function hasUpgrade(id) { return !!getCoinUpgradesSave()[id]; }
 
@@ -36323,7 +36333,7 @@ function getDailyChallenge() {
 }
 
 function getDailyChallengeCompleted() {
-  var save = JSON.parse(DDStore.getItem('dd_dc') || '{}');
+  var save = _jsonParseSafe(DDStore.getItem('dd_dc'), '{}');
   return save.completedDate === todayKey();
 }
 
@@ -36414,9 +36424,9 @@ function beginBossRush() {
   var _brWepBonus = hasUpgrade('cu-starting-blade') ? 2 : 0;
   var _brDefBonus = 0;
   try {
-    var _bw = JSON.parse(DDStore.getItem('dd_equipped_weapon') || 'null');
+    var _bw = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null');
     if (_bw) { var _bwAtk = getWeaponAtk(_bw); if (Array.isArray(_bwAtk)) _brWepBonus += Math.floor((_bwAtk[0]+_bwAtk[1])/2); }
-    var _ba = JSON.parse(DDStore.getItem('dd_equipped_armor') || 'null');
+    var _ba = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null');
     if (_ba) _brDefBonus = _ba.defBase || _ba.defBonus || 0;
   } catch(e) {}
 
@@ -38355,7 +38365,7 @@ function renderJournal() {
 // FEATURE 1: DAILY CHALLENGE REGISTRATION
 //═════════════════
 function getDCRegistration() {
-  return JSON.parse(DDStore.getItem('dd_dc_reg') || '{}');
+  return _jsonParseSafe(DDStore.getItem('dd_dc_reg'), '{}');
 }
 function setDCRegistration(o) { DDStore.setItem('dd_dc_reg', JSON.stringify(o)); }
 
@@ -38399,7 +38409,7 @@ function renderDCPanel() {
   };
 
   // Build history
-  var history = JSON.parse(DDStore.getItem('dd_dc_history') || '[]');
+  var history = _jsonParseSafe(DDStore.getItem('dd_dc_history'), '[]');
   var historyHtml = history.length > 0
     ? '<div class="dc-history"><div class="dc-history-title">Recent Challenges</div>' +
       history.slice(-5).reverse().map(function(h){
@@ -38448,7 +38458,7 @@ function checkDailyChallengeCompletion() {
   var dc = getDailyChallenge();
   if (!dc) return;
   completeDailyChallenge();
-  var history = JSON.parse(DDStore.getItem('dd_dc_history') || '[]');
+  var history = _jsonParseSafe(DDStore.getItem('dd_dc_history'), '[]');
   history.push({ date: todayKey(), name: dc.name, completed: true });
   if (history.length > 30) history = history.slice(-30);
   DDStore.setItem('dd_dc_history', JSON.stringify(history));
@@ -39796,13 +39806,13 @@ function checkBestiaryMilestone(id) {
 
 function applyMilestoneEffect(effect) {
   // Applied permanently via localStorage — checked on run start
-  var effects = JSON.parse(DDStore.getItem('dd_milestone_effects') || '{}');
+  var effects = _jsonParseSafe(DDStore.getItem('dd_milestone_effects'), '{}');
   effects[effect] = (effects[effect] || 0) + 1;
   DDStore.setItem('dd_milestone_effects', JSON.stringify(effects));
 }
 
 function getMilestoneEffects() {
-  return JSON.parse(DDStore.getItem('dd_milestone_effects') || '{}');
+  return _jsonParseSafe(DDStore.getItem('dd_milestone_effects'), '{}');
 }
 
 function applyMilestoneBuffs() {
@@ -39869,7 +39879,7 @@ function showAchievementToast(ach) {
 // GLOBAL STATS TRACKING
 //═════════════════
 function getGlobalStats() {
-  try { return JSON.parse(DDStore.getItem('dd_global_stats') || '{}'); } catch(e) { return {}; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_global_stats'), '{}'); } catch(e) { return {}; }
 }
 function saveGlobalStats(s) { try { DDStore.setItem('dd_global_stats', JSON.stringify(s)); } catch(e) { console.warn('[DD] saveGlobalStats failed:', e); } }
 
@@ -39925,7 +39935,7 @@ function addCoinsToWallet(n) {
 }
 
 function getClaimedAwards() {
-  return JSON.parse(DDStore.getItem('dd_claimed_awards') || '[]');
+  return _jsonParseSafe(DDStore.getItem('dd_claimed_awards'), '[]');
 }
 function saveClaimedAwards(a) { DDStore.setItem('dd_claimed_awards', JSON.stringify(a)); }
 
@@ -40048,7 +40058,7 @@ var ACCESS = {
 
 function loadAccessPrefs() {
   try {
-    var saved = JSON.parse(DDStore.getItem('dd_access') || 'null');
+    var saved = _jsonParseSafe(DDStore.getItem('dd_access'), 'null');
     if (saved) {
       ACCESS.verbose  = saved.verbose  !== undefined ? saved.verbose  : true;
       ACCESS.combat   = saved.combat   !== undefined ? saved.combat   : true;
@@ -40792,7 +40802,7 @@ var RARE_SPIRITS = [
 var _spiritPickCallback = null;
 
 function getCustomSpiritsWithFunctions() {
-  var customs = JSON.parse(DDStore.getItem('dd_custom_spirits') || '[]');
+  var customs = _jsonParseSafe(DDStore.getItem('dd_custom_spirits'), '[]');
   return customs.map(function(s) {
     var fns = getCustomSpiritFunctions(s.abilityId || '');
     return Object.assign({}, s, fns);
@@ -41244,7 +41254,7 @@ function checkDDDIVictory() {
   DS.dddiDefeated = true;
   DS.isDDDIBoss = false;
   // Unlock DDDI story in library
-  var unlocks = JSON.parse(DDStore.getItem('dd_unlocks') || '{}');
+  var unlocks = _jsonParseSafe(DDStore.getItem('dd_unlocks'), '{}');
   unlocks['dddi-boss-defeated'] = true;
   DDStore.setItem('dd_unlocks', JSON.stringify(unlocks));
   // Big reward
@@ -41962,7 +41972,7 @@ function manualRepairUnlocks() {
     var order = ['Crypt of Malachar','The Ashbound Wastes','Frosthold Abyss','The Sunken Archives','The Hollow','The Whispering Forest','The Infernal Descent','The Abyssal Deep'];
     var idx = order.indexOf(DS.dungeon);
     if (idx >= 0) {
-      var u = JSON.parse(DDStore.getItem('dd_unlocks') || '{}');
+      var u = _jsonParseSafe(DDStore.getItem('dd_unlocks'), '{}');
       // Unlock everything up to and including next dungeon
       for (var i = 0; i <= idx && i < order.length - 1; i++) {
         u[order[i+1]] = true;
@@ -45700,7 +45710,7 @@ function getDailyRewardForDay(day) {
 
 function getDailyDescentState() {
   try {
-    return JSON.parse(DDStore.getItem('dd_daily_descent') || 'null');
+    return _jsonParseSafe(DDStore.getItem('dd_daily_descent'), 'null');
   } catch(e) { return null; }
 }
 
@@ -45712,9 +45722,9 @@ function openMenuInventory() {
   // Load equipped gear from localStorage into DS so renderInv works
   DS._fromMenu = true;
   try {
-    var w = JSON.parse(DDStore.getItem('dd_equipped_weapon') || 'null');
+    var w = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null');
     if (w) { DS.equippedWeapon = w; DS.equippedWeaponAtk = getWeaponAtk(w); }
-    var a = JSON.parse(DDStore.getItem('dd_equipped_armor') || 'null');
+    var a = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null');
     if (a) { DS.equippedArmor = a; DS.equippedArmorDef = getArmorDef(a); }
   } catch(e) {}
   DS.inventory = getGlobalInventory();
@@ -46750,7 +46760,7 @@ var SCORE_RANKS = [
 ];
 
 function getScoreData() {
-  return JSON.parse(DDStore.getItem('dd_score') || '{"total":0,"breakdown":{}}');
+  return _jsonParseSafe(DDStore.getItem('dd_score'), '{"total":0,"breakdown":{}}');
 }
 function saveScoreData(s) { DDStore.setItem('dd_score', JSON.stringify(s)); }
 
@@ -46918,7 +46928,7 @@ function processAchPopupQueue() {
 // BOSS RUSH LEADERBOARD
 //═════════════════
 function getBossRushScores() {
-  return JSON.parse(DDStore.getItem('dd_br_scores') || '[]');
+  return _jsonParseSafe(DDStore.getItem('dd_br_scores'), '[]');
 }
 function saveBossRushScore(entry) {
   var scores = getBossRushScores();
@@ -47522,7 +47532,7 @@ var BOUNTY_RANKS = [
 ];
 
 function getBountyRankData() {
-  return JSON.parse(DDStore.getItem('dd_bounty_rank') || '{"rank":1,"xp":0}');
+  return _jsonParseSafe(DDStore.getItem('dd_bounty_rank'), '{"rank":1,"xp":0}');
 }
 function saveBountyRankData(d) { DDStore.setItem('dd_bounty_rank', JSON.stringify(d)); }
 
@@ -47637,7 +47647,7 @@ function updateHuntStatsUI() {
 
 function renderHuntCharList() {
   // Reload CHARS fresh from storage
-  CHARS = JSON.parse(DDStore.getItem('dd_chars') || '[]');
+  CHARS = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]');
   var container = document.getElementById('hunt-char-list');
   if (!container) return;
   container.innerHTML = '';
@@ -47957,7 +47967,7 @@ var SIEGE_UPGRADES = [
   { id:'stockpile',name:'Extra Potion',     desc:'Stock one extra health potion for the battle ahead.',       goldCost:200, wpCost:0,    icon:'🧪', repeatable:true },
 ];
 
-function getSiegeData() { return JSON.parse(DDStore.getItem('dd_siege_data') || '{}'); }
+function getSiegeData() { return _jsonParseSafe(DDStore.getItem('dd_siege_data'), '{}'); }
 function saveSiegeData(d) { DDStore.setItem('dd_siege_data', JSON.stringify(d)); }
 
 function loadSiegeHub() {
@@ -47969,7 +47979,7 @@ function loadSiegeHub() {
   SG.difficulty = d.difficulty || 'easy';
 
   // Count stationed minions
-  var minions = JSON.parse(DDStore.getItem('dd_minions') || '[]');
+  var minions = _jsonParseSafe(DDStore.getItem('dd_minions'), '[]');
   var stationed = d.stationedMinions || [];
   SG.minionCount = stationed.length;
   SG.minionAtk = stationed.reduce(function(t,m){ return t + (m.atk||8); }, 0);
@@ -48009,7 +48019,7 @@ function renderSiegeUpgrades() {
     // Check if upgradeable
     if (upg.id === 'reinforce' && SG.baseLevel >= 5) return;
     if (upg.id === 'station') {
-      var minions = JSON.parse(DDStore.getItem('dd_minions') || '[]');
+      var minions = _jsonParseSafe(DDStore.getItem('dd_minions'), '[]');
       if (minions.length === 0) return;
     }
 
@@ -48031,7 +48041,7 @@ function renderSiegeUpgrades() {
 
 function renderSiegeCharList() {
   // Reload CHARS fresh from storage
-  CHARS = JSON.parse(DDStore.getItem('dd_chars') || '[]');
+  CHARS = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]');
   var container = document.getElementById('siege-char-list');
   if (!container) return;
   container.innerHTML = '';
@@ -48087,7 +48097,7 @@ function buySiegeUpgrade(id) {
     showToast('🧱 Base upgraded to level ' + SG.baseLevel + '!', 'gold');
     say('Base reinforced to level ' + SG.baseLevel + '. Maximum durability is now ' + SG.baseMaxDur + ' percent.');
   } else if (id === 'station') {
-    var minions = JSON.parse(DDStore.getItem('dd_minions') || '[]');
+    var minions = _jsonParseSafe(DDStore.getItem('dd_minions'), '[]');
     if (minions.length === 0) { say('No minions available to station.'); return; }
     var stationed = d.stationedMinions || [];
     stationed.push(minions[0]);
@@ -48118,7 +48128,7 @@ function startSiege() {
   if (!c) { document.getElementById('siege-start-msg').textContent = 'Select a character.'; return; }
 
   // Init from character — use FULL character stats
-  CHARS = JSON.parse(DDStore.getItem('dd_chars') || '[]');
+  CHARS = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]');
   c = CHARS[SG.charIdx];
   if (!c) { say('Select a character first.'); return; }
 
@@ -48505,7 +48515,7 @@ var JULY4_TOURNAMENT = {
 };
 
 function getJuly4TournamentData() {
-  return JSON.parse(DDStore.getItem('dd_july4_tourney') || '{}');
+  return _jsonParseSafe(DDStore.getItem('dd_july4_tourney'), '{}');
 }
 function saveJuly4TournamentData(d) { DDStore.setItem('dd_july4_tourney', JSON.stringify(d)); }
 
@@ -48619,7 +48629,7 @@ var BOUNTY_TEMPLATES = [
 ];
 
 function getBountyData() {
-  return JSON.parse(DDStore.getItem('dd_bounty_data') || '{}');
+  return _jsonParseSafe(DDStore.getItem('dd_bounty_data'), '{}');
 }
 function saveBountyData(d) { DDStore.setItem('dd_bounty_data', JSON.stringify(d)); }
 
@@ -48878,7 +48888,7 @@ var _tutTimer = null;
 var _tutProgressTimer = null;
 
 function getDungeonTipsSeen() {
-  return JSON.parse(DDStore.getItem('dd_dungeon_tips_seen') || '[]');
+  return _jsonParseSafe(DDStore.getItem('dd_dungeon_tips_seen'), '[]');
 }
 
 function markTipSeen(id) {
@@ -49996,7 +50006,7 @@ function applyBackstory(ch) {
 // HALL OF LEGENDS
 //═════════════════
 function getLegends() {
-  try { return JSON.parse(DDStore.getItem('dd_legends') || '{}'); } catch(e) { return {}; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_legends'), '{}'); } catch(e) { return {}; }
 }
 function saveLegends(l) { try { DDStore.setItem('dd_legends', JSON.stringify(l)); } catch(e) { console.warn('[DD] saveLegends failed:', e); } }
 
@@ -50116,7 +50126,7 @@ var JULIO_FRAGMENTS = [
 ];
 
 function getJulioFragments() {
-  return JSON.parse(DDStore.getItem('dd_julio_fragments') || '[]');
+  return _jsonParseSafe(DDStore.getItem('dd_julio_fragments'), '[]');
 }
 function saveJulioFragments(f) { DDStore.setItem('dd_julio_fragments', JSON.stringify(f)); }
 
@@ -50135,7 +50145,7 @@ function collectJulioFragment() {
 }
 
 function unlockJulioStory() {
-  var unlocked = JSON.parse(DDStore.getItem('dd_julio_story') || 'false');
+  var unlocked = _jsonParseSafe(DDStore.getItem('dd_julio_story'), 'false');
   if (unlocked) return;
   DDStore.setItem('dd_julio_story', 'true');
   sfx('sfx-unlock');
@@ -51317,7 +51327,7 @@ var MENU_TOGGLE_ITEMS = [
 function renderMenuToggles() {
   var container = document.getElementById('gameplay-menu-toggles');
   if (!container) return;
-  var prefs = JSON.parse(DDStore.getItem('dd_menu_prefs') || '{}');
+  var prefs = _jsonParseSafe(DDStore.getItem('dd_menu_prefs'), '{}');
   container.innerHTML = '';
   MENU_TOGGLE_ITEMS.forEach(function(item) {
     var isOn = prefs[item.id] !== false;
@@ -51332,7 +51342,7 @@ function renderMenuToggles() {
     btn.setAttribute('aria-label', item.label + ' currently ' + (isOn ? 'visible' : 'hidden'));
     btn.onclick = (function(itemId, itemLabel) {
       return function() {
-        var p = JSON.parse(DDStore.getItem('dd_menu_prefs') || '{}');
+        var p = _jsonParseSafe(DDStore.getItem('dd_menu_prefs'), '{}');
         p[itemId] = !(p[itemId] !== false);
         DDStore.setItem('dd_menu_prefs', JSON.stringify(p));
         loadGameplaySettings(); renderMenuToggles();
@@ -51723,7 +51733,7 @@ function playTrackFromDB(track) {
 
 // ── GAMEPLAY SETTINGS ──
 function loadGameplaySettings() {
-  var prefs = JSON.parse(DDStore.getItem('dd_menu_prefs') || '{}');
+  var prefs = _jsonParseSafe(DDStore.getItem('dd_menu_prefs'), '{}');
   MENU_TOGGLE_ITEMS.forEach(function(item) {
     var el = document.getElementById(item.id);
     if (el) el.style.display = (prefs[item.id] === false) ? 'none' : '';
@@ -52174,7 +52184,7 @@ function confirmBuildSpirit() {
     onAttack: fns.onAttack, onCombatStart: fns.onCombatStart, onKill: fns.onKill
   };
 
-  var customs = JSON.parse(DDStore.getItem('dd_custom_spirits') || '[]');
+  var customs = _jsonParseSafe(DDStore.getItem('dd_custom_spirits'), '[]');
   // Store without functions (cannot serialize functions to JSON)
   var storable = Object.assign({}, customSpirit, { onAttack: null, onCombatStart: null, onKill: null });
   customs.push(storable);
@@ -52466,7 +52476,7 @@ var ALCHEMY_RECIPES = [
 ];
 
 function getAlchemyIngredients() {
-  return JSON.parse(DDStore.getItem('dd_alchemy_ingredients') || '{}');
+  return _jsonParseSafe(DDStore.getItem('dd_alchemy_ingredients'), '{}');
 }
 function saveAlchemyIngredients(ing) {
   DDStore.setItem('dd_alchemy_ingredients', JSON.stringify(ing));
@@ -52656,7 +52666,7 @@ function buyVendorDailyElixir() {
     DS.inventory.push(elixir);
     renderInv();
   } else {
-    var stored = JSON.parse(DDStore.getItem('dd_alchemy_stored') || '[]');
+    var stored = _jsonParseSafe(DDStore.getItem('dd_alchemy_stored'), '[]');
     stored.push(elixir);
     DDStore.setItem('dd_alchemy_stored', JSON.stringify(stored));
   }
@@ -52722,7 +52732,7 @@ function craftAlchemyPotion(recipeId) {
     renderInv();
   } else {
     // Store for next run if not in dungeon
-    var stored = JSON.parse(DDStore.getItem('dd_alchemy_stored') || '[]');
+    var stored = _jsonParseSafe(DDStore.getItem('dd_alchemy_stored'), '[]');
     stored.push(potion);
     DDStore.setItem('dd_alchemy_stored', JSON.stringify(stored));
     say('Potion stored. It will be available in your next dungeon run.');
@@ -53128,7 +53138,7 @@ function redeemCode() {
   }
 
   // Void Reaper codes (VOID-XXXX-XXXX)
-  var redeemed = JSON.parse(DDStore.getItem('dd_redeemed_codes') || '[]');
+  var redeemed = _jsonParseSafe(DDStore.getItem('dd_redeemed_codes'), '[]');
   if (redeemed.indexOf(code) !== -1) { msg.textContent='Already redeemed.'; msg.style.color='#ff4444'; say('Already redeemed.'); return; }
   if (code.match(/^VOID-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
     var seed = 0;
@@ -53821,7 +53831,7 @@ var HOME_SLEEP_ROOMS = 5;
 var HOME_SKILL_COOLDOWN_MS = 3 * 60 * 1000;
 var HOME_MAX_SKILL_LEVEL = 5;
 
-function getHomeSave() { return JSON.parse(DDStore.getItem('dd_home') || '{}'); }
+function getHomeSave() { return _jsonParseSafe(DDStore.getItem('dd_home'), '{}'); }
 function saveHome(o) { DDStore.setItem('dd_home', JSON.stringify(o)); }
 
 function openHome() {
@@ -54032,7 +54042,7 @@ var FORGE_RECIPES = [
   { id:'dragon-blade', name:'Dragon Blade', icon:'🐉', atk:[22,36], materials:{ 'dragon-scale':2, 'fire-ember':1 },       desc:'The pinnacle of forged weapons.' },
 ];
 
-function getForgeStash() { return JSON.parse(DDStore.getItem('dd_forge_stash') || '{}'); }
+function getForgeStash() { return _jsonParseSafe(DDStore.getItem('dd_forge_stash'), '{}'); }
 function saveForgeStash(s) { DDStore.setItem('dd_forge_stash', JSON.stringify(s)); }
 var _forgeCurrentWeapon = null;
 var _forgeCurrentRecipe = null;
@@ -54519,7 +54529,7 @@ function mineUseSkill(sk, ch) {
 
 function mineCombatAction(action) {
   if (!_mineState.inCombat || !_mineState.enemy) return;
-  var chars = CHARS && CHARS.length ? CHARS : (function(){ try { return JSON.parse(DDStore.getItem('dd_chars') || '[]'); } catch(e) { return []; } })();
+  var chars = CHARS && CHARS.length ? CHARS : (function(){ try { return _jsonParseSafe(DDStore.getItem('dd_chars'), '[]'); } catch(e) { return []; } })();
   var ch = chars[_mineState.charIdx];
   if (!ch) return;
 
@@ -54988,7 +54998,7 @@ function renderMineCharSelect() {
   var list = document.getElementById('mine-char-list');
   if (!list) { console.warn('[Mine] mine-char-list element not found'); return; }
   list.innerHTML = '';
-  var chars = (CHARS && CHARS.length) ? CHARS : (function(){ try { return JSON.parse(DDStore.getItem('dd_chars') || '[]'); } catch(e) { return []; } })();
+  var chars = (CHARS && CHARS.length) ? CHARS : (function(){ try { return _jsonParseSafe(DDStore.getItem('dd_chars'), '[]'); } catch(e) { return []; } })();
   if (!chars || chars.length === 0) {
     list.innerHTML = '<div style="font-family:Cinzel,serif;font-size:0.65rem;color:#555;">No characters yet. Create one first from the main menu.</div>';
     return;
@@ -55005,7 +55015,7 @@ function renderMineCharSelect() {
 }
 
 function mineStart(charIdx) {
-  var chars = CHARS && CHARS.length ? CHARS : (function(){ try { return JSON.parse(DDStore.getItem('dd_chars') || '[]'); } catch(e) { return []; } })();
+  var chars = CHARS && CHARS.length ? CHARS : (function(){ try { return _jsonParseSafe(DDStore.getItem('dd_chars'), '[]'); } catch(e) { return []; } })();
   var ch = chars[charIdx];
   if (!ch) return;
   _mineState.charIdx = charIdx;
@@ -55184,7 +55194,7 @@ function craftGunFromParts(gunId) {
 }
 
 // ── MINION SYSTEM ───────────────────────────────────────────────────────────
-function getMinions() { return JSON.parse(DDStore.getItem('dd_minions') || '[]'); }
+function getMinions() { return _jsonParseSafe(DDStore.getItem('dd_minions'), '[]'); }
 function saveMinions(m) { DDStore.setItem('dd_minions', JSON.stringify(m)); }
 function getActiveMinion() { return DDStore.getItem('dd_active_minion') || null; }
 function setActiveMinion(id) { if (id) DDStore.setItem('dd_active_minion', id); else DDStore.removeItem('dd_active_minion'); }
@@ -55351,7 +55361,7 @@ function homeCreateSkillOrbs() {
   if (!h.skillLevels || !Object.keys(h.skillLevels).length) return;
   var ch = _charIdx !== null ? CHARS[_charIdx] : null;
   if (!ch) return;
-  var orbs = JSON.parse(DDStore.getItem('dd_skill_orbs') || '[]');
+  var orbs = _jsonParseSafe(DDStore.getItem('dd_skill_orbs'), '[]');
   Object.keys(h.skillLevels).forEach(function(skillId) {
     var level = h.skillLevels[skillId];
     if (level > 1) {
@@ -55384,7 +55394,7 @@ function useSkillOrb(item, idx) {
   DS.skillLevels[item.id] = item.level;
   DS.inventory.splice(idx, 1);
   // Remove from global skill orbs
-  var orbs = JSON.parse(DDStore.getItem('dd_skill_orbs') || '[]');
+  var orbs = _jsonParseSafe(DDStore.getItem('dd_skill_orbs'), '[]');
   orbs = orbs.filter(function(o){ return !(o.id === item.id && o.fromChar === item.fromChar); });
   DDStore.setItem('dd_skill_orbs', JSON.stringify(orbs));
   saveChars(); renderInv(); saveProgress();
@@ -55796,7 +55806,7 @@ var AFK_SHOP_ITEMS = [
 ];
 
 function getAFKSave() {
-  try { return JSON.parse(DDStore.getItem('dd_afk') || '{}'); } catch(e) { return {}; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_afk'), '{}'); } catch(e) { return {}; }
 }
 function saveAFKData(o) { DDStore.setItem('dd_afk', JSON.stringify(o)); }
 
@@ -55900,9 +55910,9 @@ function startAFKRun() {
   // Apply equipped weapon/armor
   var _afkWepBonus = 0, _afkDefBonus = 0;
   try {
-    var _aw = JSON.parse(DDStore.getItem('dd_equipped_weapon') || 'null');
+    var _aw = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null');
     if (_aw) { var _awAtk = getWeaponAtk(_aw); if (Array.isArray(_awAtk)) _afkWepBonus = Math.floor((_awAtk[0]+_awAtk[1])/2); }
-    var _aa = JSON.parse(DDStore.getItem('dd_equipped_armor') || 'null');
+    var _aa = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null');
     if (_aa) _afkDefBonus = _aa.defBase || _aa.defBonus || 0;
   } catch(e) {}
 
@@ -56744,8 +56754,8 @@ function buyAFKUpgrade(item) {
   if (item.id === 'afk-title-void' || item.id === 'afk-title-fallen') {
     var titleName = item.id === 'afk-title-void' ? 'TheEndless' : 'TheFallen';
     // Add to TITLE_TAGS if not already there
-    var prefs = JSON.parse(DDStore.getItem('dd_email_prefs') || '{}');
-    var unlockedTitles = JSON.parse(DDStore.getItem('dd_unlocked_titles') || '[]');
+    var prefs = _jsonParseSafe(DDStore.getItem('dd_email_prefs'), '{}');
+    var unlockedTitles = _jsonParseSafe(DDStore.getItem('dd_unlocked_titles'), '[]');
     if (unlockedTitles.indexOf(titleName) === -1) unlockedTitles.push(titleName);
     DDStore.setItem('dd_unlocked_titles', JSON.stringify(unlockedTitles));
     save.totalPoints = totalPts - item.cost;
@@ -56964,7 +56974,7 @@ function startDailyDungeon() {
 
 // ── END CHALLENGES ──
 function getGraveyard() {
-  try { return JSON.parse(DDStore.getItem('dd_graveyard') || '[]'); } catch(e) { return []; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_graveyard'), '[]'); } catch(e) { return []; }
 }
 function saveGraveyard(arr) { try { DDStore.setItem('dd_graveyard', JSON.stringify(arr)); } catch(e) { console.warn('[DD] saveGraveyard failed:', e); } }
 
@@ -57084,7 +57094,7 @@ function getInfernalPath() {
 }
 
 function getRiddlesSolved() {
-  try { return JSON.parse(DDStore.getItem('dd_infernal_riddles') || '[]'); } catch(e) { return []; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_infernal_riddles'), '[]'); } catch(e) { return []; }
 }
 
 function handleInfernalClick() {
@@ -57680,7 +57690,7 @@ function importSaveCode() {
           // Since it's the first statement here, the ReferenceError was
           // also silently skipping loadHighScore() and
           // updateGlobalGoldDisplay() right after it on the same line.
-          try { CHARS = JSON.parse(DDStore.getItem('dd_chars') || '[]'); } catch(e) { CHARS = []; }
+          try { CHARS = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]'); } catch(e) { CHARS = []; }
           loadHighScore(); updateGlobalGoldDisplay();
         }},
         { label: 'Cancel', action: function() { say('Import cancelled.'); } }
@@ -58001,7 +58011,7 @@ function generateVoidCode() {
   for (var i = 0; i < 4; i++) part2 += chars[Math.floor(Math.random() * chars.length)];
   var code = 'VOID-' + part1 + '-' + part2;
   // Store it so it can be validated
-  var codes = JSON.parse(DDStore.getItem('dd_void_codes') || '[]');
+  var codes = _jsonParseSafe(DDStore.getItem('dd_void_codes'), '[]');
   codes.push({ code: code, created: Date.now() });
   if (codes.length > 10) codes = codes.slice(-10);
   DDStore.setItem('dd_void_codes', JSON.stringify(codes));
@@ -58061,7 +58071,7 @@ function enterRewardCode() {
   }
 
   // Void codes
-  var redeemed = JSON.parse(DDStore.getItem('dd_redeemed_codes') || '[]');
+  var redeemed = _jsonParseSafe(DDStore.getItem('dd_redeemed_codes'), '[]');
   if (redeemed.indexOf(code) !== -1) { if(result){result.style.color='#ff4444';result.textContent='Already redeemed.';} say('Already redeemed.'); return; }
   if (!code.match(/^VOID-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
     if(result){result.style.color='#ff4444';result.textContent='Invalid code. Birthday codes: DDBD26. Void Reaper codes: VOID-XXXX-XXXX';}
@@ -58239,7 +58249,7 @@ function pauseRedeemCode() {
   }
 
   // Void codes — use enterRewardCode logic inline
-  var redeemed = JSON.parse(DDStore.getItem('dd_redeemed_codes') || '[]');
+  var redeemed = _jsonParseSafe(DDStore.getItem('dd_redeemed_codes'), '[]');
   if (redeemed.indexOf(code) !== -1) { if(result){result.style.color='#ff4444';result.textContent='Already redeemed.';} say('Already redeemed.'); return; }
   if (!code.match(/^VOID-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) { if(result){result.style.color='#ff4444';result.textContent='Invalid code format.';} say('Invalid code.'); return; }
   var seed = 0;
@@ -59332,7 +59342,7 @@ function timeDescenderVictory() {
   if (_timeDescenderInterval) { clearInterval(_timeDescenderInterval); _timeDescenderInterval = null; }
   var gold = rnd(80, 140);
   DS.gold += gold; addGlobalGold(gold);
-  var saveData = JSON.parse(DDStore.getItem('dd_time_descender') || '{}');
+  var saveData = _jsonParseSafe(DDStore.getItem('dd_time_descender'), '{}');
   var firstKill = !saveData.defeated;
   addLog('\u23f3 The Time Descender crumbles. Time flows normally again. +' + gold + ' gold.');
   say('The Time Descender falls. Time flows normally. You earned ' + gold + ' gold.');
@@ -59417,7 +59427,7 @@ function renderTitlePicker() {
   var firstName = getPlayerFirstName();
   var current = getPlayerTitle();
   var coins = (getRaidSave().mysteryCoins || 0);
-  var owned = JSON.parse(DDStore.getItem('dd_owned_titles') || '["Wanderer"]');
+  var owned = _jsonParseSafe(DDStore.getItem('dd_owned_titles'), '["Wanderer"]');
 
   var preview = document.getElementById('title-picker-preview');
   if (preview) preview.textContent = 'Currently: ' + firstName + ' the ' + current;
@@ -59498,7 +59508,7 @@ function buyTitle(tag, cost) {
   var data = getRaidSave();
   data.mysteryCoins = newCoins;
   setRaidSave(data);
-  var owned = JSON.parse(DDStore.getItem('dd_owned_titles') || '["Wanderer"]');
+  var owned = _jsonParseSafe(DDStore.getItem('dd_owned_titles'), '["Wanderer"]');
   if (owned.indexOf(tag) === -1) owned.push(tag);
   DDStore.setItem('dd_owned_titles', JSON.stringify(owned));
   say('Title unlocked: ' + tag + '. ' + data.mysteryCoins + ' coins remaining.');
@@ -60037,10 +60047,10 @@ function renderBlacksmithInv() {
   var equippedWeapon = DS.equippedWeapon;
   var equippedArmor = DS.equippedArmor;
   if (!equippedWeapon) {
-    try { equippedWeapon = JSON.parse(DDStore.getItem('dd_equipped_weapon') || 'null'); } catch(e) {}
+    try { equippedWeapon = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null'); } catch(e) {}
   }
   if (!equippedArmor) {
-    try { equippedArmor = JSON.parse(DDStore.getItem('dd_equipped_armor') || 'null'); } catch(e) {}
+    try { equippedArmor = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null'); } catch(e) {}
   }
 
   var inv = getGlobalInventory();
@@ -60506,11 +60516,11 @@ function renderBlacksmith() {
   if (fromMenu || !DS.equippedWeapon || !DS.equippedArmor) {
     try {
       if (!DS.equippedWeapon) {
-        var _w = JSON.parse(DDStore.getItem('dd_equipped_weapon') || 'null');
+        var _w = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null');
         if (_w) { DS.equippedWeapon = _w; DS.equippedWeaponAtk = getWeaponAtk(_w); }
       }
       if (!DS.equippedArmor) {
-        var _a = JSON.parse(DDStore.getItem('dd_equipped_armor') || 'null');
+        var _a = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null');
         if (_a) { DS.equippedArmor = _a; DS.equippedArmorDef = getArmorDef(_a); }
       }
     } catch(e) {}
@@ -60583,11 +60593,11 @@ function upgradeEquipped(type) {
   if (fromMenu) {
     try {
       if (!DS.equippedWeapon) {
-        var _w = JSON.parse(DDStore.getItem('dd_equipped_weapon') || 'null');
+        var _w = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null');
         if (_w) { DS.equippedWeapon = _w; DS.equippedWeaponAtk = getWeaponAtk(_w); }
       }
       if (!DS.equippedArmor) {
-        var _a = JSON.parse(DDStore.getItem('dd_equipped_armor') || 'null');
+        var _a = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null');
         if (_a) { DS.equippedArmor = _a; DS.equippedArmorDef = getArmorDef(_a); }
       }
     } catch(e) {}
@@ -60728,10 +60738,10 @@ DDStore.whenReady().then(function() {
   // (ember spawn, audio init listeners, Firebase auth init, everything below).
   // Malformed dd_chars JSON here used to throw synchronously and silently
   // skip the whole block instead of just falling back to an empty roster.
-  try { CHARS = JSON.parse(DDStore.getItem('dd_chars') || '[]'); } catch(e) { CHARS = []; }
+  try { CHARS = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]'); } catch(e) { CHARS = []; }
   _chaosMode = DDStore.getItem('dd_chaos_mode') === '1';
-  try { bestiaryKills = JSON.parse(DDStore.getItem('dd_bestiary') || '{}'); } catch(e) { bestiaryKills = {}; }
-  try { _earnedMilestones = JSON.parse(DDStore.getItem('dd_milestones') || '{}'); } catch(e) { _earnedMilestones = {}; }
+  try { bestiaryKills = _jsonParseSafe(DDStore.getItem('dd_bestiary'), '{}'); } catch(e) { bestiaryKills = {}; }
+  try { _earnedMilestones = _jsonParseSafe(DDStore.getItem('dd_milestones'), '{}'); } catch(e) { _earnedMilestones = {}; }
   _musicBoxTutorialSeen = DDStore.getItem('dd_mb_tutorial') === '1';
   var _shakePref = DDStore.getItem('dd_shake');
   if (_shakePref !== null) _shakeEnabled = _shakePref === '1';
@@ -61110,7 +61120,7 @@ var SPIRE_MILESTONES = {
 };
 
 function getSpireSave() {
-  try { return JSON.parse(DDStore.getItem('dd_spire') || '{}'); } catch(e) { return {}; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_spire'), '{}'); } catch(e) { return {}; }
 }
 function saveSpireData(o) { DDStore.setItem('dd_spire', JSON.stringify(o)); }
 
@@ -61247,12 +61257,12 @@ function startSpire() {
   var _spireWepBonus = 0;
   var _spireDefBonus = 0;
   try {
-    var _sw = JSON.parse(DDStore.getItem('dd_equipped_weapon') || 'null');
+    var _sw = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null');
     if (_sw) {
       var _swAtk = getWeaponAtk(_sw);
       if (Array.isArray(_swAtk)) _spireWepBonus = Math.floor((_swAtk[0] + _swAtk[1]) / 2);
     }
-    var _sa = JSON.parse(DDStore.getItem('dd_equipped_armor') || 'null');
+    var _sa = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null');
     if (_sa) _spireDefBonus = _sa.defBase || _sa.defBonus || 0;
   } catch(e) {}
 
@@ -63779,7 +63789,7 @@ function addVoidFragment() {
 
 function addVoidChapterToLibrary(num, title, text) {
   try {
-    var vChapters = JSON.parse(DDStore.getItem('dd_void_chronicles') || '[]');
+    var vChapters = _jsonParseSafe(DDStore.getItem('dd_void_chronicles'), '[]');
     // Check if already added
     if (vChapters.find(function(c){ return c.num === num; })) return;
     vChapters.push({ num: num, title: title, text: text, date: Date.now() });
@@ -63788,7 +63798,7 @@ function addVoidChapterToLibrary(num, title, text) {
 }
 
 function getVoidChronicles() {
-  try { return JSON.parse(DDStore.getItem('dd_void_chronicles') || '[]'); } catch(e) { return []; }
+  try { return _jsonParseSafe(DDStore.getItem('dd_void_chronicles'), '[]'); } catch(e) { return []; }
 }
 
 function dismissVoidChronicles() {
@@ -64844,7 +64854,7 @@ function toggleHunterMode() {
   updateHunterBar();
   // Save to character
   try {
-    var chars = JSON.parse(DDStore.getItem('dd_chars') || '[]');
+    var chars = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]');
     if (chars[_charIdx]) { chars[_charIdx].hunterMode = DS.hunterMode; DDStore.setItem('dd_chars', JSON.stringify(chars)); }
   } catch(e) {}
 }
@@ -65020,12 +65030,12 @@ function startShadowRealm() {
 
   // Apply global equipped weapon
   try {
-    var sw = JSON.parse(DDStore.getItem('dd_equipped_weapon') || 'null');
+    var sw = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null');
     if (sw && sw.atkBase) {
       var atkArr = getWeaponAtk(sw);
       SR.atk += Math.floor((atkArr[0] + atkArr[1]) / 2);
     }
-    var sa = JSON.parse(DDStore.getItem('dd_equipped_armor') || 'null');
+    var sa = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null');
     if (sa) SR.def += sa.defBase || sa.defBonus || 0;
   } catch(e) {}
 
@@ -65189,7 +65199,7 @@ function shadowDie() {
   SR.inCombat = false;
 
   // Save to leaderboard
-  var board = JSON.parse(DDStore.getItem('dd_shadow_leaderboard') || '[]');
+  var board = _jsonParseSafe(DDStore.getItem('dd_shadow_leaderboard'), '[]');
   board.push({
     name: SR.charName,
     cls: SR.cls,
