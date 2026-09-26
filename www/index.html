@@ -140,6 +140,23 @@ body{background:var(--bg-void);color:var(--text-primary);font-family:'Crimson Te
 .torch-glow{position:absolute;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,39,0.15) 0%,transparent 70%);top:-20px;left:50%;transform:translateX(-50%);animation:glowPulse 2s ease-in-out infinite;}
 @keyframes glowPulse{0%,100%{opacity:1;}50%{opacity:.6;}}
 
+/* Wall-bump feedback for the 3D view — sighted players get no cue at all
+   otherwise when a move is blocked (the wall message/sfx are audio-only),
+   which reads as the game being broken rather than "there's a wall here". */
+@keyframes wallBumpShake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-8px);}
+  40%{transform:translateX(7px);}
+  60%{transform:translateX(-5px);}
+  80%{transform:translateX(3px);}
+}
+.dg-3d-wallbump{animation:wallBumpShake .32s ease;}
+.dg-3d-wallbump::after{
+  content:'';position:absolute;inset:0;background:rgba(200,30,30,0.28);
+  pointer-events:none;animation:wallBumpFlash .32s ease;z-index:5;
+}
+@keyframes wallBumpFlash{0%{opacity:1;}100%{opacity:0;}}
+
 /* SCREENS */
 .screen{display:none;position:relative;z-index:10;width:100%;height:100vh;overflow-y:auto;}
 .screen.active{display:flex;animation:screenIn .4s ease;}
@@ -13240,6 +13257,7 @@ function moveRoom3D(dir) {
     sfx('sfx-heavy-miss');
     say('There is a wall to the ' + dir + '. ' + (cur ? _room3DExitsText(cur) : ''));
     if (cur) play3DExitCues(cur);
+    _flash3DWallBump();
     return;
   }
   var delta = ROOM3D_DIRS.filter(function(x){ return x.name === d; })[0];
@@ -13250,6 +13268,7 @@ function moveRoom3D(dir) {
     // guarantees, but never let a bad cell crash movement.
     sfx('sfx-heavy-miss');
     say('There is a wall to the ' + dir + '.');
+    _flash3DWallBump();
     return;
   }
 
@@ -13345,6 +13364,20 @@ var _room3D = { loading:null, THREE:null, scene:null, camera:null, renderer:null
 
 function _room3DWantsVisual() {
   return shouldUse3DMode() && !!(DS && DS._roomGraph);
+}
+
+// Sighted players watching the 3D view have no cue when a move is blocked
+// by a wall — the feedback (sfx + say()) is audio-only, so nothing visibly
+// happens on screen and it reads as the game being broken. Give the view a
+// quick shake + red flash instead.
+function _flash3DWallBump() {
+  if (!_room3DWantsVisual()) return;
+  var view = document.getElementById('dg-3d-view');
+  if (!view) return;
+  view.classList.remove('dg-3d-wallbump');
+  void view.offsetWidth; // restart the animation if it's already mid-flash
+  view.classList.add('dg-3d-wallbump');
+  setTimeout(function() { view.classList.remove('dg-3d-wallbump'); }, 350);
 }
 
 // A screen-reader player still wants the room to actually render — to show
