@@ -7701,9 +7701,29 @@ var DDStore = (function() {
       </div>
     </div>
 
-    <!-- Step 4: Combat -->
-    <div class="tutorial-step" id="tut-4" aria-label="Tutorial step 4 of 7">
-      <p class="tutorial-num">Combat — Step 4 of 7</p>
+    <!-- Step 4: Accessibility & Advanced Features -->
+    <div class="tutorial-step" id="tut-4" aria-label="Tutorial step 4 of 8">
+      <p class="tutorial-num">Accessibility — Step 4 of 8</p>
+      <h2 class="tutorial-title">Features Worth Turning On</h2>
+      <div class="tutorial-body">
+        <p>Your screen reader announcements work automatically — nothing to enable there. But a few opt-in features are easy to miss.</p>
+        <p><strong>Voice Commands</strong> — a microphone button appears during exploration and combat. Say things like "attack," "north," or "defend" to play hands-free. Enable it in Settings.</p>
+        <p><strong>Haptic Feedback</strong> — distinct vibration patterns for hits, crits, level-ups, and danger. On by default — adjust intensity in Settings under Accessibility.</p>
+        <p><strong>3D Mode &amp; Echo-Location</strong> — an optional spatial-audio layer for exploring rooms. Turn it on in Settings under Beta Features, then use the Echo-Location button (or Alt+E) to sonar-ping a room for walls and doors.</p>
+      </div>
+      <div class="tutorial-tip">
+        <div class="tutorial-tip-label">💡 Command Center</div>
+        Prefer typing? The Command Center lets you play the entire game — including character creation — with text commands instead of buttons.
+      </div>
+      <div class="tutorial-btns">
+        <button class="btn-ghost" onclick="tutStep(3)" aria-label="Previous step">← Back</button>
+        <button class="btn-gold" onclick="tutStep(5)" aria-label="Next step">Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Combat -->
+    <div class="tutorial-step" id="tut-5" aria-label="Tutorial step 5 of 8">
+      <p class="tutorial-num">Combat — Step 5 of 8</p>
       <h2 class="tutorial-title">Fighting in the Dark</h2>
       <div class="tutorial-body">
         <p>Combat is <strong>turn-based</strong>. You act, then the enemy acts.</p>
@@ -7714,19 +7734,19 @@ var DDStore = (function() {
         <p><strong>Skills</strong> — unlock as you level up. Each class has unique powerful abilities that cost SP.</p>
         <p><strong>Soul Trap</strong> — if you have one in your inventory, a Soul Trap button appears in combat. Use it to capture the enemy as a permanent minion instead of killing it.</p>
       </div>
-      <div class="tutorial-tip">
-        <div class="tutorial-tip-label">💡 Boss Fights</div>
-        The boss on floor 10 has 3 phases. Each phase it gets stronger and changes its attack pattern. Defeat all 3 phases to complete the dungeon.
+      <div class="tutorial-tip" id="tut-5-practice-tip">
+        <div class="tutorial-tip-label">🗡 Try it yourself</div>
+        A harmless training Shade will appear. Practice Attack, Heavy Strike, and Defend against it — it can barely scratch you, and you cannot actually die to it.
       </div>
       <div class="tutorial-btns">
-        <button class="btn-ghost" onclick="tutStep(3)" aria-label="Previous step">← Back</button>
-        <button class="btn-gold" onclick="tutStep(5)" aria-label="Next step">Next →</button>
+        <button class="btn-ghost" onclick="tutStep(4)" aria-label="Previous step">← Back</button>
+        <button class="btn-gold" id="tut-5-practice-btn" onclick="startTutorialCombatPractice()" aria-label="Start a practice fight against a harmless training enemy">🗡 Start Practice Fight</button>
       </div>
     </div>
 
-    <!-- Step 5: Progression -->
-    <div class="tutorial-step" id="tut-5" aria-label="Tutorial step 5 of 7">
-      <p class="tutorial-num">Progression — Step 5 of 7</p>
+    <!-- Step 6: Progression -->
+    <div class="tutorial-step" id="tut-6" aria-label="Tutorial step 6 of 8">
+      <p class="tutorial-num">Progression — Step 6 of 8</p>
       <h2 class="tutorial-title">Growing Stronger</h2>
       <div class="tutorial-body">
         <p>You earn <strong>XP</strong> from every kill. Level up to gain HP, attack power, and skill unlocks. Every level gives 3 points to spend on stats.</p>
@@ -7740,14 +7760,14 @@ var DDStore = (function() {
         Use a Soul Trap in combat to capture enemies as permanent minions. Collect materials from kills and craft custom weapons at the Forge inside your Home. Both are accessed from the Home screen between fights.
       </div>
       <div class="tutorial-btns">
-        <button class="btn-ghost" onclick="tutStep(4)" aria-label="Previous step">← Back</button>
-        <button class="btn-gold" onclick="tutStep(6)" aria-label="Next step">Next →</button>
+        <button class="btn-ghost" onclick="tutStep(5)" aria-label="Previous step">← Back</button>
+        <button class="btn-gold" onclick="tutStep(7)" aria-label="Next step">Next →</button>
       </div>
     </div>
 
-    <!-- Step 6: Blacksmith -->
-    <div class="tutorial-step" id="tut-6" aria-label="Tutorial step 6 of 7">
-      <p class="tutorial-num">Blacksmith — Step 6 of 7</p>
+    <!-- Step 7: Blacksmith -->
+    <div class="tutorial-step" id="tut-7" aria-label="Tutorial step 7 of 8">
+      <p class="tutorial-num">Blacksmith — Step 7 of 8</p>
       <h2 class="tutorial-title">The Blacksmith</h2>
       <div class="tutorial-body">
         <p>The <strong>Blacksmith</strong> appears inside dungeons and lets you do two things.</p>
@@ -7760,14 +7780,14 @@ var DDStore = (function() {
         If you pick Blacksmith as your profession during character creation, you get a 10% discount on all upgrades. Great for long runs.
       </div>
       <div class="tutorial-btns">
-        <button class="btn-ghost" onclick="tutStep(5)" aria-label="Previous step">← Back</button>
-        <button class="btn-gold" onclick="tutStep(7)" aria-label="Next step">Next →</button>
+        <button class="btn-ghost" onclick="tutStep(6)" aria-label="Previous step">← Back</button>
+        <button class="btn-gold" onclick="tutStep(8)" aria-label="Next step">Next →</button>
       </div>
     </div>
 
-    <!-- Step 7: Ready -->
-    <div class="tutorial-step" id="tut-7" aria-label="Tutorial step 7 of 7">
-      <p class="tutorial-num">Ready — Step 7 of 7</p>
+    <!-- Step 8: Ready -->
+    <div class="tutorial-step" id="tut-8" aria-label="Tutorial step 8 of 8">
+      <p class="tutorial-num">Ready — Step 8 of 8</p>
       <h2 class="tutorial-title">You Are Ready to Descend</h2>
       <div class="tutorial-body">
         <p>That is everything you need to know. The rest you will learn in the dark.</p>
@@ -7781,7 +7801,7 @@ var DDStore = (function() {
         Find it in Settings under the Accessibility section whenever you need a refresher.
       </div>
       <div class="tutorial-btns">
-        <button class="btn-ghost" onclick="tutStep(6)" aria-label="Previous step">← Back</button>
+        <button class="btn-ghost" onclick="tutStep(7)" aria-label="Previous step">← Back</button>
         <button class="btn-gold" onclick="closeTutorial()" aria-label="Begin your descent, close tutorial and go to main menu" style="background:var(--gold);font-size:0.8rem;padding:14px 28px;">⚔ Begin Your Descent</button>
       </div>
     </div>
@@ -16330,6 +16350,9 @@ function doFight(action) {
   // The Clock (Time Descender phase 2) runs its own attack-window combat loop —
   // route attack/heavy/defend clicks there instead of the normal resolution below.
   if (DS.enemy && DS.enemy.isClock) { timeDescenderClockHit(action); return; }
+  // Interactive tutorial practice fight (The Shade) — narrate each action the
+  // first time it's used, then let real combat resolve normally below.
+  if (DS.enemy && DS.enemy.isTutorialEnemy) { _tutCombatOnAction(action); }
   try { tickSpellCooldown(); } catch(e2) {}
   // Charmed by The Heartbreaker — skip this turn
   if (DS._playerCharmed && (action === 'attack' || action === 'heavy' || action === 'skill')) {
@@ -16989,6 +17012,17 @@ function enemyDead() {
   if (e && e.isTimeDescender) {
     if (e.phase === 2) { setTimeout(function() { timeDescenderVictory(); }, 300); return; }
     setTimeout(function() { timeDescenderPhaseTwo(); }, 300);
+    return;
+  }
+
+  // Interactive tutorial practice fight (The Shade) — no loot/XP, just resume
+  // the tutorial overlay at the next step once the player's had their reps in.
+  if (e && e.isTutorialEnemy) {
+    DS.inCombat = false;
+    addLog('✨ The Shade dissolves. Practice complete!');
+    say('Practice fight complete! Continuing the tutorial.');
+    showDgPanels(true, false, false);
+    setTimeout(function() { resumeTutorialAfterCombat(); }, 1000);
     return;
   }
 
@@ -18994,6 +19028,7 @@ function useItem(i) {
     if (!te) { say('No enemy to capture. Use a Soul Trap during combat.'); return; }
     if (te.isBoss) { say('You cannot capture bosses.'); return; }
     if (te.isTimeDescender) { say('The Time Descender cannot be captured. It must be fought.'); return; }
+    if (te.isTutorialEnemy) { say('This is a training enemy — Soul Traps are not needed here.'); return; }
     var captured = captureMinion({ id: (te.id || te.name.toLowerCase().replace(/ /g,'_')), name: te.name, icon: te.icon || '👾', atk: te.atk ? (Array.isArray(te.atk) ? te.atk[1] : te.atk) : 5 });
     if (captured) {
       DS.inventory.splice(i, 1);
@@ -40262,7 +40297,7 @@ function speakSelfVoice(text) {
 // TUTORIAL SYSTEM
 //═════════════════
 var _tutStep = 1;
-var TUTORIAL_STEPS = 7;
+var TUTORIAL_STEPS = 8;
 
 function openTutorial() {
   // Mark as seen immediately so refresh does not re-trigger
@@ -40275,7 +40310,7 @@ function openTutorial() {
     if (el) el.classList.toggle('active', i === 1);
   }
   document.getElementById('tutorial-overlay').classList.add('open');
-  say('Tutorial. Step 1 of 12. Welcome to Dungeon Descent. Press Next to continue or Skip Tutorial to go straight to the game.');
+  say('Tutorial. Step 1 of ' + TUTORIAL_STEPS + '. Welcome to Dungeon Descent. Press Next to continue or Skip Tutorial to go straight to the game.');
   setTimeout(function() {
     var btn = document.querySelector('#tut-1 .btn-gold');
     if (btn) btn.focus();
@@ -40289,8 +40324,8 @@ function tutStep(n) {
   var next = document.getElementById('tut-' + n);
   if (next) next.classList.add('active');
   renderTutPips();
-  var titles = ['','Welcome','Character Creation','Navigation','Combat','Progression','Blacksmith','Ready to Descend'];
-  say('Tutorial step ' + n + ' of 7. ' + (titles[n] || ''));
+  var titles = ['','Welcome','Character Creation','Navigation','Accessibility','Combat','Progression','Blacksmith','Ready to Descend'];
+  say('Tutorial step ' + n + ' of ' + TUTORIAL_STEPS + '. ' + (titles[n] || ''));
   setTimeout(function() {
     var btn = document.querySelector('#tut-' + n + ' .btn-gold');
     if (btn) btn.focus();
@@ -51243,14 +51278,60 @@ function startTutorial() {
 }
 
 function spawnTutorialShade() {
-  DS.enemy = { name:'The Shade', icon:'👤', hp:12, maxHp:12, atk:[1,2], gold:[0,0], isTutorialEnemy:true };
+  // hp raised from the original 12 to 50 — at 12 HP most builds one- or
+  // two-shot it, leaving no room to actually demonstrate Heavy Strike and
+  // Defend before it dies. atk stays trivial ([1,2]) so it's still harmless.
+  DS.enemy = { name:'The Shade', icon:'👤', hp:50, maxHp:50, atk:[1,2], gold:[0,0], isTutorialEnemy:true };
   DS.inCombat = true; DS.defending = false;
   showDgPanels(false, true, false);
   document.getElementById('dg-enemy-icon').textContent = '👤';
   document.getElementById('dg-enemy-name').textContent = t('The Shade');
   updateEnemyBar(); updatePlayerBar(); setCombatBtns(true); updateSkillButtons();
   addLog('A Shade materialises. It is weak. A tutorial enemy. Defeat it.');
-  say('Tutorial combat. The Shade. 12 HP. Use Attack to defeat it.');
+  say('Tutorial combat. The Shade. 50 HP. It barely hits back. Use Attack to defeat it.');
+}
+
+// ── INTERACTIVE COMBAT PRACTICE (Tutorial Step 5) ──
+// spawnTutorialShade() existed for at least a couple versions but was never
+// actually called from anywhere — the tutorial's Combat step was pure text,
+// no hands-on practice. This wires it up: launched from the tutorial overlay,
+// it hides the overlay, spawns the Shade in a real (harmless) fight, narrates
+// each action type contextually the first time it's used (see the
+// isTutorialEnemy hook in doFight()), and resumes the tutorial once it dies
+// (handled centrally in enemyDead(), same pattern as Medusa/Time Descender).
+function startTutorialCombatPractice() {
+  var dungeonScreen = document.getElementById('screen-dungeon');
+  var liveRun = dungeonScreen && dungeonScreen.classList.contains('active') && DS && !DS.inCombat && DS.floor;
+  if (!liveRun) {
+    // Tutorial replayed from Settings/menu, not from inside an active run —
+    // there's no real dungeon screen to spawn a fight into. Skip straight on.
+    say('Practice fights are only available during an active run. You will get the chance to try this once you start playing.');
+    tutStep(6);
+    return;
+  }
+  document.getElementById('tutorial-overlay').classList.remove('open');
+  DS._tutCombatBeats = {};
+  spawnTutorialShade();
+  addLog('📖 Tutorial: try Attack, Heavy Strike, and Defend against this training Shade.');
+}
+
+function _tutCombatOnAction(action) {
+  if (!DS._tutCombatBeats) DS._tutCombatBeats = {};
+  if (DS._tutCombatBeats[action]) return;
+  DS._tutCombatBeats[action] = true;
+  var tips = {
+    attack: '📖 Attack — reliable, always hits, small chance to crit.',
+    heavy: '📖 Heavy Strike — hits harder, but can miss completely.',
+    defend: '📖 Defend — reduces incoming damage and counters.',
+    potion: '📖 Potion — heals you using an item from your inventory.',
+    skill: '📖 Skill — your class\'s special ability, costs SP.',
+  };
+  if (tips[action]) addLog(tips[action]);
+}
+
+function resumeTutorialAfterCombat() {
+  document.getElementById('tutorial-overlay').classList.add('open');
+  tutStep(6);
 }
 
 // ── ESCAPE CONFIRM OVERLAY ──
