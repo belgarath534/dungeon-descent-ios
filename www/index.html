@@ -13266,6 +13266,7 @@ function moveRoom3D(dir) {
     say('There is a wall to the ' + dir + '. ' + (cur ? _room3DExitsText(cur) : ''));
     if (cur) play3DExitCues(cur);
     _flash3DWallBump();
+    vibe && vibe(VIBE.wallBump);
     return;
   }
   var delta = ROOM3D_DIRS.filter(function(x){ return x.name === d; })[0];
@@ -13277,6 +13278,7 @@ function moveRoom3D(dir) {
     sfx('sfx-heavy-miss');
     say('There is a wall to the ' + dir + '.');
     _flash3DWallBump();
+    vibe && vibe(VIBE.wallBump);
     return;
   }
 
@@ -13406,7 +13408,7 @@ function echoLocate() {
   // Central ping — a quick rising sweep, unpanned, marks the start of the pulse
   _echoOsc('sine', 300, 0, 0, 0.16, 0.55);
   _echoOsc('sine', 900, 0, 0.05, 0.12, 0.35);
-  vibe && vibe([40]);
+  vibe && vibe(VIBE.echoPing);
 
   var openWords = [], wallWords = [];
   ROOM3D_DIRS.forEach(function(d, i) {
@@ -15643,7 +15645,7 @@ function startCombat(isBoss) {
       updatePlayerBar();
       addLog('📦 The Mimic reveals itself! Surprise attack deals ' + surprise + ' damage!');
       say('The Mimic! Surprise attack. ' + surprise + ' damage.');
-      vibe && vibe([200, 100, 200]);
+      vibe && vibe(VIBE.mimicReveal);
     }, 500);
   }
 
@@ -16826,7 +16828,7 @@ function enemyDead() {
     sfx('sfx-hurt');
     addLog('🧟 ' + e.name + ' falls — then rises again. It will not stay down.');
     say(e.name + ' rises from death at 20 percent HP. Strike it down again.');
-    vibe && vibe([200, 100, 200, 100, 200]);
+    vibe && vibe(VIBE.undeadRises);
     setCombatBtns(true);
     return;
   }
@@ -16876,7 +16878,7 @@ function enemyDead() {
     updateEnemyBar();
     addLog('💀 ' + e.name + ' refuses to stay dead! Returns at ' + e.hp + ' HP!');
     say(e.name + ' refuses to stay dead. It returns at ' + e.hp + ' HP. Kill it again.');
-    vibe && vibe([100, 50, 100]);
+    vibe && vibe(VIBE.undeadRises);
     setCombatBtns(true); updateSkillButtons();
     return; // don't complete the kill yet
   }
@@ -17856,7 +17858,7 @@ function stalkerMove(dir) {
   if (dist === 1) {
     addLog('💀 The Darkness Swallower is right next to you. You can hear it breathe.');
     say('It is right next to you. One step away. The darkness breathes.');
-    vibe && vibe([300, 100, 300]);
+    vibe && vibe(VIBE.dreadClose);
     showStalkerFightOption();
   } else if (dist === 2) {
     var hint2 = (dir2 === 'ahead' || dir2 === 'behind') ? ' — ' + dir2 + ' of you' : '';
@@ -17884,7 +17886,7 @@ function stalkerCaught() {
     js.volume = AUD ? (AUD.sfxVol || 0.8) : 0.8;
     js.play().catch(function(){});
   } catch(e) {}
-  vibe && vibe([500, 100, 500, 100, 500]);
+  vibe && vibe(VIBE.jumpscare);
   var dmg = Math.round(DS.maxHp * 0.35);
   DS.hp = Math.max(1, DS.hp - dmg);
   updatePlayerBar();
@@ -24023,7 +24025,7 @@ function checkBossPhase() {
       addLog('💀 FINAL FORM — ' + msg4);
       say('Final form. The Shapeshifter unleashes everything. Every hit adds 2 corruption. Use Purge.');
       showPhaseTransitionModal('💀 FINAL FORM', msg4, '#330055');
-      vibe && vibe([300, 100, 300, 100, 300]);
+      vibe && vibe(VIBE.finalForm);
       return true;
     }
     return false;
@@ -35689,7 +35691,7 @@ function startPreBossGauntlet() {
     ' of minions stand between you and the boss. Defeat them all.'
   );
   say('Pre-boss gauntlet. ' + waveCount + ' wave' + (waveCount > 1 ? 's' : '') + ' of minions block the path to the final boss. Prepare yourself.');
-  sfx('sfx-stairs'); vibe && vibe([100, 50, 100]);
+  sfx('sfx-stairs'); vibe && vibe(VIBE.gauntletStart);
   setTimeout(function() { spawnGauntletWave(); }, 1500);
 }
 
@@ -35757,7 +35759,7 @@ function onGauntletWaveComplete() {
     showDgPanels(true, false, false);
     setEvent('danger', '💀 The minions are defeated. The final chamber opens. The boss awaits.');
     say('Gauntlet complete. All waves defeated. The boss chamber opens. Prepare for the final fight.');
-    sfx('sfx-victory'); vibe && vibe([200, 100, 200]);
+    sfx('sfx-victory'); vibe && vibe(VIBE.gauntletClear);
     setTimeout(function() { startCombat(true); }, 2000);
   }
 }
@@ -59285,8 +59287,8 @@ function degradeWeapon(amount) {
   var dur = DS.equippedWeapon.durability;
   // Warn player at key thresholds
   if (dur === 40) { addLog('⚠ ' + DS.equippedWeapon.name + ' is Worn. Visit the Blacksmith to repair it.'); say('Warning. Your weapon is worn. Visit the Blacksmith.'); }
-  if (dur === 20) { addLog('🔴 ' + DS.equippedWeapon.name + ' is Damaged! Repair it soon or it will break!'); say('Danger. Your weapon is damaged. Repair immediately.'); vibe && vibe([100,50,100]); }
-  if (dur === 0)  { addLog('💔 ' + DS.equippedWeapon.name + ' has BROKEN! Your attacks deal half damage until repaired.'); say('Your weapon has broken! Half damage until repaired at Blacksmith.'); vibe && vibe([300]); }
+  if (dur === 20) { addLog('🔴 ' + DS.equippedWeapon.name + ' is Damaged! Repair it soon or it will break!'); say('Danger. Your weapon is damaged. Repair immediately.'); vibe && vibe(VIBE.weaponDamaged); }
+  if (dur === 0)  { addLog('💔 ' + DS.equippedWeapon.name + ' has BROKEN! Your attacks deal half damage until repaired.'); say('Your weapon has broken! Half damage until repaired at Blacksmith.'); vibe && vibe(VIBE.weaponBroken); }
 }
 
 function getWeaponDamageMult() {
@@ -62877,6 +62879,17 @@ var VIBE = {
   hunterCatch:[600],              // hunter catches you
   hunterKill: [100, 50, 200, 50, 400], // you killed the hunter
   shadowWave: [80, 40, 80, 40, 160], // new shadow realm wave
+  mimicReveal:  [200, 100, 200],           // a disguised enemy reveals itself and gets a free hit in
+  undeadRises:  [200, 100, 200, 100, 200], // an enemy that "died" gets back up — not over yet
+  dreadClose:   [300, 100, 300],           // an unseen threat is right next to you
+  jumpscare:    [500, 100, 500, 100, 500], // a scripted jump-scare moment
+  finalForm:    [300, 100, 300, 100, 300], // a boss's last, hardest phase begins
+  gauntletStart:[100, 50, 100],            // a wave-based pre-boss challenge begins
+  gauntletClear:[200, 100, 200],           // all gauntlet waves cleared, boss chamber opens
+  weaponDamaged:[100, 50, 100],            // equipped weapon durability hit a warning threshold
+  weaponBroken: [300],                     // equipped weapon durability hit zero
+  wallBump:     [60, 30, 60],              // walked into a wall in 3D Mode
+  echoPing:     [40],                      // Echo-location pulse
 };
 
 function toggleVibration() {
