@@ -53084,9 +53084,11 @@ function openCommandCenter() {
   var ov = document.getElementById('ov-command-center');
   if (!ov) return;
   ov.style.display = 'flex';
-  // Show mic button if SpeechRecognition available
+  // Show mic button if either the native plugin or the browser API is
+  // available — was checking only the browser API, which iOS's WKWebView
+  // never implements, so the mic button silently never appeared there.
   var micBtn = document.getElementById('cc-mic-btn');
-  if (micBtn && (window.SpeechRecognition || window.webkitSpeechRecognition)) {
+  if (micBtn && _voiceRecognitionMode()) {
     micBtn.style.display = '';
   }
   setTimeout(function(){ var inp = document.getElementById('cc-input'); if(inp) inp.focus(); }, 100);
@@ -53329,11 +53331,50 @@ function executeCommand() {
   say('Unknown command. Type help to see all available commands.');
 }
 
-function startVoiceCommand() {
-  var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRec) { ccPrint('Voice recognition not supported on this browser.', 'cc-line-err'); return; }
+// This used to check only window.SpeechRecognition/webkitSpeechRecognition,
+// which iOS's WKWebView has never implemented (same gap the new Voice
+// Commands feature was built to work around — see _voiceRecognitionMode()
+// and _voiceCommandNative() above). Reusing that same native-plugin path
+// here means the Command Center's own mic button now actually works on
+// iOS too, instead of silently never showing up.
+async function startVoiceCommand() {
+  var mode = _voiceRecognitionMode();
   var micBtn = document.getElementById('cc-mic-btn');
   var inp = document.getElementById('cc-input');
+  if (!mode) { ccPrint('Voice recognition not available on this device or browser.', 'cc-line-err'); return; }
+
+  if (mode === 'native') {
+    var SR = Capacitor.Plugins.SpeechRecognition;
+    try {
+      var perm = await SR.checkPermissions();
+      if (perm.speechRecognition !== 'granted') {
+        perm = await SR.requestPermissions();
+        if (perm.speechRecognition !== 'granted') {
+          ccPrint('Voice commands need microphone and speech recognition permission. Enable it in device Settings.', 'cc-line-err');
+          say('Voice commands need microphone and speech recognition permission. Enable it in your device Settings.');
+          return;
+        }
+      }
+      if (micBtn) { micBtn.textContent = '🔴'; micBtn.style.borderColor = '#ff4444'; }
+      say('Listening. Speak your command.');
+      var result = await SR.start({ language: 'en-US', maxResults: 1, popup: false, partialResults: false });
+      if (micBtn) { micBtn.textContent = '🎤'; micBtn.style.borderColor = '#333'; }
+      var transcript = (result && result.matches && result.matches[0]) || '';
+      if (!transcript) { ccPrint('Did not catch that. Try typing instead.', 'cc-line-err'); say('Did not catch that.'); return; }
+      if (inp) inp.value = transcript;
+      ccPrint('Heard: "' + transcript + '"', 'cc-line-info');
+      executeCommand();
+    } catch (e) {
+      if (micBtn) { micBtn.textContent = '🎤'; micBtn.style.borderColor = '#333'; }
+      console.warn('[DD] Command Center voice (native) failed:', e);
+      ccPrint('Voice error. Try typing instead.', 'cc-line-err');
+      say('Voice recognition error. Please type your command instead.');
+    }
+    return;
+  }
+
+  // Web fallback — browser build, real Chrome/Edge tab
+  var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
   var recognition = new SpeechRec();
   recognition.lang = 'en-US';
   recognition.interimResults = false;
@@ -53380,9 +53421,18 @@ function initCommandCenterToggle() {
 var _ccChar = {}; // character being built in terminal
 var _ccStep = null; // current creation step
 
-var _ccClasses = ['Warrior','Monk','Assassin','Paladin','Naturalist','Sorcerer','Necromancer','Berserker','Bard','Alchemist','BloodKnight','Druid','Warlock','DeathKnight','Ranger','Sentinel','Cleric','Wizard'];
+// These four lists are the terminal's own copy of what the real
+// character-creation screen offers, kept in sync by hand — they went stale
+// for a long time (6 classes and a whole dungeon added since, and the
+// Profession step was never added here at all, so every terminal-created
+// character silently got prof:'Wanderer', which isn't a real profession and
+// grants no profession bonus). Cross-check against the class-card/data-prof
+// buttons around line 2400-2650 if classes/races/dungeons/professions are
+// added again later.
+var _ccClasses = ['Warrior','Monk','Assassin','Paladin','Naturalist','Sorcerer','Necromancer','Berserker','Bard','Alchemist','BloodKnight','Druid','Warlock','DeathKnight','Ranger','Sentinel','Cleric','Wizard','Elementalist','VoidWalker','ShadowMage','TimeMage','Shaman','Arcanist'];
 var _ccRaces = ['Human','Elf','Dwarf','Orc','Tiefling','Shade','Vampire','Goblin','Angel','Demon','Golem','Halfling','Dragonborn','Gnome','Merfolk'];
-var _ccDungeons = ['Crypt of Malachar','The Ashbound Wastes','Frosthold Abyss','The Sunken Archives','The Hollow','The Whispering Forest','The Infernal Descent','The Abyssal Deep'];
+var _ccProfs = ['Blacksmith','Herbalist','Scholar','Mercenary','Gravedigger','Thief','Pilgrim','Grave Robber','Street Rat','Tinkerer','Warden'];
+var _ccDungeons = ['Crypt of Malachar','The Ashbound Wastes','Frosthold Abyss','The Sunken Archives','The Hollow','The Whispering Forest','The Infernal Descent','The Abyssal Deep','The Shadow World'];
 var _ccDiffs = ['Wanderer','Explorer','Forsaken','Condemned','Nightmare'];
 
 function ccStartCharacterCreation() {
@@ -53435,11 +53485,26 @@ function ccHandleInput(raw) {
     if (!race) { ccPrint('Invalid race. Type a number 1-' + _ccRaces.length + ' or a race name.', 'cc-line-err'); say('Invalid race. Try again.'); return; }
     _ccChar.race = race;
     ccPrint('✓ Race: ' + race, 'cc-line-ok');
+    _ccStep = 'profession';
+    ccPrint('', 'cc-line-info');
+    ccPrint('STEP 3 — Choose your Profession:', 'cc-line-cmd');
+    _ccProfs.forEach(function(p, i){ ccPrint((i+1) + '. ' + p + ' — ' + (_profDescs[p]||''), 'cc-line-info'); });
+    say('Step 3. Choose your profession. ' + _ccProfs.map(function(p,i){ return (i+1)+' '+p; }).join(', '));
+    return;
+  }
+
+  if (_ccStep === 'profession') {
+    var idx = parseInt(input) - 1;
+    var prof = !isNaN(idx) && _ccProfs[idx] ? _ccProfs[idx]
+             : _ccProfs.find(function(p){ return p.toLowerCase().startsWith(input); });
+    if (!prof) { ccPrint('Invalid profession. Type a number 1-' + _ccProfs.length + ' or a profession name.', 'cc-line-err'); say('Invalid profession. Try again.'); return; }
+    _ccChar.prof = prof;
+    ccPrint('✓ Profession: ' + prof, 'cc-line-ok');
     _ccStep = 'dungeon';
     ccPrint('', 'cc-line-info');
-    ccPrint('STEP 3 — Choose your Dungeon:', 'cc-line-cmd');
+    ccPrint('STEP 4 — Choose your Dungeon:', 'cc-line-cmd');
     _ccDungeons.forEach(function(d, i){ ccPrint((i+1) + '. ' + d, 'cc-line-info'); });
-    say('Step 3. Choose your dungeon. ' + _ccDungeons.map(function(d,i){ return (i+1)+' '+d; }).join(', '));
+    say('Step 4. Choose your dungeon. ' + _ccDungeons.map(function(d,i){ return (i+1)+' '+d; }).join(', '));
     return;
   }
 
@@ -53452,9 +53517,9 @@ function ccHandleInput(raw) {
     ccPrint('✓ Dungeon: ' + dng, 'cc-line-ok');
     _ccStep = 'difficulty';
     ccPrint('', 'cc-line-info');
-    ccPrint('STEP 4 — Choose your Difficulty:', 'cc-line-cmd');
+    ccPrint('STEP 5 — Choose your Difficulty:', 'cc-line-cmd');
     _ccDiffs.forEach(function(d, i){ ccPrint((i+1) + '. ' + d, 'cc-line-info'); });
-    say('Step 4. Choose difficulty. 1 Wanderer, 2 Explorer, 3 Forsaken, 4 Condemned, 5 Nightmare.');
+    say('Step 5. Choose difficulty. 1 Wanderer, 2 Explorer, 3 Forsaken, 4 Condemned, 5 Nightmare.');
     return;
   }
 
@@ -53467,8 +53532,8 @@ function ccHandleInput(raw) {
     ccPrint('✓ Difficulty: ' + diff, 'cc-line-ok');
     _ccStep = 'name';
     ccPrint('', 'cc-line-info');
-    ccPrint('STEP 5 — What is your character\'s name?', 'cc-line-cmd');
-    say('Step 5. What is your character name? Type it and press run.');
+    ccPrint('STEP 6 — What is your character\'s name?', 'cc-line-cmd');
+    say('Step 6. What is your character name? Type it and press run.');
     return;
   }
 
@@ -53482,11 +53547,12 @@ function ccHandleInput(raw) {
     ccPrint('Name:       ' + _ccChar.name, 'cc-line-ok');
     ccPrint('Class:      ' + _ccChar.cls, 'cc-line-ok');
     ccPrint('Race:       ' + _ccChar.race, 'cc-line-ok');
+    ccPrint('Profession: ' + _ccChar.prof, 'cc-line-ok');
     ccPrint('Dungeon:    ' + _ccChar.dungeon, 'cc-line-ok');
     ccPrint('Difficulty: ' + _ccChar.diff, 'cc-line-ok');
     ccPrint('', 'cc-line-info');
     ccPrint('Launch into AFK mode? Type yes or no.', 'cc-line-cmd');
-    say('Character summary. ' + _ccChar.name + ' the ' + _ccChar.race + ' ' + _ccChar.cls + '. Dungeon: ' + _ccChar.dungeon + '. Difficulty: ' + _ccChar.diff + '. Launch into AFK mode? Type yes or no.');
+    say('Character summary. ' + _ccChar.name + ' the ' + _ccChar.race + ' ' + _ccChar.cls + ', ' + _ccChar.prof + '. Dungeon: ' + _ccChar.dungeon + '. Difficulty: ' + _ccChar.diff + '. Launch into AFK mode? Type yes or no.');
     return;
   }
 
@@ -53495,7 +53561,7 @@ function ccHandleInput(raw) {
       // Create character and launch AFK
       var ch = {
         name: _ccChar.name, cls: _ccChar.cls, race: _ccChar.race,
-        prof: 'Wanderer', dungeon: _ccChar.dungeon, difficulty: _ccChar.diff,
+        prof: _ccChar.prof, dungeon: _ccChar.dungeon, difficulty: _ccChar.diff,
         floor: 0, created: Date.now(), runMode: 'classic',
         earnedSpirits: [], levelPoints: 0
       };
@@ -53504,14 +53570,17 @@ function ccHandleInput(raw) {
       saveChars();
       ccPrint('', 'cc-line-info');
       ccPrint(_ccChar.name + ' created! Launching AFK mode...', 'cc-line-ok');
+      // Read the name out before clearing _ccChar below — say() used to run
+      // AFTER the reset and always spoke "undefined is ready" instead.
+      var createdName = _ccChar.name;
       _ccStep = null; _ccChar = {};
-      say(_ccChar.name + ' is ready. Launching Endless Descent.');
+      say(createdName + ' is ready. Launching Endless Descent.');
       setTimeout(function(){ closeCommandCenter(); goTo('afk-setup'); }, 1200);
     } else if (input === 'no' || input === 'n') {
       // Create character without launching AFK
       var ch = {
         name: _ccChar.name, cls: _ccChar.cls, race: _ccChar.race,
-        prof: 'Wanderer', dungeon: _ccChar.dungeon, difficulty: _ccChar.diff,
+        prof: _ccChar.prof, dungeon: _ccChar.dungeon, difficulty: _ccChar.diff,
         floor: 0, created: Date.now(), runMode: 'classic',
         earnedSpirits: [], levelPoints: 0
       };
@@ -53519,8 +53588,10 @@ function ccHandleInput(raw) {
       _charIdx = CHARS.length - 1;
       saveChars();
       ccPrint(_ccChar.name + ' created and saved! Find them in your character list.', 'cc-line-ok');
+      // Same fix as above — capture the name before _ccChar is cleared.
+      var savedName = _ccChar.name;
       _ccStep = null; _ccChar = {};
-      say(_ccChar.name + ' created and saved. You can find them in your character list.');
+      say(savedName + ' created and saved. You can find them in your character list.');
     } else {
       ccPrint('Type yes to launch AFK or no to save without launching.', 'cc-line-err');
     }
