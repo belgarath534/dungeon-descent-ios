@@ -7208,6 +7208,7 @@ var DDStore = (function() {
       <div style="font-family:'Cinzel Decorative',cursive;font-size:0.9rem;color:#cc9944;" id="trophy-title">🏆 Your Trophies</div>
       <button onclick="closeTrophyOverlay()" style="background:none;border:1px solid #333;color:#888;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;padding:6px 12px;" aria-label="Close trophies">✕ Close</button>
     </div>
+    <div id="trophy-3d-view" style="display:none;position:relative;width:100%;height:190px;background:#000;overflow:hidden;border:1px solid #2a1a1a;margin-bottom:16px;" aria-hidden="true"></div>
     <div id="trophy-count-display" style="font-family:'Cinzel Decorative',cursive;font-size:2rem;color:#cc9944;text-align:center;margin-bottom:4px;">0</div>
     <div style="font-family:Cinzel,serif;font-size:0.65rem;color:#555;text-align:center;margin-bottom:20px;">Total Trophies Earned</div>
     <div style="font-family:Cinzel,serif;font-size:0.65rem;letter-spacing:0.15em;color:#888;margin-bottom:10px;">UNLOCKED ACHIEVEMENTS</div>
@@ -35127,10 +35128,117 @@ function retroactiveAchievementRewards() {
   updateTrophyDisplay();
 }
 
+// ── TROPHY ROOM — 3D SHOWCASE ──
+// A static, slowly-rotating display case: one pedestal per achievement,
+// glowing and colored by trophy tier when unlocked, dim and dark when not.
+// Purely a visual add-on next to the existing accessible text list above —
+// gated the same way every other 3D visual in the game is (isBetaOn
+// '3dmode'), since it's for sighted players/friends, not a replacement for
+// the say() summary and text list blind players already rely on. Rebuilt
+// fresh and fully disposed on every open/close (this overlay opens rarely
+// enough that persisting a scene across opens isn't worth the complexity,
+// and a fresh build always reflects newly-unlocked achievements correctly).
+var _trophy3D = { THREE: null, scene: null, camera: null, renderer: null, raf: null, group: null };
+function _trophy3DWantsVisual() {
+  return typeof isBetaOn === 'function' && isBetaOn('3dmode');
+}
+function initTrophy3DView() {
+  var wrap = document.getElementById('trophy-3d-view');
+  if (!wrap) return;
+  if (!_trophy3DWantsVisual()) { wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+  _load3DEngine().then(function(THREE) {
+    if (!_trophy3DWantsVisual()) return; // player may have backed out before load finished
+    _buildTrophy3DScene(THREE);
+    _startTrophy3DLoop();
+  }).catch(function(e) { console.warn('[DD] Trophy room visual failed:', e); wrap.style.display = 'none'; });
+}
+function _buildTrophy3DScene(THREE) {
+  _trophy3D.THREE = THREE;
+  var wrap = document.getElementById('trophy-3d-view');
+  var w = wrap.clientWidth || 300, h = wrap.clientHeight || 190;
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0a0806);
+  scene.fog = new THREE.FogExp2(0x0a0806, 0.05);
+  var camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 50);
+  camera.position.set(0, 3.4, 8.5);
+  camera.lookAt(0, 1, 0);
+  var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(w, h);
+  wrap.innerHTML = '';
+  wrap.appendChild(renderer.domElement);
+  _trophy3D.scene = scene; _trophy3D.camera = camera; _trophy3D.renderer = renderer;
+
+  scene.add(new THREE.AmbientLight(0x554433, 1.1));
+  var point = new THREE.PointLight(0xffcc88, 1.4, 30);
+  point.position.set(0, 6, 4);
+  scene.add(point);
+
+  var group = new THREE.Group();
+  scene.add(group);
+  _trophy3D.group = group;
+
+  var unlockedSet = {};
+  getUnlockedAchievements().forEach(function(id) { unlockedSet[id] = true; });
+
+  var cols = Math.max(1, Math.ceil(Math.sqrt(ACHIEVEMENTS.length)));
+  var rows = Math.ceil(ACHIEVEMENTS.length / cols);
+  var spacing = 1.15;
+  var startX = -((cols - 1) * spacing) / 2;
+
+  ACHIEVEMENTS.forEach(function(ach, i) {
+    var col = i % cols, row = Math.floor(i / cols);
+    var x = startX + col * spacing;
+    var z = -row * spacing;
+    var isUnlocked = !!unlockedSet[ach.id];
+    var tier = ach.trophies || 1;
+    var color = tier >= 7 ? 0xffcc33 : tier >= 3 ? 0xccccdd : 0xcc8855;
+
+    var base = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.22, 0.26, 0.35, 8),
+      new THREE.MeshStandardMaterial({ color: isUnlocked ? 0x333333 : 0x181818, roughness: 0.85 })
+    );
+    base.position.set(x, 0.17, z);
+    group.add(base);
+
+    var orbMat = isUnlocked
+      ? new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.6, roughness: 0.3 })
+      : new THREE.MeshStandardMaterial({ color: 0x202020, roughness: 0.9 });
+    var orb = new THREE.Mesh(new THREE.IcosahedronGeometry(0.15, 0), orbMat);
+    orb.position.set(x, 0.5, z);
+    group.add(orb);
+  });
+
+  // Recenter the group in depth so the whole grid sits in front of the camera
+  group.position.z = (rows - 1) * spacing / 2;
+}
+function _startTrophy3DLoop() {
+  if (_trophy3D.raf || !_trophy3D.renderer) return;
+  var clock = new _trophy3D.THREE.Clock();
+  function loop() {
+    _trophy3D.raf = requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    if (_trophy3D.group) _trophy3D.group.rotation.y += dt * 0.25;
+    _trophy3D.renderer.render(_trophy3D.scene, _trophy3D.camera);
+  }
+  loop();
+}
+function _teardownTrophy3D() {
+  if (_trophy3D.raf) { cancelAnimationFrame(_trophy3D.raf); _trophy3D.raf = null; }
+  if (_trophy3D.renderer) {
+    try { _trophy3D.renderer.dispose(); _trophy3D.renderer.forceContextLoss(); } catch (e) {}
+  }
+  var wrap = document.getElementById('trophy-3d-view');
+  if (wrap) wrap.innerHTML = '';
+  _trophy3D.scene = null; _trophy3D.camera = null; _trophy3D.renderer = null; _trophy3D.group = null;
+}
+
 function openTrophyOverlay() {
   var ov = document.getElementById('ov-trophies');
   if (!ov) return;
   ov.style.display = 'flex';
+  initTrophy3DView();
   var total = getTrophies();
   var countEl = document.getElementById('trophy-count-display');
   if (countEl) countEl.textContent = total;
@@ -35161,6 +35269,7 @@ function openTrophyOverlay() {
 function closeTrophyOverlay() {
   var ov = document.getElementById('ov-trophies');
   if (ov) ov.style.display = 'none';
+  _teardownTrophy3D();
 }
 
 function updateTrophyDisplay() {
