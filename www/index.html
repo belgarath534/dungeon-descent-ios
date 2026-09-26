@@ -42390,22 +42390,36 @@ function checkWhatsNew() {
   var loadingAnim = document.querySelector('.loading-animation-text');
   // loading animation text is JS-generated so handled separately below
   var seen = DDStore.getItem('dd_version_seen');
-  if (!seen) {
-    // Fresh install — nothing to compare against, so there's no "what's new"
-    // for them yet. Record the version silently instead of popping this in
-    // front of a brand-new player before they've even made a character.
+  if (seen === CURRENT_VERSION) return;
+
+  // dd_version_seen being empty does NOT mean this is a brand-new player —
+  // this whole mechanism was dead code until it got wired up, so EVERY
+  // existing player's dd_version_seen is empty too, no matter how much save
+  // data they have. The bug in the previous fix: it treated "never recorded"
+  // as "never played," silently ate the popup on that first load, and wrote
+  // dd_version_seen going forward — so it could only ever have shown once,
+  // and then never again on any later refresh. Use real save-data signals
+  // instead to tell an actual fresh install apart from an existing player.
+  var hasPlayedBefore = !!DDStore.getItem('dd_tutorial_seen') || (CHARS && CHARS.length > 0);
+  if (!seen && !hasPlayedBefore) {
+    // Genuinely brand new — nothing to compare against, no popup needed.
     DDStore.setItem('dd_version_seen', CURRENT_VERSION);
     return;
   }
-  if (seen !== CURRENT_VERSION) {
-    // Returning player on an older version — show the migration animation
-    // first, then the popup.
-    setTimeout(function() {
-      showMigrationAnimation(function() {
-        showWhatsNewPopup();
-      });
-    }, 1200);
-  }
+
+  // Either a returning player upgrading from a known older version, or an
+  // existing player whose dd_version_seen was simply never recorded before
+  // now — show the popup either way. Only play the migration animation when
+  // there's an actual older version to name; it describes a real one-time
+  // localStorage-to-IndexedDB migration, so it shouldn't run for a player who
+  // was never truly "on" a previous version as far as this flag knows.
+  setTimeout(function() {
+    if (seen) {
+      showMigrationAnimation(function() { showWhatsNewPopup(); });
+    } else {
+      showWhatsNewPopup();
+    }
+  }, 1200);
 }
 function showWhatsNewPopup() {
   // The #whats-new-popup CSS rule (fixed overlay, flex-centered) existed, but
