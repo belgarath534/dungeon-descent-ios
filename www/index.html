@@ -16379,7 +16379,7 @@ function doFight(action) {
       addLog('🩸 Leech! +'  + leechHeal + ' HP from life steal.' + (DS._leechTurns <= 0 ? ' Leech fades.' : ' ' + DS._leechTurns + ' turns left.'));
       updatePlayerBar();
     }
-    addLog(crit ? 'CRITICAL HIT! You strike for ' + playerDmg + ' damage!' : 'You attack for ' + playerDmg + ' damage.');
+    addLog(crit ? t('CRITICAL HIT! You strike for ') + playerDmg + t(' damage!') : t('You attack for ') + playerDmg + t(' damage.'));
     if (crit) { updateDailyQuestProgress('crits', 1); trackGlobalStat('totalCrits', 1); }
     // Serrated — 15% chance to hit twice
     if (DS.equippedWeapon && DS.equippedWeapon.rarityEffect === 'serrated' && Math.random() < 0.15 && e.hp > 0) {
@@ -16419,7 +16419,7 @@ function doFight(action) {
     } else {
       playerDmg = Math.round(baseAtk * 1.7);
       sfx('sfx-heavy-hit');
-      addLog('Heavy strike lands for ' + playerDmg + ' damage!');
+      addLog(t('Heavy strike lands for ') + playerDmg + t(' damage!'));
       // Shadow World — heavy strike breaks Void Weaver web
       if (DS.dungeon === 'The Shadow World' && DS.enemy && DS.enemy.corruptWeb && DS.enemy._webActive) {
         DS.enemy._webActive = false;
@@ -16431,7 +16431,7 @@ function doFight(action) {
   } else if (action === 'defend') {
     DS.defending = true;
     playerDmg = Math.round(baseAtk * 0.5);
-    addLog('You defend, dealing ' + playerDmg + ' and bracing for the counter.');
+    addLog(t('You defend, dealing ') + playerDmg + t(' and bracing for the counter.'));
 
   } else if (action === 'potion') {
     vibe(VIBE.potion);
@@ -16683,9 +16683,9 @@ function doFight(action) {
     } else {
       sfx('sfx-hurt');
       if (blocked > 0) {
-        addLog(e.name + ' strikes for ' + rawDmg + ' — you absorb ' + blocked + '. You take ' + taken + ' damage.');
+        addLog(e.name + t(' strikes for ') + rawDmg + t(' — you absorb ') + blocked + t('. You take ') + taken + t(' damage.'));
       } else {
-        addLog(e.name + ' attacks for ' + taken + ' damage.');
+        addLog(e.name + t(' attacks for ') + taken + t(' damage.'));
       }
     }
     DS.hp = Math.max(0, DS.hp - taken);
@@ -33995,6 +33995,27 @@ var T = {
   'Four full weeks. The fragments could almost speak.': 'Quatro semanas completas. Os fragmentos quase poderiam falar.',
   'Twenty-nine days. One more.': 'Vinte e nove dias. Só mais um.',
   'A full month. The dungeon bows. This reward will not come again until you have earned it again.': 'Um mês completo. A masmorra se curva. Esta recompensa não virá de novo até que você a conquiste novamente.',
+
+  // Combat log fragments — these are the static pieces of damage messages
+  // that get concatenated with dynamic numbers (e.g. "You attack for " +
+  // playerDmg + " damage."). t() does an exact-string lookup, so a message
+  // built by concatenation could never match a whole-sentence key once a
+  // number was mixed in — it silently fell back to English every time,
+  // even with a full translation table, because the *pieces* around the
+  // number had no entries of their own. This was the main dungeon's most
+  // frequently seen text (fires on every single combat turn), so it was
+  // the biggest visible source of "half Portuguese, half English."
+  'CRITICAL HIT! You strike for ': 'ACERTO CRÍTICO! Você golpeia por ',
+  'You attack for ': 'Você ataca por ',
+  ' damage!': ' de dano!',
+  ' damage.': ' de dano.',
+  'Heavy strike lands for ': 'Golpe pesado acerta por ',
+  'You defend, dealing ': 'Você se defende, causando ',
+  ' and bracing for the counter.': ' e se prepara para o contra-ataque.',
+  ' strikes for ': ' golpeia por ',
+  ' — you absorb ': ' — você absorve ',
+  '. You take ': '. Você sofre ',
+  ' attacks for ': ' ataca causando ',
 }
 };
 
