@@ -8760,7 +8760,9 @@ var TRACK_FILES = {
   'sunken-boss':     _audioUrl('music-sunken-boss.mp3'),
   'sunken-battle':   _audioUrl('music-sunken-battle.mp3'),
   'hollow1':         _audioUrl('music-hollow1.mp3'),
-  'hollow2':         _audioUrl('music-hollow2.mp3'),
+  // 'hollow2' intentionally omitted — music-hollow2.mp3 never uploaded
+  // correctly (it's a saved 404 page, not audio); see the matching notes
+  // on the dungeon-track pickers and in ALL_TRACKS_LOOP/MUSIC_CATALOGUE.
   'hollow3':         _audioUrl('music-hollow3.mp3'),
   'hollow-boss':     _audioUrl('music-hollow-boss.mp3'),
   'hollow-battle':   _audioUrl('music-hollow-battle.mp3'),
@@ -9287,7 +9289,7 @@ var ALL_TRACKS_LOOP = [
   'ash1','ash2','ash3','ash-battle','ash-boss',
   'frost1','frost2','frost3','frost-battle','frost-boss',
   'sunken1','sunken2','sunken3','sunken-battle','sunken-boss',
-  'hollow1','hollow2','hollow3','hollow-battle','hollow-boss',
+  'hollow1','hollow3','hollow-battle','hollow-boss', // hollow2 omitted — see TRACK_FILES note
   'whisper1','whisper2','whisper3','whisper-battle','whisper-boss',
   'infernal1','infernal2','infernal3','infernal-battle','infernal-boss',
   'bestiary','blacksmith','chronicles','help','afk',
@@ -49785,7 +49787,7 @@ var MUSIC_CATALOGUE = [
   { key:'sunken-boss',     label:'Leviathan — Sunken Archives Boss',          dungeon:'The Sunken Archives' },
   { key:'sunken-battle',   label:'Ink and Tide — Sunken Battle',              dungeon:'The Sunken Archives' },
   { key:'hollow1',         label:'Something in the Walls — The Hollow',       dungeon:'The Hollow' },
-  { key:'hollow2',         label:'The House Remembers — The Hollow',          dungeon:'The Hollow' },
+  // 'hollow2' ("The House Remembers") omitted — see TRACK_FILES note above
   { key:'hollow3',         label:'No One Left — The Hollow',                  dungeon:'The Hollow' },
   { key:'hollow-boss',     label:'The Hollow Matron — Final Confrontation',   dungeon:'The Hollow' },
   { key:'hollow-battle',   label:'Grief Made Real — Hollow Battle',           dungeon:'The Hollow' },
@@ -50875,7 +50877,10 @@ function getDungeonTrack() {
     'The Ashbound Wastes': DS.floor <= 3 ? 'ash1' : DS.floor <= 6 ? 'ash2' : 'ash3',
     'Frosthold Abyss': DS.floor <= 3 ? 'frost1' : DS.floor <= 6 ? 'frost2' : 'frost3',
     'The Sunken Archives': DS.floor <= 3 ? 'sunken1' : DS.floor <= 6 ? 'sunken2' : 'sunken3',
-    'The Hollow': DS.floor <= 3 ? 'hollow1' : DS.floor <= 6 ? 'hollow2' : 'hollow3',
+    // hollow2 is skipped here too — see the matching TEMP note on the main
+    // dungeon-track picker (~line 8856): the file never uploaded correctly
+    // (it's a saved 404 page, not audio) so playing it just produces silence.
+    'The Hollow': DS.floor <= 6 ? 'hollow1' : 'hollow3',
     'The Whispering Forest': DS.floor <= 3 ? 'whisper1' : DS.floor <= 6 ? 'whisper2' : 'whisper3',
   };
   return map[DS.dungeon] || null;
