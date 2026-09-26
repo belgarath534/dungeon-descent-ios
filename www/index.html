@@ -63058,15 +63058,23 @@ var _shakeListenerAttached = false;
 function initShakeToAttack() {
   if (_shakeListenerAttached) return;
   try {
-    if (!window.Capacitor || !Capacitor.Plugins || !Capacitor.Plugins.Motion) return;
+    // @capacitor/motion has no native iOS/Android code at all (no podspec,
+    // no ios/ or android/ folder) — it's a pure wrapper around the browser's
+    // own DeviceMotionEvent, and only registers as Capacitor.Plugins.Motion
+    // if its JS file is explicitly loaded into the page, which it never was
+    // here (only capacitor.js itself is loaded). So that check always failed
+    // and this never ran, on iOS, Android, OR in a browser — the native app
+    // runs this same web content inside a WKWebView, which supports
+    // DeviceMotionEvent natively same as Safari, so talking to it directly
+    // works identically in both places without needing the plugin at all.
+    if (typeof window.DeviceMotionEvent === 'undefined') return; // no accelerometer support here at all
 
     function _attachMotionListener() {
       if (_shakeListenerAttached) return;
       _shakeListenerAttached = true;
-      Capacitor.Plugins.Motion.addListener('accel', function(event) {
+      window.addEventListener('devicemotion', function(event) {
         if (!_shakeEnabled) return;
         if (!DS || !DS.inCombat) return;
-        // Capacitor Motion plugin returns acceleration or accelerationIncludingGravity
         var a = event.acceleration || event.accelerationIncludingGravity;
         if (!a) return;
         var x = a.x || 0, y = a.y || 0, z = a.z || 0;
@@ -63087,9 +63095,8 @@ function initShakeToAttack() {
       console.log('[DD] Shake to attack enabled');
     }
 
-    // iOS 13+ requires explicit permission for DeviceMotion
-    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    if (isIOS && typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+    // iOS 13+ (Safari and WKWebView alike) requires explicit permission for DeviceMotion
+    if (typeof DeviceMotionEvent.requestPermission === 'function') {
       DeviceMotionEvent.requestPermission().then(function(state) {
         if (state === 'granted') {
           _attachMotionListener();
