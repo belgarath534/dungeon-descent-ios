@@ -61933,6 +61933,14 @@ function vibe(pattern) {
               // ImpactStyle enum values work on both iOS and Android
               var ImpactStyle = (Capacitor.Plugins.Haptics.ImpactStyle) ||
                 { Heavy: 'HEAVY', Medium: 'MEDIUM', Light: 'LIGHT' };
+              // impact() is a fixed-length native "tap" — it ignores dur
+              // entirely, so every pulse in every pattern in the whole game
+              // (a 100ms tap and a 500ms death buzz alike) physically felt
+              // like the exact same brief click. That's the "tiny, not
+              // sharp" feeling: fire it first for a crisp, percussive
+              // onset, then immediately layer vibrate({duration}) on top
+              // so the pulse actually lasts as long as its pattern says —
+              // sharp attack, real felt presence behind it.
               if (dur >= 300) {
                 Capacitor.Plugins.Haptics.impact({ style: ImpactStyle.Heavy || 'HEAVY' });
               } else if (dur >= 150) {
@@ -61940,6 +61948,7 @@ function vibe(pattern) {
               } else {
                 Capacitor.Plugins.Haptics.impact({ style: ImpactStyle.Light || 'LIGHT' });
               }
+              Capacitor.Plugins.Haptics.vibrate({ duration: dur });
             } catch(e) {}
           }, d);
         })(delay, duration);
