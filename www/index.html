@@ -1824,7 +1824,7 @@ var DDStore = (function() {
     <!-- Title -->
     <div class="loading-title" data-i18n="game-title" style="font-size:2.4rem;line-height:1.1;margin-bottom:6px;">Dungeon<br>Descent</div>
     <div class="loading-sub" data-i18n="game-subtitle" style="margin-bottom:6px;">Into the dark. Again.</div>
-    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.7</div>
+    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.7.1</div>
 
     <!-- Loading bar -->
     <div class="loading-bar-wrap">
@@ -2003,7 +2003,7 @@ var DDStore = (function() {
         <span data-i18n="btn-quit">🕯 Quit</span>
       </button>
     </nav>
-    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 7, Release">v11.7 · Release</p>
+    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 7 point 1, Release">v11.7.1 · Release</p>
     <p id="menu-online-count" style="font-family:Cinzel,serif;font-size:0.55rem;color:#444;margin-top:4px;letter-spacing:0.1em;" aria-live="polite" aria-label="Players currently online"></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#ffdd44;margin-top:6px;" aria-label="Your global gold" aria-live="polite"><span data-i18n="lbl-gold">💰 </span><span class="global-gold-display">0</span></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#88ddff;margin-top:2px;" aria-label="Your diamonds" aria-live="polite">💎 <span class="global-diamond-display">0</span></p>
@@ -3567,8 +3567,24 @@ var DDStore = (function() {
       <button class="back-btn" onclick="goTo('menu')" aria-label="Back to main menu">← Menu</button>
       <h2 class="screen-title">What's New</h2>
     </div>
-    <div class="version-block latest" tabindex="0" aria-label="Version 11.7">
-      <div class="version-num">v11.7 — Latest</div>
+    <div class="version-block latest" tabindex="0" aria-label="Version 11.7.1">
+      <div class="version-num">v11.7.1 — Latest</div>
+      <div class="version-date">The Familiar & Live Activity Update</div>
+      <ul class="version-changes">
+        <li>🐾 The Familiar — a small companion separate from your Guide that bonds with you across every run, persisted account-wide like your trophies. Bond grows from kills, room searches, and full dungeon clears. Custom naming, 4 unlockable species (100 trophies, clear every dungeon, defeat the Void Reaper, or reach Bond Level 10), bond-level titles at 5/10/20, a comfort line at critical sanity, and it recognizes Julio and the Void Reaper by name. 3 new achievements: First Bond, The Loyal, The Inseparable. Flavor-only on purpose — no stat effect, can't touch combat balance.</li>
+        <li>🎧 Echo-Location 2.0 — doors leading toward an unvisited room now layer a distinct cue for what's actually coming: a low growl for danger, a bright shimmer for something promising, a detuned "uncertain" tone for a mystery. A real read of the next room, not flavor. Also now senses corridor depth — a long hallway gets a longer fading tone plus a soft trailing echo, a single-room alcove stays short and tight.</li>
+        <li>🏹 Live directional Hunter — the hunter's heartbeat and proximity pulse are now panned to the direction it's actually coming from (the door behind you, since it's always following your trail), and update live on every beat instead of once per distance milestone.</li>
+        <li>⬇️ Descent cue — a falling pitch sweep plays when you actually descend a floor, reinforcing the "going deeper" feeling.</li>
+        <li>📱 Live Activity (iOS) and a live notification (Android) — Hunter distance or Endless Descent floor/points now show right on your lock screen (and Dynamic Island on iOS) while the app is backgrounded, for either Hunter Mode or an AFK run. Clears itself when either ends.</li>
+        <li>✌️ Magic Tap → Echo-Location — VoiceOver users can now fire Echo-Location from anywhere in 3D Mode exploration with a two-finger double-tap, no menu required.</li>
+        <li>🔊 Fixed VoiceOver/TalkBack burying 3D Mode's directional door and wall cues under the screen reader's own speech — they fire after the room announcement now instead of on top of it. Also added a native iOS audio session fix so game audio and VoiceOver speech share the device properly.</li>
+        <li>🐛 Fixed the What's New popup never actually showing on a version update — it was fully built but never wired up, and the popup element it needed didn't exist in the page yet. Also fixed a follow-on bug where every existing player got silently misread as a brand-new install the first time the fix went live.</li>
+        <li>🐛 Fixed the Void Reaper staying stuck on "Dormant" forever after being killed, if the player closed the app within 10 seconds of the killing blow.</li>
+        <li>🐛 Fixed Shake to Attack never working at all on iOS or in the browser — it was gated behind a plugin object that never actually existed on any platform.</li>
+      </ul>
+    </div>
+    <div class="version-block" tabindex="0" aria-label="Version 11.7">
+      <div class="version-num">v11.7</div>
       <div class="version-date">The Accessibility & Fix Sweep</div>
       <ul class="version-changes">
         <li>🕯️ Hide and Seek — in case it slipped past you: a tense chase mode against the Darkness Swallower, solo or with up to 5 friends in a shared room. Find the exit before it finds you. Been in the game for a while — it just never got its own mention here until now.</li>
@@ -5754,6 +5770,34 @@ var DDStore = (function() {
         <div class="help-body">When you create a new character you are asked to name your guide at Step 9 — a companion who walks with you through every dungeon. She speaks during boss fights, level ups, low HP moments, achievements, hunter encounters, and death. Her portrait appears at the bottom of the screen whenever she has something to say. Tap the X button to dismiss her message. She stays consistent throughout every run.</div>
       </div>
       <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🐾 The Familiar</div>
+        <div class="help-body">A small companion separate from your Guide that bonds with you across every run — persists account-wide, just like your trophies. Bond grows from kills, room searches, and full dungeon clears. Rename it and choose from 4 species, each unlocked by a real milestone (100 trophies, clearing every dungeon, defeating the Void Reaper, or reaching Bond Level 10) — access the picker from its overlay, found from a new menu badge. Earns bond-level titles at 5, 10, and 20, offers a comfort line when your sanity drops critically low, and reacts by name the first time you meet Julio or the Void Reaper each run. Kept flavor-only on purpose — no stat effect — so it can never affect combat balance. 3 achievements track bond level: First Bond, The Loyal, and The Inseparable.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🎧 Echo-Location</div>
+        <div class="help-body">Found in 3D Mode's action bar, or say "echo," "sonar," or "ping" with Voice Commands. Fires a sonar pulse: a central ping, then a panned tone toward every door in the room — a sharp tik for a wall, a soft fading tone for an open door, its fade length matching how far that corridor actually runs before hitting a dead end. Doors leading toward a room you haven't visited yet also layer a distinct cue for what's coming — a low growl for danger, a bright shimmer for something promising, a detuned "uncertain" tone for a mystery — a real read of the next room, not decoration. Works purely by audio even with the 3D visual switched off.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🧊 3D Mode</div>
+        <div class="help-body">An alternate way to explore every dungeon — a real 3D rendered view with full spatial audio, walking between rooms yourself instead of tapping directions. Turn it on in Settings under Beta Features. Each dungeon has its own distinct visual palette. Off by default for screen reader users, but you can turn it on yourself just for the spatial audio layer — Echo-Location, directional door and wall cues, and a live directional pulse from the Hunter when Hunter Mode is active — with or without ever looking at the 3D visual.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🎤 Voice Commands</div>
+        <div class="help-body">Play combat and exploration completely hands-free. In combat say "attack," "heavy strike," "defend," "potion," "flee," or "skills." While exploring say "north," "south," "east," "west," "search," "inventory," or "echo location." Uses native on-device speech recognition on iOS and Android — enable it from Settings.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🏆 Trophy Room</div>
+        <div class="help-body">A dedicated 3D space to browse everything you've earned, reachable from the Trophies overlay. The 3D showcase itself is purely decorative and hidden from screen readers, but every trophy is still fully reachable through the regular accessible trophy list right alongside it — nothing about your trophies is screen-reader-only-hidden.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🕯️ Hide and Seek</div>
+        <div class="help-body">A tense chase mode against the Darkness Swallower. Play solo or with up to 5 friends in a shared room — find the exit before it finds you.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">📱 Live Status While Backgrounded</div>
+        <div class="help-body">On iOS, a Live Activity shows your Hunter distance or Endless Descent floor and points right on your lock screen and in the Dynamic Island while the app is backgrounded. On Android, the same information shows in a persistent, low-priority notification. Appears automatically whenever Hunter Mode or an AFK Endless Descent run is active, and clears itself the moment either ends.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">💀 Hardcore Mode</div>
         <div class="help-body">Enable Hardcore Mode at the Difficulty step during character creation. In Hardcore Mode death is permanent — if your character dies they are deleted forever. No cloud save, no second chances, no retry. A HC badge appears in the top bar to remind you the stakes are real. Combined with Hunter Mode it creates the most intense experience Dungeon Descent offers.</div>
       </div>
@@ -5978,6 +6022,14 @@ var DDStore = (function() {
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">Screen Reader Support</div>
         <div class="help-body">Dungeon Descent was built specifically for JAWS, NVDA, and VoiceOver users. Every combat action, room description, enemy attack, level up, item found, achievement unlock, and event is announced automatically. You never need to read the screen manually — the game reads itself to you.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">✌️ Magic Tap → Echo-Location</div>
+        <div class="help-body">On iOS with VoiceOver, a two-finger double-tap (Magic Tap) fires Echo-Location instantly from anywhere while exploring a dungeon in 3D Mode — no need to find a button first. It's a completely separate gesture from the regular one-finger double-tap that activates buttons, so there's no conflict between the two. Does nothing outside of active exploration, so it's safe to try anywhere in the app.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">📳 Expanded Haptic Vocabulary</div>
+        <div class="help-body">Dozens of named vibration patterns for specific moments — mimic reveals, undead rising, boss phase transitions, 3D Mode wall bumps, echo-location pulses, hunter proximity, and more — each with its own distinct feel, and each respecting its own stated duration instead of every buzz being the same fixed-length tap.</div>
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">First Launch Prompt</div>
@@ -42799,7 +42851,7 @@ function devResetSRPrompt() {
 }
 
 // ── WHATS NEW ──
-var CURRENT_VERSION = '11.7';
+var CURRENT_VERSION = '11.7.1';
 function checkWhatsNew() {
   // Update ALL version displays from single source of truth
   var vtag = document.querySelector('.version-tag');
