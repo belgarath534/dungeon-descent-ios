@@ -5546,6 +5546,7 @@ var DDStore = (function() {
       <button class="quest-tab" role="tab" aria-selected="false" onclick="helpTab('dungeons')" id="help-tab-dungeons">🏚 Dungeons</button>
       <button class="quest-tab" role="tab" aria-selected="false" onclick="helpTab('combat')" id="help-tab-combat">⚔ Combat</button>
       <button class="quest-tab" role="tab" aria-selected="false" onclick="helpTab('features')" id="help-tab-features">✨ Features</button>
+      <button class="quest-tab" role="tab" aria-selected="false" onclick="helpTab('online')" id="help-tab-online">🌐 Multiplayer</button>
       <button class="quest-tab" role="tab" aria-selected="false" onclick="helpTab('strategies')" id="help-tab-strategies">🗺 Strategies</button>
       <button class="quest-tab" role="tab" aria-selected="false" onclick="helpTab('access')" id="help-tab-access">♿ Accessibility</button>
       <button class="quest-tab" role="tab" aria-selected="false" onclick="helpTab('keys')" id="help-tab-keys">⌨ Key Commands</button>
@@ -5669,7 +5670,7 @@ var DDStore = (function() {
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">The Hollow — Dungeon 5</div>
-        <div class="help-body">An abandoned house. The strangest dungeon in the game. Has a weather system — every run rolls one of 5 weather conditions that change how the dungeon plays. Unique enemies include the Weeping Child (soothe it with the Music Box to unlock a later event), the Music Box itself, and the Uninvited Guest. The boss is The Last Resident. Completing the Hollow unlocks New Game Plus.</div>
+        <div class="help-body">An abandoned house. The strangest dungeon in the game. Has a weather system — every run rolls one of 5 weather conditions that change how the dungeon plays. Unique enemies include the Weeping Child (soothe it with the Music Box to unlock a later event), the Music Box itself, and the Uninvited Guest. The boss is The Last Resident.</div>
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">The Whispering Forest — Dungeon 6</div>
@@ -5682,6 +5683,10 @@ var DDStore = (function() {
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">The Abyssal Deep — Dungeon 8</div>
         <div class="help-body">The bottom of the ocean where no light reaches. Unlocks automatically after completing The Infernal Descent. Features 9 unique ocean enemies — Tide Wraith, Drowned Sailor, Ink Fiend, Deep Stalker, Siren, Abyssal Eye and more, each with unique combat mechanics. The Leviathan is the final boss with 4 phases and 800 HP — the hardest boss in the game. Each phase transition plays a different music track. Has 5 unique dungeon events including The Witness — a shark that has been watching you the entire run and becomes your permanent minion if you earn its trust. Has its own weather system, music, and ambient. Bring everything you have.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">The Shadow World — Dungeon 9</div>
+        <div class="help-body">A secret dungeon that has existed for 3000 years beneath a cursed forest. 14 enemies with unique mechanics, including The Mimic, The Lurker, The Reflection, and Shadow Archon. Shadow Corruption builds per hit you take — at 3 stacks your damage is halved, so spend the 4 SP on Purge before it gets there. Shadow Ambush encounters bring back echoes of enemies you already killed this run, each adding more corruption on hit. The Echo always spawns first as the floor 10 boss; defeating it auto-triggers a dramatic fight against The Shapeshifter, a 4-phase boss that copies your weapon damage, matches your exact HP, and corrupts you on every hit — widely considered the hardest boss in the game. A Security Room event can also appear: watch 4 camera feeds for the Darkness Swallower and escape the opposite direction, by sight or by its growl, before a 15-second timer runs out.</div>
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">Dungeon Weather System</div>
@@ -5705,7 +5710,7 @@ var DDStore = (function() {
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">New Game Plus</div>
-        <div class="help-body">After completing all 5 dungeons with a character you unlock New Game Plus. NG Plus keeps your character's spirit but resets the run stats. Enemies are 20 percent stronger. Each subsequent NG Plus adds 5 percent more difficulty. There is no cap.</div>
+        <div class="help-body">Clear any dungeon and a choice screen appears: Continue Journey (move on to the next dungeon with your current character) or New Game Plus (replay that same dungeon, harder, keeping your character and spirit). Each dungeon tracks its own NG+ count — enemies get roughly 20 percent stronger on your first NG+ run through a dungeon, with each subsequent NG+ adding about 5 percent more on top. There is no cap.</div>
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">Hunter Mode</div>
@@ -5807,7 +5812,7 @@ var DDStore = (function() {
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">🏆 The True Ending</div>
-        <div class="help-body">Clear all 8 dungeons — the Crypt of Malachar, The Ashbound Wastes, Frosthold Abyss, The Sunken Archives, The Hollow, The Whispering Forest, The Infernal Descent, and The Abyssal Deep — and something special happens. A cinematic plays, a title is earned, and credits roll. You do not need to clear them all on the same character. Progress is tracked across all your runs forever.</div>
+        <div class="help-body">Clear all 9 dungeons — the Crypt of Malachar, The Ashbound Wastes, Frosthold Abyss, The Sunken Archives, The Hollow, The Whispering Forest, The Infernal Descent, The Abyssal Deep, and The Shadow World — and something special happens. A cinematic plays, a title is earned, and credits roll. You do not need to clear them all on the same character. Progress is tracked across all your runs forever.</div>
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">The Chronicles</div>
@@ -5975,7 +5980,48 @@ var DDStore = (function() {
       </div>
     </div>
 
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">⛏ The Mine and Guns</div>
+        <div class="help-body">A standalone mode, separate from the 9 story dungeons. Send a character into the Mine to dig for Diamonds, Mystery Coins, gold, and Gun Parts — carry up to 15 items before surfacing, and descend deeper for rarer loot but tougher enemies. Diamonds buy guns at the Blacksmith — 13 of them, from the Flintlock Pistol to the AK-47, each with its own charge mechanic, shot count, and cooldown. Charge, fire, then wait for the reload sound before charging again. Automatic guns fire multiple shots before needing to cool down. Gun Parts (Barrels, Firing Mechanisms, Stocks, Trigger Assemblies) let you craft guns at Home instead of buying them. Guns work in dungeons, The Siege, and Raids.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">📖 The Codex</div>
+        <div class="help-body">A lore system separate from The Chronicles — three tabs: World Lore, Enemy Lore, and Artifacts. 14 entries total, unlocked through gameplay: clearing a dungeon, reaching kill totals, hitting Mine depth milestones, or collecting Void Fragments. Access it from the main menu.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🏆 Boss Loot — Dungeon Relics</div>
+        <div class="help-body">Every dungeon boss drops a unique relic when defeated for the first time — one per dungeon, each with a passive effect that changes how the rest of your run plays: extra max HP, a chance to freeze or dodge, bonus elemental damage, healing per room, and more. Malachar's Crown Fragment goes further — it can shatter once to save you from a killing blow instead of letting you die.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🌑 Legacy Mode vs. Classic Run</div>
+        <div class="help-body">Choose your run mode at character creation. Classic Run is the original experience — your level resets to 1 on death, every run is a fresh start, no dungeon scaling. Legacy Mode keeps your level between runs (cap raised to 25); clearing a dungeon raises its Dungeon Tier, which scales enemy HP and damage up but increases gold rewards too. Die in Legacy Mode and your level is kept, but that dungeon's tier resets.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">⚔ Boss Retry and the Pre-Boss Gauntlet</div>
+        <div class="help-body">Die to a dungeon's final boss and you get one retry per run — it costs 15% of your gold and restores you to 50% HP, but the boss resets to full strength. Before you even reach the boss, expect a Pre-Boss Gauntlet: 1 or 2 waves of buffed dungeon minions spawn between the floor 10 elite and the final fight.</div>
+      </div>
     </div><!-- end help-features -->
+
+    <!-- MULTIPLAYER & ONLINE TAB -->
+    <div id="help-online" class="help-section" style="display:none;">
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">⚔️ PVP Arena</div>
+        <div class="help-body">Fight another player in real-time, turn-based combat. Create a room and share the code, or join one someone shared with you. Runs on Firebase Realtime Database, so it works on any device and is always online — no server to keep up, no connection drops.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">💬 Global Chat</div>
+        <div class="help-body">Talk to players around the world in real time. Pick a username, send messages, see them appear instantly. Accessible from the main menu. Manage your username and toggle the in-dungeon chat button from Settings under Chat. Separate from the Void Reaper's World Chat, which only appears on the Void Reaper screen.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">⚗️ Community Enemy Creator</div>
+        <div class="help-body">Design your own enemy and share it with every player worldwide — name, description, HP, type, dungeon, and a special mechanic described in plain English (an AI translates it into real combat flags, like "heals 15 HP every 3 turns"). Test it in a practice arena before submitting. Submissions are AI-moderated; repeated violations earn a creation ban. Your enemy can appear in any player's dungeon with a special announcement, and browse everyone else's creations from the Bestiary's community tab.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🪦 Global Obituary</div>
+        <div class="help-body">A shared record of real deaths from real players worldwide — not just your own. Every death across every mode (dungeons, Boss Rush, Daily Raid, The Spire) registers here.</div>
+      </div>
+    </div>
+    <!-- end help-online -->
 
     <!-- STRATEGIES TAB -->
     <div id="help-strategies" class="help-section" style="display:none;">
@@ -6081,7 +6127,7 @@ var DDStore = (function() {
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">Seasonal Events</div>
-        <div class="help-body">Events activate automatically based on the date and time. <strong>Halloween</strong> (October) — 12 special enemies, +25% XP, enemies 30% stronger. <strong>Christmas</strong> (December) — Krampus and crew, +15% XP. <strong>Easter</strong> (April 5-7) — The Easter Bunny appears. Fight it, adopt it as a spirit companion, or let it go for gold. <strong>XP Weekend</strong> (Saturday and Sunday) — 2x XP. <strong>Void Week</strong> (Monday) — 2x gold, enemies 20% stronger. <strong>Blood Moon</strong> (days 1-7 each month) — enemies hit harder. <strong>Architect Week</strong> (days 8-14) — Julio appears 3x more often. The Events screen in the main menu shows all active and upcoming events.</div>
+        <div class="help-body">Events activate automatically based on the date and time. <strong>Halloween</strong> (October) — 12 special enemies, +25% XP, enemies 30% stronger. <strong>Christmas</strong> (December) — Krampus and crew, +15% XP. <strong>Easter</strong> (April 5-7) — The Easter Bunny appears. Fight it, adopt it as a spirit companion, or let it go for gold. <strong>Valentine's Day</strong> (February 13-15) — 7 exclusive enemies including The Cupid, a Love Potion to charm enemies to your side for 2 turns, and The Heartbreaker boss. <strong>St. Patrick's Day</strong> (March 14-18) — 8 Irish enemies and the Shamrock Shop. <strong>Friday the 13th</strong> (any Friday the 13th) — Halloween music everywhere, the dungeon goes dark, and a chance at the Black Box event. <strong>Cinco de Mayo</strong> (May 5) — an exclusive weapon in the Blacksmith, bonus XP and gold. <strong>Fourth of July</strong> (July 1-7) — Redcoat invasion, Fireworks Corner, and the Independence Tournament. <strong>Brazil Independence Day</strong> (September 7) — 7 Brazilian enemies and a Carnival King boss. <strong>XP Weekend</strong> (Saturday and Sunday) — 2x XP. <strong>Void Week</strong> (Monday) — 2x gold, enemies 20% stronger. <strong>Blood Moon</strong> (days 1-7 each month) — enemies hit harder. <strong>Architect Week</strong> (days 8-14) — Julio appears 3x more often. The Events screen in the main menu shows all active and upcoming events.</div>
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">High Score and Ranks</div>
@@ -51700,14 +51746,14 @@ function toggleMenuNotifications() {
 // HELP SCREEN
 //═════════════════
 function helpTab(tab) {
-  var tabs = ['basics','characters','dungeons','combat','features','strategies','access'];
+  var tabs = ['basics','characters','dungeons','combat','features','online','strategies','access','keys'];
   tabs.forEach(function(t) {
     var btn = document.getElementById('help-tab-' + t);
     var panel = document.getElementById('help-' + t);
     if (btn) { btn.classList.toggle('active', t === tab); btn.setAttribute('aria-selected', t === tab ? 'true' : 'false'); }
     if (panel) { panel.style.display = t === tab ? 'block' : 'none'; panel.style.setProperty('display', t === tab ? 'block' : 'none', 'important'); }
   });
-  var names = { basics:'Basics. How the game works.', characters:'Characters. Classes, races, professions, skills and spirits.', dungeons:'Dungeons. All seven dungeons, difficulties and weather.', combat:'Combat. How to fight, special enemies and Insane Mode.', features:'Features. Chronicles, Hall of Legends, Julio questline and more.', strategies:'Strategies. Tips and tactics to survive and win the dungeon.', access:'Accessibility. Screen reader support, headings and settings.' };
+  var names = { basics:'Basics. How the game works.', characters:'Characters. Classes, races, professions, skills and spirits.', dungeons:'Dungeons. All nine dungeons, difficulties and weather.', combat:'Combat. How to fight, special enemies and Insane Mode.', features:'Features. Chronicles, Hall of Legends, Julio questline and more.', online:'Multiplayer and Online. PVP Arena, Global Chat, community enemies and the global obituary.', strategies:'Strategies. Tips and tactics to survive and win the dungeon.', access:'Accessibility. Screen reader support, headings and settings.', keys:'Key Commands. Keyboard shortcuts for every screen.' };
   say('Help — ' + (names[tab] || tab));
 }
 
