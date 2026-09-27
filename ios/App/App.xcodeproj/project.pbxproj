@@ -18,7 +18,26 @@
 		FE9E789837FC1A660FD6EAC6 /* sfx-unlock.wav in Resources */ = {isa = PBXBuildFile; fileRef = 39DDD28DEF9D59FC8E924074 /* sfx-unlock.wav */; };
 		165C94095B293494158A0933 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5082947E97F714ABBA04143B /* GoogleService-Info.plist */; };
 		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
+		6720E992B8D1799825F36B95 /* DDLiveActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A0358590CE7BB382C3D8BB /* DDLiveActivityAttributes.swift */; };
+		C7356984D95A8B3A82E53C78 /* LiveActivityPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1C1C67D2920C2229A7692B /* LiveActivityPlugin.swift */; };
+		9FF865C2682637C56200493D /* DDLiveActivityBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17BCFFEB01F3BE313526D0AE /* DDLiveActivityBundle.swift */; };
+		495B7A4ECAFEF082FA4F1ED6 /* DDLiveActivityWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CBD9919AA4D99F2493EA48 /* DDLiveActivityWidget.swift */; };
+		06E0DACC38F910163ECC53B2 /* DDLiveActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A0358590CE7BB382C3D8BB /* DDLiveActivityAttributes.swift */; };
+		8DFA0DF984BF5B650FADD5D1 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F013B7D8EB5C732DC77F042B /* WidgetKit.framework */; };
+		285311574C9950DF4F6B1E4F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7421A0885E4F8EB5C2E9940 /* SwiftUI.framework */; };
+		CCF0C4F096F5B6B278F77C31 /* ActivityKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1919E1FD56004145F0584F3B /* ActivityKit.framework */; };
+		E2F9727D5E8C2DD3CACE7740 /* DDLiveActivity.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FDBCA1DD5D18734C341E8B20 /* DDLiveActivity.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A3D599E876E6C09085A223B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B9F7AC1B7F6B6EEC28842881;
+			remoteInfo = DDLiveActivity;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
@@ -37,7 +56,30 @@
 		AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF51FD2D460BCFE21FA515B2 /* Pods-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.release.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.release.xcconfig"; sourceTree = "<group>"; };
 		FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
+		02A0358590CE7BB382C3D8BB /* DDLiveActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDLiveActivityAttributes.swift; sourceTree = "<group>"; };
+		AA1C1C67D2920C2229A7692B /* LiveActivityPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityPlugin.swift; sourceTree = "<group>"; };
+		17BCFFEB01F3BE313526D0AE /* DDLiveActivityBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDLiveActivityBundle.swift; sourceTree = "<group>"; };
+		C2CBD9919AA4D99F2493EA48 /* DDLiveActivityWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DDLiveActivityWidget.swift; sourceTree = "<group>"; };
+		3FCE72B9CCB65D10036602AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F013B7D8EB5C732DC77F042B /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		A7421A0885E4F8EB5C2E9940 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		1919E1FD56004145F0584F3B /* ActivityKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ActivityKit.framework; path = System/Library/Frameworks/ActivityKit.framework; sourceTree = SDKROOT; };
+		FDBCA1DD5D18734C341E8B20 /* DDLiveActivity.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DDLiveActivity.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6D92F30E881DD0245D667E58 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E2F9727D5E8C2DD3CACE7740 /* DDLiveActivity.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		504EC3011FED79650016851F /* Frameworks */ = {
@@ -48,6 +90,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		25FD7E912E9CD71A0C88520C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DFA0DF984BF5B650FADD5D1 /* WidgetKit.framework in Frameworks */,
+				285311574C9950DF4F6B1E4F /* SwiftUI.framework in Frameworks */,
+				CCF0C4F096F5B6B278F77C31 /* ActivityKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -55,6 +107,9 @@
 			isa = PBXGroup;
 			children = (
 				AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */,
+				F013B7D8EB5C732DC77F042B /* WidgetKit.framework */,
+				A7421A0885E4F8EB5C2E9940 /* SwiftUI.framework */,
+				1919E1FD56004145F0584F3B /* ActivityKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -63,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				504EC3061FED79650016851F /* App */,
+				678E4EDD33A6CB9566D0A675 /* DDLiveActivity */,
 				504EC3051FED79650016851F /* Products */,
 				7F8756D8B27F46E3366F6CEA /* Pods */,
 				27E2DDA53C4D2A4D1A88CE4A /* Frameworks */,
@@ -73,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				504EC3041FED79650016851F /* App.app */,
+				FDBCA1DD5D18734C341E8B20 /* DDLiveActivity.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,6 +140,8 @@
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				57C66D9919FC0D5454536BD4 /* AudioSessionPlugin.swift */,
+				02A0358590CE7BB382C3D8BB /* DDLiveActivityAttributes.swift */,
+				AA1C1C67D2920C2229A7692B /* LiveActivityPlugin.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -94,6 +153,16 @@
 				D42B237DA858E76A95278B39 /* App.entitlements */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		678E4EDD33A6CB9566D0A675 /* DDLiveActivity */ = {
+			isa = PBXGroup;
+			children = (
+				17BCFFEB01F3BE313526D0AE /* DDLiveActivityBundle.swift */,
+				C2CBD9919AA4D99F2493EA48 /* DDLiveActivityWidget.swift */,
+				3FCE72B9CCB65D10036602AA /* Info.plist */,
+			);
+			path = DDLiveActivity;
 			sourceTree = "<group>";
 		};
 		7F8756D8B27F46E3366F6CEA /* Pods */ = {
@@ -116,16 +185,35 @@
 				504EC3001FED79650016851F /* Sources */,
 				504EC3011FED79650016851F /* Frameworks */,
 				504EC3021FED79650016851F /* Resources */,
+				6D92F30E881DD0245D667E58 /* Embed Foundation Extensions */,
 				9592DBEFFC6D2A0C8D5DEB22 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				FA9FA9F622513CB5FA8B611A /* PBXTargetDependency */,
 			);
 			name = App;
 			productName = App;
 			productReference = 504EC3041FED79650016851F /* App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		B9F7AC1B7F6B6EEC28842881 /* DDLiveActivity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9893E634E28FC4DD3DD026A2 /* Build configuration list for PBXNativeTarget "DDLiveActivity" */;
+			buildPhases = (
+				D7FC6DFBBA3DBF24100A20DF /* Sources */,
+				25FD7E912E9CD71A0C88520C /* Frameworks */,
+				EFB1B168859B943E72580991 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DDLiveActivity;
+			productName = DDLiveActivity;
+			productReference = FDBCA1DD5D18734C341E8B20 /* DDLiveActivity.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -139,6 +227,10 @@
 					504EC3031FED79650016851F = {
 						CreatedOnToolsVersion = 9.2;
 						LastSwiftMigration = 1100;
+						ProvisioningStyle = Automatic;
+					};
+					B9F7AC1B7F6B6EEC28842881 = {
+						CreatedOnToolsVersion = 15.0;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -159,6 +251,7 @@
 			projectRoot = "";
 			targets = (
 				504EC3031FED79650016851F /* App */,
+				B9F7AC1B7F6B6EEC28842881 /* DDLiveActivity */,
 			);
 		};
 /* End PBXProject section */
@@ -176,6 +269,13 @@
 				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
 				FE9E789837FC1A660FD6EAC6 /* sfx-unlock.wav in Resources */,
 				165C94095B293494158A0933 /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EFB1B168859B943E72580991 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,10 +324,30 @@
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				B3D46B72CD6EAB9F6F1E077F /* AudioSessionPlugin.swift in Sources */,
+				6720E992B8D1799825F36B95 /* DDLiveActivityAttributes.swift in Sources */,
+				C7356984D95A8B3A82E53C78 /* LiveActivityPlugin.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D7FC6DFBBA3DBF24100A20DF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9FF865C2682637C56200493D /* DDLiveActivityBundle.swift in Sources */,
+				495B7A4ECAFEF082FA4F1ED6 /* DDLiveActivityWidget.swift in Sources */,
+				06E0DACC38F910163ECC53B2 /* DDLiveActivityAttributes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FA9FA9F622513CB5FA8B611A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B9F7AC1B7F6B6EEC28842881 /* DDLiveActivity */;
+			targetProxy = A3D599E876E6C09085A223B1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		504EC30B1FED79650016851F /* Main.storyboard */ = {
@@ -397,6 +517,50 @@
 			};
 			name = Release;
 		};
+		89B7CA4A1603976325B5E502 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DDLiveActivity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DDLiveActivity;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dungeon.descent.DDLiveActivity;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BE3C24A4581785870F0747D6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DDLiveActivity/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DDLiveActivity;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dungeon.descent.DDLiveActivity;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -414,6 +578,15 @@
 			buildConfigurations = (
 				504EC3171FED79650016851F /* Debug */,
 				504EC3181FED79650016851F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9893E634E28FC4DD3DD026A2 /* Build configuration list for PBXNativeTarget "DDLiveActivity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				89B7CA4A1603976325B5E502 /* Debug */,
+				BE3C24A4581785870F0747D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

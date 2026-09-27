@@ -62,5 +62,7 @@
 	<string>Dungeon Descent uses speech recognition so you can play hands-free — say things like "attack", "defend", or "north" instead of tapping buttons.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Dungeon Descent needs the microphone to hear your voice commands during combat and exploration.</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 </dict>
 </plist>
