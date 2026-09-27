@@ -11527,61 +11527,6 @@ function chooseSubclass(sub) {
   saveProgress();
 }
 
-// Apply passive subclass effects in combat
-function applySubclassPassives(context) {
-  if (!DS._subclass) return 0;
-  var bonus = 0;
-
-  // Gladiator — crits deal 2.5x
-  if (DS._gladiatorCrit && context === 'crit-mult') return 2.5;
-
-  // Iron Fist — +20% damage when no weapon
-  if (DS._ironFist && context === 'player-atk' && !DS.equippedWeapon) {
-    bonus = Math.round(bonus * 0.20);
-  }
-
-  // Avenger — double damage at 25% HP
-  if (DS._avenger && context === 'player-atk' && DS.hp <= DS.maxHp * 0.25) {
-    return 2.0; // multiplier
-  }
-
-  // High Priest — 20% damage reduction
-  if (DS._highPriest && context === 'damage-taken') {
-    return 0.80; // multiplier
-  }
-
-  // Ironclad — max 12 damage
-  if (DS._ironclad && context === 'damage-cap') return 12;
-
-  // Wildfire — 25% chance double damage
-  if (DS._wildfire && context === 'player-atk' && Math.random() < 0.25) {
-    addLog('🔥 Wild Surge! Double damage!');
-    return 2.0;
-  }
-
-  // Vampire Lord — heal 20% of damage dealt
-  if (DS._vampireLord && context === 'on-deal') return 0.20;
-
-  // Smiter — every 3rd attack holy damage
-  if (DS._smiter && context === 'player-atk') {
-    DS._smiterCount = (DS._smiterCount || 0) + 1;
-    if (DS._smiterCount >= 3) {
-      DS._smiterCount = 0;
-      var smiteDmg = DS.level * 3;
-      addLog('⚡ Holy Smite! +' + smiteDmg + ' holy damage!');
-      return smiteDmg; // bonus damage added
-    }
-  }
-
-  // Trickster Bard — 25% miss chance
-  if (DS._tricksterBard && context === 'enemy-hit' && Math.random() < 0.25) {
-    addLog('🎭 Distracted! Enemy attack misses!');
-    return true; // true = miss
-  }
-
-  return bonus;
-}
-
 // ── ABYSSAL DEEP — UNLOCK & NAVIGATION ──────────────────────────────────────
 
 function isAbyssalUnlocked() {
@@ -15663,6 +15608,7 @@ function advanceFloor() {
   if (isNaN(DS.floor) || DS.floor === undefined || DS.floor === null) DS.floor = 1;
   DS.floor++;
   DS._blackBoxThisFloor = false;
+  DS._weaponUndyingUsedFloor = false;
   DS._killStreak = 0; // reset kill streak on new floor
   // Reset Shadow World per-run state on floor 1
   if (DS.floor === 1 && DS.dungeon === 'The Shadow World') {
@@ -15987,6 +15933,8 @@ function searchRoom() {
 
     // Enchanter drop — 2.5% chance
     tryDropEnchanter();
+    // Spirit Orb drop — 5% chance to earn a new spirit companion
+    checkSpiritOrbDrop();
     updateTopBar(); saveProgress();
   } else if (r < findChance + 0.20) {
     var hasTrapSense = DS.scholarProf || (DS.activeSpirit && DS.activeSpirit.id === 'frost-sprite');
@@ -16038,6 +15986,7 @@ function startCombat(isBoss) {
   if (isBoss) DS._eliteKilledFloor10 = false;
   try { updateCombatSpellBtn(); } catch(e2) {}
   if (DS.cls === 'Ranger') DS.rangerFirstHit = true;
+  DS._weaponFirstHit = true;
   if (DS._huntersMark) DS._huntersMarkReady = true;
   if (DS.enemy) DS.enemy = applyTierScaling(DS.enemy);
 
@@ -16793,8 +16742,12 @@ function doFight(action) {
 
   if (action === 'attack') {
     if (DS.assassinFirstBlood) { DS.assassinFirstBlood = false; DS.markedKill = true; }
+    // Weapon rarity effect — resolved once per attack, checked by id below
+    var _wre = DS.equippedWeapon && DS.equippedWeapon.rarityEffect;
+    // Keen — +5% critical hit chance
+    var _keenBonus = _wre === 'keen' ? 0.05 : 0;
     // The Unlucky One — no crits, no luck
-    var crit = !DS._unluckyOne && (Math.random() < (0.10 + (DS.critBonus||0)) || DS.markedKill);
+    var crit = !DS._unluckyOne && (Math.random() < (0.10 + (DS.critBonus||0) + _keenBonus) || DS.markedKill);
     if (DS.markedKill) { DS.markedKill = false; addLog('Marked Kill activates — guaranteed critical!'); }
     // Transcendence
     var transcMult = (DS.transcendence && DS.transcendence > 0) ? 2 : 1;
@@ -16802,11 +16755,33 @@ function doFight(action) {
     // Sacred blade
     var swordMult = (DS.sacredBlade && DS.sacredBlade > 0) ? 2 : 1;
     if (DS.sacredBlade && DS.sacredBlade > 0) DS.sacredBlade--;
-    playerDmg = Math.round((crit ? Math.round(baseAtk * 1.8) : baseAtk) * transcMult * swordMult);
+    playerDmg = Math.round((crit ? Math.round(baseAtk * (DS._gladiatorCrit ? 2.5 : 1.8)) : baseAtk) * transcMult * swordMult);
     if (DS.berserkerTrait && ACCESS.classTraits && DS.hp < DS.maxHp * 0.5) {
       playerDmg = Math.round(playerDmg * (1 + (1 - DS.hp/DS.maxHp) * 0.5));
     }
     if (DS.dragonbornBonus && ACCESS.classTraits) playerDmg = Math.round(playerDmg * DS.dragonbornBonus);
+    // Smiter subclass — every 3rd attack deals bonus holy damage equal to level x 3
+    if (DS._smiter) {
+      DS._smiterCount = (DS._smiterCount || 0) + 1;
+      if (DS._smiterCount >= 3) {
+        DS._smiterCount = 0;
+        var smiteDmg = DS.level * 3;
+        playerDmg += smiteDmg;
+        addLog('⚡ Holy Smite! +' + smiteDmg + ' holy damage!');
+      }
+    }
+    // Swift weapon — +20% damage on the first attack of combat
+    if (_wre === 'swift' && DS._weaponFirstHit) {
+      playerDmg = Math.round(playerDmg * 1.20);
+      addLog('⚔ Swift blade strikes first — +20% opening damage!');
+    }
+    DS._weaponFirstHit = false;
+    // Cursed weapon — +40% damage (paid for with HP drain, see doFight's per-round tick)
+    if (_wre === 'cursed') playerDmg = Math.round(playerDmg * 1.40);
+    // Apocalypse weapon — +60% damage on every attack
+    if (_wre === 'apocalypse') playerDmg = Math.round(playerDmg * 1.60);
+    // Godslayer weapon — double damage against bosses
+    if (_wre === 'godslayer' && e.isBoss) playerDmg = Math.round(playerDmg * 2);
     // Ranger — bonus damage on first hit of combat
     if (DS.cls === 'Ranger' && ACCESS.classTraits && DS.rangerFirstHit) {
       playerDmg = Math.round(playerDmg * 1.75);
@@ -16883,6 +16858,24 @@ function doFight(action) {
       addLog('⚔ Serrated blade strikes again for ' + bonusHit + ' damage!');
       updateEnemyBar();
     }
+    // Vampiric weapon — heal 3 HP on every hit
+    if (_wre === 'vampiric') {
+      DS.hp = Math.min(DS.maxHp, DS.hp + 3);
+      addLog('🩸 Vampiric blade drains 3 HP.');
+      updatePlayerBar();
+    }
+    // Lifesteal weapon — heal 15% of damage dealt
+    if (_wre === 'lifesteal') {
+      var lsHeal = Math.max(1, Math.round(playerDmg * 0.15));
+      DS.hp = Math.min(DS.maxHp, DS.hp + lsHeal);
+      addLog('🩸 Lifesteal! +' + lsHeal + ' HP.');
+      updatePlayerBar();
+    }
+    // Thundering weapon — 25% chance to stun the enemy on hit
+    if (_wre === 'thundering' && e.hp > 0 && Math.random() < 0.25) {
+      e._stunned = true;
+      addLog('⚡ Thundering strike stuns ' + e.name + '!');
+    }
     // Check if player attack killed enemy already
     if (e.hp <= 0) { if(e.isMedusa){setTimeout(function(){showMedusaChoice();},300);return;} setTimeout(function(){enemyDead();},300); return; }
     // Thunderfist stun
@@ -16907,7 +16900,9 @@ function doFight(action) {
     }
 
   } else if (action === 'heavy') {
-    if (Math.random() < 0.30) {
+    // Weighted weapon — heavy strikes never miss
+    var _heavyWre = DS.equippedWeapon && DS.equippedWeapon.rarityEffect;
+    if (_heavyWre !== 'weighted' && Math.random() < 0.30) {
       sfx('sfx-heavy-miss');
       vibe(VIBE.miss);
       addLog('Your heavy strike misses! The enemy sidesteps.');
@@ -17075,6 +17070,8 @@ function doFight(action) {
     if (DS.enemyFearTurns && DS.enemyFearTurns > 0) { rawDmg = Math.round(rawDmg * 0.8); DS.enemyFearTurns--; addLog('😨 Enemy is afraid — damage reduced 20%. ' + DS.enemyFearTurns + ' turn' + (DS.enemyFearTurns !== 1 ? 's' : '') + ' left.'); }
     // Hollow Matron — all enemies deal +10% damage while she lives
     if (DS.dungeon === 'The Hollow' && e && e.hollowMatron) rawDmg = Math.round(rawDmg * 1.1);
+    // The Shade — 30% chance to strike three times
+    if (e && e.isShadeElite) rawDmg = applyShadeSpecialHit(rawDmg);
     // Abyssal Deep enemy mechanics
     if (DS.dungeon === 'The Abyssal Deep') { try { applyAbyssalEnemyMechanics(e, 'defend'); } catch(err){} }
     // Abyssal weather enemy mult
@@ -17099,6 +17096,12 @@ function doFight(action) {
     if (DS._defBoostTurns && DS._defBoostTurns > 0) {
       DS._defBoostTurns--;
       if (DS._defBoostTurns <= 0) { DS.defBonus = Math.max(0, (DS.defBonus||0) - (DS._lastDefBoost||0)); DS._lastDefBoost = 0; addLog('DEF boost expired.'); }
+    }
+    // Cursed weapon — the +40% damage bonus (applied at hit time) costs 3 HP every round
+    if (DS.equippedWeapon && DS.equippedWeapon.rarityEffect === 'cursed') {
+      DS.hp = Math.max(1, DS.hp - 3);
+      addLog('💀 The cursed blade drains 3 HP from you.');
+      updatePlayerBar();
     }
     // Void Moth — 15% chance to negate damage entirely
     if (DS.activeSpirit && DS.activeSpirit.id === 'void-moth' && DS.level >= 5 && Math.random() < 0.15) {
@@ -17230,6 +17233,12 @@ function sanitizeGold() {
 function enemyDead() {
   var e = DS.enemy;
   try { resetGunState(); } catch(e2) {}
+  // Soulbound weapon — restore 5 SP on every kill
+  if (DS.equippedWeapon && DS.equippedWeapon.rarityEffect === 'soulbound' && DS.sp !== undefined) {
+    DS.sp = Math.min(DS.maxSp, (DS.sp || 0) + 5);
+    addLog('💠 Soulbound blade restores 5 SP.');
+    updateXPBar();
+  }
 
   // Time Descender — every kill path (attack, heavy, skills, DoT ticks, guns,
   // scrolls, potions) ends up here since enemyDead() reads DS.enemy directly,
@@ -17451,7 +17460,7 @@ function enemyDead() {
   var hw = getHollowWeather();
   if (hw && hw.goldMult && DS.dungeon === 'The Hollow') g = Math.round(g * hw.goldMult);
   // Vampire Lord — heal from kills
-  if (DS._vampireLord) { var vlHeal = Math.max(1, Math.floor(g * 0.15)); DS.hp = Math.min(DS.maxHp, DS.hp + vlHeal); updatePlayerBar(); }
+  if (DS._vampireLord) { var vlHeal = Math.max(1, Math.floor(g * 0.20)); DS.hp = Math.min(DS.maxHp, DS.hp + vlHeal); updatePlayerBar(); }
   // Dungeon weather gold mult
   var _dwGold = getDungeonWeatherGoldMult();
   if (_dwGold !== 1 && DS.dungeon !== 'The Hollow') g = Math.round(g * _dwGold);
@@ -17673,6 +17682,16 @@ function handleDeath() {
     updatePlayerBar();
     addLog('💜 Undying! Death refused you — you survive at 1 HP!');
     say('Undying passive! You survive death at 1 HP. This can only happen once.');
+    setCombatBtns(true);
+    return;
+  }
+  // Undying weapon rarity effect — survive a killing blow at 1 HP, once per floor
+  if (DS.equippedWeapon && DS.equippedWeapon.rarityEffect === 'undying' && !DS._weaponUndyingUsedFloor) {
+    DS._weaponUndyingUsedFloor = true;
+    DS.hp = 1;
+    updatePlayerBar();
+    addLog('💜 The Undying blade refuses death — you survive at 1 HP!');
+    say('Undying weapon activates! Death refused. You survive at 1 HP.');
     setCombatBtns(true);
     return;
   }
@@ -18840,7 +18859,7 @@ function renderInv() {
     var item = entry.item;
     var count = entry.count;
     var i = entry.indices[0]; // index of first instance for use/drop
-    var isUsable = item.type === 'potion' || item.type === 'elixir' || item.type === 'enchanter' || item.type === 'music-player' || item.type === 'luck-potion' || item.type === 'fire-potion' || item.type === 'curse-potion' || item.type === 'swift-potion' || item.type === 'def-potion' || item.type === 'atk-potion' || item.type === 'cursed' || item.type === 'rune' || item.type === 'scroll' || item.type === 'skill-orb' || item.type === 'soul-trap' || item.type === 'sp-potion' || item.type === 'gamblers-spirit' || item.type === 'mirror-flask' || item.type === 'phantom-potion' || item.type === 'gravity-tonic' || item.type === 'leech-brew' || item.type === 'rage-tonic' || item.type === 'fog-flask' || item.type === 'time-potion' || item.type === 'corruption-flask' || item.type === 'love-potion' || item.type === 'consumable';
+    var isUsable = item.type === 'potion' || item.type === 'elixir' || item.type === 'enchanter' || item.type === 'music-player' || item.type === 'luck-potion' || item.type === 'fire-potion' || item.type === 'curse-potion' || item.type === 'swift-potion' || item.type === 'def-potion' || item.type === 'atk-potion' || item.type === 'cursed' || item.type === 'rune' || item.type === 'scroll' || item.type === 'skill-orb' || item.type === 'soul-trap' || item.type === 'sp-potion' || item.type === 'gamblers-spirit' || item.type === 'mirror-flask' || item.type === 'phantom-potion' || item.type === 'gravity-tonic' || item.type === 'leech-brew' || item.type === 'rage-tonic' || item.type === 'fog-flask' || item.type === 'time-potion' || item.type === 'corruption-flask' || item.type === 'love-potion' || item.type === 'consumable' || item.isWhisperMusicBox;
     var isRelic = item.type === 'relic';
     var isEquippable = item.isEquippable && (item.type === 'weapon' || item.type === 'armor');
     var row = document.createElement('div');
@@ -19004,6 +19023,22 @@ function useItem(i) {
     addLog('🪞 Mirror Fragment shattered — all ' + cleared + ' corruption stack' + (cleared > 1 ? 's' : '') + ' purged instantly!');
     say('Mirror Fragment used. All corruption cleared. The shard is gone.');
     setEvent('good', '🪞 The Mirror Fragment shatters in your hand. The corruption inside you fractures with it. ' + cleared + ' stack' + (cleared > 1 ? 's' : '') + ' purged.');
+    return;
+  }
+  if (item.isWhisperMusicBox) {
+    DS.inventory.splice(i, 1);
+    renderInv(); saveProgress();
+    playTrack('music-box');
+    sfx('sfx-unlock');
+    addLog('🎵 You open the Music Box. The melody plays. The corruption recedes.');
+    say('Music Box used. Corruption cleared.');
+    setEvent('good', '🎵 The melody plays. The corruption inside you fades to nothing.');
+    _corruption = 0;
+    updateCorruptionBar();
+    setTimeout(function() {
+      var mbTrack = AUD.tracks['music-box'];
+      if (mbTrack) { try { mbTrack.pause(); mbTrack.currentTime = 0; } catch(e) {} }
+    }, 5000);
     return;
   }
   if (item.type === 'elixir') {
@@ -20977,7 +21012,7 @@ function raidFight(action){
 
   if(action==='attack'){
     var crit=Math.random()<(0.10+(DS.critBonus||0));
-    pdmg=crit?Math.round(baseAtk*1.8):baseAtk;
+    pdmg=crit?Math.round(baseAtk*(DS._gladiatorCrit?2.5:1.8)):baseAtk;
     sfx(crit?'sfx-crit':'sfx-attack');
     rLog(crit?t('CRITICAL HIT on ')+e.name+t(' for ')+pdmg+'!':t('You attack ')+e.name+t(' for ')+pdmg+'.');
   } else if(action==='heavy'){
@@ -23375,7 +23410,8 @@ function useSkill(idx) {
     say('Your skills are silenced!'); return; 
   }
   var _drownedTomeDisc = DS.inventory ? DS.inventory.reduce(function(sum, i){ return sum + (i.spellDiscount || 0); }, 0) : 0;
-  var actualCost = (DS.unlimitedPower && DS.unlimitedPower > 0) ? 0 : Math.max(0, skill.spCost - (DS.tinkererDiscount||0) - traitDisc - gnomeDisc - _weatherSpDiscount - _abyssalSpDiscount - (DS._soulSurge ? 1 : 0) - _drownedTomeDisc);
+  var _apocalypseWeapon = DS.equippedWeapon && DS.equippedWeapon.rarityEffect === 'apocalypse';
+  var actualCost = ((DS.unlimitedPower && DS.unlimitedPower > 0) || _apocalypseWeapon) ? 0 : Math.max(0, skill.spCost - (DS.tinkererDiscount||0) - traitDisc - gnomeDisc - _weatherSpDiscount - _abyssalSpDiscount - (DS._soulSurge ? 1 : 0) - _drownedTomeDisc);
   if (DS.unlimitedPower && DS.unlimitedPower > 0) DS.unlimitedPower--;
   DS.sp -= actualCost;
   updateXPBar();
@@ -37119,7 +37155,7 @@ function brFight(action) {
   if(action==='attack'){
     var crit=Math.random()<(0.10+(DS.critBonus||0))||BR.markedKill;
     if(BR.markedKill){BR.markedKill=false; brLog('Marked Kill activates!');}
-    pdmg=crit?Math.round(baseAtk*1.8):baseAtk;
+    pdmg=crit?Math.round(baseAtk*(DS._gladiatorCrit?2.5:1.8)):baseAtk;
     sfx(crit?'sfx-crit':'sfx-attack');
     brLog(crit?t('CRITICAL HIT for ')+pdmg+'!':t('You attack for ')+pdmg+'.');
   } else if(action==='heavy'){
@@ -56126,25 +56162,6 @@ function triggerCorruptionDeath() {
   setTimeout(function(){ handleDeath(); }, 800);
 }
 
-function useWhisperMusicBox() {
-  var mbIdx = -1;
-  for (var i=0;i<DS.inventory.length;i++) { if (DS.inventory[i].isWhisperMusicBox) { mbIdx = i; break; } }
-  if (mbIdx === -1) { say('No Music Box in inventory.'); return; }
-  DS.inventory.splice(mbIdx, 1);
-  renderInv();
-  playTrack('music-box');
-  addLog('You open the Music Box. The melody plays. The corruption recedes.');
-  say('Music Box used. Corruption cleared.');
-  _corruption = 0;
-  updateCorruptionBar();
-  sfx('sfx-unlock');
-  setTimeout(function() {
-    var t = AUD.tracks['music-box'];
-    if (t) { try { t.pause(); t.currentTime = 0; } catch(e){} }
-  }, 5000);
-}
-
-
 // ── FUNCTION ALIASES & STUBS ──
 // levelUp is an alias for checkLevelUp
 function levelUp() {
@@ -58879,7 +58896,7 @@ function executeMultiAttack(targetIdx) {
   }
 
   var crit = !missed && Math.random() < 0.12;
-  if (crit) playerDmg = Math.round(playerDmg * 1.8);
+  if (crit) playerDmg = Math.round(playerDmg * (DS._gladiatorCrit ? 2.5 : 1.8));
 
   if (!missed) {
     // Apply mechanic flags
@@ -60029,24 +60046,6 @@ function applyRarityToWeapon(weapon, rarity) {
   return w;
 }
 
-function getWeaponRarityDisplay(weapon) {
-  if (!weapon || !weapon.rarity || weapon.rarity === 'common') return '';
-  return weapon.raritySymbol + ' ';
-}
-
-function applyRarityEffectInCombat(weapon, event) {
-  if (!weapon || !weapon.rarityEffect) return 0;
-  var e = weapon.rarityEffect;
-  if (event === 'onHit') {
-    if (e === 'vampiric') { DS.hp = Math.min(DS.maxHp, DS.hp + 3); return 0; }
-    if (e === 'soulbound' && DS.sp !== undefined) { DS.sp = Math.min(DS.maxSp || 100, (DS.sp || 0) + 5); return 0; }
-    if (e === 'cursed') { DS.hp = Math.max(1, DS.hp - 3); return 0; }
-  }
-  if (event === 'onKill') {
-    if (e === 'soulbound' && DS.sp !== undefined) { DS.sp = Math.min(DS.maxSp || 100, (DS.sp || 0) + 5); }
-  }
-  return 0;
-}
 // ── END WEAPON RARITY SYSTEM ──
 
 var BLACKSMITH_WEAPONS = [
