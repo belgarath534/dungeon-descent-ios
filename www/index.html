@@ -5560,7 +5560,7 @@ var DDStore = (function() {
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">How do I start?</div>
-        <div class="help-body">From the main menu press Play. If you have no characters, press New Character. You will go through 7 creation steps — Class, Race, Profession, Name, Dungeon, Difficulty, and an optional Backstory. Then you descend. The dungeon announces every room, every enemy, every event automatically.</div>
+        <div class="help-body">From the main menu press Play. If you have no characters, press New Character. You will go through 12 creation steps — Class, Race, Profession, Name, Dungeon, Difficulty, Run Mode (Classic or Legacy), Spirit Companion, then four optional steps: Corruption Mode, Hunter Mode, Your Guide (name your companion), and Your Origin (backstory). Then you descend. The dungeon announces every room, every enemy, every event automatically.</div>
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">How do I win?</div>
@@ -5574,12 +5574,20 @@ var DDStore = (function() {
         <div class="help-title" role="heading" aria-level="2">What is a run?</div>
         <div class="help-body">A run is one complete attempt at a dungeon from floor 1 to floor 10. Each run your XP, gold, and skills reset. Your character persists between runs — their completion history, earned spirits, and journal entries carry over forever.</div>
       </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">🎲 Run Modifiers</div>
+        <div class="help-body">Every dungeon run has a chance to roll a random modifier before you descend — one of 8: Burning Dungeon (fire damage, +50% gold), Frozen Floors (enemies hit 20% softer, fewer rooms), The Watching (no event rooms, double XP), Death March (enemies 25% stronger, boss drops a legendary item), Gold Curse (triple gold, potions cost double), Phantom Run (invisible until you attack, guaranteed crit on your first strike), Berserk Mode (+40% damage, can't defend), and Blessed Run (start with a full inventory of potions and 100 bonus gold). Turn modifiers off entirely in Settings under Gameplay.</div>
+      </div>
+      <div class="help-entry" tabindex="0">
+        <div class="help-title" role="heading" aria-level="2">⏸ Pause Menu</div>
+        <div class="help-body">Press Backspace on desktop or tap the ⏸ button in the dungeon top bar to pause. Shows your character name, current floor, dungeon, and HP, with options for Resume, Save, Settings, Quests, and Main Menu — all keyboard and screen reader accessible. You can't pause mid-combat; your screen reader announces why if you try.</div>
+      </div>
     </div>
 
     <!-- CHARACTERS TAB -->
     <div id="help-characters" class="help-section" style="display:none;">
       <div class="help-entry" tabindex="0">
-        <div class="help-title" role="heading" aria-level="2">Classes (18 total)</div>
+        <div class="help-title" role="heading" aria-level="2">Classes (24 total)</div>
         <div class="help-body">
           <strong>Warrior</strong> — high HP, reliable damage, defensive skills. Best for beginners.<br>
           <strong>Monk</strong> — fast attacks, SP regeneration, zen-based skills.<br>
@@ -5598,26 +5606,33 @@ var DDStore = (function() {
           <strong>Ranger</strong> — swift hunter. First hit every combat deals 75% bonus damage. High flee chance.<br>
           <strong>Sentinel</strong> — unbreakable wall. Highest HP of any class. Takes 25% less damage from all sources.<br>
           <strong>Cleric</strong> — sacred healer, triple potion strength, holy relics.<br>
-          <strong>Wizard</strong> — arcane scholar, highest SP, lowest HP. Reveals enemy stats at combat start. 15 unique spells including Time Warp, Meteor, and Arcane Singularity.
+          <strong>Wizard</strong> — arcane scholar, highest SP, lowest HP. Reveals enemy stats at combat start. 15 unique spells including Time Warp, Meteor, and Arcane Singularity.<br>
+          <strong>Elementalist</strong> — elemental master. Deals bonus damage to enemies weak to your chosen element.<br>
+          <strong>VoidWalker</strong> — void entity. Phases through attacks and strikes from the void.<br>
+          <strong>ShadowMage</strong> — shadow caster. Magic damage drawn from the darkness.<br>
+          <strong>TimeMage</strong> — temporal mage. Manipulates time in combat.<br>
+          <strong>Shaman</strong> — spirit caller. Summons ancestral spirits in combat.<br>
+          <strong>Arcanist</strong> — pure arcane power. Highest magic damage in the game.
         </div>
       </div>
       <div class="help-entry" tabindex="0">
-        <div class="help-title" role="heading" aria-level="2">Races (13 total — including Vampire, Goblin, Angel, Demon, Golem, Gnome, Merfolk, Dragonborn)</div>
+        <div class="help-title" role="heading" aria-level="2">Races (15 total)</div>
         <div class="help-body">
-          <strong>Human</strong> — balanced stats, no weaknesses.<br>
-          <strong>Orc</strong> — highest attack in game, lower defense.<br>
-          <strong>Elf</strong> — high speed and crit chance.<br>
-          <strong>Dwarf</strong> — high defense, bonus HP, shop discounts.<br>
-          <strong>Undead</strong> — immune to poison, drains life from enemies.<br>
-          <strong>Fae</strong> — double gold find, bonus to flee attempts.<br>
-          <strong>Demon</strong> — strong attack and defense, takes more holy damage.<br>
-          <strong>Vampire</strong> — heals on every kill, weakened in light areas.<br>
-          <strong>Goblin</strong> — starts with extra gold, bonus gold from kills.<br>
-          <strong>Angel</strong> — starts with an extra life, bonus holy damage.<br>
-          <strong>Golem</strong> — very high HP and defense, lower attack speed.<br>
-          <strong>Gnome</strong> — plus INT and LCK, plus 10 max SP, all skills cost 2 less SP every combat.<br>
-          <strong>Merfolk</strong> — potions heal 20% more, bonus HP and ATK in the Sunken Archives.<br>
-          <strong>Dragonborn</strong> — 10% chance to deal bonus burn damage each hit, scales with floor depth.
+          <strong>Human</strong> — adaptable, a small bonus to every stat.<br>
+          <strong>Elf</strong> — graceful, bonus agility and intelligence.<br>
+          <strong>Dwarf</strong> — unyielding, bonus strength and defense.<br>
+          <strong>Orc</strong> — savage, a massive strength bonus but reduced defense.<br>
+          <strong>Tiefling</strong> — infernal, bonus luck and intelligence.<br>
+          <strong>Shade</strong> — ethereal, bonus agility and luck.<br>
+          <strong>Vampire</strong> — drains 5 HP per kill, but starts with 20% less max HP.<br>
+          <strong>Goblin</strong> — +25% gold from everything, starts with bonus gold.<br>
+          <strong>Angel</strong> — one extra life, heals 15 HP on every level up.<br>
+          <strong>Demon</strong> — deals and takes 15% more damage.<br>
+          <strong>Golem</strong> — +5 defense, immune to poison and freeze.<br>
+          <strong>Halfling</strong> — lucky, big luck bonus but reduced strength, 15% dodge chance.<br>
+          <strong>Dragonborn</strong> — 10% chance to deal bonus burn damage each hit, scales with floor depth.<br>
+          <strong>Gnome</strong> — arcane trickster, plus INT and LCK, all skills cost 2 less SP every combat.<br>
+          <strong>Merfolk</strong> — aquatic, plus AGI, potions heal 20% more, bonus HP and ATK in the Sunken Archives.
         </div>
       </div>
       <div class="help-entry" tabindex="0">
@@ -5637,7 +5652,7 @@ var DDStore = (function() {
         </div>
       </div>
       <div class="help-entry" tabindex="0">
-        <div class="help-title" role="heading" aria-level="2">Backstories (optional, Step 10)</div>
+        <div class="help-title" role="heading" aria-level="2">Backstories (optional, Step 12)</div>
         <div class="help-body">At the end of character creation you can choose a backstory. Each one grants a small bonus and writes your first journal entry automatically. Options include Exiled Noble (plus 15 gold), Cursed Wanderer (plus 10 max HP), Former Soldier (plus 2 defense), Lost Scholar (plus 20 percent XP), Debt Collector (plus 25 gold), True Believer (plus 1 extra life), Nobody Special (no bonus — just honest), and Last Hope (plus 5 SP per level up). Backstory is completely optional — press Skip to go straight into the dungeon.</div>
       </div>
       <div class="help-entry" tabindex="0">
@@ -5646,7 +5661,7 @@ var DDStore = (function() {
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">Spirit Companions</div>
-        <div class="help-body">Every character bonds with a spirit companion before their first run. Spirits give passive bonuses every run and deal bonus damage in combat. You earn rare spirits by defeating bosses and special enemies. Spirits are permanent — they stay with your character forever. You can change your active spirit between runs from the character screen.</div>
+        <div class="help-body">Every character bonds with a spirit companion before their first run. Spirits give passive bonuses every run and deal bonus damage in combat. You earn rare spirits by defeating bosses and special enemies. Spirits are permanent — they stay with your character forever. You can change your active spirit between runs from the character screen.<br><br><strong>Spirit Builder</strong> — every enemy kill has a 40% chance to drop a Soul Fragment. Collect 25 to unlock the Spirit Builder, a tab in the Bestiary. Name your spirit, pick an icon from 12 options and one of 8 craftable abilities (Soul Mend, Surge Strike, Essence Drain, Spirit Ward, Fortune's Veil, Venom Aura, Final Judgment, Purifying Song), then build it. Your custom spirit joins the spirit picker for every future run, permanently.</div>
       </div>
     </div>
 
@@ -6167,7 +6182,7 @@ var DDStore = (function() {
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">Navigation — Ctrl + Shift + Key</div>
-        <div class="help-body"><strong>Ctrl+Shift+H</strong> — Main Menu<br><strong>Ctrl+Shift+P</strong> — Character List<br><strong>Ctrl+Shift+B</strong> — Bestiary<br><strong>Ctrl+Shift+Q</strong> — Quests and Achievements<br><strong>Ctrl+Shift+E</strong> — Events Screen<br><strong>Ctrl+Shift+S</strong> — Settings<br><strong>Ctrl+Shift+R</strong> — High Score<br><strong>Ctrl+Shift+L</strong> — Chronicles<br><strong>Ctrl+Shift+I</strong> — Inventory (in dungeon)<br><strong>Ctrl+Shift+K</strong> — Spell Book<br><strong>Ctrl+Shift+A</strong> — Arcane Shop<strong>Ctrl+Shift+M</strong> — Seasonal Shop (in dungeon)<br><strong>Ctrl+Shift+N</strong> — New Character (from main menu)<br><strong>Ctrl+Shift+Enter</strong> — Quick Play with last character (from main menu)</div>
+        <div class="help-body"><strong>Ctrl+Shift+H</strong> — Main Menu<br><strong>Ctrl+Shift+P</strong> — Character List<br><strong>Ctrl+Shift+B</strong> — Bestiary<br><strong>Ctrl+Shift+Q</strong> — Quests and Achievements<br><strong>Ctrl+Shift+E</strong> — Events Screen<br><strong>Ctrl+Shift+S</strong> — Settings<br><strong>Ctrl+Shift+R</strong> — High Score<br><strong>Ctrl+Shift+L</strong> — Chronicles<br><strong>Ctrl+Shift+I</strong> — Inventory (in dungeon)<br><strong>Ctrl+Shift+K</strong> — Spell Book<br><strong>Ctrl+Shift+A</strong> — Arcane Shop<br><strong>Ctrl+Shift+M</strong> — Seasonal Shop (in dungeon)<br><strong>Ctrl+Shift+N</strong> — New Character (from main menu)<br><strong>Ctrl+Shift+Enter</strong> — Quick Play with last character (from main menu)</div>
       </div>
       <div class="help-entry" tabindex="0">
         <div class="help-title" role="heading" aria-level="2">Combat — Alt + Key (Dungeon, Spire and Raid)</div>
