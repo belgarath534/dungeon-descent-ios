@@ -16797,6 +16797,11 @@ function doFight(action) {
     if (_wre === 'apocalypse') playerDmg = Math.round(playerDmg * 1.60);
     // Godslayer weapon — double damage against bosses
     if (_wre === 'godslayer' && e.isBoss) playerDmg = Math.round(playerDmg * 2);
+    // Executioner weapon — +50% damage against enemies below 25% HP
+    if (_wre === 'executioner' && e.maxHp && (e.hp / e.maxHp) < 0.25) {
+      playerDmg = Math.round(playerDmg * 1.50);
+      addLog('💀 Executioner strikes the weakened foe — +50% damage!');
+    }
     // Ranger — bonus damage on first hit of combat
     if (DS.cls === 'Ranger' && ACCESS.classTraits && DS.rangerFirstHit) {
       playerDmg = Math.round(playerDmg * 1.75);
@@ -17492,6 +17497,7 @@ function enemyDead() {
   var g = Array.isArray(e.gold) ? rnd(e.gold[0], e.gold[1]) : (parseInt(e.gold) || 5);
   if (DS.goblinGold) g = Math.round(g * 1.25);
   if (DS.graveRobberLoot) g = Math.round(g * 1.20);
+  if (DS.equippedWeapon && DS.equippedWeapon.rarityEffect === 'fortune') g = Math.round(g * 1.25);
   if (DS._dailyMod_tripleGold) g = g * 3;
   if (DS._dailyMod_lucky) g = Math.round(g * 1.5);
   var hw = getHollowWeather();
@@ -59926,11 +59932,13 @@ var RARITY_EFFECTS = {
     { id:'vampiric',  name:'Vampiric',    desc:'Heals 3 HP on every hit.' },
     { id:'serrated',  name:'Serrated',    desc:'15% chance to hit twice per attack.' },
     { id:'weighted',  name:'Weighted',    desc:'Heavy strikes never miss.' },
+    { id:'fortune',   name:'Fortune',     desc:'+25% gold from every kill.' },
   ],
   strong: [
     { id:'soulbound', name:'Soulbound',   desc:'Restores 5 SP on every kill.' },
     { id:'thundering',name:'Thundering',  desc:'25% chance to stun enemy on hit.' },
     { id:'cursed',    name:'Cursed',      desc:'+40% damage but you take 3 HP per turn in combat.' },
+    { id:'executioner',name:'Executioner',desc:'+50% damage against enemies below 25% HP.' },
   ],
   legendary: [
     { id:'godslayer', name:'Godslayer',   desc:'Deals double damage to bosses.' },
