@@ -8709,6 +8709,15 @@ var AUD = {
 var _webAudioReady = false;
 function initWebAudio() {
   if (_webAudioReady || !window.AudioContext && !window.webkitAudioContext) return;
+  // Ask iOS to configure its audio session for sustained gameplay audio
+  // that coexists with other active audio (notably VoiceOver's own
+  // speech) rather than the WebView's ambient default. No-ops cleanly on
+  // web/Android since Capacitor.Plugins.AudioSession only exists on iOS.
+  try {
+    if (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.AudioSession) {
+      Capacitor.Plugins.AudioSession.configureForGameplay().catch(function(e) { console.warn('[DD] AudioSession config failed:', e); });
+    }
+  } catch(e) {}
   try {
     AUD.ctx = new (window.AudioContext || window.webkitAudioContext)();
     // Master gain — volume slider controls this — WORKS on iOS
