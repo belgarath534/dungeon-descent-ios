@@ -9595,7 +9595,7 @@ function goTo(id) {
       if (DS && shouldUse3DMode() && DS._roomGraph) {
         var startCell = DS._roomGraph.cells[_room3DKey(DS._gridPos.gx, DS._gridPos.gy)];
         init3DView();
-        setTimeout(function(){ play3DExitCues(startCell); }, 700);
+        play3DExitCues(startCell);
       }
     }, 100);
     setTimeout(function(){ try { initHomeButton(); } catch(e){} }, 200);
@@ -13435,17 +13435,28 @@ function _play3DBlip(pan, pitch, delaySec) {
 // slightly so each direction is distinguishable rather than one blended chord.
 function play3DExitCues(cell) {
   if (!cell || !shouldUse3DMode()) return;
-  _load3DBlipBuffer().then(function(buf) {
-    if (!buf) return;
-    var i = 0;
-    ROOM3D_DIRS.forEach(function(d) {
-      if (cell.doors[d.name]) {
-        var cfg = ROOM3D_DOOR_AUDIO[d.name];
-        _play3DBlip(cfg.pan, cfg.pitch, i * 0.16);
-        i++;
-      }
+  // Every call site here fires this right alongside a say() announcement
+  // (room entry, wall bump, floor start) — VoiceOver/TalkBack duck other
+  // app audio while actively speaking, so a one-shot blip fired at that
+  // exact moment gets buried and is never actually heard, even though the
+  // code runs fine. Echo-location doesn't have this problem (it's a
+  // deliberate, isolated action with no simultaneous speech) and neither
+  // does the Hide-and-Seek growl (a continuous loop with plenty of quiet
+  // gaps to land in) — this needs the same room-description-clearing
+  // delay familiarSpeak() already uses for the same reason.
+  setTimeout(function() {
+    _load3DBlipBuffer().then(function(buf) {
+      if (!buf) return;
+      var i = 0;
+      ROOM3D_DIRS.forEach(function(d) {
+        if (cell.doors[d.name]) {
+          var cfg = ROOM3D_DOOR_AUDIO[d.name];
+          _play3DBlip(cfg.pan, cfg.pitch, i * 0.16);
+          i++;
+        }
+      });
     });
-  });
+  }, 1800);
 }
 
 // ── ECHO-LOCATION ── a player-triggered sonar pulse: a central ping, then
@@ -15608,7 +15619,7 @@ function advanceFloor() {
     generate3DRoomGraph();
     var _newFloorStartCell = DS._roomGraph.cells[_room3DKey(0, 0)];
     if (_room3D.built) _placeCameraAt(_newFloorStartCell);
-    setTimeout(function(){ play3DExitCues(_newFloorStartCell); }, 900);
+    play3DExitCues(_newFloorStartCell);
   }
   // Track no-damage floors for achievement
   if (DS.hpAtFloorStart && DS.hp >= DS.hpAtFloorStart) {
