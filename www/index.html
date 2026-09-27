@@ -65270,6 +65270,34 @@ window.addEventListener('load', function() {
       }
       // Single combat check
       if (DS.inCombat && DS.enemy && DS.enemy.hp > 0) {
+        // BUGFIX: a room-enter encounter roll (Chimera, The Shade, a Hollow
+        // special encounter, etc.) sets DS.inCombat/DS.enemy and starts combat
+        // audio well before it finishes building the fight — if anything in
+        // between throws, the function aborts before ever calling
+        // showDgPanels(false, true, false), so the room panel (#dg-nav) stays
+        // visible with the combat panel hidden. DS.enemy is valid here, so the
+        // stuck-state branch above never fires either — the player is left
+        // looking at the room, unable to move (moveRoom short-circuits on
+        // DS.inCombat) with no visible way to fight. Detect that mismatch
+        // directly and force the combat panel to show.
+        var navPanel = document.getElementById('dg-nav');
+        var combatPanel = document.getElementById('dg-combat');
+        if (navPanel && combatPanel && navPanel.style.display !== 'none' && combatPanel.style.display === 'none') {
+          showDgPanels(false, true, false);
+          // The crash that caused this could have landed before the enemy
+          // icon/name were ever written too — restore them from DS.enemy
+          // directly rather than trusting whatever's currently in the DOM.
+          var eIcon = document.getElementById('dg-enemy-icon');
+          var eName = document.getElementById('dg-enemy-name');
+          if (eIcon && DS.enemy.icon) eIcon.textContent = DS.enemy.icon;
+          if (eName && DS.enemy.name) eName.textContent = t(DS.enemy.name);
+          updateEnemyBar(); updatePlayerBar();
+          // Whatever threw mid-spawn may also have left the room-re-entry
+          // guard stuck on — clear it so enterRoom() isn't refused again
+          // once this fight actually ends.
+          _roomResolving = false;
+          say('Combat resumed.');
+        }
         var atk = document.getElementById('cbtn-attack');
         if (atk && atk.disabled) { setCombatBtns(true); }
       }
