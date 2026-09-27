@@ -16906,6 +16906,17 @@ function doFight(action) {
     if (spiritDmg > 0) { e.hp = Math.max(0, e.hp - spiritDmg); updateEnemyBar(); if(e.hp<=0){ if(e.isMedusa){setTimeout(function(){showMedusaChoice();},300);return;} setTimeout(function(){enemyDead();},300);return;} }
     // Minion attack (bonus damage if enemy survived)
     minionCombatAttack(e);
+    // Love Potion — charmed ally attacks alongside you for its remaining turns
+    if (DS._charmedAlly && DS._charmedAlly.turns > 0 && e.hp > 0) {
+      var caDmg = Math.max(1, (DS._charmedAlly.atk ? rnd(DS._charmedAlly.atk[0], DS._charmedAlly.atk[1]) : 5));
+      e.hp = Math.max(0, e.hp - caDmg);
+      addLog('💘 ' + DS._charmedAlly.name + ' fights for you — ' + caDmg + ' damage!');
+      DS._charmedAlly.turns--;
+      if (DS._charmedAlly.turns <= 0) {
+        addLog('💔 ' + DS._charmedAlly.name + '\'s charm fades. It slips away.');
+        DS._charmedAlly = null;
+      }
+    }
     updateEnemyBar();
     if (e.hp <= 0) { if(e.isMedusa){setTimeout(function(){showMedusaChoice();},300);return;} setTimeout(function(){enemyDead();},300); return; }
     // Music Box — after player attacks, melody plays
