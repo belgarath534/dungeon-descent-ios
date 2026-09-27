@@ -16939,6 +16939,23 @@ function doFight(action) {
       addLog('Your heavy strike misses! The enemy sidesteps.');
     } else {
       playerDmg = Math.round(baseAtk * 1.7);
+      // Swift weapon — +20% damage on the first attack of combat
+      if (_heavyWre === 'swift' && DS._weaponFirstHit) {
+        playerDmg = Math.round(playerDmg * 1.20);
+        addLog('⚔ Swift blade strikes first — +20% opening damage!');
+      }
+      DS._weaponFirstHit = false;
+      // Cursed weapon — +40% damage (paid for with HP drain, see doFight's per-round tick)
+      if (_heavyWre === 'cursed') playerDmg = Math.round(playerDmg * 1.40);
+      // Apocalypse weapon — +60% damage on every attack
+      if (_heavyWre === 'apocalypse') playerDmg = Math.round(playerDmg * 1.60);
+      // Godslayer weapon — double damage against bosses
+      if (_heavyWre === 'godslayer' && e.isBoss) playerDmg = Math.round(playerDmg * 2);
+      // Executioner weapon — +50% damage against enemies below 25% HP
+      if (_heavyWre === 'executioner' && e.maxHp && (e.hp / e.maxHp) < 0.25) {
+        playerDmg = Math.round(playerDmg * 1.50);
+        addLog('💀 Executioner strikes the weakened foe — +50% damage!');
+      }
       sfx('sfx-heavy-hit');
       addLog(t('Heavy strike lands for ') + playerDmg + t(' damage!'));
       // Shadow World — heavy strike breaks Void Weaver web
