@@ -13320,6 +13320,7 @@ function generate3DRoomGraph() {
   }
   DS._roomGraph = { cells: cells };
   DS._gridPos = { gx: 0, gy: 0 };
+  DS._lastMoveDir = null;
   // A fresh graph always starts back at (0,0) with a brand new layout, but
   // any rooms already built in the live scene belong to the PREVIOUS floor's
   // layout — same grid keys, different doors. Wipe them so nothing stale
@@ -13390,6 +13391,7 @@ function moveRoom3D(dir) {
   }
 
   DS._gridPos = { gx: ngx, gy: ngy };
+  DS._lastMoveDir = d;
   sfx('sfx-footstep');
   showDgPanels(true, false, false);
 
@@ -13420,6 +13422,44 @@ function moveRoom3D(dir) {
 // ("behind") — four audibly distinct signatures from one short sound.
 var _room3DBlipBuffer = null;
 var ROOM3D_DOOR_AUDIO = { N:{pan:0,pitch:1.18}, S:{pan:0,pitch:0.82}, E:{pan:0.8,pitch:1.0}, W:{pan:-0.8,pitch:1.0} };
+
+// Hunter Mode tracks the hunter as a "rooms away" count, not a real position —
+// but it's always fictionally following your trail, so the door you just came
+// through (the opposite of your last move) is genuinely where it's coming
+// from. Reuses the same pan/pitch table as the door cues above so the hunter
+// cue sits in the same left/right/pitch space the player already learned.
+function _hunterDirCue() {
+  if (!shouldUse3DMode() || !DS._lastMoveDir) return null;
+  var moved = ROOM3D_DIRS.filter(function(x){ return x.name === DS._lastMoveDir; })[0];
+  if (!moved) return null;
+  return ROOM3D_DOOR_AUDIO[moved.opp];
+}
+
+// A falling pitch sweep layered on top of the existing stairs SFX at the
+// moment a floor is actually descended (not reused for unrelated sfx-stairs
+// cues elsewhere, like the stalker minigame or the pre-boss gauntlet) —
+// reinforces "going deeper" the same way the echo-location cues reinforce
+// direction.
+function playDescentCue() {
+  if (!window.AUD || !AUD.ctx || !AUD.sfxOn) return;
+  try {
+    var ctx = AUD.ctx;
+    var t0 = ctx.currentTime;
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(520, t0);
+    osc.frequency.exponentialRampToValueAtTime(110, t0 + 0.7);
+    var vol = (AUD.sfxVol || 0.8) * 0.3;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.linearRampToValueAtTime(vol, t0 + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.75);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + 0.8);
+  } catch (e) {}
+}
 
 function _load3DBlipBuffer() {
   if (_room3DBlipBuffer) return Promise.resolve(_room3DBlipBuffer);
@@ -13539,6 +13579,24 @@ function _echoAheadCue(category, pan, delay) {
   }
 }
 
+// Walks straight through the room graph in one direction, counting how many
+// consecutive connected cells continue that way before hitting a wall or the
+// edge of what's been generated. There's no room-size data to draw on — every
+// cell is one grid unit — so this is the honest stand-in for "how far can the
+// pulse travel that way": a long straight run of doors reads as a real
+// hallway, a single door reads as a small alcove.
+function _corridorDepth(cell, dirName, maxDepth) {
+  var d = ROOM3D_DIRS.filter(function(x){ return x.name === dirName; })[0];
+  var depth = 0, cx = cell.gx, cy = cell.gy, cur = cell;
+  while (depth < maxDepth && cur && cur.doors[dirName]) {
+    cx += d.dx; cy += d.dy;
+    cur = DS._roomGraph.cells[_room3DKey(cx, cy)];
+    if (!cur) break;
+    depth++;
+  }
+  return depth;
+}
+
 function echoLocate() {
   if (!DS) return;
   if (DS.inCombat) { say('Echo-location only works while exploring, not during combat.'); return; }
@@ -13566,8 +13624,16 @@ function echoLocate() {
     var delay = 0.22 + i * 0.11;
     if (cell.doors[d.name]) {
       openWords.push(d.word);
-      // Open — a longer, softer tone that fades away, implying space beyond
-      _echoOsc('sine', 420 * cfg.pitch, cfg.pan, delay, 0.32, 0.30);
+      // Open — a longer, softer tone that fades away, implying space beyond.
+      // Duration (and, past 1 room deep, a soft trailing repeat) scale with
+      // how far the corridor actually runs in that direction, so a long
+      // hallway reads differently from a single-room alcove.
+      var corridorDepth = _corridorDepth(cell, d.name, 3);
+      var openDur = 0.32 + corridorDepth * 0.14;
+      _echoOsc('sine', 420 * cfg.pitch, cfg.pan, delay, openDur, 0.30);
+      if (corridorDepth >= 2) {
+        _echoOsc('sine', 420 * cfg.pitch, cfg.pan, delay + openDur * 0.55, openDur * 0.7, 0.16);
+      }
       var neighborKey = _room3DKey(cell.gx + d.dx, cell.gy + d.dy);
       var neighbor = DS._roomGraph.cells[neighborKey];
       if (aheadCategory && neighbor && !neighbor.visited) {
@@ -15676,6 +15742,7 @@ function advanceFloor() {
   trackGlobalStat('totalFloors', 1);
   setGlobalStatMax('bestFloor', DS.floor);
   sfx('sfx-stairs'); vibe(VIBE.loot);
+  playDescentCue();
   say('Floor ' + DS.floor + ' of 10. You reach the stairs. A merchant waits in the passage. Shop open.');
   setEvent('good', 'You find the stairs down. The cold deepens. A hooded figure crouches nearby, wares spread on a cloth.');
   updateTopBar();
@@ -63910,6 +63977,7 @@ var _HUNTER_AUDIO = {
 var _hunterMusicEl = null;
 var _heartbeatEl = null;
 var _heartbeatInterval = null;
+var _heartbeatPanner = null;
 // Add hunter-theme to TRACK_FILES now that _HUNTER_AUDIO is defined
 try { if (typeof TRACK_FILES !== 'undefined') TRACK_FILES['hunter-theme'] = _HUNTER_AUDIO.music; } catch(e) {}
 
@@ -63919,6 +63987,17 @@ function initHunterAudio() {
     _heartbeatEl = new Audio(_HUNTER_AUDIO.heartbeat);
     _heartbeatEl.loop = false;
     _heartbeatEl.volume = AUD ? (AUD.sfxVol || 0.8) : 0.8;
+    // Route through Web Audio so the loop can be panned live to whichever
+    // direction the hunter is coming from — updated on every beat in
+    // playHeartbeat() below, so it tracks your last move in real time.
+    try {
+      if (window.AUD && AUD.ctx && AUD.ctx.createMediaElementSource) {
+        var src = AUD.ctx.createMediaElementSource(_heartbeatEl);
+        _heartbeatPanner = AUD.ctx.createStereoPanner();
+        src.connect(_heartbeatPanner);
+        _heartbeatPanner.connect(AUD.ctx.destination);
+      }
+    } catch (e) { _heartbeatPanner = null; }
   }
 }
 
@@ -63978,6 +64057,10 @@ function playHeartbeat() {
   if (!AUD || !AUD.sfxOn) return;
   initHunterAudio();
   _heartbeatEl.volume = AUD.sfxVol || 0.8;
+  if (_heartbeatPanner) {
+    var dirCue = _hunterDirCue();
+    _heartbeatPanner.pan.value = dirCue ? dirCue.pan : 0;
+  }
   _heartbeatEl.currentTime = 0;
   _heartbeatEl.play().catch(function(){});
 }
@@ -65210,10 +65293,18 @@ function hunterProximitySound(dist) {
   if (!AUD || !AUD.sfxOn) return;
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var dirCue = _hunterDirCue();
+    var dest = ctx.destination;
+    if (dirCue && ctx.createStereoPanner) {
+      var panner = ctx.createStereoPanner();
+      panner.pan.value = dirCue.pan;
+      panner.connect(ctx.destination);
+      dest = panner;
+    }
     var osc = ctx.createOscillator();
     var gain = ctx.createGain();
     osc.connect(gain);
-    gain.connect(ctx.destination);
+    gain.connect(dest);
     // Lower pitch = further away, higher + faster = closer
     var freq = dist >= 6 ? 60 : dist >= 4 ? 80 : dist >= 2 ? 110 : 140;
     var vol = dist >= 6 ? 0.08 : dist >= 4 ? 0.15 : dist >= 2 ? 0.25 : 0.4;
@@ -65228,7 +65319,7 @@ function hunterProximitySound(dist) {
     if (dist <= 2) {
       var osc2 = ctx.createOscillator();
       var gain2 = ctx.createGain();
-      osc2.connect(gain2); gain2.connect(ctx.destination);
+      osc2.connect(gain2); gain2.connect(dest);
       osc2.type = 'sine';
       osc2.frequency.setValueAtTime(freq * 1.1, ctx.currentTime + 0.4);
       gain2.gain.setValueAtTime(0, ctx.currentTime + 0.4);
