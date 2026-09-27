@@ -56788,6 +56788,7 @@ function afkEndRun() {
   clearInterval(AFK.timerInterval);
   AFK.interval = null;
   AFK.timerInterval = null;
+  _gameStatusHide();
 
   // Save points
   addDescentPoints(AFK.points);
@@ -56946,6 +56947,7 @@ function updateAFKUI() {
     floorEl.textContent = AFK.floor;
     floorEl.setAttribute('aria-label', 'Floor ' + AFK.floor);
   }
+  if (AFK.running) _gameStatusNotify('Endless Descent', 'Floor ' + AFK.floor + ' — ' + AFK.points.toLocaleString() + ' points');
   var hpPct = Math.max(0, Math.round((AFK.hp / AFK.maxHp) * 100));
   var hpBar = document.getElementById('afk-hp-bar');
   if (hpBar) {
@@ -65352,6 +65354,28 @@ function updateHunterTracker() {
   }
 }
 
+// ── LIVE STATUS NOTIFICATION (Android) ──
+// The Android half of the Live Activity idea — a persistent, low-priority
+// notification for glanceable status (Hunter distance, Endless Descent
+// progress) while the game runs or is briefly backgrounded. iOS has no
+// equivalent yet (that's the actual iOS Live Activity, a separate,
+// heavier lift). Guarded by plugin existence, so it's a clean no-op on
+// iOS/web where Capacitor.Plugins.GameStatusNotification doesn't exist.
+function _gameStatusNotify(title, text) {
+  try {
+    if (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.GameStatusNotification) {
+      Capacitor.Plugins.GameStatusNotification.show({ title: title, text: text }).catch(function(){});
+    }
+  } catch(e) {}
+}
+function _gameStatusHide() {
+  try {
+    if (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.GameStatusNotification) {
+      Capacitor.Plugins.GameStatusNotification.hide().catch(function(){});
+    }
+  } catch(e) {}
+}
+
 function updateHunterBar() {
   updateHunterTracker();
   var bar = document.getElementById('dg-hunter-bar');
@@ -65359,6 +65383,7 @@ function updateHunterBar() {
   if (!bar || !label) return;
   if (!DS.hunterMode || !DS.hunterAlive) {
     bar.parentElement.style.display = 'none';
+    _gameStatusHide();
     return;
   }
   bar.parentElement.style.display = '';
@@ -65367,8 +65392,10 @@ function updateHunterBar() {
   // Color shifts red as hunter closes in
   var color = DS.hunterDist >= 6 ? '#cc4400' : DS.hunterDist >= 3 ? '#ff6600' : '#ff0000';
   bar.style.background = color;
-  label.textContent = '🏹 Hunter: ' + DS.hunterDist + ' room' + (DS.hunterDist === 1 ? '' : 's') + ' away';
+  var hunterText = '🏹 Hunter: ' + DS.hunterDist + ' room' + (DS.hunterDist === 1 ? '' : 's') + ' away';
+  label.textContent = hunterText;
   label.style.color = color;
+  _gameStatusNotify('Dungeon Descent', hunterText);
 }
 
 function hunterCatch() {
