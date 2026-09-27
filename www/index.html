@@ -14844,6 +14844,14 @@ function initDungeon(ch) {
   try { resetGunState(); } catch(e) {}
   // Reset hunter caught flag
   DS._hunterCaught = false;
+  try { companionOnDungeonStart(); } catch(e) {}
+  try { checkLeoEasterEgg(ch.name); } catch(e) {}
+  // Independence Tournament — starts once per character per event window
+  try {
+    if (getActiveEvent() === 'july4' && !getJuly4TournamentData().active) {
+      startJuly4Tournament(_charIdx);
+    }
+  } catch(e) {}
 }
 
 var _roomResolving = false;
@@ -15056,6 +15064,13 @@ function enterRoom() {
     : DS.diff === 'Forsaken' ? 0.55 : 0.40;
   var _hw = getHollowWeather();
   if (_hw && _hw.combatBonus && DS.dungeon === 'The Hollow') combatChance += _hw.combatBonus;
+  // Dungeon weather combat-frequency effects (Cursed Fog, Ash Storm, Blizzard,
+  // Rising Tides, Wild Hunt, Silver Fog, Bone Storm, etc.) — promised in their
+  // own weather text but never actually applied outside The Hollow.
+  if (DS.dungeon !== 'The Hollow') {
+    var _dwCombatBonus = getDungeonWeatherCombatBonus();
+    if (_dwCombatBonus) combatChance += _dwCombatBonus;
+  }
 
   _roomResolving = true;
   setTimeout(function() {
@@ -15983,7 +15998,7 @@ var DUNGEON_BOSS_SFX = {
 function startCombat(isBoss) {
   setTimeout(function(){ showDungeonTip(isBoss ? 'first-boss' : 'first-combat'); }, 800);
   DS.inCombat = true; DS.defending = false;
-  if (isBoss) DS._eliteKilledFloor10 = false;
+  if (isBoss) { DS._eliteKilledFloor10 = false; try { companionOnBossEncounter(); } catch(e2) {} }
   try { updateCombatSpellBtn(); } catch(e2) {}
   if (DS.cls === 'Ranger') DS.rangerFirstHit = true;
   DS._weaponFirstHit = true;
@@ -17060,6 +17075,12 @@ function doFight(action) {
     if (DS._maskImmune) { DS._maskImmune = false; rawDmg = 0; addLog('🎭 Mask absorbs the hit — immunity triggered!'); say('Mask immunity — hit absorbed!'); }
     // Mask — Dodge every other hit
     if (DS._maskDodge) { DS._maskDodgeToggle = !DS._maskDodgeToggle; if (DS._maskDodgeToggle) { rawDmg = 0; addLog('🎭 Mask: Phase Dodge — you slip through the attack!'); say('Phase dodge — attack missed!'); } }
+    // Shadow Cloak potion — timed dodge chance
+    if (DS._dodgeBuff && DS._dodgeBuffTurns > 0 && rawDmg > 0 && Math.random() < DS._dodgeBuff) {
+      rawDmg = 0;
+      addLog('🌒 Shadow Cloak — you phase through the attack!');
+      say('Shadow Cloak — attack dodged!');
+    }
     // Mask — Reflection: reflect enemy attack back
     if (DS._maskReflect && rawDmg > 0) { DS._maskReflect = false; var reflected = rawDmg; rawDmg = 0; if (DS.enemy) { DS.enemy.hp = Math.max(0, DS.enemy.hp - reflected); updateEnemyBar(); } addLog('🎭 Mask: Reflection — ' + reflected + ' damage reflected back at the enemy!'); say('Reflection — attack reflected for ' + reflected + ' damage!'); }
     // Mask — Spirit Form: half physical damage
@@ -17102,6 +17123,11 @@ function doFight(action) {
       DS.hp = Math.max(1, DS.hp - 3);
       addLog('💀 The cursed blade drains 3 HP from you.');
       updatePlayerBar();
+    }
+    // Shadow Cloak potion — tick down its timed dodge buff
+    if (DS._dodgeBuffTurns && DS._dodgeBuffTurns > 0) {
+      DS._dodgeBuffTurns--;
+      if (DS._dodgeBuffTurns <= 0) { DS._dodgeBuff = 0; addLog('Shadow Cloak faded.'); }
     }
     // Void Moth — 15% chance to negate damage entirely
     if (DS.activeSpirit && DS.activeSpirit.id === 'void-moth' && DS.level >= 5 && Math.random() < 0.15) {
@@ -18859,7 +18885,7 @@ function renderInv() {
     var item = entry.item;
     var count = entry.count;
     var i = entry.indices[0]; // index of first instance for use/drop
-    var isUsable = item.type === 'potion' || item.type === 'elixir' || item.type === 'enchanter' || item.type === 'music-player' || item.type === 'luck-potion' || item.type === 'fire-potion' || item.type === 'curse-potion' || item.type === 'swift-potion' || item.type === 'def-potion' || item.type === 'atk-potion' || item.type === 'cursed' || item.type === 'rune' || item.type === 'scroll' || item.type === 'skill-orb' || item.type === 'soul-trap' || item.type === 'sp-potion' || item.type === 'gamblers-spirit' || item.type === 'mirror-flask' || item.type === 'phantom-potion' || item.type === 'gravity-tonic' || item.type === 'leech-brew' || item.type === 'rage-tonic' || item.type === 'fog-flask' || item.type === 'time-potion' || item.type === 'corruption-flask' || item.type === 'love-potion' || item.type === 'consumable' || item.isWhisperMusicBox;
+    var isUsable = item.type === 'potion' || item.type === 'elixir' || item.type === 'enchanter' || item.type === 'music-player' || item.type === 'luck-potion' || item.type === 'fire-potion' || item.type === 'curse-potion' || item.type === 'swift-potion' || item.type === 'def-potion' || item.type === 'atk-potion' || item.type === 'cursed' || item.type === 'rune' || item.type === 'scroll' || item.type === 'skill-orb' || item.type === 'soul-trap' || item.type === 'sp-potion' || item.type === 'gamblers-spirit' || item.type === 'mirror-flask' || item.type === 'phantom-potion' || item.type === 'gravity-tonic' || item.type === 'leech-brew' || item.type === 'rage-tonic' || item.type === 'fog-flask' || item.type === 'time-potion' || item.type === 'corruption-flask' || item.type === 'love-potion' || item.type === 'consumable' || item.isWhisperMusicBox || item.isFirework;
     var isRelic = item.type === 'relic';
     var isEquippable = item.isEquippable && (item.type === 'weapon' || item.type === 'armor');
     var row = document.createElement('div');
@@ -19039,6 +19065,14 @@ function useItem(i) {
       var mbTrack = AUD.tracks['music-box'];
       if (mbTrack) { try { mbTrack.pause(); mbTrack.currentTime = 0; } catch(e) {} }
     }, 5000);
+    return;
+  }
+  if (item.isFirework) {
+    if (!DS.inCombat || !DS.enemy) {
+      say('Fireworks can only be used in combat — face an enemy first.');
+      return;
+    }
+    useFirework(i);
     return;
   }
   if (item.type === 'elixir') {
@@ -19842,27 +19876,6 @@ function dismissCreditsAndGoHome() {
   goHome();
 }
 
-function showCredits() {
-  var ov = document.createElement('div');
-  ov.id = 'credits-overlay';
-  ov.setAttribute('role', 'dialog');
-  ov.setAttribute('aria-modal', 'true');
-  ov.setAttribute('aria-label', 'Dungeon Descent Credits');
-  ov.style.cssText = 'position:fixed;inset:0;background:#000;z-index:99999;display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto;';
-  ov.innerHTML = '<div style="max-width:480px;width:100%;text-align:center;font-family:Cinzel,serif;">' +
-    '<div style="font-size:1.4rem;color:#e0c080;margin-bottom:20px;letter-spacing:0.3em;">DUNGEON DESCENT</div>' +
-    '<div style="font-size:0.65rem;color:#555;letter-spacing:0.3em;margin-bottom:32px;">A GAME BY LEO</div>' +
-    '<div style="font-size:0.75rem;color:#888;line-height:2;margin-bottom:20px;">Designed, developed, and built entirely<br>by Leo Productions</div>' +
-    '<div style="font-size:0.7rem;color:#666;line-height:2;margin-bottom:20px;">Age 15. Worcester, Massachusetts.<br>Blind from birth.</div>' +
-    '<div style="font-size:0.7rem;color:#888;line-height:2;margin-bottom:20px;">"Accessible game design is not a limitation.<br>It is a superpower."</div>' +
-    '<div style="font-size:0.65rem;color:#444;line-height:2;margin-bottom:32px;">Built as a single HTML file.<br>Fully accessible with JAWS, VoiceOver, and NVDA.<br>Deployed at dungeon-descent.org<br><a href="https://discord.gg/3FbYrQysRN" target="_blank" rel="noopener" style="color:#5865F2;text-decoration:none;">💬 discord.gg/3FbYrQysRN</a></div>' +
-    '<div style="font-size:0.6rem;color:#444;line-height:1.9;margin-bottom:32px;">Additional sound effects courtesy of 30 Freesound.org<br>contributors, licensed under CC0 and Creative Commons<br>Attribution — full list in the Credits screen from the main menu.</div>' +
-    '<button type="button" onclick="dismissCreditsAndGoHome()" style="padding:14px 28px;background:#0a0800;border:1px solid #cc9944;color:#e0c080;font-family:Cinzel,serif;font-size:0.75rem;cursor:pointer;" aria-label="Return to main menu">Return Home</button>' +
-    '</div>';
-  document.body.appendChild(ov);
-  setTimeout(function() { var btn = ov.querySelector('button'); if (btn) btn.focus(); }, 100);
-  say('Credits. Dungeon Descent. Designed, developed, and built entirely by Leo Productions. Age 15. Worcester, Massachusetts. Blind from birth. Accessible game design is not a limitation. It is a superpower.');
-}
 // ── END TRUE ENDING ──
 
 function _continueBossVictory() {
@@ -20335,30 +20348,6 @@ function retryRun() {
   }
 }
 
-function quickRetry() {
-  // Restart same class, race, profession, dungeon, difficulty — skip all creation
-  if (_charIdx === null) return;
-  var ch = CHARS[_charIdx];
-  // Reset run state but keep character identity
-  ch.floor = 1;
-  ch.completed = false;
-  ch.midRunSave = null;
-  ch.deathLog = ch.deathLog || [];
-  saveChars();
-  document.getElementById('dg-end').style.display = 'none';
-  var ngBtn = document.getElementById('dg-ngplus-btn');
-  if (ngBtn) ngBtn.style.display = 'none';
-  initDungeon(ch);
-  say('Quick retry! Same class, dungeon and difficulty. Good luck ' + DS.name + '.');
-  setTimeout(function() {
-    var ch = CHARS[_charIdx];
-    if (ch && ch.lastSpirit) {
-      var sp = getSpiritById(ch.lastSpirit);
-      if (sp) pickSpirit(sp);
-    }
-    enterRoom();
-  }, 150);
-}
 
 function openNGPlusChoice() {
   var ch = _charIdx !== null ? CHARS[_charIdx] : null;
@@ -24606,15 +24595,13 @@ function showInfernalPhaseAlert(phase, message) {
   var color = phase === 3 ? '#ff2200' : '#ff6600';
   var title = phase === 3 ? '⚠ FINAL PHASE' : '⚠ PHASE ' + phase;
 
-  var hunterHtml = '<div style="max-width:360px;width:100%;background:#0a0000;border:2px solid #cc0000;padding:24px;text-align:center;">';
-  hunterHtml += '<div style="font-size:1.8rem;margin-bottom:12px;" aria-hidden="true">&#x1F3F9;</div>';
-  hunterHtml += '<div style="font-family:sans-serif;font-size:1rem;color:#cc0000;margin-bottom:8px;">IT IS HERE</div>';
-  hunterHtml += '<div style="font-family:sans-serif;font-size:0.72rem;color:#888;line-height:1.7;margin-bottom:20px;">The hunter has nearly reached you. One chance — face it, or run with everything you have.</div>';
-  hunterHtml += '<div style="display:flex;flex-direction:column;gap:10px;">';
-  hunterHtml += '<button type="button" onclick="hunterFight()" style="padding:14px;background:#1a0000;border:2px solid #cc0000;color:#ff6644;font-family:sans-serif;font-size:0.8rem;cursor:pointer;" aria-label="Fight the hunter">Fight the Hunter</button>';
-  hunterHtml += '<button type="button" onclick="hunterRun()" style="padding:14px;background:#0a0a00;border:1px solid #666;color:#aaa;font-family:sans-serif;font-size:0.8rem;cursor:pointer;" aria-label="Run — sprint to the next room">Run — Sprint Away</button>';
-  hunterHtml += '</div></div>';
-  ov.innerHTML = hunterHtml;
+  var phaseHtml = '<div id="infernal-phase-title" style="max-width:360px;width:100%;background:#0a0000;border:2px solid ' + color + ';padding:24px;text-align:center;">';
+  phaseHtml += '<div style="font-size:1.8rem;margin-bottom:12px;" aria-hidden="true">🔥</div>';
+  phaseHtml += '<div style="font-family:sans-serif;font-size:1rem;color:' + color + ';margin-bottom:8px;">' + title + '</div>';
+  phaseHtml += '<div style="font-family:sans-serif;font-size:0.72rem;color:#888;line-height:1.7;margin-bottom:20px;white-space:pre-line;">' + message + '</div>';
+  phaseHtml += '<button type="button" onclick="dismissInfernalPhaseAlert()" style="width:100%;padding:14px;background:#1a0000;border:2px solid ' + color + ';color:#ff6644;font-family:sans-serif;font-size:0.8rem;cursor:pointer;" aria-label="Continue the fight">Continue →</button>';
+  phaseHtml += '</div>';
+  ov.innerHTML = phaseHtml;
   document.body.appendChild(ov);
 
   // Focus the button for screen readers
@@ -47501,25 +47488,6 @@ function showAchievementPopup(ach, gold, trophies) {
   if (!_achPopupShowing) processAchPopupQueue();
 }
 
-function dismissAchPopup() {
-  if (_achPopupTimer) { clearTimeout(_achPopupTimer); _achPopupTimer = null; }
-  var popup = document.getElementById('ach-popup');
-  if (popup) popup.classList.remove('show');
-  // Clear text so screen reader stops announcing
-  var nameEl = document.getElementById('ach-popup-name');
-  var descEl = document.getElementById('ach-popup-desc');
-  var iconEl = document.getElementById('ach-popup-icon');
-  var tierEl = document.getElementById('ach-popup-tier');
-  if (nameEl) nameEl.textContent = '';
-  if (descEl) descEl.textContent = '';
-  if (iconEl) iconEl.textContent = '';
-  if (tierEl) tierEl.textContent = '';
-  var ann = document.getElementById('ach-announce');
-  if (ann) ann.textContent = '';
-  _achPopupShowing = false;
-  setTimeout(function() { processAchPopupQueue(); }, 200);
-}
-
 function processAchPopupQueue() {
   if (_achPopupQueue.length === 0) { _achPopupShowing = false; return; }
   _achPopupShowing = true;
@@ -53051,31 +53019,6 @@ function chimeraVictory() {
   setTimeout(function(){ enterRoom(); }, 2000);
 }
 
-function blackBoxOpen() {
-  sfx('sfx-trap');
-  say('You open the black box. Something steps out.');
-  addLog('🔪 The box opens. The Unlucky One has found you.');
-  DS._unluckyOne = true;
-  DS.enemy = { name:'The Unlucky One', icon:'🔲', hp:120, maxHp:120, atk:[18,28], gold:[50,80], isBoss:true, isUnluckyOne:true };
-  DS.inCombat = true;
-  showDgPanels(false, true, false);
-  document.getElementById('dg-enemy-icon').textContent = '🔲';
-  document.getElementById('dg-enemy-name').textContent = t('The Unlucky One');
-  updateEnemyBar(); updatePlayerBar();
-  setCombatBtns(true);
-  addLog('The Unlucky One emerges. Your luck drops to zero. It wants your gold.');
-  say('The Unlucky One. 120 HP. Your critical chance is zero. It may steal your gold each turn.');
-}
-
-function blackBoxLeave() {
-  sfx('sfx-select');
-  say('You leave the box. It does not follow. It does not need to.');
-  addLog('You leave the black box untouched. Smart.');
-  var evEl = document.getElementById('dg-event');
-  if (evEl) evEl.style.display = 'none';
-  enterRoom();
-}
-
 // ── ALCHEMY SYSTEM ──────────────────────────────────────────────────────────
 
 var ALCHEMY_INGREDIENTS = [
@@ -53520,29 +53463,6 @@ function applyPotionEffect(potion) {
 }
 
 // Tick ATK/DEF boost turns
-function tickAlchemyBoosts() {
-  if (DS._atkBoostTurns && DS._atkBoostTurns > 0) {
-    DS._atkBoostTurns--;
-    if (DS._atkBoostTurns <= 0) {
-      DS.atkBonus = Math.max(0, (DS.atkBonus||0) - (DS._lastAtkBoost||0));
-      DS._atkBoostTurns = 0;
-      addLog('ATK boost expired.');
-    }
-  }
-  if (DS._defBoostTurns && DS._defBoostTurns > 0) {
-    DS._defBoostTurns--;
-    if (DS._defBoostTurns <= 0) {
-      DS.defBonus = Math.max(0, (DS.defBonus||0) - (DS._lastDefBoost||0));
-      DS._defBoostTurns = 0;
-      addLog('DEF boost expired.');
-    }
-  }
-  if (DS._dodgeBuffTurns && DS._dodgeBuffTurns > 0) {
-    DS._dodgeBuffTurns--;
-    if (DS._dodgeBuffTurns <= 0) { DS._dodgeBuff = 0; addLog('Shadow Cloak faded.'); }
-  }
-}
-
 // Drop ingredients from enemies (10% chance per kill)
 function alchemyDropOnKill(enemy) {
   if (Math.random() > 0.10) return;
@@ -60644,12 +60564,6 @@ function buyBlacksmithWeapon(weapon, cost, isFree) {
   renderBlacksmithShop();
   var remaining = fromMenu ? getGlobalGold() : inSpire ? SPIRE.gold : DS.gold;
   say('Gold remaining: ' + remaining + '.');
-}
-
-function giveStarterWeaponIfNeeded() {
-  // Called on game start — gives the free Worn Blade if never claimed
-  if (DDStore.getItem('dd_starter_weapon_given') !== '1') return;
-  // Already handled via the shop claim button — no auto-give needed
 }
 
 // ── END BLACKSMITH WEAPON SHOP ──
