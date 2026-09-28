@@ -63064,6 +63064,13 @@ var IAP_PRODUCTS = [
   { id: 'dd_coins_large',  coins: 200, label: 'Patron of the Abyss' },
 ];
 
+// The store is Android's Google Play or iOS's App Store, whichever this device is actually running.
+function getIAPPlatform() {
+  if (!window.CdvPurchase) return null;
+  var isIOSDevice = window.Capacitor && typeof Capacitor.getPlatform === 'function' && Capacitor.getPlatform() === 'ios';
+  return isIOSDevice ? CdvPurchase.Platform.APPLE_APPSTORE : CdvPurchase.Platform.GOOGLE_PLAY;
+}
+
 function initIAP() {
   try {
     if (!window.CdvPurchase) {
@@ -63072,14 +63079,14 @@ function initIAP() {
     }
     var store = CdvPurchase.store;
     var ProductType = CdvPurchase.ProductType;
-    var Platform = CdvPurchase.Platform;
+    var Platform = getIAPPlatform();
 
     // Register all three products
     store.register(IAP_PRODUCTS.map(function(p) {
       return {
         id: p.id,
         type: ProductType.CONSUMABLE,
-        platform: Platform.GOOGLE_PLAY
+        platform: Platform
       };
     }));
 
@@ -63130,7 +63137,7 @@ function initIAP() {
     });
 
     // Initialize the store
-    store.initialize([Platform.GOOGLE_PLAY]);
+    store.initialize([Platform]);
     store.ready(function() {
       _iapReady = true;
       console.log('[DD] IAP ready');
@@ -63145,7 +63152,7 @@ function buyCoins(productId) {
   try {
     if (!_isOnline) { say('No internet connection. Purchases require internet.'); return; }
     if (!window.CdvPurchase) {
-      say('Purchases are only available on the Android app.');
+      say('Purchases are not available on this device.');
       return;
     }
     if (!_iapReady) {
@@ -63155,7 +63162,7 @@ function buyCoins(productId) {
       return;
     }
     var store = CdvPurchase.store;
-    var product = store.get(productId, CdvPurchase.Platform.GOOGLE_PLAY);
+    var product = store.get(productId, getIAPPlatform());
     if (!product) {
       say('Product not available. Please try again.');
       return;
