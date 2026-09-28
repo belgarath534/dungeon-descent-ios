@@ -61039,6 +61039,9 @@ DDStore.whenReady().then(function() {
   document.addEventListener('touchstart', unlockSafariAudio, { once: true });
   // Load accessibility prefs on page load
   loadAccessPrefs();
+  // Wrap saveChars() so every save also fires a background cloud sync
+  // (no-ops until the player is actually signed in — see initAccountSync())
+  try { initAccountSync(); } catch(e) {}
   // Check first run — show tutorial
   checkFirstRun();
   updateGlobalGoldDisplay();
