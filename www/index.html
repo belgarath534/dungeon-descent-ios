@@ -11428,7 +11428,6 @@ var SUBCLASSES = {
 
 // ── SUBCLASS FUNCTIONS ────────────────────────────────────────────────────────
 
-function getActiveSubclass() { return DS._subclass || null; }
 
 function showSubclassChoice() {
   if (DS._subclass) return; // already chosen
@@ -14824,6 +14823,12 @@ function initDungeon(ch) {
   DS._hunterCaught = false;
   try { companionOnDungeonStart(); } catch(e) {}
   try { checkLeoEasterEgg(ch.name); } catch(e) {}
+  // Whisper Forest — ambient corruption ticks up passively while exploring.
+  // startCorruptionSystem() existed with a matching stopCorruptionSystem()
+  // call on escape-to-menu, but nothing ever called the start half, so the
+  // passive tick never ran — only the explicit story-triggered corruption
+  // sources (Mask, Mirror, Offering, etc.) ever moved the meter.
+  try { if (isWhisperForest()) startCorruptionSystem(); } catch(e) {}
   // Independence Tournament — starts once per character per event window
   try {
     if (getActiveEvent() === 'july4' && !getJuly4TournamentData().active) {
@@ -55864,19 +55869,6 @@ function minionCombatAttack(enemy) {
   var dmg = m.atk + Math.floor(Math.random() * 4);
   enemy.hp = Math.max(0, (enemy.hp || 0) - dmg);
   addLog('👾 ' + m.name + ' attacks for ' + dmg + ' damage!');
-}
-
-// Soul Trap — use in combat
-function useSoulTrap(enemy) {
-  if (!enemy) { say('No enemy to capture.'); return; }
-  var minions = getMinions();
-  if (minions.find(function(m){ return m.id === (enemy.id || enemy.name); })) {
-    say('You already have a ' + enemy.name + '.'); return;
-  }
-  if (minions.length >= 8) {
-    say('Your minion slots are full. Release one first.'); return;
-  }
-  captureMinion(enemy);
 }
 
 function renderHomeSkills() {
