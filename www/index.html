@@ -62396,8 +62396,45 @@ function keepAwakeOff() {
 //═════════════════════════════
 // VIBRATION SYSTEM (upgraded to Capacitor native haptics)
 //═════════════════════════════
+// Translate the game's [onMs, offMs, onMs, offMs, ...] patterns into Core
+// Haptics events with a real relativeTime/duration/intensity/sharpness,
+// instead of the fixed-length "impact" tap the fallback below has to fake
+// a duration for. Same Heavy/Medium/Light duration thresholds as the
+// fallback, so the two paths still feel like the same design language.
+function buildHapticEvents(arr) {
+  var events = [];
+  var t = 0;
+  for (var i = 0; i < arr.length; i += 2) {
+    var durMs = arr[i];
+    var gapMs = arr[i + 1] || 0;
+    var intensity, sharpness;
+    if (durMs >= 300) { intensity = 1.0; sharpness = 0.7; }
+    else if (durMs >= 150) { intensity = 0.7; sharpness = 0.5; }
+    else { intensity = 0.4; sharpness = 0.3; }
+    events.push({ type: 'continuous', time: t / 1000, duration: Math.max(durMs / 1000, 0.01), intensity: intensity, sharpness: sharpness });
+    t += durMs + gapMs;
+  }
+  return events;
+}
+
 function vibe(pattern) {
   if (!AUD.vibrationOn) return;
+  // Core Haptics (iOS 13+, via our own CoreHapticsPlugin) — real per-pattern
+  // duration/intensity/sharpness. Doesn't exist on Android, so this is a
+  // natural no-op there and falls straight through to legacyVibe().
+  if (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.CoreHaptics) {
+    try {
+      var events = buildHapticEvents(Array.isArray(pattern) ? pattern : [pattern]);
+      Capacitor.Plugins.CoreHaptics.playPattern({ events: events }).catch(function() {
+        legacyVibe(pattern);
+      });
+      return;
+    } catch(e) {}
+  }
+  legacyVibe(pattern);
+}
+
+function legacyVibe(pattern) {
   // Try Capacitor native haptics first (real Android/iOS haptic engine)
   if (window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.Haptics) {
     try {
