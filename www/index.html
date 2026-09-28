@@ -36778,8 +36778,8 @@ function renderCoinShop() {
   grid.innerHTML = '';
   document.getElementById('coinshop-msg').textContent = '';
 
-  // ── Watch Ad button — Android only ──
-  if (window.Capacitor) {
+  // ── Watch Ad button — Android only (AdMob is broken/does nothing on iOS) ──
+  if (window.Capacitor && typeof Capacitor.getPlatform === 'function' && Capacitor.getPlatform() === 'android') {
   var adDiv = document.createElement('div');
   adDiv.style.cssText = 'background:#0a0a1a;border:1px solid #8888ff;padding:14px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;';
   var adCooldownLeft = _adCooldown ? ' (on cooldown)' : '';
