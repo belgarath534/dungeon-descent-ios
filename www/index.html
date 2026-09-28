@@ -58392,8 +58392,11 @@ function openPauseSpirits() {
     btn.style.cssText = 'font-family:Cinzel,serif;font-size:0.62rem;padding:4px 10px;background:#0a0800;border:1px solid #ffaa44;color:#ffaa44;cursor:pointer;';
     btn.setAttribute('aria-label', (isActive ? 'Currently active: ' : 'Activate ') + spirit.name);
     (function(sp){ btn.onclick = function(){
-      DS.activeSpirit = sp;
-      say(sp.name + ' activated.');
+      // pickSpirit() (not a plain DS.activeSpirit assignment) so the switch
+      // persists to CHARS[_charIdx].lastSpirit for next run and refreshes
+      // the in-dungeon spirit HUD row immediately, same as the character
+      // creation flow already does.
+      pickSpirit(sp);
       openPauseSpirits();
     }; })(spirit);
     div.appendChild(btn);
