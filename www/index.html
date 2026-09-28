@@ -20669,6 +20669,14 @@ function buyItem(i) {
   if (DS.activeSpirit && DS.activeSpirit.isMarketSprite) {
     finalCost = Math.max(1, Math.round(finalCost * 0.80));
     if (finalCost < item.cost) addLog('Market Sprite negotiates — price reduced to ' + finalCost + 'g!');
+    // Mark the discount as spent the moment it's actually used, not just at
+    // run victory — otherwise swapping away and back to Market Sprite
+    // mid-run (see the reactivation fee in openPauseSpirits()) never
+    // actually gates anything, since the flag wouldn't be set yet.
+    if (_charIdx !== null && CHARS[_charIdx] && !CHARS[_charIdx].marketSpriteUsed) {
+      CHARS[_charIdx].marketSpriteUsed = true;
+      saveChars();
+    }
   }
   if (isNightTime() && finalCost < item.cost) addLog('🌙 Night discount applied — ' + finalCost + 'g instead of ' + item.cost + 'g.');
   if (DS.gold < finalCost) {
@@ -58295,6 +58303,25 @@ function openPauseSpirits() {
     btn.style.cssText = 'font-family:Cinzel,serif;font-size:0.62rem;padding:4px 10px;background:#0a0800;border:1px solid #ffaa44;color:#ffaa44;cursor:pointer;';
     btn.setAttribute('aria-label', (isActive ? 'Currently active: ' : 'Activate ') + spirit.name);
     (function(sp){ btn.onclick = function(){
+      // Market Sprite costs gold to reactivate once its shop discount has
+      // already been spent this run — otherwise you could swap away after
+      // using the discount, take some other spirit's bonus, then swap back
+      // for another free discount window. Gated here at the explicit swap,
+      // not inside pickSpirit() itself, since pickSpirit() is also what
+      // silently re-applies your last-used spirit at the start of a new
+      // run — that continuation should never fail for lack of gold.
+      if (sp.isMarketSprite && _charIdx !== null) {
+        var ch = CHARS[_charIdx];
+        if (ch.marketSpriteUsed) {
+          if (DS.gold < sp.reactivateCost) {
+            say('Not enough gold to reactivate the Market Sprite. You need ' + sp.reactivateCost + ' gold.');
+            return;
+          }
+          DS.gold -= sp.reactivateCost; spendGlobalGold(sp.reactivateCost);
+          updateTopBar();
+          addLog('Paid ' + sp.reactivateCost + 'g to reactivate Market Sprite.');
+        }
+      }
       // pickSpirit() (not a plain DS.activeSpirit assignment) so the switch
       // persists to CHARS[_charIdx].lastSpirit for next run and refreshes
       // the in-dungeon spirit HUD row immediately, same as the character
