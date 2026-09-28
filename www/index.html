@@ -16789,6 +16789,10 @@ function doFight(action) {
     if (_wre === 'swift' && DS._weaponFirstHit) {
       playerDmg = Math.round(playerDmg * 1.20);
       addLog('⚔ Swift blade strikes first — +20% opening damage!');
+    // Bow — "First strike every combat" (its own catalog description) — same +20% opening bonus as Swift
+    } else if (DS.equippedWeapon && DS.equippedWeapon.weaponType === 'bow' && DS._weaponFirstHit) {
+      playerDmg = Math.round(playerDmg * 1.20);
+      addLog('🏹 First strike! Bow finds its mark — +20% opening damage!');
     }
     DS._weaponFirstHit = false;
     // Cursed weapon — +40% damage (paid for with HP drain, see doFight's per-round tick)
@@ -16878,6 +16882,13 @@ function doFight(action) {
       addLog('⚔ Serrated blade strikes again for ' + bonusHit + ' damage!');
       updateEnemyBar();
     }
+    // Dagger — "15% chance to strike twice" (its own catalog description)
+    if (DS.equippedWeapon && DS.equippedWeapon.weaponType === 'dagger' && Math.random() < 0.15 && e.hp > 0) {
+      var daggerBonusHit = Math.round(playerDmg * 0.5);
+      e.hp = Math.max(0, e.hp - daggerBonusHit);
+      addLog('🗡️ Dagger strikes again for ' + daggerBonusHit + ' damage!');
+      updateEnemyBar();
+    }
     // Vampiric weapon — heal 3 HP on every hit
     if (_wre === 'vampiric') {
       DS.hp = Math.min(DS.maxHp, DS.hp + 3);
@@ -16943,6 +16954,10 @@ function doFight(action) {
       if (_heavyWre === 'swift' && DS._weaponFirstHit) {
         playerDmg = Math.round(playerDmg * 1.20);
         addLog('⚔ Swift blade strikes first — +20% opening damage!');
+      // Bow — "First strike every combat" — same +20% opening bonus as Swift
+      } else if (DS.equippedWeapon && DS.equippedWeapon.weaponType === 'bow' && DS._weaponFirstHit) {
+        playerDmg = Math.round(playerDmg * 1.20);
+        addLog('🏹 First strike! Bow finds its mark — +20% opening damage!');
       }
       DS._weaponFirstHit = false;
       // Cursed weapon — +40% damage (paid for with HP drain, see doFight's per-round tick)
@@ -16958,6 +16973,13 @@ function doFight(action) {
       }
       sfx('sfx-heavy-hit');
       addLog(t('Heavy strike lands for ') + playerDmg + t(' damage!'));
+      // Dagger — "15% chance to strike twice"
+      if (DS.equippedWeapon && DS.equippedWeapon.weaponType === 'dagger' && Math.random() < 0.15 && e.hp > 0) {
+        var daggerHeavyBonusHit = Math.round(playerDmg * 0.5);
+        e.hp = Math.max(0, e.hp - daggerHeavyBonusHit);
+        addLog('🗡️ Dagger strikes again for ' + daggerHeavyBonusHit + ' damage!');
+        updateEnemyBar();
+      }
       // Shadow World — heavy strike breaks Void Weaver web
       if (DS.dungeon === 'The Shadow World' && DS.enemy && DS.enemy.corruptWeb && DS.enemy._webActive) {
         DS.enemy._webActive = false;
@@ -17511,6 +17533,7 @@ function enemyDead() {
     }
   }
   recordKill(e.name);
+  checkEquipmentDrop();
   var g = Array.isArray(e.gold) ? rnd(e.gold[0], e.gold[1]) : (parseInt(e.gold) || 5);
   if (DS.goblinGold) g = Math.round(g * 1.25);
   if (DS.graveRobberLoot) g = Math.round(g * 1.20);
@@ -60882,6 +60905,7 @@ function rollEquipmentDrop(floor) {
     var t = types[Math.floor(Math.random() * types.length)];
     var def = WEAPON_TYPES[t];
     return {
+      id: 'drop-weapon-' + Date.now() + '-' + Math.floor(Math.random() * 10000),
       name: def.name,
       icon: def.icon,
       type: 'weapon',
@@ -60896,6 +60920,7 @@ function rollEquipmentDrop(floor) {
     var at = atypes[Math.floor(Math.random() * atypes.length)];
     var adef = ARMOR_TYPES[at];
     return {
+      id: 'drop-armor-' + Date.now() + '-' + Math.floor(Math.random() * 10000),
       name: adef.name,
       icon: adef.icon,
       type: 'armor',
