@@ -23382,15 +23382,6 @@ function updateSkillButtons() {
 }
 
 // Helper — call at end of buff/utility skills in multi-combat to trigger enemy turns
-function multiSkillEnd() {
-  if (_multiCombatActive) {
-    setTimeout(function(){ multiEnemiesTakeTurns(); }, 400);
-  } else {
-    setCombatBtns(true);
-    updateSkillButtons();
-  }
-}
-
 function useSkill(idx) {
   var unlocked = getUnlockedSkills();
   if (idx >= unlocked.length) return;
@@ -52551,9 +52542,13 @@ function pickRunMode(mode) {
 }
 
 function applyTierScaling(enemy) {
-  if (!DS._tierHpMult && !DS._tierAtkMult) return enemy;
-  var hpMult = DS._tierHpMult || 1;
-  var atkMult = DS._tierAtkMult || 1;
+  // Chaos Mode (secret console code) — getChaosGoldMult() already randomizes
+  // gold at the enemyDead() payout, but the matching enemy-strength half,
+  // getChaosEnemyMult(), was never actually applied anywhere.
+  var chaosMult = getChaosEnemyMult();
+  if (!DS._tierHpMult && !DS._tierAtkMult && chaosMult === 1) return enemy;
+  var hpMult = (DS._tierHpMult || 1) * chaosMult;
+  var atkMult = (DS._tierAtkMult || 1) * chaosMult;
   enemy.hp = Math.round(enemy.hp * hpMult);
   enemy.maxHp = enemy.hp;
   if (Array.isArray(enemy.atk)) {
@@ -54380,8 +54375,6 @@ var SCROLL_DEFS = [
   }},
 ];
 
-function getRandRune() { return JSON.parse(JSON.stringify(RUNE_DEFS[Math.floor(Math.random()*RUNE_DEFS.length)])); }
-function getRandScroll() { return JSON.parse(JSON.stringify(SCROLL_DEFS[Math.floor(Math.random()*SCROLL_DEFS.length)])); }
 // ── END RUNES AND SCROLLS ──
 
 // ── SET BONUS SYSTEM ──
