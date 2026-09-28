@@ -5281,7 +5281,6 @@ var DDStore = (function() {
       <button class="siege-btn" onclick="siegeCallMinion()" id="siege-btn-minion" style="background:#0a0a1a;border:1px solid #4444aa;color:#8888ff;font-family:Cinzel,serif;font-size:0.68rem;cursor:pointer;padding:10px;" aria-label="Call stationed minion to attack">👾 Minion Attack</button>
       <button class="siege-btn" onclick="siegeGunAction()" id="siege-btn-gun" style="display:none;background:#0a0800;border:1px solid #cc8800;color:#ffaa00;font-family:Cinzel,serif;font-size:0.68rem;cursor:pointer;padding:10px;" aria-label="Charge gun">🔫 Charge Gun</button>
     </div>
-    <div id="siege-status-msg" style="font-family:Cinzel,serif;font-size:0.65rem;color:#cc9944;text-align:center;margin-top:10px;min-height:20px;" aria-live="assertive"></div>
   </div>
 </div>
 
@@ -19566,12 +19565,6 @@ function addJournalEntry(text) {
   DS.journalLog.push({ time: timeStr, text: text });
 }
 
-function saveJournal() {
-  if (_charIdx === null) return;
-  CHARS[_charIdx].journal = DS.journalLog;
-  saveChars();
-}
-
 // ── SAVE ──
 function saveProgress(completed) {
   if (_charIdx === null) return;
@@ -19642,6 +19635,10 @@ function saveProgress(completed) {
       saveGlobalInventory(_globalInv);
       DS.inventory = [];
     }
+    // Journal only ever persisted on death (see handleDeath()) — a run you
+    // won or walked away from lost every journal entry it logged, since
+    // saveJournal() existed but was never called from any other exit path.
+    if (DS.journalLog) CHARS[_charIdx].journal = DS.journalLog;
     saveChars();
     checkAchievements();
     recordDungeonFirstClear(DS.dungeon, DS.name, DS.cls, DS.race);
@@ -46532,14 +46529,6 @@ function claimDailyDescent() {
   say('Claimed! ' + reward.gold + ' gold added. ' + (reward.bonus ? 'Bonus reward also added.' : '') + ' Come back tomorrow to continue your streak.');
 }
 
-function updateStreakBadge(streak, justClaimed) {
-  var badge = document.getElementById('menu-streak-badge');
-  if (!badge) return;
-  badge.style.display = '';
-  badge.textContent = '🔥 Day ' + streak + ' Streak' + (justClaimed ? ' ✓ Claimed' : ' — Tap to Claim');
-  badge.setAttribute('aria-label', 'Daily Descent. Day ' + streak + ' streak. ' + (justClaimed ? 'Claimed today.' : 'Tap to claim today\'s reward.'));
-  badge.onkeydown = function(e) { if (e.key === 'Enter' || e.key === ' ') checkDailyDescent(); };
-}
 // ── END DAILY DESCENT ──
 function getSeasonalCurrency(key) {
   return parseInt(DDStore.getItem('dd_sc_' + key) || '0');
@@ -48843,11 +48832,6 @@ function siegeLog(msg) {
   line.textContent = (typeof t === 'function') ? t(msg) : msg;
   log.appendChild(line);
   log.scrollTop = log.scrollHeight;
-}
-
-function siegeSetStatus(msg) {
-  var el = document.getElementById('siege-status-msg');
-  if (el) el.textContent = msg;
 }
 
 function siegeAttack(type) {
@@ -51883,7 +51867,11 @@ function showEscapeConfirmOverlay() {
 
 function confirmEscapeToMenu() {
   closeEscapeConfirm();
-  if (_charIdx !== null && CHARS[_charIdx]) { CHARS[_charIdx].floor = DS.floor || 1; saveChars(); }
+  if (_charIdx !== null && CHARS[_charIdx]) {
+    CHARS[_charIdx].floor = DS.floor || 1;
+    if (DS.journalLog) CHARS[_charIdx].journal = DS.journalLog;
+    saveChars();
+  }
   stopAmbient();
   if (typeof stopCorruptionSystem === 'function') stopCorruptionSystem();
   playTrack(getMenuTrack());
@@ -56398,10 +56386,6 @@ function getAFKSave() {
 }
 function saveAFKData(o) { DDStore.setItem('dd_afk', JSON.stringify(o)); }
 
-function getTotalDescentPoints() {
-  return getAFKSave().totalPoints || 0;
-}
-
 function addDescentPoints(pts) {
   var s = getAFKSave();
   s.totalPoints = (s.totalPoints || 0) + pts;
@@ -59273,18 +59257,6 @@ function getCharPersistentLevel(charIdx) {
 function getEndlessBestStr(ch) {
   if (!ch.endlessBest || ch.endlessBest < 1) return '';
   return ' · ⬇ Floor ' + ch.endlessBest + ' (Endless)';
-}
-
-function resetCharPersistentLevel(charIdx) {
-  var idx = charIdx !== undefined ? charIdx : _charIdx;
-  if (idx === null || !CHARS[idx]) return;
-  CHARS[idx].persistLevel  = 1;
-  CHARS[idx].persistXp     = 0;
-  CHARS[idx].persistSkills = [];
-  CHARS[idx].persistMaxHp  = 0;
-  CHARS[idx].persistAtk    = 0;
-  saveChars();
-  say('Character level reset. Back to level 1.');
 }
 
 // Get persistent bonuses as plain object for non-DS modes
