@@ -910,19 +910,6 @@ body{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bot
 .skill-choice-cost{font-family:'Cinzel',serif;font-size:0.65rem;color:#7060c0;}
 
 /* ── SPIRIT COMPANIONS ── */
-.spirit-pick-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:88;align-items:center;justify-content:center;padding:20px;}
-.spirit-pick-overlay.open{display:flex;}
-.spirit-pick-box{background:#080610;border:1px solid #5a20a0;border-top:2px solid #a050e0;width:min(560px,96vw);padding:32px;animation:panelSlide 0.3s ease;max-height:92vh;overflow-y:auto;}
-.spirit-pick-title{font-family:'Cinzel Decorative',cursive;font-size:1.1rem;color:#c080f0;margin-bottom:6px;}
-.spirit-pick-sub{font-size:0.85rem;color:var(--text-secondary);font-style:italic;margin-bottom:20px;line-height:1.5;}
-.spirit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.spirit-card{background:#0e0818;border:1px solid #4a1880;padding:16px;cursor:pointer;transition:all 0.2s;outline:none;text-align:left;width:100%;}
-.spirit-card:hover,.spirit-card:focus{border-color:#a050e0;background:#16102a;}
-.spirit-card:focus{outline:2px solid #a050e0;outline-offset:2px;}
-.spirit-card-icon{font-size:2rem;display:block;margin-bottom:8px;}
-.spirit-card-name{font-family:'Cinzel',serif;font-size:0.88rem;color:#c080f0;margin-bottom:4px;}
-.spirit-card-desc{font-size:0.75rem;color:var(--text-secondary);font-style:italic;line-height:1.4;margin-bottom:6px;}
-.spirit-card-ability{font-family:'Cinzel',serif;font-size:0.65rem;color:#8040c0;letter-spacing:0.08em;}
 .dg-spirit-row{background:#0a0616;border:1px solid #3a1060;padding:8px 16px;display:flex;align-items:center;gap:12px;}
 .dg-spirit-icon{font-size:1.3rem;flex-shrink:0;}
 .dg-spirit-info{flex:1;}
@@ -6581,15 +6568,6 @@ var DDStore = (function() {
     <h2 class="skill-choice-title" id="skill-choice-title">⬆ New Skill Available</h2>
     <p class="skill-choice-sub" id="skill-choice-sub">Choose one skill to unlock. The others are lost.</p>
     <div class="skill-choice-grid" id="skill-choice-grid" role="group" aria-label="Choose a skill"></div>
-  </div>
-</div>
-
-<!-- SPIRIT PICK OVERLAY -->
-<div class="spirit-pick-overlay" id="spirit-pick-overlay" role="dialog" aria-modal="true" aria-labelledby="spirit-pick-title">
-  <div class="spirit-pick-box">
-    <h2 class="spirit-pick-title" id="spirit-pick-title">✦ Choose Your Spirit Companion</h2>
-    <p class="spirit-pick-sub" id="spirit-pick-sub">A spirit will accompany you through the dungeon. It attacks alongside you in combat. Choose wisely — you can only have one.</p>
-    <div class="spirit-grid" id="spirit-pick-grid" role="group" aria-label="Choose a spirit companion"></div>
   </div>
 </div>
 
@@ -41444,8 +41422,6 @@ var RARE_SPIRITS = [
     onKill:null }
 ];
 
-var _spiritPickCallback = null;
-
 function getCustomSpiritsWithFunctions() {
   var customs = _jsonParseSafe(DDStore.getItem('dd_custom_spirits'), '[]');
   return customs.map(function(s) {
@@ -41462,79 +41438,7 @@ function getSpiritById(id) {
   return getAllSpirits().find(function(s){ return s.id===id; });
 }
 
-function openSpiritPicker(callback) {
-  _spiritPickCallback = callback;
-  var grid = document.getElementById('spirit-pick-grid');
-  grid.innerHTML = '';
-
-  // Collect earnedSpirits from ALL characters — not just current one
-  var allEarned = [];
-  CHARS.forEach(function(ch) {
-    if (ch && ch.earnedSpirits) {
-      ch.earnedSpirits.forEach(function(id) {
-        if (allEarned.indexOf(id) === -1) allEarned.push(id);
-      });
-    }
-  });
-  // Also check current char
-  var earned = (_charIdx!==null && CHARS[_charIdx] && CHARS[_charIdx].earnedSpirits) ? CHARS[_charIdx].earnedSpirits : [];
-  earned.forEach(function(id){ if (allEarned.indexOf(id)===-1) allEarned.push(id); });
-
-  var lastSpiritId = _charIdx !== null && CHARS[_charIdx] ? CHARS[_charIdx].lastSpirit : null;
-  var rareAvail = RARE_SPIRITS.filter(function(s){ return allEarned.indexOf(s.id) !== -1; });
-  var eliteAvail = ELITE_SPIRITS.filter(function(s){ return allEarned.indexOf(s.id) !== -1; });
-  // Show ALL custom built spirits
-  var customAvail = getCustomSpiritsWithFunctions();
-  var available = STARTER_SPIRITS.concat(rareAvail).concat(eliteAvail).concat(customAvail);
-
-  var extraCount = rareAvail.length + eliteAvail.length + customAvail.length;
-  document.getElementById('spirit-pick-sub').textContent = extraCount > 0
-    ? 'You have ' + extraCount + ' earned spirit' + (extraCount !== 1 ? 's' : '') + ' available. Rare and elite spirits require level 5.'
-    : 'Choose a starter companion for this run.';
-
-  available.forEach(function(spirit) {
-    var card = document.createElement('button');
-    card.className = 'spirit-card';
-    var isLastUsed = lastSpiritId && spirit.id === lastSpiritId;
-    card.setAttribute('aria-label', spirit.name + (isLastUsed ? ' — last used.' : '') + '. ' + spirit.desc + ' Ability: ' + spirit.ability + (spirit.minLevel ? ' Requires level ' + spirit.minLevel + '.' : ''));
-    if (isLastUsed) card.style.borderColor = '#a050e0';
-    card.innerHTML =
-      '<span class="spirit-card-icon" aria-hidden="true">' + spirit.icon + '</span>' +
-      '<div class="spirit-card-name">' + spirit.name +
-        (spirit.rarity==='rare' ? ' <span style="font-size:0.58rem;color:var(--gold);border:1px solid var(--gold-dim);padding:1px 5px;">RARE</span>' : '') +
-        (spirit.rarity==='elite' ? ' <span style="font-size:0.58rem;color:#cc88ff;border:1px solid #884499;padding:1px 5px;">ELITE</span>' : '') +
-        (spirit.isCustomBuilt ? ' <span style="font-size:0.58rem;color:#44aaff;border:1px solid #224488;padding:1px 5px;">CUSTOM</span>' : '') +
-      '</div>' +
-      '<div class="spirit-card-desc">' + spirit.desc + '</div>' +
-      '<div class="spirit-card-ability">✦ ' + spirit.ability + '</div>';
-    (function(s){
-      card.onclick = function(){
-        // Market Sprite costs gold to reactivate if already used
-        if (s.isMarketSprite && _charIdx !== null) {
-          var ch = CHARS[_charIdx];
-          if (ch.marketSpriteUsed) {
-            if (DS.gold < s.reactivateCost) {
-              say('Not enough gold to reactivate the Market Sprite. You need ' + s.reactivateCost + ' gold.');
-              return;
-            }
-            DS.gold -= s.reactivateCost; spendGlobalGold(s.reactivateCost);
-            updateTopBar();
-            addLog('Paid ' + s.reactivateCost + 'g to reactivate Market Sprite.');
-          }
-        }
-        pickSpirit(s);
-      };
-    })(spirit);
-    grid.appendChild(card);
-  });
-
-  document.getElementById('spirit-pick-overlay').classList.add('open');
-  say('Choose your spirit companion. ' + available.length + ' available. ' + available.map(function(s){return s.name;}).join(', '));
-  setTimeout(function(){ var f=grid.querySelector('.spirit-card'); if(f) f.focus(); },80);
-}
-
 function pickSpirit(spirit) {
-  document.getElementById('spirit-pick-overlay').classList.remove('open');
   DS.activeSpirit = spirit;
   updateSpiritDisplay();
   // Save spirit choice to character so it persists
@@ -41543,7 +41447,6 @@ function pickSpirit(spirit) {
     saveChars();
   }
   say('You chose ' + spirit.name + '. ' + spirit.ability);
-  if (_spiritPickCallback) { _spiritPickCallback(); _spiritPickCallback = null; }
 }
 
 function updateSpiritDisplay() {
