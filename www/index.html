@@ -3019,8 +3019,8 @@ var DDStore = (function() {
       <div class="backstory-grid" id="backstory-grid" role="radiogroup" aria-label="Choose your backstory"></div>
       <div class="btn-row">
         <button class="btn btn-secondary" onclick="cStep(11)" aria-label="Back to companion guide">← Back</button>
-        <button class="btn btn-ghost" onclick="finalizeChar()" aria-label="Skip backstory and descend now">Skip ↓</button>
-        <button class="btn btn-primary" onclick="finalizeChar()" aria-label="Descend with chosen backstory">⚔ Descend</button>
+        <button class="btn btn-ghost" onclick="openConfirmDialog()" aria-label="Skip backstory and descend now">Skip ↓</button>
+        <button class="btn btn-primary" onclick="openConfirmDialog()" aria-label="Descend with chosen backstory">⚔ Descend</button>
       </div>
     </section>
   </div>
@@ -9321,18 +9321,6 @@ function _playTrackFallback(name, url) {
   }
 }
 
-function playTrackFromPlayer(name) {
-  // Called directly from music player — always stops custom track first
-  if (_customTrackActive || _ytActive) stopCustomTrack();
-  if (AUD.current === name) return;
-  var old = AUD.current ? AUD.tracks[AUD.current] : null;
-  if (old) { old.pause(); old.currentTime = 0; }
-  AUD.current = name;
-  var track = getTrack(name);
-  if (track) { track.volume = AUD.musicVol; track.currentTime = 0; track.play().catch(function(){}); }
-  say('Now playing: ' + name + '.');
-}
-
 function sfxHover(e) {
   if (e.target && e.target.classList.contains('menu-btn')) sfx('sfx-hover');
 }
@@ -15445,10 +15433,19 @@ function enterRoom() {
           sfx('sfx-loot'); vibe(VIBE.loot);
         }
         // Lucky Descent — first loot of run is always rare
-        if (DS._luckyDescent && !DS._luckyDescentUsed && lootItem.type === 'weapon') {
+        // BUGFIX: this used to build its own { id:'rare', label:'Rare', ... }
+        // object missing atkMult and specialEffect (both present on the real
+        // WEAPON_RARITIES entry). applyRarityToWeapon()/applyRarityToArmor()
+        // multiply atkBase/defBase by rarity.atkMult, so the guaranteed
+        // weapon's stats became NaN, and specialEffect being undefined meant
+        // it never actually got a rarity effect either — "guaranteed rare"
+        // silently produced a broken item. Look up the real tier object
+        // instead so this always matches WEAPON_RARITIES exactly, and only
+        // used the weapon path before — armor never got its guaranteed roll.
+        if (DS._luckyDescent && !DS._luckyDescentUsed && (lootItem.type === 'weapon' || lootItem.type === 'armor')) {
           DS._luckyDescentUsed = true;
-          var rareRarity = { id:'rare', label:'Rare', symbol:'◆', color:'#4a9eff' };
-          lootItem = applyRarityToWeapon(lootItem, rareRarity);
+          var rareRarity = WEAPON_RARITIES.find(function(r){ return r.id === 'rare'; });
+          lootItem = lootItem.type === 'weapon' ? applyRarityToWeapon(lootItem, rareRarity) : applyRarityToArmor(lootItem, rareRarity);
           addLog('🌟 Lucky Descent — rare quality guaranteed!');
         }
         // Void Pact — 5% chance to find a Mystery Coin
@@ -19982,12 +19979,6 @@ function showTrueEnding() {
     box.appendChild(btnRow);
     setTimeout(function() { credBtn.focus(); }, 100);
   }, 16000);
-}
-
-function dismissCreditsAndGoHome() {
-  var ov = document.getElementById('credits-overlay');
-  if (ov) ov.remove();
-  goHome();
 }
 
 // ── END TRUE ENDING ──
@@ -41344,6 +41335,10 @@ function openSettingsPanel(panel) {
   if (panel === 'beta') updateBetaPanel();
   if (panel === '3dmode') update3DSettingsPanel();
   if (panel === 'notifications') syncNotifToggleUI();
+  // BUGFIX: checkSavedCustomTrack() existed to restore your last-used custom
+  // track URL into the input field, but nothing ever called it — the URL was
+  // saved correctly, just never shown again, so the field always looked blank.
+  if (panel === 'audio') checkSavedCustomTrack();
   var el = document.getElementById('settings-panel-' + panel);
   if (el) el.classList.add('open');
   var names = { audio: 'Audio', language: 'Language', accessibility: 'Accessibility', gameplay: 'Gameplay', account: 'Account', dev: 'Developer Tools' };
@@ -46413,25 +46408,6 @@ function saveDailyDescentState(state) {
   DDStore.setItem('dd_daily_descent', JSON.stringify(state));
 }
 
-function openMenuInventory() {
-  // Load equipped gear from localStorage into DS so renderInv works
-  DS._fromMenu = true;
-  try {
-    var w = _jsonParseSafe(DDStore.getItem('dd_equipped_weapon'), 'null');
-    if (w) { DS.equippedWeapon = w; DS.equippedWeaponAtk = getWeaponAtk(w); }
-    var a = _jsonParseSafe(DDStore.getItem('dd_equipped_armor'), 'null');
-    if (a) { DS.equippedArmor = a; DS.equippedArmorDef = getArmorDef(a); }
-  } catch(e) {}
-  DS.inventory = getGlobalInventory();
-
-  var ov = document.getElementById('ov-inv');
-  if (!ov) { say('Inventory not available.'); return; }
-  ov.classList.add('open');
-  renderInv();
-  say('Inventory. ' + DS.inventory.length + ' items. Tab through to equip or use items.');
-  setTimeout(function(){ var f = ov.querySelector('button'); if(f) f.focus(); }, 100);
-}
-
 function initDailyDescentBadge() {
   var now = new Date();
   var today = now.getFullYear() + '-' + (now.getMonth()+1) + '-' + now.getDate();
@@ -51119,25 +51095,6 @@ function mpStop() {
   // Resume game music if it was playing before music player opened
   if (AUD && AUD.musicOn && AUD.current) {
     try { playTrack(AUD.current); } catch(e) {}
-  }
-}
-
-function libTab(tab) {
-  var storiesPanel = document.getElementById('library-list');
-  var musicPanel = document.getElementById('library-music-panel');
-  var stBtn = document.getElementById('lib-tab-stories');
-  var muBtn = document.getElementById('lib-tab-music');
-  if (tab === 'stories') {
-    if (storiesPanel) storiesPanel.style.display = '';
-    if (musicPanel) musicPanel.style.display = 'none';
-    if (stBtn) { stBtn.classList.add('active'); stBtn.setAttribute('aria-selected','true'); }
-    if (muBtn) { muBtn.classList.remove('active'); muBtn.setAttribute('aria-selected','false'); }
-    say('Stories tab. ' + STORIES.filter(function(s){ return !s.hidden || DDStore.getItem('dd_julio_story'); }).length + ' stories available.');
-  } else {
-    if (storiesPanel) storiesPanel.style.display = 'none';
-    if (musicPanel) { musicPanel.style.display = ''; renderMusicPlayer(); }
-    if (stBtn) { stBtn.classList.remove('active'); stBtn.setAttribute('aria-selected','false'); }
-    if (muBtn) { muBtn.classList.add('active'); muBtn.setAttribute('aria-selected','true'); }
   }
 }
 
@@ -59394,91 +59351,6 @@ function startEndlessCombat(enemy) {
 
 // Show endless best floor on character cards
 
-function confirmSaveTrack() {
-  try {
-    var inp = document.getElementById('save-track-name');
-    var name = inp ? inp.value.trim() : 'My Track';
-    if (!name) name = 'My Track';
-    // Read blob and url from module vars BEFORE removing overlay
-    var blob = _pendingSaveBlob;
-    var url = _pendingSaveUrl;
-    var id = 'track-' + Date.now();
-    // Clear module vars
-    _pendingSaveBlob = null;
-    _pendingSaveUrl = '';
-    // Now safe to remove overlay
-    var ov = document.getElementById('save-track-overlay');
-    if (ov) ov.remove();
-    saveTrackToDB(id, name, blob, url);
-  } catch(e) {
-    say('Error saving track. ' + (e.message || 'Unknown error.'));
-    console.log('confirmSaveTrack error:', e);
-  }
-}
-
-function promptSaveTrack(blob, url, defaultName) {
-  var name = defaultName || 'My Custom Track';
-  var existing = document.getElementById('save-track-overlay');
-  if (existing) existing.remove();
-
-  var ov = document.createElement('div');
-  ov.id = 'save-track-overlay';
-  ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);z-index:9600;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;';
-  _pendingSaveBlob = blob || null;
-  _pendingSaveUrl = url || '';
-
-  var box = document.createElement('div');
-  box.style.cssText = 'max-width:400px;width:100%;background:var(--bg-panel);border:1px solid var(--gold-dim);border-top:3px solid var(--gold);padding:24px;';
-
-  var eyebrow = document.createElement('div');
-  eyebrow.style.cssText = 'font-family:Cinzel,serif;font-size:0.65rem;letter-spacing:0.3em;color:var(--gold-dim);margin-bottom:8px;';
-  eyebrow.textContent = '💾 SAVE TO MY TRACKS';
-
-  var desc = document.createElement('p');
-  desc.style.cssText = 'font-size:0.78rem;color:var(--text-secondary);margin-bottom:14px;';
-  desc.textContent = 'Give this track a name so you can find it later.';
-
-  var inp = document.createElement('input');
-  inp.type = 'text';
-  inp.id = 'save-track-name';
-  inp.value = name;
-  inp.maxLength = 40;
-  inp.setAttribute('aria-label', 'Track name');
-  inp.style.cssText = 'width:100%;background:#111;color:#ccc;border:1px solid var(--border-dim);padding:10px;font-size:0.82rem;box-sizing:border-box;margin-bottom:12px;';
-
-  var btnRow = document.createElement('div');
-  btnRow.style.cssText = 'display:flex;gap:8px;';
-
-  var saveBtn = document.createElement('button');
-  saveBtn.className = 'menu-btn primary';
-  saveBtn.style.flex = '1';
-  saveBtn.setAttribute('aria-label', 'Save track');
-  saveBtn.textContent = '💾 Save';
-  saveBtn.onclick = confirmSaveTrack;
-
-  var skipBtn = document.createElement('button');
-  skipBtn.className = 'btn-ghost';
-  skipBtn.style.flex = '1';
-  skipBtn.setAttribute('aria-label', 'Skip saving');
-  skipBtn.textContent = 'Skip';
-  skipBtn.onclick = closeTrackSavePrompt;
-
-  btnRow.appendChild(saveBtn);
-  btnRow.appendChild(skipBtn);
-  box.appendChild(eyebrow);
-  box.appendChild(desc);
-  box.appendChild(inp);
-  box.appendChild(btnRow);
-  ov.appendChild(box);
-  document.body.appendChild(ov);
-
-  setTimeout(function() {
-    inp.focus(); inp.select();
-    say('Save track to My Tracks? Enter a name and press Save, or press Skip.');
-  }, 100);
-}
-
-
 
 // ── TIME DESCENDER ENCOUNTER FUNCTIONS ──
 function timeDescenderClockHit(action) {
@@ -63962,47 +63834,6 @@ function getVoidChronicles() {
   try { return _jsonParseSafe(DDStore.getItem('dd_void_chronicles'), '[]'); } catch(e) { return []; }
 }
 
-function dismissVoidChronicles() {
-  var el = document.getElementById('void-chronicles-overlay');
-  if (el) el.remove();
-}
-
-function openVoidChronicles() {
-  var chapters = getVoidChronicles();
-  if (chapters.length === 0) {
-    say('No Void Chronicles yet. Find the child who wanders the dungeon.');
-    return;
-  }
-  // Show in a modal
-  var ov = document.createElement('div');
-  ov.id = 'void-chronicles-overlay';
-  ov.setAttribute('role', 'dialog');
-  ov.setAttribute('aria-modal', 'true');
-  ov.setAttribute('aria-label', 'The Void Chronicles');
-  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.96);z-index:9500;display:flex;align-items:center;justify-content:center;padding:20px;';
-
-  var box = document.createElement('div');
-  box.style.cssText = 'max-width:480px;width:100%;background:#04000a;border:1px solid #220033;padding:24px;max-height:85vh;overflow-y:auto;';
-
-  var html = '<div style="font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.4em;color:#440066;margin-bottom:6px;">THE VOID CHRONICLES</div>';
-  html += '<div style="font-family:Cinzel,serif;font-size:0.9rem;color:#8833cc;margin-bottom:4px;">Fragments: ' + chapters.length + ' / 25</div>';
-  html += '<div style="width:40px;height:1px;background:#330044;margin-bottom:20px;"></div>';
-
-  chapters.sort(function(a,b){ return a.num - b.num; }).forEach(function(c) {
-    html += '<div style="margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #110022;">';
-    html += '<div style="font-family:Cinzel,serif;font-size:0.7rem;color:#6622aa;margin-bottom:6px;">' + c.title + '</div>';
-    html += '<div style="font-family:Cinzel,serif;font-size:0.65rem;color:#554466;line-height:1.9;">' + c.text + '</div>';
-    html += '</div>';
-  });
-
-  html += '<button type="button" onclick="dismissVoidChronicles()" style="width:100%;padding:12px;background:#080010;border:1px solid #440066;color:#8833cc;font-family:Cinzel,serif;font-size:0.72rem;cursor:pointer;margin-top:10px;" aria-label="Close Void Chronicles">Close</button>';
-
-  box.innerHTML = html;
-  ov.appendChild(box);
-  document.body.appendChild(ov);
-  setTimeout(function(){ var btn = ov.querySelector('button'); if(btn) btn.focus(); }, 100);
-  say('The Void Chronicles. ' + chapters.length + ' of 25 fragments collected.');
-}
 // ── END VOID CHILD FRAGMENT SYSTEM ──
 
 // ── NPC ENCOUNTER SYSTEM ──
@@ -65217,10 +65048,14 @@ function openShadowInventory() {
       if (!already) DS.inventory.push(ki);
     });
   } catch(e) {}
-  var ov = document.getElementById('ov-inv');
-  if (ov) {
+  // BUGFIX: this referenced #ov-inv, which doesn't exist anywhere in the
+  // page — the real inventory panel is #dg-inv, toggled via display (see
+  // toggleInv()), not a class="overlay" element with an .open class. The
+  // Inventory button in Shadow Realm silently did nothing.
+  var panel = document.getElementById('dg-inv');
+  if (panel) {
     renderInv();
-    ov.classList.add('open');
+    panel.style.display = '';
     say('Inventory opened. ' + (DS.inventory ? DS.inventory.length : 0) + ' items. Armor equipping is locked during combat.');
   }
 }
