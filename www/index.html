@@ -7022,10 +7022,21 @@ var DDStore = (function() {
       </div>
       <div id="bs-panel-reforge" style="display:none;padding:14px;">
         <div style="font-family:Cinzel,serif;font-size:0.72rem;color:#cc9944;margin-bottom:10px;">✨ Reforge</div>
-        <div style="font-family:Cinzel,serif;font-size:0.65rem;color:#666;line-height:1.7;margin-bottom:14px;">Spend gold to reroll your equipped weapon's rarity. Higher rarities have better stats and special effects. Results are random.</div>
+        <div style="font-family:Cinzel,serif;font-size:0.65rem;color:#666;line-height:1.7;margin-bottom:10px;">Spend gold to reroll your equipped weapon's rarity. Higher rarities have better stats and special effects. Results are random.</div>
+        <button type="button" onclick="openRarityGuide()" style="width:100%;padding:8px;background:#0a0800;border:1px solid #555;color:#cc9944;font-family:Cinzel,serif;font-size:0.65rem;cursor:pointer;margin-bottom:14px;" aria-label="View every rarity effect for weapons and armor">📖 View All Rarity Effects</button>
         <div id="bs-reforge-content"></div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- RARITY EFFECTS GUIDE OVERLAY -->
+<div id="ov-rarity-guide" role="dialog" aria-modal="true" aria-label="Rarity Effects Guide" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.97);z-index:930;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto;">
+  <div style="max-width:440px;width:100%;background:#0a0a0a;border:1px solid #333;border-top:2px solid #cc9944;padding:24px;">
+    <button onclick="closeRarityGuide()" style="font-family:'Cinzel',serif;font-size:0.65rem;color:#888;background:none;border:none;cursor:pointer;margin-bottom:12px;" aria-label="Close rarity guide">← Back to Reforge</button>
+    <div style="font-family:'Cinzel Decorative',cursive;font-size:1rem;color:#cc9944;margin-bottom:4px;">📖 Rarity Effects</div>
+    <div style="font-family:'Cinzel',serif;font-size:0.65rem;color:#666;margin-bottom:14px;">Every special effect a weapon or armor piece can roll, by tier. Reforging rerolls both the tier and, at Uncommon or above, a random effect from that tier.</div>
+    <div id="rarity-guide-content"></div>
   </div>
 </div>
 
@@ -35027,88 +35038,6 @@ var TITLE_TAGS = [
   'Relic', 'Marked', 'Wanderer', 'Remnant', 'Sovereign'
 ];
 
-var _selectedTag = null;
-
-function openTagPrompt() {
-  var ov = document.getElementById('ov-username');
-  if (!ov) return;
-  _selectedTag = null;
-  // Build tag list
-  var list = document.getElementById('tag-list');
-  if (list) {
-    list.innerHTML = '';
-    TITLE_TAGS.forEach(function(tag) {
-      var btn = document.createElement('button');
-      btn.textContent = tag;
-      btn.setAttribute('role', 'radio');
-      btn.setAttribute('aria-checked', 'false');
-      btn.setAttribute('aria-label', tag + ' title');
-      btn.style.cssText = 'padding:8px;background:#111;border:1px solid #333;color:#aaa;font-family:Cinzel,serif;font-size:0.72rem;cursor:pointer;border-radius:3px;text-align:center;';
-      btn.onclick = function() {
-        list.querySelectorAll('button').forEach(function(b) {
-          b.setAttribute('aria-checked','false');
-          b.style.borderColor = '#333';
-          b.style.color = '#aaa';
-        });
-        btn.setAttribute('aria-checked','true');
-        btn.style.borderColor = '#ffdd44';
-        btn.style.color = '#ffdd44';
-        _selectedTag = tag;
-        // Update preview
-        var preview = document.getElementById('ov-username-preview');
-        var user = getFirebaseUser();
-        if (preview && user) {
-          preview.textContent = getDisplayName(user) + ' · ' + tag;
-        }
-        say(tag + ' selected. Press Confirm Title to save.');
-      };
-      list.appendChild(btn);
-    });
-    // Focus first tag
-    setTimeout(function() {
-      var first = list.querySelector('button');
-      if (first) first.focus();
-    }, 150);
-  }
-  // Show current display name in preview
-  var preview = document.getElementById('ov-username-preview');
-  var user = getFirebaseUser();
-  if (preview && user) {
-    preview.textContent = getDisplayName(user) + ' · ???';
-  }
-  ov.classList.add('open');
-  say('Choose your title. This appears next to your name on the leaderboard. ' + TITLE_TAGS.length + ' titles available.');
-}
-
-async function submitTag() {
-  var err = document.getElementById('username-error');
-  var setErr = function(msg, col) { if (err) { err.textContent = msg; err.style.color = col || '#ff4444'; } };
-  if (!_selectedTag) {
-    setErr('Please select a title first.');
-    say('Please select a title first.');
-    return;
-  }
-  var user = getFirebaseUser();
-  if (!user) { setErr('Not signed in.'); return; }
-  // Save tag locally
-  DDStore.setItem('dd_title_tag', _selectedTag);
-  // Save to Firebase
-  if (window._fbDb) {
-    window._fbDb.collection('users').doc(user.uid).set(
-      { titleTag: _selectedTag, updatedAt: Date.now() },
-      { merge: true }
-    ).catch(function(e) { console.warn('Tag save error:', e.message); });
-  }
-  setErr('Title set: ' + _selectedTag, '#44ff88');
-  say('Title set to ' + _selectedTag + '. Your name on the leaderboard is now ' + getDisplayName(user) + ' dot ' + _selectedTag + '.');
-  updateAccountUI();
-  setTimeout(closeUsernamePrompt, 1200);
-}
-
-function getTitleTag() {
-  return DDStore.getItem('dd_title_tag') || null;
-}
-
 // checkUsername() was called from submitUsername() below but never actually
 // defined anywhere in the codebase — every username submission threw a
 // ReferenceError immediately, before ever reaching saveUsername() (which
@@ -35146,10 +35075,6 @@ async function saveUsername(username) {
 
 function getLocalUsername() {
   return DDStore.getItem('dd_username') || null;
-}
-
-function openUsernamePrompt() {
-  openTagPrompt();
 }
 
 function closeUsernamePrompt() {
@@ -35282,9 +35207,15 @@ function getDisplayName(user) {
 }
 
 // Full leaderboard display: "Leo#x7k · TheVoid" or just "Leo#x7k"
+// BUGFIX: this used getTitleTag() (dd_title_tag), settable only through
+// openTagPrompt()/submitTag() — neither ever had a button calling them, so
+// the leaderboard tag could never actually be set by any player. Reuses
+// getPlayerTitle() (dd_title) instead, the title from the already-live
+// "🏷 Change Title" picker in Account — same TITLE_TAGS pool, one title
+// system instead of two, and it's always settable right now.
 function getLeaderboardName(user) {
   var base = getDisplayName(user);
-  var tag = getTitleTag();
+  var tag = getPlayerTitle();
   return tag ? base + ' · ' + tag : base;
 }
 
@@ -35321,7 +35252,7 @@ async function uploadToLeaderboard() {
       uid: user.uid,
       username: username,
       score: total,
-      tag: getTitleTag() || '',
+      tag: getPlayerTitle() || '',
       updatedAt: Date.now(),
     });
     setBtn('✓ Uploaded!', '#44ff88');
@@ -59947,6 +59878,46 @@ function applyRarityToArmor(armor, rarity) {
   return a;
 }
 // ── END ARMOR RARITY SYSTEM ──
+
+// ── RARITY EFFECTS GUIDE ──
+function openRarityGuide() {
+  var ov = document.getElementById('ov-rarity-guide');
+  if (!ov) return;
+  renderRarityGuide();
+  ov.style.display = 'flex';
+  say('Rarity Effects Guide.');
+}
+
+function closeRarityGuide() {
+  var ov = document.getElementById('ov-rarity-guide');
+  if (ov) ov.style.display = 'none';
+}
+
+function renderRarityGuide() {
+  var c = document.getElementById('rarity-guide-content');
+  if (!c) return;
+  var html = '';
+  WEAPON_RARITIES.forEach(function(tier) {
+    if (!tier.specialEffect) return; // Common has no effects
+    var weaponEffects = RARITY_EFFECTS[tier.specialEffect] || [];
+    var armorEffects = ARMOR_RARITY_EFFECTS[tier.specialEffect] || [];
+    html += '<div style="margin-bottom:18px;">';
+    html += '<div style="font-family:Cinzel,serif;font-size:0.78rem;color:' + tier.color + ';margin-bottom:8px;border-bottom:1px solid #222;padding-bottom:4px;">' + tier.symbol + ' ' + tier.label + '</div>';
+    weaponEffects.forEach(function(e) {
+      html += '<div style="margin-bottom:6px;padding-left:6px;border-left:2px solid ' + tier.color + ';">' +
+        '<span style="font-family:Cinzel,serif;font-size:0.68rem;color:#ddd;">⚔ ' + e.name + '</span>' +
+        '<span style="font-size:0.62rem;color:#888;"> — ' + e.desc + '</span></div>';
+    });
+    armorEffects.forEach(function(e) {
+      html += '<div style="margin-bottom:6px;padding-left:6px;border-left:2px solid ' + tier.color + ';">' +
+        '<span style="font-family:Cinzel,serif;font-size:0.68rem;color:#ddd;">🛡 ' + e.name + '</span>' +
+        '<span style="font-size:0.62rem;color:#888;"> — ' + e.desc + '</span></div>';
+    });
+    html += '</div>';
+  });
+  c.innerHTML = html;
+}
+// ── END RARITY EFFECTS GUIDE ──
 
 var BLACKSMITH_WEAPONS = [
   { id:'starter-blade',  name:'Worn Blade',      icon:'🗡️', type:'weapon', weaponType:'sword',  level:1, cost:0,   atkBase:[4,8],  isEquippable:true, desc:'A battered but reliable blade. Free for any new adventurer.' },
