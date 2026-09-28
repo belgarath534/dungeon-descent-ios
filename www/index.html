@@ -15420,6 +15420,13 @@ function enterRoom() {
             lootItem = applyRarityToWeapon(lootItem, dropRarity);
           }
         }
+        // Apply rarity to armor drops
+        if (lootItem.type === 'armor' && typeof rollWeaponRarity !== 'undefined') {
+          var armorDropRarity = rollWeaponRarity();
+          if (armorDropRarity && armorDropRarity.id !== 'common') {
+            lootItem = applyRarityToArmor(lootItem, armorDropRarity);
+          }
+        }
         // Prevent duplicate weapons — if already in inventory, skip
         if (lootItem.type === 'weapon' || lootItem.type === 'armor') {
           var alreadyHas = DS.inventory.find(function(inv){ return inv.name === lootItem.name; });
@@ -15606,7 +15613,10 @@ function advanceFloor() {
   DS.floor++;
   DS._blackBoxThisFloor = false;
   DS._weaponUndyingUsedFloor = false;
+  DS._armorSanctuaryUsedFloor = false;
   DS._killStreak = 0; // reset kill streak on new floor
+  // Warm Blood coin upgrade — heal 1 HP on entering each new floor
+  if (DS._warmBlood && DS.hp > 0) { DS.hp = Math.min(DS.maxHp, DS.hp + 1); updatePlayerBar(); }
   // Reset Shadow World per-run state on floor 1
   if (DS.floor === 1 && DS.dungeon === 'The Shadow World') {
     DS._shadowCorruption = 0;
@@ -15984,6 +15994,7 @@ function startCombat(isBoss) {
   try { updateCombatSpellBtn(); } catch(e2) {}
   if (DS.cls === 'Ranger') DS.rangerFirstHit = true;
   DS._weaponFirstHit = true;
+  DS._tookDamageThisCombat = false;
   if (DS._huntersMark) DS._huntersMarkReady = true;
   if (DS.enemy) DS.enemy = applyTierScaling(DS.enemy);
 
@@ -16788,6 +16799,8 @@ function doFight(action) {
       playerDmg = Math.round(playerDmg * 1.50);
       addLog('💀 Executioner strikes the weakened foe — +50% damage!');
     }
+    // Aegis armor — -20% damage dealt (paid for with -40% damage taken, see enemy-attack block)
+    if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'aegis') playerDmg = Math.round(playerDmg * 0.80);
     // Ranger — bonus damage on first hit of combat
     if (DS.cls === 'Ranger' && ACCESS.classTraits && DS.rangerFirstHit) {
       playerDmg = Math.round(playerDmg * 1.75);
@@ -16953,6 +16966,8 @@ function doFight(action) {
         playerDmg = Math.round(playerDmg * 1.50);
         addLog('💀 Executioner strikes the weakened foe — +50% damage!');
       }
+      // Aegis armor — -20% damage dealt
+      if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'aegis') playerDmg = Math.round(playerDmg * 0.80);
       sfx('sfx-heavy-hit');
       addLog(t('Heavy strike lands for ') + playerDmg + t(' damage!'));
       // Dagger — "15% chance to strike twice"
@@ -17016,7 +17031,9 @@ function doFight(action) {
     // Swift Potion guarantees flee
     var swiftGuarantee = (DS._swiftPotion && DS._swiftPotion > 0) || DS._runeSpeed;
     if (DS._swiftPotion && DS._swiftPotion > 0) DS._swiftPotion--;
-    var fleeChance = swiftGuarantee ? 1.0 : (hasRing ? 0.75 : 0.45) + (DS.fleeBonus || 0);
+    // Light Step armor rarity effect — +10% flee chance
+    var lightStepBonus = (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'light-step') ? 0.10 : 0;
+    var fleeChance = swiftGuarantee ? 1.0 : (hasRing ? 0.75 : 0.45) + (DS.fleeBonus || 0) + lightStepBonus;
     if (Math.random() < fleeChance) {
       DS.inCombat = false;
       playTrack(exploTrackForFloor(DS.floor));
@@ -17082,9 +17099,20 @@ function doFight(action) {
     // Check frozen (from trap)
     if (DS.frozen) {
       DS.frozen = false;
-      addLog('You are frozen and cannot act this turn!');
-      say('Frozen! You skip this turn.');
-      setCombatBtns(true); updateSkillButtons(); return;
+      // Juggernaut armor — immune to being frozen
+      if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'juggernaut') {
+        addLog('🛡️ Juggernaut armor shrugs off the freeze!');
+      } else {
+        addLog('You are frozen and cannot act this turn!');
+        say('Frozen! You skip this turn.');
+        setCombatBtns(true); updateSkillButtons(); return;
+      }
+    }
+    // Regenerating armor — heal 3 HP at the start of every enemy turn
+    if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'regenerating' && DS.hp > 0) {
+      DS.hp = Math.min(DS.maxHp, DS.hp + 3);
+      addLog('💚 Regenerating armor heals 3 HP.');
+      updatePlayerBar();
     }
     var rawDmg = rnd(e.atk[0], e.atk[1]);
     // Rage Tonic — double incoming damage, but player ATK is tripled (applied in attack)
@@ -17211,6 +17239,12 @@ function doFight(action) {
     if (DS.cls === 'DeathKnight' && ACCESS.classTraits) taken = Math.max(1, Math.round(taken * 0.80));
     // Sentinel — take 25% less damage
     if (DS.cls === 'Sentinel' && ACCESS.classTraits) taken = Math.max(1, Math.round(taken * 0.75));
+    // Fortified armor — 15% less damage taken
+    if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'fortified') taken = Math.max(1, Math.round(taken * 0.85));
+    // Aegis armor — 40% less damage taken (paid for with -20% damage dealt, applied in attack)
+    if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'aegis') taken = Math.max(1, Math.round(taken * 0.60));
+    // Unbreakable armor — no single hit exceeds 25% of max HP
+    if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'unbreakable') taken = Math.min(taken, Math.ceil(DS.maxHp * 0.25));
     // Demon race — take 15% MORE damage (high risk high reward)
     if (DS.demonRace && ACCESS.classTraits) taken = Math.round(taken * 1.15);
     // Bard — 15% chance to charm enemy into skipping attack
@@ -17223,6 +17257,12 @@ function doFight(action) {
     if (DS.cls === 'Monk' && ACCESS.classTraits && Math.random() < 0.10) {
       addLog('🥷 Monk dodges the attack completely!');
       say('Dodged!');
+      setCombatBtns(true); updateSkillButtons(); return;
+    }
+    // Sturdy armor — 5% chance to fully block an attack
+    if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'sturdy' && Math.random() < 0.05) {
+      addLog('🛡️ Sturdy armor fully blocks the attack!');
+      say('Sturdy armor — attack fully blocked!');
       setCombatBtns(true); updateSkillButtons(); return;
     }
     // Hollow Mask relic — 15% dodge chance
@@ -17253,6 +17293,11 @@ function doFight(action) {
     if (!DS._floorDmgTaken) DS._floorDmgTaken = 0; DS._floorDmgTaken += taken;
     vibe(taken > (DS.maxHp||100) * 0.3 ? VIBE.bigDamage : (e && e.isBoss ? VIBE.bossAttack : VIBE.takeDamage));
     updatePlayerBar();
+    // Daily Quest — took damage this combat (nodmg quest) and low-HP survival
+    // (survive quest); neither 'nodmg' nor 'survive' had a call site anywhere,
+    // so both quests were unwinnable if rolled as the day's quest.
+    DS._tookDamageThisCombat = true;
+    if (DS.hp > 0 && DS.hp <= 10) updateDailyQuestProgress('survive', 1);
 
     // Thornmail — reflect damage back to attacker
     if (DS.equippedArmor && DS.equippedArmor.thornReflect && taken > 0) {
@@ -17262,6 +17307,26 @@ function doFight(action) {
         updateEnemyBar();
         addLog('🌵 Thornmail reflects ' + reflected + ' back at ' + e.name + '!');
       }
+    }
+
+    // Thorned armor rarity effect — reflect 15% of damage taken
+    if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'thorned' && taken > 0 && e && e.hp > 0) {
+      var thornedReflect = Math.floor(taken * 0.15);
+      if (thornedReflect > 0) {
+        e.hp = Math.max(0, e.hp - thornedReflect);
+        updateEnemyBar();
+        addLog('🌵 Thorned armor reflects ' + thornedReflect + ' back at ' + e.name + '!');
+        if (e.hp <= 0) { setTimeout(function(){ enemyDead(); }, 300); return; }
+      }
+    }
+
+    // Vengeful armor rarity effect — 20% chance to counter for your own ATK
+    if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'vengeful' && e && e.hp > 0 && Math.random() < 0.20) {
+      var vengefulDmg = rnd(DS.atk[0], DS.atk[1]) + (DS.atkBonus || 0);
+      e.hp = Math.max(0, e.hp - vengefulDmg);
+      updateEnemyBar();
+      addLog('⚔️ Vengeful armor counters for ' + vengefulDmg + ' damage!');
+      if (e.hp <= 0) { setTimeout(function(){ enemyDead(); }, 300); return; }
     }
 
     // Ghost Shroud — 10% chance attack fully missed (retroactive dodge)
@@ -17296,6 +17361,8 @@ function sanitizeGold() {
 function enemyDead() {
   var e = DS.enemy;
   try { resetGunState(); } catch(e2) {}
+  // Daily Quest — defeated an enemy without taking damage this combat
+  if (!DS._tookDamageThisCombat) updateDailyQuestProgress('nodmg', 1);
   // Soulbound weapon — restore 5 SP on every kill
   if (DS.equippedWeapon && DS.equippedWeapon.rarityEffect === 'soulbound' && DS.sp !== undefined) {
     DS.sp = Math.min(DS.maxSp, (DS.sp || 0) + 5);
@@ -17757,6 +17824,16 @@ function handleDeath() {
     updatePlayerBar();
     addLog('💜 The Undying blade refuses death — you survive at 1 HP!');
     say('Undying weapon activates! Death refused. You survive at 1 HP.');
+    setCombatBtns(true);
+    return;
+  }
+  // Sanctuary armor rarity effect — survive a killing blow at 1 HP, once per floor
+  if (DS.equippedArmor && DS.equippedArmor.rarityEffect === 'sanctuary' && !DS._armorSanctuaryUsedFloor) {
+    DS._armorSanctuaryUsedFloor = true;
+    DS.hp = 1;
+    updatePlayerBar();
+    addLog('🛡️ Sanctuary armor refuses death — you survive at 1 HP!');
+    say('Sanctuary armor activates! Death refused. You survive at 1 HP.');
     setCombatBtns(true);
     return;
   }
@@ -23385,6 +23462,13 @@ function useSkill(idx) {
   var skill = unlocked[idx];
   if (DS.sp < skill.spCost) { say('Not enough SP. You need ' + skill.spCost + ' SP but have ' + DS.sp + '.'); return; }
   if (!DS.inCombat) { say('Skills can only be used in combat.'); return; }
+  // Daily Quest — track unique skills used this run (dq-skills-3's 'skilluse'
+  // type had no call site anywhere, so that quest could never be completed)
+  if (!DS._skillsUsedThisRun) DS._skillsUsedThisRun = [];
+  if (DS._skillsUsedThisRun.indexOf(skill.name) === -1) {
+    DS._skillsUsedThisRun.push(skill.name);
+    updateDailyQuestProgress('skilluse', 1);
+  }
   // BUGFIX: same combat-state-desync guard as doFight() — DS.inCombat can be true
   // with DS.enemy missing (e.g. after a special-encounter handler clears the enemy
   // without ending combat), which would otherwise crash below and freeze combat.
@@ -35501,6 +35585,11 @@ var DAILY_QUESTS = [
   { id:'dq-skills-3',    desc:'Use 3 different skills in a single run.',     type:'skilluse', target:3,   reward:'80 gold', rewardGold:80 },
   { id:'dq-survive',     desc:'Take damage but survive with 10 HP or less.', type:'survive',  target:1,   reward:'90 gold', rewardGold:90 },
   { id:'dq-kills-nodmg', desc:'Defeat 3 enemies without taking any damage.', type:'nodmg',    target:3,   reward:'100 gold', rewardGold:100 },
+  { id:'dq-kills-30',    desc:'Defeat 30 enemies in a single run.',          type:'kills',    target:30,  reward:'220 gold + potion', rewardGold:220, rewardPotion:true },
+  { id:'dq-floor-10',    desc:'Reach floor 10 in a single run.',             type:'floor',    target:10,  reward:'160 gold', rewardGold:160 },
+  { id:'dq-gold-300',    desc:'Collect 300 gold in a single run.',           type:'gold',     target:300, reward:'250 gold', rewardGold:250 },
+  { id:'dq-crits-8',     desc:'Land 8 critical hits in a single run.',       type:'crits',    target:8,   reward:'150 gold', rewardGold:150 },
+  { id:'dq-loot-8',      desc:'Find 8 items in a single run.',               type:'loot',     target:8,   reward:'140 gold + potion', rewardGold:140, rewardPotion:true },
 ];
 
 var ACHIEVEMENTS = [
@@ -36485,7 +36574,7 @@ function beginRaid(){
 
   RD={
     wave:1, maxHp:maxHp, hp:maxHp, atk:atk, def:def + _armorBonus,
-    atkBonus:_weaponBonus + atkBonus, defBonus:_armorBonus, defending:false, gold:0, potions: 4 + (hasUpgrade('cu-raid-potion') ? 1 : 0),
+    atkBonus:_weaponBonus + atkBonus, defBonus:_armorBonus, defending:false, gold:0, potions: 4 + (hasUpgrade('cu-raid-boost') ? 1 : 0),
     enemies:[], curIdx:0, done:false,
     cls: ch.cls, prof: ch.prof, charName: ch.name,
     sp:20 + (charLevel - 1) * 2, maxSp:20 + (charLevel - 1) * 2,
@@ -36760,6 +36849,9 @@ var COIN_UPGRADES = [
   { id:'cu-deaths-bargain', name:"Death's Bargain",   icon:'⚰️', desc:'On death, unleash one final powerful counterattack.',    cost:45 },
   { id:'cu-hunters-mark',   name:"Hunter's Mark",     icon:'🏹', desc:'Your first attack in every combat is always a critical hit.',cost:40},
   { id:'cu-night-blessing', name:'Night Blessing',    icon:'🌙', desc:'During Night Mode gain +5 ATK and +10% gold on all runs.', cost:25 },
+  { id:'cu-bloodhound',     name:"Bloodhound's Nose", icon:'🐺', desc:'+5% chance for enemies to drop equipment on kill.',      cost:25 },
+  { id:'cu-trapper',        name:"Trapper's Kit",     icon:'🪤', desc:'Start every run with a Soul Trap in your inventory.',    cost:30 },
+  { id:'cu-warm-blood',     name:'Warm Blood',        icon:'💗', desc:'Heal 1 HP every time you reach a new floor.',            cost:20 },
 ];
 
 function getCoinUpgradesSave() { return _jsonParseSafe(DDStore.getItem('dd_coin_upgrades'), '{}'); }
@@ -36876,6 +36968,9 @@ function applyCoinUpgrades() {
   if (hasUpgrade('cu-third-eye'))       { DS._thirdEye = true; }
   if (hasUpgrade('cu-lucky-descent'))   { DS._luckyDescent = true; }
   if (hasUpgrade('cu-void-pact'))       { DS._voidPact = true; }
+  if (hasUpgrade('cu-bloodhound'))      { DS._bloodhound = true; }
+  if (hasUpgrade('cu-warm-blood'))      { DS._warmBlood = true; }
+  if (hasUpgrade('cu-trapper'))         { DS.inventory.push({ name:'Soul Trap', icon:'🪤', type:'soul-trap', desc:'Captures the current enemy as a permanent minion. Use during combat.' }); }
   if (hasUpgrade('cu-gamblers-spirit')) { 
     DS._gamblersSpirit = true;
     if (!DS._gamblersUsed) {
@@ -55778,17 +55873,22 @@ function captureMinion(enemy) {
     say('You already have a ' + enemy.name + ' as a minion.');
     return false;
   }
+  // Elite-sourced minions are a real tier up, not just a stat bump — see
+  // the crit chance in minionCombatAttack() too.
+  var isElite = !!enemy.isElite;
+  var scalePct = isElite ? 0.85 : 0.60;
   var minion = {
     id: enemy.id || ('minion_' + Date.now()),
     name: enemy.name,
     icon: enemy.icon || '👾',
-    atk: Math.max(1, Math.floor((enemy.atk || enemy.atkBase || 5) * 0.6)),
+    atk: Math.max(1, Math.floor((enemy.atk || enemy.atkBase || 5) * scalePct)),
+    tier: isElite ? 'elite' : 'common',
     capturedOn: Date.now()
   };
   minions.push(minion);
   saveMinions(minions);
-  say('You captured ' + minion.name + '! Find them in your Home under Minions.');
-  showToast('👾 ' + minion.name + ' captured!', 'green');
+  say('You captured ' + (isElite ? 'an Elite ' : 'a ') + minion.name + '! Find them in your Home under Minions.');
+  showToast((isElite ? '⭐👾 Elite ' : '👾 ') + minion.name + ' captured!', 'green');
   return true;
 }
 
@@ -55806,7 +55906,7 @@ function renderMinionList() {
     return '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:' + (isActive ? '#0a1a0a' : '#080808') + ';border:1px solid ' + (isActive ? '#44aa44' : '#222') + ';margin-bottom:6px;border-radius:2px;">' +
       '<span style="font-size:1.4rem;" aria-hidden="true">' + m.icon + '</span>' +
       '<div style="flex:1;">' +
-        '<div style="font-family:Cinzel,serif;font-size:0.72rem;color:' + (isActive ? '#44ff88' : '#aaa') + ';">' + m.name + (isActive ? ' <span style="font-size:0.6rem;color:#44aa44;">[ACTIVE]</span>' : '') + '</div>' +
+        '<div style="font-family:Cinzel,serif;font-size:0.72rem;color:' + (isActive ? '#44ff88' : '#aaa') + ';">' + m.name + (m.tier === 'elite' ? ' <span style="font-size:0.6rem;color:#cc88ff;border:1px solid #884499;padding:1px 5px;">ELITE</span>' : '') + (isActive ? ' <span style="font-size:0.6rem;color:#44aa44;">[ACTIVE]</span>' : '') + '</div>' +
         '<div style="font-family:Cinzel,serif;font-size:0.6rem;color:#555;">ATK: ' + m.atk + ' per round</div>' +
       '</div>' +
       '<button onclick="toggleMinion(\'' + m.id + '\')" style="padding:6px 10px;background:' + (isActive ? '#0a1a0a' : '#0a0a0a') + ';border:1px solid ' + (isActive ? '#44aa44' : '#444') + ';color:' + (isActive ? '#44ff88' : '#888') + ';font-family:Cinzel,serif;font-size:0.62rem;cursor:pointer;" aria-label="' + (isActive ? 'Deactivate' : 'Activate') + ' ' + m.name + '">' + (isActive ? 'Deactivate' : 'Activate') + '</button>' +
@@ -55848,8 +55948,14 @@ function minionCombatAttack(enemy) {
   var m = minions.find(function(x){ return x.id === activeId; });
   if (!m) return;
   var dmg = m.atk + Math.floor(Math.random() * 4);
-  enemy.hp = Math.max(0, (enemy.hp || 0) - dmg);
-  addLog('👾 ' + m.name + ' attacks for ' + dmg + ' damage!');
+  if (m.tier === 'elite' && Math.random() < 0.10) {
+    dmg *= 2;
+    enemy.hp = Math.max(0, (enemy.hp || 0) - dmg);
+    addLog('⭐ ' + m.name + ' lands a devastating critical for ' + dmg + ' damage!');
+  } else {
+    enemy.hp = Math.max(0, (enemy.hp || 0) - dmg);
+    addLog('👾 ' + m.name + ' attacks for ' + dmg + ' damage!');
+  }
 }
 
 function renderHomeSkills() {
@@ -59917,6 +60023,59 @@ function applyRarityToWeapon(weapon, rarity) {
 
 // ── END WEAPON RARITY SYSTEM ──
 
+// ── ARMOR RARITY SYSTEM ──
+// Mirrors the weapon rarity system above — same WEAPON_RARITIES tier/drop-chance
+// table (a generic rarity roll, not actually weapon-specific), a parallel
+// effects table themed around defense instead of offense, and the same
+// apply-on-drop pattern.
+var ARMOR_RARITY_EFFECTS = {
+  minor: [
+    { id:'sturdy',      name:'Sturdy',      desc:'5% chance to fully block an attack.' },
+    { id:'light-step',  name:'Light Step',  desc:'+10% flee chance.' },
+  ],
+  moderate: [
+    { id:'regenerating',name:'Regenerating',desc:'Heals 3 HP at the start of every enemy turn.' },
+    { id:'thorned',     name:'Thorned',     desc:'Reflects 15% of damage taken back at the attacker.' },
+  ],
+  strong: [
+    { id:'fortified',   name:'Fortified',   desc:'-15% all incoming damage.' },
+    { id:'vengeful',    name:'Vengeful',    desc:'20% chance to counter for your own attack damage when hit.' },
+  ],
+  legendary: [
+    { id:'juggernaut',  name:'Juggernaut',  desc:'Immune to being frozen.' },
+    { id:'unbreakable', name:'Unbreakable', desc:'No single hit can deal more than 25% of your max HP.' },
+  ],
+  mythic: [
+    { id:'sanctuary',   name:'Sanctuary',   desc:'Once per floor, survive a killing blow at 1 HP.' },
+    { id:'aegis',       name:'Aegis',       desc:'-40% damage taken, but -20% damage dealt.' },
+  ]
+};
+
+function applyRarityToArmor(armor, rarity) {
+  if (!rarity || rarity.id === 'common') return armor;
+  var a = Object.assign({}, armor);
+  a.rarity = rarity.id;
+  a.rarityLabel = rarity.label;
+  a.rarityColor = rarity.color;
+  a.raritySymbol = rarity.symbol;
+  // Boost DEF
+  if (typeof a.defBase === 'number') {
+    a.defBase = Math.round(a.defBase * rarity.atkMult);
+  }
+  // Add special effect
+  if (rarity.specialEffect && ARMOR_RARITY_EFFECTS[rarity.specialEffect]) {
+    var effects = ARMOR_RARITY_EFFECTS[rarity.specialEffect];
+    var effect = effects[Math.floor(Math.random() * effects.length)];
+    a.rarityEffect = effect.id;
+    a.rarityEffectName = effect.name;
+    a.rarityEffectDesc = effect.desc;
+    a.desc = '[' + rarity.label + '] ' + effect.name + ' — ' + effect.desc + ' ' + (a.desc || '');
+    a.name = rarity.label + ' ' + a.name;
+  }
+  return a;
+}
+// ── END ARMOR RARITY SYSTEM ──
+
 var BLACKSMITH_WEAPONS = [
   { id:'starter-blade',  name:'Worn Blade',      icon:'🗡️', type:'weapon', weaponType:'sword',  level:1, cost:0,   atkBase:[4,8],  isEquippable:true, desc:'A battered but reliable blade. Free for any new adventurer.' },
   { id:'iron-sword',     name:'Iron Sword',       icon:'⚔️', type:'weapon', weaponType:'sword',  level:1, cost:40,  atkBase:[5,10], isEquippable:true, desc:'Standard iron. Reliable in any dungeon.' },
@@ -60790,11 +60949,12 @@ function upgradeEquipped(type) {
 function rollEquipmentDrop(floor) {
   var isWeapon = Math.random() < 0.5;
   var scale = Math.floor(floor / 3);
+  var dropRarity = rollWeaponRarity();
   if (isWeapon) {
     var types = Object.keys(WEAPON_TYPES);
     var t = types[Math.floor(Math.random() * types.length)];
     var def = WEAPON_TYPES[t];
-    return {
+    var wItem = {
       id: 'drop-weapon-' + Date.now() + '-' + Math.floor(Math.random() * 10000),
       name: def.name,
       icon: def.icon,
@@ -60805,11 +60965,12 @@ function rollEquipmentDrop(floor) {
       desc: def.desc,
       isEquippable: true,
     };
+    return (dropRarity && dropRarity.id !== 'common') ? applyRarityToWeapon(wItem, dropRarity) : wItem;
   } else {
     var atypes = Object.keys(ARMOR_TYPES);
     var at = atypes[Math.floor(Math.random() * atypes.length)];
     var adef = ARMOR_TYPES[at];
-    return {
+    var aItem = {
       id: 'drop-armor-' + Date.now() + '-' + Math.floor(Math.random() * 10000),
       name: adef.name,
       icon: adef.icon,
@@ -60820,12 +60981,14 @@ function rollEquipmentDrop(floor) {
       desc: adef.desc,
       isEquippable: true,
     };
+    return (dropRarity && dropRarity.id !== 'common') ? applyRarityToArmor(aItem, dropRarity) : aItem;
   }
 }
 
 // 15% chance to drop equipment on enemy kill
 function checkEquipmentDrop() {
-  if (Math.random() > 0.15) return;
+  var dropChance = 0.15 + (DS._bloodhound ? 0.05 : 0);
+  if (Math.random() > dropChance) return;
   var item = rollEquipmentDrop(DS.floor || 1);
   DS.inventory.push(item);
   addLog('🎁 Found: ' + item.icon + ' ' + item.name + ' Level ' + item.level + '! Check inventory.');
