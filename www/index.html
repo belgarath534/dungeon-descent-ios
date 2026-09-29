@@ -25830,21 +25830,23 @@ function getFirebaseUser() {
   return window._fbCurrentUser || null;
 }
 
-async function syncToCloud() {
+async function syncToCloud(silent) {
   var user = getFirebaseUser();
   if (!user) {
-    say('Not signed in. Please sign in first.');
-    var err = document.getElementById('account-error');
-    if (err) { err.style.color = '#ffaa44'; err.textContent = 'Not signed in. Please sign in first.'; }
+    if (!silent) {
+      say('Not signed in. Please sign in first.');
+      var err = document.getElementById('account-error');
+      if (err) { err.style.color = '#ffaa44'; err.textContent = 'Not signed in. Please sign in first.'; }
+    }
     return;
   }
   if (!window._fbSaveData) {
-    say('Cloud unavailable. Game saves locally.');
+    if (!silent) say('Cloud unavailable. Game saves locally.');
     return;
   }
   var indicator = document.getElementById('account-sync-indicator');
   if (indicator) { indicator.textContent = '⏳ Syncing...'; indicator.style.color = '#ffaa44'; }
-  say('Syncing your save data to the cloud. Please wait.');
+  if (!silent) say('Syncing your save data to the cloud. Please wait.');
   try {
     var saveData = {
       chars: DDStore.getItem('dd_chars'),
@@ -25860,18 +25862,18 @@ async function syncToCloud() {
       srPromptSeen: DDStore.getItem('dd_sr_prompt_seen'),
       accessSettings: DDStore.getItem('dd_access'),
     };
-    say('Uploading save data. Almost done.');
+    if (!silent) say('Uploading save data. Almost done.');
     var ok = await window._fbSaveData(user.uid, saveData);
     if (indicator) {
       indicator.textContent = ok ? '✓ Synced to cloud!' : '✗ Sync failed. Try again.';
       indicator.style.color = ok ? '#44ff88' : '#ff4444';
       setTimeout(function() { if (indicator) indicator.textContent = ''; }, 3000);
     }
-    say(ok ? 'Sync complete. Your save data is backed up to the cloud.' : 'Sync failed. Check your connection and try again.');
+    if (!silent) say(ok ? 'Sync complete. Your save data is backed up to the cloud.' : 'Sync failed. Check your connection and try again.');
   } catch(e) {
     console.error('syncToCloud error:', e);
     if (indicator) { indicator.textContent = '✗ Sync error: ' + (e.message || 'unknown'); indicator.style.color = '#ff4444'; }
-    say('Sync error. Check your connection.');
+    if (!silent) say('Sync error. Check your connection.');
   }
 }
 
@@ -26265,15 +26267,30 @@ function closeAccountPanel() {
 
 // Auto-sync to cloud every time saveChars is called
 var _origSaveChars = null;
+// BUGFIX: this fired a full, spoken syncToCloud() on every single
+// saveChars() call — which happens on nearly every gameplay event (loot
+// pickup, floor change, etc.) — so VoiceOver users got "Syncing... Uploading
+// save data... Sync complete" read out constantly, on top of whatever else
+// was happening. Cloud sync itself is still valuable to keep current, so
+// instead of removing it: throttled to at most once every 2 minutes of
+// real time, and the throttled auto-sync is silent (silent=true) — no
+// speech, no interruption. The manual "Sync to Cloud" button in Account
+// still gets the full announced version, since that's a deliberate,
+// occasional action where hearing confirmation is exactly the point.
+var _lastAutoSyncAt = 0;
+var AUTO_SYNC_MIN_INTERVAL_MS = 120000;
 function initAccountSync() {
   if (typeof saveChars === 'function' && !_origSaveChars) {
     _origSaveChars = saveChars;
     saveChars = function() {
       _origSaveChars();
-      // Fire and forget — sync to cloud in background
+      // Fire and forget — sync to cloud in background, throttled and silent
       if (getFirebaseUser() && window._fbSaveData) {
+        var now = Date.now();
+        if (now - _lastAutoSyncAt < AUTO_SYNC_MIN_INTERVAL_MS) return;
+        _lastAutoSyncAt = now;
         setTimeout(function() {
-          syncToCloud().catch(function(e) {
+          syncToCloud(true).catch(function(e) {
             console.warn('Background sync failed:', e && e.message);
           });
         }, 500);
@@ -59003,18 +59020,24 @@ function checkSpiritOrbDrop() {
   // Pick a spirit the player does not already have
   var ch = _charIdx !== null ? CHARS[_charIdx] : null;
   if (!ch) return false;
-  var owned = ch.spirits || [];
-  var ownedIds = owned.map(function(s){ return s.id; });
+  // BUGFIX: this referenced a global SPIRITS variable that has never existed
+  // anywhere in the codebase — every single time this 5% roll actually hit,
+  // the whole function threw a ReferenceError, which broke searchRoom()
+  // entirely for that search. Also wrote captured spirits to ch.spirits
+  // (full objects) instead of ch.earnedSpirits (the real field every other
+  // spirit-unlock path in the game reads/writes — see openPauseSpirits(),
+  // getUnlockedFamiliarSpecies(), etc. — as a plain array of id strings).
+  var ownedIds = ch.earnedSpirits || [];
 
   // Filter available spirits
-  var available = SPIRITS.filter(function(s){
+  var available = getAllSpirits().filter(function(s){
     return ownedIds.indexOf(s.id) === -1 && !s.requiresCompletion;
   });
   if (available.length === 0) return false;
 
   var spirit = available[Math.floor(Math.random() * available.length)];
-  if (!ch.spirits) ch.spirits = [];
-  ch.spirits.push(spirit);
+  if (!ch.earnedSpirits) ch.earnedSpirits = [];
+  ch.earnedSpirits.push(spirit.id);
   saveChars();
 
   setEvent('good', '✨ Spirit Orb Found! You discovered ' + spirit.icon + ' ' + spirit.name + '. Activate it from the Pause Menu → Spirits.');
