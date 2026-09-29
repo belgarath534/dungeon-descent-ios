@@ -48146,15 +48146,14 @@ async function brianPlayNext() {
     var bp = _brianAudio.play(); if (bp && bp.catch) bp.catch(function(){});
   } catch(e) {
     console.warn('Brian TTS error:', e);
-    // Fallback to browser TTS
-    if (window.speechSynthesis) {
-      var u = new SpeechSynthesisUtterance(text);
-      u.onend = function() { brianPlayNext(); };
-      window.speechSynthesis.speak(u);
-    } else {
-      _brianPlaying = false;
-      brianPlayNext();
-    }
+    // BUGFIX: this used to call window.speechSynthesis directly, which is
+    // unreliable — often silently produces no sound at all — inside this
+    // app's WebView, especially with VoiceOver/TalkBack active. say() ->
+    // _saySR() -> Capacitor's native ScreenReader.speak() is the actual
+    // path every other spoken line in the game already relies on, so
+    // route the fallback through that instead of a second, unproven one.
+    say(text);
+    setTimeout(function() { brianPlayNext(); }, 2500);
   }
 }
 
