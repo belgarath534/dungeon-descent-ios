@@ -6276,6 +6276,7 @@ var DDStore = (function() {
       <div class="rs-char" id="rs-char"></div>
     </div>
     <div class="rs-closing" id="rs-closing" aria-label="Closing line"></div>
+    <div id="rs-recap-section" style="display:none;padding:12px 16px;background:rgba(139,26,26,0.08);border:1px solid #331111;margin-bottom:10px;border-radius:2px;"></div>
     <div class="rs-grid" id="rs-grid" aria-label="Run statistics"></div>
     <div class="rs-section" id="rs-spirit-section" style="display:none;">
       <div class="rs-section-title">SPIRIT COMPANION</div>
@@ -18023,14 +18024,29 @@ function updateEnemyBar() {
 }
 
 function updatePlayerBar() {
-  // Low HP heartbeat — plays when HP is at or below 10%
+  // Track HP as of just before this update — the death recap on the run
+  // summary screen reads DS._hpBeforeLastHit to say what your health was
+  // right before the killing blow, since by the time DS.hp itself is read
+  // after death it's already 0.
   try {
-    if (DS && DS.hp > 0 && DS.maxHp > 0 && typeof _HUNTER_AUDIO !== 'undefined') {
+    if (DS) {
+      DS._hpBeforeLastHit = (typeof DS._hpAtLastUpdate === 'number') ? DS._hpAtLastUpdate : DS.hp;
+      DS._hpAtLastUpdate = DS.hp;
+    }
+  } catch(e) {}
+  // Low HP heartbeat — two tiers. Warning at <=10% (800ms beat, same as
+  // before). Critical at <=5% restarts the loop faster (400ms) and adds
+  // a spoken critical alert, so "about to die" reads differently from
+  // "getting risky" instead of the same beat all the way down to 0 HP.
+  try {
+    if (DS && DS.hp > 0 && DS.maxHp > 0 && typeof _HUNTER_AUDIO !== 'undefined' && !DS.hunterMode) {
       var hpPct = DS.hp / DS.maxHp;
-      if (hpPct <= 0.10 && !DS.hunterMode) {
-        if (!_heartbeatInterval) { startHeartbeatLoop(800); companionOnLowHP(); }
-      } else if (hpPct > 0.10 && !DS.hunterMode) {
-        stopHeartbeatLoop();
+      if (hpPct <= 0.05) {
+        if (_hpWarnTier !== 2) { _hpWarnTier = 2; startHeartbeatLoop(400); speakCritical('Critical! Health nearly gone.'); }
+      } else if (hpPct <= 0.10) {
+        if (_hpWarnTier !== 1) { _hpWarnTier = 1; startHeartbeatLoop(800); companionOnLowHP(); }
+      } else if (_hpWarnTier !== 0) {
+        _hpWarnTier = 0; stopHeartbeatLoop();
       }
     }
   } catch(e) {}
@@ -49752,12 +49768,53 @@ function buildRunSummary(isVictory) {
     btns.insertBefore(cjBtn, ngBtn);
   }
 
+  // Death Recap — only for an actual combat/HP death, not the sanity-zero
+  // ending or other non-death "false" summaries (those don't route through
+  // handleDeath, so DS.hp isn't actually <=0 for them). Built straight
+  // from current DS state rather than ch.deathLog so it still works for
+  // Hardcore Mode's early-exit death path, which never calls logDeath()
+  // since the character gets deleted right after.
+  var recapSection = document.getElementById('rs-recap-section');
+  var recapText = '';
+  if (!isVictory && DS.hp <= 0) {
+    var recapBits = [];
+    var killerName = DS.enemy ? DS.enemy.name : 'the dungeon';
+    recapBits.push('Killed by ' + killerName + ' on floor ' + (DS.floor || 1) + '.');
+    if (typeof DS._hpBeforeLastHit === 'number' && DS.maxHp) {
+      var hpBeforePct = Math.max(0, Math.round((DS._hpBeforeLastHit / DS.maxHp) * 100));
+      recapBits.push('You were at ' + hpBeforePct + '% health before that blow.');
+    }
+    try {
+      var logEl = document.getElementById('dg-combat-log');
+      if (logEl) {
+        var logLines = Array.prototype.slice.call(logEl.children).map(function(el){ return el.textContent; }).filter(Boolean);
+        // Skip the very last line — that's the killing blow itself, already
+        // covered by "Killed by X" above. The line before it is what
+        // actually happened on your last turn (item used, spell cast, etc).
+        var lastAction = logLines.length > 1 ? logLines[logLines.length - 2] : null;
+        if (lastAction) recapBits.push('Just before that: ' + lastAction);
+      }
+    } catch(e) {}
+    recapText = recapBits.join(' ');
+  }
+  if (recapSection) {
+    if (recapText) {
+      recapSection.style.display = '';
+      recapSection.innerHTML =
+        '<div style="font-family:Cinzel,serif;font-size:0.65rem;letter-spacing:0.2em;color:#cc6666;margin-bottom:6px;">💀 DEATH RECAP</div>' +
+        '<div style="font-family:Cinzel,serif;font-size:0.72rem;color:#e0a0a0;line-height:1.6;">' + recapText + '</div>';
+    } else {
+      recapSection.style.display = 'none';
+    }
+  }
+
   // JAWS announcement
   var jaws = (isVictory ? 'Victory! ' : 'Defeated. ') +
     (DS.name || 'Adventurer') + ' the ' + (DS.cls || '') + '. ' +
     (DS.kills || 0) + ' enemies slain. Floor ' + (DS.floor || 1) + '. Level ' + (DS.level || 1) + '. ' +
     'Total score: ' + (score ? (score.total||0).toLocaleString() : '0') + ' points. Rank: ' + (rankInfo ? rankInfo.label : 'Initiate') + '.' +
-    (isVictory ? ' New Game Plus is available.' : '');
+    (isVictory ? ' New Game Plus is available.' : '') +
+    (recapText ? ' ' + recapText : '');
   say(jaws);
 
   // Play music for run summary — clean cut from combat, brief silence, then summary music
@@ -63349,6 +63406,11 @@ var _hunterMusicEl = null;
 var _heartbeatEl = null;
 var _heartbeatInterval = null;
 var _heartbeatPanner = null;
+// Low-HP heartbeat tier — 0 normal, 1 warning (<=10%), 2 critical (<=5%).
+// Tracked separately from _heartbeatInterval so the warning->critical
+// transition can restart the loop at a faster, more urgent rate instead
+// of just leaving the same 800ms warning beat running all the way to 0 HP.
+var _hpWarnTier = 0;
 // Add hunter-theme to TRACK_FILES now that _HUNTER_AUDIO is defined
 try { if (typeof TRACK_FILES !== 'undefined') TRACK_FILES['hunter-theme'] = _HUNTER_AUDIO.music; } catch(e) {}
 
