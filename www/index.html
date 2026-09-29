@@ -48441,8 +48441,8 @@ function huntEncounterEnemy(rank) {
 
     huntLog((crit?'💥 CRITICAL! ':'') + 'Defeated ' + enemy.name + '. +' + goldEarned + 'g +' + xpEarned + ' XP', 'system');
 
-    // Brian only speaks 25% of the time on normal kills
-    if (Math.random() < 0.25) {
+    // Brian speaks most of the time on normal kills now
+    if (Math.random() < 0.70) {
       brianSay(getHuntNarration('enemy'));
       setTimeout(function(){ brianSay(getHuntNarration('kill')); }, 4000);
     }
@@ -48460,8 +48460,8 @@ function huntEncounterEnemy(rank) {
     // Always Brian when HP is critical
     if (HUNT.hp < HUNT.maxHp * 0.3) {
       brianSay(getHuntNarration('lowHp'));
-    } else if (Math.random() < 0.20) {
-      // 20% chance Brian comments on regular hit
+    } else if (Math.random() < 0.65) {
+      // Brian comments on most regular hits now
       brianSay(getHuntNarration('hurt'));
     }
   }
@@ -48484,18 +48484,18 @@ function huntFindItem(rank) {
     HUNT.gold += g;
     addGlobalGold(g);
     huntLog('  → +' + g + ' gold', 'item');
-    // Only 15% chance Brian comments on gold
-    if (Math.random() < 0.15) brianSay('An ancient coin catches the light. Worth ' + g + ' gold.');
+    // Brian comments on most gold finds now
+    if (Math.random() < 0.55) brianSay('An ancient coin catches the light. Worth ' + g + ' gold.');
   } else {
     try {
       var inv = getGlobalInventory();
       inv.push({name: item.name, icon: item.icon, type: item.type, desc: 'Found in the Hunting Grounds.', rarity: item.rarity});
       saveGlobalInventory(inv);
     } catch(e2) {}
-    // Brian always speaks for rare items, 15% chance for others
+    // Brian always speaks for rare items, and most of the time for others now
     if (item.rarity === 'rare') {
       brianSay(getHuntNarration('item') + ' Something rare. ' + item.name + '.');
-    } else if (Math.random() < 0.15) {
+    } else if (Math.random() < 0.55) {
       brianSay(getHuntNarration('item') + ' ' + item.name + '.');
     }
   }
@@ -48507,7 +48507,9 @@ function huntRest() {
   var healAmt = Math.round(HUNT.maxHp * 0.08);
   HUNT.hp = Math.min(HUNT.maxHp, HUNT.hp + healAmt);
   huntLog('💚 Rest. Recovered ' + healAmt + ' HP. (' + HUNT.hp + ' HP)', 'system');
-  // Brian never speaks on rest - just silence and ambience
+  // Brian comments on about half of rest ticks — the 'rest' narration pool
+  // existed but was never actually wired up before now.
+  if (Math.random() < 0.45) brianSay(getHuntNarration('rest'));
 }
 
 function stopHunt(died) {
