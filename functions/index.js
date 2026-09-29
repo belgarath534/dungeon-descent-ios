@@ -1,15 +1,8 @@
-const { onRequest } = require('firebase-functions/v2/https');
-const { defineSecret } = require('firebase-functions/params');
-const admin = require('firebase-admin');
-const { PollyClient, SynthesizeSpeechCommand } = require('@aws-sdk/client-polly');
+import { http } from '@google-cloud/functions-framework';
+import admin from 'firebase-admin';
+import { PollyClient, SynthesizeSpeechCommand } from '@aws-sdk/client-polly';
 
 admin.initializeApp();
-
-// Set once via:
-//   firebase functions:secrets:set AWS_ACCESS_KEY_ID
-//   firebase functions:secrets:set AWS_SECRET_ACCESS_KEY
-const awsAccessKeyId = defineSecret('AWS_ACCESS_KEY_ID');
-const awsSecretAccessKey = defineSecret('AWS_SECRET_ACCESS_KEY');
 
 // Brian — British English neural voice, closest match to the narrator
 // voice the game already used on ElevenLabs.
@@ -26,12 +19,20 @@ const DAILY_CALL_CAP = 300;
 const DAILY_CHAR_CAP = 20000;
 
 // Proxies Hunting Grounds narrator lines to Amazon Polly. The AWS
-// credentials never reach the client — they only live here, in Secret
-// Manager. Every caller must present a valid Firebase Auth ID token, and
-// usage is rate limited per user in Firestore so a leaked or scraped
-// endpoint still can't run up a real AWS bill the way the old hardcoded
-// client-side ElevenLabs key did.
-exports.narrateHuntLine = onRequest({ secrets: [awsAccessKeyId, awsSecretAccessKey], cors: true }, async (req, res) => {
+// credentials never reach the client — they only live here, bound as
+// Secret Manager secrets on this Cloud Run service (AWS_ACCESS_KEY_ID /
+// AWS_SECRET_ACCESS_KEY under "Variables & Secrets"). Every caller must
+// present a valid Firebase Auth ID token, and usage is rate limited per
+// user in Firestore so a leaked or scraped endpoint still can't run up a
+// real AWS bill the way the old hardcoded client-side ElevenLabs key did.
+http('narrateHuntLine', async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
@@ -88,8 +89,8 @@ exports.narrateHuntLine = onRequest({ secrets: [awsAccessKeyId, awsSecretAccessK
     const polly = new PollyClient({
       region: POLLY_REGION,
       credentials: {
-        accessKeyId: awsAccessKeyId.value(),
-        secretAccessKey: awsSecretAccessKey.value()
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
       }
     });
     const command = new SynthesizeSpeechCommand({
