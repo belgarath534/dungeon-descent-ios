@@ -48143,7 +48143,12 @@ async function brianPlayNext() {
     if (_brianAudio) { _brianAudio.pause(); _brianAudio = null; }
     _brianAudio = new Audio(url);
     _brianAudio.onended = function() { URL.revokeObjectURL(url); brianPlayNext(); };
-    var bp = _brianAudio.play(); if (bp && bp.catch) bp.catch(function(){});
+    var bp = _brianAudio.play();
+    // BUGFIX: a failed play() (autoplay policy, decode error, etc.) used to
+    // be swallowed here with an empty .catch() — real audio came back from
+    // the proxy, but if the browser refused to actually play it, nothing
+    // happened and nothing was said at all. Fall back to say() instead.
+    if (bp && bp.catch) bp.catch(function(err) { console.warn('Brian audio playback failed:', err); say(text); setTimeout(function() { brianPlayNext(); }, 2500); });
   } catch(e) {
     console.warn('Brian TTS error:', e);
     // BUGFIX: this used to call window.speechSynthesis directly, which is
