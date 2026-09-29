@@ -48104,9 +48104,10 @@ function examineEnemy() {
 // with a hardcoded API key, which ships to every install of the app —
 // anyone can pull it out of the bundle and burn the account's credits on
 // it, which is almost certainly what actually happened. The key has been
-// removed and rotated; ElevenLabs is now only ever called from the
-// narrateHuntLine Cloud Function (see /functions/index.js), which holds
-// the real key server-side, requires a signed-in Firebase user, and rate
+// removed and rotated; narration now goes through Amazon Polly (Brian
+// neural voice) and is only ever called from the narrateHuntLine Cloud
+// Function (see /functions/index.js), which holds the real AWS
+// credentials server-side, requires a signed-in Firebase user, and rate
 // limits per-user daily usage. Signed-out players still hear the Hunting
 // Grounds narration — it just falls back straight to device TTS below,
 // same as any proxy failure.

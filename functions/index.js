@@ -1,13 +1,20 @@
 const { onRequest } = require('firebase-functions/v2/https');
 const { defineSecret } = require('firebase-functions/params');
 const admin = require('firebase-admin');
+const { PollyClient, SynthesizeSpeechCommand } = require('@aws-sdk/client-polly');
 
 admin.initializeApp();
 
-// Set once via: firebase functions:secrets:set ELEVENLABS_KEY
-const elevenlabsKey = defineSecret('ELEVENLABS_KEY');
+// Set once via:
+//   firebase functions:secrets:set AWS_ACCESS_KEY_ID
+//   firebase functions:secrets:set AWS_SECRET_ACCESS_KEY
+const awsAccessKeyId = defineSecret('AWS_ACCESS_KEY_ID');
+const awsSecretAccessKey = defineSecret('AWS_SECRET_ACCESS_KEY');
 
-const BRIAN_VOICE_ID = 'nPczCjzI2devNBz1zQrb';
+// Brian — British English neural voice, closest match to the narrator
+// voice the game already used on ElevenLabs.
+const POLLY_VOICE_ID = 'Brian';
+const POLLY_REGION = 'us-east-1';
 
 // A single request can only ask for this many characters — keeps any one
 // call cheap regardless of what text the client sends.
@@ -18,12 +25,13 @@ const MAX_TEXT_LENGTH = 300;
 const DAILY_CALL_CAP = 300;
 const DAILY_CHAR_CAP = 20000;
 
-// Proxies Hunting Grounds narrator lines to ElevenLabs. The API key never
-// reaches the client — it only lives here, in Secret Manager. Every
-// caller must present a valid Firebase Auth ID token, and usage is rate
-// limited per user in Firestore so a leaked or scraped endpoint still
-// can't drain the account the way the old hardcoded client key did.
-exports.narrateHuntLine = onRequest({ secrets: [elevenlabsKey], cors: true }, async (req, res) => {
+// Proxies Hunting Grounds narrator lines to Amazon Polly. The AWS
+// credentials never reach the client — they only live here, in Secret
+// Manager. Every caller must present a valid Firebase Auth ID token, and
+// usage is rate limited per user in Firestore so a leaked or scraped
+// endpoint still can't run up a real AWS bill the way the old hardcoded
+// client-side ElevenLabs key did.
+exports.narrateHuntLine = onRequest({ secrets: [awsAccessKeyId, awsSecretAccessKey], cors: true }, async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
@@ -77,29 +85,29 @@ exports.narrateHuntLine = onRequest({ secrets: [elevenlabsKey], cors: true }, as
   }
 
   try {
-    const elResponse = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + BRIAN_VOICE_ID, {
-      method: 'POST',
-      headers: {
-        'xi-api-key': elevenlabsKey.value(),
-        'Content-Type': 'application/json',
-        'Accept': 'audio/mpeg'
-      },
-      body: JSON.stringify({
-        text,
-        model_id: 'eleven_monolingual_v1',
-        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-      })
+    const polly = new PollyClient({
+      region: POLLY_REGION,
+      credentials: {
+        accessKeyId: awsAccessKeyId.value(),
+        secretAccessKey: awsSecretAccessKey.value()
+      }
     });
-    if (!elResponse.ok) {
-      console.error('ElevenLabs error:', elResponse.status, await elResponse.text());
-      res.status(502).json({ error: 'Narration service error' });
-      return;
+    const command = new SynthesizeSpeechCommand({
+      Text: text,
+      OutputFormat: 'mp3',
+      VoiceId: POLLY_VOICE_ID,
+      Engine: 'neural'
+    });
+    const pollyResponse = await polly.send(command);
+    const chunks = [];
+    for await (const chunk of pollyResponse.AudioStream) {
+      chunks.push(chunk);
     }
-    const arrayBuf = await elResponse.arrayBuffer();
+    const audioBuffer = Buffer.concat(chunks);
     res.set('Content-Type', 'audio/mpeg');
-    res.status(200).send(Buffer.from(arrayBuf));
+    res.status(200).send(audioBuffer);
   } catch (e) {
-    console.error('Narration proxy error:', e);
-    res.status(500).json({ error: 'Narration proxy failed' });
+    console.error('Polly narration error:', e);
+    res.status(502).json({ error: 'Narration service error' });
   }
 });
