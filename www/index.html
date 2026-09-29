@@ -48100,8 +48100,17 @@ function examineEnemy() {
 // THE HUNTING GROUNDS — BOUNTY RANK + AFK HUNT WITH BRIAN NARRATOR
 // --════════════════════════
 
-var ELEVENLABS_KEY = 'sk_06f8629075f9e0e10265a8d406f12025609e769d40abf8ae';
-var BRIAN_VOICE_ID = 'nPczCjzI2devNBz1zQrb';
+// BUGFIX (security): this used to call ElevenLabs directly from the client
+// with a hardcoded API key, which ships to every install of the app —
+// anyone can pull it out of the bundle and burn the account's credits on
+// it, which is almost certainly what actually happened. The key has been
+// removed and rotated; ElevenLabs is now only ever called from the
+// narrateHuntLine Cloud Function (see /functions/index.js), which holds
+// the real key server-side, requires a signed-in Firebase user, and rate
+// limits per-user daily usage. Signed-out players still hear the Hunting
+// Grounds narration — it just falls back straight to device TTS below,
+// same as any proxy failure.
+var BRIAN_PROXY_URL = 'https://us-central1-dungeon-descent-fbaf2.cloudfunctions.net/narrateHuntLine';
 var _brianAudio = null;
 var _brianQueue = [];
 var _brianPlaying = false;
@@ -48116,20 +48125,18 @@ async function brianPlayNext() {
   _brianPlaying = true;
   var text = _brianQueue.shift();
   try {
-    var response = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + BRIAN_VOICE_ID, {
+    var user = getFirebaseUser();
+    if (!user) throw new Error('Not signed in — narrator voice requires an account.');
+    var idToken = await user.getIdToken();
+    var response = await fetch(BRIAN_PROXY_URL, {
       method: 'POST',
       headers: {
-        'xi-api-key': ELEVENLABS_KEY,
-        'Content-Type': 'application/json',
-        'Accept': 'audio/mpeg'
+        'Authorization': 'Bearer ' + idToken,
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        text: text,
-        model_id: 'eleven_monolingual_v1',
-        voice_settings: { stability: 0.5, similarity_boost: 0.75 }
-      })
+      body: JSON.stringify({ text: text })
     });
-    if (!response.ok) throw new Error('ElevenLabs error: ' + response.status);
+    if (!response.ok) throw new Error('Narrator proxy error: ' + response.status);
     var blob = await response.blob();
     var url = URL.createObjectURL(blob);
     if (_brianAudio) { _brianAudio.pause(); _brianAudio = null; }
