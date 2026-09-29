@@ -35931,6 +35931,25 @@ function familiarTitle(level) {
   }
   return '';
 }
+// Visual evolution — same three tiers as FAMILIAR_TITLES (5/10/20), but
+// giving them an actual on-screen payoff instead of just a text label.
+// A badge next to the icon everywhere it's shown, and a glow that
+// intensifies in the big familiar overlay specifically.
+var FAMILIAR_EVOLUTION_BADGES = ['', '✦', '✧', '★'];
+function familiarEvolutionStage(level) {
+  if (level >= 20) return 3;
+  if (level >= 10) return 2;
+  if (level >= 5) return 1;
+  return 0;
+}
+function familiarEvolutionBadge(level) {
+  return FAMILIAR_EVOLUTION_BADGES[familiarEvolutionStage(level)];
+}
+function familiarGlowStyle(level) {
+  var stage = familiarEvolutionStage(level);
+  var glows = ['none', '0 0 6px #ffdd44aa', '0 0 10px #ffdd44dd, 0 0 4px #fff8', '0 0 16px #ffdd44ff, 0 0 8px #fff, 0 0 2px #fff'];
+  return glows[stage];
+}
 function _familiarSpecies(f) {
   return FAMILIAR_SPECIES.find(function(s) { return s.id === f.speciesId; }) || FAMILIAR_SPECIES[0];
 }
@@ -36060,7 +36079,9 @@ function updateFamiliarBadge() {
   if (!el) return;
   var f = getFamiliar();
   var sp = _familiarSpecies(f);
-  el.textContent = sp.icon + ' Lv.' + familiarBondLevel(f.bond);
+  var level = familiarBondLevel(f.bond);
+  var badge = familiarEvolutionBadge(level);
+  el.textContent = sp.icon + (badge ? ' ' + badge : '') + ' Lv.' + level;
 }
 function _renderFamiliarSpeciesPicker(f) {
   var listEl = document.getElementById('familiar-species-list');
@@ -36091,7 +36112,12 @@ function openFamiliarOverlay() {
   var title = familiarTitle(level);
   ov.style.display = 'flex';
   var iconEl = document.getElementById('familiar-icon-display');
-  if (iconEl) iconEl.textContent = sp.icon;
+  if (iconEl) {
+    var badge = familiarEvolutionBadge(level);
+    iconEl.textContent = sp.icon + (badge ? ' ' + badge : '');
+    iconEl.style.textShadow = familiarGlowStyle(level);
+    iconEl.style.transition = 'text-shadow 0.6s ease';
+  }
   var nameEl = document.getElementById('familiar-name-display');
   if (nameEl) nameEl.textContent = displayName.charAt(0).toUpperCase() + displayName.slice(1);
   var levelEl = document.getElementById('familiar-level-display');
