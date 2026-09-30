@@ -6905,6 +6905,21 @@ var DDStore = (function() {
       <div id="firebase-ready-indicator" style="font-size:0.65rem;margin-top:8px;color:#888;font-family:'Cinzel',serif;">⏳ Connecting to cloud...</div>
     </div>
 
+    <!-- iCloud backup — independent of the Firebase account system above.
+         No sign-in needed, just whatever iCloud account is already on the
+         device. Hidden on non-iOS via JS (display:none by default). -->
+    <div id="icloud-backup-section" style="display:none;background:#0a0a0a;border:1px solid #333;padding:12px 16px;margin-bottom:20px;border-radius:4px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div style="font-family:'Cinzel',serif;font-size:0.72rem;color:#ccc;">🍎 iCloud Backup</div>
+        <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;">
+          <input type="checkbox" id="icloud-backup-toggle" onchange="toggleICloudBackup(this.checked)" aria-label="Enable automatic iCloud backup">
+        </label>
+      </div>
+      <p style="font-size:0.68rem;color:#888;line-height:1.6;margin:0 0 8px;">Backs your save up to your own iCloud account automatically — no sign-in needed, separate from the account system above. Off by default.</p>
+      <div id="icloud-backup-status" style="font-size:0.65rem;min-height:16px;margin-bottom:8px;"></div>
+      <button onclick="loadFromiCloud()" class="btn-ghost" style="width:100%;font-size:0.68rem;padding:8px;" aria-label="Restore save data from iCloud backup">Restore from iCloud</button>
+    </div>
+
     <div style="font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.4em;color:#555;margin-bottom:16px;">☁ ACCOUNT</div>
 
     <!-- Status -->
@@ -26407,6 +26422,7 @@ function openAccountPanel() {
   if (ov) {
     ov.classList.add('open');
     updateAccountUI();
+    updateICloudBackupUI();
     say('Account panel. Beta feature. Account is not required to play. The game always saves to local storage.');
     setTimeout(function() {
       var first = ov.querySelector('input, button');
@@ -26450,7 +26466,155 @@ function initAccountSync() {
           });
         }, 500);
       }
+      // Independent iCloud backup — own throttle, own opt-in toggle. Doesn't
+      // know or care whether Firebase sync above also ran; a player can use
+      // either, both, or neither.
+      if (isICloudBackupEnabled() && getICloudPlugin()) {
+        var nowIC = Date.now();
+        if (nowIC - _lastICloudSyncAt < ICLOUD_SYNC_MIN_INTERVAL_MS) return;
+        _lastICloudSyncAt = nowIC;
+        setTimeout(function() { syncToiCloud(true); }, 500);
+      }
     };
+  }
+}
+
+// ── iCLOUD BACKUP (iOS only) ────────────────────────────────────────────
+// A second, independent backup destination alongside Firebase — no sign-in
+// screen, no account, just whatever iCloud account is already on the
+// device. Opt-in via a toggle in Account settings, off by default so
+// nothing writes to iCloud unless the player chooses to. This system and
+// the Firebase one don't know about each other and never try to merge —
+// whichever one gets restored from is just whichever button the player
+// taps.
+var _lastICloudSyncAt = 0;
+var ICLOUD_SYNC_MIN_INTERVAL_MS = 120000;
+
+function getICloudPlugin() {
+  if (!window.Capacitor || typeof Capacitor.getPlatform !== 'function' || Capacitor.getPlatform() !== 'ios') return null;
+  return (Capacitor.Plugins && Capacitor.Plugins.iCloudSync) ? Capacitor.Plugins.iCloudSync : null;
+}
+
+function isICloudBackupEnabled() {
+  return DDStore.getItem('dd_icloud_backup_enabled') === 'true';
+}
+
+function setICloudBackupEnabled(on) {
+  DDStore.setItem('dd_icloud_backup_enabled', on ? 'true' : 'false');
+}
+
+function buildLocalSavePayload() {
+  return {
+    chars: DDStore.getItem('dd_chars'),
+    unlocks: DDStore.getItem('dd_unlocks'),
+    achievements: DDStore.getItem('dd_achievements'),
+    globalStats: DDStore.getItem('dd_global_stats'),
+    coinUpgrades: DDStore.getItem('dd_coin_upgrades'),
+    raidData: DDStore.getItem('dd_raid'),
+    medusa: DDStore.getItem('dd_medusa'),
+    voidReaper: DDStore.getItem('dd_void_reaper'),
+    username: DDStore.getItem('dd_username'),
+    titleTag: DDStore.getItem('dd_title_tag'),
+    srPromptSeen: DDStore.getItem('dd_sr_prompt_seen'),
+    accessSettings: DDStore.getItem('dd_access'),
+  };
+}
+
+async function checkICloudAvailability() {
+  var plugin = getICloudPlugin();
+  var statusEl = document.getElementById('icloud-backup-status');
+  if (!plugin) {
+    if (statusEl) { statusEl.textContent = 'iCloud backup is only available on iOS.'; statusEl.style.color = '#666'; }
+    return false;
+  }
+  try {
+    var res = await plugin.isAvailable();
+    if (statusEl) {
+      if (res && res.available) { statusEl.textContent = '✓ iCloud is available on this device.'; statusEl.style.color = '#44ff88'; }
+      else { statusEl.textContent = 'iCloud is not available. Sign in to iCloud in your device Settings first.'; statusEl.style.color = '#ffaa44'; }
+    }
+    return !!(res && res.available);
+  } catch(e) {
+    if (statusEl) { statusEl.textContent = 'Could not check iCloud status.'; statusEl.style.color = '#ff4444'; }
+    return false;
+  }
+}
+
+async function syncToiCloud(silent) {
+  var plugin = getICloudPlugin();
+  if (!plugin || !isICloudBackupEnabled()) return;
+  try {
+    var payload = buildLocalSavePayload();
+    await plugin.saveData({ json: JSON.stringify(payload) });
+    if (!silent) say('Backed up to iCloud.');
+  } catch(e) {
+    console.warn('[DD] iCloud backup failed:', e && e.message);
+    if (!silent) say('iCloud backup failed. Check your connection.');
+  }
+}
+
+async function loadFromiCloud() {
+  var plugin = getICloudPlugin();
+  if (!plugin) { say('iCloud backup is only available on iOS.'); return false; }
+  say('Checking iCloud for a saved backup. Please wait.');
+  try {
+    var res = await plugin.loadData();
+    if (!res || !res.found) { say('No iCloud backup found.'); return false; }
+    var data = JSON.parse(res.json);
+    if (data.chars) DDStore.setItem('dd_chars', data.chars);
+    if (data.unlocks) DDStore.setItem('dd_unlocks', data.unlocks);
+    if (data.achievements) DDStore.setItem('dd_achievements', data.achievements);
+    if (data.globalStats) DDStore.setItem('dd_global_stats', data.globalStats);
+    if (data.coinUpgrades) DDStore.setItem('dd_coin_upgrades', data.coinUpgrades);
+    if (data.raidData) DDStore.setItem('dd_raid', data.raidData);
+    if (data.medusa) DDStore.setItem('dd_medusa', data.medusa);
+    if (data.voidReaper) DDStore.setItem('dd_void_reaper', data.voidReaper);
+    if (data.username) DDStore.setItem('dd_username', data.username);
+    if (data.titleTag) DDStore.setItem('dd_title_tag', data.titleTag);
+    if (data.srPromptSeen) DDStore.setItem('dd_sr_prompt_seen', data.srPromptSeen);
+    if (data.accessSettings) DDStore.setItem('dd_access', data.accessSettings);
+    try {
+      var freshChars = _jsonParseSafe(DDStore.getItem('dd_chars'), '[]');
+      CHARS.length = 0;
+      freshChars.forEach(function(c){ CHARS.push(c); });
+    } catch(e2) { console.error('CHARS reload error:', e2); }
+    renderCharList();
+    if (typeof refreshDungeonUnlocks === 'function') refreshDungeonUnlocks();
+    if (typeof checkAchievements === 'function') checkAchievements();
+    var active = document.querySelector('.screen.active');
+    if (active && (active.id === 'screen-menu' || active.id === 'screen-charlist')) {
+      goTo('charlist');
+    }
+    say('Restored from iCloud backup.');
+    return true;
+  } catch(e) {
+    console.error('[DD] iCloud load error:', e);
+    say('iCloud restore failed. Check your connection.');
+    return false;
+  }
+}
+
+function updateICloudBackupUI() {
+  var section = document.getElementById('icloud-backup-section');
+  var toggle = document.getElementById('icloud-backup-toggle');
+  if (!section) return;
+  var plugin = getICloudPlugin();
+  if (!plugin) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  if (toggle) toggle.checked = isICloudBackupEnabled();
+  if (isICloudBackupEnabled()) checkICloudAvailability();
+}
+
+function toggleICloudBackup(on) {
+  setICloudBackupEnabled(on);
+  var statusEl = document.getElementById('icloud-backup-status');
+  if (on) {
+    say('iCloud backup enabled. Your save will back up automatically.');
+    checkICloudAvailability();
+    syncToiCloud(false);
+  } else {
+    say('iCloud backup disabled.');
+    if (statusEl) { statusEl.textContent = ''; }
   }
 }
 
