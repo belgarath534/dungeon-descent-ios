@@ -52316,6 +52316,14 @@ function extractYouTubeId(url) {
   if (m) return m[1];
   m = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
   if (m) return m[1];
+  // BUGFIX: Shorts and Live links use a path segment instead of a ?v=
+  // query param, so neither matched before — pasting either one silently
+  // fell through to the broken "treat the YouTube page URL as a raw audio
+  // file" path in loadCustomTrackURL() instead of recognizing it at all.
+  m = url.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/);
+  if (m) return m[1];
+  m = url.match(/youtube\.com\/live\/([a-zA-Z0-9_-]{11})/);
+  if (m) return m[1];
   return null;
 }
 
@@ -52331,23 +52339,49 @@ function loadYouTubeTrack(videoId, label) {
   if (!wrap) return;
   wrap.innerHTML = '';
   wrap.style.cssText = 'position:fixed;bottom:60px;left:0;right:0;z-index:800;background:#0a0010;border-top:1px solid #330066;padding:10px 16px;display:flex;align-items:center;gap:12px;';
+  // BUGFIX: this div starts as aria-hidden="true" in its base HTML (it's
+  // an empty 1x1px offscreen placeholder until a track loads). Only its
+  // inline style ever got reset here — aria-hidden stayed true even once
+  // it was visually on-screen, so the entire player (including its own
+  // Play button) was invisible to VoiceOver/TalkBack no matter what URL
+  // was loaded. This is very likely why it "didn't work" at all.
+  wrap.removeAttribute('aria-hidden');
+
+  var embedBase = 'https://www.youtube-nocookie.com/embed/' + videoId +
+    '?mute=0&loop=1&playlist=' + videoId +
+    '&controls=1&modestbranding=1&rel=0&origin=' + encodeURIComponent(window.location.origin || 'https://dungen-descent.org');
 
   var iframe = document.createElement('iframe');
   iframe.width = '160';
   iframe.height = '90';
-  // mute=0 keeps audio on, autoplay=1 starts it, origin helps with permissions
-  iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId +
-    '?autoplay=1&mute=0&loop=1&playlist=' + videoId +
-    '&controls=1&modestbranding=1&rel=0&origin=' + encodeURIComponent(window.location.origin || 'https://dungeon-descent.netlify.app');
+  // BUGFIX: autoplay=1 combined with mute=0 is blocked by virtually every
+  // mobile browser/WebView's autoplay policy — it silently never starts,
+  // with no error. Loading without autoplay, then setting a fresh src
+  // with autoplay=1 inside the Play button's own click handler below,
+  // counts as triggered-by-a-real-user-gesture and reliably works instead.
+  iframe.src = embedBase;
   iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
   iframe.setAttribute('allowfullscreen', '');
   iframe.setAttribute('frameborder', '0');
-  iframe.setAttribute('aria-label', 'YouTube player — ' + (label || videoId) + '. Press play if audio does not start.');
+  iframe.setAttribute('aria-label', 'YouTube player — ' + (label || videoId) + '.');
   iframe.style.cssText = 'border:none;flex-shrink:0;border-radius:4px;';
 
   var info = document.createElement('div');
   info.style.cssText = 'flex:1;font-family:Cinzel,serif;font-size:0.65rem;color:#aa44ff;line-height:1.6;';
-  info.innerHTML = '<div style="color:#cc88ff;">🎵 ' + (label || 'YouTube Track') + '</div><div style="color:#555;font-size:0.6rem;">Tap the player if audio doesn\'t start</div>';
+  info.innerHTML = '<div style="color:#cc88ff;">🎵 ' + (label || 'YouTube Track') + '</div>';
+
+  // Real, first-class Play button — reachable and clearly labeled for
+  // VoiceOver/TalkBack, rather than relying on reaching into YouTube's
+  // own iframe controls (cross-origin iframe accessibility is unreliable,
+  // and its controls only appear once the video has already loaded).
+  var playBtn = document.createElement('button');
+  playBtn.textContent = '▶ Play';
+  playBtn.style.cssText = 'padding:8px 14px;background:#1a0022;border:1px solid #44cc88;color:#44cc88;font-family:Cinzel,serif;font-size:0.68rem;cursor:pointer;flex-shrink:0;border-radius:4px;';
+  playBtn.setAttribute('aria-label', 'Play ' + (label || 'YouTube track'));
+  playBtn.onclick = function() {
+    iframe.src = embedBase + '&autoplay=1';
+    say('Playing ' + (label || 'YouTube track') + '.');
+  };
 
   var stopBtn = document.createElement('button');
   stopBtn.textContent = '✕ Stop';
@@ -52357,6 +52391,7 @@ function loadYouTubeTrack(videoId, label) {
 
   wrap.appendChild(iframe);
   wrap.appendChild(info);
+  wrap.appendChild(playBtn);
   wrap.appendChild(stopBtn);
 
   // Update status in settings panel
@@ -52365,14 +52400,14 @@ function loadYouTubeTrack(videoId, label) {
   if (statusEl) { statusEl.style.display = ''; statusEl.textContent = '▶ YouTube: ' + (label || videoId); }
   if (gameStopBtn) gameStopBtn.style.display = '';
 
-  say('YouTube track loaded: ' + (label || videoId) + '. Should start playing now. Stop button appears at the bottom of screen.');
+  say('YouTube track loaded: ' + (label || videoId) + '. A Play button now appears at the bottom of the screen — press it to start audio.');
 }
 
 function stopYouTubeTrack() {
   _ytActive = false;
   _ytVideoId = null;
   var wrap = document.getElementById('yt-player-wrap');
-  if (wrap) { wrap.innerHTML = ''; wrap.style.display = 'none'; }
+  if (wrap) { wrap.innerHTML = ''; wrap.style.display = 'none'; wrap.setAttribute('aria-hidden', 'true'); }
 }
 
 function loadCustomTrackURL() {
@@ -52388,7 +52423,17 @@ function loadCustomTrackURL() {
     loadYouTubeTrack(ytId, label);
     DDStore.setItem('dd_custom_track_url', url);
     DDStore.setItem('dd_custom_track_yt', ytId);
-    say('Loading YouTube track. It may take a moment to start.');
+    return;
+  }
+  // BUGFIX: a YouTube-domain URL this game doesn't recognize the shape of
+  // (Shorts/Live are now handled above, but future URL shapes or a bad
+  // paste could still slip through) used to fall straight into the
+  // "regular audio URL" path below, which tries to play the YouTube page
+  // itself as an audio file — fails with no useful explanation. Catch any
+  // youtube.com/youtu.be/music.youtube.com URL here and say so clearly
+  // instead of silently misfiring.
+  if (/youtube\.com|youtu\.be/i.test(url)) {
+    say("That looks like a YouTube link, but I couldn't find a video ID in it. Try copying the link directly from the Share button on the video.");
     return;
   }
 
