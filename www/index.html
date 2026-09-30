@@ -48376,8 +48376,9 @@ function startHunt() {
 
 function scheduleNextHuntTick() {
   if (!HUNT.active) return;
-  // Random delay between 25 and 45 seconds
-  var delay = 25000 + Math.floor(Math.random() * 20000);
+  // TESTING: shortened to 4-8 seconds temporarily so testing doesn't mean
+  // waiting up to 45s per attempt. Restore to 25000 + 20000 once confirmed.
+  var delay = 4000 + Math.floor(Math.random() * 4000);
   HUNT.timer = setTimeout(function() {
     if (!HUNT.active) return;
     huntTick();
@@ -48445,8 +48446,9 @@ function huntEncounterEnemy(rank) {
 
     huntLog((crit?'💥 CRITICAL! ':'') + 'Defeated ' + enemy.name + '. +' + goldEarned + 'g +' + xpEarned + ' XP', 'system');
 
-    // Brian speaks most of the time on normal kills now
-    if (Math.random() < 0.70) {
+    // TESTING: forced to 100% temporarily to verify the narrator pipeline
+    // without random misses in the way. Dial back down once confirmed.
+    if (Math.random() < 1.0) {
       brianSay(getHuntNarration('enemy'));
       setTimeout(function(){ brianSay(getHuntNarration('kill')); }, 4000);
     }
@@ -48464,8 +48466,8 @@ function huntEncounterEnemy(rank) {
     // Always Brian when HP is critical
     if (HUNT.hp < HUNT.maxHp * 0.3) {
       brianSay(getHuntNarration('lowHp'));
-    } else if (Math.random() < 0.65) {
-      // Brian comments on most regular hits now
+    } else if (Math.random() < 1.0) {
+      // TESTING: forced to 100% temporarily, see note above
       brianSay(getHuntNarration('hurt'));
     }
   }
@@ -48488,8 +48490,8 @@ function huntFindItem(rank) {
     HUNT.gold += g;
     addGlobalGold(g);
     huntLog('  → +' + g + ' gold', 'item');
-    // Brian comments on most gold finds now
-    if (Math.random() < 0.55) brianSay('An ancient coin catches the light. Worth ' + g + ' gold.');
+    // TESTING: forced to 100% temporarily, see note above
+    if (Math.random() < 1.0) brianSay('An ancient coin catches the light. Worth ' + g + ' gold.');
   } else {
     try {
       var inv = getGlobalInventory();
@@ -48499,7 +48501,8 @@ function huntFindItem(rank) {
     // Brian always speaks for rare items, and most of the time for others now
     if (item.rarity === 'rare') {
       brianSay(getHuntNarration('item') + ' Something rare. ' + item.name + '.');
-    } else if (Math.random() < 0.55) {
+    } else if (Math.random() < 1.0) {
+      // TESTING: forced to 100% temporarily, see note above
       brianSay(getHuntNarration('item') + ' ' + item.name + '.');
     }
   }
@@ -48511,9 +48514,8 @@ function huntRest() {
   var healAmt = Math.round(HUNT.maxHp * 0.08);
   HUNT.hp = Math.min(HUNT.maxHp, HUNT.hp + healAmt);
   huntLog('💚 Rest. Recovered ' + healAmt + ' HP. (' + HUNT.hp + ' HP)', 'system');
-  // Brian comments on about half of rest ticks — the 'rest' narration pool
-  // existed but was never actually wired up before now.
-  if (Math.random() < 0.45) brianSay(getHuntNarration('rest'));
+  // TESTING: forced to 100% temporarily, see note above
+  if (Math.random() < 1.0) brianSay(getHuntNarration('rest'));
 }
 
 function stopHunt(died) {
