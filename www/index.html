@@ -6932,6 +6932,9 @@ var DDStore = (function() {
       <button onclick="accountGoogleLogin()" id="btn-google-login" style="width:100%;padding:12px;background:#1a0a0a;border:1px solid #663333;color:#ffaaaa;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;margin-bottom:8px;" aria-label="Sign in with Google">
         🔵 Sign in with Google
       </button>
+      <button onclick="accountAppleLogin()" id="btn-apple-login" style="width:100%;padding:12px;background:#0a0a0a;border:1px solid #444;color:#ccc;font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;margin-bottom:8px;" aria-label="Sign in with Apple">
+        🍎 Sign in with Apple
+      </button>
       <button onclick="accountForgotPassword()" style="width:100%;padding:8px;background:none;border:none;color:#555;font-family:'Cinzel',serif;font-size:0.65rem;cursor:pointer;text-decoration:underline;" aria-label="Forgot password">
         Forgot password?
       </button>
@@ -8082,6 +8085,14 @@ var DDStore = (function() {
         </div>
         <span class="settings-cat-arrow" aria-hidden="true">›</span>
       </a>
+      <button class="settings-cat-btn" onclick="openSendFeedback()" aria-label="Send Feedback — report a bug or suggest a feature without leaving the app">
+        <span class="settings-cat-icon" aria-hidden="true">💬</span>
+        <div class="settings-cat-info">
+          <div class="settings-cat-name">Send Feedback</div>
+          <div class="settings-cat-desc">Report a bug or suggest a feature</div>
+        </div>
+        <span class="settings-cat-arrow" aria-hidden="true">›</span>
+      </button>
       <a href="https://dungen-descent.org/privacy" target="_blank" rel="noopener" class="settings-cat-btn" aria-label="Privacy Policy" style="text-decoration:none;color:inherit;">
         <span class="settings-cat-icon" aria-hidden="true">🔒</span>
         <div class="settings-cat-info">
@@ -8276,6 +8287,29 @@ var DDStore = (function() {
     </div>
     <button onclick="redeemCode()" style="width:100%;padding:14px;background:#1a1000;border:2px solid var(--gold);color:var(--gold);font-family:'Cinzel Decorative',cursive;font-size:0.85rem;cursor:pointer;margin-bottom:12px;" aria-label="Redeem code">⚔ Redeem</button>
     <div id="redeem-msg" style="font-family:Cinzel,serif;font-size:0.72rem;color:#888;min-height:20px;text-align:center;" aria-live="polite"></div>
+  </div>
+</div>
+
+<!-- SETTINGS PANEL: FEEDBACK -->
+<div class="settings-panel" id="settings-panel-feedback" role="dialog" aria-modal="true" aria-label="Send Feedback">
+  <div class="settings-panel-wrap">
+    <button class="settings-back" onclick="closeSettingsPanel('feedback')" aria-label="Back to settings">← Back</button>
+    <h3 class="settings-panel-title">💬 Send Feedback</h3>
+    <p style="font-family:Cinzel,serif;font-size:0.68rem;color:#666;margin-bottom:16px;line-height:1.7;">Bug reports, feature ideas, or anything else — this goes straight to the developer. Mention what dungeon and floor you were on if it's a bug.</p>
+    <div style="margin-bottom:12px;">
+      <label for="feedback-type" style="font-family:Cinzel,serif;font-size:0.65rem;color:#888;display:block;margin-bottom:6px;">Type</label>
+      <select id="feedback-type" style="width:100%;background:#0a0a0a;border:1px solid #333;color:#fff;font-family:'Cinzel',serif;font-size:0.75rem;padding:10px;box-sizing:border-box;" aria-label="Feedback type">
+        <option>Bug report</option>
+        <option>Feature suggestion</option>
+        <option>Something else</option>
+      </select>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label for="feedback-message" style="font-family:Cinzel,serif;font-size:0.65rem;color:#888;display:block;margin-bottom:6px;">Message</label>
+      <textarea id="feedback-message" rows="5" placeholder="What happened, or what you'd like to see..." style="width:100%;background:#0a0a0a;border:1px solid #333;color:#fff;font-family:'Cinzel',serif;font-size:0.75rem;padding:10px;box-sizing:border-box;resize:vertical;" aria-label="Feedback message"></textarea>
+    </div>
+    <button onclick="sendFeedback()" id="feedback-submit-btn" style="width:100%;padding:14px;background:#1a1000;border:2px solid var(--gold);color:var(--gold);font-family:'Cinzel Decorative',cursive;font-size:0.85rem;cursor:pointer;margin-bottom:12px;" aria-label="Send feedback">📨 Send</button>
+    <div id="feedback-msg" style="font-family:Cinzel,serif;font-size:0.72rem;color:#888;min-height:20px;text-align:center;" aria-live="polite"></div>
   </div>
 </div>
 
@@ -26055,6 +26089,30 @@ async function accountSignUp() {
 }
 
 var _ddSocialLoginInitialized = false;
+// Shared by both accountGoogleLogin() and accountAppleLogin() — both
+// providers must be registered in the SAME initialize() call, since
+// _ddSocialLoginInitialized is one shared flag. If each login function
+// called its own initialize() only when the flag was still false,
+// whichever provider got tapped first would "win" and the other's
+// config would silently never reach the plugin at all.
+async function _ddInitSocialLogin() {
+  if (_ddSocialLoginInitialized) return;
+  console.log('[DD Cloud] Initializing SocialLogin...');
+  await _ddWithTimeout(window.Capacitor.Plugins.SocialLogin.initialize({
+    google: {
+      webClientId: '109323203666-sj667ngkft9jr7h85c5338bvllhl3hoq.apps.googleusercontent.com',
+      iOSClientId: '109323203666-sj667ngkft9jr7h85c5338bvllhl3hoq.apps.googleusercontent.com',
+      mode: 'online',
+    },
+    // Native iOS Sign In with Apple doesn't need a clientId here — it
+    // authenticates against the app's own bundle ID once the capability
+    // is enabled in Xcode, not against a separate Services ID the way
+    // the web OAuth flow does.
+    apple: {},
+  }), 15000, 'SocialLogin.initialize');
+  _ddSocialLoginInitialized = true;
+  console.log('[DD Cloud] SocialLogin initialized');
+}
 // Wraps a promise so a hung native call fails loudly instead of leaving the
 // UI looking dead forever with no error and no feedback.
 function _ddWithTimeout(promise, ms, label) {
@@ -26105,18 +26163,7 @@ async function accountGoogleLogin() {
       var SocialLogin = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.SocialLogin;
       if (!SocialLogin) throw new Error('SocialLogin plugin not available');
       if (err) err.textContent = 'Opening Google sign in...';
-      if (!_ddSocialLoginInitialized) {
-        console.log('[DD Cloud] Initializing SocialLogin...');
-        await _ddWithTimeout(SocialLogin.initialize({
-          google: {
-            webClientId: '109323203666-sj667ngkft9jr7h85c5338bvllhl3hoq.apps.googleusercontent.com',
-            iOSClientId: '109323203666-sj667ngkft9jr7h85c5338bvllhl3hoq.apps.googleusercontent.com',
-            mode: 'online',
-          },
-        }), 15000, 'SocialLogin.initialize');
-        _ddSocialLoginInitialized = true;
-        console.log('[DD Cloud] SocialLogin initialized');
-      }
+      await _ddInitSocialLogin();
       if (err) err.textContent = 'Waiting for Google...';
       var loginRes = await _ddWithTimeout(SocialLogin.login({
         provider: 'google',
@@ -26182,6 +26229,98 @@ async function accountGoogleLogin() {
   } catch(e) {
     err.textContent = 'Google sign in failed. Try again.';
     say('Google sign in failed.');
+  }
+}
+
+// Sign in with Apple. Mirrors accountGoogleLogin() — same plugin
+// (@capgo/capacitor-social-login), same response shape (result.idToken),
+// same Firebase sign-in-with-credential + currentUser-poll pattern to
+// dodge the same signInWithCredential-hangs-forever WKWebView quirk.
+// NEEDS REAL-DEVICE VERIFICATION before shipping: this can't be tested
+// end-to-end without an active Apple Developer Program membership — the
+// "Sign In with Apple" capability has to be added to the app's
+// entitlements in Xcode (Signing & Capabilities), which itself requires
+// that paid membership to provision. Also needs "Apple" enabled as a
+// sign-in provider in the Firebase console before any of this can
+// actually reach Firebase successfully.
+async function accountAppleLogin() {
+  var err = document.getElementById('account-error');
+  var isCapacitorNative = window.Capacitor && typeof Capacitor.getPlatform === 'function' &&
+    (Capacitor.getPlatform() === 'ios' || Capacitor.getPlatform() === 'android');
+  if (!window._fbAuth) {
+    if (err) { err.style.color='#ff4444'; err.textContent = 'Cloud not ready. Check connection.'; }
+    say('Cloud not available. Check your internet connection.');
+    return;
+  }
+  if (isCapacitorNative) {
+    try {
+      console.log('[DD Cloud] Apple sign-in tapped (native)');
+      var SocialLogin = window.Capacitor && Capacitor.Plugins && Capacitor.Plugins.SocialLogin;
+      if (!SocialLogin) throw new Error('SocialLogin plugin not available');
+      if (err) err.textContent = 'Opening Apple sign in...';
+      await _ddInitSocialLogin();
+      if (err) err.textContent = 'Waiting for Apple...';
+      var loginRes = await _ddWithTimeout(SocialLogin.login({
+        provider: 'apple',
+        options: { scopes: ['email', 'name'] },
+      }), 60000, 'SocialLogin.login');
+      console.log('[DD Cloud] SocialLogin.login resolved:', loginRes);
+      var idToken = loginRes && loginRes.result ? loginRes.result.idToken : null;
+      if (!idToken) throw new Error('No idToken returned');
+      // Some Apple flows sign the token against a nonce that Firebase then
+      // requires back (as rawNonce) to validate the credential. Pass it
+      // through only if the plugin actually gave us one, rather than
+      // assuming either way.
+      var nonce = loginRes.result.nonce || loginRes.result.rawNonce || null;
+      var appleProvider = new firebase.auth.OAuthProvider('apple.com');
+      var credential = nonce
+        ? appleProvider.credential({ idToken: idToken, rawNonce: nonce })
+        : appleProvider.credential({ idToken: idToken });
+      if (err) err.textContent = 'Signing into Firebase...';
+      window._fbAuth.signInWithCredential(credential).catch(function(e) {
+        console.log('[DD Cloud] signInWithCredential promise rejected (may be spurious):', e);
+      });
+      var signedInUser = await _ddWaitForAuthUser(window._fbAuth, 10000);
+      if (!signedInUser) throw new Error('Firebase sign-in did not complete');
+      console.log('[DD Cloud] signInWithCredential succeeded (via currentUser poll)');
+      err.textContent = '';
+      say('Signed in with Apple. Syncing your save data.');
+      var loadedNative = await loadFromCloud();
+      if (loadedNative) {
+        say('Cloud save loaded.');
+        setEvent('good', '☁ Signed in with Apple. Cloud save loaded!');
+      } else {
+        await syncToCloud();
+        setEvent('good', '☁ Signed in with Apple. Save backed up to cloud.');
+      }
+      closeAccountPanel();
+    } catch(e) {
+      console.log('[DD Cloud] Native Apple sign in error:', e);
+      err.textContent = 'Apple sign in failed: ' + (e.message || 'unknown error');
+      say('Apple sign in failed: ' + (e.message || 'unknown error'));
+    }
+    return;
+  }
+  try {
+    if (err) err.textContent = 'Opening Apple sign in...';
+    var provider = new firebase.auth.OAuthProvider('apple.com');
+    provider.addScope('email');
+    provider.addScope('name');
+    await window._fbAuth.signInWithPopup(provider);
+    err.textContent = '';
+    say('Signed in with Apple. Syncing your save data.');
+    var loaded = await loadFromCloud();
+    if (loaded) {
+      say('Cloud save loaded.');
+      setEvent('good', '☁ Signed in with Apple. Cloud save loaded!');
+    } else {
+      await syncToCloud();
+      setEvent('good', '☁ Signed in with Apple. Save backed up to cloud.');
+    }
+    closeAccountPanel();
+  } catch(e) {
+    err.textContent = 'Apple sign in failed. Try again.';
+    say('Apple sign in failed.');
   }
 }
 
@@ -41340,7 +41479,7 @@ function openSettingsPanel(panel) {
   if (panel === 'audio') checkSavedCustomTrack();
   var el = document.getElementById('settings-panel-' + panel);
   if (el) el.classList.add('open');
-  var names = { audio: 'Audio', language: 'Language', accessibility: 'Accessibility', gameplay: 'Gameplay', account: 'Account', dev: 'Developer Tools' };
+  var names = { audio: 'Audio', language: 'Language', accessibility: 'Accessibility', gameplay: 'Gameplay', account: 'Account', dev: 'Developer Tools', feedback: 'Send Feedback' };
   say((names[panel] || panel) + ' settings opened.');
   setTimeout(function() {
     var first = document.querySelector('#settings-panel-' + panel + ' button, #settings-panel-' + panel + ' input, #settings-panel-' + panel + ' select');
@@ -53818,6 +53957,61 @@ function openRedeemCode() {
   openSettingsPanel('redeem');
   setTimeout(function(){ var inp = document.getElementById('redeem-code-input'); if(inp) inp.focus(); }, 200);
   say('Redeem Code. Enter your code and tap Redeem.');
+}
+
+function openSendFeedback() {
+  openSettingsPanel('feedback');
+  setTimeout(function(){ var inp = document.getElementById('feedback-message'); if(inp) inp.focus(); }, 200);
+  say('Send Feedback. Choose a type, write your message, and tap Send.');
+}
+
+// Reuses the same Formspree endpoint the support.html contact form posts
+// to, so feedback from in-game and from the website both land in the
+// same inbox. Sends the signed-in player's email as _replyto (if
+// signed in) so replying in the inbox reaches them directly — same
+// convention as the website form, and the same bug that form had
+// (_replyto hardcoded to the dev's own address) is deliberately not
+// repeated here.
+async function sendFeedback() {
+  var typeSel = document.getElementById('feedback-type');
+  var msgInput = document.getElementById('feedback-message');
+  var statusEl = document.getElementById('feedback-msg');
+  var btn = document.getElementById('feedback-submit-btn');
+  if (!msgInput || !statusEl) return;
+  var message = msgInput.value.trim();
+  if (!message) { statusEl.textContent = 'Please write a message first.'; statusEl.style.color = '#ff4444'; say('Please write a message first.'); return; }
+
+  var user = getFirebaseUser();
+  var email = (user && user.email) ? user.email : 'no-reply@dungen-descent.org';
+  var payload = {
+    type: typeSel ? typeSel.value : 'Something else',
+    message: message,
+    email: email,
+    platform: (window.Capacitor && typeof Capacitor.getPlatform === 'function') ? Capacitor.getPlatform() : 'web',
+    gameVersion: (typeof CURRENT_VERSION !== 'undefined') ? CURRENT_VERSION : 'unknown',
+    _replyto: email,
+  };
+
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+  statusEl.textContent = '';
+  try {
+    var response = await fetch('https://formspree.io/f/mkjnkenn', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error('Formspree error: ' + response.status);
+    msgInput.value = '';
+    statusEl.style.color = '#44ff88';
+    statusEl.textContent = '✅ Sent. Thank you!';
+    say('Feedback sent. Thank you!');
+  } catch(e) {
+    statusEl.style.color = '#ff4444';
+    statusEl.textContent = 'Could not send. Check your connection and try again.';
+    say('Could not send feedback. Check your connection and try again.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '📨 Send'; }
+  }
 }
 
 function redeemCode() {
