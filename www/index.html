@@ -48139,9 +48139,6 @@ async function brianPlayNext() {
     });
     if (!response.ok) throw new Error('Narrator proxy error: ' + response.status);
     var blob = await response.blob();
-    // DEBUG: temporary — confirms real audio bytes actually reached the
-    // client. Remove once the silent-playback issue is found.
-    say('Debug. Received ' + blob.size + ' bytes, type ' + blob.type + '.');
     var url = URL.createObjectURL(blob);
     if (_brianAudio) { _brianAudio.pause(); _brianAudio = null; }
     _brianAudio = new Audio(url);
@@ -48152,23 +48149,14 @@ async function brianPlayNext() {
     // the proxy, but if the browser refused to actually play it, nothing
     // happened and nothing was said at all. Fall back to say() instead.
     if (bp && bp.catch) {
-      bp.then(function() { say('Debug. Play promise resolved.'); })
-        .catch(function(err) {
-          console.warn('Brian audio playback failed:', err);
-          say('Debug. Play failed: ' + (err && err.message ? err.message : String(err)) + '.');
-          say(text);
-          setTimeout(function() { brianPlayNext(); }, 2500);
-        });
-    } else {
-      // DEBUG: play() didn't return a promise at all in this environment —
-      // that's a real finding on its own if we ever hear this.
-      say('Debug. Play returned no promise.');
+      bp.catch(function(err) {
+        console.warn('Brian audio playback failed:', err);
+        say(text);
+        setTimeout(function() { brianPlayNext(); }, 2500);
+      });
     }
   } catch(e) {
     console.warn('Brian TTS error:', e);
-    // DEBUG: temporary — says exactly which step failed instead of just
-    // silently falling through, so this doesn't read as "nothing happened."
-    say('Debug. Error: ' + (e && e.message ? e.message : String(e)) + '.');
     // BUGFIX: this used to call window.speechSynthesis directly, which is
     // unreliable — often silently produces no sound at all — inside this
     // app's WebView, especially with VoiceOver/TalkBack active. say() ->
@@ -48394,9 +48382,8 @@ function startHunt() {
 
 function scheduleNextHuntTick() {
   if (!HUNT.active) return;
-  // TESTING: shortened to 4-8 seconds temporarily so testing doesn't mean
-  // waiting up to 45s per attempt. Restore to 25000 + 20000 once confirmed.
-  var delay = 4000 + Math.floor(Math.random() * 4000);
+  // Random delay between 25 and 45 seconds
+  var delay = 25000 + Math.floor(Math.random() * 20000);
   HUNT.timer = setTimeout(function() {
     if (!HUNT.active) return;
     huntTick();
@@ -48464,9 +48451,8 @@ function huntEncounterEnemy(rank) {
 
     huntLog((crit?'💥 CRITICAL! ':'') + 'Defeated ' + enemy.name + '. +' + goldEarned + 'g +' + xpEarned + ' XP', 'system');
 
-    // TESTING: forced to 100% temporarily to verify the narrator pipeline
-    // without random misses in the way. Dial back down once confirmed.
-    if (Math.random() < 1.0) {
+    // Brian speaks most of the time on normal kills
+    if (Math.random() < 0.70) {
       brianSay(getHuntNarration('enemy'));
       setTimeout(function(){ brianSay(getHuntNarration('kill')); }, 4000);
     }
@@ -48484,8 +48470,8 @@ function huntEncounterEnemy(rank) {
     // Always Brian when HP is critical
     if (HUNT.hp < HUNT.maxHp * 0.3) {
       brianSay(getHuntNarration('lowHp'));
-    } else if (Math.random() < 1.0) {
-      // TESTING: forced to 100% temporarily, see note above
+    } else if (Math.random() < 0.65) {
+      // Brian comments on most regular hits
       brianSay(getHuntNarration('hurt'));
     }
   }
@@ -48508,8 +48494,8 @@ function huntFindItem(rank) {
     HUNT.gold += g;
     addGlobalGold(g);
     huntLog('  → +' + g + ' gold', 'item');
-    // TESTING: forced to 100% temporarily, see note above
-    if (Math.random() < 1.0) brianSay('An ancient coin catches the light. Worth ' + g + ' gold.');
+    // Brian comments on most gold finds
+    if (Math.random() < 0.55) brianSay('An ancient coin catches the light. Worth ' + g + ' gold.');
   } else {
     try {
       var inv = getGlobalInventory();
@@ -48519,8 +48505,7 @@ function huntFindItem(rank) {
     // Brian always speaks for rare items, and most of the time for others now
     if (item.rarity === 'rare') {
       brianSay(getHuntNarration('item') + ' Something rare. ' + item.name + '.');
-    } else if (Math.random() < 1.0) {
-      // TESTING: forced to 100% temporarily, see note above
+    } else if (Math.random() < 0.55) {
       brianSay(getHuntNarration('item') + ' ' + item.name + '.');
     }
   }
@@ -48532,8 +48517,8 @@ function huntRest() {
   var healAmt = Math.round(HUNT.maxHp * 0.08);
   HUNT.hp = Math.min(HUNT.maxHp, HUNT.hp + healAmt);
   huntLog('💚 Rest. Recovered ' + healAmt + ' HP. (' + HUNT.hp + ' HP)', 'system');
-  // TESTING: forced to 100% temporarily, see note above
-  if (Math.random() < 1.0) brianSay(getHuntNarration('rest'));
+  // Brian comments on about half of rest ticks
+  if (Math.random() < 0.45) brianSay(getHuntNarration('rest'));
 }
 
 function stopHunt(died) {
