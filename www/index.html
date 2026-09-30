@@ -48139,6 +48139,9 @@ async function brianPlayNext() {
     });
     if (!response.ok) throw new Error('Narrator proxy error: ' + response.status);
     var blob = await response.blob();
+    // DEBUG: temporary — confirms real audio bytes actually reached the
+    // client. Remove once the silent-playback issue is found.
+    say('Debug. Received ' + blob.size + ' bytes, type ' + blob.type + '.');
     var url = URL.createObjectURL(blob);
     if (_brianAudio) { _brianAudio.pause(); _brianAudio = null; }
     _brianAudio = new Audio(url);
@@ -48148,9 +48151,24 @@ async function brianPlayNext() {
     // be swallowed here with an empty .catch() — real audio came back from
     // the proxy, but if the browser refused to actually play it, nothing
     // happened and nothing was said at all. Fall back to say() instead.
-    if (bp && bp.catch) bp.catch(function(err) { console.warn('Brian audio playback failed:', err); say(text); setTimeout(function() { brianPlayNext(); }, 2500); });
+    if (bp && bp.catch) {
+      bp.then(function() { say('Debug. Play promise resolved.'); })
+        .catch(function(err) {
+          console.warn('Brian audio playback failed:', err);
+          say('Debug. Play failed: ' + (err && err.message ? err.message : String(err)) + '.');
+          say(text);
+          setTimeout(function() { brianPlayNext(); }, 2500);
+        });
+    } else {
+      // DEBUG: play() didn't return a promise at all in this environment —
+      // that's a real finding on its own if we ever hear this.
+      say('Debug. Play returned no promise.');
+    }
   } catch(e) {
     console.warn('Brian TTS error:', e);
+    // DEBUG: temporary — says exactly which step failed instead of just
+    // silently falling through, so this doesn't read as "nothing happened."
+    say('Debug. Error: ' + (e && e.message ? e.message : String(e)) + '.');
     // BUGFIX: this used to call window.speechSynthesis directly, which is
     // unreliable — often silently produces no sound at all — inside this
     // app's WebView, especially with VoiceOver/TalkBack active. say() ->
