@@ -8835,6 +8835,37 @@ function initWebAudio() {
   }
 }
 
+// Danger Radar — a short synthesized sonar ping, stereo-panned to a random
+// side. No audio asset needed since it's an oscillator tone, not a sample.
+// intensity (0-1) raises pitch and adds a second urgent beat above 0.5,
+// so a sensed trap "feels" closer/more dangerous than a routine search.
+function playRadarPing(intensity) {
+  try {
+    if (!AUD || !AUD.ctx) return;
+    if (AUD.ctx.state === 'suspended') AUD.ctx.resume();
+    var dir = Math.random() < 0.5 ? -0.6 : 0.6;
+    var dest = AUD.sfxGain || AUD.ctx.destination;
+    var vol = 0.35 * (AUD.sfxVol != null ? AUD.sfxVol : 0.8);
+    var fire = function(delaySec) {
+      var now = AUD.ctx.currentTime + delaySec;
+      var osc = AUD.ctx.createOscillator();
+      var gainNode = AUD.ctx.createGain();
+      var panner = AUD.ctx.createStereoPanner ? AUD.ctx.createStereoPanner() : null;
+      osc.type = 'sine';
+      osc.frequency.value = 600 + intensity * 500;
+      if (panner) { panner.pan.value = dir; osc.connect(gainNode); gainNode.connect(panner); panner.connect(dest); }
+      else { osc.connect(gainNode); gainNode.connect(dest); }
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(vol, now + 0.02);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      osc.start(now);
+      osc.stop(now + 0.4);
+    };
+    fire(0);
+    if (intensity > 0.5) fire(0.16);
+  } catch(e) { console.warn('[DD Audio] radar ping error:', e); }
+}
+
 // Fetch and decode an audio file into an AudioBuffer (cached)
 // BUGFIX: no size ceiling here meant a bad/oversized upload (one hosted track
 // was found to be 60MB+ — 3x+ every other track in the game) would still get
@@ -16003,10 +16034,18 @@ function searchRoom() {
     updateTopBar(); saveProgress();
   } else if (r < findChance + 0.20) {
     var hasTrapSense = DS.scholarProf || (DS.activeSpirit && DS.activeSpirit.id === 'frost-sprite');
+    var usedWardingBell = false;
+    if (!hasTrapSense && DS._wardingBellCharges > 0) {
+      DS._wardingBellCharges--;
+      usedWardingBell = true;
+      hasTrapSense = true;
+    }
     if (hasTrapSense) {
-      var trapMsg = DS.activeSpirit && DS.activeSpirit.id==='frost-sprite' ? DS.activeSpirit.icon+' Frost Sprite senses the trap!' : 'Your scholarly instincts warn you.';
+      playRadarPing(0.85);
+      var trapMsg = DS.activeSpirit && DS.activeSpirit.id==='frost-sprite' ? DS.activeSpirit.icon+' Frost Sprite senses the trap!' : usedWardingBell ? '🔔 The Warding Bell rings sharply.' : 'Your scholarly instincts warn you.';
       setEvent('', trapMsg + ' You step around it easily.');
-      say('You detected and avoided a trap.');
+      say(usedWardingBell ? 'The Warding Bell rings. You sense the trap and step around it.' : 'You detected and avoided a trap.');
+      if (usedWardingBell) saveProgress();
     } else {
       triggerTrap();
     }
@@ -17906,6 +17945,23 @@ function handleDeath() {
     setCombatBtns(true);
     return;
   }
+  // Phoenix Feather — purchased/found consumable, auto-revives once if carried
+  if (DS.inventory) {
+    var pfIdx = -1;
+    for (var pfi = 0; pfi < DS.inventory.length; pfi++) {
+      if (DS.inventory[pfi].type === 'phoenix-feather') { pfIdx = pfi; break; }
+    }
+    if (pfIdx !== -1) {
+      DS.inventory.splice(pfIdx, 1);
+      DS.hp = Math.max(1, Math.round(DS.maxHp * 0.30));
+      updatePlayerBar();
+      addLog('🔥 The Phoenix Feather ignites. You are reborn from the ashes at 30% HP!');
+      say('The Phoenix Feather ignites! You rise again at 30 percent HP. The feather crumbles to ash.');
+      renderInv(); saveProgress();
+      setCombatBtns(true);
+      return;
+    }
+  }
   // In hardcore, after one-time saves are exhausted, delete the character immediately
   if (DS.hardcoreMode && handleHardcoreDeath()) return;
   try {
@@ -19323,6 +19379,12 @@ function useItem(i) {
     say('Used ' + item.name + '. +' + (item.atk||4) + ' attack.');
     setEvent('good', 'Berserker Draught consumed. Fury burns through you. +' + (item.atk||4) + ' attack.');
     updateTopBar(); renderInv(); saveProgress();
+  } else if (item.type === 'warding-bell') {
+    DS._wardingBellCharges = (DS._wardingBellCharges || 0) + 1;
+    DS.inventory.splice(i, 1);
+    say('Warding Bell attuned. It will ring out and warn you the next time you search a room with a trap.');
+    setEvent('good', '🔔 The Warding Bell hums softly, attuned and waiting.');
+    renderInv(); saveProgress();
   } else if (item.type === 'cursed') {
     DS.inventory.splice(i, 1);
     var roll = Math.floor(Math.random() * 6);
@@ -20689,6 +20751,8 @@ var SHOP_STOCK = [
   { name:'Fog Flask',         icon:'🌫️', type:'fog-flask',            cost:25, desc:'Enemy has 70% chance to miss for 3 turns.' },
   { name:'Time Potion',       icon:'⌛', type:'time-potion',           cost:45, desc:'2 free attacks this turn. Enemy cannot respond.' },
   { name:'Corruption Flask',  icon:'💜', type:'corruption-flask',      cost:33, desc:'Deals 20 corruption damage to enemy each turn for 4 turns.' },
+  { name:'Warding Bell',      icon:'🔔', type:'warding-bell',          cost:20, desc:'Rings out the next time you search a room with a trap, letting you step around it. One use.' },
+  { name:'Phoenix Feather',   icon:'🪶', type:'phoenix-feather',       cost:150,desc:'If you would die while carrying this, it ignites instead — you are reborn at 30% HP. Consumed automatically. One use.' },
   { name:'Elixir of Life',    icon:'✨', type:'heal',        healPct:0.6, cost:35, desc:'Restores 60% of max HP instantly.' },
   { name:'Gravebound Elixir', icon:'💀', type:'heal',        healPct:0.6, cost:35, desc:'Restores 60% of max HP instantly.' },
   { name:'Tidal Elixir',      icon:'🌊', type:'heal',        healPct:0.6, cost:35, desc:'Restores 60% of max HP instantly.' },
