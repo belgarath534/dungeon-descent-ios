@@ -8684,7 +8684,7 @@ var DDStore = (function() {
           <div class="access-option-name" id="ao-tut-name">View Tutorial</div>
           <div class="access-option-desc" id="ao-tut-desc">Replay the beginner guide at any time.</div>
         </div>
-        <button class="btn-ghost" onclick="closeSettings();openTutorial();" aria-label="Open the tutorial guide" style="font-size:0.65rem;padding:6px 14px;" id="ao-tut-btn">Open</button>
+        <button class="btn-ghost" onclick="replayTutorial();" aria-label="Open the tutorial guide" style="font-size:0.65rem;padding:6px 14px;" id="ao-tut-btn">Open</button>
       </div>
     </div>
 
@@ -15700,6 +15700,7 @@ function advanceFloor() {
   // Guard against NaN
   if (isNaN(DS.floor) || DS.floor === undefined || DS.floor === null) DS.floor = 1;
   DS.floor++;
+  if (DS.floor === 2) setTimeout(function(){ showDungeonTip('first-floor2'); }, 800);
   DS._blackBoxThisFloor = false;
   DS._weaponUndyingUsedFloor = false;
   DS._armorSanctuaryUsedFloor = false;
@@ -16025,6 +16026,7 @@ function searchRoom() {
       DS.inventory.push(li); applyItem(li);
       setEvent('good', t('Searching carefully, you find') + ' ' + item.icon + ' ' + t(item.name) + '. ' + t(item.desc));
       say(t('Found') + ' ' + t(item.name) + '.');
+      setTimeout(function(){ showDungeonTip('first-loot'); }, 800);
     }
 
     // Enchanter drop — 2.5% chance
@@ -16085,7 +16087,7 @@ var DUNGEON_BOSS_SFX = {
 };
 
 function startCombat(isBoss) {
-  setTimeout(function(){ showDungeonTip(isBoss ? 'first-boss' : 'first-combat'); }, 800);
+  setTimeout(function(){ showDungeonTip(isBoss ? 'first-boss' : (DS.enemy && DS.enemy.isElite) ? 'first-elite' : 'first-combat'); }, 800);
   DS.inCombat = true; DS.defending = false;
   if (isBoss) { DS._eliteKilledFloor10 = false; try { companionOnBossEncounter(); } catch(e2) {} }
   try { updateCombatSpellBtn(); } catch(e2) {}
@@ -23593,6 +23595,7 @@ function useSkill(idx) {
   var skill = unlocked[idx];
   if (DS.sp < skill.spCost) { say('Not enough SP. You need ' + skill.spCost + ' SP but have ' + DS.sp + '.'); return; }
   if (!DS.inCombat) { say('Skills can only be used in combat.'); return; }
+  setTimeout(function(){ showDungeonTip('first-skill'); }, 800);
   // Daily Quest — track unique skills used this run (dq-skills-3's 'skilluse'
   // type had no call site anywhere, so that quest could never be completed)
   if (!DS._skillsUsedThisRun) DS._skillsUsedThisRun = [];
@@ -41379,6 +41382,16 @@ function closeTutorial() {
   }, 100);
 }
 
+// Settings "View Tutorial" — a deliberate replay. Unlike the automatic
+// first-run trigger, this also clears the in-dungeon contextual tip banners
+// (DUNGEON_TIPS) so a player who asks to see the tutorial again actually
+// gets the full experience back, not just the modal.
+function replayTutorial() {
+  DDStore.setItem('dd_dungeon_tips_seen', '[]');
+  closeSettings();
+  openTutorial();
+}
+
 //═════════════════
 // CORRUPTION SYSTEM
 //═════════════════
@@ -41557,11 +41570,12 @@ function onPlayerDeathCorruption() {
   }, 5000);
 })();
 
-function checkFirstRun() {
-  if (!DDStore.getItem('dd_tutorial_seen')) {
-    setTimeout(function() { openTutorial(); }, 600);
-  }
-}
+// checkFirstRun() used to auto-open the tutorial here AND startTutorial()
+// auto-opened it again at the first "Begin Descent" (two unsynced flags,
+// dd_tutorial_seen vs dd_combat_tutorial) — a new player saw the full modal
+// twice in one session. Removed; shouldShowTutorial()/startTutorial() at
+// closeQuestPopup() is now the single trigger, consolidated onto
+// dd_tutorial_seen (set by openTutorial() itself).
 
 //═════════════════
 // DEFEAT QUOTES — dungeon taunts
@@ -49921,8 +49935,11 @@ function markTipSeen(id) {
 }
 
 function hasSeenTip(id) {
-  // If player has completed a dungeon before, skip all tips
-  if (DDStore.getItem('dd_tutorial_done') === '1') return true;
+  // Each tip depends only on its own seen-state now. It used to also
+  // short-circuit true for every tip once dd_tutorial_done was set after a
+  // player's first dungeon clear — but that silently killed tips for things
+  // a player genuinely hadn't encountered yet (e.g. their first elite, on
+  // their second dungeon), not just ones they'd already seen.
   return getDungeonTipsSeen().indexOf(id) !== -1;
 }
 
@@ -52263,14 +52280,12 @@ function showRunModifierIntro(callback) {
 
 // ── TUTORIAL SYSTEM (session additions) ──
 function shouldShowTutorial() {
-  if (DDStore.getItem('dd_combat_tutorial') === '1') return false;
-  return true;
+  return !DDStore.getItem('dd_tutorial_seen');
 }
 
 function startTutorial() {
   if (!shouldShowTutorial()) return;
-  DDStore.setItem('dd_combat_tutorial', '1');
-  openTutorial();
+  openTutorial(); // openTutorial() itself marks dd_tutorial_seen immediately
 }
 
 function spawnTutorialShade() {
@@ -52298,15 +52313,25 @@ function spawnTutorialShade() {
 function startTutorialCombatPractice() {
   var dungeonScreen = document.getElementById('screen-dungeon');
   var liveRun = dungeonScreen && dungeonScreen.classList.contains('active') && DS && !DS.inCombat && DS.floor;
-  if (!liveRun) {
-    // Tutorial replayed from Settings/menu, not from inside an active run —
-    // there's no real dungeon screen to spawn a fight into. Skip straight on.
-    say('Practice fights are only available during an active run. You will get the chance to try this once you start playing.');
+  // No active run (e.g. replayed from Settings/main menu) — as long as a
+  // character is actually loaded (DS holds real hp/maxHp), switch to the
+  // dungeon screen just for this practice fight and switch back afterward,
+  // so "Replay Tutorial" can complete the whole walkthrough on demand
+  // instead of always skipping the one hands-on step.
+  var hasCharacter = DS && typeof DS.hp === 'number' && typeof DS.maxHp === 'number' && DS.maxHp > 0;
+  if (!liveRun && !hasCharacter) {
+    say('Practice fights need a character loaded. Create or load a character first, then replay the tutorial.');
     tutStep(6);
     return;
   }
   document.getElementById('tutorial-overlay').classList.remove('open');
   DS._tutCombatBeats = {};
+  if (!liveRun) {
+    DS._tutStandaloneReturnScreen = _currentScreen;
+    goTo('dungeon');
+  } else {
+    DS._tutStandaloneReturnScreen = null;
+  }
   spawnTutorialShade();
   addLog('📖 Tutorial: try Attack, Heavy Strike, and Defend against this Training Shade.');
 }
@@ -52326,6 +52351,10 @@ function _tutCombatOnAction(action) {
 }
 
 function resumeTutorialAfterCombat() {
+  if (DS._tutStandaloneReturnScreen) {
+    goTo(DS._tutStandaloneReturnScreen);
+    DS._tutStandaloneReturnScreen = null;
+  }
   document.getElementById('tutorial-overlay').classList.add('open');
   tutStep(6);
 }
@@ -61614,8 +61643,6 @@ DDStore.whenReady().then(function() {
   // Wrap saveChars() so every save also fires a background cloud sync
   // (no-ops until the player is actually signed in — see initAccountSync())
   try { initAccountSync(); } catch(e) {}
-  // Check first run — show tutorial
-  checkFirstRun();
   updateGlobalGoldDisplay();
   updateDiamondDisplay();
   refreshInfernalCard();
