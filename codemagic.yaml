@@ -49,8 +49,10 @@ workflows:
       app_store_connect: Accessible Backrooms
     environment:
       ios_signing:
+        # The main app's profile is downloaded fresh from Apple in the
+        # "Get the App Store profile from Apple" step below, so a stale copy
+        # saved in Codemagic can't sneak in without iCloud.
         provisioning_profiles:
-          - Dungeon Descent iCloud App Store
           - Dungeon Descent Live Activity App Store
         certificates:
           - Accessible Backrooms Distribution
@@ -67,6 +69,27 @@ workflows:
       - name: Capacitor sync
         script: |
           npx cap sync ios
+      - name: Get the App Store profile from Apple
+        script: |
+          # Uses the App Store Connect key from the integration above.
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          for NAME in "Dungeon Descent iCloud App Store" "Dungeon Descent App Store"; do
+            TMP=$(mktemp -d)
+            app-store-connect profiles list --type IOS_APP_STORE --state ACTIVE \
+              --name "$NAME" --save --profiles-dir "$TMP" || true
+            for F in "$TMP"/*; do
+              [ -f "$F" ] || continue
+              if security cms -D -i "$F" | grep -q "iCloud.com.dungeon.descent"; then
+                echo "Using \"$NAME\" from Apple, it includes iCloud"
+                cp "$F" "$DEST/"
+                exit 0
+              fi
+              echo "\"$NAME\" on Apple does not include iCloud, skipping it"
+            done
+          done
+          echo "No active App Store profile with iCloud for com.dungeon.descent was found on Apple"
+          exit 1
       - name: Use the App Store signing profiles
         script: |
           xcode-project use-profiles
