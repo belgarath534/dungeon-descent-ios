@@ -41,8 +41,10 @@ workflows:
 
   dungeon-descent-appstore:
     name: Dungeon Descent App Store
-    max_build_duration: 120
-    instance_type: mac_mini_m2
+    # Paid pay-as-you-go Mac: starts right away instead of waiting in the free line.
+    # The 60 minute cap keeps a stuck build from costing much.
+    max_build_duration: 60
+    instance_type: mac_mini_m4
     integrations:
       app_store_connect: Accessible Backrooms
     environment:
