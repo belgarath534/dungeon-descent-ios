@@ -9,6 +9,17 @@ import Capacitor
 // right fit for something like Echo-Location that the player should be
 // able to trigger from anywhere while exploring.
 class MainViewController: CAPBridgeViewController {
+    // Plugins that live in the app itself (not npm packages) aren't found by
+    // Capacitor automatically, so without this they'd never reach the game:
+    // iCloud backup, audio session, haptics and the Live Activity would all
+    // silently do nothing.
+    override func capacitorDidLoad() {
+        bridge?.registerPluginInstance(AudioSessionPlugin())
+        bridge?.registerPluginInstance(CoreHapticsPlugin())
+        bridge?.registerPluginInstance(LiveActivityPlugin())
+        bridge?.registerPluginInstance(iCloudSyncPlugin())
+    }
+
     override func accessibilityPerformMagicTap() -> Bool {
         webView?.evaluateJavaScript("if (typeof echoLocate === 'function') { echoLocate(); }", completionHandler: nil)
         return true
