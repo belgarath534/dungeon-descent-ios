@@ -38,3 +38,49 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
+
+  dungeon-descent-appstore:
+    name: Dungeon Descent App Store
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Accessible Backrooms
+    environment:
+      ios_signing:
+        provisioning_profiles:
+          - Dungeon Descent App Store
+          - Dungeon Descent Live Activity App Store
+        certificates:
+          - Accessible Backrooms Distribution
+      node: v20.14.0
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install --legacy-peer-deps
+          # The iPhone version launches without ads or coin purchases (Android keeps both).
+          # Leaving the plugins out means the coin shop hides those buttons by itself.
+          npm uninstall @capacitor-community/admob cordova-plugin-purchase --legacy-peer-deps
+      - name: Capacitor sync
+        script: |
+          npx cap sync ios
+      - name: Use the App Store signing profiles
+        script: |
+          xcode-project use-profiles
+      - name: Set build number
+        script: |
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = $BUILD_NUMBER;/" ios/App/App.xcodeproj/project.pbxproj
+          grep -m1 CURRENT_PROJECT_VERSION ios/App/App.xcodeproj/project.pbxproj
+      - name: Build signed IPA
+        script: |
+          xcode-project build-ipa \
+            --workspace ios/App/App.xcworkspace \
+            --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
