@@ -108,4 +108,4 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true
+        submit_to_testflight: false  # internal testers get every build anyway; true tries external beta review and fails without Test Information
