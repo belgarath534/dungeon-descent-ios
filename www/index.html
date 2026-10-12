@@ -3425,7 +3425,7 @@ var DDStore = (function() {
 
       <!-- Submit -->
       <button id="ec-submit-btn" onclick="ecSubmit()" style="width:100%;padding:14px;background:#0a0800;border:2px solid #c9a227;color:#e8c84a;font-family:Cinzel,serif;font-size:0.8rem;cursor:pointer;letter-spacing:0.1em;margin-bottom:8px;" aria-label="Submit your enemy to the community pool">⚔ Unleash This Enemy</button>
-      <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#444;text-align:center;">Your enemy will appear in dungeons for all players after passing a content filter.</div>
+      <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#888;text-align:center;">Your enemy will appear in dungeons for all players after passing a content filter. By creating one you agree to the <a href="https://dungen-descent.org/terms" target="_blank" rel="noopener" style="color:#c8a832;">Terms of Service</a>. Players can report or block any community enemy in the Bestiary, Community tab.</div>
     </div>
 
     <!-- Success state -->
@@ -8154,6 +8154,12 @@ var DDStore = (function() {
       <div id="chat-username-status" style="font-family:Cinzel,serif;font-size:0.6rem;color:#555;margin-top:4px;" aria-live="polite"></div>
     </div>
 
+    <div style="margin-bottom:16px;">
+      <div style="font-family:Cinzel,serif;font-size:0.65rem;color:#c8a832;margin-bottom:6px;">Blocked Players</div>
+      <div id="ugc-blocked-summary" style="font-family:Cinzel,serif;font-size:0.6rem;color:#888;margin-bottom:6px;" aria-live="polite">You have not blocked anyone.</div>
+      <button onclick="ugcUnblockAll()" style="width:100%;padding:8px 14px;background:#0a0800;border:1px solid #c9a227;color:#c9a227;font-family:Cinzel,serif;font-size:0.65rem;cursor:pointer;" aria-label="Unblock all players and show hidden messages and enemies again">Unblock everyone</button>
+    </div>
+
     <button onclick="closeSettingsPanel('chat'); goTo('chat');" style="width:100%;padding:12px;background:#0a0800;border:1px solid #554488;color:#aa88ff;font-family:Cinzel,serif;font-size:0.7rem;cursor:pointer;" aria-label="Open global chat">💬 Open Global Chat</button>
   </div>
 </div>
@@ -8165,7 +8171,7 @@ var DDStore = (function() {
       <button class="back-btn" onclick="chatClose()" aria-label="Back to menu">← Menu</button>
       <h2 class="screen-title">💬 Global Chat</h2>
     </div>
-    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#444;text-align:center;margin-bottom:8px;">Talk to players around the world. Be respectful.</div>
+    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#888;text-align:center;margin-bottom:8px;">Talk to players around the world. By chatting you agree to the <a href="https://dungen-descent.org/terms" target="_blank" rel="noopener" style="color:#c8a832;">Terms of Service</a>: no tolerance for objectionable content or abusive players. Every message has Report and Block buttons.</div>
 
     <!-- Messages area -->
     <div id="chat-messages" style="flex:1;overflow-y:auto;background:#060600;border:1px solid #221100;padding:10px;margin-bottom:10px;min-height:200px;max-height:55vh;" role="log" aria-live="polite" aria-label="Chat messages" aria-relevant="additions"></div>
@@ -22413,6 +22419,7 @@ function ecSubmit() {
     ecShowError('Your submission contains inappropriate content. Please revise and try again.');
     return;
   }
+  if (!ugcRequireAgreement()) return;
 
   if (!_ecCurrentStats) ecRollStats();
 
@@ -22502,6 +22509,7 @@ async function loadCommunityEnemies() {
 function getCommunityEnemy(dungeonName) {
   if (!_communityEnemyCache.length) return null;
   var eligible = _communityEnemyCache.filter(function(e) {
+    if (ugcIsBlocked(e.creator) || ugcIsHidden(e._id)) return false;
     return e.dungeon === 'all' || e.dungeon === dungeonName;
   });
   if (!eligible.length) return null;
@@ -22546,6 +22554,128 @@ try {
     }, 3000);
   });
 } catch(e) {}
+
+// ═══════════════════════════════════════════════════════
+// PLAYER SAFETY: REPORT, BLOCK, COMMUNITY RULES
+// ═══════════════════════════════════════════════════════
+// Global chat and community enemies are written by players and seen by
+// everyone, so (App Store guideline 1.2) players must agree to the terms
+// before posting, and can report or block anything they see. Reports go to
+// the developer's inbox through the same Formspree form as Send Feedback.
+// Blocking and hiding are stored on this device only.
+
+var DD_TERMS_URL = 'https://dungen-descent.org/terms';
+var DD_REPORT_ENDPOINT = 'https://formspree.io/f/mkjnkenn';
+
+function ugcBlockedList() {
+  var list = _jsonParseSafe(DDStore.getItem('dd_blocked_players'), '[]');
+  return Array.isArray(list) ? list : [];
+}
+function ugcHiddenList() {
+  var list = _jsonParseSafe(DDStore.getItem('dd_hidden_content'), '[]');
+  return Array.isArray(list) ? list : [];
+}
+function ugcIsBlocked(name) {
+  if (!name) return false;
+  return ugcBlockedList().indexOf(String(name).trim().toLowerCase()) !== -1;
+}
+function ugcIsHidden(id) {
+  return !!id && ugcHiddenList().indexOf(String(id)) !== -1;
+}
+function ugcHide(id) {
+  if (!id) return;
+  var list = ugcHiddenList();
+  if (list.indexOf(String(id)) === -1) { list.push(String(id)); DDStore.setItem('dd_hidden_content', JSON.stringify(list.slice(-500))); }
+}
+function ugcUpdateBlockedSummary() {
+  var el = document.getElementById('ugc-blocked-summary');
+  if (!el) return;
+  var n = ugcBlockedList().length;
+  el.textContent = n ? ('You have blocked ' + n + (n === 1 ? ' player.' : ' players.')) : 'You have not blocked anyone.';
+}
+function ugcRefreshViews() {
+  try { if (_chatOpen) chatLoadMessages(); } catch(e) {}
+  try { if (typeof vrInitScreenChat === 'function' && _vrChatListener) vrInitScreenChat(); } catch(e) {}
+  try {
+    var grid = document.getElementById('be-community-grid');
+    if (grid && grid.offsetParent !== null) renderCommunityBestiary();
+  } catch(e) {}
+  ugcUpdateBlockedSummary();
+}
+
+// One-time agreement before a player posts anything others can see.
+function ugcRequireAgreement() {
+  if (DDStore.getItem('dd_ugc_terms_ok') === '1') return true;
+  var ok = window.confirm('Before you post: chat messages and community enemies are seen by all players. ' +
+    'By continuing you agree to the Dungeon Descent Terms of Service at dungen-descent.org/terms. ' +
+    'There is no tolerance for objectionable content or abusive players. Content that breaks the rules is removed and its author can be banned. ' +
+    'You can report or block anyone. Do you agree?');
+  if (ok) { DDStore.setItem('dd_ugc_terms_ok', '1'); say('Thank you. You agreed to the Terms of Service.'); }
+  else { say('You need to agree to the Terms of Service to post.'); }
+  return ok;
+}
+
+function ugcBlock(name) {
+  name = String(name || '').trim();
+  if (!name) return;
+  if (!window.confirm('Block ' + name + '? You will no longer see their chat messages or community enemies. You can unblock everyone later in Settings, Chat.')) return;
+  var list = ugcBlockedList();
+  var key = name.toLowerCase();
+  if (list.indexOf(key) === -1) { list.push(key); DDStore.setItem('dd_blocked_players', JSON.stringify(list)); }
+  say(name + ' is blocked. You will not see their messages or enemies anymore.');
+  ugcRefreshViews();
+}
+
+function ugcUnblockAll() {
+  DDStore.setItem('dd_blocked_players', '[]');
+  DDStore.setItem('dd_hidden_content', '[]');
+  say('Everyone is unblocked, and hidden messages and enemies are shown again.');
+  ugcRefreshViews();
+}
+
+async function ugcReport(kind, id, author, content) {
+  var reason = window.prompt('Report this ' + kind + ' by ' + (author || 'unknown') + '. What is wrong with it? For example: offensive, harassment, spam. You can also leave this empty.', '');
+  if (reason === null) { say('Report cancelled.'); return; }
+  ugcHide(id);
+  ugcRefreshViews();
+  var user = (typeof getFirebaseUser === 'function') ? getFirebaseUser() : null;
+  var payload = {
+    type: 'Content report: ' + kind,
+    message: 'REPORTED ' + kind.toUpperCase() + '\nAuthor: ' + (author || 'unknown') + '\nContent: ' + (content || '') +
+      '\nID: ' + (id || 'none') + '\nReason: ' + (reason || 'not given') +
+      '\nReported by: ' + ((typeof chatGetUsername === 'function' && chatGetUsername()) || 'no chat username') +
+      '\nTime: ' + new Date().toISOString(),
+    email: (user && user.email) ? user.email : 'no-reply@dungen-descent.org',
+    platform: (window.Capacitor && typeof Capacitor.getPlatform === 'function') ? Capacitor.getPlatform() : 'web',
+    gameVersion: (typeof CURRENT_VERSION !== 'undefined') ? CURRENT_VERSION : 'unknown',
+  };
+  try {
+    var r = await fetch(DD_REPORT_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!r.ok) throw new Error('status ' + r.status);
+    say('Report sent. Thank you. The developer reviews reports within 24 hours. It is hidden for you now.');
+  } catch(e) {
+    say('The report could not be sent. Check your connection. It is hidden for you now.');
+  }
+}
+
+// A JS string literal that is safe inside a double-quoted HTML attribute.
+function ugcAttrJson(v) {
+  return JSON.stringify(String(v == null ? '' : v)).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Report and Block buttons for one piece of player content, as HTML.
+function ugcButtonsHtml(kind, id, author, content) {
+  var a = chatEscape(author || ''), btn = 'font-family:Cinzel,serif;font-size:0.55rem;background:#0a0800;border:1px solid #443300;color:#c8a832;padding:3px 8px;margin:4px 6px 0 0;cursor:pointer;';
+  var args = ugcAttrJson(kind) + ',' + ugcAttrJson(id) + ',' + ugcAttrJson(author) + ',' + ugcAttrJson(String(content || '').slice(0, 300));
+  return '<div>' +
+    '<button style="' + btn + '" onclick="ugcReport(' + args + ')" aria-label="Report ' + chatEscape(kind) + ' by ' + a + '">Report</button>' +
+    '<button style="' + btn + '" onclick="ugcBlock(' + ugcAttrJson(author) + ')" aria-label="Block ' + a + '">Block</button>' +
+  '</div>';
+}
 
 // ═══════════════════════════════════════════════════════
 // GLOBAL CHAT SYSTEM
@@ -22654,7 +22784,7 @@ function chatLoadMessages() {
   _chatListener = function(snap) {
     if (!_chatOpen) return;
     var messages = [];
-    snap.forEach(function(child) { messages.push(child.val()); });
+    snap.forEach(function(child) { messages.push(Object.assign({ _key: child.key }, child.val())); });
     chatRenderMessages(messages);
   };
   ref.on('value', _chatListener, function(err) {
@@ -22668,6 +22798,7 @@ function chatRenderMessages(messages) {
   if (!messagesEl) return;
   var myUsername = chatGetUsername();
   var wasAtBottom = messagesEl.scrollHeight - messagesEl.scrollTop <= messagesEl.clientHeight + 50;
+  messages = messages.filter(function(m) { return !ugcIsBlocked(m.username) && !ugcIsHidden(m._key); });
 
   if (!messages.length) {
     messagesEl.innerHTML = '<div style="font-family:Cinzel,serif;font-size:0.65rem;color:#444;text-align:center;padding:20px;">No messages yet. Be the first to say something!</div>';
@@ -22677,10 +22808,13 @@ function chatRenderMessages(messages) {
   messagesEl.innerHTML = messages.map(function(msg) {
     var isMe = msg.username === myUsername;
     var time = msg.timestamp ? chatFormatTime(msg.timestamp) : '';
-    return '<div style="padding:6px 0;border-bottom:1px solid #111;" tabindex="0" aria-label="' + msg.username + ' said ' + msg.message + ' ' + time + '">' +
+    return '<div style="padding:6px 0;border-bottom:1px solid #111;">' +
+      '<div tabindex="0" aria-label="' + chatEscape(msg.username) + ' said ' + chatEscape(msg.message) + ' ' + time + '">' +
       '<span style="font-family:Cinzel,serif;font-size:0.62rem;color:' + (isMe ? '#c8a832' : '#88aacc') + ';">' + chatEscape(msg.username) + '</span>' +
       '<span style="font-family:Cinzel,serif;font-size:0.55rem;color:#333;margin-left:6px;">' + time + '</span>' +
       '<div style="font-family:Cinzel,serif;font-size:0.68rem;color:#aaa;margin-top:2px;">' + chatEscape(msg.message) + '</div>' +
+      '</div>' +
+      (isMe || msg.system ? '' : ugcButtonsHtml('message', msg._key, msg.username, msg.message)) +
     '</div>';
   }).join('');
 
@@ -22715,6 +22849,7 @@ function chatSend() {
     return;
   }
   if (!window._fbRtdb) { say('Chat unavailable. Check your connection.'); return; }
+  if (!ugcRequireAgreement()) return;
 
   var data = {
     username: username,
@@ -22758,6 +22893,7 @@ try {
       if (settingsInput && saved) settingsInput.value = saved;
       var toggle = document.getElementById('chat-dungeon-toggle');
       if (toggle) toggle.checked = DDStore.getItem('dd_chat_dungeon') === '1';
+      try { ugcUpdateBlockedSummary(); } catch(e) {}
     }, 1000);
   });
 } catch(e) {}
@@ -25666,7 +25802,7 @@ function vrInitScreenChat() {
   var ref = window._fbRtdb.ref('global_chat').orderByChild('timestamp').limitToLast(30);
   _vrChatListener = function(snap) {
     var messages = [];
-    snap.forEach(function(child) { messages.push(child.val()); });
+    snap.forEach(function(child) { messages.push(Object.assign({ _key: child.key }, child.val())); });
     vrRenderChat(messages);
   };
   ref.on('value', _vrChatListener, function(err) {
@@ -25678,6 +25814,7 @@ function vrRenderChat(messages) {
   var el = document.getElementById('vr-chat-messages');
   if (!el) return;
   var myUsername = chatGetUsername();
+  messages = messages.filter(function(m) { return !ugcIsBlocked(m.username) && !ugcIsHidden(m._key); });
   if (!messages.length) {
     el.innerHTML = '<div style="font-family:Cinzel,serif;font-size:0.65rem;color:#444;text-align:center;padding:10px;">No messages yet. Coordinate your attack!</div>';
     return;
@@ -25687,10 +25824,13 @@ function vrRenderChat(messages) {
     var isSystem = !!msg.system;
     var time = msg.timestamp ? chatFormatTime(msg.timestamp) : '';
     var nameColor = isSystem ? '#aa44ff' : (isMe ? '#c8a832' : '#7799bb');
-    return '<div style="padding:4px 0;border-bottom:1px solid #111;" tabindex="0" aria-label="' + msg.username + ': ' + msg.message + '">' +
+    return '<div style="padding:4px 0;border-bottom:1px solid #111;">' +
+      '<div tabindex="0" aria-label="' + chatEscape(msg.username) + ': ' + chatEscape(msg.message) + '">' +
       '<span style="font-family:Cinzel,serif;font-size:0.6rem;color:' + nameColor + ';">' + chatEscape(msg.username) + '</span>' +
       '<span style="font-family:Cinzel,serif;font-size:0.52rem;color:#333;margin-left:5px;">' + time + '</span>' +
       '<div style="font-family:Cinzel,serif;font-size:0.65rem;color:' + (isSystem ? '#bb88ff' : '#aaa') + ';margin-top:1px;">' + chatEscape(msg.message) + '</div>' +
+      '</div>' +
+      (isMe || isSystem ? '' : ugcButtonsHtml('message', msg._key, msg.username, msg.message)) +
     '</div>';
   }).join('');
   el.scrollTop = el.scrollHeight;
@@ -25709,6 +25849,7 @@ function vrChatSend() {
   if (!message || message.length > 200) { say('Message must be 1 to 200 characters.'); return; }
   if (chatContainsBadWord(message)) { say('Message contains inappropriate content.'); if(input) input.value=''; return; }
   if (!window._fbRtdb) return;
+  if (!ugcRequireAgreement()) return;
 
   window._fbRtdb.ref('global_chat').push({
     username: username,
@@ -42450,7 +42591,12 @@ async function renderCommunityBestiary() {
       return;
     }
 
-    _communityEnemyCache.forEach(function(enemy) {
+    var visibleEnemies = _communityEnemyCache.filter(function(e) { return !ugcIsBlocked(e.creator) && !ugcIsHidden(e._id); });
+    if (!visibleEnemies.length) {
+      grid.innerHTML = '<div style="font-family:Cinzel,serif;font-size:0.65rem;color:#444;text-align:center;padding:20px;">No community enemies to show.</div>';
+      return;
+    }
+    visibleEnemies.forEach(function(enemy) {
       var card = document.createElement('div');
       card.className = 'be-card';
       card.setAttribute('tabindex', '0');
@@ -42459,21 +42605,22 @@ async function renderCommunityBestiary() {
       card.style.borderColor = '#554488';
 
       card.innerHTML =
-        '<div class="be-icon" style="color:#aa88ff;" aria-hidden="true">' + (enemy.icon || '👤') + '</div>' +
-        '<div class="be-name">' + enemy.name + '</div>' +
-        '<div class="be-tier" style="color:#aa88ff;">Created by ' + enemy.creator + '</div>' +
-        '<div class="be-desc">' + (enemy.desc || '') + '</div>' +
+        '<div class="be-icon" style="color:#aa88ff;" aria-hidden="true">' + chatEscape(enemy.icon || '👤') + '</div>' +
+        '<div class="be-name">' + chatEscape(enemy.name) + '</div>' +
+        '<div class="be-tier" style="color:#aa88ff;">Created by ' + chatEscape(enemy.creator) + '</div>' +
+        '<div class="be-desc">' + chatEscape(enemy.desc || '') + '</div>' +
         '<div style="font-family:Cinzel,serif;font-size:0.58rem;color:#555;margin-top:4px;">' +
-          (enemy.dungeon === 'all' ? 'All Dungeons' : enemy.dungeon) + ' · ' +
-          (enemy.type || 'common') + ' · ' +
-          'HP ' + enemy.hp + ' · ATK ' + enemy.atk +
-          ' · ⚔ ' + (enemy.kills || 0) + ' kills' +
-        '</div>';
+          chatEscape(enemy.dungeon === 'all' ? 'All Dungeons' : enemy.dungeon) + ' · ' +
+          chatEscape(enemy.type || 'common') + ' · ' +
+          'HP ' + chatEscape(enemy.hp) + ' · ATK ' + chatEscape(enemy.atk) +
+          ' · ⚔ ' + chatEscape(enemy.kills || 0) + ' kills' +
+        '</div>' +
+        ugcButtonsHtml('enemy', enemy._id, enemy.creator, (enemy.name || '') + ': ' + (enemy.desc || ''));
 
       grid.appendChild(card);
     });
 
-    say(_communityEnemyCache.length + ' community enemies loaded.');
+    say(visibleEnemies.length + ' community enemies loaded. Each one has Report and Block buttons.');
   } catch(e) {
     grid.innerHTML = '<div style="font-family:Cinzel,serif;font-size:0.65rem;color:#444;text-align:center;padding:20px;">Failed to load community enemies. Check your connection.</div>';
   }
