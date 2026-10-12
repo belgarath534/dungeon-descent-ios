@@ -1,0 +1,11 @@
+Dungeon Descent achievements uploader
+
+1. Unzip this folder on your Windows computer.
+2. Copy the same AuthKey .p8 key file you used before into this folder.
+3. Double click "Submit achievements.bat".
+4. Paste your Issuer ID and press Enter.
+5. Wait until it says ALL DONE.
+
+It gives every achievement that has no picture its icon from the icons folder (each one uses the achievement's emoji from the game), then sends all achievements that are not already with Apple to App Review together.
+It skips achievements that are already submitted or live, so it is safe to run again.
+Your key stays on your computer. It is only sent to Apple, to sign in.
