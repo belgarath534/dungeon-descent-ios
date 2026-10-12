@@ -26603,7 +26603,7 @@ function accountDeleteAccount() {
   if (!window._deleteConfirmPending) {
     window._deleteConfirmPending = true;
     setInd('⚠ Tap Delete again to confirm.', '#ff4444');
-    say('Tap Delete Account again to confirm. Only removes cloud account. Local saves are safe.');
+    say('Tap Delete Account again to confirm. This deletes your account and its cloud save. Saves on this device are kept.');
     setTimeout(function() {
       window._deleteConfirmPending = false;
       setInd('');
@@ -26613,11 +26613,11 @@ function accountDeleteAccount() {
   // Confirmed — delete
   window._deleteConfirmPending = false;
   setInd('⏳ Deleting account...', '#ffaa44');
-  var doDelete = window._fbAuth ? window._fbAuth.currentUser.delete() : (window._fbDeleteAccount ? window._fbDeleteAccount() : Promise.reject(new Error('Not available')));
+  var doDelete = window._fbDeleteAccount ? window._fbDeleteAccount() : (window._fbAuth ? window._fbAuth.currentUser.delete() : Promise.reject(new Error('Not available')));;
   doDelete.then(function() {
     window._fbCurrentUser = null;
     setInd('✓ Account deleted', '#44ff88');
-    say('Account deleted. Local saves are untouched.');
+    say('Account and cloud save deleted. Saves on this device are untouched.');
     setEvent('', 'Cloud account deleted. Local saves are safe.');
     setTimeout(function() { updateAccountUI(); setInd(''); }, 2000);
   }).catch(function(e) {
@@ -61897,17 +61897,28 @@ DDStore.whenReady().then(function() {
           }
         };
 
-        // Delete account data from Firestore
+        // Delete the account and everything stored under it: the cloud save,
+        // the profile and its inbox, the leaderboard entry and the reserved
+        // username. Each removal is best-effort so one missing document can't
+        // block the rest; the login itself is deleted last.
         window._fbDeleteAccount = async function() {
           var user = window._fbAuth.currentUser;
           if (!user) return;
-          try {
-            await window._fbDb.collection('saves').doc(user.uid).delete();
-            await user.delete();
-          } catch(e) {
-            console.warn('Delete error:', e);
-            throw e;
+          var db = window._fbDb, uid = user.uid;
+          var tryDel = async function(label, fn) { try { await fn(); } catch(e) { console.warn('Delete ' + label + ' failed:', e && e.message); } };
+          var profile = null;
+          await tryDel('profile read', async function() { var snap = await db.collection('users').doc(uid).get(); profile = snap.exists ? snap.data() : null; });
+          await tryDel('save', function() { return db.collection('saves').doc(uid).delete(); });
+          await tryDel('inbox', async function() {
+            var inbox = await db.collection('users').doc(uid).collection('inbox').get();
+            await Promise.all(inbox.docs.map(function(d) { return d.ref.delete(); }));
+          });
+          await tryDel('profile', function() { return db.collection('users').doc(uid).delete(); });
+          await tryDel('leaderboard', function() { return db.collection('leaderboard').doc(uid).delete(); });
+          if (profile && profile.username) {
+            await tryDel('username', function() { return db.collection('usernames').doc(String(profile.username).toLowerCase()).delete(); });
           }
+          await user.delete();
         };
 
         window._fbAuth.onAuthStateChanged(function(user) {
