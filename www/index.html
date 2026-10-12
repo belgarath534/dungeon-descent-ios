@@ -9310,6 +9310,9 @@ function playTrack(name) {
   if (!AUD.loaded) return;
   if (!AUD.musicOn) { AUD.current = name; return; }
   if (_customTrackActive || _ytActive) { AUD.current = name; return; }
+  // The music player owns the music while it plays; remember what the game
+  // wanted so mpStop() can go back to it.
+  if (typeof _mpPlaying !== 'undefined' && _mpPlaying) { AUD.current = name; return; }
   // Don't restart if same track is already playing — check both Web Audio and Howler
   if (AUD.current === name) {
     // Web Audio: BufferSource is active if it exists and hasn't ended
@@ -52890,9 +52893,11 @@ function loadYouTubeTrack(videoId, label) {
   // was loaded. This is very likely why it "didn't work" at all.
   wrap.removeAttribute('aria-hidden');
 
-  var embedBase = 'https://www.youtube-nocookie.com/embed/' + videoId +
-    '?mute=0&loop=1&playlist=' + videoId +
-    '&controls=1&modestbranding=1&rel=0&origin=' + encodeURIComponent(window.location.origin || 'https://dungen-descent.org');
+  // YouTube refuses embeds that arrive with no referrer ("Video player
+  // configuration error", error 153), and the iPhone app runs from
+  // capacitor://localhost, which sends none. So the player is a small page
+  // on the website that embeds YouTube with a normal https referrer.
+  var embedBase = 'https://dungen-descent.org/yt.html?v=' + encodeURIComponent(videoId);
 
   var iframe = document.createElement('iframe');
   iframe.width = '160';
@@ -61697,8 +61702,26 @@ DDStore.whenReady().then(function() {
   // backgrounded or the screen locks, and WKWebView can leave AudioContext.state
   // reporting 'running' even though it is actually dead — so always try to resume/
   // recreate rather than trusting the reported state.
+  // visibilitychange and Capacitor's appStateChange both fire for the same
+  // trip to the background (and appStateChange alone fires for system sheets
+  // like Sign in with Apple), so this flag makes each side run once. Running
+  // resume twice started the game track twice, on top of itself.
+  var _ddInBackground = false;
+
   function _ddResumeAudioOnForeground() {
     if (!AUD) return;
+    if (!_ddInBackground) return;
+    _ddInBackground = false;
+    // The music player kept playing in the background; leave it alone.
+    if (typeof _mpPlaying !== 'undefined' && _mpPlaying) {
+      if (AUD.ctx && AUD.ctx.state !== 'running') { AUD.ctx.resume().catch(function() {}); }
+      return;
+    }
+    if (window._ddCustomTrackWasPlaying && _customTrackAudio) {
+      window._ddCustomTrackWasPlaying = false;
+      try { _customTrackAudio.play().catch(function() {}); } catch(e) {}
+      return;
+    }
     var cur = AUD.current;
     var ambKey = AUD._pausedAmbientKey;
     AUD._pausedAmbientKey = null;
@@ -61738,8 +61761,28 @@ DDStore.whenReady().then(function() {
 
   function _ddSuspendAudioOnBackground() {
     if (!AUD) return;
+    if (_ddInBackground) return;
+    _ddInBackground = true;
+    // Note: not stopHunterMusic() here. It ends by starting the dungeon floor
+    // music, which is exactly the "crypt music plays when I leave the app"
+    // bug. Pausing the hunter music element below is all that's needed.
+    // Remember the ambience before stopping it, so it comes back on return.
+    var ambientKey = _ambientTrack;
+    try { stopAmbient(); } catch(e) {}
+    try {
+      if (window._hunterMusicEl) { _hunterMusicEl.pause(); }
+      if (window._heartbeatEl) { _heartbeatEl.pause(); }
+    } catch(e) {}
+    // The music player is meant to keep playing when you leave the app, like
+    // any music app. Everything else goes quiet.
+    if (typeof _mpPlaying !== 'undefined' && _mpPlaying) return;
+    if (_customTrackActive && _customTrackAudio && !_customTrackAudio.paused) {
+      window._ddCustomTrackWasPlaying = true;
+      try { _customTrackAudio.pause(); } catch(e) {}
+    }
+    if (window._currentTrackEl) { try { window._currentTrackEl.pause(); } catch(e) {} }
     // Remember what was playing so we can restore it exactly on foreground
-    AUD._pausedAmbientKey = _ambientTrack;
+    AUD._pausedAmbientKey = ambientKey;
     if (AUD.currentSource) {
       try { AUD.currentSource.stop(); } catch(e) {}
       AUD.currentSource = null;
@@ -61748,7 +61791,6 @@ DDStore.whenReady().then(function() {
       AUD.ctx.suspend().catch(function() {});
     }
     try { stopAmbient(); } catch(e) {}
-    try { stopHunterMusic(); } catch(e) {}
     try {
       if (window._hunterMusicEl) { _hunterMusicEl.pause(); }
       if (window._heartbeatEl) { _heartbeatEl.pause(); }
