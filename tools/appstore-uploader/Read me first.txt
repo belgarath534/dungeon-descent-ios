@@ -1,0 +1,13 @@
+Dungeon Descent App Store uploader
+
+1. Unzip this folder on your Windows computer.
+2. Copy your key file into this folder. It is the file you downloaded from Apple, named AuthKey_ followed by letters, ending in .p8. It is the same key you used for Accessible Backrooms.
+3. Double click "Fill in App Store page.bat".
+4. When it asks, paste your Issuer ID and press Enter.
+5. If it asks for your name, phone and email, type them. Only Apple reviewers see them.
+6. Wait until it says ALL DONE, then refresh App Store Connect.
+
+It fills in: description, subtitle, keywords, promotional text, App Review notes, category, the newest build and the iPhone and iPad screenshots.
+It does not change the app name, or your support, marketing and privacy links if they are already filled in.
+Your key stays on your computer. It is only sent to Apple, to sign in.
+You can run it again safely: it replaces the screenshots instead of adding copies.

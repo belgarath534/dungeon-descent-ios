@@ -22608,7 +22608,7 @@ function ugcRequireAgreement() {
   if (DDStore.getItem('dd_ugc_terms_ok') === '1') return true;
   var ok = window.confirm('Before you post: chat messages and community enemies are seen by all players. ' +
     'By continuing you agree to the Dungeon Descent Terms of Service at dungen-descent.org/terms. ' +
-    'There is no tolerance for objectionable content or abusive players. Content that breaks the rules is removed and its author can be banned. ' +
+    'There is no tolerance for objectionable content or abusive players. Content that breaks the rules is removed. ' +
     'You can report or block anyone. Do you agree?');
   if (ok) { DDStore.setItem('dd_ugc_terms_ok', '1'); say('Thank you. You agreed to the Terms of Service.'); }
   else { say('You need to agree to the Terms of Service to post.'); }
