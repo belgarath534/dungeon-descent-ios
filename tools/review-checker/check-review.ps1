@@ -57,6 +57,15 @@ function Call($Method, $Path, $Body) {
       $r = New-Object IO.StreamReader($_.Exception.Response.GetResponseStream()); $raw = $r.ReadToEnd()
       $j = $raw | ConvertFrom-Json
       $msg = ($j.errors | ForEach-Object { "$($_.title): $($_.detail)" }) -join ' / '
+      # Apple lists exactly what is wrong under associatedErrors, one list per item.
+      $list = @()
+      foreach ($e in $j.errors) {
+        $assoc = $e.meta.associatedErrors
+        if ($assoc) { foreach ($prop in $assoc.PSObject.Properties) { foreach ($x in @($prop.Value)) { $list += "  - $($x.title) $($x.detail) [$($x.code)]" } } }
+      }
+      if ($list.Count) { $msg += "`r`nWhat is wrong:`r`n" + ($list -join "`r`n") }
+      # Save Apple's whole answer so it can be copied and sent to Claude.
+      Set-Content -Path (Join-Path $Here 'apple-answer.txt') -Value $raw -Encoding UTF8
     } catch {}
     throw "Apple said: $msg"
   }
@@ -172,5 +181,5 @@ try {
   Say ''
   Say 'Apple would not send it. Here is exactly what Apple said:'
   Say "  $_"
-  Say 'Copy this message and send it to Claude.'
+  Say 'Apple''s full answer was also saved in this folder as apple-answer.txt. Send that file, or a photo of this window, to Claude.'
 }
