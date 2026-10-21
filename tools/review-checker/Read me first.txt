@@ -1,0 +1,13 @@
+App Review checker
+
+What it does:
+It asks Apple for the real status of Dungeon Descent or Accessible Backrooms, and tells you in plain words whether Apple has your app or whether it is stuck as a draft that was never sent. If it is stuck, it asks you before sending it to Apple. It never changes anything unless you type Y.
+
+How to use it:
+1. Put your key file in this folder. It is the same file you used for the achievements script. Its name starts with AuthKey_ and ends with .p8.
+2. Open "Check review status.bat".
+3. Type 1 for Dungeon Descent or 2 for Accessible Backrooms, and press Enter.
+4. Paste your Issuer ID and press Enter.
+5. Listen to the results. If it says FOUND IT, type Y and press Enter to send it to Apple.
+
+If Apple says no, the window shows Apple's exact message. Copy it and send it to Claude.
