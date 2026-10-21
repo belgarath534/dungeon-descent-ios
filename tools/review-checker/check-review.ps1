@@ -162,6 +162,10 @@ $canAdd = 'PREPARE_FOR_SUBMISSION', 'READY_FOR_REVIEW', 'DEVELOPER_REJECTED', 'R
 Say ''
 $q = 'Do you want me to send it to Apple now'
 if (-not $target.HasVersion -and $canAdd) { $q += ", and add version $($version.attributes.versionString) to it" }
+$erdOld = $version.attributes.earliestReleaseDate
+if ($erdOld -and ([DateTime]$erdOld).ToUniversalTime() -lt [DateTime]::UtcNow) {
+  Say "Also found: the release date is set to $(([DateTime]$erdOld).ToString('MMMM d')), which already passed. Apple refuses that. I will change it to: release as soon as Apple approves."
+}
 $answer = (Read-Host "${q}? Type Y and press Enter, or just press Enter to stop").Trim()
 if ($answer -notmatch '^[Yy]') { Say 'OK, nothing was changed.'; exit 0 }
 
@@ -172,6 +176,14 @@ if (-not $target.HasVersion -and $canAdd) {
       appStoreVersion = @{ data = @{ type = 'appStoreVersions'; id = $version.id } } } } } | Out-Null
     Say "Added version $($version.attributes.versionString)."
   } catch { Say "Could not add the version: $_" }
+}
+# Apple refuses a version whose "release no earlier than" date has passed.
+$erd = $version.attributes.earliestReleaseDate
+if ($erd -and ([DateTime]$erd).ToUniversalTime() -lt [DateTime]::UtcNow) {
+  try {
+    Call PATCH "/v1/appStoreVersions/$($version.id)" @{ data = @{ type = 'appStoreVersions'; id = $version.id; attributes = @{ releaseType = 'AFTER_APPROVAL'; earliestReleaseDate = $null } } } | Out-Null
+    Say 'Fixed the release date: it was set to a day that already passed. The app will now be released as soon as Apple approves it.'
+  } catch { Say "Could not fix the release date: $_" }
 }
 try {
   Call PATCH "/v1/reviewSubmissions/$($target.Sub.id)" @{ data = @{ type = 'reviewSubmissions'; id = $target.Sub.id; attributes = @{ submitted = $true } } } | Out-Null
