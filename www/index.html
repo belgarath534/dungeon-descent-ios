@@ -1811,7 +1811,7 @@ var DDStore = (function() {
     <!-- Title -->
     <div class="loading-title" data-i18n="game-title" style="font-size:2.4rem;line-height:1.1;margin-bottom:6px;">Dungeon<br>Descent</div>
     <div class="loading-sub" data-i18n="game-subtitle" style="margin-bottom:6px;">Into the dark. Again.</div>
-    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.7.1</div>
+    <div style="font-family:Cinzel,serif;font-size:0.58rem;color:#333;letter-spacing:0.2em;margin-bottom:40px;" aria-hidden="true" id="loading-version-tag">v11.7.2</div>
 
     <!-- Loading bar -->
     <div class="loading-bar-wrap">
@@ -1990,7 +1990,7 @@ var DDStore = (function() {
         <span data-i18n="btn-quit">🕯 Quit</span>
       </button>
     </nav>
-    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 7 point 1, Release">v11.7.1 · Release</p>
+    <p class="version-tag" id="menu-version-tag" aria-label="Version 11 point 7 point 2, Release">v11.7.2 · Release</p>
     <p id="menu-online-count" style="font-family:Cinzel,serif;font-size:0.55rem;color:#444;margin-top:4px;letter-spacing:0.1em;" aria-live="polite" aria-label="Players currently online"></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#ffdd44;margin-top:6px;" aria-label="Your global gold" aria-live="polite"><span data-i18n="lbl-gold">💰 </span><span class="global-gold-display">0</span></p>
     <p style="font-family:Cinzel,serif;font-size:0.7rem;color:#88ddff;margin-top:2px;" aria-label="Your diamonds" aria-live="polite">💎 <span class="global-diamond-display">0</span></p>
@@ -2899,7 +2899,7 @@ var DDStore = (function() {
 
       <div class="btn-row">
         <button class="btn btn-secondary" onclick="cStep(6)" aria-label="Back to difficulty">← Back</button>
-        <button class="btn btn-primary" onclick="cStep(8)" aria-label="Continue to backstory">Next →</button>
+        <button class="btn btn-primary" onclick="cStep(8)" aria-label="Continue to spirit step">Next →</button>
       </div>
     </section>
 
@@ -2953,7 +2953,7 @@ var DDStore = (function() {
         </button>
       </div>
       <div class="btn-row">
-        <button class="btn btn-secondary" onclick="cStep(11)" aria-label="Back to companion guide">← Back</button>
+        <button class="btn btn-secondary" onclick="cStep(9)" aria-label="Back to corruption step">← Back</button>
         <button class="btn btn-primary" onclick="cStep(11)" aria-label="Continue to companion guide step">Next →</button>
       </div>
     </section>
@@ -3554,8 +3554,25 @@ var DDStore = (function() {
       <button class="back-btn" onclick="goTo('menu')" aria-label="Back to main menu">← Menu</button>
       <h2 class="screen-title">What's New</h2>
     </div>
-    <div class="version-block latest" tabindex="0" aria-label="Version 11.7.1">
-      <div class="version-num">v11.7.1 — Latest</div>
+    <div class="version-block latest" tabindex="0" aria-label="Version 11.7.2">
+      <div class="version-num">v11.7.2 — Latest</div>
+      <div class="version-date">The Run Briefing Update</div>
+      <ul class="version-changes">
+        <li>📜 Run Briefing — starting a run no longer stacks up to six pop-ups on top of each other. The quests, run modifier, dungeon condition, class trait, opening quote, dungeon intro, seasonal event and your guide's greeting are now one screen with one Begin Descent button. Nothing disappears on a timer, VoiceOver lands right on Begin, and the narrator reads the whole page.</li>
+        <li>🎓 The tutorial for new players now starts right when you begin your first run, instead of after your first fight.</li>
+        <li>🎃 Seasonal event pop-ups now only appear on the main menu, never in the middle of character creation or a run.</li>
+        <li>🔍 Your first search in every run always finds something, so a new run never opens with a trap.</li>
+        <li>🐛 Fixed the Back button on the Hunter Mode step of character creation going forward to the guide step instead of back. Also fixed the Run Mode step's Next button saying it goes to the backstory instead of the spirit step.</li>
+        <li>🐛 Fixed the Play button and other buttons being announced as headings when screen reader headings are on. Buttons stay buttons now.</li>
+        <li>🐛 Fixed combat messages running together for screen readers, like "Shield Bash!You attack".</li>
+        <li>🐛 Fixed the Daily Challenge being listed as active when you had not registered for it. The briefing now tells you to register in Challenges if you want to play it.</li>
+        <li>🐛 Fixed the Floor Complete summary always saying "Gold earned: 0".</li>
+        <li>🐛 Fixed the dungeon condition and your health sometimes showing different values at the start of a run, caused by the old pop-ups overlapping.</li>
+        <li>📱 On phones and tablets, the welcome message now says to swipe to explore the menu instead of pressing Tab.</li>
+      </ul>
+    </div>
+    <div class="version-block" tabindex="0" aria-label="Version 11.7.1">
+      <div class="version-num">v11.7.1</div>
       <div class="version-date">The Familiar & Live Activity Update</div>
       <ul class="version-changes">
         <li>🐾 The Familiar — a small companion separate from your Guide that bonds with you across every run, persisted account-wide like your trophies. Bond grows from kills, room searches, and full dungeon clears. Custom naming, 4 unlockable species (100 trophies, clear every dungeon, defeat the Void Reaper, or reach Bond Level 10), bond-level titles at 5/10/20, a comfort line at critical sanity, and it recognizes Julio and the Void Reaper by name. 3 new achievements: First Bond, The Loyal, The Inseparable. Flavor-only on purpose — no stat effect, can't touch combat balance.</li>
@@ -15620,7 +15637,8 @@ function showFloorCompleteScreen() {
   var kills = DS._floorKills || 0;
   var dmgDealt = DS._floorDmgDealt || 0;
   var dmgTaken = DS._floorDmgTaken || 0;
-  var goldEarned = DS._floorGoldEarned || 0;
+  // gold gained on this floor (the old counter was never added to)
+  var goldEarned = DS._floorGoldEarned || Math.max(0, (DS.gold || 0) - (DS._floorGoldStart || 0));
   var bestHit = DS._floorBestHit || 0;
   var hpHealed = DS._floorHpHealed || 0;
 
@@ -15658,7 +15676,7 @@ function showFloorCompleteScreen() {
 
   // Reset floor stats
   DS._floorKills = 0; DS._floorDmgDealt = 0; DS._floorDmgTaken = 0;
-  DS._floorGoldEarned = 0; DS._floorBestHit = 0; DS._floorHpHealed = 0;
+  DS._floorGoldEarned = 0; DS._floorBestHit = 0; DS._floorHpHealed = 0; DS._floorGoldStart = DS.gold || 0;
 }
 
 function floorDescend() {
@@ -16021,6 +16039,8 @@ function searchRoom() {
   sfx('sfx-search');
   sfx('sfx-select');
   var r = Math.random();
+  // The first search of a run always finds something, so a new player's first try is never a trap.
+  if (!DS._firstSearchDone) { DS._firstSearchDone = true; r = 0; }
   var findChance = (DS.prof === 'Thief' ? 0.50 : 0.35) + (hasUpgrade('cu-loot-boost') ? 0.08 : 0);
   var searchLoot = DS.dungeon === 'The Ashbound Wastes' ? ASH_LOOT
                : DS.dungeon === 'Frosthold Abyss'       ? FROST_LOOT
@@ -18836,15 +18856,16 @@ function addLog(msg) {
   var log = document.getElementById('dg-combat-log');
   if (!log) return;
   var line = document.createElement('div');
+  // The trailing space keeps screen readers from running lines together ("Bash!You attack").
   if (typeof _translationEnabled !== 'undefined' && _translationEnabled) {
-    line.textContent = msg; // show English immediately
+    line.textContent = msg + ' '; // show English immediately
     log.appendChild(line);
     log.scrollTop = log.scrollHeight;
     translateText(msg).then(function(t) {
-      if (t !== msg) line.textContent = t;
+      if (t !== msg) line.textContent = t + ' ';
     });
   } else {
-    line.textContent = msg;
+    line.textContent = msg + ' ';
     log.appendChild(line);
     log.scrollTop = log.scrollHeight;
   }
@@ -27445,6 +27466,7 @@ var T = {
     'exclusive enemies are invading':'inimigos exclusivos estão invadindo','Event':'Evento','An event is active.':'Um evento está ativo.','Your guide':'Seu guia','says':'diz',
     'the':'o','enters':'entra em','Begin Descent':'Começar a Descida','Press Begin Descent when you are ready.':'Aperte Começar a Descida quando estiver pronto.',
     'Beginning your descent.':'Começando sua descida.',
+    'Today\'s daily challenge is':'O desafio diário de hoje é','Register for it in Challenges on the main menu to play it and earn a Mystery Coin.':'Inscreva-se em Desafios no menu principal para jogar e ganhar uma Moeda Misteriosa.',
     // Batch 14: final Help-screen headings and standalone UI fragments
     '0 Mystery Coins': '0 Moedas Misteriosas',
     '🌊 The Abyssal Deep': '🌊 As Profundezas Abissais',
@@ -32795,6 +32817,8 @@ var T = {
     'Continue to run mode step': 'Continuar para passo de modo de corrida',
     'Continue to spirit step': 'Continuar para passo de espírito',
     'Continue to corruption step': 'Continuar para passo de corrupção',
+    'Continue to spirit step': 'Continuar para o passo do espírito',
+    'Back to corruption step': 'Voltar ao passo de corrupção',
     'Continue to hunter mode step': 'Continuar para passo do modo caçador',
     'Continue to companion guide step': 'Continuar para passo do guia companheiro',
     'Continue to origin': 'Continuar para origem',
@@ -36899,7 +36923,10 @@ function showRunBriefing() {
   var q = [];
   try {
     var dc = getDailyChallenge(), dcDone = getDailyChallengeCompleted();
-    if (dc && !dcDone) q.push(t('Daily challenge') + ', ' + dc.name + ': ' + dc.desc + ' ' + t('Complete it for 1 Mystery Coin.'));
+    var dcReg = typeof isDCRegistered === 'function' && isDCRegistered();
+    // The challenge only applies once you register for it in Challenges, so say which it is.
+    if (dc && !dcDone && dcReg) q.push(t('Daily challenge') + ', ' + dc.name + ': ' + dc.desc + ' ' + t('Complete it for 1 Mystery Coin.'));
+    else if (dc && !dcDone) q.push(t('Today\'s daily challenge is') + ' ' + dc.name + '. ' + t('Register for it in Challenges on the main menu to play it and earn a Mystery Coin.'));
     else if (dc && dcDone) q.push(t('Daily challenge complete') + ': ' + dc.name + '.');
   } catch(e) {}
   q.push(t('Main quest') + ': ' + t('Descend to floor 10 and defeat the dungeon boss.'));
@@ -36951,6 +36978,7 @@ function beginRunFromBriefing(mod, isRepeatRun) {
   var ov = document.getElementById('run-briefing'); if (ov) ov.remove();
   say(t('Beginning your descent.'));
   if (mod) applyRunModifier();
+  DS._floorGoldStart = DS.gold || 0;
   var ch = _charIdx !== null ? CHARS[_charIdx] : null;
   if (isRepeatRun) { enterRoom(); return; }
   if (shouldShowTutorial()) {
@@ -41795,9 +41823,11 @@ function onPlayerDeathCorruption() {
     if (typeof _translationEnabled !== 'undefined' && _translationEnabled) {
       translateMenuText();
     }
+    // Phones and tablets have no Tab key: tell touch screen reader users to swipe.
+    var _touch = (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) || ('ontouchstart' in window);
     var welcomeMsg = (typeof _translationEnabled !== 'undefined' && _translationEnabled && _translationLang === 'pt-BR')
-      ? 'Dungeon Descent carregado. Bem-vindo. Pressione Tab para navegar pelo menu principal.'
-      : 'Dungeon Descent loaded. Welcome. Press Tab to navigate the main menu.';
+      ? (_touch ? 'Dungeon Descent carregado. Bem-vindo. Deslize para explorar o menu principal.' : 'Dungeon Descent carregado. Bem-vindo. Pressione Tab para navegar pelo menu principal.')
+      : (_touch ? 'Dungeon Descent loaded. Welcome. Swipe to explore the main menu.' : 'Dungeon Descent loaded. Welcome. Press Tab to navigate the main menu.');
     say(welcomeMsg);
     // Check for active seasonal event and show popup
     setTimeout(function(){ try { checkSeasonalEventPopup(); } catch(e) { console.warn('[DD] seasonal popup error:', e); } }, 1000);
@@ -43542,7 +43572,7 @@ function devResetSRPrompt() {
 }
 
 // ── WHATS NEW ──
-var CURRENT_VERSION = '11.7.1';
+var CURRENT_VERSION = '11.7.2';
 function checkWhatsNew() {
   // Update ALL version displays from single source of truth
   var vtag = document.querySelector('.version-tag');
@@ -52089,6 +52119,8 @@ function injectHeadings() {
     if (!el) return;
     var tag = el.tagName ? el.tagName.toLowerCase() : '';
     if (tag === 'h1'||tag === 'h2'||tag === 'h3'||tag === 'h4') return;
+    // Never turn something you can press into a heading: VoiceOver would stop calling it a button.
+    if (tag === 'button'||tag === 'a'||tag === 'input'||tag === 'select'||tag === 'textarea'||el.getAttribute('role') === 'button'||el.hasAttribute('onclick')) return;
     el.setAttribute('role', 'heading');
     el.setAttribute('aria-level', String(level));
     el.setAttribute('data-injected-heading', '1');
