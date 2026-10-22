@@ -14586,6 +14586,7 @@ var LIVES_MAP = { Wanderer:3, Ironblood:1, Condemned:1, Forsaken:1, Nightmare:1,
 var DS = {};
 
 function initDungeon(ch) {
+  _briefPending = false; _briefWeather = null;
   var maxHp = HP_MAP[ch.cls] || 100;
   // Clean up any weapon/armor/enchanter/soul-trap duplicates left over from the
   // addToGlobalInventory() dedup bug, and persist the cleanup so it doesn't
@@ -14859,31 +14860,34 @@ function initDungeon(ch) {
   // Roll weather
   if (ch.dungeon === 'The Hollow') {
     var weather = rollHollowWeather();
+    _briefWeather = weather;
     applyHollowWeatherBonuses();
     _dungeonWeather = null;
     setTimeout(function() {
       var wb = document.getElementById('dg-weather-banner');
       if (wb) { wb.textContent = weather.icon + ' ' + weather.name + ' — ' + weather.effect; wb.style.display = ''; }
-      say('Tonight in the Hollow: ' + weather.name + '. ' + weather.desc);
+      if (!_briefPending) say('Tonight in the Hollow: ' + weather.name + '. ' + weather.desc);
     }, 2500);
   } else if (ch.dungeon === 'The Abyssal Deep') {
     _hollowWeather = null;
     _dungeonWeather = null;
     var dweather = rollAbyssalWeather();
+    _briefWeather = dweather;
     applyDungeonWeatherBonuses();
     setTimeout(function() {
       var wb = document.getElementById('dg-weather-banner');
       if (dweather && dweather.effect !== 'No special effects. An eerie peace.') {
         if (wb) { wb.textContent = dweather.icon + ' ' + dweather.name + ' — ' + dweather.effect; wb.style.display = ''; wb.style.color = '#4488ff'; }
-        say('Abyssal condition: ' + dweather.name + '. ' + dweather.desc + ' Effect: ' + dweather.effect);
+        if (!_briefPending) say('Abyssal condition: ' + dweather.name + '. ' + dweather.desc + ' Effect: ' + dweather.effect);
       } else if (dweather) {
         if (wb) { wb.textContent = dweather.icon + ' ' + dweather.name; wb.style.display = ''; wb.style.color = '#446688'; }
-        say('Abyssal condition: ' + dweather.name + '. ' + dweather.desc);
+        if (!_briefPending) say('Abyssal condition: ' + dweather.name + '. ' + dweather.desc);
       }
     }, 2500);
   } else {
     _hollowWeather = null;
     var dweather = rollDungeonWeather(ch.dungeon);
+    _briefWeather = dweather;
     applyDungeonWeatherBonuses();
     setTimeout(function() {
       var wb = document.getElementById('dg-weather-banner');
@@ -14893,13 +14897,13 @@ function initDungeon(ch) {
           wb.style.display = '';
           wb.style.color = '#e0c080';
         }
-        // Show sequential intro pop-ups
-        showDungeonIntroPopups(dweather, ch);
+        // Show sequential intro pop-ups, unless the run briefing already covers them
+        if (!_briefPending) showDungeonIntroPopups(dweather, ch);
       } else if (dweather) {
         if (wb) { wb.textContent = dweather.icon + ' ' + dweather.name; wb.style.display = ''; wb.style.color = '#888'; }
-        say('Dungeon condition: ' + dweather.name + '. ' + dweather.desc);
+        if (!_briefPending) say('Dungeon condition: ' + dweather.name + '. ' + dweather.desc);
       } else {
-        showDungeonIntroPopups(null, ch);
+        if (!_briefPending) showDungeonIntroPopups(null, ch);
       }
     }, 2500);
   }
@@ -27431,6 +27435,16 @@ var T = {
   'en': {},  // English is always the fallback
 
   'pt-BR': {
+    // Run briefing
+    'RUN BRIEFING':'RESUMO DA EXPEDIÇÃO','Run briefing.':'Resumo da expedição.','Your words':'Suas palavras','Dungeon condition':'Condição da masmorra',
+    'Effect':'Efeito','Class trait':'Traço de classe','Run modifier':'Modificador da expedição',
+    'You can turn run modifiers off in Settings, Gameplay.':'Você pode desligar os modificadores em Configurações, Jogabilidade.',
+    'Daily challenge':'Desafio diário','Complete it for 1 Mystery Coin.':'Complete para ganhar 1 Moeda Misteriosa.','Daily challenge complete':'Desafio diário completo',
+    'Descend to floor 10 and defeat the dungeon boss.':'Desça até o andar 10 e derrote o chefe da masmorra.','Daily quest':'Missão diária','Complete!':'Completa!',
+    'Progress':'Progresso','Reward':'Recompensa','Quests':'Missões','bonus XP':'de XP bônus','bonus gold':'de ouro bônus','enemies':'inimigos','stronger':'mais fortes',
+    'exclusive enemies are invading':'inimigos exclusivos estão invadindo','Event':'Evento','An event is active.':'Um evento está ativo.','Your guide':'Seu guia','says':'diz',
+    'the':'o','enters':'entra em','Begin Descent':'Começar a Descida','Press Begin Descent when you are ready.':'Aperte Começar a Descida quando estiver pronto.',
+    'Beginning your descent.':'Começando sua descida.',
     // Batch 14: final Help-screen headings and standalone UI fragments
     '0 Mystery Coins': '0 Moedas Misteriosas',
     '🌊 The Abyssal Deep': '🌊 As Profundezas Abissais',
@@ -36828,53 +36842,129 @@ function getMainQuest() {
   return { desc:'Descend to floor 10 and defeat the dungeon boss.', type:'boss', complete:false };
 }
 
-function showQuestPopup() {
-  // Skip quest popup on repeat runs — go straight to dungeon
-  var isRepeatRun = _charIdx !== null && CHARS[_charIdx] && CHARS[_charIdx].lastSpirit &&
-    DDStore.getItem('dd_seen_quest_' + encodeURIComponent(CHARS[_charIdx] ? CHARS[_charIdx].name : ''));
-  if (isRepeatRun && DS.activeSpirit) {
-    showRunStartQuote(function() {
-      showDungeonIntro(DS.dungeon, function() { enterRoom(); });
-    });
-    return;
-  }
-  // Mark as seen for next time
-  if (_charIdx !== null && CHARS[_charIdx]) {
-    DDStore.setItem('dd_seen_quest_' + encodeURIComponent(CHARS[_charIdx].name), '1');
-  }
-  var daily = getDailyQuestDef();
-  var dailySave = getDailyQuest();
-  // Show daily challenge if active
-  var dc = getDailyChallenge();
-  var dcCompleted = getDailyChallengeCompleted();
-  var dcBanner = dc && !dcCompleted
-    ? '<div class="daily-challenge-banner" aria-label="Daily Challenge active">' +
-      '<div class="dc-title">⚡ Daily Challenge — ' + dc.name + '</div>' +
-      '<div class="dc-desc">' + dc.desc + '</div>' +
-      '<div class="dc-reward">Complete for 1 Mystery Coin</div>' +
-      '</div>'
-    : dc && dcCompleted
-    ? '<div class="daily-challenge-banner" style="border-left-color:#4a8a4a;" aria-label="Daily Challenge complete">' +
-      '<div class="dc-title" style="color:#7aaa7a;">✦ Daily Challenge Complete — ' + dc.name + '</div>' +
-      '<div class="dc-desc">You earned 1 Mystery Coin.</div>' +
-      '</div>'
-    : '';
-  var list = document.getElementById('quest-popup-list');
-  list.innerHTML = dcBanner +
-    '<div class="quest-card main" style="margin-bottom:10px;" aria-label="Main quest">' +
-      '<div class="quest-name">⚔ Main Quest <span class="quest-badge main">MAIN</span></div>' +
-      '<div class="quest-desc">Descend to floor 10 and defeat the dungeon boss.</div>' +
-    '</div>' +
-    '<div class="quest-card daily" aria-label="Daily quest">' +
-      '<div class="quest-name">☀ Daily Quest <span class="quest-badge daily">DAILY</span></div>' +
-      '<div class="quest-desc">' + daily.desc + '</div>' +
-      '<div class="quest-progress">' + (dailySave.complete ? '✓ Complete!' : (dailySave.progress||0) + ' / ' + daily.target) + '</div>' +
-      '<div class="quest-reward">Reward: ' + daily.reward + '</div>' +
-    '</div>';
-  document.getElementById('quest-popup').classList.add('open');
-  say('Active quests. Main quest: Defeat the dungeon boss on floor 10. Daily quest: ' + daily.desc + ' Progress: ' + (dailySave.progress||0) + ' of ' + daily.target + '. Press Begin Descent to start.');
-  setTimeout(function(){ document.querySelector('#quest-popup button').focus(); }, 60);
+function showQuestPopup() { showRunBriefing(); }
+
+// ── RUN BRIEFING ──
+// Everything about a new run on one screen with one Begin button: the opening
+// quote, the dungeon intro, the dungeon condition, the class trait, the run
+// modifier, the quests, the seasonal event and the guide's greeting. These
+// used to be separate pop-ups, some on timers, that stacked on top of each other.
+var _briefPending = false, _briefWeather = null;
+function classTraitText(cls) {
+  var traitDescs = {
+    'Warrior': 'Heavy strikes have a 25% chance to stun enemies for one turn.',
+    'Mage': 'Skills cost 3 less SP. Elemental skills deal 20% more damage.',
+    'Rogue': 'First attack each combat always hits. Critical hit chance is doubled.',
+    'Cleric': 'Potions heal 30% more. Holy skills restore SP on use.',
+    'Ranger': 'First attack each combat deals double damage.',
+    'Sentinel': 'Defending reduces damage by an extra 20%. Counter-attacks on defend.',
+    'Necromancer': 'Enemies killed have a 15% chance to rise as temporary undead allies.',
+    'Bard': 'Skills boost all stats temporarily after use.',
+    'Monk': 'No weapon bonuses but unarmed attacks scale with level.',
+    'Druid': 'Heals 6 HP every room entered.',
+    'Assassin': 'Critical hits deal triple damage instead of double.',
+    'Paladin': 'Holy aura weakens undead enemies automatically.',
+    'BloodKnight': 'Heals 10% of damage dealt as HP.',
+    'Warlock': 'Dark pact — take 5 damage per turn but deal 30% more.',
+    'Alchemist': 'Potions never run out — can be used twice each.',
+    'Sorcerer': 'Skills scale with INT stat instead of STR.',
+    'Wizard': 'Can cast two skills per turn once per floor.',
+    'DeathKnight': 'Unholy aura drains 5 HP from enemies every turn.'
+  };
+  return traitDescs[cls] || 'A unique class ability is active this run.';
 }
+function _briefEsc(x) { return String(x == null ? '' : x).replace(/[&<>"]/g, function(c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function showRunBriefing() {
+  var old = document.getElementById('run-briefing'); if (old) old.remove();
+  var ch = _charIdx !== null ? CHARS[_charIdx] : null;
+  // Repeat runs with a spirit already chosen skip the run modifier, as before.
+  var isRepeatRun = !!(ch && ch.lastSpirit && DDStore.getItem('dd_seen_quest_' + encodeURIComponent(ch.name)) && DS.activeSpirit);
+  if (ch) DDStore.setItem('dd_seen_quest_' + encodeURIComponent(ch.name), '1');
+  _briefPending = true;
+  var mod = isRepeatRun ? null : rollRunModifier();
+
+  var parts = []; // {title, text}
+  var quote = null; try { quote = getRunStartQuote(); } catch(e) {}
+  var intro = (typeof DUNGEON_INTROS !== 'undefined' && !_dungeonIntroShown[DS.dungeon]) ? DUNGEON_INTROS[DS.dungeon] : null;
+  if (intro) { _dungeonIntroShown[DS.dungeon] = true; parts.push({ title: intro.eyebrow, text: intro.text }); }
+  if (quote) parts.push({ title: t('Your words'), text: quote });
+  var w = _briefWeather;
+  if (w) {
+    var noEffect = !w.effect || /^No special effects/.test(w.effect);
+    parts.push({ title: t('Dungeon condition') + ': ' + w.name, text: (w.desc || '') + (noEffect ? '' : ' ' + t('Effect') + ': ' + w.effect) });
+  }
+  parts.push({ title: t('Class trait') + ': ' + DS.cls, text: classTraitText(DS.cls) });
+  if (mod) parts.push({ title: t('Run modifier') + ': ' + mod.name, text: mod.desc + ' ' + t('You can turn run modifiers off in Settings, Gameplay.') });
+  var q = [];
+  try {
+    var dc = getDailyChallenge(), dcDone = getDailyChallengeCompleted();
+    if (dc && !dcDone) q.push(t('Daily challenge') + ', ' + dc.name + ': ' + dc.desc + ' ' + t('Complete it for 1 Mystery Coin.'));
+    else if (dc && dcDone) q.push(t('Daily challenge complete') + ': ' + dc.name + '.');
+  } catch(e) {}
+  q.push(t('Main quest') + ': ' + t('Descend to floor 10 and defeat the dungeon boss.'));
+  try {
+    var daily = getDailyQuestDef(), dailySave = getDailyQuest();
+    q.push(t('Daily quest') + ': ' + daily.desc + ' ' + (dailySave.complete ? t('Complete!') : t('Progress') + ': ' + (dailySave.progress || 0) + ' / ' + daily.target + '.') + ' ' + t('Reward') + ': ' + daily.reward + '.');
+  } catch(e) {}
+  parts.push({ title: t('Quests'), text: q.join(' ') });
+  try {
+    var ev = getEventBonuses();
+    if (ev) {
+      var eb = [];
+      if (ev.xpMult && ev.xpMult > 1) eb.push(Math.round((ev.xpMult - 1) * 100) + '% ' + t('bonus XP'));
+      if (ev.goldMult && ev.goldMult > 1) eb.push(Math.round((ev.goldMult - 1) * 100) + '% ' + t('bonus gold'));
+      if (ev.enemyMult && ev.enemyMult > 1) eb.push(t('enemies') + ' ' + Math.round((ev.enemyMult - 1) * 100) + '% ' + t('stronger'));
+      if (ev.extraEnemies && ev.extraEnemies.length) eb.push(t('exclusive enemies are invading'));
+      parts.push({ title: t('Event') + ': ' + ev.label, text: eb.length ? eb.join(', ') + '.' : t('An event is active.') });
+    }
+  } catch(e) {}
+  try {
+    var gl = getGuideDialogue('dungeonStart');
+    if (gl) parts.push({ title: (typeof getCompanionName === 'function' ? getCompanionName() : t('Your guide')) + ' ' + t('says'), text: gl });
+  } catch(e) {}
+
+  var title = DS.name + ' ' + t('the') + ' ' + DS.cls + ' ' + t('enters') + ' ' + DS.dungeon;
+  var ov = document.createElement('div');
+  ov.id = 'run-briefing';
+  ov.setAttribute('role', 'dialog');
+  ov.setAttribute('aria-modal', 'true');
+  ov.setAttribute('aria-labelledby', 'rb-title');
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:8600;display:flex;align-items:center;justify-content:center;padding:16px;';
+  ov.innerHTML = '<div style="max-width:440px;width:100%;max-height:92vh;overflow-y:auto;background:var(--bg-panel,#0c0a08);border:1px solid var(--gold-dim,#6a5420);border-top:3px solid var(--gold,#c9a227);padding:22px 20px;">' +
+    '<div style="font-family:Cinzel,serif;font-size:0.6rem;letter-spacing:0.3em;color:var(--gold-dim,#8a7030);margin-bottom:6px;" aria-hidden="true">⚔ ' + _briefEsc(t('RUN BRIEFING')) + '</div>' +
+    '<h2 id="rb-title" tabindex="-1" style="font-family:Cinzel,serif;font-size:1rem;color:var(--gold,#c9a227);margin:0 0 14px;line-height:1.4;">' + _briefEsc(title) + '</h2>' +
+    parts.map(function(p) {
+      return '<section style="margin-bottom:12px;border-left:2px solid #4a3a18;padding-left:10px;"><h3 style="font-family:Cinzel,serif;font-size:0.78rem;color:#e0c080;margin:0 0 4px;">' + _briefEsc(p.title) + '</h3>' +
+        '<p style="font-size:0.8rem;color:var(--text-secondary,#b8ab90);line-height:1.6;margin:0;">' + _briefEsc(p.text) + '</p></section>';
+    }).join('') +
+    '<button type="button" id="rb-begin" class="menu-btn primary" style="width:100%;margin-top:8px;" aria-label="' + _briefEsc(t('Begin your descent')) + '">' + _briefEsc(t('Begin Descent')) + ' ⚔</button></div>';
+  document.body.appendChild(ov);
+  document.getElementById('rb-begin').onclick = function() { beginRunFromBriefing(mod, isRepeatRun); };
+  setTimeout(function() { var b = document.getElementById('rb-begin'); if (b) b.focus(); }, 100);
+  setTimeout(function() {
+    say(t('Run briefing.') + ' ' + title + '. ' + parts.map(function(p) { return p.title + '. ' + p.text; }).join(' ') + ' ' + t('Press Begin Descent when you are ready.'));
+  }, 250);
+}
+
+function beginRunFromBriefing(mod, isRepeatRun) {
+  var ov = document.getElementById('run-briefing'); if (ov) ov.remove();
+  say(t('Beginning your descent.'));
+  if (mod) applyRunModifier();
+  var ch = _charIdx !== null ? CHARS[_charIdx] : null;
+  if (isRepeatRun) { enterRoom(); return; }
+  if (shouldShowTutorial()) {
+    enterRoom();
+    setTimeout(function() { startTutorial(); }, 600);
+  } else if (ch && ch.lastSpirit && DS.activeSpirit) {
+    enterRoom();
+  } else {
+    // Use the spirit chosen in character creation, or the first starter spirit
+    pickSpirit((ch && ch.lastSpirit && getSpiritById(ch.lastSpirit)) || STARTER_SPIRITS[0]);
+    enterRoom();
+  }
+}
+// ── END RUN BRIEFING ──
 
 function closeQuestPopup() {
   document.getElementById('quest-popup').classList.remove('open');
@@ -43655,6 +43745,8 @@ function checkSeasonalEventPopup() {
     // Don't show if whats-new popup is already visible
     var wnp = document.getElementById('whats-new-popup');
     if (wnp && (wnp.style.display === 'flex' || wnp.classList.contains('open'))) { setTimeout(checkSeasonalEventPopup, 6000); return; }
+    // only on the main menu: it must never cover character creation or a run
+    if (typeof _currentScreen !== 'undefined' && _currentScreen && _currentScreen !== 'menu') { setTimeout(checkSeasonalEventPopup, 6000); return; }
 
     var existing = document.getElementById('event-arrival-popup');
     if (existing) existing.remove();
@@ -64500,6 +64592,7 @@ function companionOnDungeonStart() {
   var name = getCompanionName();
   var dungeon = DS.dungeon || 'the dungeon';
   setTimeout(function() {
+    if (_briefPending) return; // already said on the run briefing
     var msg = getGuideDialogue('dungeonStart');
     if (msg) companionSay(msg, 5000);
   }, 2000);
