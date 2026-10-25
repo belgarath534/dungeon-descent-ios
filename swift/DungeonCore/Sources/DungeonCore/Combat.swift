@@ -19,6 +19,9 @@ public struct TurnResult: Equatable, Sendable {
     public var bossPhaseMessage: String? = nil
     /// False when a skill couldn't be used (not enough SP …); nothing happened.
     public var acted = true
+    /// A cowardly enemy ran away, dropping this much gold.
+    public var enemyFled = false
+    public var goldGained = 0
     public var log: [String] = []
     public var announcement: String? = nil
 }
@@ -43,7 +46,10 @@ public enum Combat {
 
     /// Picks and scales the next normal enemy for the current floor.
     public static func nextEnemy(for run: Run, dice: inout some Dice) -> Enemy {
-        let pool = Bestiary.enemies(for: run.dungeon, difficulty: run.difficulty).pool(forFloor: run.floor)
+        let tables = Bestiary.enemies(for: run.dungeon, difficulty: run.difficulty)
+        // 15% elite chance from floor 4 (enterRoom)
+        let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(0.15)
+        let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
         let t = pool[dice.roll(0...(pool.count - 1))]
         return Enemy.spawn(t, floor: run.floor, playerLevel: run.level,
                            ngPlusCount: ngCount(run), endless: run.difficulty == .endless)
@@ -128,6 +134,7 @@ public enum Combat {
             }
         }
 
+        r.playerDamage = EnemyAbilities.onPlayerHit(&run, r.playerDamage, basic: true, dice: &dice, log: &r.log)
         dealDamage(&run, r.playerDamage, log: &r.log)
         return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
     }
@@ -165,6 +172,15 @@ public enum Combat {
             return r
         }
         if skipEnemy {
+            r.announcement = r.log.last
+            return r
+        }
+        if let g = EnemyAbilities.cowardFlees(&run, dice: &dice, log: &r.log) {
+            r.enemyFled = true
+            r.goldGained = g
+            run.kills += 1
+            run.inCombat = false
+            run.enemy = nil
             r.announcement = r.log.last
             return r
         }
@@ -277,7 +293,10 @@ public enum Combat {
             return 0
         }
 
-        var raw = dice.roll(e.currentAtk)
+        let move = EnemyAbilities.beforeAttack(&run, dice: &dice, log: &log)
+        if move.skipAttack { return 0 }
+        var raw = dice.roll(e.currentAtk) + EnemyAbilities.secondStrike(e, dice: &dice, log: &log)
+        raw = jsRound(Double(raw) * move.multiplier) + move.extra
         if run.fight.softenHits > 0 {
             run.fight.softenHits -= 1
             raw = jsRound(Double(raw) * run.fight.soften)
@@ -286,7 +305,7 @@ public enum Combat {
         if run.undeadRes && Bestiary.undeadNames.contains(e.name) {
             raw = jsRound(Double(raw) * 0.65)
         }
-        let maxBlock = Int((Double(raw) * 0.60).rounded(.down))
+        let maxBlock = move.ignoreDefense ? 0 : Int((Double(raw) * 0.60).rounded(.down))
         let defVal = run.totalDef + (run.defending ? 4 : 0)
         let blocked = min(defVal, maxBlock)
         var taken = max(1, raw - blocked)
@@ -333,6 +352,7 @@ public enum Combat {
             run.enemy = hurt
             if back > 0 { log.append("\(back) damage is reflected back at \(hurt.name)!") }
         }
+        EnemyAbilities.afterAttack(&run, taken: taken, dice: &dice, log: &log)
         if var c = run.enemy, c.cursedTurns > 0 {
             c.cursedTurns -= 1
             if c.cursedTurns == 0 { log.append("The curse on \(c.name) fades.") }

@@ -50,13 +50,17 @@ function _audioUrl(f) { return f; }
 // Keeps only plain data: functions (e.g. RUNE_DEFS.apply) are dropped.
 function plain(v) { return JSON.parse(JSON.stringify(v)); }
 
-function enemies(prefix) {
+const eliteTable = grab('ELITE_ENEMIES');
+
+// eliteKey: the ELITE_ENEMIES entry for this table (a dungeon name or 'Nightmare').
+function enemies(prefix, eliteKey) {
   const e = grab(prefix + 'ENEMIES');
   if (!e) return undefined;
   return plain({
     t1: e.t1 || [], t2: e.t2 || [], t3: e.t3 || [],
     bosses: e.bossPool || (e.boss ? [e.boss] : []),
-    elites: e.elites || [],
+    elites: (eliteTable[eliteKey] || []).concat(e.elites || [])
+      .concat(eliteKey === 'The Whispering Forest' ? grab('WHISPER_ELITES') || [] : []),
   });
 }
 
@@ -81,7 +85,8 @@ function startingSkills() {
 
 const out = {
   dungeons: {},
-  nightmareEnemies: enemies('NIGHTMARE_'),
+  nightmareEnemies: enemies('NIGHTMARE_', 'Nightmare'),
+  enemySpecials: plain(grab('ENEMY_SPECIALS')),
   traps: plain(grab('TRAP_TYPES')),
   classSkills: plain(grab('CLASS_SKILLS')),
   startingSkills: startingSkills(),
@@ -95,7 +100,7 @@ const out = {
 const crypt = { loot: grab('LOOT'), shop: grab('SHOP_STOCK'), rooms: grab('ROOM_DESCS'), floors: grab('FLOOR_NAMES') };
 for (const [name, p] of Object.entries(dungeons)) {
   out.dungeons[name] = {
-    enemies: enemies(p),
+    enemies: enemies(p, name),
     loot: plain(grab(p + 'LOOT') || crypt.loot),
     shop: plain(grab(p + 'SHOP_STOCK') || crypt.shop),
     rooms: plain(grab(p + 'ROOM_DESCS') || crypt.rooms),

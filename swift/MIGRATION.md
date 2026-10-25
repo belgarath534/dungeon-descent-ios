@@ -51,8 +51,8 @@ build there means the app doesn't compile; the log says why.
    loot rooms, searching and traps, potions, runes, scrolls, weapons and armor, the
    shop after every floor, descend or wander, leveling, lives and Phoenix Feathers,
    boss phases, victory and defeat. Runs are saved after every action and can be
-   continued. Class skills: all 358, learned at level-ups.
-   Next: special room events, elites, enemy abilities, weapon rarities.
+   continued. Class skills: all 358, learned at level-ups. Elites, enemy abilities,
+   special rooms and dungeon events. Next: weapon rarities, achievements, stats.
    Then import web saves.
 4. **Native services:** Sign in with Apple / Google through the Firebase iOS SDK,
    cloud save, StoreKit 2 purchases, Game Center, Core Haptics, audio, Live Activity,
@@ -74,7 +74,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Run start stats | initDungeon | 🟡 equipment, coin upgrades, milestone buffs, dream buffs, spirits not yet |
 | Crypt enemies and bosses, scaling | DUNGEON ENGINE | ✅ |
 | Other dungeons' enemy tables | DUNGEON ENGINE | ✅ from gamedata.json, including Nightmare enemies |
-| Enemy special abilities (burn, dodge, lifesteal …) | ENEMY_SPECIALS, enemy flags | ⬜ kept in the data, not acted on yet |
+| Enemy special abilities (burn, dodge, lifesteal …) | ENEMY_SPECIALS, enemy flags | ✅ all 176 named special moves and the common ability flags; the one-off Hollow and Shadow World mechanics not yet |
 | Room descriptions, floor names | ROOM_DESCS, FLOOR_NAMES | ✅ |
 | Attack / heavy / defend / enemy counter | doFight | 🟡 base rules only |
 | Potions, runes, scrolls, Phoenix Feather | useItem | ✅ except the shop's more exotic brews (soul trap, mirror flask, rage tonic …) |
@@ -86,7 +86,10 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Rooms, search, floors, shop | enterRoom, searchRoom, openShop | 🟡 all but special room events and NPC encounters |
 | Saving a run in progress | midRunSave | ✅ (Swift's own format) |
 | Import web saves into the Swift app | DDStore (IndexedDB) | ✅ offered on first launch and in Settings (WebSaveImporter) |
-| Elites, multi-enemy combat | MULTI-ENEMY COMBAT SYSTEM | ⬜ |
+| Elites | ELITE_ENEMIES | ✅ 15% from floor 4, every dungeon and Nightmare |
+| Special rooms (treasure, sanctuary, cursed, hidden, merchant) | SPECIAL_ROOMS | ✅ |
+| Dungeon events (shrine, chest, Julio, wounded adventurer, Abyssal events …) | DUNGEON_EVENTS | ✅ 9 of 16 (the Shadow World ones and The Witness not yet) |
+| Multi-enemy combat | MULTI-ENEMY COMBAT SYSTEM | ⬜ |
 | Gun crafting | GUN DEFINITIONS | ⬜ |
 | Raids, Boss Rush, Daily Challenge, Tournament | RAID ENGINE, BOSS RUSH ENGINE … | ⬜ |
 | Quests, bounties, inbox, achievements, stats | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
@@ -136,4 +139,10 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **Shared skill names:** several classes share an effect name with different
   descriptions (Bone Shield, Taunt, Arcane Bolt …) and the web version ran the same code
   for all of them. Each class now gets its own version.
+- **Cursed Chamber** looked up its enemy in the wrong kind of table, so it never
+  spawned the cursed enemy (outside the Shadow World) and just rolled an ordinary room.
+  It now spawns a stronger enemy with triple gold, as described.
+- **Ashbound enemy abilities** (Cinder Hound and Ember Knight burning you, Smoke Wraith
+  phasing out every third turn) were in the data and descriptions but nothing applied
+  them. They now work.
 

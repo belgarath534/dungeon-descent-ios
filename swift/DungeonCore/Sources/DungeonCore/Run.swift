@@ -92,6 +92,10 @@ public struct Run: Codable, Sendable {
     public var firstSearchDone = false
     /// Rooms already rolled by a Scroll of Reveal, used before rolling new ones.
     public var upcomingRooms: [Rooms.Outcome] = []
+    /// This floor's special rooms ("normal", "treasure", "rest" …), planned when the floor starts.
+    public var roomPlan: [String] = []
+    /// An event waiting for the player's choice.
+    public var pendingEvent: String? = nil
 
     public var isDead: Bool { hp <= 0 }
 

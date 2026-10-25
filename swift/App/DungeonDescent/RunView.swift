@@ -153,6 +153,13 @@ struct RunView: View {
         case .shopping:
             Text("Buy what you need below, then leave the merchant to keep exploring.")
                 .font(.footnote)
+        case .event:
+            if let ev = model.pendingEvent {
+                Text(ev.text).font(.callout)
+                ForEach(Array(ev.choices.enumerated()), id: \.offset) { i, label in
+                    Button(label) { model.chooseEvent(i) }
+                }
+            }
         case .victory:
             Text("Victory! You have conquered \(model.run.dungeon).").font(.headline)
             Button("Return to characters") { dismiss() }

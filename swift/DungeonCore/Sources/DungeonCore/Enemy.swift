@@ -65,6 +65,28 @@ public struct Enemy: Codable, Equatable, Sendable {
     /// Damage over time on the enemy (poison, bleeding, burning).
     public var dotDamage = 0
     public var dotTurns = 0
+    public var isElite = false
+    /// Flavor text, or an elite's ability.
+    public var desc: String? = nil
+    /// Ability flags from the web data (burn, lifesteal, dodgeChance …).
+    public var mechanics: [String: JSONValue] = [:]
+    /// Fight bookkeeping for those abilities.
+    public var turnsTaken = 0
+    public var hitsTaken = 0
+    public var vanished = false
+
+    public func number(_ key: String) -> Double? {
+        if case .number(let n)? = mechanics[key] { return n }
+        return nil
+    }
+
+    public func flag(_ key: String) -> Bool {
+        switch mechanics[key] {
+        case .bool(true): return true
+        case .number(let n): return n != 0
+        default: return false
+        }
+    }
     public var isDead: Bool { hp <= 0 }
 
     /// Attack range this turn, halved while cursed.
@@ -117,7 +139,12 @@ extension Enemy {
         let hp = jsRound(Double(t.hp) * (1 + f * 0.09) * ng * lvl)
         let lo = jsRound(Double(t.atk.lowerBound) * (1 + f * 0.06) * ng * lvl)
         let hi = jsRound(Double(t.atk.upperBound) * (1 + f * 0.06) * ng * lvl)
-        return Enemy(name: t.name, icon: t.icon, hp: hp, maxHp: hp, atk: lo...max(lo, hi), gold: t.gold)
+        var e = Enemy(name: t.name, icon: t.icon, hp: hp, maxHp: hp, atk: lo...max(lo, hi), gold: t.gold)
+        e.mechanics = t.mechanics
+        if t.coward { e.mechanics["coward"] = .bool(true) }
+        e.isElite = t.mechanics["isElite"] == .bool(true)
+        if case .string(let a)? = t.mechanics["ability"] ?? t.mechanics["eliteAbility"] { e.desc = a } else { e.desc = t.desc }
+        return e
     }
 
     /// Scales a boss, matching startCombat(): +15% HP and attack per player

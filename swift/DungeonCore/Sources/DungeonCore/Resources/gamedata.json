@@ -442,7 +442,53 @@
       "phaseMsg3": "She abandons grace entirely. Raw death magic pours from her hands!"
      }
     ],
-    "elites": []
+    "elites": [
+     {
+      "name": "Ancient Death Knight",
+      "icon": "⚔️",
+      "hp": 90,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       20,
+       35
+      ],
+      "isElite": true,
+      "ability": "Unholy Aura — reduces your defense by 2 on hit."
+     },
+     {
+      "name": "The Eternal Warden",
+      "icon": "🛡️",
+      "hp": 100,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       22,
+       38
+      ],
+      "isElite": true,
+      "ability": "Unyielding — takes only 70% damage from all attacks."
+     },
+     {
+      "name": "Crypt Champion",
+      "icon": "💀",
+      "hp": 85,
+      "atk": [
+       15,
+       24
+      ],
+      "gold": [
+       18,
+       32
+      ],
+      "isElite": true,
+      "ability": "Battle Hardened — heals 10 HP each turn."
+     }
+    ]
    },
    "loot": [
     {
@@ -1439,7 +1485,53 @@
       "phaseMsg3": "Pyrax transcends form entirely. He IS the fire now!"
      }
     ],
-    "elites": []
+    "elites": [
+     {
+      "name": "Ash Titan",
+      "icon": "🔥",
+      "hp": 95,
+      "atk": [
+       15,
+       24
+      ],
+      "gold": [
+       22,
+       38
+      ],
+      "isElite": true,
+      "ability": "Inferno — deals 8 burn damage per turn after hit."
+     },
+     {
+      "name": "Vel Ashara Chosen",
+      "icon": "🌋",
+      "hp": 88,
+      "atk": [
+       14,
+       23
+      ],
+      "gold": [
+       20,
+       35
+      ],
+      "isElite": true,
+      "ability": "Fire Shield — reflects 20% of damage back to attacker."
+     },
+     {
+      "name": "The Undying Flame",
+      "icon": "♨️",
+      "hp": 92,
+      "atk": [
+       13,
+       22
+      ],
+      "gold": [
+       21,
+       36
+      ],
+      "isElite": true,
+      "ability": "Reignite — returns to 30 HP once per combat when killed."
+     }
+    ]
    },
    "loot": [
     {
@@ -1969,7 +2061,53 @@
       "phaseMsg3": "The mirrors merge. Khyros is whole again — and furious!"
      }
     ],
-    "elites": []
+    "elites": [
+     {
+      "name": "Glacier Warden",
+      "icon": "🧊",
+      "hp": 98,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       22,
+       38
+      ],
+      "isElite": true,
+      "ability": "Deep Freeze — freezes you for 1 turn on hit, 25% chance."
+     },
+     {
+      "name": "The Frost Sovereign",
+      "icon": "❄️",
+      "hp": 92,
+      "atk": [
+       14,
+       23
+      ],
+      "gold": [
+       21,
+       36
+      ],
+      "isElite": true,
+      "ability": "Ice Armor — reduces all incoming damage by 25%."
+     },
+     {
+      "name": "Abyssal Hunter",
+      "icon": "🐺",
+      "hp": 86,
+      "atk": [
+       15,
+       25
+      ],
+      "gold": [
+       20,
+       34
+      ],
+      "isElite": true,
+      "ability": "Pack Leader — gains +3 attack for each floor descended."
+     }
+    ]
    },
    "loot": [
     {
@@ -2441,7 +2579,53 @@
       "phaseMsg3": "The water rises. He calls something from the deep!"
      }
     ],
-    "elites": []
+    "elites": [
+     {
+      "name": "The Head Archivist",
+      "icon": "📚",
+      "hp": 94,
+      "atk": [
+       13,
+       22
+      ],
+      "gold": [
+       22,
+       38
+      ],
+      "isElite": true,
+      "ability": "Forbidden Knowledge — reduces your SP by 8 on each hit."
+     },
+     {
+      "name": "Leviathan Scout",
+      "icon": "🦑",
+      "hp": 100,
+      "atk": [
+       14,
+       24
+      ],
+      "gold": [
+       24,
+       40
+      ],
+      "isElite": true,
+      "ability": "Ink Blast — blinds you, 35% miss chance for 2 turns."
+     },
+     {
+      "name": "Drowned Paladin",
+      "icon": "⚓",
+      "hp": 90,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       20,
+       35
+      ],
+      "isElite": true,
+      "ability": "Righteous Tide — heals 15 HP and deals 10 bonus damage on attack."
+     }
+    ]
    },
    "loot": [
     {
@@ -2993,7 +3177,53 @@
       "phaseMsg3": "Reality tears where he walks. He was never meant to exist here."
      }
     ],
-    "elites": []
+    "elites": [
+     {
+      "name": "The Hollow Patriarch",
+      "icon": "🎩",
+      "hp": 105,
+      "atk": [
+       16,
+       25
+      ],
+      "gold": [
+       22,
+       38
+      ],
+      "isElite": true,
+      "ability": "Head of the House — all enemies gain +15% HP while he lives."
+     },
+     {
+      "name": "The Séance Master",
+      "icon": "🕯️",
+      "hp": 95,
+      "atk": [
+       18,
+       27
+      ],
+      "gold": [
+       24,
+       40
+      ],
+      "isElite": true,
+      "ability": "Commune with the Dead — summons a spirit each turn for 5 damage."
+     },
+     {
+      "name": "The Hollow Architect",
+      "icon": "🏚️",
+      "hp": 100,
+      "atk": [
+       15,
+       24
+      ],
+      "gold": [
+       20,
+       36
+      ],
+      "isElite": true,
+      "ability": "Built This House — cannot be killed in fewer than 3 hits."
+     }
+    ]
    },
    "loot": [
     {
@@ -3626,7 +3856,53 @@
       "phaseMsg3": "Alone now. The Alpha finishes what the pack started."
      }
     ],
-    "elites": []
+    "elites": [
+     {
+      "name": "The Portrait",
+      "icon": "🖼️",
+      "hp": 85,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       12,
+       18
+      ],
+      "isElite": true,
+      "eliteAbility": "Painted Reality — weakens your attack"
+     },
+     {
+      "name": "The Bell Ringer",
+      "icon": "🔔",
+      "hp": 90,
+      "atk": [
+       13,
+       20
+      ],
+      "gold": [
+       12,
+       18
+      ],
+      "isElite": true,
+      "eliteAbility": "Toll — drains 10 SP per strike"
+     },
+     {
+      "name": "The Oldest Guest",
+      "icon": "👴",
+      "hp": 95,
+      "atk": [
+       14,
+       21
+      ],
+      "gold": [
+       13,
+       19
+      ],
+      "isElite": true,
+      "eliteAbility": "Old Grudge — reduces your max HP"
+     }
+    ]
    },
    "loot": [
     {
@@ -4589,6 +4865,51 @@
      }
     ],
     "elites": [
+     {
+      "name": "The Infernal Warden",
+      "icon": "🔥",
+      "hp": 130,
+      "atk": [
+       22,
+       32
+      ],
+      "gold": [
+       35,
+       55
+      ],
+      "isElite": true,
+      "ability": "Hellfire Aura — deals 10 fire damage per turn to you."
+     },
+     {
+      "name": "Archon of Ash",
+      "icon": "🌋",
+      "hp": 120,
+      "atk": [
+       20,
+       30
+      ],
+      "gold": [
+       32,
+       50
+      ],
+      "isElite": true,
+      "ability": "Volcanic Rage — gains +5 ATK each time it takes damage."
+     },
+     {
+      "name": "The Branded One",
+      "icon": "☠️",
+      "hp": 115,
+      "atk": [
+       24,
+       35
+      ],
+      "gold": [
+       38,
+       58
+      ],
+      "isElite": true,
+      "ability": "Mark of the Infernal — reduces your max HP by 10 on hit."
+     },
      {
       "name": "The Void King",
       "icon": "👑",
@@ -5617,6 +5938,51 @@
     ],
     "elites": [
      {
+      "name": "The Pale Leviathan",
+      "icon": "🤍",
+      "hp": 150,
+      "atk": [
+       25,
+       38
+      ],
+      "gold": [
+       45,
+       70
+      ],
+      "isElite": true,
+      "ability": "Calls one Tide Wraith every 3 turns."
+     },
+     {
+      "name": "Void Colossus",
+      "icon": "🌑",
+      "hp": 140,
+      "atk": [
+       22,
+       35
+      ],
+      "gold": [
+       42,
+       65
+      ],
+      "isElite": true,
+      "ability": "Abyss Crush — ignores 50% of your defense on every attack."
+     },
+     {
+      "name": "The Deep Archivist",
+      "icon": "📿",
+      "hp": 135,
+      "atk": [
+       20,
+       32
+      ],
+      "gold": [
+       40,
+       62
+      ],
+      "isElite": true,
+      "ability": "Ancient Curse — reduces your ATK by 3 permanently until you rest."
+     },
+     {
       "name": "The Drowned King",
       "icon": "👑",
       "hp": 95,
@@ -6612,7 +6978,1111 @@
     "phaseMsg3": "There is nothing left of the dungeon. Only the Void. Only you. Only the end!"
    }
   ],
-  "elites": []
+  "elites": [
+   {
+    "name": "The First Fear",
+    "icon": "😱",
+    "hp": 110,
+    "atk": [
+     18,
+     28
+    ],
+    "gold": [
+     30,
+     50
+    ],
+    "isElite": true,
+    "ability": "Primal Terror — reduces your attack by 4 for 3 turns."
+   },
+   {
+    "name": "Void Champion",
+    "icon": "🌑",
+    "hp": 105,
+    "atk": [
+     17,
+     27
+    ],
+    "gold": [
+     28,
+     48
+    ],
+    "isElite": true,
+    "ability": "Void Touched — ignores all your defense bonuses."
+   },
+   {
+    "name": "The One That Watches",
+    "icon": "👁️",
+    "hp": 95,
+    "atk": [
+     19,
+     30
+    ],
+    "gold": [
+     32,
+     52
+    ],
+    "isElite": true,
+    "ability": "Always Watching — gains +5 attack each phase."
+   }
+  ]
+ },
+ "enemySpecials": {
+  "Death Knight": {
+   "name": "Shield Slam",
+   "chance": 0.25,
+   "msg": "Shield Slam! Ignores your defense!",
+   "effect": "ignore-def"
+  },
+  "Brood Mother": {
+   "name": "Spawn",
+   "chance": 0.3,
+   "msg": "The Brood Mother spawns a small spider!",
+   "effect": "spawn"
+  },
+  "The Watcher": {
+   "name": "Vanish",
+   "chance": 0.2,
+   "msg": "The Watcher vanishes — you cannot hit it!",
+   "effect": "vanish"
+  },
+  "Soul Eater": {
+   "name": "Soul Drain",
+   "chance": 0.3,
+   "msg": "Soul Drain! Steals 6 SP from you.",
+   "effect": "sp-drain"
+  },
+  "Crypt Banshee": {
+   "name": "Wail",
+   "chance": 0.25,
+   "msg": "The Banshee wails — your next attack is weakened!",
+   "effect": "weaken"
+  },
+  "Void Stalker": {
+   "name": "Phase Shift",
+   "chance": 0.2,
+   "msg": "Void Stalker phases out — no damage this turn!",
+   "effect": "vanish"
+  },
+  "Blizzard Wraith": {
+   "name": "Freeze Touch",
+   "chance": 0.25,
+   "msg": "Freeze Touch! You are frozen and skip next action!",
+   "effect": "freeze-player"
+  },
+  "The Unmaking": {
+   "name": "Unmake",
+   "chance": 0.2,
+   "msg": "The Unmaking removes 15 HP from your maximum!",
+   "effect": "reduce-maxhp"
+  },
+  "Nightmare Colossus": {
+   "name": "Crush",
+   "chance": 0.25,
+   "msg": "CRUSH! Deals double damage this hit!",
+   "effect": "double-dmg"
+  },
+  "Skeleton Warrior": {
+   "name": "Bone Shield",
+   "chance": 0.3,
+   "msg": "Bone Shield — defense bypassed!",
+   "effect": "ignore-def"
+  },
+  "Ancient Skeleton": {
+   "name": "Deathblow",
+   "chance": 0.2,
+   "msg": "Ancient Deathblow — double damage!",
+   "effect": "double-dmg"
+  },
+  "Bone Archer": {
+   "name": "Pinning Shot",
+   "chance": 0.25,
+   "msg": "Pinning Shot — you skip your next turn!",
+   "effect": "freeze-player"
+  },
+  "Crimson Wraith": {
+   "name": "Life Drain",
+   "chance": 0.3,
+   "msg": "Life Drain — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Shadow Wraith": {
+   "name": "Fade",
+   "chance": 0.25,
+   "msg": "Shadow Wraith fades — unhittable this turn!",
+   "effect": "vanish"
+  },
+  "Hollow Wraith": {
+   "name": "SP Drain",
+   "chance": 0.35,
+   "msg": "Hollow Wraith drains 8 SP!",
+   "effect": "sp-drain"
+  },
+  "Giant Spider": {
+   "name": "Web Shot",
+   "chance": 0.3,
+   "msg": "Web Shot — you skip next action!",
+   "effect": "freeze-player"
+  },
+  "Cave Troll": {
+   "name": "Wild Swing",
+   "chance": 0.25,
+   "msg": "Wild Swing — unblockable strike!",
+   "effect": "ignore-def"
+  },
+  "Stone Golem": {
+   "name": "Ground Slam",
+   "chance": 0.2,
+   "msg": "Ground Slam — double damage!",
+   "effect": "double-dmg"
+  },
+  "Venom Crawler": {
+   "name": "Toxic Spit",
+   "chance": 0.35,
+   "msg": "Toxic Spit — your attack is weakened!",
+   "effect": "weaken"
+  },
+  "Lich": {
+   "name": "Curse",
+   "chance": 0.25,
+   "msg": "Cursed! Reduces your max HP by 15!",
+   "effect": "reduce-maxhp"
+  },
+  "Grave Robber": {
+   "name": "Filch",
+   "chance": 0.3,
+   "msg": "Filch! Steals 6 SP!",
+   "effect": "sp-drain"
+  },
+  "Corpse Knight": {
+   "name": "Rend",
+   "chance": 0.25,
+   "msg": "Rend — defense bypassed!",
+   "effect": "ignore-def"
+  },
+  "Infernal Hound": {
+   "name": "Inferno Bite",
+   "chance": 0.3,
+   "msg": "Inferno Bite — ignores armor!",
+   "effect": "ignore-def"
+  },
+  "Flame Elemental": {
+   "name": "Flare Burst",
+   "chance": 0.25,
+   "msg": "Flare Burst — double fire damage!",
+   "effect": "double-dmg"
+  },
+  "Ash Specter": {
+   "name": "Smolder",
+   "chance": 0.3,
+   "msg": "Smoldering touch weakens your attack!",
+   "effect": "weaken"
+  },
+  "Frost Revenant": {
+   "name": "Glacial Touch",
+   "chance": 0.25,
+   "msg": "Glacial Touch — you are frozen!",
+   "effect": "freeze-player"
+  },
+  "Ice Witch": {
+   "name": "Shatter",
+   "chance": 0.2,
+   "msg": "Shatter — double damage!",
+   "effect": "double-dmg"
+  },
+  "Frozen Knight": {
+   "name": "Ice Wall",
+   "chance": 0.3,
+   "msg": "Ice Wall — your attack is weakened!",
+   "effect": "weaken"
+  },
+  "Mirror Shade": {
+   "name": "Reflection",
+   "chance": 0.35,
+   "msg": "Mirror Shade reflects — double damage!",
+   "effect": "double-dmg"
+  },
+  "Hollow Preacher": {
+   "name": "Dark Sermon",
+   "chance": 0.25,
+   "msg": "Dark Sermon — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "Corrupted Hunter": {
+   "name": "Soul Pierce",
+   "chance": 0.3,
+   "msg": "Soul Pierce — bypasses all defenses!",
+   "effect": "ignore-def"
+  },
+  "Abyssal Colossus": {
+   "name": "Abyss Slam",
+   "chance": 0.25,
+   "msg": "Abyss Slam — void-infused, ignoring armor!",
+   "effect": "ignore-def"
+  },
+  "Ancient Revenant": {
+   "name": "Ancient Curse",
+   "chance": 0.2,
+   "msg": "Ancient Curse — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Archive Specter": {
+   "name": "Knowledge Drain",
+   "chance": 0.3,
+   "msg": "Knowledge Drain — 8 SP stolen!",
+   "effect": "sp-drain"
+  },
+  "Arctic Revenant": {
+   "name": "Permafrost",
+   "chance": 0.25,
+   "msg": "Permafrost — you are frozen!",
+   "effect": "freeze-player"
+  },
+  "Armored Skeleton": {
+   "name": "Iron Retaliation",
+   "chance": 0.3,
+   "msg": "Iron Retaliation — double damage!",
+   "effect": "double-dmg"
+  },
+  "Ash Crawler": {
+   "name": "Ember Spit",
+   "chance": 0.3,
+   "msg": "Ember Spit — weakens your attack!",
+   "effect": "weaken"
+  },
+  "Ashen Revenant": {
+   "name": "Ash Cloud",
+   "chance": 0.25,
+   "msg": "Ash Cloud — your attack is weakened!",
+   "effect": "weaken"
+  },
+  "Ashen Wisp": {
+   "name": "Flicker",
+   "chance": 0.35,
+   "msg": "The Ashen Wisp flickers and vanishes!",
+   "effect": "vanish"
+  },
+  "Avalanche Colossus": {
+   "name": "Avalanche",
+   "chance": 0.2,
+   "msg": "Avalanche — double damage!",
+   "effect": "double-dmg"
+  },
+  "Blighted Overseer": {
+   "name": "Blight Mark",
+   "chance": 0.25,
+   "msg": "Blight Mark — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Bloated Librarian": {
+   "name": "Toxic Burst",
+   "chance": 0.3,
+   "msg": "Toxic Burst — weakens your attack!",
+   "effect": "weaken"
+  },
+  "Blood Golem": {
+   "name": "Blood Surge",
+   "chance": 0.25,
+   "msg": "Blood Surge — ignores armor!",
+   "effect": "ignore-def"
+  },
+  "Bone Colossus": {
+   "name": "Bone Crush",
+   "chance": 0.2,
+   "msg": "Bone Crush — double damage!",
+   "effect": "double-dmg"
+  },
+  "Bone Shard": {
+   "name": "Splinter",
+   "chance": 0.4,
+   "msg": "Splinter — bone shards pierce your armor!",
+   "effect": "ignore-def"
+  },
+  "Brittle Skeleton": {
+   "name": "Shard Burst",
+   "chance": 0.35,
+   "msg": "Shard Burst — shatters through defense!",
+   "effect": "ignore-def"
+  },
+  "Cave Bat": {
+   "name": "Screech",
+   "chance": 0.3,
+   "msg": "Screech — weakens your next attack!",
+   "effect": "weaken"
+  },
+  "Char Bat": {
+   "name": "Fire Screech",
+   "chance": 0.3,
+   "msg": "Fire Screech — burning cry weakens you!",
+   "effect": "weaken"
+  },
+  "Char Stalker": {
+   "name": "Smoldering Claw",
+   "chance": 0.25,
+   "msg": "Smoldering Claw — burns through armor!",
+   "effect": "ignore-def"
+  },
+  "Cinder Wraith": {
+   "name": "Cinder Touch",
+   "chance": 0.3,
+   "msg": "Cinder Touch — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Creaking Step": {
+   "name": "Sudden Lunge",
+   "chance": 0.35,
+   "msg": "Sudden Lunge — you freeze in surprise!",
+   "effect": "freeze-player"
+  },
+  "Crypt Rat": {
+   "name": "Gnaw",
+   "chance": 0.4,
+   "msg": "Gnaw — relentless biting ignores armor!",
+   "effect": "ignore-def"
+  },
+  "Crypt Spider": {
+   "name": "Web Wrap",
+   "chance": 0.3,
+   "msg": "Web Wrap — you skip your next action!",
+   "effect": "freeze-player"
+  },
+  "Cursed Knight": {
+   "name": "Cursed Blow",
+   "chance": 0.25,
+   "msg": "Cursed Blow — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Dark Priest": {
+   "name": "Dark Prayer",
+   "chance": 0.25,
+   "msg": "Dark Prayer — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "Dark Tendril": {
+   "name": "Entangle",
+   "chance": 0.35,
+   "msg": "Entangle — you skip your next turn!",
+   "effect": "freeze-player"
+  },
+  "Deep Cartographer": {
+   "name": "Map the Weakness",
+   "chance": 0.25,
+   "msg": "Mapped your weakness — ignores defense!",
+   "effect": "ignore-def"
+  },
+  "Dread Knight": {
+   "name": "Dread Charge",
+   "chance": 0.25,
+   "msg": "Dread Charge — double damage!",
+   "effect": "double-dmg"
+  },
+  "Dread Sovereign": {
+   "name": "Sovereign Decree",
+   "chance": 0.2,
+   "msg": "Sovereign Decree — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Dread Wisp": {
+   "name": "Dread Pulse",
+   "chance": 0.3,
+   "msg": "Dread Pulse — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "Drowned Archivist": {
+   "name": "Waterlogged Tome",
+   "chance": 0.25,
+   "msg": "Waterlogged Tome — defense bypassed!",
+   "effect": "ignore-def"
+  },
+  "Drowned Chancellor": {
+   "name": "Tidal Command",
+   "chance": 0.2,
+   "msg": "Tidal Command — double damage!",
+   "effect": "double-dmg"
+  },
+  "Drowned Scholar": {
+   "name": "Ink Splash",
+   "chance": 0.3,
+   "msg": "Ink Splash — your attack is weakened!",
+   "effect": "weaken"
+  },
+  "Ember Reaper": {
+   "name": "Reaping Flame",
+   "chance": 0.25,
+   "msg": "Reaping Flame — ignores all armor!",
+   "effect": "ignore-def"
+  },
+  "Ember Shade": {
+   "name": "Ember Drift",
+   "chance": 0.3,
+   "msg": "Ember Drift — vanishes in ash!",
+   "effect": "vanish"
+  },
+  "Flame Wraith": {
+   "name": "Searing Touch",
+   "chance": 0.25,
+   "msg": "Searing Touch — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Flesh Amalgam": {
+   "name": "Absorb",
+   "chance": 0.2,
+   "msg": "Absorb — the amalgam absorbs the hit!",
+   "effect": "vanish"
+  },
+  "Flesh Wraith": {
+   "name": "Flesh Drain",
+   "chance": 0.3,
+   "msg": "Flesh Drain — 8 SP stolen!",
+   "effect": "sp-drain"
+  },
+  "Frost Reaper": {
+   "name": "Frozen Scythe",
+   "chance": 0.25,
+   "msg": "Frozen Scythe — freezes you solid!",
+   "effect": "freeze-player"
+  },
+  "Frost Shade": {
+   "name": "Frost Drift",
+   "chance": 0.3,
+   "msg": "Frost Drift — vanishes into frost!",
+   "effect": "vanish"
+  },
+  "Frostbite Hound": {
+   "name": "Freezing Bite",
+   "chance": 0.3,
+   "msg": "Freezing Bite — weakens your attack!",
+   "effect": "weaken"
+  },
+  "Frozen Banshee": {
+   "name": "Ice Wail",
+   "chance": 0.25,
+   "msg": "Ice Wail — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Frozen Husk": {
+   "name": "Crumble Shards",
+   "chance": 0.3,
+   "msg": "Crumble Shards — ignore your armor!",
+   "effect": "ignore-def"
+  },
+  "Frozen Titan": {
+   "name": "Glacial Stomp",
+   "chance": 0.2,
+   "msg": "Glacial Stomp — double damage!",
+   "effect": "double-dmg"
+  },
+  "Glacial Knight": {
+   "name": "Frost Lance",
+   "chance": 0.25,
+   "msg": "Frost Lance — piercing ice ignores defense!",
+   "effect": "ignore-def"
+  },
+  "Glacial Rat": {
+   "name": "Icy Gnaw",
+   "chance": 0.35,
+   "msg": "Icy Gnaw — weakens your attack!",
+   "effect": "weaken"
+  },
+  "Grand Archivist": {
+   "name": "Forbidden Text",
+   "chance": 0.2,
+   "msg": "Forbidden Text — 10 SP drained!",
+   "effect": "sp-drain"
+  },
+  "Grave Crawler": {
+   "name": "Grave Soil",
+   "chance": 0.3,
+   "msg": "Grave Soil — blinds, weakens your attack!",
+   "effect": "weaken"
+  },
+  "Grief Made Flesh": {
+   "name": "Overwhelming Grief",
+   "chance": 0.25,
+   "msg": "Overwhelming Grief — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Hollow Bride": {
+   "name": "Vow of Silence",
+   "chance": 0.25,
+   "msg": "Vow of Silence — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "Hollow Colossus": {
+   "name": "Hollow Slam",
+   "chance": 0.2,
+   "msg": "Hollow Slam — ignores all defense!",
+   "effect": "ignore-def"
+  },
+  "Hollow Groom": {
+   "name": "Empty Promise",
+   "chance": 0.25,
+   "msg": "Empty Promise — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "Hollow Shade": {
+   "name": "Hollow Touch",
+   "chance": 0.3,
+   "msg": "Hollow Touch — vanishes before your strike!",
+   "effect": "vanish"
+  },
+  "Ice Shard": {
+   "name": "Splinter Shot",
+   "chance": 0.4,
+   "msg": "Splinter Shot — ice pierces your armor!",
+   "effect": "ignore-def"
+  },
+  "Ice Stalker": {
+   "name": "Studied Strike",
+   "chance": 0.25,
+   "msg": "Studied Strike — defense bypassed!",
+   "effect": "ignore-def"
+  },
+  "Infernal Brute": {
+   "name": "Brute Force",
+   "chance": 0.25,
+   "msg": "Brute Force — double damage!",
+   "effect": "double-dmg"
+  },
+  "Infernal Champion": {
+   "name": "Champion Strike",
+   "chance": 0.2,
+   "msg": "Champion Strike — ignores defense!",
+   "effect": "ignore-def"
+  },
+  "Infernal Colossus": {
+   "name": "Inferno Stomp",
+   "chance": 0.2,
+   "msg": "Inferno Stomp — double damage!",
+   "effect": "double-dmg"
+  },
+  "Infernal Ember": {
+   "name": "Ember Burst",
+   "chance": 0.35,
+   "msg": "Ember Burst — weakens your attack!",
+   "effect": "weaken"
+  },
+  "Infernal Overlord": {
+   "name": "Overlord Command",
+   "chance": 0.2,
+   "msg": "Overlord Command — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Ink Wraith": {
+   "name": "Ink Blind",
+   "chance": 0.3,
+   "msg": "Ink Blind — your attack is weakened!",
+   "effect": "weaken"
+  },
+  "Leviathan Spawn": {
+   "name": "Tidal Slam",
+   "chance": 0.25,
+   "msg": "Tidal Slam — ignores your armor!",
+   "effect": "ignore-def"
+  },
+  "Leviathan of the Deep": {
+   "name": "Crushing Depth",
+   "chance": 0.15,
+   "msg": "Crushing Depth — double damage!",
+   "effect": "double-dmg"
+  },
+  "Malachar the Undying": {
+   "name": "Undying Wrath",
+   "chance": 0.2,
+   "msg": "Undying Wrath — double damage!",
+   "effect": "double-dmg"
+  },
+  "Molten Knight": {
+   "name": "Molten Strike",
+   "chance": 0.25,
+   "msg": "Molten Strike — liquid fire ignores armor!",
+   "effect": "ignore-def"
+  },
+  "Nightmare Rat": {
+   "name": "Nightmare Gnaw",
+   "chance": 0.4,
+   "msg": "Nightmare Gnaw — gnaws through armor!",
+   "effect": "ignore-def"
+  },
+  "Nightmare Shade": {
+   "name": "Nightmare Touch",
+   "chance": 0.25,
+   "msg": "Nightmare Touch — vanishes into fear!",
+   "effect": "vanish"
+  },
+  "Paper Shade": {
+   "name": "Paper Cut",
+   "chance": 0.4,
+   "msg": "Paper Cut — a thousand cuts weaken you!",
+   "effect": "weaken"
+  },
+  "Permafrost Crawler": {
+   "name": "Frost Grip",
+   "chance": 0.3,
+   "msg": "Frost Grip — frozen, skip next action!",
+   "effect": "freeze-player"
+  },
+  "Plague Hound": {
+   "name": "Plague Bite",
+   "chance": 0.3,
+   "msg": "Plague Bite — infected wound weakens you!",
+   "effect": "weaken"
+  },
+  "Plague Wraith": {
+   "name": "Plague Touch",
+   "chance": 0.25,
+   "msg": "Plague Touch — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Plague of Cinders": {
+   "name": "Cinder Plague",
+   "chance": 0.25,
+   "msg": "Cinder Plague — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "Rotting Ghoul": {
+   "name": "Putrid Swipe",
+   "chance": 0.3,
+   "msg": "Putrid Swipe — rotten claws weaken you!",
+   "effect": "weaken"
+  },
+  "Scorched Husk": {
+   "name": "Ember Burst",
+   "chance": 0.3,
+   "msg": "Ember Burst — scorched explosion ignores armor!",
+   "effect": "ignore-def"
+  },
+  "Scream Without Source": {
+   "name": "Sourceless Scream",
+   "chance": 0.25,
+   "msg": "Sourceless Scream — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Shadow Architect": {
+   "name": "Redesign",
+   "chance": 0.2,
+   "msg": "Redesign — weakens your attack!",
+   "effect": "weaken"
+  },
+  "Shadow Creep": {
+   "name": "Creep",
+   "chance": 0.35,
+   "msg": "Shadow Creep vanishes before your strike!",
+   "effect": "vanish"
+  },
+  "Shadow Stalker": {
+   "name": "Shadow Strike",
+   "chance": 0.25,
+   "msg": "Shadow Strike — ignores your defense!",
+   "effect": "ignore-def"
+  },
+  "Slag Crawler": {
+   "name": "Slag Spit",
+   "chance": 0.3,
+   "msg": "Slag Spit — weakens your attack!",
+   "effect": "weaken"
+  },
+  "Slag Titan": {
+   "name": "Slag Stomp",
+   "chance": 0.2,
+   "msg": "Slag Stomp — double damage!",
+   "effect": "double-dmg"
+  },
+  "Soggy Sentinel": {
+   "name": "Waterlog",
+   "chance": 0.3,
+   "msg": "Waterlog — you skip your next action!",
+   "effect": "freeze-player"
+  },
+  "Soul Harvester": {
+   "name": "Harvest",
+   "chance": 0.25,
+   "msg": "Harvest — 8 SP taken from your soul!",
+   "effect": "sp-drain"
+  },
+  "Soul Harvester Prime": {
+   "name": "Grand Harvest",
+   "chance": 0.2,
+   "msg": "Grand Harvest — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "The Almost": {
+   "name": "Almost Touch",
+   "chance": 0.3,
+   "msg": "Almost Touch — nearly real, defense bypassed!",
+   "effect": "ignore-def"
+  },
+  "The Ashen King": {
+   "name": "Royal Decree",
+   "chance": 0.2,
+   "msg": "Royal Decree — double damage!",
+   "effect": "double-dmg"
+  },
+  "The Ashen Throne": {
+   "name": "Throne Command",
+   "chance": 0.2,
+   "msg": "Throne Command — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "The Bell Ringer": {
+   "name": "Toll",
+   "chance": 0.25,
+   "msg": "The Bell tolls — 10 SP drained!",
+   "effect": "sp-drain"
+  },
+  "The Bone Sovereign": {
+   "name": "Sovereign Shatter",
+   "chance": 0.2,
+   "msg": "Sovereign Shatter — ignores your armor!",
+   "effect": "ignore-def"
+  },
+  "The Caretaker": {
+   "name": "Caretaking",
+   "chance": 0.25,
+   "msg": "Caretaking — weakens your attack!",
+   "effect": "weaken"
+  },
+  "The Cinder Colossus": {
+   "name": "Cinder Crash",
+   "chance": 0.2,
+   "msg": "Cinder Crash — double damage!",
+   "effect": "double-dmg"
+  },
+  "The Damned": {
+   "name": "Damnation",
+   "chance": 0.25,
+   "msg": "Damnation — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "The Door Warden": {
+   "name": "Door Slam",
+   "chance": 0.3,
+   "msg": "Door Slam — you are frozen in place!",
+   "effect": "freeze-player"
+  },
+  "The Drowned Curator": {
+   "name": "Waterlogged",
+   "chance": 0.25,
+   "msg": "Waterlogged — your attack is weakened!",
+   "effect": "weaken"
+  },
+  "The Dungeon Itself": {
+   "name": "Collapse",
+   "chance": 0.15,
+   "msg": "COLLAPSE — the dungeon deals double damage!",
+   "effect": "double-dmg"
+  },
+  "The Eternal Pyre": {
+   "name": "Eternal Flame",
+   "chance": 0.2,
+   "msg": "Eternal Flame — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "The Eternal Winter": {
+   "name": "Eternal Cold",
+   "chance": 0.2,
+   "msg": "Eternal Cold — you skip your next action!",
+   "effect": "freeze-player"
+  },
+  "The Forgotten": {
+   "name": "Forgotten Touch",
+   "chance": 0.3,
+   "msg": "Forgotten Touch — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "The Frozen King": {
+   "name": "Glacial Decree",
+   "chance": 0.2,
+   "msg": "Glacial Decree — double damage!",
+   "effect": "double-dmg"
+  },
+  "The Glacial Sovereign": {
+   "name": "Glacial Command",
+   "chance": 0.2,
+   "msg": "Glacial Command — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "The Grieving One": {
+   "name": "Grief Strike",
+   "chance": 0.25,
+   "msg": "Grief Strike — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "The Groundskeeper": {
+   "name": "Upkeep",
+   "chance": 0.25,
+   "msg": "Upkeep — weakens your attack!",
+   "effect": "weaken"
+  },
+  "The Hard Void": {
+   "name": "Void Pressure",
+   "chance": 0.25,
+   "msg": "Void Pressure — ignores all defense!",
+   "effect": "ignore-def"
+  },
+  "The Hollow": {
+   "name": "Hollow Impact",
+   "chance": 0.25,
+   "msg": "Hollow Impact — double damage!",
+   "effect": "double-dmg"
+  },
+  "The Hollow Matron": {
+   "name": "Matron Curse",
+   "chance": 0.2,
+   "msg": "Matron Curse — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "The Hollow One": {
+   "name": "One Strike",
+   "chance": 0.25,
+   "msg": "One Strike — ignores your armor!",
+   "effect": "ignore-def"
+  },
+  "The House Itself": {
+   "name": "House Rules",
+   "chance": 0.2,
+   "msg": "House Rules — the house always wins. Double damage!",
+   "effect": "double-dmg"
+  },
+  "The Infernal Architect": {
+   "name": "Redesign",
+   "chance": 0.2,
+   "msg": "Redesign — rewrites your defenses down!",
+   "effect": "reduce-maxhp"
+  },
+  "The Last Librarian": {
+   "name": "Final Volume",
+   "chance": 0.2,
+   "msg": "Final Volume — devastating power, double damage!",
+   "effect": "double-dmg"
+  },
+  "The Last Resident": {
+   "name": "Last Stand",
+   "chance": 0.2,
+   "msg": "Last Stand — nothing to lose, ignores armor!",
+   "effect": "ignore-def"
+  },
+  "The Music Box": {
+   "name": "Discordant Note",
+   "chance": 0.3,
+   "msg": "Discordant Note — 10 SP drained!",
+   "effect": "sp-drain"
+  },
+  "The Nameless": {
+   "name": "Nameless Blow",
+   "chance": 0.25,
+   "msg": "Nameless Blow — undefined force ignores defense!",
+   "effect": "ignore-def"
+  },
+  "The Nightmare Sovereign": {
+   "name": "Nightmare Rule",
+   "chance": 0.15,
+   "msg": "Nightmare Rule — double damage!",
+   "effect": "double-dmg"
+  },
+  "The Oldest Guest": {
+   "name": "Old Grudge",
+   "chance": 0.25,
+   "msg": "Old Grudge — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "The Parlor Guest": {
+   "name": "Polite Strike",
+   "chance": 0.3,
+   "msg": "Polite Strike — courteous but bypasses defense!",
+   "effect": "ignore-def"
+  },
+  "The Portrait": {
+   "name": "Painted Reality",
+   "chance": 0.25,
+   "msg": "Painted Reality — distorts perception, weakens attack!",
+   "effect": "weaken"
+  },
+  "The Reflection": {
+   "name": "Mirror Strike",
+   "chance": 0.3,
+   "msg": "Mirror Strike — your own force reflected back! Double damage!",
+   "effect": "double-dmg"
+  },
+  "The Sunken Warden": {
+   "name": "Warden Grab",
+   "chance": 0.25,
+   "msg": "Warden Grab — immobilized in the depths!",
+   "effect": "freeze-player"
+  },
+  "The Twin": {
+   "name": "Twin Strike",
+   "chance": 0.3,
+   "msg": "Twin Strike — simultaneous blow ignores all defense!",
+   "effect": "ignore-def"
+  },
+  "The Uninvited Guest": {
+   "name": "Uninvited",
+   "chance": 0.25,
+   "msg": "Uninvited — unwelcome presence drains 8 SP!",
+   "effect": "sp-drain"
+  },
+  "The Unnamed": {
+   "name": "Unnamed Force",
+   "chance": 0.25,
+   "msg": "Unnamed Force — bypasses your armor!",
+   "effect": "ignore-def"
+  },
+  "The Unraveling": {
+   "name": "Unravel",
+   "chance": 0.25,
+   "msg": "Unravel — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "The Void Below": {
+   "name": "Void Pull",
+   "chance": 0.25,
+   "msg": "Void Pull — pulls you in, freezing you!",
+   "effect": "freeze-player"
+  },
+  "The Void Given Form": {
+   "name": "Void Manifestation",
+   "chance": 0.2,
+   "msg": "Void Manifestation — true void, double damage!",
+   "effect": "double-dmg"
+  },
+  "The Void King": {
+   "name": "Void Sovereignty",
+   "chance": 0.15,
+   "msg": "Void Sovereignty — ignores your armor!",
+   "effect": "ignore-def"
+  },
+  "The Void Sovereign": {
+   "name": "Void Command",
+   "chance": 0.15,
+   "msg": "Void Command — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "The Void Walker": {
+   "name": "Void Step",
+   "chance": 0.25,
+   "msg": "Void Step — vanishes between dimensions!",
+   "effect": "vanish"
+  },
+  "The Wall Crawler": {
+   "name": "Wall Grab",
+   "chance": 0.3,
+   "msg": "Wall Grab — frozen in place!",
+   "effect": "freeze-player"
+  },
+  "The Weeping Child": {
+   "name": "Wail",
+   "chance": 0.25,
+   "msg": "The Weeping Child wails — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "The Weeping Mother": {
+   "name": "Mothers Grief",
+   "chance": 0.2,
+   "msg": "Mothers Grief — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Tide Golem": {
+   "name": "Tidal Crush",
+   "chance": 0.25,
+   "msg": "Tidal Crush — ignores your armor!",
+   "effect": "ignore-def"
+  },
+  "Tomb Bat": {
+   "name": "Tomb Screech",
+   "chance": 0.3,
+   "msg": "Tomb Screech — weakens your attack!",
+   "effect": "weaken"
+  },
+  "Venom Spitter": {
+   "name": "Venom Spray",
+   "chance": 0.35,
+   "msg": "Venom Spray — weakens your next attack!",
+   "effect": "weaken"
+  },
+  "Void Frost": {
+   "name": "Void Chill",
+   "chance": 0.3,
+   "msg": "Void Chill — freezes you solid!",
+   "effect": "freeze-player"
+  },
+  "Void Husk": {
+   "name": "Husk Touch",
+   "chance": 0.3,
+   "msg": "Husk Touch — 8 SP drained!",
+   "effect": "sp-drain"
+  },
+  "Void Phantom": {
+   "name": "Phantom Phase",
+   "chance": 0.25,
+   "msg": "Phantom Phase — vanishes!",
+   "effect": "vanish"
+  },
+  "Void Reaper": {
+   "name": "Void Harvest",
+   "chance": 0.2,
+   "msg": "Void Harvest — 10 SP claimed!",
+   "effect": "sp-drain"
+  },
+  "Void Reaper Spawn": {
+   "name": "Spawn Slash",
+   "chance": 0.3,
+   "msg": "Spawn Slash — strikes through armor!",
+   "effect": "ignore-def"
+  },
+  "Void Reaver": {
+   "name": "Reave",
+   "chance": 0.25,
+   "msg": "Reave — tears through your defenses!",
+   "effect": "ignore-def"
+  },
+  "Void Sentinel": {
+   "name": "Sentinel Guard",
+   "chance": 0.25,
+   "msg": "Sentinel Guard — double damage!",
+   "effect": "double-dmg"
+  },
+  "Void Shadow": {
+   "name": "Shadow Meld",
+   "chance": 0.3,
+   "msg": "Shadow Meld — disappears!",
+   "effect": "vanish"
+  },
+  "Void Spawn": {
+   "name": "Spawn Rush",
+   "chance": 0.35,
+   "msg": "Spawn Rush — chaotic attack ignores defense!",
+   "effect": "ignore-def"
+  },
+  "Void Wisp": {
+   "name": "Wisp Drain",
+   "chance": 0.35,
+   "msg": "Wisp Drain — 6 SP stolen!",
+   "effect": "sp-drain"
+  },
+  "Void Wraith": {
+   "name": "Void Wail",
+   "chance": 0.25,
+   "msg": "Void Wail — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Volcanic Revenant": {
+   "name": "Volcanic Surge",
+   "chance": 0.25,
+   "msg": "Volcanic Surge — lava ignores armor!",
+   "effect": "ignore-def"
+  },
+  "Wailing Wraith": {
+   "name": "Wailing Touch",
+   "chance": 0.25,
+   "msg": "Wailing Touch — reduces your max HP!",
+   "effect": "reduce-maxhp"
+  },
+  "Web Stalker": {
+   "name": "Web Trap",
+   "chance": 0.3,
+   "msg": "Web Trap — skip your next action!",
+   "effect": "freeze-player"
+  }
  },
  "traps": {
   "crypt": [

@@ -270,9 +270,9 @@ public enum Skills {
             }
         }
 
-        r.playerDamage = dmg
         r.log.append(msg)
-        Combat.dealDamage(&run, dmg, log: &r.log)
+        r.playerDamage = EnemyAbilities.onPlayerHit(&run, dmg, basic: false, dice: &dice, log: &r.log)
+        Combat.dealDamage(&run, r.playerDamage, log: &r.log)
         // A stun that lands this turn also stops this turn's counter-attack.
         if let en = run.enemy, en.stunTurns > 0, !skipEnemy {
             var s = en

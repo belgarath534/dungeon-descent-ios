@@ -776,3 +776,123 @@ final class SoundtrackTests: XCTestCase {
         XCTAssertNotNil(Soundtrack.file(forTrack: "menu"))
     }
 }
+
+final class EncounterTests: XCTestCase {
+    func newRun(_ dungeon: String = "Crypt of Malachar") -> Run {
+        Run(character: PlayerCharacter(name: "E", cls: "Warrior", race: "Human", prof: "Thief",
+                                       dungeon: dungeon, difficulty: .wanderer))
+    }
+
+    func testFloorPlanKeepsFirstAndLastRoomsNormal() {
+        var dice = SeededDice(seed: 11)
+        var specials = 0, middles = 0
+        for _ in 0..<500 {
+            var r = newRun()
+            r.floorRoomsNeeded = 8
+            Encounters.planFloor(&r, dice: &dice)
+            XCTAssertEqual(r.roomPlan.count, 8)
+            XCTAssertEqual(r.roomPlan.first, "normal")
+            XCTAssertEqual(r.roomPlan.last, "normal")
+            middles += 6
+            specials += r.roomPlan.filter { $0 != "normal" }.count
+        }
+        // 39% of middle rooms are special in the web version
+        XCTAssertEqual(Double(specials) / Double(middles), 0.39, accuracy: 0.03)
+    }
+
+    func testSpecialRooms() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        var dice = SeededDice(seed: 4)
+        var r = newRun()
+        r.floor = 3
+        let treasure = Encounters.specialRooms.first { $0.type == "treasure" }!
+        let t = Encounters.enterSpecial(treasure, &r, dice: &dice, wallet: w, store: store)
+        XCTAssertEqual(t.gold, 35)
+        XCTAssertGreaterThanOrEqual(w.gold, 35)
+
+        r.hp = 50
+        let rest = Encounters.specialRooms.first { $0.type == "rest" }!
+        _ = Encounters.enterSpecial(rest, &r, dice: &dice, wallet: w, store: store)
+        XCTAssertEqual(r.hp, 74)   // +20% of 120
+
+        let cursed = Encounters.specialRooms.first { $0.type == "cursed" }!
+        let c = Encounters.enterSpecial(cursed, &r, dice: &dice, wallet: w, store: store)
+        XCTAssertTrue(c.enemy?.name.hasPrefix("Cursed ") ?? false)
+
+        let merchant = Encounters.specialRooms.first { $0.type == "merchant" }!
+        XCTAssertTrue(Encounters.enterSpecial(merchant, &r, dice: &dice, wallet: w, store: store).openShop)
+    }
+
+    func testEventsMatchTheirDungeons() {
+        var dice = SeededDice(seed: 8)
+        var crypt: Set<String> = [], abyss: Set<String> = []
+        for _ in 0..<3000 {
+            if let e = Encounters.rollEvent(newRun(), dice: &dice) { crypt.insert(e.id) }
+            if let e = Encounters.rollEvent(newRun("The Abyssal Deep"), dice: &dice) { abyss.insert(e.id) }
+        }
+        XCTAssertEqual(crypt, ["julio", "shrine", "chest", "wounded", "inscription"])
+        XCTAssertEqual(abyss, ["abyssal-singing", "abyssal-crack", "abyssal-ship", "abyssal-shrine"])
+    }
+
+    func testEveryEventChoiceResolves() {
+        var dice = SeededDice(seed: 21)
+        let w = Wallet(store: MemoryStore())
+        w.addGold(100)
+        for e in Encounters.events {
+            for c in e.choices.indices {
+                for _ in 0..<20 {
+                    var r = newRun(e.dungeons?.first ?? "Crypt of Malachar")
+                    r.gold = 100
+                    r.inventory = [Encounters.potion]
+                    r.pendingEvent = e.id
+                    let out = Encounters.choose(c, &r, dice: &dice, wallet: w)
+                    XCTAssertFalse(out.message.isEmpty, "\(e.id) \(c)")
+                    XCTAssertNil(r.pendingEvent)
+                }
+            }
+        }
+    }
+
+    func testElitesAppearFromFloorFour() {
+        var dice = SeededDice(seed: 2)
+        var r = newRun()
+        r.floor = 3
+        XCTAssertFalse((0..<300).contains { _ in Combat.nextEnemy(for: r, dice: &dice).isElite })
+        r.floor = 5
+        let elites = (0..<1000).filter { _ in Combat.nextEnemy(for: r, dice: &dice).isElite }.count
+        XCTAssertEqual(Double(elites) / 1000, 0.15, accuracy: 0.04)
+    }
+
+    func testCowardsRunFromHealthyHeroes() {
+        var r = newRun()
+        let rat = Bestiary.crypt.t1.first { $0.coward }!
+        Combat.begin(&r, against: Enemy.spawn(rat, floor: 1, playerLevel: 1))
+        var d = LoadedDice(rolls: [1, 2])
+        let res = Combat.takeTurn(&r, .defend, dice: &d)
+        if !res.enemyDied {
+            XCTAssertTrue(res.enemyFled)
+            XCTAssertEqual(res.goldGained, 2)
+            XCTAssertNil(r.enemy)
+        }
+    }
+
+    func testImmuneFirstHitAndSpecialMoves() {
+        var r = newRun("The Ashbound Wastes")
+        let sentinel = Bestiary.enemies(for: "The Ashbound Wastes").t2.first { $0.name == "Pyre Sentinel" }!
+        Combat.begin(&r, against: Enemy.spawn(sentinel, floor: 4, playerLevel: 1))
+        var d = LoadedDice(rolls: [12, 5])
+        XCTAssertEqual(Combat.takeTurn(&r, .attack, dice: &d).playerDamage, 0)
+        var d2 = LoadedDice(rolls: [12, 5])
+        XCTAssertGreaterThan(Combat.takeTurn(&r, .attack, dice: &d2).playerDamage, 0)
+
+        // Death Knight's Shield Slam ignores defense when it fires
+        var k = newRun()
+        let dk = Bestiary.crypt.t3.first { $0.name == "Death Knight" }!
+        Combat.begin(&k, against: Enemy.spawn(dk, floor: 7, playerLevel: 1))
+        var d3 = LoadedDice(rolls: [8, 10], chances: [false, true])
+        let res = Combat.takeTurn(&k, .attack, dice: &d3)
+        // On floor 7 its hits start at 14; Shield Slam means none of it is blocked
+        XCTAssertEqual(res.enemyDamage, 14)
+    }
+}
