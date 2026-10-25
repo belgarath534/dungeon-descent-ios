@@ -8,6 +8,14 @@ public protocol GameStore: AnyObject {
     func getItem(_ key: String) -> String?
     func setItem(_ key: String, _ value: String)
     func removeItem(_ key: String)
+    /// Writes many keys at once (one save to disk instead of one per key).
+    func setItems(_ items: [String: String])
+}
+
+extension GameStore {
+    public func setItems(_ items: [String: String]) {
+        for (k, v) in items { setItem(k, v) }
+    }
 }
 
 /// Storage keys used by the web version, collected in one place.
@@ -59,6 +67,11 @@ public final class FileStore: GameStore {
 
     public func removeItem(_ key: String) {
         lock.lock(); values[key] = nil; lock.unlock()
+        flush()
+    }
+
+    public func setItems(_ items: [String: String]) {
+        lock.lock(); values.merge(items) { _, new in new }; lock.unlock()
         flush()
     }
 

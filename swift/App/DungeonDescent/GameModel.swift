@@ -7,7 +7,7 @@ import DungeonCore
 final class GameModel: ObservableObject {
     let store: GameStore
     let wallet: Wallet
-    private let roster: CharacterRoster
+    private var roster: CharacterRoster
 
     @Published private(set) var characters: [PlayerCharacter] = []
     @Published private(set) var gold = 0
@@ -51,6 +51,42 @@ final class GameModel: ObservableObject {
     }
 
     var globalInventory: GlobalInventory { GlobalInventory(store: store) }
+
+    // MARK: Importing the web version's save
+
+    /// What a web save contains, for the confirmation message.
+    struct WebSaveSummary {
+        let characters: [PlayerCharacter]
+        let gold: Int
+        let diamonds: Int
+        let keys: Int
+    }
+
+    static func summarize(_ data: [String: String]) -> WebSaveSummary {
+        let probe = MemoryStore(data)
+        return WebSaveSummary(characters: CharacterRoster(store: probe).characters,
+                              gold: Wallet(store: probe).gold,
+                              diamonds: Wallet(store: probe).diamonds,
+                              keys: data.count)
+    }
+
+    /// Replaces this app's save with the web version's. Swift's own runs in
+    /// progress are dropped, since they belong to the characters being replaced.
+    func importWebSave(_ data: [String: String]) {
+        store.setItems(data.filter { $0.key.hasPrefix("dd_") && !$0.key.hasPrefix("dd_swift_") })
+        roster = CharacterRoster(store: store)
+        UserDefaults.standard.set(true, forKey: "swift_web_import_done")
+        refresh()
+    }
+
+    /// True until the player has imported or skipped the web save once.
+    var shouldOfferWebImport: Bool {
+        !UserDefaults.standard.bool(forKey: "swift_web_import_done")
+    }
+
+    func skipWebImport() {
+        UserDefaults.standard.set(true, forKey: "swift_web_import_done")
+    }
 
     // MARK: Saved runs
     // A run in progress is saved after every action, so it survives iOS closing

@@ -3,6 +3,7 @@ import DungeonCore
 
 struct MainMenuView: View {
     @EnvironmentObject var game: GameModel
+    @StateObject private var webImport = WebImportFlow()
 
     var body: some View {
         List {
@@ -51,7 +52,9 @@ struct MainMenuView: View {
         .onAppear {
             Sound.track("menu")
             Sound.ambient(nil)
+            if game.shouldOfferWebImport { webImport.check(game, quietIfEmpty: true) }
         }
+        .webImportAlerts(webImport, game: game)
     }
 }
 
@@ -134,6 +137,8 @@ struct CharacterRow: View {
 }
 
 struct SettingsView: View {
+    @EnvironmentObject var game: GameModel
+    @StateObject private var webImport = WebImportFlow()
     @AppStorage("swift_haptics") private var haptics = true
     @AppStorage("swift_class_traits") private var classTraits = true
     @AppStorage("swift_music_on") private var musicOn = true
@@ -165,6 +170,17 @@ struct SettingsView: View {
             } footer: {
                 Text("Class traits give Paladin, Death Knight and Sentinel their damage reduction.")
             }
+            Section {
+                Button(webImport.checking ? "Looking for a web version save…" : "Import save from the web version") {
+                    webImport.check(game, quietIfEmpty: false)
+                }
+                .disabled(webImport.checking)
+            } header: {
+                Text("Web version save")
+            } footer: {
+                Text("Copies your characters, gold, items and progress from the web version of Dungeon Descent on this iPhone. It replaces what's in the Swift version.")
+            }
+
             Section("About") {
                 LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
                 LabeledContent("Build", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")
@@ -173,6 +189,7 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+        .webImportAlerts(webImport, game: game)
     }
 }
 
@@ -191,6 +208,71 @@ struct VolumeSlider: View {
                 case .decrement: value = max(0, value - 0.1)
                 @unknown default: break
                 }
+            }
+    }
+}
+
+/// Finding and importing the web version's save, with the questions it asks.
+@MainActor
+final class WebImportFlow: ObservableObject {
+    @Published var checking = false
+    @Published var found: [String: String]? = nil
+    @Published var nothingFound = false
+    private let importer = WebSaveImporter()
+
+    func check(_ game: GameModel, quietIfEmpty: Bool) {
+        guard !checking else { return }
+        checking = true
+        importer.read { [weak self] data in
+            guard let self else { return }
+            self.checking = false
+            if GameModel.summarize(data).characters.isEmpty && data[StoreKey.globalGold] == nil {
+                if quietIfEmpty { game.skipWebImport() } else { self.nothingFound = true }
+            } else {
+                self.found = data
+            }
+        }
+    }
+
+    func summary() -> String {
+        guard let data = found else { return "" }
+        let s = GameModel.summarize(data)
+        let names = s.characters.map { "\($0.name) the \($0.race) \($0.cls)" }
+        var text = names.isEmpty ? "No characters" : "\(names.count) character\(names.count == 1 ? "" : "s"): " + names.joined(separator: ", ")
+        text += ". \(s.gold) gold, \(s.diamonds) diamonds."
+        return text
+    }
+}
+
+extension View {
+    @MainActor
+    func webImportAlerts(_ flow: WebImportFlow, game: GameModel) -> some View {
+        self
+            .alert("Import your web version save?", isPresented: Binding(
+                get: { flow.found != nil },
+                set: { if !$0 { flow.found = nil } }
+            )) {
+                Button("Import") {
+                    if let data = flow.found {
+                        game.importWebSave(data)
+                        Feedback.announce("Save imported. \(game.characters.count) characters ready.")
+                    }
+                    flow.found = nil
+                }
+                Button("Not now", role: .cancel) {
+                    game.skipWebImport()
+                    flow.found = nil
+                }
+            } message: {
+                Text("Found on this iPhone: \(flow.summary()) Importing replaces what's in the Swift version. You can do it later from Settings.")
+            }
+            .alert("No web version save found", isPresented: Binding(
+                get: { flow.nothingFound },
+                set: { flow.nothingFound = $0 }
+            )) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("There's no save from the web version of Dungeon Descent on this iPhone.")
             }
     }
 }

@@ -18,8 +18,10 @@ It uses the same bundle ID (com.dungeon.descent), so it replaces the web version
 on TestFlight. To go back, run the old "Dungeon Descent App Store" workflow, but
 its build number has to be higher than the Swift build's first.
 
-**Your web-version saves** live in the app's WebKit storage. The Swift app doesn't
-read or delete them yet; importing them is on the list below.
+**Your web-version saves** live in the app's WebKit storage. On first launch the Swift
+app looks for them (a hidden web view opens the same IndexedDB at capacitor://localhost)
+and offers to import them; Settings can do it again later. The web data is only read,
+never changed, so going back to the web version keeps working.
 
 - **DungeonCore** copies the web version's numbers exactly. JavaScript rounding
   and number parsing are reproduced (`jsRound`, `jsParseInt`), and the tests check
@@ -83,7 +85,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Kill gold | enemyDead | 🟡 base gold, Goblin, Grave Robber, luck |
 | Rooms, search, floors, shop | enterRoom, searchRoom, openShop | 🟡 all but special room events and NPC encounters |
 | Saving a run in progress | midRunSave | ✅ (Swift's own format) |
-| Import web saves into the Swift app | DDStore (IndexedDB) | ⬜ |
+| Import web saves into the Swift app | DDStore (IndexedDB) | ✅ offered on first launch and in Settings (WebSaveImporter) |
 | Elites, multi-enemy combat | MULTI-ENEMY COMBAT SYSTEM | ⬜ |
 | Gun crafting | GUN DEFINITIONS | ⬜ |
 | Raids, Boss Rush, Daily Challenge, Tournament | RAID ENGINE, BOSS RUSH ENGINE … | ⬜ |
