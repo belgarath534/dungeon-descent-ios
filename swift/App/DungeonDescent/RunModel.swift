@@ -45,11 +45,14 @@ final class RunModel: ObservableObject {
         var r = Run(character: game.characters[characterIndex], gold: game.wallet.gold)
         r.applyStartBonuses(wallet: game.wallet)
         game.globalInventory.load(into: &r)
+        var d = SystemDice()
+        Skills.start(&r, dice: &d)
         if r.floor >= 10 && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
         run = r
         roomTitle = Rooms.floorName(r.floor, dungeon: r.dungeon)
         add("Descended into \(r.dungeon) on \(r.difficulty.rawValue) difficulty.")
         add("Floor \(r.floor): \(roomTitle). \(r.lives) \(r.lives == 1 ? "life" : "lives").")
+        if let s = Skills.unlocked(r).first { add("✨ Starting skill: \(s.name). \(s.desc)") }
         persist()
     }
 
@@ -186,6 +189,13 @@ final class RunModel: ObservableObject {
             let msg = "Level up! You are now level \(r.level). You have \(r.levelPoints) level points to spend."
             add(msg)
             said += " " + msg
+            if r.skillChoices.isEmpty {
+                Skills.offer(&r, dice: &d)
+                if !r.skillChoices.isEmpty {
+                    let names = r.skillChoices.compactMap { Skills.skill($0, cls: r.cls)?.name }
+                    said += " New skill available! Choose one of: " + names.joined(separator: ", ") + "."
+                }
+            }
         }
         Feedback.success()
         r.enemy = nil
@@ -206,6 +216,11 @@ final class RunModel: ObservableObject {
         var r = run
         Feedback.warning()
         switch Progression.handleDeath(&r) {
+        case .resurrected:
+            if r.enemy != nil { r.inCombat = true }
+            let msg = "Resurrection! You rise again with 50 percent HP."
+            add("✨ " + msg)
+            finish(r, dice, phase: r.inCombat ? .fighting : .exploring, spoken: spoken + " " + msg)
         case .phoenix:
             // The fight goes on if there was one.
             if r.enemy != nil { r.inCombat = true }
@@ -240,6 +255,50 @@ final class RunModel: ObservableObject {
         let next = game.unlockedDungeons().last ?? ""
         let unlock = next != run.dungeon && !next.isEmpty ? " \(next) is unlocked." : ""
         Feedback.announce(spoken + " Victory! You have conquered \(run.dungeon).\(unlock)")
+    }
+
+    // MARK: Skills
+
+    var skills: [Skill] { Skills.unlocked(run) }
+    func skillCost(_ s: Skill) -> Int { Skills.cost(s, run) }
+
+    func useSkill(_ effect: String) {
+        guard phase == .fighting else { return }
+        var r = run
+        var d = dice
+        let result = Skills.use(&r, effect, dice: &d, options: .init(classTraits: AppSettings.classTraits))
+        guard result.acted else {
+            Feedback.announce(result.announcement ?? "You can't use that now.")
+            return
+        }
+        result.log.forEach { add($0) }
+        if result.playerDamage > 0 { Feedback.hit(heavy: result.playerDamage >= 30) }
+        var spoken = result.log.joined(separator: " ")
+        if result.fled {
+            finish(r, d, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring, spoken: spoken)
+            return
+        }
+        if result.enemyDied, let e = r.enemy {
+            run = r; dice = d
+            enemyDefeated(e, spoken: spoken)
+            return
+        }
+        if result.playerDied {
+            run = r; dice = d
+            playerDied(killedBy: r.enemy?.name ?? "the dungeon", spoken: spoken)
+            return
+        }
+        if result.enemyDamage != nil, let a = result.announcement { spoken += " " + a }
+        finish(r, d, phase: .fighting, spoken: spoken)
+    }
+
+    func pickSkill(_ effect: String) {
+        var r = run
+        guard let s = Skills.pick(&r, effect) else { return }
+        run = r
+        persist()
+        add("✨ You unlocked \(s.name). \(s.desc)")
+        Feedback.announce("You unlocked \(s.name). \(s.desc)")
     }
 
     // MARK: Items

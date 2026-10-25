@@ -602,3 +602,155 @@ final class GameContentTests: XCTestCase {
         XCTAssertTrue(early.isDisjoint(with: deep))
     }
 }
+
+final class SkillTests: XCTestCase {
+    func newRun(_ cls: String, race: String = "Human") -> Run {
+        Run(character: PlayerCharacter(name: "S", cls: cls, race: race, prof: "Thief",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+    }
+    var dummy: Enemy { Enemy(name: "Dummy", icon: "", hp: 500, maxHp: 500, atk: 10...10, gold: 1...1) }
+
+    func testEveryClassStartsWithASkillFromItsOwnList() {
+        for c in GameData.classes {
+            var r = newRun(c.id)
+            var d = SeededDice(seed: 1)
+            Skills.start(&r, dice: &d)
+            XCTAssertEqual(r.unlockedSkills.count, 1, c.id)
+            XCTAssertNotNil(Skills.skill(r.unlockedSkills[0], cls: c.id), c.id)
+            XCTAssertEqual(r.skillPool.count, Skills.all(for: c.id).count - 1, c.id)
+        }
+        var w = newRun("Warrior")
+        var d = SeededDice(seed: 2)
+        Skills.start(&w, dice: &d)
+        XCTAssertEqual(w.unlockedSkills, ["shield-bash"])
+    }
+
+    func testOfferingAndPickingRemovesTheOthers() {
+        var r = newRun("Monk")
+        var d = SeededDice(seed: 3)
+        Skills.start(&r, dice: &d)
+        Skills.offer(&r, dice: &d)
+        XCTAssertEqual(r.skillChoices.count, 3)
+        let tiers = Set(r.skillChoices.compactMap { Skills.skill($0, cls: "Monk")?.tier })
+        XCTAssertEqual(tiers, ["common", "rare", "legendary"])
+        let pick = r.skillChoices[1]
+        let others = r.skillChoices.filter { $0 != pick }
+        Skills.pick(&r, pick)
+        XCTAssertTrue(r.unlockedSkills.contains(pick))
+        XCTAssertTrue(r.skillChoices.isEmpty)
+        for o in others { XCTAssertFalse(r.skillPool.contains(o)) }
+    }
+
+    func testDamageSkillThenCounter() {
+        var r = newRun("Warrior")
+        r.unlockedSkills = ["shield-bash"]
+        Combat.begin(&r, against: dummy)
+        var d = LoadedDice(rolls: [10, 10])
+        let res = Skills.use(&r, "shield-bash", dice: &d)
+        XCTAssertEqual(res.playerDamage, 9)          // round(10 × 0.9)
+        XCTAssertEqual(r.sp, 12)                     // 20 − 8
+        XCTAssertEqual(r.totalDef, 6)                // 3 + 3 this fight
+        XCTAssertNotNil(res.enemyDamage)
+    }
+
+    func testFreeSkillsSkipTheCounterAndStunsBlockIt() {
+        var r = newRun("Paladin")
+        r.unlockedSkills = ["lay-on-hands"]
+        r.hp = 50
+        Combat.begin(&r, against: dummy)
+        var d = LoadedDice(rolls: [6])
+        let heal = Skills.use(&r, "lay-on-hands", dice: &d)
+        XCTAssertEqual(r.hp, 85)
+        XCTAssertNil(heal.enemyDamage)
+
+        var n = newRun("Naturalist")
+        n.unlockedSkills = ["entangle"]
+        Combat.begin(&n, against: dummy)
+        var d2 = LoadedDice(rolls: [10])
+        XCTAssertNil(Skills.use(&n, "entangle", dice: &d2).enemyDamage)
+        XCTAssertEqual(n.hp, n.maxHp)
+    }
+
+    func testNotEnoughSPDoesNothing() {
+        var r = newRun("Warrior")
+        r.unlockedSkills = ["indomitable"]
+        Combat.begin(&r, against: dummy)
+        var d = LoadedDice()
+        let res = Skills.use(&r, "indomitable", dice: &d)
+        XCTAssertFalse(res.acted)
+        XCTAssertEqual(r.sp, 20)
+    }
+
+    func testShieldsDodgesAndDamageOverTime() {
+        var r = newRun("Sorcerer")
+        r.unlockedSkills = ["mana-shield"]
+        Combat.begin(&r, against: dummy)
+        var d = LoadedDice(rolls: [10, 10, 10])
+        _ = Skills.use(&r, "mana-shield", dice: &d)
+        _ = Combat.takeTurn(&r, .defend, dice: &d)
+        // The hit is 10, defending blocks 4 (Sorcerer has no defense), the shield takes the other 6.
+        XCTAssertEqual(r.hp, 70)
+        XCTAssertEqual(r.fight.shield, 19)
+
+        var v = newRun("Naturalist")
+        v.unlockedSkills = ["venom"]
+        Combat.begin(&v, against: dummy)
+        var d2 = LoadedDice(rolls: [10, 10, 10])
+        _ = Skills.use(&v, "venom", dice: &d2)
+        _ = Combat.takeTurn(&v, .defend, dice: &d2)
+        XCTAssertEqual(v.enemy?.dotTurns, 2)
+        XCTAssertEqual(v.enemy?.hp, 500 - 5 - 8)     // defend hit (round(10 × 0.5)) + one venom tick
+    }
+
+    func testPreviouslyBrokenSkillsNowWork() {
+        var r = newRun("Elementalist")
+        r.unlockedSkills = ["fireball"]
+        Combat.begin(&r, against: dummy)
+        var d = LoadedDice(rolls: [10, 10], chances: [false])
+        XCTAssertEqual(Skills.use(&r, "fireball", dice: &d).playerDamage, 18)
+
+        var ranger = newRun("Ranger")
+        ranger.unlockedSkills = ["aimed-shot"]
+        Combat.begin(&ranger, against: dummy)
+        var d2 = LoadedDice(rolls: [10, 10])
+        XCTAssertEqual(Skills.use(&ranger, "aimed-shot", dice: &d2).playerDamage, 16)
+    }
+
+    func testResurrectionAndGnomeDiscount() {
+        var r = newRun("Paladin")
+        r.resurrection = true
+        r.lives = 1
+        r.hp = 0
+        XCTAssertEqual(Progression.handleDeath(&r), .resurrected)
+        XCTAssertEqual(r.hp, 65)
+        XCTAssertEqual(r.lives, 1)
+
+        let g = newRun("Warrior", race: "Gnome")
+        XCTAssertEqual(Skills.cost(Skills.skill("shield-bash", cls: "Warrior")!, g), 6)
+    }
+
+    /// Uses every skill of every class against a sturdy enemy, many times over,
+    /// to catch crashes, negative HP or stuck states.
+    func testEverySkillWorksInAFight() {
+        var dice = SeededDice(seed: 77)
+        for c in GameData.classes {
+            for s in Skills.all(for: c.id) {
+                for _ in 0..<5 {
+                    var r = newRun(c.id)
+                    r.sp = 200; r.maxSp = 200; r.gold = 50; r.kills = 4
+                    r.unlockedSkills = Skills.all(for: c.id).map(\.effect)
+                    r.lastSkill = "\(Skills.all(for: c.id)[0].effect)"
+                    Combat.begin(&r, against: Enemy(name: "Golem", icon: "", hp: 300, maxHp: 300, atk: 5...15, gold: 1...1))
+                    _ = Combat.takeTurn(&r, .attack, dice: &dice)
+                    let res = Skills.use(&r, s.effect, dice: &dice)
+                    XCTAssertTrue(res.acted, "\(c.id)/\(s.effect)")
+                    XCTAssertGreaterThanOrEqual(r.hp, 0, "\(c.id)/\(s.effect)")
+                    XCTAssertLessThanOrEqual(r.hp, r.maxHp, "\(c.id)/\(s.effect)")
+                    if let e = r.enemy { XCTAssertGreaterThanOrEqual(e.hp, 0) }
+                    // A few more turns with effects active
+                    for _ in 0..<4 where r.inCombat { _ = Combat.takeTurn(&r, .attack, dice: &dice) }
+                }
+            }
+        }
+    }
+}

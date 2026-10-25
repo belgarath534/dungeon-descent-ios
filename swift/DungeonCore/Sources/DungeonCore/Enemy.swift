@@ -60,6 +60,11 @@ public struct Enemy: Codable, Equatable, Sendable {
     public var phaseMsg3: String? = nil
     /// Turns left of a Curse Potion halving its attack.
     public var cursedTurns = 0
+    /// Turns the enemy loses (stuns, sleep, frozen).
+    public var stunTurns = 0
+    /// Damage over time on the enemy (poison, bleeding, burning).
+    public var dotDamage = 0
+    public var dotTurns = 0
     public var isDead: Bool { hp <= 0 }
 
     /// Attack range this turn, halved while cursed.

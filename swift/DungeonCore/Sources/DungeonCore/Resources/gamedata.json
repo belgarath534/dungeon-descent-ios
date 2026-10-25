@@ -6695,5 +6695,2933 @@
     "msg": "Void Pull! 18 damage. Something is missing from you."
    }
   ]
+ },
+ "classSkills": {
+  "Warrior": [
+   {
+    "name": "Shield Bash",
+    "icon": "🛡️",
+    "desc": "Slam your shield, dealing damage and reducing enemy next attack.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "shield-bash"
+   },
+   {
+    "name": "War Cry",
+    "icon": "📣",
+    "desc": "Battle cry empowers next attack for 2x damage.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "war-cry"
+   },
+   {
+    "name": "Iron Stance",
+    "icon": "🦵",
+    "desc": "Plant your feet — gain +4 defense for 2 turns.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "iron-stance"
+   },
+   {
+    "name": "Taunt",
+    "icon": "😤",
+    "desc": "Force the enemy to attack recklessly — their next hit deals half damage.",
+    "spCost": 7,
+    "tier": "common",
+    "effect": "taunt"
+   },
+   {
+    "name": "Weapon Throw",
+    "icon": "🗡️",
+    "desc": "Throw your weapon for a ranged strike dealing 1.2x damage.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "weapon-throw"
+   },
+   {
+    "name": "Last Stand",
+    "icon": "💢",
+    "desc": "Below 30% HP, unleash a devastating strike for 3x damage.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "last-stand"
+   },
+   {
+    "name": "Battle Hardened",
+    "icon": "⚔️",
+    "desc": "Permanently gain +3 max HP this run.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "battle-hardened"
+   },
+   {
+    "name": "Overwhelm",
+    "icon": "🌊",
+    "desc": "Strike twice — each hit deals 0.8x damage.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "overwhelm"
+   },
+   {
+    "name": "Fortify",
+    "icon": "🏰",
+    "desc": "Reduce all incoming damage by 35% for 3 turns.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "fortify"
+   },
+   {
+    "name": "Execute",
+    "icon": "⚡",
+    "desc": "Enemy below 25% HP? Execute for guaranteed critical hit.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "execute"
+   },
+   {
+    "name": "Unstoppable",
+    "icon": "🔥",
+    "desc": "For 2 turns, cannot be killed below 1 HP.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "unstoppable"
+   },
+   {
+    "name": "Warlord",
+    "icon": "👑",
+    "desc": "Every kill this combat restores 10 HP and 3 SP.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "warlord"
+   },
+   {
+    "name": "Titan Smash",
+    "icon": "💥",
+    "desc": "Massive strike dealing 4x damage but costs 15 HP.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "titan-smash"
+   },
+   {
+    "name": "Battlecry",
+    "icon": "🦁",
+    "desc": "Doubles your attack for the rest of combat.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "battlecry"
+   },
+   {
+    "name": "Indomitable",
+    "icon": "🛡️",
+    "desc": "Fully restore HP once per combat.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "indomitable"
+   }
+  ],
+  "Monk": [
+   {
+    "name": "Swift Strike",
+    "icon": "⚡",
+    "desc": "Strike twice in rapid succession for full damage each hit.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "swift-strike"
+   },
+   {
+    "name": "Inner Focus",
+    "icon": "🧘",
+    "desc": "Center yourself, restoring 15 HP and 10 SP.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "inner-focus"
+   },
+   {
+    "name": "Wind Step",
+    "icon": "💨",
+    "desc": "Dodge the next enemy attack completely.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "wind-step"
+   },
+   {
+    "name": "Ki Pulse",
+    "icon": "✨",
+    "desc": "Release inner energy dealing 1.5x damage, ignores armor.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "ki-pulse"
+   },
+   {
+    "name": "Meditate",
+    "icon": "🌸",
+    "desc": "Restore 8 SP and heal 10 HP.",
+    "spCost": 5,
+    "tier": "common",
+    "effect": "meditate"
+   },
+   {
+    "name": "Pressure Point",
+    "icon": "👊",
+    "desc": "Strike a vital point, ignoring all enemy defense.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "pressure-point"
+   },
+   {
+    "name": "Iron Body",
+    "icon": "💪",
+    "desc": "Harden your body — +5 defense permanently this run.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "iron-body"
+   },
+   {
+    "name": "Thousand Cuts",
+    "icon": "🗡️",
+    "desc": "Strike 4 times for 0.5x damage each hit.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "thousand-cuts"
+   },
+   {
+    "name": "Spirit Shield",
+    "icon": "🔵",
+    "desc": "Create a shield that absorbs 30 damage.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "spirit-shield"
+   },
+   {
+    "name": "Zen Strike",
+    "icon": "☯️",
+    "desc": "Your next 3 attacks cannot miss.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "zen-strike"
+   },
+   {
+    "name": "Transcendence",
+    "icon": "🌟",
+    "desc": "Enter a state of perfect focus — double all damage for 2 turns.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "transcendence"
+   },
+   {
+    "name": "Soul Surge",
+    "icon": "💫",
+    "desc": "Unleash your full inner power for 3.5x damage.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "soul-surge"
+   },
+   {
+    "name": "One With All",
+    "icon": "🌊",
+    "desc": "Restore all SP and heal 25 HP.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "one-with-all"
+   },
+   {
+    "name": "Iron Fist",
+    "icon": "🥊",
+    "desc": "Your fists tear through armor — deal 2.5x damage.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "iron-fist"
+   },
+   {
+    "name": "Enlightenment",
+    "icon": "☀️",
+    "desc": "Permanently increase max SP by 10 this run.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "enlightenment"
+   }
+  ],
+  "Assassin": [
+   {
+    "name": "Backstab",
+    "icon": "🗡️",
+    "desc": "Strike from shadows for 3x damage, 35% miss chance.",
+    "spCost": 12,
+    "tier": "common",
+    "effect": "backstab"
+   },
+   {
+    "name": "Smoke Bomb",
+    "icon": "💨",
+    "desc": "Vanish in smoke. Guaranteed escape from combat.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "smoke-bomb"
+   },
+   {
+    "name": "Poison Blade",
+    "icon": "🐍",
+    "desc": "Coat your blade — next hit applies 3-turn poison.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "poison-blade"
+   },
+   {
+    "name": "Shadowstep",
+    "icon": "🌑",
+    "desc": "Phase through the enemy — your next attack cannot miss.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "shadowstep"
+   },
+   {
+    "name": "Cheap Shot",
+    "icon": "🎯",
+    "desc": "Strike a weak point — enemy skips their next turn.",
+    "spCost": 11,
+    "tier": "common",
+    "effect": "cheap-shot"
+   },
+   {
+    "name": "Marked Kill",
+    "icon": "🎯",
+    "desc": "Mark your target — next attack guaranteed critical.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "marked-kill"
+   },
+   {
+    "name": "Shadow Clone",
+    "icon": "👥",
+    "desc": "Create a shadow — doubles your next attack.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "shadow-clone"
+   },
+   {
+    "name": "Death Mark",
+    "icon": "💀",
+    "desc": "Enemy takes 50% more damage for 3 turns.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "death-mark"
+   },
+   {
+    "name": "Serrated Blade",
+    "icon": "🗡️",
+    "desc": "Your attacks cause bleeding — 5 damage per turn for 4 turns.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "serrated-blade"
+   },
+   {
+    "name": "Ambush",
+    "icon": "🌒",
+    "desc": "Double damage if enemy is above 75% HP.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "ambush"
+   },
+   {
+    "name": "Assassinate",
+    "icon": "☠️",
+    "desc": "Instant kill if enemy is below 20% HP.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "assassinate"
+   },
+   {
+    "name": "Shadow Form",
+    "icon": "🕷️",
+    "desc": "Become untargetable — enemy misses for 2 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "shadow-form"
+   },
+   {
+    "name": "Fan of Knives",
+    "icon": "🗡️",
+    "desc": "Unleash 5 rapid strikes for 0.6x damage each.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "fan-of-knives"
+   },
+   {
+    "name": "Lethal Tempo",
+    "icon": "⚡",
+    "desc": "Each consecutive attack this combat deals 15% more damage.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "lethal-tempo"
+   },
+   {
+    "name": "Death Sentence",
+    "icon": "💀",
+    "desc": "Your next attack deals damage equal to 40% of enemy max HP.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "death-sentence"
+   }
+  ],
+  "Paladin": [
+   {
+    "name": "Holy Strike",
+    "icon": "✨",
+    "desc": "Channel divine power — strike for damage and heal 20 HP.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "holy-strike"
+   },
+   {
+    "name": "Divine Shield",
+    "icon": "🔮",
+    "desc": "Block ALL incoming damage this turn.",
+    "spCost": 12,
+    "tier": "common",
+    "effect": "divine-shield"
+   },
+   {
+    "name": "Consecrate",
+    "icon": "✝️",
+    "desc": "Blessed ground — reduce all incoming damage by 20% for 3 turns.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "consecrate"
+   },
+   {
+    "name": "Lay on Hands",
+    "icon": "🤲",
+    "desc": "Touch of healing — restore 35 HP instantly.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "lay-on-hands"
+   },
+   {
+    "name": "Holy Light",
+    "icon": "💛",
+    "desc": "Blind the enemy — their next 2 attacks deal half damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "holy-light"
+   },
+   {
+    "name": "Smite",
+    "icon": "⚡",
+    "desc": "Call down divine wrath for massive holy damage.",
+    "spCost": 18,
+    "tier": "rare",
+    "effect": "smite"
+   },
+   {
+    "name": "Aura of Faith",
+    "icon": "😇",
+    "desc": "Permanent aura — restore 5 HP at the start of each turn.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "aura-of-faith"
+   },
+   {
+    "name": "Sacred Blade",
+    "icon": "⚔️",
+    "desc": "Bless your weapon — deal 2x damage for 3 attacks.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "sacred-blade"
+   },
+   {
+    "name": "Holy Nova",
+    "icon": "💥",
+    "desc": "Release holy energy — deals 1.5x damage and heals you for half.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "holy-nova"
+   },
+   {
+    "name": "Judgment",
+    "icon": "⚖️",
+    "desc": "Judge the enemy — deal damage equal to their defense value times 5.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "judgment"
+   },
+   {
+    "name": "Resurrection",
+    "icon": "💖",
+    "desc": "Return from death once per run with 50% HP.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "resurrection"
+   },
+   {
+    "name": "Archangel",
+    "icon": "👼",
+    "desc": "Transform briefly — triple attack and defense for 2 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "archangel"
+   },
+   {
+    "name": "Divine Wrath",
+    "icon": "☀️",
+    "desc": "Unleash all divine power — 5x damage but ends all SP.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "divine-wrath"
+   },
+   {
+    "name": "Sanctuary",
+    "icon": "🛡️",
+    "desc": "Cannot take more than 10 damage per hit for 3 turns.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "sanctuary"
+   },
+   {
+    "name": "Holy Crusade",
+    "icon": "⚔️",
+    "desc": "Each holy attack this combat heals you for 15 HP.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "holy-crusade"
+   }
+  ],
+  "Naturalist": [
+   {
+    "name": "Entangle",
+    "icon": "🌿",
+    "desc": "Roots enemy — they skip their next counterattack.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "entangle"
+   },
+   {
+    "name": "Venom",
+    "icon": "🐍",
+    "desc": "Apply poison — 8 damage per turn for 3 turns.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "venom"
+   },
+   {
+    "name": "Pack Bond",
+    "icon": "🐺",
+    "desc": "Call a wolf ally — attacks with you this turn for bonus damage.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "pack-bond"
+   },
+   {
+    "name": "Nature Mend",
+    "icon": "🍃",
+    "desc": "Draw power from nature — heal 20 HP.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "nature-mend"
+   },
+   {
+    "name": "Camouflage",
+    "icon": "🌳",
+    "desc": "Blend with surroundings — enemy has 40% miss chance next turn.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "camouflage"
+   },
+   {
+    "name": "Call of Wild",
+    "icon": "🐺",
+    "desc": "Summon a spirit beast to attack for 2x your base attack.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "call-wild"
+   },
+   {
+    "name": "Thorns",
+    "icon": "🌵",
+    "desc": "Surround yourself with thorns — reflect 30% of damage received.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "thorns"
+   },
+   {
+    "name": "Plague",
+    "icon": "🦠",
+    "desc": "Infect the enemy — they lose 10 HP per turn for 4 turns.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "plague"
+   },
+   {
+    "name": "Predator",
+    "icon": "🐆",
+    "desc": "Strike with animal fury — 2.5x damage.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "predator"
+   },
+   {
+    "name": "Swarm",
+    "icon": "🐝",
+    "desc": "Unleash a swarm — enemy cannot act for 1 turn.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "swarm"
+   },
+   {
+    "name": "Ancient Grove",
+    "icon": "🌲",
+    "desc": "Summon ancient power — heal 40 HP and deal 2x damage.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "ancient-grove"
+   },
+   {
+    "name": "Apex Predator",
+    "icon": "🦁",
+    "desc": "Channel apex predator energy — 4x damage.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "apex-predator"
+   },
+   {
+    "name": "Plague Lord",
+    "icon": "☣️",
+    "desc": "Infect with lethal plague — 20 damage per turn for 5 turns.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "plague-lord"
+   },
+   {
+    "name": "Nature Wrath",
+    "icon": "🌪️",
+    "desc": "Summon a storm of nature — 3x damage ignoring all defenses.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "nature-wrath"
+   },
+   {
+    "name": "One With Nature",
+    "icon": "🌍",
+    "desc": "Become one with the dungeon — restore all HP.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "one-nature"
+   }
+  ],
+  "Sorcerer": [
+   {
+    "name": "Arcane Bolt",
+    "icon": "🔮",
+    "desc": "Fire a bolt of arcane energy bypassing defense.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "arcane-bolt"
+   },
+   {
+    "name": "Mana Shield",
+    "icon": "💙",
+    "desc": "Convert 10 SP into a barrier absorbing 25 damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "mana-shield"
+   },
+   {
+    "name": "Frost Bolt",
+    "icon": "❄️",
+    "desc": "Freeze the enemy — they deal 30% less damage next turn.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "frost-bolt"
+   },
+   {
+    "name": "Arcane Surge",
+    "icon": "⚡",
+    "desc": "Overcharge your magic — 1.6x damage but costs 5 HP.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "arcane-surge"
+   },
+   {
+    "name": "Mana Tap",
+    "icon": "🔵",
+    "desc": "Draw from the arcane — restore 12 SP.",
+    "spCost": 5,
+    "tier": "common",
+    "effect": "mana-tap"
+   },
+   {
+    "name": "Obliterate",
+    "icon": "💥",
+    "desc": "Channel all remaining SP into a blast — damage scales with SP.",
+    "spCost": 20,
+    "tier": "rare",
+    "effect": "obliterate"
+   },
+   {
+    "name": "Chain Lightning",
+    "icon": "⚡",
+    "desc": "Lightning bounces — deal 1.5x damage and stun 1 turn.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "chain-lightning"
+   },
+   {
+    "name": "Arcane Armor",
+    "icon": "🔷",
+    "desc": "Crystallize magical armor — absorb up to 40 damage.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "arcane-armor"
+   },
+   {
+    "name": "Gravity Well",
+    "icon": "🌑",
+    "desc": "Trap the enemy — they cannot deal critical hits for 3 turns.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "gravity-well"
+   },
+   {
+    "name": "Spell Weave",
+    "icon": "🌀",
+    "desc": "Weave two spells — deal 1.3x damage twice.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "spell-weave"
+   },
+   {
+    "name": "Singularity",
+    "icon": "🌌",
+    "desc": "Create a singularity — deals damage equal to 50% enemy max HP.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "singularity"
+   },
+   {
+    "name": "Time Stop",
+    "icon": "⏱️",
+    "desc": "Stop time briefly — attack 3 times before enemy can react.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "time-stop"
+   },
+   {
+    "name": "Void Blast",
+    "icon": "🕳️",
+    "desc": "Channel the void — 5x damage, costs 20 HP.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "void-blast"
+   },
+   {
+    "name": "Arcane Nova",
+    "icon": "💫",
+    "desc": "Release nova of pure magic — deal 3x damage to enemy.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "arcane-nova"
+   },
+   {
+    "name": "Unlimited Power",
+    "icon": "⚡",
+    "desc": "Remove all SP limits — your next 3 skills cost 0 SP.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "unlimited-power"
+   }
+  ],
+  "Necromancer": [
+   {
+    "name": "Death Touch",
+    "icon": "💀",
+    "desc": "Touch of death — deal 1.4x damage and steal 5 SP from enemy.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "death-touch"
+   },
+   {
+    "name": "Raise Dead",
+    "icon": "🧟",
+    "desc": "Raise the last fallen enemy as a minion — attacks with you once.",
+    "spCost": 12,
+    "tier": "common",
+    "effect": "raise-dead"
+   },
+   {
+    "name": "Life Drain",
+    "icon": "🩸",
+    "desc": "Drain life — deal damage and heal for half the amount.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "life-drain"
+   },
+   {
+    "name": "Bone Shield",
+    "icon": "🦴",
+    "desc": "Form a bone shield — absorb up to 20 damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "bone-shield"
+   },
+   {
+    "name": "Curse",
+    "icon": "😈",
+    "desc": "Curse the enemy — they take 15% more damage for 3 turns.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "curse"
+   },
+   {
+    "name": "Soul Harvest",
+    "icon": "💜",
+    "desc": "Harvest enemy soul — deal 1.8x damage and restore 8 SP.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "soul-harvest"
+   },
+   {
+    "name": "Corpse Explosion",
+    "icon": "💥",
+    "desc": "Explode a fallen enemy — deal massive damage based on their max HP.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "corpse-explosion"
+   },
+   {
+    "name": "Undying",
+    "icon": "☠️",
+    "desc": "Become undying briefly — cannot die for 1 turn.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "undying"
+   },
+   {
+    "name": "Necrotic Bolt",
+    "icon": "🌑",
+    "desc": "Fire decaying magic — ignores all defense.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "necrotic-bolt"
+   },
+   {
+    "name": "Plague Carrier",
+    "icon": "🦠",
+    "desc": "Infect with dark plague — 12 damage per turn for 4 turns.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "plague-carrier"
+   },
+   {
+    "name": "Army of Dead",
+    "icon": "💀",
+    "desc": "Raise an army — attack 4 times for 0.7x damage each.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "army-of-dead"
+   },
+   {
+    "name": "Death Pact",
+    "icon": "🩸",
+    "desc": "Sacrifice 30 HP to deal 5x damage.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "death-pact"
+   },
+   {
+    "name": "Soul Storm",
+    "icon": "🌪️",
+    "desc": "Unleash every harvested soul — massive AoE dealing 3x damage.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "soul-storm"
+   },
+   {
+    "name": "Lich Form",
+    "icon": "👑",
+    "desc": "Transform into a Lich — double all stats for 3 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "lich-form"
+   },
+   {
+    "name": "Death Coil",
+    "icon": "☠️",
+    "desc": "Coil of death energy — deals 2x damage and heals 25 HP.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "death-coil"
+   }
+  ],
+  "Berserker": [
+   {
+    "name": "Reckless Strike",
+    "icon": "🪓",
+    "desc": "Wild swing dealing 1.6x damage but taking 5 HP.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "reckless-strike"
+   },
+   {
+    "name": "Rage",
+    "icon": "😡",
+    "desc": "Enter rage — +4 attack for next 3 turns.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "rage"
+   },
+   {
+    "name": "War Stomp",
+    "icon": "🦶",
+    "desc": "Stomp the ground — enemy staggers, skips next turn.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "war-stomp"
+   },
+   {
+    "name": "Blood Frenzy",
+    "icon": "🩸",
+    "desc": "Frenzy attack — deal 1.3x damage for each 10% HP missing.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "blood-frenzy"
+   },
+   {
+    "name": "Headbutt",
+    "icon": "💥",
+    "desc": "Savage headbutt — 1.4x damage and reduces enemy defense.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "headbutt"
+   },
+   {
+    "name": "Rampage",
+    "icon": "🔥",
+    "desc": "Go on a rampage — attack twice with growing power.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "rampage"
+   },
+   {
+    "name": "Undying Rage",
+    "icon": "💢",
+    "desc": "Below 30% HP? Deal 3x damage — pure fury.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "undying-rage"
+   },
+   {
+    "name": "Savage Blow",
+    "icon": "🪓",
+    "desc": "Devastating blow — 2.5x damage, ignores 50% of defense.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "savage-blow"
+   },
+   {
+    "name": "War Cry",
+    "icon": "📣",
+    "desc": "Terrifying cry — reduces enemy damage by 30% for 2 turns.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "berserker-cry"
+   },
+   {
+    "name": "Relentless",
+    "icon": "⚡",
+    "desc": "Cannot be slowed — guaranteed to move first this turn.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "relentless"
+   },
+   {
+    "name": "Wrath Incarnate",
+    "icon": "☄️",
+    "desc": "Become pure wrath — 4x damage at the cost of all defense.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "wrath-incarnate"
+   },
+   {
+    "name": "Death Wish",
+    "icon": "💀",
+    "desc": "Risk it all — deal damage equal to missing HP times 3.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "death-wish"
+   },
+   {
+    "name": "Berserker God",
+    "icon": "👑",
+    "desc": "Ascend to berserker godhood — immune to damage for 1 turn then 4x.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "berserker-god"
+   },
+   {
+    "name": "Endless Rage",
+    "icon": "🔥",
+    "desc": "Rage never ends — double attack speed for 3 turns.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "endless-rage"
+   },
+   {
+    "name": "Final Blow",
+    "icon": "💥",
+    "desc": "One strike with everything — deal 6x damage but end combat SP.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "final-blow"
+   }
+  ],
+  "Bard": [
+   {
+    "name": "Battle Hymn",
+    "icon": "🎵",
+    "desc": "Inspiring song — your next attack deals 1.5x damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "battle-hymn"
+   },
+   {
+    "name": "Dissonance",
+    "icon": "🎶",
+    "desc": "Jarring chord — enemy loses 3 defense this turn.",
+    "spCost": 7,
+    "tier": "common",
+    "effect": "dissonance"
+   },
+   {
+    "name": "Soothing Melody",
+    "icon": "🎼",
+    "desc": "Calming song — restore 18 HP.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "soothing-melody"
+   },
+   {
+    "name": "Taunt Song",
+    "icon": "😏",
+    "desc": "Mockery melody — enemy attacks recklessly, 25% miss chance.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "taunt-song"
+   },
+   {
+    "name": "Rhythmic Strike",
+    "icon": "🥁",
+    "desc": "Strike in rhythm — deals 1.2x damage and restores 5 SP.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "rhythmic-strike"
+   },
+   {
+    "name": "War Ballad",
+    "icon": "⚔️",
+    "desc": "Epic war song — your attack is doubled for 2 turns.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "war-ballad"
+   },
+   {
+    "name": "Lullaby",
+    "icon": "😴",
+    "desc": "Put the enemy to sleep — they miss their next turn.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "lullaby"
+   },
+   {
+    "name": "Discord",
+    "icon": "💔",
+    "desc": "Chaos chord — confuse enemy to deal 1.8x damage to itself.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "discord"
+   },
+   {
+    "name": "Heroic Verse",
+    "icon": "📜",
+    "desc": "Sing of heroes — permanently gain +5 max HP this run.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "heroic-verse"
+   },
+   {
+    "name": "Anthem",
+    "icon": "🎺",
+    "desc": "Rally anthem — restore 15 HP and 10 SP.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "anthem"
+   },
+   {
+    "name": "Song of Doom",
+    "icon": "💀",
+    "desc": "Death song — enemy takes 3x damage from your next 2 attacks.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "song-of-doom"
+   },
+   {
+    "name": "Requiem",
+    "icon": "🌹",
+    "desc": "Funeral song — deal damage equal to 45% of enemy max HP.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "requiem"
+   },
+   {
+    "name": "Epic Tale",
+    "icon": "📖",
+    "desc": "Tell your epic — every kill this run permanently boosts your ATK.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "epic-tale"
+   },
+   {
+    "name": "Maestro",
+    "icon": "🎭",
+    "desc": "Become the maestro — all skills cost 0 SP for 3 turns.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "maestro"
+   },
+   {
+    "name": "Grand Finale",
+    "icon": "🎆",
+    "desc": "End with everything — deal 5x damage.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "grand-finale"
+   }
+  ],
+  "Alchemist": [
+   {
+    "name": "Acid Flask",
+    "icon": "🧪",
+    "desc": "Throw acid — deals 1.4x damage and reduces enemy defense.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "acid-flask"
+   },
+   {
+    "name": "Healing Brew",
+    "icon": "💊",
+    "desc": "Craft a quick healing brew — restore 25 HP.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "healing-brew"
+   },
+   {
+    "name": "Smoke Grenade",
+    "icon": "💨",
+    "desc": "Throw smoke — enemy has 35% miss chance next turn.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "smoke-grenade"
+   },
+   {
+    "name": "Transmute",
+    "icon": "⚗️",
+    "desc": "Transmute 10 gold into raw power — deal 1.5x damage.",
+    "spCost": 7,
+    "tier": "common",
+    "effect": "transmute"
+   },
+   {
+    "name": "Sticky Bomb",
+    "icon": "💣",
+    "desc": "Plant a bomb — explodes next turn for 1.8x damage.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "sticky-bomb"
+   },
+   {
+    "name": "Explosive Flask",
+    "icon": "💥",
+    "desc": "Large explosion — 2x damage ignoring defense.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "explosive-flask"
+   },
+   {
+    "name": "Philosopher Stone",
+    "icon": "💎",
+    "desc": "Touch of the stone — convert HP into SP at 2:1 ratio.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "philosopher-stone"
+   },
+   {
+    "name": "Elixir of Rage",
+    "icon": "🔴",
+    "desc": "Drink battle elixir — triple damage but take 10 HP this turn.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "elixir-of-rage"
+   },
+   {
+    "name": "Corrosion",
+    "icon": "☣️",
+    "desc": "Corrode armor — enemy loses ALL defense for 3 turns.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "corrosion"
+   },
+   {
+    "name": "Chain Reaction",
+    "icon": "⚡",
+    "desc": "Trigger chain — deal 1.2x damage 3 times.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "chain-reaction"
+   },
+   {
+    "name": "Nova Bomb",
+    "icon": "🌟",
+    "desc": "Detonation — deals damage equal to 60% of enemy max HP.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "nova-bomb"
+   },
+   {
+    "name": "Grand Transmutation",
+    "icon": "✨",
+    "desc": "Transmute everything — deal 4x damage.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "grand-transmute"
+   },
+   {
+    "name": "Immortality Serum",
+    "icon": "💉",
+    "desc": "Inject serum — cannot die for 2 turns.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "immortality-serum"
+   },
+   {
+    "name": "Plague Bomb",
+    "icon": "🦠",
+    "desc": "Devastating plague — 15 damage per turn for 6 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "plague-bomb"
+   },
+   {
+    "name": "Unstable Formula",
+    "icon": "☢️",
+    "desc": "Experimental formula — massive random damage (1x to 6x).",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "unstable-formula"
+   }
+  ],
+  "BloodKnight": [
+   {
+    "name": "Blood Strike",
+    "icon": "🩸",
+    "desc": "Sacrifice 8 HP to deal 2x damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "blood-strike"
+   },
+   {
+    "name": "Crimson Slash",
+    "icon": "⚔️",
+    "desc": "Slash dealing 1.4x damage, heals 5 HP on hit.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "crimson-slash"
+   },
+   {
+    "name": "Life Tap",
+    "icon": "❤️",
+    "desc": "Tap into life force — convert 15 HP into 15 SP.",
+    "spCost": 5,
+    "tier": "common",
+    "effect": "life-tap"
+   },
+   {
+    "name": "Blood Bath",
+    "icon": "💉",
+    "desc": "Bathed in enemy blood — gain +3 attack for this combat.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "blood-bath"
+   },
+   {
+    "name": "Hemorrhage",
+    "icon": "🩸",
+    "desc": "Cause enemy to bleed — 8 damage per turn for 3 turns.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "hemorrhage"
+   },
+   {
+    "name": "Sanguine Fury",
+    "icon": "🔥",
+    "desc": "Fury of blood — sacrifice 20 HP for 3x damage.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "sanguine-fury"
+   },
+   {
+    "name": "Blood Armor",
+    "icon": "🛡️",
+    "desc": "Crystallize blood into armor — absorb 35 damage.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "blood-armor"
+   },
+   {
+    "name": "Crimson Nova",
+    "icon": "💥",
+    "desc": "Blood nova explosion — 2x damage to enemy.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "crimson-nova"
+   },
+   {
+    "name": "Vein Tap",
+    "icon": "💜",
+    "desc": "Drain enemy veins — steal 15 HP from enemy.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "vein-tap"
+   },
+   {
+    "name": "Exsanguinate",
+    "icon": "☠️",
+    "desc": "Drain all blood — deal 1.8x damage, enemy bleeds for 3 turns.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "exsanguinate"
+   },
+   {
+    "name": "Blood God",
+    "icon": "👑",
+    "desc": "Become blood incarnate — 5x damage, heal for half dealt.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "blood-god"
+   },
+   {
+    "name": "Crimson Storm",
+    "icon": "🌪️",
+    "desc": "Storm of crimson — attack 5 times for 0.8x damage.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "crimson-storm"
+   },
+   {
+    "name": "Exanguination",
+    "icon": "💀",
+    "desc": "Ultimate drain — deal damage equal to 35% of enemy max HP.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "exanguination"
+   },
+   {
+    "name": "Blood Pact",
+    "icon": "🩸",
+    "desc": "Dark pact — sacrifice 40 HP to deal 6x damage.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "blood-pact"
+   },
+   {
+    "name": "Immortal Blood",
+    "icon": "❤️",
+    "desc": "Your blood is eternal — regenerate 10 HP per turn for 4 turns.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "immortal-blood"
+   }
+  ],
+  "Druid": [
+   {
+    "name": "Nature Bolt",
+    "icon": "🍃",
+    "desc": "Hurl a bolt of nature energy — 1.3x damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "nature-bolt"
+   },
+   {
+    "name": "Regrowth",
+    "icon": "🌱",
+    "desc": "Channel nature — heal 20 HP.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "regrowth"
+   },
+   {
+    "name": "Thorn Whip",
+    "icon": "🌿",
+    "desc": "Thorned vine — 1.4x damage and reduces enemy attack.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "thorn-whip"
+   },
+   {
+    "name": "Beast Form",
+    "icon": "🐻",
+    "desc": "Shift to beast — gain +4 attack and +2 defense for 2 turns.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "beast-form"
+   },
+   {
+    "name": "Rejuvenate",
+    "icon": "💚",
+    "desc": "Renewing touch — restore 8 SP and 12 HP.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "rejuvenate"
+   },
+   {
+    "name": "Moonfire",
+    "icon": "🌙",
+    "desc": "Lunar beam — 2x damage ignoring 30% of defense.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "moonfire"
+   },
+   {
+    "name": "Spirit Form",
+    "icon": "👻",
+    "desc": "Shift to spirit — heal 30 HP, become untargetable next turn.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "spirit-form"
+   },
+   {
+    "name": "Barkskin",
+    "icon": "🌲",
+    "desc": "Harden skin into bark — reduce all damage by 40% for 2 turns.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "barkskin"
+   },
+   {
+    "name": "Sunfire",
+    "icon": "☀️",
+    "desc": "Solar strike — 1.8x damage and burns for 8/turn for 3 turns.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "sunfire"
+   },
+   {
+    "name": "Wild Growth",
+    "icon": "🌺",
+    "desc": "Wild regeneration — heal 10 HP per turn for 3 turns.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "wild-growth"
+   },
+   {
+    "name": "Avatar of Nature",
+    "icon": "🌍",
+    "desc": "Become nature — triple attack and massive defense for 2 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "avatar-nature"
+   },
+   {
+    "name": "Ancient Wrath",
+    "icon": "⚡",
+    "desc": "Ancient fury — 4x damage ignoring all defense.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "ancient-wrath"
+   },
+   {
+    "name": "Balance",
+    "icon": "☯️",
+    "desc": "Restore perfect balance — fully heal and restore all SP.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "balance"
+   },
+   {
+    "name": "Stormcall",
+    "icon": "🌩️",
+    "desc": "Call a storm — deals 3x damage and stuns for 1 turn.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "stormcall"
+   },
+   {
+    "name": "Verdant Tide",
+    "icon": "🌊",
+    "desc": "Tidal wave of nature — 2.5x damage plus 20 HP heal.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "verdant-tide"
+   }
+  ],
+  "Warlock": [
+   {
+    "name": "Dark Pact",
+    "icon": "🧿",
+    "desc": "Strike a dark deal — 1.5x damage, drain 10 HP from self.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "dark-pact"
+   },
+   {
+    "name": "Soul Rend",
+    "icon": "💜",
+    "desc": "Tear at the soul — 1.4x damage, steal 8 HP from enemy.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "soul-rend"
+   },
+   {
+    "name": "Hex",
+    "icon": "🔮",
+    "desc": "Curse the enemy — they take 50% more damage for 2 turns.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "hex"
+   },
+   {
+    "name": "Void Grasp",
+    "icon": "⬛",
+    "desc": "Void tendrils — 1.3x damage and reduce enemy attack.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "void-grasp"
+   },
+   {
+    "name": "Life Leech",
+    "icon": "🩸",
+    "desc": "Drain life — deal 1.2x damage and heal for half dealt.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "life-leech"
+   },
+   {
+    "name": "Shadow Bolt",
+    "icon": "🌑",
+    "desc": "A bolt of pure shadow — 2x damage ignoring defense.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "shadow-bolt"
+   },
+   {
+    "name": "Demonic Surge",
+    "icon": "😈",
+    "desc": "Channel demonic power — 1.8x damage and +3 attack this combat.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "demonic-surge"
+   },
+   {
+    "name": "Soul Cage",
+    "icon": "🔒",
+    "desc": "Trap the enemy soul — they cannot act for 1 turn.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "soul-cage"
+   },
+   {
+    "name": "Eldritch Blast",
+    "icon": "💥",
+    "desc": "Eldritch energy — 2.5x damage to a random target.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "eldritch-blast"
+   },
+   {
+    "name": "Pact of Blood",
+    "icon": "💉",
+    "desc": "Blood pact — sacrifice 25 HP for 3x damage.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "pact-of-blood"
+   },
+   {
+    "name": "Void Collapse",
+    "icon": "🕳️",
+    "desc": "Collapse reality — 4x damage ignoring all defense.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "void-collapse"
+   },
+   {
+    "name": "Soul Storm",
+    "icon": "⚡",
+    "desc": "Unleash all stolen souls — damage scales with kills this run.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "warlock-soul-storm"
+   },
+   {
+    "name": "Elder Invocation",
+    "icon": "👁️",
+    "desc": "Invoke the Elder — triple stats for 2 turns.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "elder-invocation"
+   },
+   {
+    "name": "Oblivion",
+    "icon": "🌀",
+    "desc": "Oblivion — deal damage equal to 70% of enemy max HP.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "oblivion"
+   },
+   {
+    "name": "Final Pact",
+    "icon": "💀",
+    "desc": "The last pact — sacrifice all HP above 1 for massive damage.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "final-pact"
+   }
+  ],
+  "DeathKnight": [
+   {
+    "name": "Death Strike",
+    "icon": "💀",
+    "desc": "Strike of death — 1.5x damage, heals 5 HP.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "death-strike"
+   },
+   {
+    "name": "Bone Shield",
+    "icon": "🦴",
+    "desc": "Shield of bones — +5 DEF for 3 turns.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "bone-shield"
+   },
+   {
+    "name": "Death Grip",
+    "icon": "🤚",
+    "desc": "Grip of death — enemy cannot flee or use skills for 1 turn.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "death-grip"
+   },
+   {
+    "name": "Plague",
+    "icon": "🦠",
+    "desc": "Infect the enemy — 8 damage per turn for 4 turns.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "plague"
+   },
+   {
+    "name": "Unholy Ground",
+    "icon": "☠️",
+    "desc": "Unholy ground — enemy takes 10 extra damage each turn they attack.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "unholy-ground"
+   },
+   {
+    "name": "Death Coil",
+    "icon": "🌀",
+    "desc": "Coil of death — 2x damage or heal 25 HP. Your choice.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "death-coil"
+   },
+   {
+    "name": "Army of Dead",
+    "icon": "💀",
+    "desc": "Raise the dead — 3 undead attack for 12 each.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "army-of-dead"
+   },
+   {
+    "name": "Unholy Frenzy",
+    "icon": "😤",
+    "desc": "+6 ATK for 3 turns. You also take 5 extra damage per hit.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "unholy-frenzy"
+   },
+   {
+    "name": "Corpse Explosion",
+    "icon": "💥",
+    "desc": "Explode a fallen enemy — 2.5x damage to current enemy.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "corpse-explosion"
+   },
+   {
+    "name": "Death Pact",
+    "icon": "⚔️",
+    "desc": "Pact with death — sacrifice 20 HP for +10 ATK permanently this run.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "death-pact"
+   },
+   {
+    "name": "Apocalypse",
+    "icon": "☢️",
+    "desc": "Apocalyptic strike — 4x damage, all enemies take 20 additional damage.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "apocalypse"
+   },
+   {
+    "name": "Lichform",
+    "icon": "💀",
+    "desc": "Become a lich — immune to death once per run.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "lichform"
+   },
+   {
+    "name": "Soul Harvest",
+    "icon": "🌀",
+    "desc": "Harvest all fallen souls — heal 50 HP.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "soul-harvest-dk"
+   },
+   {
+    "name": "Death and Decay",
+    "icon": "☠️",
+    "desc": "Decay everything — enemy loses 5 ATK and DEF each turn for 5 turns.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "death-and-decay"
+   },
+   {
+    "name": "The Lich King",
+    "icon": "👑",
+    "desc": "Become the Lich King — +15 ATK, +15 DEF, immune to debuffs.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "the-lich-king"
+   }
+  ],
+  "Ranger": [
+   {
+    "name": "Aimed Shot",
+    "icon": "🎯",
+    "desc": "Precise shot — 1.6x damage, cannot miss.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "aimed-shot"
+   },
+   {
+    "name": "Rapid Fire",
+    "icon": "🏹",
+    "desc": "Loose two arrows — two hits of 0.9x each.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "rapid-fire"
+   },
+   {
+    "name": "Hunter's Mark",
+    "icon": "🎯",
+    "desc": "Mark the prey — next attack deals double damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "mark-kill"
+   },
+   {
+    "name": "Shadow Step",
+    "icon": "🌑",
+    "desc": "Step into shadow — guaranteed flee this turn.",
+    "spCost": 7,
+    "tier": "common",
+    "effect": "shadow-step"
+   },
+   {
+    "name": "Barbed Arrow",
+    "icon": "🩸",
+    "desc": "Barbed tip — enemy bleeds for 3 turns, 5 damage each.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "venom-strike"
+   },
+   {
+    "name": "Eagle Eye",
+    "icon": "👁️",
+    "desc": "Eagle sight — next 2 attacks deal 1.5x damage.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "eagle-eye"
+   },
+   {
+    "name": "Pin Down",
+    "icon": "📌",
+    "desc": "Pin to the wall — enemy cannot attack next turn.",
+    "spCost": 11,
+    "tier": "rare",
+    "effect": "wing-gust"
+   },
+   {
+    "name": "Rain of Arrows",
+    "icon": "🌧️",
+    "desc": "Arrow storm — 3 rapid strikes of 0.8x each.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "dragon-rush"
+   },
+   {
+    "name": "Predator",
+    "icon": "🐆",
+    "desc": "Hunt mode — +50% damage for 2 turns.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "draconic-surge"
+   },
+   {
+    "name": "True Strike",
+    "icon": "⚡",
+    "desc": "Unblockable — ignores all defense.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "fire-breath"
+   },
+   {
+    "name": "Killshot",
+    "icon": "💀",
+    "desc": "Lethal shot — 4x damage, triple on marked targets.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "dragonstrike"
+   },
+   {
+    "name": "Phantom Volley",
+    "icon": "👻",
+    "desc": "Ghost arrows — 5x damage that bypasses all resistances.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "apocalyptic-fire"
+   },
+   {
+    "name": "Death from Afar",
+    "icon": "☠️",
+    "desc": "Legendary precision — 60% of enemy max HP as damage.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "world-ender"
+   },
+   {
+    "name": "Hunter's End",
+    "icon": "🏆",
+    "desc": "The hunt ends — triple attack and crit guaranteed.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "true-dragon-form"
+   }
+  ],
+  "Sentinel": [
+   {
+    "name": "Shield Wall",
+    "icon": "🛡️",
+    "desc": "Raise shield — absorb all damage for 1 turn.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "scale-shield"
+   },
+   {
+    "name": "Taunt",
+    "icon": "📢",
+    "desc": "Taunt enemy — they must attack you, take 20% less damage.",
+    "spCost": 7,
+    "tier": "common",
+    "effect": "taunt"
+   },
+   {
+    "name": "Iron Stance",
+    "icon": "⚓",
+    "desc": "Plant feet — cannot flee, take 40% less damage 2 turns.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "fortify"
+   },
+   {
+    "name": "Counter",
+    "icon": "↩️",
+    "desc": "Counter stance — reflect 30% of next hit back.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "molten-scales"
+   },
+   {
+    "name": "War Cry",
+    "icon": "😤",
+    "desc": "Intimidating roar — enemy attack reduced by half 2 turns.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "dragon-fear"
+   },
+   {
+    "name": "Bulwark",
+    "icon": "🏰",
+    "desc": "Become a fortress — +8 defense for 3 turns.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "barkskin"
+   },
+   {
+    "name": "Retribution",
+    "icon": "⚖️",
+    "desc": "Righteous payback — deal damage equal to damage taken.",
+    "spCost": 11,
+    "tier": "rare",
+    "effect": "retribution"
+   },
+   {
+    "name": "Unbreakable",
+    "icon": "💎",
+    "desc": "Cannot be reduced below 1 HP this turn.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "dk-undying"
+   },
+   {
+    "name": "Earthquake",
+    "icon": "🌍",
+    "desc": "Slam the ground — 2x damage to all enemies.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "death-nova"
+   },
+   {
+    "name": "Sanctuary",
+    "icon": "✨",
+    "desc": "Divine protection — cap all damage at 10 for 3 turns.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "sanctuary"
+   },
+   {
+    "name": "Last Stand",
+    "icon": "🔱",
+    "desc": "Near death power — triple damage when below 25% HP.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "apocalypse"
+   },
+   {
+    "name": "Siege Breaker",
+    "icon": "💥",
+    "desc": "Legendary slam — 4x damage, ignores defense entirely.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "dark-ascension"
+   },
+   {
+    "name": "Eternal Guard",
+    "icon": "♾️",
+    "desc": "Become immortal for 3 turns — all damage negated.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "eternal-darkness"
+   },
+   {
+    "name": "Colossus",
+    "icon": "🗿",
+    "desc": "Ascend to colossus — double HP and triple defense 2 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "death-decay"
+   }
+  ],
+  "Cleric": [
+   {
+    "name": "Holy Light",
+    "icon": "✨",
+    "desc": "Healing light — restore 25 HP.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "cleric-holy-light"
+   },
+   {
+    "name": "Sacred Strike",
+    "icon": "✝️",
+    "desc": "Strike with holy power — 1.3x damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "sacred-strike"
+   },
+   {
+    "name": "Bless",
+    "icon": "🙏",
+    "desc": "Divine blessing — +3 defense and +2 attack this combat.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "bless"
+   },
+   {
+    "name": "Smite Evil",
+    "icon": "⚡",
+    "desc": "Smite the enemy — 1.5x damage.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "cleric-smite"
+   },
+   {
+    "name": "Prayer",
+    "icon": "📿",
+    "desc": "Pray for guidance — restore 8 SP and 12 HP.",
+    "spCost": 0,
+    "tier": "common",
+    "effect": "prayer"
+   },
+   {
+    "name": "Divine Barrier",
+    "icon": "🔵",
+    "desc": "Holy barrier — absorb up to 40 damage.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "divine-barrier"
+   },
+   {
+    "name": "Consecrate Ground",
+    "icon": "💛",
+    "desc": "Consecrate — reduce incoming damage 30% for 3 turns.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "consecrate-ground"
+   },
+   {
+    "name": "Holy Word",
+    "icon": "📖",
+    "desc": "Holy word of power — 2x damage and stun 1 turn.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "holy-word"
+   },
+   {
+    "name": "Mass Heal",
+    "icon": "💚",
+    "desc": "Massive healing — restore 45 HP.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "mass-heal"
+   },
+   {
+    "name": "Angel Guard",
+    "icon": "👼",
+    "desc": "Angel guardian — cannot take more than 8 damage per hit for 3 turns.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "angel-guard"
+   },
+   {
+    "name": "Miracle",
+    "icon": "🌟",
+    "desc": "Divine miracle — fully restore HP.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "miracle"
+   },
+   {
+    "name": "Holy Crusade",
+    "icon": "⚔️",
+    "desc": "Crusade — each attack heals 20 HP for 3 turns.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "cleric-crusade"
+   },
+   {
+    "name": "Divine Judgment",
+    "icon": "⚖️",
+    "desc": "Judgment — damage based on 5x your defense stat.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "divine-judgment"
+   },
+   {
+    "name": "Resurrection",
+    "icon": "⬆️",
+    "desc": "Prepare resurrection — survive death once with 50% HP.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "cleric-resurrection"
+   },
+   {
+    "name": "Wrath of God",
+    "icon": "☄️",
+    "desc": "Wrath of God — 5x damage, consume all SP.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "wrath-of-god"
+   }
+  ],
+  "Wizard": [
+   {
+    "name": "Arcane Bolt",
+    "icon": "⚡",
+    "desc": "Fire a bolt of arcane energy — 1.4x damage.",
+    "spCost": 7,
+    "tier": "common",
+    "effect": "arcane-bolt"
+   },
+   {
+    "name": "Arcane Study",
+    "icon": "📖",
+    "desc": "Study the enemy — reveal exact HP and attack range.",
+    "spCost": 5,
+    "tier": "common",
+    "effect": "arcane-study"
+   },
+   {
+    "name": "Mana Shield",
+    "icon": "🔵",
+    "desc": "Arcane barrier — absorb up to 35 damage.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "mana-shield"
+   },
+   {
+    "name": "Spell Surge",
+    "icon": "🌀",
+    "desc": "Surge of power — next spell costs 0 SP.",
+    "spCost": 0,
+    "tier": "common",
+    "effect": "spell-surge"
+   },
+   {
+    "name": "Frost Nova",
+    "icon": "❄️",
+    "desc": "Freeze the enemy — skip their next attack.",
+    "spCost": 11,
+    "tier": "common",
+    "effect": "frost-nova"
+   },
+   {
+    "name": "Arcane Missiles",
+    "icon": "✨",
+    "desc": "Fire 3 missiles — each deals 0.6x damage.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "arcane-missiles"
+   },
+   {
+    "name": "Time Warp",
+    "icon": "⏳",
+    "desc": "Warp time — take two actions this turn.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "time-warp"
+   },
+   {
+    "name": "Polymorph",
+    "icon": "🐸",
+    "desc": "Polymorph the enemy — halve their attack for 3 turns.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "polymorph"
+   },
+   {
+    "name": "Mana Drain",
+    "icon": "💧",
+    "desc": "Drain arcane energy — restore 20 SP from the enemy.",
+    "spCost": 0,
+    "tier": "rare",
+    "effect": "mana-drain"
+   },
+   {
+    "name": "Arcane Explosion",
+    "icon": "💥",
+    "desc": "Arcane explosion — 2.5x damage to all this turn.",
+    "spCost": 18,
+    "tier": "rare",
+    "effect": "arcane-explosion"
+   },
+   {
+    "name": "Spellsteal",
+    "icon": "🧿",
+    "desc": "Steal the enemy's power — +5 attack permanently this run.",
+    "spCost": 14,
+    "tier": "legendary",
+    "effect": "spellsteal"
+   },
+   {
+    "name": "Arcane Singularity",
+    "icon": "🌑",
+    "desc": "Singularity — deal damage equal to enemy's current HP / 2.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "arcane-singularity"
+   },
+   {
+    "name": "Time Stop",
+    "icon": "⏱️",
+    "desc": "Stop time — skip 2 enemy turns completely.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "time-stop"
+   },
+   {
+    "name": "Meteor",
+    "icon": "☄️",
+    "desc": "Call a meteor — 4x damage. Enemies below 30% HP are instantly defeated.",
+    "spCost": 24,
+    "tier": "legendary",
+    "effect": "meteor"
+   },
+   {
+    "name": "Arcane Mastery",
+    "icon": "🔮",
+    "desc": "Mastery — all spells deal +50% damage for rest of run.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "arcane-mastery"
+   }
+  ],
+  "Elementalist": [
+   {
+    "name": "Fireball",
+    "icon": "🔥",
+    "desc": "Hurl a fireball — 1.8x damage. 20% chance to burn for 3 turns.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "fireball"
+   },
+   {
+    "name": "Ice Shard",
+    "icon": "❄️",
+    "desc": "Shard of ice — slows enemy, reducing their next attack by 30%.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "ice-shard"
+   },
+   {
+    "name": "Lightning Bolt",
+    "icon": "⚡",
+    "desc": "Strike with lightning — 1.5x damage, always crits on wet enemies.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "lightning-bolt"
+   },
+   {
+    "name": "Flame Shield",
+    "icon": "🛡️",
+    "desc": "Surround yourself in fire — attackers take 10 fire damage per hit.",
+    "spCost": 11,
+    "tier": "common",
+    "effect": "flame-shield"
+   },
+   {
+    "name": "Frost Armor",
+    "icon": "🧊",
+    "desc": "+6 DEF for 3 turns. Enemies who hit you slow down.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "frost-armor"
+   },
+   {
+    "name": "Chain Lightning",
+    "icon": "⛈️",
+    "desc": "Lightning chains — hits enemy for 1.5x then bounces for 0.8x.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "chain-lightning"
+   },
+   {
+    "name": "Meteor Shower",
+    "icon": "🌠",
+    "desc": "Rain meteors — 3 hits of 0.8x damage each.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "meteor-shower"
+   },
+   {
+    "name": "Blizzard",
+    "icon": "🌨️",
+    "desc": "Blizzard — enemy misses their next 2 attacks.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "blizzard"
+   },
+   {
+    "name": "Inferno",
+    "icon": "🌋",
+    "desc": "Continuous fire damage — 15 per turn for 3 turns.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "inferno"
+   },
+   {
+    "name": "Storm Call",
+    "icon": "🌩️",
+    "desc": "Call a storm — +40% damage to all attacks for 2 turns.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "storm-call"
+   },
+   {
+    "name": "Elemental Burst",
+    "icon": "💥",
+    "desc": "All elements at once — 3x damage, random elemental effect.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "elemental-burst"
+   },
+   {
+    "name": "Absolute Zero",
+    "icon": "🧊",
+    "desc": "Freeze enemy completely — they cannot act for 3 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "absolute-zero"
+   },
+   {
+    "name": "Solar Flare",
+    "icon": "☀️",
+    "desc": "Blind the enemy — they miss for 3 turns and take 2x damage.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "solar-flare"
+   },
+   {
+    "name": "Thunderstrike",
+    "icon": "⚡",
+    "desc": "Ultimate lightning — 4x damage, ignores all defense.",
+    "spCost": 24,
+    "tier": "legendary",
+    "effect": "thunderstrike"
+   },
+   {
+    "name": "Elemental Mastery",
+    "icon": "🔮",
+    "desc": "All elemental attacks deal double damage for rest of run.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "elemental-mastery"
+   }
+  ],
+  "VoidWalker": [
+   {
+    "name": "Void Strike",
+    "icon": "🌑",
+    "desc": "Strike from the void — 1.6x damage, ignores half of enemy defense.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "void-strike"
+   },
+   {
+    "name": "Phase",
+    "icon": "👻",
+    "desc": "Phase through next attack — take zero damage.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "phase"
+   },
+   {
+    "name": "Void Pulse",
+    "icon": "💜",
+    "desc": "Pulse of void energy — 1.4x damage, heals you for 10 HP.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "void-pulse"
+   },
+   {
+    "name": "Dark Step",
+    "icon": "🌒",
+    "desc": "Step into darkness — next attack deals 2x damage from stealth.",
+    "spCost": 11,
+    "tier": "common",
+    "effect": "dark-step"
+   },
+   {
+    "name": "Null Field",
+    "icon": "⚫",
+    "desc": "Nullify enemy — their defense drops to 0 for 2 turns.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "null-field"
+   },
+   {
+    "name": "Void Drain",
+    "icon": "🌀",
+    "desc": "Drain void energy — steal 8 SP from enemy, deal 1.2x damage.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "void-drain"
+   },
+   {
+    "name": "Shadow Meld",
+    "icon": "🌑",
+    "desc": "Meld with shadows — heal 20 HP and restore 10 SP.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "shadow-meld"
+   },
+   {
+    "name": "Void Rupture",
+    "icon": "💥",
+    "desc": "Tear reality — 2.5x damage, enemy loses 5 ATK permanently.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "void-rupture"
+   },
+   {
+    "name": "Entropy",
+    "icon": "♾️",
+    "desc": "Entropy hits — each attack this turn deals 10% more than the last.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "entropy"
+   },
+   {
+    "name": "Oblivion",
+    "icon": "🕳️",
+    "desc": "Send enemy to oblivion briefly — skip their next 2 turns.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "oblivion"
+   },
+   {
+    "name": "Void Collapse",
+    "icon": "🌑",
+    "desc": "Collapse reality — 4x damage, takes 20% back as self damage.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "void-collapse"
+   },
+   {
+    "name": "Phase Form",
+    "icon": "👁️",
+    "desc": "Full phase — immune to all damage for 2 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "phase-form"
+   },
+   {
+    "name": "Annihilation",
+    "icon": "💀",
+    "desc": "Annihilate — deal damage equal to enemy missing HP.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "annihilation"
+   },
+   {
+    "name": "Void Mastery",
+    "icon": "🌑",
+    "desc": "+3 ATK and +3 DEF permanently. Void empowers your every action.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "void-mastery"
+   },
+   {
+    "name": "The Void",
+    "icon": "⚫",
+    "desc": "Become the void — all attacks deal double for rest of run.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "the-void"
+   }
+  ],
+  "ShadowMage": [
+   {
+    "name": "Shadow Bolt",
+    "icon": "🖤",
+    "desc": "Bolt of shadow — 1.5x damage, 25% chance to curse enemy.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "shadow-bolt"
+   },
+   {
+    "name": "Darkness",
+    "icon": "🌑",
+    "desc": "Plunge into darkness — enemy misses next attack.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "darkness"
+   },
+   {
+    "name": "Shadow Touch",
+    "icon": "👆",
+    "desc": "Draining touch — deal 1.2x damage and steal 5 HP.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "shadow-touch"
+   },
+   {
+    "name": "Nightmare",
+    "icon": "😱",
+    "desc": "Inflict nightmare — enemy attacks randomly, hitting itself 50% of time.",
+    "spCost": 11,
+    "tier": "common",
+    "effect": "nightmare"
+   },
+   {
+    "name": "Shroud",
+    "icon": "🌫️",
+    "desc": "Shroud yourself — reduce all incoming damage by 30% for 3 turns.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "shroud"
+   },
+   {
+    "name": "Soul Rend",
+    "icon": "💔",
+    "desc": "Tear the soul — 2x damage, reduces enemy max HP by 10.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "soul-rend"
+   },
+   {
+    "name": "Shadow Clone",
+    "icon": "👥",
+    "desc": "Create a shadow — your next attack copies for 60% damage.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "shadow-clone-sm"
+   },
+   {
+    "name": "Dark Pact",
+    "icon": "📜",
+    "desc": "Pact with darkness — +5 ATK permanently, -5 max HP.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "dark-pact"
+   },
+   {
+    "name": "Cursed Touch",
+    "icon": "☠️",
+    "desc": "Curse the enemy — they take 15% more damage from all sources.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "cursed-touch"
+   },
+   {
+    "name": "Shadow World",
+    "icon": "🌑",
+    "desc": "Enter shadow world — immune to damage for 1 turn, attack twice after.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "shadow-world"
+   },
+   {
+    "name": "Shadow Storm",
+    "icon": "⛈️",
+    "desc": "Storm of shadows — 5 hits at 0.7x damage each.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "shadow-storm"
+   },
+   {
+    "name": "Dark Ascension",
+    "icon": "👑",
+    "desc": "+10 ATK and +10 DEF from shadow energy. Ascend beyond limit.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "dark-ascension"
+   },
+   {
+    "name": "Void Shadow",
+    "icon": "🌑",
+    "desc": "Shadow meets void — 3.5x damage, enemy cursed for rest of combat.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "void-shadow"
+   },
+   {
+    "name": "Night Terror",
+    "icon": "😈",
+    "desc": "Ultimate fear — enemy attack drops to 0 for 3 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "night-terror"
+   },
+   {
+    "name": "Shadow Mastery",
+    "icon": "🖤",
+    "desc": "All shadow attacks deal triple damage for rest of run.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "shadow-mastery"
+   }
+  ],
+  "TimeMage": [
+   {
+    "name": "Slow",
+    "icon": "🐌",
+    "desc": "Slow time around enemy — their attack speed halved for 3 turns.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "slow"
+   },
+   {
+    "name": "Haste",
+    "icon": "⚡",
+    "desc": "Accelerate yourself — attack twice this turn.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "haste"
+   },
+   {
+    "name": "Rewind",
+    "icon": "↩️",
+    "desc": "Rewind the last hit — undo 15 damage taken this combat.",
+    "spCost": 11,
+    "tier": "common",
+    "effect": "rewind"
+   },
+   {
+    "name": "Time Skip",
+    "icon": "⏭️",
+    "desc": "Skip ahead — enemy skips their next turn.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "time-skip"
+   },
+   {
+    "name": "Temporal Sight",
+    "icon": "👁️",
+    "desc": "See the future — preview enemy next attack and take 50% less damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "temporal-sight"
+   },
+   {
+    "name": "Time Lock",
+    "icon": "🔒",
+    "desc": "Lock the enemy in time — frozen for 2 turns, take 1.5x damage.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "time-lock"
+   },
+   {
+    "name": "Chronostrike",
+    "icon": "⏱️",
+    "desc": "Strike across time — hit twice, each at full damage.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "chronostrike"
+   },
+   {
+    "name": "Paradox",
+    "icon": "🔄",
+    "desc": "Create a paradox — your next attack happens twice simultaneously.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "paradox"
+   },
+   {
+    "name": "Age",
+    "icon": "💀",
+    "desc": "Age the enemy — reduce their ATK and DEF by 5 permanently.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "age"
+   },
+   {
+    "name": "Time Surge",
+    "icon": "⚡",
+    "desc": "Surge through time — +4 ATK for 4 turns.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "time-surge"
+   },
+   {
+    "name": "Time Stop",
+    "icon": "⏹️",
+    "desc": "Stop time completely — 2 free attacks, enemy cannot respond.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "time-stop-tm"
+   },
+   {
+    "name": "Temporal Rift",
+    "icon": "🌀",
+    "desc": "Rift in time — 3.5x damage, enemy sent back to start of combat.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "temporal-rift"
+   },
+   {
+    "name": "Chrono Mastery",
+    "icon": "⏰",
+    "desc": "You exist outside time — immune to all debuffs for rest of run.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "chrono-mastery"
+   },
+   {
+    "name": "Rewrite",
+    "icon": "✏️",
+    "desc": "Rewrite the fight — reset enemy HP to what it was 3 turns ago.",
+    "spCost": 24,
+    "tier": "legendary",
+    "effect": "rewrite"
+   },
+   {
+    "name": "Eternity",
+    "icon": "♾️",
+    "desc": "Enter eternity — all cooldowns reset, all SP restored.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "eternity"
+   }
+  ],
+  "Shaman": [
+   {
+    "name": "Earthshake",
+    "icon": "🌍",
+    "desc": "Shake the earth — 1.6x damage, 40% chance to stun for 1 turn.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "earthshake-sk"
+   },
+   {
+    "name": "Spirit Heal",
+    "icon": "💚",
+    "desc": "Call on spirits — heal 25 HP.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "spirit-heal"
+   },
+   {
+    "name": "Nature's Wrath",
+    "icon": "🌿",
+    "desc": "Wrath of nature — 1.4x damage, 30% chance to poison for 3 turns.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "natures-wrath"
+   },
+   {
+    "name": "Stone Skin",
+    "icon": "🪨",
+    "desc": "Skin of stone — +8 DEF for 3 turns.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "stone-skin"
+   },
+   {
+    "name": "Spirit Call",
+    "icon": "👻",
+    "desc": "Call a spirit — deals 20 damage automatically this turn.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "spirit-call"
+   },
+   {
+    "name": "Totemic Strike",
+    "icon": "🪃",
+    "desc": "Strike with totem power — 2x damage, heals 10 HP.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "totemic-strike"
+   },
+   {
+    "name": "Earthquake",
+    "icon": "🌋",
+    "desc": "Full earthquake — 2.5x damage, enemy stunned for 1 turn.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "earthquake"
+   },
+   {
+    "name": "Ancestral Guard",
+    "icon": "🛡️",
+    "desc": "Ancestors protect — reduce all damage taken by 50% for 2 turns.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "ancestral-guard"
+   },
+   {
+    "name": "Storm Totem",
+    "icon": "⛈️",
+    "desc": "Totem deals 12 damage to enemy every turn for 3 turns.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "storm-totem"
+   },
+   {
+    "name": "Earth Barrier",
+    "icon": "🪨",
+    "desc": "Earthen wall — absorb up to 40 damage.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "earth-barrier"
+   },
+   {
+    "name": "Volcano",
+    "icon": "🌋",
+    "desc": "Summon a volcano — 4x damage, burns for 10 per turn for 3 turns.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "volcano"
+   },
+   {
+    "name": "World Shatter",
+    "icon": "💥",
+    "desc": "Shatter the world — 3.5x damage to all enemies this floor.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "world-shatter"
+   },
+   {
+    "name": "Spirit Army",
+    "icon": "👻",
+    "desc": "Army of spirits — 5 spirits each deal 15 damage this turn.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "spirit-army"
+   },
+   {
+    "name": "Earth Mastery",
+    "icon": "🌍",
+    "desc": "Earth obeys — all earth skills deal double. +5 DEF permanently.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "earth-mastery"
+   },
+   {
+    "name": "Gaia's Wrath",
+    "icon": "🌏",
+    "desc": "Gaia herself attacks — deals 5x damage. Once per run only.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "gaias-wrath"
+   }
+  ],
+  "Arcanist": [
+   {
+    "name": "Arcane Bolt",
+    "icon": "✨",
+    "desc": "Pure arcane energy — 1.5x damage, ignores all elemental resistance.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "arcane-bolt"
+   },
+   {
+    "name": "Mana Shield",
+    "icon": "🔵",
+    "desc": "Shield of pure magic — absorb up to 25 damage.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "mana-shield"
+   },
+   {
+    "name": "Arcane Pulse",
+    "icon": "💫",
+    "desc": "Pulse of arcane — 1.3x damage to enemy, restore 8 SP.",
+    "spCost": 7,
+    "tier": "common",
+    "effect": "arcane-pulse"
+   },
+   {
+    "name": "Spell Echo",
+    "icon": "🔄",
+    "desc": "Echo the last skill used — cast it again for free.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "spell-echo"
+   },
+   {
+    "name": "Arcane Eye",
+    "icon": "👁️",
+    "desc": "See all — reveal enemy stats, weakness, and next move.",
+    "spCost": 6,
+    "tier": "common",
+    "effect": "arcane-eye"
+   },
+   {
+    "name": "Arcane Storm",
+    "icon": "⛈️",
+    "desc": "Storm of pure magic — 2x damage, 30% chance to stun.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "arcane-storm"
+   },
+   {
+    "name": "Spell Steal",
+    "icon": "🧿",
+    "desc": "Steal arcane power — copy enemy ability for 1 turn.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "spell-steal-arc"
+   },
+   {
+    "name": "Arcane Surge",
+    "icon": "💥",
+    "desc": "Surge of power — next spell costs 0 SP and deals +50% damage.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "arcane-surge"
+   },
+   {
+    "name": "Mana Burn",
+    "icon": "🔥",
+    "desc": "Burn enemy mana — deal damage equal to their SP.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "mana-burn"
+   },
+   {
+    "name": "Arcane Armor",
+    "icon": "🛡️",
+    "desc": "+10 DEF from arcane protection for 3 turns.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "arcane-armor"
+   },
+   {
+    "name": "Pure Destruction",
+    "icon": "💀",
+    "desc": "Pure arcane destruction — 4x damage, no class modifiers needed.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "pure-destruction"
+   },
+   {
+    "name": "Arcane Singularity",
+    "icon": "🌑",
+    "desc": "Singularity — deal damage = enemy current HP divided by 2.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "arc-singularity"
+   },
+   {
+    "name": "Spell Mastery",
+    "icon": "🔮",
+    "desc": "All spells cost half SP and deal +40% damage for rest of run.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "spell-mastery"
+   },
+   {
+    "name": "Arcane Overload",
+    "icon": "⚡",
+    "desc": "Overload — deal 5x damage, but lose 30 HP.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "arcane-overload"
+   },
+   {
+    "name": "Omnimancy",
+    "icon": "✨",
+    "desc": "Master all magic — randomly cast any spell effect for free each turn.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "omnimancy"
+   }
+  ]
+ },
+ "startingSkills": {
+  "Warrior": "shield-bash",
+  "Monk": "swift-strike",
+  "Assassin": "backstab",
+  "Paladin": "holy-strike",
+  "Naturalist": "entangle",
+  "Wizard": "arcane-bolt",
+  "Ranger": "aimed-shot",
+  "Necromancer": "raise-dead",
+  "Sorcerer": "fireball",
+  "Warlock": "eldritch-blast",
+  "Sentinel": "sentinel-strike",
+  "Dragonborn": "flame-breath"
  }
 }

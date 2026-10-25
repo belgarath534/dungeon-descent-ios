@@ -67,7 +67,19 @@ const dungeons = {
   'The Abyssal Deep':      'ABYSSAL_',
 };
 
-const out = { dungeons: {}, nightmareEnemies: enemies('NIGHTMARE_'), traps: plain(grab('TRAP_TYPES')) };
+// Starting skill per class, from initSkillPool().
+function startingSkills() {
+  const m = /var startingSkills = (\{[^}]*\})/.exec(src);
+  return m ? JSON.parse(m[1]) : {};
+}
+
+const out = {
+  dungeons: {},
+  nightmareEnemies: enemies('NIGHTMARE_'),
+  traps: plain(grab('TRAP_TYPES')),
+  classSkills: plain(grab('CLASS_SKILLS')),
+  startingSkills: startingSkills(),
+};
 const crypt = { loot: grab('LOOT'), shop: grab('SHOP_STOCK'), rooms: grab('ROOM_DESCS'), floors: grab('FLOOR_NAMES') };
 for (const [name, p] of Object.entries(dungeons)) {
   out.dungeons[name] = {

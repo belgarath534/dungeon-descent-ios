@@ -125,6 +125,8 @@ public enum Progression {
     public enum DeathOutcome: Equatable, Sendable {
         /// A Phoenix Feather burned instead; the fight goes on at 30% HP.
         case phoenix
+        /// A resurrection skill brought you back at 50% HP.
+        case resurrected
         /// Came back at 40% HP with this many lives left.
         case revived(livesLeft: Int)
         case runOver
@@ -134,6 +136,11 @@ public enum Progression {
     /// cheat-death items and skills are not ported yet.
     public static func handleDeath(_ run: inout Run) -> DeathOutcome {
         if Inventory.usePhoenixFeather(&run) { return .phoenix }
+        if run.resurrection {
+            run.resurrection = false
+            run.hp = jsRound(Double(run.maxHp) * 0.5)
+            return .resurrected
+        }
         run.lives = max(0, run.lives - 1)
         run.inCombat = false
         if run.lives <= 0 { return .runOver }

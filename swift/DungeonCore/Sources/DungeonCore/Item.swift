@@ -138,7 +138,7 @@ public enum ItemTables {
     /// stocks these until the rest (soul trap, mirror flask, rage tonic …) are ported.
     static let supportedTypes: Set<String> = [
         "potion", "elixir", "heal", "atk-potion", "def-potion", "luck-potion", "fire-potion",
-        "curse-potion", "swift-potion", "phoenix-feather", "weapon", "armor", "rune", "scroll", "ring", "gem",
+        "curse-potion", "swift-potion", "phoenix-feather", "weapon", "armor", "rune", "scroll", "ring", "gem", "sp-potion",
     ]
     static let supportedIds: [String: Set<String>] = [
         "rune": ["rune-strength", "rune-protection", "rune-speed", "rune-fortune", "rune-vitality"],

@@ -68,6 +68,25 @@ public struct Run: Codable, Sendable {
     public var poisonDamage = 0
     public var frozen = false
 
+    // Skills
+    public var unlockedSkills: [String] = []
+    public var skillPool: [String] = []
+    /// Skills offered at the last level-up, waiting for the player to pick one.
+    public var skillChoices: [String] = []
+    public var lastSkill: String? = nil
+    /// Next skills cost no SP (Unlimited Power, Maestro, Spell Surge).
+    public var freeSkills = 0
+    /// Extra damage on skills / on everything for the rest of the run (masteries).
+    public var skillDamageBonus = 0.0
+    public var allDamageBonus = 0.0
+    public var halfCostSkills = false
+    public var resurrection = false
+    public var debuffImmune = false
+    public var usedOncePerRun: [String] = []
+
+    /// Effects that only last for the current fight.
+    public var fight = FightEffects()
+
     // Room state
     public var searched = false
     public var firstSearchDone = false
@@ -88,11 +107,12 @@ public struct Run: Codable, Sendable {
 
     /// Everything added on top of the class's attack roll.
     public var totalAtkBonus: Int {
-        atkBonus + weaponBonus + tempAtk - (equippedArmor?.armorType == "heavy" ? 1 : 0)
+        atkBonus + weaponBonus + tempAtk + fight.atk + (fight.buffTurns > 0 ? fight.buffAtk : 0)
+            - (equippedArmor?.armorType == "heavy" ? 1 : 0)
     }
 
     /// Total defense, before the +4 for defending.
-    public var totalDef: Int { def + defBonus + armorDef + tempDef }
+    public var totalDef: Int { def + defBonus + armorDef + tempDef + fight.def + (fight.buffTurns > 0 ? fight.buffDef : 0) }
 
     public var hasFleeRing: Bool { inventory.contains { $0.effect == "flee" } }
 
@@ -139,4 +159,60 @@ public struct Run: Codable, Sendable {
             graveRobberLoot = true
         }
     }
+}
+
+/// Skill effects that last only for the current fight (reset when a new one starts).
+public struct FightEffects: Codable, Sendable {
+    /// Damage absorbed before HP (Mana Shield, Bone Shield …).
+    public var shield = 0
+    /// Enemy attacks dodged completely.
+    public var dodges = 0
+    /// Chance the enemy's next attack misses (Camouflage).
+    public var enemyMiss = 0.0
+    /// Incoming damage reduced by this share for some turns (Fortify, Barkskin …).
+    public var reduce = 0.0
+    public var reduceTurns = 0
+    /// No hit can do more than this for some turns (Sanctuary).
+    public var cap = 0
+    public var capTurns = 0
+    /// The enemy's next hits are multiplied by this (Holy Light, Taunt, Slow …).
+    public var soften = 1.0
+    public var softenHits = 0
+    /// The enemy takes this much more damage for some turns (Death Mark, Hex …).
+    public var vulnerable = 0.0
+    public var vulnerableTurns = 0
+    /// Your next attacks are multiplied by this (Sacred Blade, War Ballad …).
+    public var empower = 1.0
+    public var empowerCount = 0
+    public var unstoppableTurns = 0
+    public var regen = 0
+    public var regenTurns = 0
+    /// Share of damage taken reflected back (Thorns).
+    public var thorns = 0.0
+    public var thornsTurns = 0
+    /// Flat damage dealt back to the enemy each time it hits you (Flame Shield).
+    public var retaliate = 0
+    /// HP healed on each of your hits (Holy Crusade).
+    public var crusadeHeal = 0
+    public var crusadeTurns = 0
+    /// Chance the enemy hits itself instead (Nightmare).
+    public var confuse = 0.0
+    public var confuseTurns = 0
+    /// Bonuses until the fight ends, and timed ones.
+    public var atk = 0
+    public var def = 0
+    public var buffAtk = 0
+    public var buffDef = 0
+    public var buffTurns = 0
+    /// Bomb that goes off on the enemy's next turn.
+    public var stickyBomb = 0
+    public var lethalTempo = 0.0
+    public var warlord = false
+    /// The enemy's attack drops by this each turn (Death and Decay).
+    public var decay = 0
+    public var decayTurns = 0
+    public var damageTaken = 0
+    public var recentHits: [Int] = []
+
+    public init() {}
 }

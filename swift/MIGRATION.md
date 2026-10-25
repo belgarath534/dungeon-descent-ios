@@ -49,7 +49,8 @@ build there means the app doesn't compile; the log says why.
    loot rooms, searching and traps, potions, runes, scrolls, weapons and armor, the
    shop after every floor, descend or wander, leveling, lives and Phoenix Feathers,
    boss phases, victory and defeat. Runs are saved after every action and can be
-   continued. Next: special room events, class skills, elites, enemy abilities.
+   continued. Class skills: all 358, learned at level-ups.
+   Next: special room events, elites, enemy abilities, weapon rarities.
    Then import web saves.
 4. **Native services:** Sign in with Apple / Google through the Firebase iOS SDK,
    cloud save, StoreKit 2 purchases, Game Center, Core Haptics, audio, Live Activity,
@@ -76,7 +77,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Attack / heavy / defend / enemy counter | doFight | 🟡 base rules only |
 | Potions, runes, scrolls, Phoenix Feather | useItem | ✅ except the shop's more exotic brews (soul trap, mirror flask, rage tonic …) |
 | Weapons and armor, equipping | equipWeapon, equipArmor | 🟡 stats and equipping; rarity effects not yet |
-| Class skills, SP | CLASS SKILLS | ⬜ |
+| Class skills, SP | CLASS SKILLS, useSkill | ✅ all 358 skills of all 24 classes, skill choice at each level-up |
 | Lives, death, revive | handleDeath | 🟡 lives, 40% revive, Phoenix Feather, death log; hardcore and class cheat-deaths not yet |
 | XP, levels, level points | gainXP, LP_STATS | ✅ |
 | Kill gold | enemyDead | 🟡 base gold, Goblin, Grave Robber, luck |
@@ -118,4 +119,18 @@ Where an item's description and the web code disagree, Swift follows the descrip
   now kept until you're out of combat.
 - **Weapon attack bonus** differed between equipping mid-run (low end of the range)
   and starting a run (middle of the range). Swift always uses the middle.
+- **105 of the 333 skill effects did nothing** in the web version: no handler existed,
+  so they cost SP, dealt no damage and gave the enemy a free hit. This includes every
+  skill of the Elementalist, Void Walker, Shadow Mage, Time Mage, Shaman and Arcanist,
+  most of the Wizard's, the Ranger's Aimed Shot and the Death Knight's legendaries. In
+  Swift every skill does what its description says (`SkillTable` in `Skills.swift`).
+- **Starting skills:** the Sorcerer's was set to Fireball (an Elementalist skill) and the
+  Sentinel's to a skill that doesn't exist, so they started with none; 12 classes had no
+  starting skill at all. Every class now starts with one.
+- **Skill buffs described as "this combat" or "for N turns"** (Shield Bash, Iron
+  Stance, Rage, Beast Form …) were added to your stats for the rest of the run, so they
+  stacked without limit. They now last for the fight or the turns described.
+- **Shared skill names:** several classes share an effect name with different
+  descriptions (Bone Shield, Taunt, Arcane Bolt …) and the web version ran the same code
+  for all of them. Each class now gets its own version.
 

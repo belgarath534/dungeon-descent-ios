@@ -17,13 +17,15 @@ public struct TurnResult: Equatable, Sendable {
     public var playerDied = false
     /// Set when a boss moved to a new phase this turn (it skips its counter).
     public var bossPhaseMessage: String? = nil
+    /// False when a skill couldn't be used (not enough SP …); nothing happened.
+    public var acted = true
     public var log: [String] = []
     public var announcement: String? = nil
 }
 
-/// The fight loop from doFight(): attack, heavy strike, defend or flee, then
-/// the enemy's counter-attack. Skills, weapon rarity effects, spirits and the
-/// special enemies are not ported yet.
+/// The fight loop from doFight() and useSkill(): your action, then the enemy's
+/// turn. Weapon rarity effects, spirits and enemy special abilities are not
+/// ported yet.
 public enum Combat {
     public struct Options: Sendable {
         /// Accessibility setting "class traits" (on by default in the web version).
@@ -35,6 +37,7 @@ public enum Combat {
         run.enemy = enemy
         run.inCombat = true
         run.defending = false
+        run.fight = FightEffects()
         if enemy.isBoss { run.bossPhase = 1 }
     }
 
@@ -53,13 +56,27 @@ public enum Combat {
         return Enemy.spawnBoss(t, playerLevel: run.level, playerMaxAtk: run.atk.upperBound, ngPlusCount: ngCount(run))
     }
 
-    /// One full turn: the player's action, then the enemy's counter if it survived.
+    /// Your attack roll for this turn: class range plus every bonus.
+    static func attackRoll(_ run: Run, dice: inout some Dice) -> Int {
+        dice.roll(run.atk) + run.totalAtkBonus
+    }
+
+    /// Bonuses that apply to every hit you land: vulnerability and masteries.
+    static func scaleDamage(_ run: Run, _ dmg: Int, skill: Bool = false) -> Int {
+        guard dmg > 0 else { return 0 }
+        var m = 1 + run.allDamageBonus
+        if skill { m += run.skillDamageBonus }
+        if run.fight.vulnerableTurns > 0 { m += run.fight.vulnerable }
+        return jsRound(Double(dmg) * m)
+    }
+
+    /// One full turn: the player's action, then the enemy's turn if it survived.
     public static func takeTurn(_ run: inout Run, _ action: PlayerAction, dice: inout some Dice,
                                 options: Options = Options()) -> TurnResult {
-        guard run.inCombat, var e = run.enemy else { return TurnResult() }
+        guard run.inCombat, run.enemy != nil else { return TurnResult() }
         var r = TurnResult()
 
-        let baseAtk = dice.roll(run.atk) + run.totalAtkBonus
+        let baseAtk = attackRoll(run, dice: &dice)
         run.defending = false
 
         if run.frozen {
@@ -75,7 +92,9 @@ public enum Combat {
                     run.markedKill = false
                     r.log.append("Marked Kill activates — guaranteed critical!")
                 }
-                r.playerDamage = r.crit ? jsRound(Double(baseAtk) * 1.8) : baseAtk
+                var dmg = r.crit ? jsRound(Double(baseAtk) * 1.8) : baseAtk
+                dmg = empowered(&run, dmg, log: &r.log)
+                r.playerDamage = scaleDamage(run, dmg)
                 r.log.append(r.crit ? "CRITICAL HIT! You strike for \(r.playerDamage) damage!"
                                     : "You attack for \(r.playerDamage) damage.")
             case .heavy:
@@ -83,12 +102,13 @@ public enum Combat {
                     r.missed = true
                     r.log.append("Your heavy strike misses! The enemy sidesteps.")
                 } else {
-                    r.playerDamage = jsRound(Double(baseAtk) * 1.7)
+                    let dmg = empowered(&run, jsRound(Double(baseAtk) * 1.7), log: &r.log)
+                    r.playerDamage = scaleDamage(run, dmg)
                     r.log.append("Heavy strike lands for \(r.playerDamage) damage!")
                 }
             case .defend:
                 run.defending = true
-                r.playerDamage = jsRound(Double(baseAtk) * 0.5)
+                r.playerDamage = scaleDamage(run, jsRound(Double(baseAtk) * 0.5))
                 r.log.append("You defend, dealing \(r.playerDamage) and bracing for the counter.")
             case .flee:
                 let guaranteed = run.swiftTurns > 0 || run.runeSpeed
@@ -108,32 +128,74 @@ public enum Combat {
             }
         }
 
-        e.hp = max(0, e.hp - r.playerDamage)
+        dealDamage(&run, r.playerDamage, log: &r.log)
+        return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
+    }
+
+    /// Applies empowered-attack bonuses (Sacred Blade, War Ballad …) to a basic attack.
+    static func empowered(_ run: inout Run, _ dmg: Int, log: inout [String]) -> Int {
+        guard run.fight.empowerCount > 0 else { return dmg }
+        run.fight.empowerCount -= 1
+        return jsRound(Double(dmg) * run.fight.empower)
+    }
+
+    /// Damage to the enemy, plus healing from Holy Crusade.
+    static func dealDamage(_ run: inout Run, _ dmg: Int, log: inout [String]) {
+        guard dmg > 0, var e = run.enemy else { return }
+        e.hp = max(0, e.hp - dmg)
         run.enemy = e
-
-        if e.isDead {
-            r.enemyDied = true
-            run.inCombat = false
-            run.kills += 1
-            r.announcement = "\(e.name) defeated."
-            return r
+        if run.fight.crusadeTurns > 0 && run.fight.crusadeHeal > 0 {
+            run.hp = min(run.maxHp, run.hp + run.fight.crusadeHeal)
+            log.append("Holy Crusade heals \(run.fight.crusadeHeal) HP.")
         }
+    }
 
+    /// After your action: check for a kill, a boss phase change, then the enemy's turn.
+    static func finishTurn(_ run: inout Run, _ result: TurnResult, skipEnemy: Bool,
+                           dice: inout some Dice, options: Options) -> TurnResult {
+        var r = result
+        guard let e = run.enemy else { return r }
+        if e.isDead {
+            return killed(&run, r)
+        }
         if let msg = checkBossPhase(&run) {
             r.bossPhaseMessage = msg
             r.log.append(msg)
             r.announcement = msg
             return r
         }
+        if skipEnemy {
+            r.announcement = r.log.last
+            return r
+        }
 
-        let taken = enemyAttack(&run, dice: &dice, options: options, log: &r.log)
+        let taken = enemyTurn(&run, dice: &dice, options: options, log: &r.log)
+        if let dead = run.enemy, dead.isDead {
+            return killed(&run, r)
+        }
         r.enemyDamage = taken
         tickEffects(&run, log: &r.log)
-        r.announcement = "\(e.name) dealt \(taken) damage. Your HP: \(run.hp) of \(run.maxHp)."
+        r.announcement = taken > 0
+            ? "\(e.name) dealt \(taken) damage. Your HP: \(run.hp) of \(run.maxHp)."
+            : "Your HP: \(run.hp) of \(run.maxHp)."
         if run.isDead {
             r.playerDied = true
             run.inCombat = false
         }
+        return r
+    }
+
+    static func killed(_ run: inout Run, _ result: TurnResult) -> TurnResult {
+        var r = result
+        r.enemyDied = true
+        run.inCombat = false
+        run.kills += 1
+        if run.fight.warlord {
+            run.hp = min(run.maxHp, run.hp + 10)
+            run.sp = min(run.maxSp, run.sp + 3)
+            r.log.append("Warlord: +10 HP and +3 SP.")
+        }
+        r.announcement = "\(run.enemy?.name ?? "The enemy") defeated."
         return r
     }
 
@@ -160,12 +222,66 @@ public enum Combat {
         return msg
     }
 
-    /// The enemy's counter-attack. Defense blocks at most 60% of a hit, and
-    /// every hit does at least 1 damage.
-    static func enemyAttack(_ run: inout Run, dice: inout some Dice,
-                            options: Options, log: inout [String]) -> Int {
+    /// The enemy's turn: damage over time, then its attack unless it's stunned,
+    /// dodged or misses. Defense blocks at most 60% of a hit, and every hit
+    /// does at least 1 damage. Returns the damage you took.
+    static func enemyTurn(_ run: inout Run, dice: inout some Dice,
+                          options: Options, log: inout [String]) -> Int {
         guard var e = run.enemy else { return 0 }
+
+        if e.dotTurns > 0 {
+            e.dotTurns -= 1
+            e.hp = max(0, e.hp - e.dotDamage)
+            log.append("\(e.name) takes \(e.dotDamage) damage over time. (\(e.dotTurns) turns left)")
+            if e.isDead { run.enemy = e; return 0 }
+        }
+        if run.fight.stickyBomb > 0 {
+            let boom = run.fight.stickyBomb
+            run.fight.stickyBomb = 0
+            e.hp = max(0, e.hp - boom)
+            log.append("💥 The sticky bomb explodes for \(boom) damage!")
+            if e.isDead { run.enemy = e; return 0 }
+        }
+        if run.fight.decayTurns > 0 {
+            run.fight.decayTurns -= 1
+            let lo = max(1, e.atk.lowerBound - run.fight.decay), hi = max(1, e.atk.upperBound - run.fight.decay)
+            e.atk = lo...max(lo, hi)
+            log.append("Death and Decay saps \(e.name)'s strength.")
+        }
+        run.enemy = e
+
+        if e.stunTurns > 0 {
+            e.stunTurns -= 1
+            run.enemy = e
+            log.append("\(e.name) cannot act this turn!")
+            return 0
+        }
+        if run.fight.dodges > 0 {
+            run.fight.dodges -= 1
+            log.append("You avoid \(e.name)'s attack completely!")
+            return 0
+        }
+        if run.fight.enemyMiss > 0 {
+            let p = run.fight.enemyMiss
+            run.fight.enemyMiss = 0
+            if dice.chance(p) {
+                log.append("\(e.name) misses you!")
+                return 0
+            }
+        }
+        if run.fight.confuseTurns > 0 && dice.chance(run.fight.confuse) {
+            let selfHit = dice.roll(e.currentAtk)
+            e.hp = max(0, e.hp - selfHit)
+            run.enemy = e
+            log.append("\(e.name) is lost in a nightmare and strikes itself for \(selfHit)!")
+            return 0
+        }
+
         var raw = dice.roll(e.currentAtk)
+        if run.fight.softenHits > 0 {
+            run.fight.softenHits -= 1
+            raw = jsRound(Double(raw) * run.fight.soften)
+        }
         raw = jsRound(Double(raw) * run.difficulty.enemyDamageMultiplier)
         if run.undeadRes && Bestiary.undeadNames.contains(e.name) {
             raw = jsRound(Double(raw) * 0.65)
@@ -182,21 +298,50 @@ public enum Combat {
             default: break
             }
         }
-        if blocked > 0 {
+        if run.fight.reduceTurns > 0 {
+            run.fight.reduceTurns -= 1
+            taken = max(1, jsRound(Double(taken) * (1 - run.fight.reduce)))
+        }
+        if run.fight.capTurns > 0 {
+            run.fight.capTurns -= 1
+            taken = min(taken, run.fight.cap)
+        }
+        if run.fight.shield > 0 {
+            let absorbed = min(run.fight.shield, taken)
+            run.fight.shield -= absorbed
+            taken -= absorbed
+            log.append(taken > 0 ? "Your shield absorbs \(absorbed). You take \(taken) damage."
+                                 : "Your shield absorbs all \(absorbed) damage!")
+        } else if blocked > 0 {
             log.append("\(e.name) strikes for \(raw) — you absorb \(blocked). You take \(taken) damage.")
         } else {
             log.append("\(e.name) attacks for \(taken) damage.")
         }
         run.hp = max(0, run.hp - taken)
-        if e.cursedTurns > 0 {
-            e.cursedTurns -= 1
-            if e.cursedTurns == 0 { log.append("The curse on \(e.name) fades.") }
-            run.enemy = e
+        if run.hp <= 0 && run.fight.unstoppableTurns > 0 {
+            run.hp = 1
+            log.append("Unstoppable! Death refused.")
+        }
+        run.fight.damageTaken += taken
+        run.fight.recentHits.append(taken)
+        if run.fight.recentHits.count > 3 { run.fight.recentHits.removeFirst() }
+
+        if taken > 0 && (run.fight.thornsTurns > 0 || run.fight.retaliate > 0), var hurt = run.enemy {
+            var back = run.fight.retaliate
+            if run.fight.thornsTurns > 0 { back += jsRound(Double(taken) * run.fight.thorns) }
+            hurt.hp = max(0, hurt.hp - back)
+            run.enemy = hurt
+            if back > 0 { log.append("\(back) damage is reflected back at \(hurt.name)!") }
+        }
+        if var c = run.enemy, c.cursedTurns > 0 {
+            c.cursedTurns -= 1
+            if c.cursedTurns == 0 { log.append("The curse on \(c.name) fades.") }
+            run.enemy = c
         }
         return taken
     }
 
-    /// Counts down potion buffs and applies poison once per turn.
+    /// Counts down timed effects once per turn and applies regeneration and poison.
     public static func tickEffects(_ run: inout Run, log: inout [String]) {
         if run.tempAtkTurns > 0 {
             run.tempAtkTurns -= 1
@@ -211,6 +356,22 @@ public enum Combat {
             run.hp = max(0, run.hp - run.poisonDamage)
             log.append("Poison deals \(run.poisonDamage) damage. (\(run.poisonTurns) turns left)")
         }
+        var f = run.fight
+        if f.regenTurns > 0 && run.hp > 0 {
+            f.regenTurns -= 1
+            run.hp = min(run.maxHp, run.hp + f.regen)
+            log.append("You regenerate \(f.regen) HP.")
+        }
+        if f.buffTurns > 0 {
+            f.buffTurns -= 1
+            if f.buffTurns == 0 { log.append("Your skill's boost fades.") }
+        }
+        if f.vulnerableTurns > 0 { f.vulnerableTurns -= 1 }
+        if f.unstoppableTurns > 0 { f.unstoppableTurns -= 1 }
+        if f.thornsTurns > 0 { f.thornsTurns -= 1 }
+        if f.crusadeTurns > 0 { f.crusadeTurns -= 1 }
+        if f.confuseTurns > 0 { f.confuseTurns -= 1 }
+        run.fight = f
     }
 
     /// New Game+ count as the web version reads it (`ngPlusCount || 1`), or nil outside NG+.

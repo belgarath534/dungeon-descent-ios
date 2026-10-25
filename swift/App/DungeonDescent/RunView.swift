@@ -34,6 +34,42 @@ struct RunView: View {
 
             Section("Actions") { actions }
 
+            if model.phase == .fighting && !model.skills.isEmpty {
+                Section("Skills · \(run.sp) of \(run.maxSp) SP") {
+                    ForEach(model.skills, id: \.effect) { s in
+                        let cost = model.skillCost(s)
+                        Button {
+                            model.useSkill(s.effect)
+                        } label: {
+                            OptionRow(title: "\(s.icon) \(s.name) · \(cost) SP", detail: s.desc)
+                        }
+                        .disabled(cost > run.sp)
+                        .accessibilityLabel("\(s.name). \(s.tier) skill. \(s.desc) Costs \(cost) SP.")
+                        .accessibilityHint(cost > run.sp ? "Not enough SP. You need \(cost - run.sp) more." : "")
+                    }
+                }
+            }
+
+            if !run.skillChoices.isEmpty {
+                Section {
+                    ForEach(run.skillChoices, id: \.self) { effect in
+                        if let s = Skills.skill(effect, cls: run.cls) {
+                            Button {
+                                model.pickSkill(effect)
+                            } label: {
+                                OptionRow(title: "\(s.icon) \(s.name) · \(s.tier) · \(s.spCost) SP", detail: s.desc)
+                            }
+                            .accessibilityLabel("\(s.name). \(s.tier). \(s.desc) Costs \(s.spCost) SP.")
+                            .accessibilityHint("Learns this skill. The others are gone.")
+                        }
+                    }
+                } header: {
+                    Text("Choose a new skill")
+                } footer: {
+                    Text("Pick one. The others won't be offered again this run.")
+                }
+            }
+
             if model.phase == .shopping {
                 Section {
                     ForEach(model.shop) { entry in
@@ -158,7 +194,7 @@ struct StatusRow: View {
                 Text("\(run.gold)g")
             }
             .font(.subheadline)
-            Text("XP \(run.xp)/\(Progression.xpNeeded(atLevel: run.level)) · ATK \(run.atk.lowerBound + run.totalAtkBonus)–\(run.atk.upperBound + run.totalAtkBonus) · DEF \(run.totalDef)")
+            Text("SP \(run.sp)/\(run.maxSp) · XP \(run.xp)/\(Progression.xpNeeded(atLevel: run.level)) · ATK \(run.atk.lowerBound + run.totalAtkBonus)–\(run.atk.upperBound + run.totalAtkBonus) · DEF \(run.totalDef)")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             if !effects.isEmpty {
@@ -179,6 +215,16 @@ struct StatusRow: View {
         if run.luckKills > 0 { e.append("double gold, \(run.luckKills) kills") }
         if run.poisonTurns > 0 { e.append("poisoned, \(run.poisonTurns) turns") }
         if run.frozen { e.append("frozen") }
+        let f = run.fight
+        if f.shield > 0 { e.append("shield \(f.shield)") }
+        if f.dodges > 0 { e.append("dodge next \(f.dodges == 1 ? "attack" : "\(f.dodges) attacks")") }
+        if f.reduceTurns > 0 { e.append("\(Int(f.reduce * 100))% less damage, \(f.reduceTurns) turns") }
+        if f.buffTurns > 0 { e.append("skill boost, \(f.buffTurns) turns") }
+        if f.empowerCount > 0 { e.append("next \(f.empowerCount == 1 ? "attack" : "\(f.empowerCount) attacks") ×\(f.empower)") }
+        if f.unstoppableTurns > 0 { e.append("cannot die, \(f.unstoppableTurns) turns") }
+        if f.regenTurns > 0 { e.append("regenerating \(f.regen)") }
+        if run.resurrection { e.append("resurrection ready") }
+        if run.freeSkills > 0 { e.append("\(run.freeSkills) free skills") }
         return e
     }
 
@@ -186,7 +232,7 @@ struct StatusRow: View {
         var s = "\(run.name), level \(run.level). \(run.hp) of \(run.maxHp) HP. \(run.lives) \(run.lives == 1 ? "life" : "lives"). "
         s += "Floor \(run.floor), room \(run.roomsOnFloor) of \(run.floorRoomsNeeded). \(run.gold) gold. "
         s += "Attack \(run.atk.lowerBound + run.totalAtkBonus) to \(run.atk.upperBound + run.totalAtkBonus), defense \(run.totalDef). "
-        s += "\(run.xp) of \(Progression.xpNeeded(atLevel: run.level)) XP."
+        s += "\(run.sp) of \(run.maxSp) SP. \(run.xp) of \(Progression.xpNeeded(atLevel: run.level)) XP."
         if !effects.isEmpty { s += " " + effects.joined(separator: ". ") + "." }
         return s
     }
@@ -201,11 +247,19 @@ struct EnemyRow: View {
             Text("\(enemy.icon) \(enemy.name)\(enemy.isBoss ? " (Boss, phase \(bossPhase))" : "")").font(.headline)
             ProgressView(value: Double(enemy.hp), total: Double(max(enemy.maxHp, 1)))
                 .tint(Theme.blood)
-            Text("\(enemy.hp) of \(enemy.maxHp) HP · hits for \(enemy.currentAtk.lowerBound)–\(enemy.currentAtk.upperBound)\(enemy.cursedTurns > 0 ? " · cursed" : "")")
+            Text("\(enemy.hp) of \(enemy.maxHp) HP · hits for \(enemy.currentAtk.lowerBound)–\(enemy.currentAtk.upperBound)\(conditions.isEmpty ? "" : " · " + conditions.joined(separator: ", "))")
                 .font(.subheadline)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(enemy.name)\(enemy.isBoss ? ", boss, phase \(bossPhase)" : ""). \(enemy.hp) of \(enemy.maxHp) HP. Hits for \(enemy.currentAtk.lowerBound) to \(enemy.currentAtk.upperBound).\(enemy.cursedTurns > 0 ? " Cursed for \(enemy.cursedTurns) more turns." : "")")
+        .accessibilityLabel("\(enemy.name)\(enemy.isBoss ? ", boss, phase \(bossPhase)" : ""). \(enemy.hp) of \(enemy.maxHp) HP. Hits for \(enemy.currentAtk.lowerBound) to \(enemy.currentAtk.upperBound).\(conditions.isEmpty ? "" : " " + conditions.joined(separator: ". ") + ".")")
+    }
+
+    private var conditions: [String] {
+        var c: [String] = []
+        if enemy.cursedTurns > 0 { c.append("cursed \(enemy.cursedTurns) turns") }
+        if enemy.stunTurns > 0 { c.append("stunned") }
+        if enemy.dotTurns > 0 { c.append("taking \(enemy.dotDamage) per turn for \(enemy.dotTurns) turns") }
+        return c
     }
 }
 

@@ -37,6 +37,11 @@ public enum Inventory {
             let heal = jsRound(Double(run.maxHp) * (item.healPct ?? 0.6))
             run.hp = min(run.maxHp, run.hp + heal)
             out.message = "Elixir used. \(item.name). Restored \(heal) HP. Current HP: \(run.hp) of \(run.maxHp)."
+        case "sp-potion":
+            guard run.sp < run.maxSp else { return Outcome(message: "Your SP is already full.", used: false) }
+            let before = run.sp
+            run.sp = min(run.maxSp, run.sp + (item.sp ?? 15))
+            out.message = "Used \(item.name). +\(run.sp - before) SP. SP: \(run.sp) of \(run.maxSp)."
         case "atk-potion":
             let n = item.atk ?? 4
             run.tempAtk = n
