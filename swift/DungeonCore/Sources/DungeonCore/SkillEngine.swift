@@ -63,7 +63,7 @@ public enum Skills {
 
     /// SP a skill costs right now, after discounts.
     public static func cost(_ s: Skill, _ run: Run) -> Int {
-        if run.freeSkills > 0 { return 0 }
+        if run.freeSkills > 0 || run.weaponEffect == "apocalypse" { return 0 }
         var c = s.spCost
         if run.race == "Gnome" { c -= 2 }
         if run.halfCostSkills { c /= 2 }

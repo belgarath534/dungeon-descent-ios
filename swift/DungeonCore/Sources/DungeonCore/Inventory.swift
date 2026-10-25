@@ -201,7 +201,10 @@ public enum Inventory {
     /// A loot room (28% of rooms): one random item from the dungeon's loot table.
     public static func lootRoom(_ run: inout Run, dice: inout some Dice, wallet: Wallet) -> Find {
         let table = ItemTables.loot(for: run.dungeon)
-        let item = table[dice.roll(0...(table.count - 1))]
+        var item = table[dice.roll(0...(table.count - 1))]
+        if item.isWeapon || item.isArmor {
+            item = Rarity.apply(Rarity.roll(dice: &dice), to: item, dice: &dice)
+        }
         let got = pickUp(&run, item, wallet: wallet)
         if got.gold > 0 {
             return Find(message: "You find a \(item.name) worth \(got.gold) gold glinting in the dust.", gold: got.gold)
@@ -252,7 +255,7 @@ public enum Inventory {
             run.poisonTurns = trap.turns
             run.poisonDamage = trap.effect == "burn" ? 6 : 8
         case "sp": run.sp = max(0, run.sp - 8)
-        case "freeze": run.frozen = true
+        case "freeze": if run.armorEffect != "juggernaut" { run.frozen = true }
         case "pushback": if run.roomsOnFloor > 1 { run.roomsOnFloor -= 1 }
         default: break
         }

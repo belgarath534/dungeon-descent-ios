@@ -108,6 +108,8 @@ public enum Progression {
         if run.graveRobberLoot { g = jsRound(Double(g) * 1.20) }
         if run.luckBonus != 0 { g = jsRound(Double(g) * (1 + run.luckBonus)) }
         if run.runeFortune { g = jsRound(Double(g) * 1.25) }
+        if run.weaponEffect == "fortune" { g = jsRound(Double(g) * 1.25) }
+        if run.weaponEffect == "soulbound" { run.sp = min(run.maxSp, run.sp + 5) }
         var luckNote = ""
         if run.luckKills > 0 {
             g *= 2
@@ -127,6 +129,8 @@ public enum Progression {
         case phoenix
         /// A resurrection skill brought you back at 50% HP.
         case resurrected
+        /// An Undying weapon or Sanctuary armor refused death; you're at 1 HP.
+        case gearSaved
         /// Came back at 40% HP with this many lives left.
         case revived(livesLeft: Int)
         case runOver
@@ -135,6 +139,11 @@ public enum Progression {
     /// Loses a life. Revives at 40% HP if any are left. Hardcore and the
     /// cheat-death items and skills are not ported yet.
     public static func handleDeath(_ run: inout Run) -> DeathOutcome {
+        if !run.gearSavedThisFloor && (run.weaponEffect == "undying" || run.armorEffect == "sanctuary") {
+            run.gearSavedThisFloor = true
+            run.hp = 1
+            return .gearSaved
+        }
         if Inventory.usePhoenixFeather(&run) { return .phoenix }
         if run.resurrection {
             run.resurrection = false

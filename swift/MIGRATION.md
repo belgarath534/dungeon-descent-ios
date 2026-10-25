@@ -52,7 +52,8 @@ build there means the app doesn't compile; the log says why.
    shop after every floor, descend or wander, leveling, lives and Phoenix Feathers,
    boss phases, victory and defeat. Runs are saved after every action and can be
    continued. Class skills: all 358, learned at level-ups. Elites, enemy abilities,
-   special rooms and dungeon events. Next: weapon rarities, achievements, stats.
+   special rooms and dungeon events. Weapon and armor rarities.
+   Next: achievements, stats, hardcore, New Game+ and Legacy runs.
    Then import web saves.
 4. **Native services:** Sign in with Apple / Google through the Firebase iOS SDK,
    cloud save, StoreKit 2 purchases, Game Center, Core Haptics, audio, Live Activity,
@@ -78,7 +79,8 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Room descriptions, floor names | ROOM_DESCS, FLOOR_NAMES | ✅ |
 | Attack / heavy / defend / enemy counter | doFight | 🟡 base rules only |
 | Potions, runes, scrolls, Phoenix Feather | useItem | ✅ except the shop's more exotic brews (soul trap, mirror flask, rage tonic …) |
-| Weapons and armor, equipping | equipWeapon, equipArmor | 🟡 stats and equipping; rarity effects not yet |
+| Weapons and armor, equipping | equipWeapon, equipArmor | ✅ |
+| Weapon and armor rarities | WEAPON_RARITIES, RARITY_EFFECTS | ✅ six tiers, all 24 effects |
 | Class skills, SP | CLASS SKILLS, useSkill | ✅ all 358 skills of all 24 classes, skill choice at each level-up |
 | Lives, death, revive | handleDeath | 🟡 lives, 40% revive, Phoenix Feather, death log; hardcore and class cheat-deaths not yet |
 | XP, levels, level points | gainXP, LP_STATS | ✅ |

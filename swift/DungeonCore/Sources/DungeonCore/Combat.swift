@@ -92,7 +92,7 @@ public enum Combat {
             switch action {
             case .attack:
                 // Rolled first, like `Math.random() < p || markedKill` in the web version.
-                let rolledCrit = dice.chance(0.10 + run.critBonus)
+                let rolledCrit = dice.chance(0.10 + run.critBonus + (run.weaponEffect == "keen" ? 0.05 : 0))
                 r.crit = rolledCrit || run.markedKill
                 if run.markedKill {
                     run.markedKill = false
@@ -100,15 +100,17 @@ public enum Combat {
                 }
                 var dmg = r.crit ? jsRound(Double(baseAtk) * 1.8) : baseAtk
                 dmg = empowered(&run, dmg, log: &r.log)
+                dmg = gearDamage(&run, dmg, log: &r.log)
                 r.playerDamage = scaleDamage(run, dmg)
                 r.log.append(r.crit ? "CRITICAL HIT! You strike for \(r.playerDamage) damage!"
                                     : "You attack for \(r.playerDamage) damage.")
             case .heavy:
-                if dice.chance(0.30) {
+                if run.weaponEffect != "weighted" && dice.chance(0.30) {
                     r.missed = true
                     r.log.append("Your heavy strike misses! The enemy sidesteps.")
                 } else {
-                    let dmg = empowered(&run, jsRound(Double(baseAtk) * 1.7), log: &r.log)
+                    var dmg = empowered(&run, jsRound(Double(baseAtk) * 1.7), log: &r.log)
+                    dmg = gearDamage(&run, dmg, log: &r.log)
                     r.playerDamage = scaleDamage(run, dmg)
                     r.log.append("Heavy strike lands for \(r.playerDamage) damage!")
                 }
@@ -120,6 +122,7 @@ public enum Combat {
                 let guaranteed = run.swiftTurns > 0 || run.runeSpeed
                 if run.swiftTurns > 0 { run.swiftTurns -= 1 }
                 let chance = guaranteed ? 1.0 : (run.hasFleeRing ? 0.75 : 0.45) + run.fleeBonus
+                    + (run.armorEffect == "light-step" ? 0.10 : 0)
                 if dice.chance(chance) {
                     r.fled = true
                     run.inCombat = false
@@ -136,7 +139,49 @@ public enum Combat {
 
         r.playerDamage = EnemyAbilities.onPlayerHit(&run, r.playerDamage, basic: true, dice: &dice, log: &r.log)
         dealDamage(&run, r.playerDamage, log: &r.log)
+        if action == .attack || action == .heavy { afterGearHit(&run, r.playerDamage, dice: &dice, log: &r.log) }
         return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
+    }
+
+    /// Weapon and armor rarity effects on your attacks.
+    static func gearDamage(_ run: inout Run, _ dmg: Int, log: inout [String]) -> Int {
+        guard let e = run.enemy else { return dmg }
+        var d = Double(dmg)
+        let firstHit = !run.fight.firstHitDone
+        run.fight.firstHitDone = true
+        switch run.weaponEffect {
+        case "swift" where firstHit: d *= 1.20; log.append("⚔ Swift blade strikes first — +20% opening damage!")
+        case "cursed": d *= 1.40
+        case "apocalypse": d *= 1.60
+        case "godslayer" where e.isBoss: d *= 2
+        case "executioner" where Double(e.hp) / Double(max(1, e.maxHp)) < 0.25:
+            d *= 1.50
+            log.append("💀 Executioner strikes the weakened foe — +50% damage!")
+        default: break
+        }
+        if run.armorEffect == "aegis" { d *= 0.80 }
+        return jsRound(d)
+    }
+
+    /// Effects that follow a landed hit: second strikes, stuns and healing.
+    static func afterGearHit(_ run: inout Run, _ dmg: Int, dice: inout some Dice, log: inout [String]) {
+        guard dmg > 0, var e = run.enemy, !e.isDead else { return }
+        switch run.weaponEffect {
+        case "serrated" where dice.chance(0.15):
+            e.hp = max(0, e.hp - dmg)
+            log.append("🗡 Serrated edge — you strike twice for another \(dmg)!")
+        case "thundering" where dice.chance(0.25):
+            e.stunTurns = max(e.stunTurns, 1)
+            log.append("⚡ Thunder rolls — \(e.name) is stunned!")
+        case "vampiric":
+            run.hp = min(run.maxHp, run.hp + 3)
+        case "lifesteal":
+            let h = jsRound(Double(dmg) * 0.15)
+            run.hp = min(run.maxHp, run.hp + h)
+            if h > 0 { log.append("Lifesteal heals \(h) HP.") }
+        default: break
+        }
+        run.enemy = e
     }
 
     /// Applies empowered-attack bonuses (Sacred Blade, War Ballad …) to a basic attack.
@@ -293,8 +338,16 @@ public enum Combat {
             return 0
         }
 
+        if run.armorEffect == "regenerating" && run.hp > 0 {
+            run.hp = min(run.maxHp, run.hp + 3)
+            log.append("💚 Regenerating armor heals 3 HP.")
+        }
         let move = EnemyAbilities.beforeAttack(&run, dice: &dice, log: &log)
         if move.skipAttack { return 0 }
+        if run.armorEffect == "sturdy" && dice.chance(0.05) {
+            log.append("🛡️ Sturdy armor fully blocks the attack!")
+            return 0
+        }
         var raw = dice.roll(e.currentAtk) + EnemyAbilities.secondStrike(e, dice: &dice, log: &log)
         raw = jsRound(Double(raw) * move.multiplier) + move.extra
         if run.fight.softenHits > 0 {
@@ -325,6 +378,12 @@ public enum Combat {
             run.fight.capTurns -= 1
             taken = min(taken, run.fight.cap)
         }
+        switch run.armorEffect {
+        case "fortified": taken = max(1, jsRound(Double(taken) * 0.85))
+        case "aegis": taken = max(1, jsRound(Double(taken) * 0.60))
+        case "unbreakable": taken = min(taken, max(1, run.maxHp / 4))
+        default: break
+        }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)
             run.fight.shield -= absorbed
@@ -345,9 +404,17 @@ public enum Combat {
         run.fight.recentHits.append(taken)
         if run.fight.recentHits.count > 3 { run.fight.recentHits.removeFirst() }
 
-        if taken > 0 && (run.fight.thornsTurns > 0 || run.fight.retaliate > 0), var hurt = run.enemy {
+        let thorned = run.armorEffect == "thorned"
+        let vengeful = run.armorEffect == "vengeful" && taken > 0 && dice.chance(0.20)
+        if taken > 0 && (run.fight.thornsTurns > 0 || run.fight.retaliate > 0 || thorned || vengeful), var hurt = run.enemy {
             var back = run.fight.retaliate
             if run.fight.thornsTurns > 0 { back += jsRound(Double(taken) * run.fight.thorns) }
+            if thorned { back += jsRound(Double(taken) * 0.15) }
+            if vengeful {
+                let counter = attackRoll(run, dice: &dice)
+                back += counter
+                log.append("⚔️ Vengeful armor counters for \(counter) damage!")
+            }
             hurt.hp = max(0, hurt.hp - back)
             run.enemy = hurt
             if back > 0 { log.append("\(back) damage is reflected back at \(hurt.name)!") }
@@ -370,6 +437,10 @@ public enum Combat {
         if run.tempDefTurns > 0 {
             run.tempDefTurns -= 1
             if run.tempDefTurns == 0 { run.tempDef = 0; log.append("Your defense boost fades.") }
+        }
+        if run.inCombat && run.weaponEffect == "cursed" && run.hp > 1 {
+            run.hp = max(1, run.hp - 3)
+            log.append("Your cursed weapon drains 3 HP.")
         }
         if run.poisonTurns > 0 && run.hp > 0 {
             run.poisonTurns -= 1

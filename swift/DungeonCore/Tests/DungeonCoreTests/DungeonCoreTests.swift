@@ -896,3 +896,76 @@ final class EncounterTests: XCTestCase {
         XCTAssertEqual(res.enemyDamage, 14)
     }
 }
+
+final class RarityTests: XCTestCase {
+    func newRun() -> Run {
+        Run(character: PlayerCharacter(name: "R", cls: "Warrior", race: "Human", prof: "Thief",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+    }
+    let axe = Item(id: "axe", name: "Battle Axe", icon: "🪓", type: "weapon", desc: "Heavy.", atkBase: [10, 20], level: 1, isEquippable: true)
+    let mail = Item(id: "mail", name: "Chain Mail", icon: "⛓️", type: "armor", desc: "+5.", defBase: 10, level: 1, isEquippable: true)
+
+    func tier(_ id: String) -> Rarity.Tier { Rarity.tiers.first { $0.id == id }! }
+
+    func testDropOddsMatchTheWebTable() {
+        var dice = SeededDice(seed: 99)
+        var counts: [String: Int] = [:]
+        for _ in 0..<100_000 { counts[Rarity.roll(dice: &dice).id, default: 0] += 1 }
+        XCTAssertEqual(Double(counts["common"]!) / 100_000, 0.60, accuracy: 0.01)
+        XCTAssertEqual(Double(counts["uncommon"]!) / 100_000, 0.25, accuracy: 0.01)
+        XCTAssertEqual(Double(counts["rare"]!) / 100_000, 0.10, accuracy: 0.01)
+        XCTAssertEqual(Double(counts["epic"]!) / 100_000, 0.04, accuracy: 0.005)
+    }
+
+    func testRarityBoostsStatsAndAddsAnEffect() {
+        var dice = SeededDice(seed: 1)
+        let epic = Rarity.apply(tier("epic"), to: axe, dice: &dice)
+        XCTAssertEqual(epic.atkBase, [15, 30])
+        XCTAssertTrue(epic.name.hasPrefix("Epic "))
+        XCTAssertNotNil(epic.rarityEffect)
+        let leg = Rarity.apply(tier("legendary"), to: mail, dice: &dice)
+        XCTAssertEqual(leg.defBase, 18)   // round(10 × 1.75)
+        XCTAssertTrue(["juggernaut", "unbreakable"].contains(leg.rarityEffect ?? ""))
+        XCTAssertEqual(Rarity.apply(tier("common"), to: axe, dice: &dice), axe)
+    }
+
+    func withEffect(_ item: Item, _ effect: String) -> Item {
+        var i = item
+        i.extra["rarityEffect"] = .string(effect)
+        return i
+    }
+
+    func testWeaponEffects() {
+        let dummy = Enemy(name: "D", icon: "", hp: 500, maxHp: 500, atk: 1...1, gold: 1...1)
+        var r = newRun()
+        r.equippedWeapon = withEffect(axe, "apocalypse")
+        Combat.begin(&r, against: dummy)
+        var d = LoadedDice(rolls: [10, 1])
+        // roll 10 + weapon bonus 15 = 25, × 1.6 = 40
+        XCTAssertEqual(Combat.takeTurn(&r, .attack, dice: &d).playerDamage, 40)
+        XCTAssertEqual(Skills.cost(Skills.skill("shield-bash", cls: "Warrior")!, r), 0)
+
+        var w = newRun()
+        w.equippedWeapon = withEffect(axe, "weighted")
+        Combat.begin(&w, against: dummy)
+        var d2 = LoadedDice(rolls: [10, 1], chances: [true])
+        XCTAssertFalse(Combat.takeTurn(&w, .heavy, dice: &d2).missed)
+    }
+
+    func testArmorEffectsAndOncePerFloorSave() {
+        var r = newRun()
+        r.equippedArmor = withEffect(mail, "unbreakable")
+        Combat.begin(&r, against: Enemy(name: "Ogre", icon: "", hp: 500, maxHp: 500, atk: 200...200, gold: 1...1))
+        var d = LoadedDice(rolls: [10, 200])
+        _ = Combat.takeTurn(&r, .attack, dice: &d)
+        XCTAssertEqual(r.hp, 120 - 30)   // capped at 25% of 120
+
+        var s = newRun()
+        s.equippedArmor = withEffect(mail, "sanctuary")
+        s.hp = 0
+        XCTAssertEqual(Progression.handleDeath(&s), .gearSaved)
+        XCTAssertEqual(s.hp, 1)
+        s.hp = 0
+        XCTAssertEqual(Progression.handleDeath(&s), .revived(livesLeft: 2))
+    }
+}

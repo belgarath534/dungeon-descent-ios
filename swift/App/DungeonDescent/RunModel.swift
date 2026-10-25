@@ -332,6 +332,12 @@ final class RunModel: ObservableObject {
         let outcome = Progression.handleDeath(&r)
         Sound.sfx(outcome == .runOver ? "sfx-gameover" : "sfx-death")
         switch outcome {
+        case .gearSaved:
+            if r.enemy != nil { r.inCombat = true }
+            let what = r.equippedWeapon?.rarityEffect == "undying" ? "Your Undying blade" : "Your Sanctuary armor"
+            let msg = "\(what) refuses death — you survive at 1 HP! It won't save you again on this floor."
+            add("💜 " + msg)
+            finish(r, dice, phase: r.inCombat ? .fighting : .exploring, spoken: spoken + " " + msg)
         case .resurrected:
             if r.enemy != nil { r.inCombat = true }
             let msg = "Resurrection! You rise again with 50 percent HP."
@@ -492,6 +498,7 @@ final class RunModel: ObservableObject {
         r.roomsOnFloor = 0
         r.floorRoomsNeeded = Rooms.roomsNeeded(floor: r.floor, difficulty: r.difficulty, dice: &d)
         r.upcomingRooms = []
+        r.gearSavedThisFloor = false
         Encounters.planFloor(&r, dice: &d)
         let floor = r.floor
         game.updateCharacter(characterIndex) { $0.floor = max($0.floor, floor) }

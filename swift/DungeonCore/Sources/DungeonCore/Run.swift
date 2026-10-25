@@ -83,6 +83,8 @@ public struct Run: Codable, Sendable {
     public var resurrection = false
     public var debuffImmune = false
     public var usedOncePerRun: [String] = []
+    /// Undying weapons and Sanctuary armor work once per floor.
+    public var gearSavedThisFloor = false
 
     /// Effects that only last for the current fight.
     public var fight = FightEffects()
@@ -211,6 +213,7 @@ public struct FightEffects: Codable, Sendable {
     /// Bomb that goes off on the enemy's next turn.
     public var stickyBomb = 0
     public var lethalTempo = 0.0
+    public var firstHitDone = false
     public var warlord = false
     /// The enemy's attack drops by this each turn (Death and Decay).
     public var decay = 0
