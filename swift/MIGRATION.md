@@ -1,16 +1,25 @@
 # Dungeon Descent: Swift rewrite
 
-The web version (`www/index.html`, ~66,000 lines) keeps running on TestFlight
-until the Swift version can replace it. Nothing in `www/` or `ios/` changes on
-the way there.
+The game is being rewritten from the web version (`www/index.html`, ~66,000
+lines) into Swift, one system at a time. The Swift app ships to TestFlight under
+the same app ID; `www/` and `ios/` stay untouched as the reference and fallback.
 
 ## How it's built
 
 ```
 swift/
   DungeonCore/      Game rules only, no screens. Builds and tests on any machine.
-  App/              (next) SwiftUI app that uses DungeonCore.
+  App/              SwiftUI app that uses DungeonCore. project.yml is turned into
+                    an Xcode project by XcodeGen on Codemagic.
 ```
+
+**TestFlight:** run the "Dungeon Descent Swift (TestFlight)" workflow in Codemagic.
+It uses the same bundle ID (com.dungeon.descent), so it replaces the web version
+on TestFlight. To go back, run the old "Dungeon Descent App Store" workflow, but
+its build number has to be higher than the Swift build's first.
+
+**Your web-version saves** live in the app's WebKit storage. The Swift app doesn't
+read or delete them yet; importing them is on the list below.
 
 - **DungeonCore** copies the web version's numbers exactly. JavaScript rounding
   and number parsing are reproduced (`jsRound`, `jsParseInt`), and the tests check
@@ -24,11 +33,12 @@ Run the tests: `cd swift/DungeonCore && swift test`
 
 ## Order of work
 
-1. **Core rules** (in progress): characters, wallet, enemies, basic combat.
-2. **App shell:** SwiftUI project, main menu, character list and creation, settings,
-   support. VoiceOver labels and announcements built in from day one.
-3. **Playable Crypt run:** rooms, search, loot, inventory, shop, leveling, lives
-   and death, boss phases, victory. First TestFlight build of the Swift app.
+1. ✅ **Core rules:** characters, wallet, enemies, basic combat, XP, lives.
+2. ✅ **App shell:** main menu, character list and creation, settings, support.
+   VoiceOver labels and announcements built in from day one.
+3. 🟡 **Playable Crypt run:** fights, room odds, leveling, lives, boss phases and
+   victory work. Next: loot, potions, inventory, search, shop, room events.
+   Then import web saves.
 4. **Native services:** Sign in with Apple / Google through the Firebase iOS SDK,
    cloud save, StoreKit 2 purchases, Game Center, Core Haptics, audio, Live Activity,
    Magic Tap, iCloud backup.
@@ -45,14 +55,17 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Gold and diamonds | GLOBAL GOLD SYSTEM | ✅ |
 | Character list, 5 slots, save format | CHARACTER STORAGE | ✅ |
 | Dungeon unlocks | getUnlockedDungeons | ✅ |
-| Classes, races, professions, difficulties | CHARACTER CREATION | 🟡 stats and lists only; race bonuses not applied yet |
+| Classes, races, professions, difficulties | CHARACTER CREATION | 🟡 Halfling, Goblin, Warden, Herbalist, Gravedigger, Pilgrim, Mercenary, Grave Robber done; other races not yet |
 | Run start stats | initDungeon | 🟡 equipment, coin upgrades, milestone buffs, dream buffs, spirits not yet |
 | Crypt enemies and bosses, scaling | DUNGEON ENGINE | ✅ |
 | Other dungeons' enemy tables | DUNGEON ENGINE | ⬜ |
 | Attack / heavy / defend / enemy counter | doFight | 🟡 base rules only |
 | Skills, potions, weapon and armor effects | doFight, CLASS SKILLS | ⬜ |
-| Lives, death, revive | handleDeath | ⬜ |
-| Rooms, search, floors, shop | enterRoom, searchRoom, openShop | ⬜ |
+| Lives, death, revive | handleDeath | 🟡 lives and 40% revive; cheat-death items and hardcore not yet |
+| XP, levels, level points | gainXP, LP_STATS | ✅ |
+| Kill gold | enemyDead | 🟡 base gold, Goblin, Grave Robber, luck |
+| Rooms, search, floors, shop | enterRoom, searchRoom, openShop | 🟡 room odds and floors; loot, events, search, shop not yet |
+| Import web saves into the Swift app | DDStore (IndexedDB) | ⬜ |
 | Elites, multi-enemy combat | MULTI-ENEMY COMBAT SYSTEM | ⬜ |
 | Gun crafting | GUN DEFINITIONS | ⬜ |
 | Raids, Boss Rush, Daily Challenge, Tournament | RAID ENGINE, BOSS RUSH ENGINE … | ⬜ |

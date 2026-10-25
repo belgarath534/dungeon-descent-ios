@@ -4,6 +4,12 @@ import Foundation
 // (_CLASSES, HP_MAP, ATK_MAP, DEF_MAP, _RACES, _PROFS, _DIFFS, LIVES_MAP, _DUNGS).
 // Names are kept as the exact strings the web version saves, so old saves load.
 
+/// A race or profession: its saved name and the one-line description shown when picking it.
+public struct Option: Sendable, Hashable {
+    public let id: String
+    public let desc: String
+}
+
 public struct ClassInfo: Sendable {
     public let id: String
     public let tagline: String
@@ -46,33 +52,33 @@ public enum GameData {
         classes.first { $0.id == id } ?? c(id, "", 100, 6...12, 0)
     }
 
-    public static let races: [(id: String, desc: String)] = [
-        ("Human", "Adaptable · +All Stats"),
-        ("Elf", "+AGI +INT"),
-        ("Dwarf", "+STR +DEF"),
-        ("Orc", "+STR+STR -DEF"),
-        ("Tiefling", "+LCK +INT"),
-        ("Shade", "+AGI +LCK"),
-        ("Vampire", "Drain 5 HP per kill"),
-        ("Goblin", "+25% gold"),
-        ("Angel", "+1 extra life"),
-        ("Demon", "+15% damage dealt and taken"),
-        ("Golem", "+5 defense · Immune to status"),
-        ("Halfling", "+LCK+LCK -STR"),
-        ("Dragonborn", "10% burn damage · Scales with floor"),
-        ("Gnome", "+INT +LCK · Skills cost less SP"),
-        ("Merfolk", "+AGI · Bonus in Sunken Archives · Potions +heal"),
+    public static let races: [Option] = [
+        Option(id: "Human", desc: "Adaptable · +All Stats"),
+        Option(id: "Elf", desc: "+AGI +INT"),
+        Option(id: "Dwarf", desc: "+STR +DEF"),
+        Option(id: "Orc", desc: "+STR+STR -DEF"),
+        Option(id: "Tiefling", desc: "+LCK +INT"),
+        Option(id: "Shade", desc: "+AGI +LCK"),
+        Option(id: "Vampire", desc: "Drain 5 HP per kill"),
+        Option(id: "Goblin", desc: "+25% gold"),
+        Option(id: "Angel", desc: "+1 extra life"),
+        Option(id: "Demon", desc: "+15% damage dealt and taken"),
+        Option(id: "Golem", desc: "+5 defense · Immune to status"),
+        Option(id: "Halfling", desc: "+LCK+LCK -STR"),
+        Option(id: "Dragonborn", desc: "10% burn damage · Scales with floor"),
+        Option(id: "Gnome", desc: "+INT +LCK · Skills cost less SP"),
+        Option(id: "Merfolk", desc: "+AGI · Bonus in Sunken Archives · Potions +heal"),
     ]
 
-    public static let professions: [(id: String, desc: String)] = [
-        ("Blacksmith", "Armor and Weapon Durability"),
-        ("Herbalist", "Potions twice as effective"),
-        ("Scholar", "Trap and Curse Detection"),
-        ("Mercenary", "Starting Gold +1 Weapon"),
-        ("Gravedigger", "Undead Resistance"),
-        ("Thief", "Hidden Loot Discovery"),
-        ("Pilgrim", "Holy Relic · +15% XP"),
-        ("Grave Robber", "Start with 50g · Bonus loot"),
+    public static let professions: [Option] = [
+        Option(id: "Blacksmith", desc: "Armor and Weapon Durability"),
+        Option(id: "Herbalist", desc: "Potions twice as effective"),
+        Option(id: "Scholar", desc: "Trap and Curse Detection"),
+        Option(id: "Mercenary", desc: "Starting Gold +1 Weapon"),
+        Option(id: "Gravedigger", desc: "Undead Resistance"),
+        Option(id: "Thief", desc: "Hidden Loot Discovery"),
+        Option(id: "Pilgrim", desc: "Holy Relic · +15% XP"),
+        Option(id: "Grave Robber", desc: "Start with 50g · Bonus loot"),
     ]
 
     public enum Difficulty: String, CaseIterable, Codable, Sendable {

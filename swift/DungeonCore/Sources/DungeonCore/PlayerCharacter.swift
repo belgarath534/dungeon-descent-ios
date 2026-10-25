@@ -3,7 +3,7 @@ import Foundation
 /// A saved character, in the same JSON shape as the web version's `CHARS` entries.
 /// Fields the Swift version doesn't use yet are kept in `extra` and written back
 /// untouched, so a web save survives a round trip through the Swift app.
-public struct Character: Equatable, Sendable {
+public struct PlayerCharacter: Equatable, Sendable {
     public var name: String
     public var cls: String
     public var race: String
@@ -68,7 +68,7 @@ public struct Character: Equatable, Sendable {
     }
 }
 
-extension Character: Codable {
+extension PlayerCharacter: Codable {
     private static let knownKeys: Set<String> = [
         "name", "cls", "race", "prof", "dungeon", "difficulty", "floor", "created", "runMode",
         "lastSpirit", "corruptionMode", "corruption", "hunterMode", "hardcoreMode",
@@ -142,12 +142,12 @@ extension Character: Codable {
 /// Loads and saves the character list under "dd_chars", like saveChars() does.
 public final class CharacterRoster {
     private let store: GameStore
-    public private(set) var characters: [Character]
+    public private(set) var characters: [PlayerCharacter]
 
     public init(store: GameStore) {
         self.store = store
         if let raw = store.getItem(StoreKey.chars), let data = raw.data(using: .utf8),
-           let list = try? JSONDecoder().decode([Character].self, from: data) {
+           let list = try? JSONDecoder().decode([PlayerCharacter].self, from: data) {
             characters = list
         } else {
             characters = []
@@ -158,14 +158,14 @@ public final class CharacterRoster {
 
     /// Adds a character and saves. Returns its index, or nil if all slots are used.
     @discardableResult
-    public func add(_ ch: Character) -> Int? {
+    public func add(_ ch: PlayerCharacter) -> Int? {
         guard !isFull else { return nil }
         characters.append(ch)
         save()
         return characters.count - 1
     }
 
-    public func update(_ index: Int, _ change: (inout Character) -> Void) {
+    public func update(_ index: Int, _ change: (inout PlayerCharacter) -> Void) {
         guard characters.indices.contains(index) else { return }
         change(&characters[index])
         save()
@@ -212,7 +212,7 @@ public final class CharacterRoster {
     }
 }
 
-extension Character {
+extension PlayerCharacter {
     /// The completion check repairDungeonUnlocks() uses.
     var finishedDungeon: Bool {
         if completed || floor >= 10 { return true }

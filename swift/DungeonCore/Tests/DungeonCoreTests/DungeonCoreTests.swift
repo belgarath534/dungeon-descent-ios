@@ -83,20 +83,20 @@ final class CharacterTests: XCTestCase {
     }
 
     func testNewCharacterDefaults() {
-        let classic = Character(name: "Kael", cls: "Warrior", race: "Human", prof: "Thief",
+        let classic = PlayerCharacter(name: "Kael", cls: "Warrior", race: "Human", prof: "Thief",
                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
         XCTAssertEqual(classic.levelCap, 10)
         XCTAssertNil(classic.dungeonTier)
-        let legacy = Character(name: "Kael", cls: "Warrior", race: "Human", prof: "Thief",
+        let legacy = PlayerCharacter(name: "Kael", cls: "Warrior", race: "Human", prof: "Thief",
                                dungeon: "Crypt of Malachar", difficulty: .wanderer, runMode: "legacy")
         XCTAssertEqual(legacy.levelCap, 25)
         XCTAssertEqual(legacy.dungeonTier, 1)
     }
 
     func testNameRule() {
-        XCTAssertFalse(Character.isValidName("A"))
-        XCTAssertTrue(Character.isValidName("Al"))
-        XCTAssertFalse(Character.isValidName(String(repeating: "x", count: 25)))
+        XCTAssertFalse(PlayerCharacter.isValidName("A"))
+        XCTAssertTrue(PlayerCharacter.isValidName("Al"))
+        XCTAssertFalse(PlayerCharacter.isValidName(String(repeating: "x", count: 25)))
     }
 
     func testRosterLimitAndUnlocks() {
@@ -105,11 +105,11 @@ final class CharacterTests: XCTestCase {
         XCTAssertEqual(roster.unlockedDungeons(), ["Crypt of Malachar", "The Ashbound Wastes"])
         XCTAssertNotNil(store.getItem("dd_unlocks"))
         for i in 0..<4 {
-            XCTAssertNotNil(roster.add(Character(name: "C\(i)", cls: "Monk", race: "Orc", prof: "Thief",
+            XCTAssertNotNil(roster.add(PlayerCharacter(name: "C\(i)", cls: "Monk", race: "Orc", prof: "Thief",
                                                  dungeon: "Crypt of Malachar", difficulty: .wanderer)))
         }
         XCTAssertTrue(roster.isFull)
-        XCTAssertNil(roster.add(Character(name: "Extra", cls: "Monk", race: "Orc", prof: "Thief",
+        XCTAssertNil(roster.add(PlayerCharacter(name: "Extra", cls: "Monk", race: "Orc", prof: "Thief",
                                           dungeon: "Crypt of Malachar", difficulty: .wanderer)))
     }
 
@@ -122,7 +122,7 @@ final class CharacterTests: XCTestCase {
 
 final class RunTests: XCTestCase {
     func testStartingStats() {
-        let ch = Character(name: "Brom", cls: "Sentinel", race: "Dwarf", prof: "Mercenary",
+        let ch = PlayerCharacter(name: "Brom", cls: "Sentinel", race: "Dwarf", prof: "Mercenary",
                            dungeon: "Crypt of Malachar", difficulty: .wanderer)
         let run = Run(character: ch, gold: 40)
         XCTAssertEqual(run.maxHp, 145)
@@ -135,7 +135,7 @@ final class RunTests: XCTestCase {
     }
 
     func testClassWithoutOwnStatsUsesWebDefaults() {
-        let ch = Character(name: "Vex", cls: "Arcanist", race: "Gnome", prof: "Herbalist",
+        let ch = PlayerCharacter(name: "Vex", cls: "Arcanist", race: "Gnome", prof: "Herbalist",
                            dungeon: "Crypt of Malachar", difficulty: .forsaken)
         let run = Run(character: ch)
         XCTAssertEqual(run.maxHp, 100)
@@ -173,7 +173,7 @@ final class EnemyScalingTests: XCTestCase {
 
 final class CombatTests: XCTestCase {
     func makeRun(_ cls: String, _ diff: GameData.Difficulty = .wanderer, prof: String = "Thief") -> Run {
-        Run(character: Character(name: "T", cls: cls, race: "Human", prof: prof,
+        Run(character: PlayerCharacter(name: "T", cls: cls, race: "Human", prof: prof,
                                  dungeon: "Crypt of Malachar", difficulty: diff))
     }
 
@@ -269,5 +269,101 @@ final class CombatTests: XCTestCase {
         }
         XCTAssertEqual(fight(seed: 42).0, fight(seed: 42).0)
         XCTAssertEqual(fight(seed: 7).1, 1)
+    }
+}
+
+final class ProgressionTests: XCTestCase {
+    func newRun(_ cls: String = "Warrior", race: String = "Human", prof: String = "Thief",
+             _ diff: GameData.Difficulty = .wanderer) -> Run {
+        Run(character: PlayerCharacter(name: "P", cls: cls, race: race, prof: prof,
+                                 dungeon: "Crypt of Malachar", difficulty: diff))
+    }
+
+    func testLevelUpsCarryXPAndGiveThreePointsPerBatch() {
+        var r = newRun()
+        // 330 XP: 100 to reach level 2, 220 more to reach level 3, 10 left over
+        XCTAssertEqual(Progression.gainXP(&r, 330), 2)
+        XCTAssertEqual(r.level, 3)
+        XCTAssertEqual(r.xp, 10)
+        XCTAssertEqual(r.levelPoints, 3)
+    }
+
+    func testPilgrimXPAndLevelCap() {
+        var p = newRun(prof: "Pilgrim")
+        Progression.gainXP(&p, 90)
+        // 90 × 1.15 is 103.49999999999999 in floating point, so JavaScript's
+        // Math.round gives 103 — past the 100 needed for level 2, 3 left over
+        XCTAssertEqual(p.level, 2)
+        XCTAssertEqual(p.xp, 3)
+        var capped = newRun()
+        Progression.gainXP(&capped, 100_000)
+        XCTAssertEqual(capped.level, 10)
+    }
+
+    func testSpendingLevelPoints() {
+        var r = newRun()
+        XCTAssertFalse(Progression.spend(&r, on: .strength))
+        r.levelPoints = 2
+        r.hp = 50
+        XCTAssertTrue(Progression.spend(&r, on: .stamina))
+        XCTAssertEqual(r.maxHp, 130)
+        XCTAssertEqual(r.hp, 60)
+        XCTAssertTrue(Progression.spend(&r, on: .agility))
+        XCTAssertEqual(r.critBonus, 0.03, accuracy: 1e-9)
+        XCTAssertEqual(r.levelPoints, 0)
+    }
+
+    func testKillRewardWithGoblinGold() {
+        var r = newRun(race: "Goblin")
+        let w = Wallet(store: MemoryStore())
+        let shade = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1)
+        var dice = LoadedDice(rolls: [4])
+        let reward = Progression.rewardKill(&r, shade, dice: &dice, wallet: w)
+        XCTAssertEqual(reward.gold, 5)      // round(4 × 1.25)
+        XCTAssertEqual(reward.xp, 15)
+        XCTAssertEqual(w.gold, 5)
+        XCTAssertEqual(reward.message, "Hollow Shade is defeated! You gain 5 gold and 15 XP.")
+    }
+
+    func testTiers() {
+        XCTAssertEqual(Progression.tier(of: "Crypt Rat", in: "Crypt of Malachar"), .t1)
+        XCTAssertEqual(Progression.tier(of: "Bone Archer", in: "Crypt of Malachar"), .t2)
+        XCTAssertEqual(Progression.tier(of: "The Pale Queen", in: "Crypt of Malachar"), .boss)
+        XCTAssertEqual(Progression.tier(of: "Blood Golem", in: "Crypt of Malachar"), .t3)
+    }
+
+    func testStartBonuses() {
+        var robber = newRun(prof: "Grave Robber")
+        let w = Wallet(store: MemoryStore())
+        robber.applyStartBonuses(wallet: w)
+        XCTAssertEqual(robber.gold, 50)
+        XCTAssertEqual(w.gold, 50)
+        XCTAssertTrue(robber.graveRobberLoot)
+        XCTAssertEqual(newRun(race: "Halfling").atk, 6...14)
+        XCTAssertEqual(newRun(prof: "Warden").defBonus, 3)
+    }
+
+    func testLives() {
+        var r = newRun()
+        r.hp = 0
+        XCTAssertEqual(Progression.handleDeath(&r), .revived(livesLeft: 2))
+        XCTAssertEqual(r.hp, 48)
+        XCTAssertEqual(Progression.handleDeath(&r), .revived(livesLeft: 1))
+        XCTAssertEqual(Progression.handleDeath(&r), .runOver)
+        var iron = newRun("Warrior", .ironblood)
+        XCTAssertEqual(Progression.handleDeath(&iron), .runOver)
+    }
+}
+
+final class RoomTests: XCTestCase {
+    func testRoomOddsMatchWebVersion() {
+        var dice = SeededDice(seed: 2024)
+        var counts: [Rooms.Outcome: Int] = [:]
+        let n = 200_000
+        for _ in 0..<n { counts[Rooms.roll(.wanderer, dice: &dice), default: 0] += 1 }
+        XCTAssertEqual(Double(counts[.fight]!) / Double(n), 0.40, accuracy: 0.01)
+        XCTAssertEqual(Double(counts[.loot]!) / Double(n), 0.28, accuracy: 0.01)
+        XCTAssertEqual(Double(counts[.event]!) / Double(n), 0.32, accuracy: 0.01)
+        XCTAssertEqual(Rooms.combatChance(.nightmare), 0.60)
     }
 }

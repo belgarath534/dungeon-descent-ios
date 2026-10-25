@@ -1,0 +1,133 @@
+import Foundation
+
+/// XP, level-ups, level points, kill rewards and lives.
+/// Ports of gainXP / checkLevelUp / LP_STATS / enemyDead's payout / handleDeath.
+public enum Progression {
+    /// XP needed to go from each level to the next (XP_TABLE).
+    public static let xpTable = [0, 100, 220, 380, 580, 820, 1100, 1430, 1810, 2240, 9999]
+
+    public enum Tier: String, Sendable { case t1, t2, t3, boss }
+
+    public static func xp(for tier: Tier) -> Int {
+        switch tier {
+        case .t1: return 15
+        case .t2: return 28
+        case .t3: return 45
+        case .boss: return 120
+        }
+    }
+
+    /// Like getEnemyTier(): anything not in tier 1, tier 2 or the bosses counts as tier 3.
+    public static func tier(of name: String, in dungeon: String) -> Tier {
+        let pool = Bestiary.enemies(for: dungeon)
+        if pool.t1.contains(where: { $0.name == name }) { return .t1 }
+        if pool.t2.contains(where: { $0.name == name }) { return .t2 }
+        if pool.bosses.contains(where: { $0.name == name }) { return .boss }
+        return .t3
+    }
+
+    public static func xpNeeded(atLevel level: Int) -> Int {
+        xpTable[min(level, xpTable.count - 1)]
+    }
+
+    /// Adds XP and levels up as far as it reaches. Returns how many levels
+    /// were gained. Each batch of level-ups gives 3 level points, once.
+    @discardableResult
+    public static func gainXP(_ run: inout Run, _ amount: Int) -> Int {
+        guard amount > 0 else { return 0 }
+        var amount = amount
+        if run.pilgrimProf { amount = jsRound(Double(amount) * 1.15) }
+        run.xp += amount
+        guard run.level < run.levelCap else { return 0 }
+        var needed = xpNeeded(atLevel: run.level)
+        var gained = 0
+        while run.xp >= needed && run.level < run.levelCap {
+            run.xp -= needed
+            run.level += 1
+            gained += 1
+            needed = xpNeeded(atLevel: run.level)
+        }
+        if gained > 0 { run.levelPoints += 3 }
+        return gained
+    }
+
+    /// Stats a level point can be spent on (LP_STATS).
+    public enum Stat: String, CaseIterable, Sendable {
+        case strength, stamina, defense, intelligence, agility, luck
+
+        public var label: String {
+            switch self {
+            case .strength: return "Strength"
+            case .stamina: return "Stamina"
+            case .defense: return "Defense"
+            case .intelligence: return "Intelligence"
+            case .agility: return "Agility"
+            case .luck: return "Luck"
+            }
+        }
+
+        public var summary: String {
+            switch self {
+            case .strength: return "+2 ATK — hit harder"
+            case .stamina: return "+10 max HP — survive longer"
+            case .defense: return "+2 DEF — reduce damage taken"
+            case .intelligence: return "+5 max SP — more skill energy"
+            case .agility: return "+3% crit chance and +5% flee chance"
+            case .luck: return "+10% gold drops and better loot"
+            }
+        }
+    }
+
+    /// Spends one level point. Returns false if there are none left.
+    @discardableResult
+    public static func spend(_ run: inout Run, on stat: Stat) -> Bool {
+        guard run.levelPoints > 0 else { return false }
+        switch stat {
+        case .strength: run.atkBonus += 2
+        case .stamina: run.maxHp += 10; run.hp = min(run.maxHp, run.hp + 10)
+        case .defense: run.defBonus += 2
+        case .intelligence: run.maxSp += 5; run.sp = min(run.maxSp, run.sp + 5)
+        case .agility: run.fleeBonus += 0.05; run.critBonus += 0.03
+        case .luck: run.luckBonus += 0.10
+        }
+        run.levelPoints -= 1
+        return true
+    }
+
+    public struct KillReward: Equatable, Sendable {
+        public var gold: Int
+        public var xp: Int
+        public var levelsGained: Int
+        public var message: String
+    }
+
+    /// Pays out for a defeated enemy: gold into the run and the shared wallet, then XP.
+    public static func rewardKill(_ run: inout Run, _ enemy: Enemy, dice: inout some Dice, wallet: Wallet) -> KillReward {
+        var g = dice.roll(enemy.gold)
+        if run.race == "Goblin" { g = jsRound(Double(g) * 1.25) }
+        if run.graveRobberLoot { g = jsRound(Double(g) * 1.20) }
+        if run.luckBonus != 0 { g = jsRound(Double(g) * (1 + run.luckBonus)) }
+        run.gold += g
+        wallet.addGold(g)
+        let xp = Progression.xp(for: tier(of: enemy.name, in: run.dungeon))
+        let levels = gainXP(&run, xp)
+        return KillReward(gold: g, xp: xp, levelsGained: levels,
+                          message: "\(enemy.name) is defeated! You gain \(g) gold and \(xp) XP.")
+    }
+
+    public enum DeathOutcome: Equatable, Sendable {
+        /// Came back at 40% HP with this many lives left.
+        case revived(livesLeft: Int)
+        case runOver
+    }
+
+    /// Loses a life. Revives at 40% HP if any are left. Hardcore and the
+    /// cheat-death items and skills are not ported yet.
+    public static func handleDeath(_ run: inout Run) -> DeathOutcome {
+        run.lives = max(0, run.lives - 1)
+        run.inCombat = false
+        if run.lives <= 0 { return .runOver }
+        run.hp = jsRound(Double(run.maxHp) * 0.4)
+        return .revived(livesLeft: run.lives)
+    }
+}

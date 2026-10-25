@@ -109,3 +109,85 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: false  # internal testers get every build anyway; true tries external beta review and fails without Test Information
+
+  dungeon-descent-swift:
+    name: Dungeon Descent Swift (TestFlight)
+    # The Swift rewrite in swift/. Same bundle ID as the web version, so each
+    # build replaces it on TestFlight. Start it by hand from Codemagic.
+    max_build_duration: 60
+    instance_type: mac_mini_m4
+    integrations:
+      app_store_connect: Accessible Backrooms
+    environment:
+      ios_signing:
+        provisioning_profiles:
+          - Dungeon Descent Live Activity App Store
+        certificates:
+          - Accessible Backrooms Distribution
+      xcode: latest
+    scripts:
+      - name: Install XcodeGen
+        script: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+      - name: Run the game rules tests
+        script: |
+          cd swift/DungeonCore
+          swift test
+      - name: Get the App Store profile from Apple
+        script: |
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          for NAME in "Dungeon Descent iCloud App Store" "Dungeon Descent App Store"; do
+            TMP=$(mktemp -d)
+            app-store-connect profiles list --type IOS_APP_STORE --state ACTIVE \
+              --name "$NAME" --save --profiles-dir "$TMP" || true
+            for F in "$TMP"/*; do
+              [ -f "$F" ] || continue
+              if security cms -D -i "$F" | grep -q "iCloud.com.dungeon.descent"; then
+                echo "Using \"$NAME\" from Apple, it includes iCloud"
+                cp "$F" "$DEST/"
+                exit 0
+              fi
+              echo "\"$NAME\" on Apple does not include iCloud, skipping it"
+            done
+          done
+          echo "No active App Store profile with iCloud for com.dungeon.descent was found on Apple"
+          exit 1
+      - name: Set build number
+        script: |
+          # TestFlight only accepts a build number higher than every earlier
+          # one, including the web version's builds from the other workflow.
+          # Ask Apple for the latest; if that fails, the project-wide build
+          # count is still higher than any number Codemagic has used before.
+          APP_ID=$(app-store-connect apps list --bundle-id-identifier com.dungeon.descent \
+            --strict-match-identifier --json 2>/dev/null \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")' || true)
+          LATEST=0
+          if [ -n "$APP_ID" ]; then
+            LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_ID" 2>/dev/null \
+              | grep -Eo '^[0-9]+$' | tail -1 || true)
+          fi
+          NEXT=$(( ${LATEST:-0} + 1 ))
+          if [ "${PROJECT_BUILD_NUMBER:-0}" -gt "$NEXT" ]; then NEXT=$PROJECT_BUILD_NUMBER; fi
+          echo "Latest on TestFlight: ${LATEST:-unknown}. Using build number $NEXT"
+          sed -i '' "s/CURRENT_PROJECT_VERSION: \"[0-9]*\"/CURRENT_PROJECT_VERSION: \"$NEXT\"/" swift/App/project.yml
+          grep CURRENT_PROJECT_VERSION swift/App/project.yml
+      - name: Generate the Xcode project
+        script: |
+          cd swift/App
+          xcodegen generate
+      - name: Use the App Store signing profiles
+        script: |
+          xcode-project use-profiles --project swift/App/DungeonDescent.xcodeproj
+      - name: Build signed IPA
+        script: |
+          xcode-project build-ipa \
+            --project swift/App/DungeonDescent.xcodeproj \
+            --scheme DungeonDescent
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false  # internal testers get every build anyway
