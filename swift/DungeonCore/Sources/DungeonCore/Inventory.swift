@@ -116,6 +116,8 @@ public enum Inventory {
             return Outcome(message: "\(item.name) can't be used in the Swift version yet.", used: false)
         }
 
+        // Healing breaks the "no potions" daily quest.
+        if ["potion", "elixir", "heal"].contains(item.type) { run.usedPotion = true }
         run.inventory.remove(at: index)
         return out
     }

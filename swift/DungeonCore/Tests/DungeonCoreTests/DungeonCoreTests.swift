@@ -1096,3 +1096,55 @@ final class FileStoreTests: XCTestCase {
         try? FileManager.default.removeItem(at: url)
     }
 }
+
+final class DailyQuestTests: XCTestCase {
+    func quests(on day: String, _ store: MemoryStore = MemoryStore()) -> DailyQuests {
+        let q = DailyQuests(store: store, calendar: Calendar(identifier: .gregorian))
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd HH:mm"
+        f.timeZone = TimeZone.current
+        let date = f.date(from: day + " 12:00")!
+        q.now = { date }
+        return q
+    }
+
+    func testSameQuestAllDayAndRotatesByDayOfYear() {
+        // 1 January is day 1 → the second quest in the list
+        XCTAssertEqual(quests(on: "2026-01-01").quest.id, "dq-kills-10")
+        XCTAssertEqual(quests(on: "2026-01-02").quest.id, "dq-kills-20")
+        let store = MemoryStore()
+        XCTAssertEqual(quests(on: "2026-01-04", store).quest.id, quests(on: "2026-01-04", store).quest.id)
+    }
+
+    func testProgressAndCompletionHappenOnce() {
+        let q = quests(on: "2026-01-01")   // defeat 10 enemies
+        XCTAssertNil(q.report("loot", 5))
+        XCTAssertNil(q.report("kills", 9))
+        XCTAssertEqual(q.progress, 9)
+        XCTAssertEqual(q.report("kills", 3)?.id, "dq-kills-10")
+        XCTAssertTrue(q.isComplete)
+        XCTAssertNil(q.report("kills", 1))
+    }
+
+    func testFloorQuestsUseTheFloorReached() {
+        let q = quests(on: "2026-01-04")   // reach floor 8
+        XCTAssertEqual(q.quest.type, "floor")
+        XCTAssertNil(q.reachedFloor(4, usedPotion: false))
+        XCTAssertNotNil(q.reachedFloor(8, usedPotion: true))
+    }
+
+    func testUnsupportedQuestDaysMoveToTheNextOne() {
+        // Day 15 is the rare-spirit quest, which isn't ported yet
+        XCTAssertEqual(quests(on: "2026-01-15").quest.id, "dq-hollow")
+    }
+
+    func testRewardPaysGoldAndPotion() {
+        let w = Wallet(store: MemoryStore())
+        var r = Run(character: PlayerCharacter(name: "Q", cls: "Bard", race: "Elf", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        let q = GameContent.shared.dailyQuests.first { $0.id == "dq-kills-20" }!
+        DailyQuests.payReward(q, &r, wallet: w)
+        XCTAssertEqual(w.gold, 150)
+        XCTAssertEqual(r.inventory.last?.name, "Health Potion")
+    }
+}

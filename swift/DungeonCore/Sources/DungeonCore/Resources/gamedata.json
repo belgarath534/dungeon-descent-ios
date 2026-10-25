@@ -9691,6 +9691,222 @@
    }
   }
  ],
+ "dailyQuests": [
+  {
+   "id": "dq-kills-5",
+   "desc": "Defeat 5 enemies in a single run.",
+   "type": "kills",
+   "target": 5,
+   "reward": "50 gold",
+   "rewardGold": 50
+  },
+  {
+   "id": "dq-kills-10",
+   "desc": "Defeat 10 enemies in a single run.",
+   "type": "kills",
+   "target": 10,
+   "reward": "100 gold",
+   "rewardGold": 100
+  },
+  {
+   "id": "dq-kills-20",
+   "desc": "Defeat 20 enemies in a single run.",
+   "type": "kills",
+   "target": 20,
+   "reward": "150 gold + potion",
+   "rewardGold": 150,
+   "rewardPotion": true
+  },
+  {
+   "id": "dq-floor-5",
+   "desc": "Reach floor 5 without fleeing any combat.",
+   "type": "floor",
+   "target": 5,
+   "reward": "75 gold",
+   "rewardGold": 75
+  },
+  {
+   "id": "dq-floor-8",
+   "desc": "Reach floor 8 in a single run.",
+   "type": "floor",
+   "target": 8,
+   "reward": "120 gold",
+   "rewardGold": 120
+  },
+  {
+   "id": "dq-loot-3",
+   "desc": "Find 3 items in a single run.",
+   "type": "loot",
+   "target": 3,
+   "reward": "60 gold",
+   "rewardGold": 60
+  },
+  {
+   "id": "dq-loot-5",
+   "desc": "Find 5 items in a single run.",
+   "type": "loot",
+   "target": 5,
+   "reward": "90 gold + potion",
+   "rewardGold": 90,
+   "rewardPotion": true
+  },
+  {
+   "id": "dq-gold-50",
+   "desc": "Collect 50 gold in a single run.",
+   "type": "gold",
+   "target": 50,
+   "reward": "60 gold",
+   "rewardGold": 60
+  },
+  {
+   "id": "dq-gold-100",
+   "desc": "Collect 100 gold in a single run.",
+   "type": "gold",
+   "target": 100,
+   "reward": "120 gold",
+   "rewardGold": 120
+  },
+  {
+   "id": "dq-gold-200",
+   "desc": "Collect 200 gold in a single run.",
+   "type": "gold",
+   "target": 200,
+   "reward": "200 gold",
+   "rewardGold": 200
+  },
+  {
+   "id": "dq-nopotion",
+   "desc": "Reach floor 3 without using any potions.",
+   "type": "nopotion",
+   "target": 3,
+   "reward": "80 gold + potion",
+   "rewardGold": 80,
+   "rewardPotion": true
+  },
+  {
+   "id": "dq-crits-3",
+   "desc": "Land 3 critical hits in a single run.",
+   "type": "crits",
+   "target": 3,
+   "reward": "70 gold",
+   "rewardGold": 70
+  },
+  {
+   "id": "dq-crits-5",
+   "desc": "Land 5 critical hits in a single run.",
+   "type": "crits",
+   "target": 5,
+   "reward": "100 gold",
+   "rewardGold": 100
+  },
+  {
+   "id": "dq-boss",
+   "desc": "Defeat the floor 10 boss in any dungeon.",
+   "type": "boss",
+   "target": 1,
+   "reward": "150 gold",
+   "rewardGold": 150
+  },
+  {
+   "id": "dq-elite",
+   "desc": "Defeat an elite enemy.",
+   "type": "elite",
+   "target": 1,
+   "reward": "100 gold + potion",
+   "rewardGold": 100,
+   "rewardPotion": true
+  },
+  {
+   "id": "dq-spirit",
+   "desc": "Complete a run with a rare spirit active.",
+   "type": "rarespirit",
+   "target": 1,
+   "reward": "120 gold",
+   "rewardGold": 120
+  },
+  {
+   "id": "dq-hollow",
+   "desc": "Complete a floor in The Hollow.",
+   "type": "hollow",
+   "target": 1,
+   "reward": "80 gold",
+   "rewardGold": 80
+  },
+  {
+   "id": "dq-sunken",
+   "desc": "Find a lore fragment in the Sunken Archives.",
+   "type": "fragment",
+   "target": 1,
+   "reward": "75 gold",
+   "rewardGold": 75
+  },
+  {
+   "id": "dq-skills-3",
+   "desc": "Use 3 different skills in a single run.",
+   "type": "skilluse",
+   "target": 3,
+   "reward": "80 gold",
+   "rewardGold": 80
+  },
+  {
+   "id": "dq-survive",
+   "desc": "Take damage but survive with 10 HP or less.",
+   "type": "survive",
+   "target": 1,
+   "reward": "90 gold",
+   "rewardGold": 90
+  },
+  {
+   "id": "dq-kills-nodmg",
+   "desc": "Defeat 3 enemies without taking any damage.",
+   "type": "nodmg",
+   "target": 3,
+   "reward": "100 gold",
+   "rewardGold": 100
+  },
+  {
+   "id": "dq-kills-30",
+   "desc": "Defeat 30 enemies in a single run.",
+   "type": "kills",
+   "target": 30,
+   "reward": "220 gold + potion",
+   "rewardGold": 220,
+   "rewardPotion": true
+  },
+  {
+   "id": "dq-floor-10",
+   "desc": "Reach floor 10 in a single run.",
+   "type": "floor",
+   "target": 10,
+   "reward": "160 gold",
+   "rewardGold": 160
+  },
+  {
+   "id": "dq-gold-300",
+   "desc": "Collect 300 gold in a single run.",
+   "type": "gold",
+   "target": 300,
+   "reward": "250 gold",
+   "rewardGold": 250
+  },
+  {
+   "id": "dq-crits-8",
+   "desc": "Land 8 critical hits in a single run.",
+   "type": "crits",
+   "target": 8,
+   "reward": "150 gold",
+   "rewardGold": 150
+  },
+  {
+   "id": "dq-loot-8",
+   "desc": "Find 8 items in a single run.",
+   "type": "loot",
+   "target": 8,
+   "reward": "140 gold + potion",
+   "rewardGold": 140,
+   "rewardPotion": true
+  }
+ ],
  "traps": {
   "crypt": [
    {

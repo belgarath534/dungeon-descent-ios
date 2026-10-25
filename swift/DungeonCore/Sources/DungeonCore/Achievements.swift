@@ -36,6 +36,7 @@ public enum GameEvent: Sendable {
     case died
     case julioMet
     case elixirUsed
+    case dailyQuestCompleted
 }
 
 /// Achievements, trophies and lifetime stats, saved under the web version's keys
@@ -189,6 +190,8 @@ public final class AchievementBook {
             increment("julioFound")
         case .elixirUsed:
             increment("elixirsUsed")
+        case .dailyQuestCompleted:
+            increment("dailyQuestsComplete")
         }
         check()
     }

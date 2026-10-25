@@ -53,8 +53,8 @@ build there means the app doesn't compile; the log says why.
    boss phases, victory and defeat. Runs are saved after every action and can be
    continued. Class skills: all 358, learned at level-ups. Elites, enemy abilities,
    special rooms and dungeon events. Weapon and armor rarities. Achievements,
-   trophies and Game Center. Hardcore, Continue Journey and New Game+.
-   Next: quests and bounties, daily challenge, boss rush, raids.
+   trophies and Game Center. Hardcore, Continue Journey and New Game+. Daily quests.
+   Next: bounties, daily challenge, boss rush, raids.
 4. **Native services:** Sign in with Apple / Google through the Firebase iOS SDK,
    cloud save, StoreKit 2 purchases, Game Center, Core Haptics, audio, Live Activity,
    Magic Tap, iCloud backup.
@@ -98,6 +98,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Lifetime stats | GLOBAL STATS TRACKING | 🟡 kills, deaths, floors, runs; no stats screen yet |
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
+| Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
 | Quests, bounties, inbox | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
 | Spirits, companion, corruption, Hunter, Void, Medusa arc | … | ⬜ |
 | Seasonal events | SEASONAL EVENTS SYSTEM | ⬜ |

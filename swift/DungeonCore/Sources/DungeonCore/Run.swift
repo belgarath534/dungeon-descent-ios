@@ -103,6 +103,8 @@ public struct Run: Codable, Sendable {
     // For achievements
     public var startedAt = Date().timeIntervalSince1970
     public var diedThisRun = false
+    public var usedPotion = false
+    public var skillsUsed: [String] = []
     public var hpAtFloorStart = 0
 
     public var isDead: Bool { hp <= 0 }

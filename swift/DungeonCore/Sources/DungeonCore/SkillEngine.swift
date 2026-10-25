@@ -100,6 +100,7 @@ public enum Skills {
         run.sp -= price
         if run.freeSkills > 0 { run.freeSkills -= 1 }
         if spec.oncePerRun { run.usedOncePerRun.append(effect) }
+        if !run.skillsUsed.contains(effect) { run.skillsUsed.append(effect) }
         run.defending = false
 
         // Spell Echo repeats the last skill for free.

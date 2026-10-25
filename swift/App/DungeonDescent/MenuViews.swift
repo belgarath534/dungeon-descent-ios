@@ -4,6 +4,7 @@ import DungeonCore
 struct MainMenuView: View {
     @EnvironmentObject var game: GameModel
     @StateObject private var webImport = WebImportFlow()
+    @State private var questSummary = ""
 
     var body: some View {
         List {
@@ -28,6 +29,11 @@ struct MainMenuView: View {
                 }
                 .font(.headline)
                 .accessibilityElement(children: .combine)
+            }
+
+            Section("Daily Quest") {
+                Text(questSummary)
+                    .accessibilityLabel("Daily quest: \(questSummary)")
             }
 
             Section {
@@ -57,6 +63,7 @@ struct MainMenuView: View {
         .onAppear {
             Sound.track("menu")
             Sound.ambient(nil)
+            questSummary = game.dailyQuests.summary
             if game.shouldOfferWebImport { webImport.check(game, quietIfEmpty: true) }
         }
         .webImportAlerts(webImport, game: game)

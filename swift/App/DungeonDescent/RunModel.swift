@@ -73,6 +73,7 @@ final class RunModel: ObservableObject {
         add("Descended into \(r.dungeon) on \(r.difficulty.rawValue) difficulty\(r.ngPlus ? ", New Game+ \(r.ngPlusCount ?? 1)" : "")\(r.hardcore ? ", Hardcore" : "").")
         add("Floor \(r.floor): \(roomTitle). \(r.lives) \(r.lives == 1 ? "life" : "lives").")
         if let s = Skills.unlocked(r).first { add("✨ Starting skill: \(s.name). \(s.desc)") }
+        add("✦ Daily quest: \(game.dailyQuests.summary)")
         persist()
         playMusic()
     }
@@ -185,7 +186,8 @@ final class RunModel: ObservableObject {
                 finish(r, d, phase: .shopping, spoken: said + " You have \(r.gold) gold.")
             } else {
                 if out.item != nil || out.gold > 0 { Sound.sfx("sfx-loot"); Feedback.success() }
-                finishQuietRoom(r, d, spoken: said)
+                let q = questFound(&r, item: out.item, gold: out.gold)
+                finishQuietRoom(r, d, spoken: said + q)
             }
             return
         }
@@ -210,6 +212,7 @@ final class RunModel: ObservableObject {
             add("\(label) \(find.message)")
             spoken += " " + find.message
             if find.item != nil || find.gold > 0 { Feedback.success(); Sound.sfx("sfx-loot") }
+            spoken += questFound(&r, item: find.item, gold: find.gold)
             finishQuietRoom(r, d, spoken: spoken)
         case .event:
             if let ev = Encounters.rollEvent(r, dice: &d) {
@@ -259,10 +262,38 @@ final class RunModel: ObservableObject {
             return
         }
         if out.item != nil || out.gold > 0 { Sound.sfx("sfx-loot") }
-        finishQuietRoom(r, d, spoken: out.message)
+        let q = questFound(&r, item: out.item, gold: out.gold)
+        finishQuietRoom(r, d, spoken: out.message + q)
     }
 
     private var achievements: AchievementBook { game.achievements }
+
+    // MARK: Daily quest
+
+    /// Counts progress toward today's quest. When it finishes, pays the reward
+    /// into the run and returns the spoken line to add.
+    private func quest(_ r: inout Run, _ type: String, _ amount: Int = 1) -> String {
+        questDone(&r, game.dailyQuests.report(type, amount))
+    }
+
+    private func questDone(_ r: inout Run, _ done: DailyQuest?) -> String {
+        guard let q = done else { return "" }
+        DailyQuests.payReward(q, &r, wallet: game.wallet)
+        achievements.record(.dailyQuestCompleted)
+        Sound.sfx("sfx-unlock")
+        Feedback.success()
+        let msg = "Daily quest complete! \(q.desc) Reward: \(q.reward)!"
+        add("✦ " + msg)
+        return " " + msg
+    }
+
+    /// Loot and gold found in a room, search or event.
+    private func questFound(_ r: inout Run, item: Item?, gold: Int) -> String {
+        var said = ""
+        if let item, item.type != "gem" { said += quest(&r, "loot") }
+        if gold > 0 { said += quest(&r, "gold", gold) }
+        return said
+    }
 
     /// Achievements for finishing a floor without losing HP.
     private func floorDone(_ r: Run) {
@@ -288,6 +319,7 @@ final class RunModel: ObservableObject {
         add(find.message)
         if find.trap != nil && find.trap != "avoided" { Feedback.warning(); Sound.sfx("sfx-trap") }
         else if find.item != nil || find.gold > 0 { Feedback.success(); Sound.sfx("sfx-loot") }
+        let q = find.playerDied ? "" : questFound(&r, item: find.item, gold: find.gold)
         run = r
         dice = d
         if find.playerDied {
@@ -295,7 +327,7 @@ final class RunModel: ObservableObject {
             return
         }
         persist()
-        Feedback.announce(find.message)
+        Feedback.announce(find.message + q)
     }
 
     // MARK: Fighting
@@ -320,6 +352,10 @@ final class RunModel: ObservableObject {
             spoken = result.log.joined(separator: " ")
             Feedback.hit(heavy: true)
         }
+        var questLine = ""
+        if result.crit { questLine += quest(&r, "crits") }
+        if (result.enemyDamage ?? 0) > 0 && r.hp > 0 && r.hp <= 10 { questLine += quest(&r, "survive") }
+        spoken += questLine
 
         if result.fled {
             finish(r, d, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring,
@@ -355,6 +391,14 @@ final class RunModel: ObservableObject {
         achievements.record(.enemyKilled(e, run: r))
         if reward.levelsGained > 0 { achievements.record(.levelReached(r.level)) }
         var said = spoken + " " + reward.message
+        said += quest(&r, "kills")
+        if e.isElite { said += quest(&r, "elite") }
+        if reward.gold > 0 { said += quest(&r, "gold", reward.gold) }
+        if r.fight.damageTaken == 0 { said += quest(&r, "nodmg") }
+        if e.isBoss {
+            said += quest(&r, "boss")
+            if r.dungeon == "The Hollow" { said += quest(&r, "hollow") }
+        }
         if reward.levelsGained > 0 {
             let msg = "Level up! You are now level \(r.level). You have \(r.levelPoints) level points to spend."
             add(msg)
@@ -391,7 +435,7 @@ final class RunModel: ObservableObject {
         var r = run
         r.gold += result.goldGained
         game.wallet.addGold(result.goldGained)
-        let msg = result.log.last ?? ""
+        let msg = (result.log.last ?? "") + quest(&r, "gold", result.goldGained)
         let done = r.roomsOnFloor >= r.floorRoomsNeeded
         if done { floorDone(r) }
         finish(r, dice, phase: done ? .floorCleared : .exploring,
@@ -476,16 +520,19 @@ final class RunModel: ObservableObject {
         guard phase == .fighting else { return }
         var r = run
         var d = dice
+        let newSkill = !r.skillsUsed.contains(effect)
         let result = Skills.use(&r, effect, dice: &d, options: .init(classTraits: AppSettings.classTraits))
         guard result.acted else {
             Feedback.announce(result.announcement ?? "You can't use that now.")
             return
         }
         result.log.forEach { add($0) }
+        var questLine = newSkill ? quest(&r, "skilluse") : ""
+        if (result.enemyDamage ?? 0) > 0 && r.hp > 0 && r.hp <= 10 { questLine += quest(&r, "survive") }
         if result.playerDamage > 0 { Feedback.hit(heavy: result.playerDamage >= 30); Sound.sfx(result.playerDamage >= 30 ? "sfx-crit" : "sfx-attack") }
         else { Sound.sfx("sfx-confirm") }
         if (result.enemyDamage ?? 0) > 0 { Sound.sfx("sfx-hurt") }
-        var spoken = result.log.joined(separator: " ")
+        var spoken = result.log.joined(separator: " ") + questLine
         if result.fled {
             finish(r, d, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring, spoken: spoken)
             playMusic()
@@ -593,10 +640,11 @@ final class RunModel: ObservableObject {
         roomTitle = Rooms.floorName(floor, dungeon: r.dungeon)
         add("You descend to floor \(floor): \(roomTitle).")
         achievements.record(.floorReached(floor))
+        let questLine = questDone(&r, game.dailyQuests.reachedFloor(floor, usedPotion: r.usedPotion))
         Sound.sfx("sfx-stairs")
         Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
         finish(r, d, phase: .shopping,
-               spoken: "Floor \(floor) of 10. \(roomTitle). A merchant waits in the passage. Shop open. You have \(r.gold) gold.")
+               spoken: "Floor \(floor) of 10. \(roomTitle). A merchant waits in the passage. Shop open. You have \(r.gold) gold." + questLine)
     }
 
     func wander() {

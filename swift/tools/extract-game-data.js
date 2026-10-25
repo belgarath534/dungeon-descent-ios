@@ -116,6 +116,7 @@ const out = {
   nightmareEnemies: enemies('NIGHTMARE_', 'Nightmare'),
   enemySpecials: plain(grab('ENEMY_SPECIALS')),
   achievements: achievements(),
+  dailyQuests: plain(grab('DAILY_QUESTS')),
   traps: plain(grab('TRAP_TYPES')),
   classSkills: plain(grab('CLASS_SKILLS')),
   startingSkills: startingSkills(),

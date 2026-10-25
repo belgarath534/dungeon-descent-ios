@@ -9,6 +9,7 @@ final class GameModel: ObservableObject {
     private let fileStore: FileStore
     let wallet: Wallet
     let achievements: AchievementBook
+    let dailyQuests: DailyQuests
     private var roster: CharacterRoster
 
     @Published private(set) var characters: [PlayerCharacter] = []
@@ -24,6 +25,7 @@ final class GameModel: ObservableObject {
         wallet = Wallet(store: store)
         roster = CharacterRoster(store: store)
         achievements = AchievementBook(store: store, wallet: wallet)
+        dailyQuests = DailyQuests(store: store)
         wallet.onChange = { [weak self] in self?.refresh() }
         achievements.onUnlock = { list in GameModel.announce(list) }
         achievements.payOutstandingRewards()
