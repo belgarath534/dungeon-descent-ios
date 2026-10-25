@@ -139,6 +139,7 @@ public enum Progression {
     /// Loses a life. Revives at 40% HP if any are left. Hardcore and the
     /// cheat-death items and skills are not ported yet.
     public static func handleDeath(_ run: inout Run) -> DeathOutcome {
+        run.diedThisRun = true
         if !run.gearSavedThisFloor && (run.weaponEffect == "undying" || run.armorEffect == "sanctuary") {
             run.gearSavedThisFloor = true
             run.hp = 1
@@ -149,6 +150,12 @@ public enum Progression {
             run.resurrection = false
             run.hp = jsRound(Double(run.maxHp) * 0.5)
             return .resurrected
+        }
+        // Hardcore: once every cheat-death is spent, the first death is the last.
+        if run.hardcore {
+            run.lives = 0
+            run.inCombat = false
+            return .runOver
         }
         run.lives = max(0, run.lives - 1)
         run.inCombat = false

@@ -5,7 +5,9 @@ import DungeonCore
 @MainActor
 struct CharacterDetailView: View {
     @EnvironmentObject var game: GameModel
-    let index: Int
+    /// The character's creation time, which identifies it even if others are deleted.
+    let id: Double
+    private var index: Int { game.characters.firstIndex { $0.created == id } ?? -1 }
     @State private var confirmingNewRun = false
     @State private var running: Bool? = nil   // nil: not playing; true: resumed; false: new run
 

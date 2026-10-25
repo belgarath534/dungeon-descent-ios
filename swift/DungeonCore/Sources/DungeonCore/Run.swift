@@ -41,6 +41,7 @@ public struct Run: Codable, Sendable {
     public var undeadRes: Bool
     public var pilgrimProf: Bool
     public var graveRobberLoot = false
+    public var hardcore = false
     public var ngPlus = false
     public var ngPlusCount: Int? = nil
 
@@ -99,6 +100,11 @@ public struct Run: Codable, Sendable {
     /// An event waiting for the player's choice.
     public var pendingEvent: String? = nil
 
+    // For achievements
+    public var startedAt = Date().timeIntervalSince1970
+    public var diedThisRun = false
+    public var hpAtFloorStart = 0
+
     public var isDead: Bool { hp <= 0 }
 
     /// Attack from the equipped weapon: the middle of its range, as initDungeon() adds it.
@@ -152,8 +158,12 @@ public struct Run: Codable, Sendable {
             atk = max(1, atk.lowerBound - 2)...max(2, atk.upperBound - 2)
         }
         self.gold = max(0, gold)
+        hardcore = ch.hardcoreMode
         ngPlus = ch.ngPlusActive
         if case .number(let n)? = ch.extra["ngPlusCount"] { ngPlusCount = Int(n) }
+        // Continue Journey carries level and XP into the next dungeon.
+        if case .number(let l)? = ch.extra["carryLevel"] { level = max(1, Int(l)) }
+        if case .number(let x)? = ch.extra["carryXp"] { xp = max(0, Int(x)) }
     }
 
     /// Run-start effects that touch the shared wallet. Call once when a run

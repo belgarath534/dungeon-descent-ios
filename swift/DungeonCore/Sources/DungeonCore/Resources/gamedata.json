@@ -8084,6 +8084,1613 @@
    "effect": "freeze-player"
   }
  },
+ "achievements": [
+  {
+   "id": "ach-first-blood",
+   "name": "First Blood",
+   "icon": "🗡️",
+   "desc": "Blood has been drawn. The dungeon takes notice.",
+   "hint": "Defeat 1 enemy.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_FIRST_BLOOD",
+   "condition": {
+    "stat": "totalKills",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-dungeon-1",
+   "name": "Descender",
+   "icon": "🏰",
+   "desc": "You went in. You came back out. Most do not.",
+   "hint": "Complete 1 dungeon run.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_DUNGEON_1",
+   "condition": {
+    "stat": "dungeonsComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-ironblood",
+   "name": "Iron Will",
+   "icon": "🩸",
+   "desc": "You bled for every floor. The dungeon respected that.",
+   "hint": "Win a run on Ironblood difficulty.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_IRONBLOOD",
+   "condition": {
+    "stat": "ironbloodWins",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-condemned",
+   "name": "Condemned",
+   "icon": "🔴",
+   "desc": "Condemned by name. Victorious by choice.",
+   "hint": "Win a run on Condemned difficulty.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_CONDEMNED",
+   "condition": {
+    "stat": "condemnedWins",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-forsaken",
+   "name": "The Forsaken",
+   "icon": "💀",
+   "desc": "Abandoned by fate. Not by will.",
+   "hint": "Win a run on Forsaken difficulty.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_FORSAKEN",
+   "condition": {
+    "stat": "forsakenWins",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-raids-1",
+   "name": "Raider",
+   "icon": "⚔️",
+   "desc": "The call came. You answered.",
+   "hint": "Complete 1 Daily Raid.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_RAIDS_1",
+   "condition": {
+    "stat": "raidsComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-raids-5",
+   "name": "Veteran Raider",
+   "icon": "🏆",
+   "desc": "Five raids. Five returns. That is not luck — that is skill.",
+   "hint": "Complete 5 Daily Raids.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_RAIDS_5",
+   "condition": {
+    "stat": "raidsComplete",
+    "min": 5
+   }
+  },
+  {
+   "id": "ach-level-5",
+   "name": "Battle-Hardened",
+   "icon": "⬆",
+   "desc": "Halfway to legend. Keep climbing.",
+   "hint": "Reach character level 5.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_LEVEL_5",
+   "condition": {
+    "stat": "maxLevel",
+    "min": 5
+   }
+  },
+  {
+   "id": "ach-level-10",
+   "name": "Legendary",
+   "icon": "👑",
+   "desc": "Maximum power reached. The dungeon fears what you have become.",
+   "hint": "Reach character level 10 (max).",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_LEVEL_10",
+   "condition": {
+    "stat": "maxLevel",
+    "min": 10
+   }
+  },
+  {
+   "id": "ach-kills-50",
+   "name": "Reaper",
+   "icon": "🌑",
+   "desc": "Fifty lives ended by your hand. The dungeon counts every one.",
+   "hint": "Defeat 50 enemies total, across all runs.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_KILLS_50",
+   "condition": {
+    "stat": "totalKills",
+    "min": 50
+   }
+  },
+  {
+   "id": "ach-kills-100",
+   "name": "Harbinger",
+   "icon": "☠️",
+   "desc": "One hundred. The dungeon stopped keeping count. You did not.",
+   "hint": "Defeat 100 enemies total, across all runs.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_KILLS_100",
+   "condition": {
+    "stat": "totalKills",
+    "min": 100
+   }
+  },
+  {
+   "id": "ach-skills",
+   "name": "Skill Master",
+   "icon": "✨",
+   "desc": "Five skills mastered in a single descent. You are no ordinary adventurer.",
+   "hint": "Unlock all 5 skills in a single descent.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_SKILLS",
+   "condition": {
+    "stat": "allSkillsUnlocked",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-ashbound",
+   "name": "Ashen Victor",
+   "icon": "🔥",
+   "desc": "You walked through ash and came out the other side. Scarred but standing.",
+   "hint": "Complete The Ashbound Wastes.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_ASHBOUND",
+   "condition": {
+    "stat": "ashboundComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-boss-all",
+   "name": "Boss Hunter",
+   "icon": "🎯",
+   "desc": "Three bosses. Three battles. Three victories. They will not be forgotten.",
+   "hint": "Defeat 3 different dungeon bosses.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_BOSS_ALL",
+   "condition": {
+    "stat": "uniqueBossKills",
+    "min": 3
+   }
+  },
+  {
+   "id": "ach-frosthold",
+   "name": "Cold Victor",
+   "icon": "❄️",
+   "desc": "The cold tried to stop you. It failed.",
+   "hint": "Complete Frosthold Abyss.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_FROSTHOLD",
+   "condition": {
+    "stat": "frostholdComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-trilogy",
+   "name": "The Descent",
+   "icon": "🏆",
+   "desc": "Seven trials. Seven victories. The dungeon calls you master.",
+   "hint": "Complete 5 dungeon runs total.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_TRILOGY",
+   "condition": {
+    "stat": "dungeonsComplete",
+    "min": 5
+   }
+  },
+  {
+   "id": "ach-nightmare",
+   "name": "Nightmare Slayer",
+   "icon": "🟣",
+   "desc": "Nightmare difficulty. You did not wake up — you won.",
+   "hint": "Win a run on Nightmare difficulty.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_NIGHTMARE",
+   "condition": {
+    "stat": "nightmareWins",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-nightmare-all",
+   "name": "Beyond Fear",
+   "icon": "⬛",
+   "desc": "Three nightmares faced. None survived.",
+   "hint": "Defeat 3 bosses on Nightmare difficulty.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_NIGHTMARE_ALL",
+   "condition": {
+    "stat": "nightmareBossKills",
+    "min": 3
+   }
+  },
+  {
+   "id": "ach-bossrush",
+   "name": "Boss Rush Legend",
+   "icon": "👑",
+   "desc": "Nine bosses. One run. Zero mercy.",
+   "hint": "Clear all 9 bosses in Boss Rush mode in one run.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_BOSSRUSH",
+   "condition": {
+    "stat": "bossRushComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-sunken",
+   "name": "Archivist",
+   "icon": "📚",
+   "desc": "The archives held secrets older than memory. Now they are yours.",
+   "hint": "Complete The Sunken Archives.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_SUNKEN",
+   "condition": {
+    "stat": "sunkenComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-hollow",
+   "name": "The Hollow",
+   "icon": "🕯️",
+   "desc": "The hollow was empty of everything except danger. You filled it with victory.",
+   "hint": "Complete The Hollow.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_HOLLOW",
+   "condition": {
+    "stat": "hollowComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-dddi-boss",
+   "name": "Non-Compliant",
+   "icon": "⚖️",
+   "desc": "Non-compliant. Victorious. The DDDI will not recover from this.",
+   "hint": "Defeat the DDDI boss.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_DDDI_BOSS",
+   "condition": {
+    "stat": "dddiDefeated",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-julio",
+   "name": "You Found Him",
+   "icon": "❓",
+   "desc": "You found him. He was not supposed to be found.",
+   "hint": "Find Julio.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_JULIO",
+   "condition": {
+    "stat": "julioFound",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-elite-kill",
+   "name": "Elite Slayer",
+   "icon": "★",
+   "desc": "Elite enemies exist to end runs. This one ended yours instead.",
+   "hint": "Defeat 1 elite enemy.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_ELITE_KILL",
+   "condition": {
+    "stat": "eliteKills",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-elite-5",
+   "name": "Elite Hunter",
+   "icon": "🏹",
+   "desc": "Five elite kills. You are becoming something the dungeon respects.",
+   "hint": "Defeat 5 elite enemies.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_ELITE_5",
+   "condition": {
+    "stat": "eliteKills",
+    "min": 5
+   }
+  },
+  {
+   "id": "ach-spirit-earn",
+   "name": "Spirit Bound",
+   "icon": "✨",
+   "desc": "A spirit chose you. That does not happen by accident.",
+   "hint": "Earn 1 spirit companion.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_SPIRIT_EARN",
+   "condition": {
+    "stat": "spiritsEarned",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-familiar-2",
+   "name": "First Bond",
+   "icon": "🐦‍⬛",
+   "desc": "A small companion has decided you are worth staying for.",
+   "hint": "Reach Bond Level 2 with your familiar.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": null,
+   "condition": {
+    "stat": "familiarBondLevel",
+    "min": 2
+   }
+  },
+  {
+   "id": "ach-familiar-10",
+   "name": "The Loyal",
+   "icon": "✨",
+   "desc": "Every fight, every search, every room — it was there for all of it.",
+   "hint": "Reach Bond Level 10 with your familiar.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": null,
+   "condition": {
+    "stat": "familiarBondLevel",
+    "min": 10
+   }
+  },
+  {
+   "id": "ach-familiar-20",
+   "name": "The Inseparable",
+   "icon": "🐈‍⬛",
+   "desc": "You cannot remember a run without it anymore. It cannot either.",
+   "hint": "Reach Bond Level 20 with your familiar.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": null,
+   "condition": {
+    "stat": "familiarBondLevel",
+    "min": 20
+   }
+  },
+  {
+   "id": "ach-ngplus",
+   "name": "Returning",
+   "icon": "🔄",
+   "desc": "You finished the dungeon. Then you went back. That says everything.",
+   "hint": "Complete a New Game+ run.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_NGPLUS",
+   "condition": {
+    "stat": "ngPlusComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-ngplus3",
+   "name": "Unreasonable",
+   "icon": "💀",
+   "desc": "Three times over. The dungeon gave up trying to stop you.",
+   "hint": "Complete New Game+ three times on the same character.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_NGPLUS3",
+   "condition": {
+    "stat": "ngPlusMaxCount",
+    "min": 3
+   }
+  },
+  {
+   "id": "ach-lore-reader",
+   "name": "Lore Keeper",
+   "icon": "📖",
+   "desc": "Five stories read. The dungeon has more history than it admits.",
+   "hint": "Read 5 story fragments.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_LORE_READER",
+   "condition": {
+    "stat": "storiesRead",
+    "min": 5
+   }
+  },
+  {
+   "id": "ach-found-julio",
+   "name": "Found Him",
+   "icon": "🏷️",
+   "desc": "Every fragment recovered. The full truth of Julio is finally yours.",
+   "hint": "Recover every fragment of Julio's full story.",
+   "gold": 250,
+   "trophies": 2,
+   "gcId": "DD_FOUND_JULIO",
+   "condition": {
+    "stat": "julioStoryUnlocked",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-medusa-mercy",
+   "name": "Lower the Shield",
+   "icon": "🐍",
+   "desc": "You lowered the shield. Most would not have.",
+   "hint": "Choose to lower the shield in the Medusa encounter.",
+   "gold": 250,
+   "trophies": 2,
+   "gcId": "DD_MEDUSA_MERCY",
+   "condition": {
+    "stat": "medusaMercy",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-medusa-found",
+   "name": "Found",
+   "icon": "💚",
+   "desc": "Against all odds, they found each other again. You made that possible.",
+   "hint": "Complete the Medusa reunion outcome.",
+   "gold": 250,
+   "trophies": 2,
+   "gcId": "DD_MEDUSA_FOUND",
+   "condition": {
+    "stat": "medusaReunion",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-medusa-lost",
+   "name": "She Still Looks",
+   "icon": "😢",
+   "desc": "She still looks for him. That is on you.",
+   "hint": "Complete the Medusa encounter where she keeps searching.",
+   "gold": 250,
+   "trophies": 2,
+   "gcId": "DD_MEDUSA_LOST",
+   "condition": {
+    "stat": "medusaStillLooks",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-tournament-win",
+   "name": "Champion",
+   "icon": "🏆",
+   "desc": "The tournament had one rule — survive. You did more than that.",
+   "hint": "Win a Tournament match.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_TOURNAMENT_WIN",
+   "condition": {
+    "stat": "tournamentWins",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-tournament-top",
+   "name": "Top of the Board",
+   "icon": "🥇",
+   "desc": "Top three in the entire tournament. Your name belongs there.",
+   "hint": "Finish top 3 in a Tournament season.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_TOURNAMENT_TOP",
+   "condition": {
+    "stat": "tournamentTop3",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-witness",
+   "name": "The Witnessed",
+   "icon": "🦈",
+   "desc": "Something ancient watched you and decided you were worthy. Few are.",
+   "hint": "Get noticed by the Witness (Abyssal Deep).",
+   "gold": 250,
+   "trophies": 5,
+   "gcId": "DD_WITNESS",
+   "condition": {
+    "stat": "witnessFound",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-abyssal-boss",
+   "name": "Depth Conqueror",
+   "icon": "🌊",
+   "desc": "The deepest creature in the deepest dungeon. Yours now.",
+   "hint": "Defeat the Abyssal Deep boss (The Leviathan).",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_ABYSSAL_BOSS",
+   "condition": {
+    "stat": "abyssalBossDefeated",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-void-reaper",
+   "name": "Void Slayer",
+   "icon": "🌑",
+   "desc": "The Void Reaper was supposed to be unkillable. You did not know that.",
+   "hint": "Defeat the Void Reaper.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_VOID_REAPER",
+   "condition": {
+    "stat": "voidReaperDefeated",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-void-survivor",
+   "name": "Still Standing",
+   "icon": "💜",
+   "desc": "You faced the Void Reaper and walked away. That alone is remarkable.",
+   "hint": "Defeat the Void Reaper, or survive an attempt against it.",
+   "gold": 250,
+   "trophies": 2,
+   "gcId": "DD_VOID_SURVIVOR",
+   "condition": {
+    "stat": "voidReaperDefeated",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-alchemist",
+   "name": "The Alchemist",
+   "icon": "🧪",
+   "desc": "Ten elixirs consumed. You have learned the old recipes.",
+   "hint": "Drink 10 elixirs total.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": null,
+   "condition": {
+    "stat": "elixirsUsed",
+    "min": 10
+   }
+  },
+  {
+   "id": "ach-riddle-correct",
+   "name": "The Riddled",
+   "icon": "❓",
+   "desc": "Brains and brawn. The dungeon did not expect both.",
+   "hint": "Answer 1 riddle correctly.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_RIDDLE_CORRECT",
+   "condition": {
+    "stat": "riddlesCorrect",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-riddle-wrong",
+   "name": "Wrong Answer",
+   "icon": "💥",
+   "desc": "Wrong answer. Right result. Sometimes force is the solution.",
+   "hint": "Answer a riddle wrong, then still defeat that boss.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_RIDDLE_WRONG",
+   "condition": {
+    "stat": "riddlesWrong",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-timer-beaten",
+   "name": "Beat The Clock",
+   "icon": "⏱",
+   "desc": "Against the clock and winning. That is pressure. That is you.",
+   "hint": "Beat a timed boss fight before the clock runs out.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_TIMER_BEATEN",
+   "condition": {
+    "stat": "bossTimerBeaten",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-boss-enrage",
+   "name": "Took Too Long",
+   "icon": "⚠️",
+   "desc": "The boss got angrier. You got a trophy. Fair trade.",
+   "hint": "Let a boss reach its enrage phase and still win.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_BOSS_ENRAGE",
+   "condition": {
+    "stat": "bossEnrages",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-formal-warning",
+   "name": "Formally Warned",
+   "icon": "⚖️",
+   "desc": "You read the warning. Compliance was never an option.",
+   "hint": "Read the \"Formal Warning\" story fragment.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_FORMAL_WARNING",
+   "condition": {
+    "stat": "storyRead_formal-warning",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-first-descent",
+   "name": "Origin Seeker",
+   "icon": "🏔️",
+   "desc": "The first dungeon existed long before you. Now you know why.",
+   "hint": "Read the \"First Descent\" story fragment.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_FIRST_DESCENT",
+   "condition": {
+    "stat": "storyRead_first-descent",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-real-story",
+   "name": "The Real Story",
+   "icon": "🏷️",
+   "desc": "The real story. Behind the game. Behind everything.",
+   "hint": "Read the \"Real Story\" story fragment.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_REAL_STORY",
+   "condition": {
+    "stat": "storyRead_real-story",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-all-stories",
+   "name": "The Archivist",
+   "icon": "📜",
+   "desc": "Every story. Every secret. The dungeon has no more to hide from you.",
+   "hint": "Read all 18 story fragments.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_ALL_STORIES",
+   "condition": {
+    "stat": "storiesRead",
+    "min": 18
+   }
+  },
+  {
+   "id": "ach-lullaby",
+   "name": "Lullaby",
+   "icon": "😢",
+   "desc": "In the middle of a dungeon you stopped to help a child. That matters.",
+   "hint": "Soothe the sleeping child in The Hollow.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_LULLABY",
+   "condition": {
+    "stat": "wepingChildSoothed",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-all-dungeons",
+   "name": "All Floors",
+   "icon": "🗺️",
+   "desc": "Seven trials completed. The dungeon bows to no one — except you.",
+   "hint": "Complete Crypt of Malachar, The Ashbound Wastes, Frosthold Abyss, The Sunken Archives, and The Hollow.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_ALL_DUNGEONS",
+   "condition": {
+    "stat": "cryptComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-reunion",
+   "name": "Rest Now",
+   "icon": "🕯️",
+   "desc": "Two souls found each other because of you. Rest now.",
+   "hint": "Reunite the Weeping Mother with her child.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_REUNION",
+   "condition": {
+    "stat": "motherReunion",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-twin-killed",
+   "name": "Mirror Broken",
+   "icon": "👤",
+   "desc": "The mirror is broken. Whatever it showed — it cannot haunt you now.",
+   "hint": "Defeat your Mirror Twin.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_TWIN_KILLED",
+   "condition": {
+    "stat": "twinKilled",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-music-box",
+   "name": "The Last Note",
+   "icon": "🎵",
+   "desc": "The last note played. You were still standing when it did.",
+   "hint": "Defeat the Music Box enemy.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_MUSIC_BOX",
+   "condition": {
+    "stat": "musicBoxDefeated",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-kills-1000",
+   "name": "One Thousand",
+   "icon": "💀",
+   "desc": "One thousand lives ended. The dungeon has run out of things to throw at you.",
+   "hint": "Defeat 1,000 enemies total.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_KILLS_1000",
+   "condition": {
+    "stat": "totalKills",
+    "min": 1000
+   }
+  },
+  {
+   "id": "ach-kills-500",
+   "name": "Five Hundred",
+   "icon": "⚔️",
+   "desc": "Five hundred. Half a thousand. The dungeon is running low on volunteers.",
+   "hint": "Defeat 500 enemies total.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_KILLS_500",
+   "condition": {
+    "stat": "totalKills",
+    "min": 500
+   }
+  },
+  {
+   "id": "ach-hollow-50",
+   "name": "Haunted",
+   "icon": "👻",
+   "desc": "Fifty Hollow Shades. The Hollow is quieter now.",
+   "hint": "Defeat 50 Hollow Shades.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_HOLLOW_50",
+   "condition": {
+    "stat": "hollowShadeKills",
+    "min": 50
+   }
+  },
+  {
+   "id": "ach-floor-9",
+   "name": "The Penultimate",
+   "icon": "9️⃣",
+   "desc": "One floor away from the boss. The dungeon holds its breath.",
+   "hint": "Reach floor 9 in a single run.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_FLOOR_9",
+   "condition": {
+    "stat": "maxFloorReached",
+    "min": 9
+   }
+  },
+  {
+   "id": "ach-no-damage",
+   "name": "Untouched",
+   "icon": "🛡️",
+   "desc": "Perfect. Not a scratch. The enemies never stood a chance.",
+   "hint": "Clear a floor without taking any damage.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_NO_DAMAGE",
+   "condition": {
+    "stat": "noDmgFloors",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-gold-1000",
+   "name": "The Merchant",
+   "icon": "💰",
+   "desc": "One thousand gold in a single run. The dungeon paid well today.",
+   "hint": "Earn 1,000 gold in a single run.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_GOLD_1000",
+   "condition": {
+    "stat": "bestGoldRun",
+    "min": 1000
+   }
+  },
+  {
+   "id": "ach-all-spirits",
+   "name": "Spirit Master",
+   "icon": "✨",
+   "desc": "All eight spirits. They chose you because there was no one else worthy.",
+   "hint": "Earn all 8 spirit companions.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_ALL_SPIRITS",
+   "condition": {
+    "stat": "spiritsEarned",
+    "min": 8
+   }
+  },
+  {
+   "id": "ach-daily-7",
+   "name": "Dedicated",
+   "icon": "☀️",
+   "desc": "Seven days of dedication. The dungeon noticed you coming back.",
+   "hint": "Complete 7 Daily Quests.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_DAILY_7",
+   "condition": {
+    "stat": "dailyQuestsComplete",
+    "min": 7
+   }
+  },
+  {
+   "id": "ach-weeping-both",
+   "name": "Family",
+   "icon": "👨‍👩‍👦",
+   "desc": "Both done. A family whole again. The dungeon will remember this kindness.",
+   "hint": "Both soothe the child AND reunite the Weeping Mother (can be different runs).",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_WEEPING_BOTH",
+   "condition": {
+    "stat": "wepingChildSoothed",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-all-quests",
+   "name": "The Completionist",
+   "icon": "🏆",
+   "desc": "Thirty daily quests. You are more committed to this dungeon than anyone.",
+   "hint": "Complete 30 Daily Quests.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_ALL_QUESTS",
+   "condition": {
+    "stat": "dailyQuestsComplete",
+    "min": 30
+   }
+  },
+  {
+   "id": "gauntlet_champion",
+   "name": "Gauntlet Champion",
+   "icon": "⚔️",
+   "desc": "Six dungeons. One life. Zero deaths. The Gauntlet has never seen anything like you.",
+   "hint": "Clear the Gauntlet (all 6 dungeons back-to-back, one life, no deaths).",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_GAUNTLET_CHAMPION",
+   "condition": {
+    "stat": "gauntletClears",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-daily-dungeon",
+   "name": "Daily Challenger",
+   "icon": "📅",
+   "desc": "The daily challenge answered. Come back tomorrow. The dungeon will be waiting.",
+   "hint": "Clear 1 Daily Dungeon Challenge.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_DAILY_DUNGEON",
+   "condition": {
+    "stat": "dailyDungeonClears",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-infernal-trial",
+   "name": "Trial by Void",
+   "icon": "🔥",
+   "desc": "The trial was designed to break you. You passed anyway.",
+   "hint": "Win the Trial by Void in The Infernal Descent.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_INFERNAL_TRIAL",
+   "condition": {
+    "stat": "infernalTrialWon",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-infernal-riddles",
+   "name": "Keeper of Secrets",
+   "icon": "🔍",
+   "desc": "Five hidden riddles solved. The dungeon did not think anyone would find them all.",
+   "hint": "Solve all 5 hidden riddles in The Infernal Descent.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_INFERNAL_RIDDLES",
+   "condition": {
+    "stat": "infernalRiddlesSolved",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-void-conqueror",
+   "name": "Void Conqueror",
+   "icon": "🌑",
+   "desc": "Five void waves. Five victories. The void has nothing left to offer.",
+   "hint": "Win 5 Void waves.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_VOID_CONQUEROR",
+   "condition": {
+    "stat": "voidConqueror",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-enemy-creator",
+   "name": "World Builder",
+   "icon": "⚗️",
+   "desc": "You built something and gave it to the world. That is what creators do.",
+   "hint": "Create and submit a custom enemy.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_ENEMY_CREATOR",
+   "condition": {
+    "stat": "enemyCreated",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-deep-miner",
+   "name": "Deep Miner",
+   "icon": "⛏️",
+   "desc": "Depth 50 in the Mine. You did not just descend — you carved your own path through the rock.",
+   "hint": "Reach depth 50 in the Mine.",
+   "gold": 200,
+   "trophies": 5,
+   "gcId": "DD_DEEP_MINER",
+   "condition": {
+    "stat": "mineMaxDepth",
+    "min": 50
+   }
+  },
+  {
+   "id": "ach-spirit-forger",
+   "name": "Spirit Forger",
+   "icon": "🔮",
+   "desc": "You looked at raw soul fragments and saw something worth building. Then you built it.",
+   "hint": "Build 1 custom spirit from soul fragments.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_SPIRIT_FORGER",
+   "condition": {
+    "stat": "customSpiritBuilt",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-first-sale",
+   "name": "First Sale",
+   "icon": "💰",
+   "desc": "First sale made. The Blacksmith nods approvingly.",
+   "hint": "Sell 1 item to the Blacksmith.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_FIRST_SALE",
+   "condition": {
+    "key": "dd_total_sells",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-merchant",
+   "name": "Merchant",
+   "icon": "🏪",
+   "desc": "Five sales. The Blacksmith is starting to recognize you.",
+   "hint": "Sell 5 items to the Blacksmith.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_MERCHANT",
+   "condition": {
+    "key": "dd_total_sells",
+    "min": 5
+   }
+  },
+  {
+   "id": "ach-black-market",
+   "name": "Black Market",
+   "icon": "🖤",
+   "desc": "Twenty items sold. You are practically running the place.",
+   "hint": "Sell 20 items to the Blacksmith.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_BLACK_MARKET",
+   "condition": {
+    "key": "dd_total_sells",
+    "min": 20
+   }
+  },
+  {
+   "id": "ach-gold-hoarder",
+   "name": "Gold Hoarder",
+   "icon": "💛",
+   "desc": "Three hundred gold in hand. The weight of it feels good.",
+   "hint": "Hold 300 gold at once.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_GOLD_HOARDER",
+   "condition": {
+    "gold": 300
+   }
+  },
+  {
+   "id": "ach-big-spender",
+   "name": "Big Spender",
+   "icon": "💸",
+   "desc": "Six hundred gold spent. The Blacksmith has a new favorite customer.",
+   "hint": "Spend 600 gold total at the Blacksmith.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_BIG_SPENDER",
+   "condition": {
+    "key": "dd_total_gold_spent",
+    "min": 600
+   }
+  },
+  {
+   "id": "ach-whale",
+   "name": "Whale",
+   "icon": "🐋",
+   "desc": "Seven thousand gold. The Blacksmith built a second floor just for you.",
+   "hint": "Spend 7,000 gold total at the Blacksmith.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_WHALE",
+   "condition": {
+    "key": "dd_total_gold_spent",
+    "min": 7000
+   }
+  },
+  {
+   "id": "ach-gold-rich",
+   "name": "Gold Baron",
+   "icon": "👑",
+   "desc": "One thousand gold. Enough to buy your way out of almost anything.",
+   "hint": "Hold 1,000 gold at once.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_GOLD_RICH",
+   "condition": {
+    "gold": 1000
+   }
+  },
+  {
+   "id": "ach-whisper",
+   "name": "Forest Walker",
+   "icon": "🌲",
+   "desc": "The forest whispered warnings the entire way. You ignored every one.",
+   "hint": "Complete The Whispering Forest.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_WHISPER",
+   "condition": {
+    "stat": "whisperComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-infernal",
+   "name": "Infernal Survivor",
+   "icon": "🔥",
+   "desc": "The infernal descent tried to break your spirit. It miscalculated.",
+   "hint": "Complete The Infernal Descent.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_INFERNAL",
+   "condition": {
+    "stat": "infernalComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-chaos",
+   "name": "Chaos Accepted",
+   "icon": "🌀",
+   "desc": "You found the code. The dungeon was never meant to be played this way. Good.",
+   "hint": "Enter the secret Chaos Mode code.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_CHAOS",
+   "condition": {
+    "equalsKey": "dd_chaos_mode",
+    "value": "1"
+   }
+  },
+  {
+   "id": "ach-abyssal",
+   "name": "Into the Deep",
+   "icon": "🌊",
+   "desc": "The deepest dungeon cleared. Whatever lives in the deep knows your name now.",
+   "hint": "Complete The Abyssal Deep.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_ABYSSAL",
+   "condition": {
+    "stat": "abyssalComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-all-8",
+   "name": "The True Descent",
+   "icon": "🗺️",
+   "desc": "All eight dungeons conquered. You are the Dungeon Master. This title is permanent.",
+   "hint": "Complete all 8 dungeons: Crypt of Malachar, The Ashbound Wastes, Frosthold Abyss, The Sunken Archives, The Hollow, The Whispering Forest, The Infernal Descent, and The Abyssal Deep.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_ALL_8",
+   "condition": {
+    "stat": "cryptComplete",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-spire-100",
+   "name": "Tower Climber",
+   "icon": "🗼",
+   "desc": "One hundred floors up. The ground is far below. Keep going.",
+   "hint": "Reach floor 100 in The Spire.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_SPIRE_100",
+   "condition": {
+    "stat": "spireBestFloor",
+    "min": 100
+   }
+  },
+  {
+   "id": "ach-spire-300",
+   "name": "The Ascent",
+   "icon": "🗼",
+   "desc": "Three hundred floors. Most adventurers stop long before this.",
+   "hint": "Reach floor 300 in The Spire.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_SPIRE_300",
+   "condition": {
+    "stat": "spireBestFloor",
+    "min": 300
+   }
+  },
+  {
+   "id": "ach-spire-500",
+   "name": "Halfway There",
+   "icon": "🗼",
+   "desc": "Halfway up The Spire. The air is thin. Your will is not.",
+   "hint": "Reach floor 500 in The Spire.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_SPIRE_500",
+   "condition": {
+    "stat": "spireBestFloor",
+    "min": 500
+   }
+  },
+  {
+   "id": "ach-spire-1000",
+   "name": "The Thousand",
+   "icon": "🗼",
+   "desc": "Floor one thousand. The Spire did not think anyone would make it this far.",
+   "hint": "Reach floor 1,000 in The Spire.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_SPIRE_1000",
+   "condition": {
+    "stat": "spireBestFloor",
+    "min": 1000
+   }
+  },
+  {
+   "id": "ach-spire-1800",
+   "name": "The Time Eater",
+   "icon": "⏳",
+   "desc": "The Time Eater consumed centuries. You consumed The Time Eater.",
+   "hint": "Defeat the Time Eater in The Spire.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_SPIRE_1800",
+   "condition": {
+    "stat": "timeEaterDefeated",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-first-minion",
+   "name": "Collector",
+   "icon": "👾",
+   "desc": "Your first captured soul. It will serve you well — willingly or not.",
+   "hint": "Capture 1 minion with a Soul Trap.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_FIRST_MINION",
+   "condition": {
+    "listKey": "dd_minions",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-five-minions",
+   "name": "Army of One",
+   "icon": "👾",
+   "desc": "Five souls bound to your will. The dungeon calls this an army.",
+   "hint": "Capture 5 minions.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_FIVE_MINIONS",
+   "condition": {
+    "listKey": "dd_minions",
+    "min": 5
+   }
+  },
+  {
+   "id": "ach-eight-minions",
+   "name": "The Menagerie",
+   "icon": "👾",
+   "desc": "Eight minions. A full menagerie of captured dungeon creatures. Impressive.",
+   "hint": "Capture 8 minions.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_EIGHT_MINIONS",
+   "condition": {
+    "listKey": "dd_minions",
+    "min": 8
+   }
+  },
+  {
+   "id": "ach-first-forge",
+   "name": "The Forger",
+   "icon": "🔨",
+   "desc": "Your first creation. The Forge recognizes a new craftsman.",
+   "hint": "Forge 1 weapon at the Blacksmith.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_FIRST_FORGE",
+   "condition": {
+    "key": "dd_forge_count",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-five-forge",
+   "name": "Master Forger",
+   "icon": "🔨",
+   "desc": "Five weapons forged. Your hands know the work now.",
+   "hint": "Forge 5 weapons.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_FIVE_FORGE",
+   "condition": {
+    "key": "dd_forge_count",
+    "min": 5
+   }
+  },
+  {
+   "id": "ach-dungeons-10",
+   "name": "Seasoned",
+   "icon": "⚔️",
+   "desc": "Ten complete runs. The dungeon has started expecting you.",
+   "hint": "Complete 10 dungeon runs total.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_DUNGEONS_10",
+   "condition": {
+    "stat": "dungeonsComplete",
+    "min": 10
+   }
+  },
+  {
+   "id": "ach-dungeons-25",
+   "name": "Veteran",
+   "icon": "⚔️",
+   "desc": "Twenty-five runs. You have spent more time in dungeons than most spend alive.",
+   "hint": "Complete 25 dungeon runs total.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_DUNGEONS_25",
+   "condition": {
+    "stat": "dungeonsComplete",
+    "min": 25
+   }
+  },
+  {
+   "id": "ach-first-death",
+   "name": "Lesson Learned",
+   "icon": "💀",
+   "desc": "Your first death. Learn from it. The dungeon already has.",
+   "hint": "Die once.",
+   "gold": 50,
+   "trophies": 1,
+   "gcId": "DD_FIRST_DEATH",
+   "condition": {
+    "stat": "totalDeaths",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-deaths-10",
+   "name": "Death Wish",
+   "icon": "💀",
+   "desc": "Ten deaths and still here. What you lack in survival you make up for in stubbornness.",
+   "hint": "Die 10 times total.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_DEATHS_10",
+   "condition": {
+    "stat": "totalDeaths",
+    "min": 10
+   }
+  },
+  {
+   "id": "ach-flawless",
+   "name": "Flawless",
+   "icon": "🛡️",
+   "desc": "Not a single death. The dungeon never found an opening. Perfect.",
+   "hint": "Complete a full run without dying.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_FLAWLESS",
+   "condition": {
+    "stat": "flawlessRuns",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-speedrun",
+   "name": "Speed Runner",
+   "icon": "⚡",
+   "desc": "Ten minutes. The dungeon barely had time to react before you were gone.",
+   "hint": "Complete a run in under 10 minutes.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_SPEEDRUN",
+   "condition": {
+    "stat": "speedRuns",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-classes-5",
+   "name": "Shapeshifter",
+   "icon": "🎭",
+   "desc": "Five different classes. You adapt. The dungeon cannot predict you.",
+   "hint": "Win a run with 5 different classes.",
+   "gold": 150,
+   "trophies": 3,
+   "gcId": "DD_CLASSES_5",
+   "condition": {
+    "stat": "uniqueClassesWon",
+    "min": 5
+   }
+  },
+  {
+   "id": "ach-classes-all",
+   "name": "Master of All",
+   "icon": "🎭",
+   "desc": "Ten classes mastered. There is no version of this dungeon you cannot handle.",
+   "hint": "Win a run with 10 different classes.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": "DD_CLASSES_ALL",
+   "condition": {
+    "stat": "uniqueClassesWon",
+    "min": 10
+   }
+  },
+  {
+   "id": "ach-kills-2500",
+   "name": "The Unstoppable",
+   "icon": "⚔️",
+   "desc": "Two thousand five hundred. At this point the dungeon is recycling enemies.",
+   "hint": "Defeat 2,500 enemies total.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": null,
+   "condition": {
+    "stat": "totalKills",
+    "min": 2500
+   }
+  },
+  {
+   "id": "ach-kills-5000",
+   "name": "Extinction Event",
+   "icon": "☠️",
+   "desc": "Five thousand enemies defeated. You are not a player anymore. You are a force of nature.",
+   "hint": "Defeat 5,000 enemies total.",
+   "gold": 400,
+   "trophies": 7,
+   "gcId": null,
+   "condition": {
+    "stat": "totalKills",
+    "min": 5000
+   }
+  },
+  {
+   "id": "ach-trophies-50",
+   "name": "Trophy Hunter",
+   "icon": "🏆",
+   "desc": "Fifty trophies earned. The shelf is filling up.",
+   "hint": "Earn 50 trophies total.",
+   "gold": 400,
+   "trophies": 5,
+   "gcId": null,
+   "condition": {
+    "trophies": 50
+   }
+  },
+  {
+   "id": "ach-trophies-100",
+   "name": "The Collector",
+   "icon": "🏆",
+   "desc": "One hundred trophies. The dungeon runs out of ways to challenge you.",
+   "hint": "Earn 100 trophies total.",
+   "gold": 400,
+   "trophies": 5,
+   "gcId": null,
+   "condition": {
+    "trophies": 100
+   }
+  },
+  {
+   "id": "ach-trophies-200",
+   "name": "Legend",
+   "icon": "🏆",
+   "desc": "Two hundred trophies. A collection that speaks for itself.",
+   "hint": "Earn 200 trophies total.",
+   "gold": 400,
+   "trophies": 5,
+   "gcId": null,
+   "condition": {
+    "trophies": 200
+   }
+  },
+  {
+   "id": "ach-echoes-of-void",
+   "name": "Echoes of the Void",
+   "icon": "🌑",
+   "desc": "The darkness remembers you.",
+   "hint": "Reach floor 10 in a single run.",
+   "gold": 200,
+   "trophies": 4,
+   "gcId": null,
+   "condition": {
+    "stat": "maxFloorReached",
+    "min": 10
+   }
+  },
+  {
+   "id": "ach-phase4-reached",
+   "name": "Into The Abyss",
+   "icon": "🌊",
+   "desc": "You reached Phase 4 of The Leviathan. The abyss has awakened.",
+   "hint": "Reach Phase 4 of The Leviathan fight.",
+   "gold": 100,
+   "trophies": 5,
+   "gcId": null,
+   "condition": {
+    "stat": "phase4Reached",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-rhythm-win",
+   "name": "In Perfect Time",
+   "icon": "🎵",
+   "desc": "You answered the call of the abyss. The rhythm was yours.",
+   "hint": "Win the rhythm sequence in the Leviathan fight.",
+   "gold": 150,
+   "trophies": 7,
+   "gcId": null,
+   "condition": {
+    "stat": "rhythmWon",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-abyss-blinked",
+   "name": "The Abyss Blinked",
+   "icon": "🐉",
+   "desc": "The Leviathan fell. It had never fallen before. It will not forget.",
+   "hint": "Defeat The Leviathan.",
+   "gold": 300,
+   "trophies": 7,
+   "gcId": null,
+   "condition": {
+    "stat": "abyssalBossDefeated",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-deeper-than-deep",
+   "name": "Deeper Than Deep",
+   "icon": "💀",
+   "desc": "You defeated The Leviathan in Hardcore Mode. The abyss will not forget you.",
+   "hint": "Defeat The Leviathan on Hardcore Mode.",
+   "gold": 500,
+   "trophies": 10,
+   "gcId": null,
+   "condition": {
+    "stat": "abyssalHardcoreWin",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-void-child-complete",
+   "name": "What She Was",
+   "icon": "👁️",
+   "desc": "Collected all 25 Void Fragments. The truth is in the library now.",
+   "hint": "Collect all 25 Void Fragments.",
+   "gold": 500,
+   "trophies": 10,
+   "gcId": null,
+   "condition": {
+    "key": "dd_void_fragments",
+    "min": 25
+   }
+  }
+ ],
  "traps": {
   "crypt": [
    {

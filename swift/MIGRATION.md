@@ -52,9 +52,9 @@ build there means the app doesn't compile; the log says why.
    shop after every floor, descend or wander, leveling, lives and Phoenix Feathers,
    boss phases, victory and defeat. Runs are saved after every action and can be
    continued. Class skills: all 358, learned at level-ups. Elites, enemy abilities,
-   special rooms and dungeon events. Weapon and armor rarities.
-   Next: achievements, stats, hardcore, New Game+ and Legacy runs.
-   Then import web saves.
+   special rooms and dungeon events. Weapon and armor rarities. Achievements,
+   trophies and Game Center. Hardcore, Continue Journey and New Game+.
+   Next: quests and bounties, daily challenge, boss rush, raids.
 4. **Native services:** Sign in with Apple / Google through the Firebase iOS SDK,
    cloud save, StoreKit 2 purchases, Game Center, Core Haptics, audio, Live Activity,
    Magic Tap, iCloud backup.
@@ -82,7 +82,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Weapons and armor, equipping | equipWeapon, equipArmor | ✅ |
 | Weapon and armor rarities | WEAPON_RARITIES, RARITY_EFFECTS | ✅ six tiers, all 24 effects |
 | Class skills, SP | CLASS SKILLS, useSkill | ✅ all 358 skills of all 24 classes, skill choice at each level-up |
-| Lives, death, revive | handleDeath | 🟡 lives, 40% revive, Phoenix Feather, death log; hardcore and class cheat-deaths not yet |
+| Lives, death, revive | handleDeath | ✅ lives, 40% revive, Phoenix Feather, resurrection skills, gear saves, hardcore, death log |
 | XP, levels, level points | gainXP, LP_STATS | ✅ |
 | Kill gold | enemyDead | 🟡 base gold, Goblin, Grave Robber, luck |
 | Rooms, search, floors, shop | enterRoom, searchRoom, openShop | 🟡 all but special room events and NPC encounters |
@@ -94,7 +94,11 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Multi-enemy combat | MULTI-ENEMY COMBAT SYSTEM | ⬜ |
 | Gun crafting | GUN DEFINITIONS | ⬜ |
 | Raids, Boss Rush, Daily Challenge, Tournament | RAID ENGINE, BOSS RUSH ENGINE … | ⬜ |
-| Quests, bounties, inbox, achievements, stats | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
+| Achievements, trophies, Game Center | ACHIEVEMENTS, awardAchievement | ✅ all 115, same save keys and Game Center IDs |
+| Lifetime stats | GLOBAL STATS TRACKING | 🟡 kills, deaths, floors, runs; no stats screen yet |
+| Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
+| Legacy run mode | Legacy Mode | ⬜ |
+| Quests, bounties, inbox | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
 | Spirits, companion, corruption, Hunter, Void, Medusa arc | … | ⬜ |
 | Seasonal events | SEASONAL EVENTS SYSTEM | ⬜ |
 | Home system | HOME SYSTEM | ⬜ |
@@ -147,4 +151,6 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **Ashbound enemy abilities** (Cinder Hound and Ember Knight burning you, Smoke Wraith
   phasing out every third turn) were in the data and descriptions but nothing applied
   them. They now work.
+- **Kill counts** went up by 2 per kill (incrementAchievementStat ran twice in enemyDead),
+  so kill achievements unlocked at half the kills they promise. Swift counts 1.
 

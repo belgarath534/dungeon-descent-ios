@@ -16,6 +16,7 @@ struct CreateCharacterView: View {
     @State private var dungeon = GameData.dungeons[0]
     @State private var difficulty = GameData.Difficulty.wanderer
     @State private var dungeons: [String] = [GameData.dungeons[0]]
+    @State private var hardcore = false
 
     private var nameOK: Bool { PlayerCharacter.isValidName(name) }
 
@@ -84,6 +85,12 @@ struct CreateCharacterView: View {
             }
 
             Section {
+                Toggle("Hardcore Mode", isOn: $hardcore)
+            } footer: {
+                Text("One death and this character is gone forever, no matter how many lives the difficulty gives.")
+            }
+
+            Section {
                 Button("Create \(nameOK ? name.trimmingCharacters(in: .whitespaces) : "Character")") {
                     create()
                 }
@@ -105,7 +112,7 @@ struct CreateCharacterView: View {
     private func create() {
         let trimmed = name.trimmingCharacters(in: .whitespaces)
         let ch = PlayerCharacter(name: trimmed, cls: cls, race: race, prof: prof,
-                                 dungeon: dungeon, difficulty: difficulty)
+                                 dungeon: dungeon, difficulty: difficulty, hardcoreMode: hardcore)
         if game.create(ch) {
             Feedback.announce("\(trimmed) created. Returning to character list.")
             dismiss()

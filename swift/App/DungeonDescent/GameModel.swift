@@ -6,7 +6,9 @@ import DungeonCore
 @MainActor
 final class GameModel: ObservableObject {
     let store: GameStore
+    private let fileStore: FileStore
     let wallet: Wallet
+    let achievements: AchievementBook
     private var roster: CharacterRoster
 
     @Published private(set) var characters: [PlayerCharacter] = []
@@ -16,10 +18,15 @@ final class GameModel: ObservableObject {
     init() {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-        store = FileStore(url: dir.appendingPathComponent("dd_store.json"))
+        let file = FileStore(url: dir.appendingPathComponent("dd_store.json"))
+        fileStore = file
+        store = file
         wallet = Wallet(store: store)
         roster = CharacterRoster(store: store)
+        achievements = AchievementBook(store: store, wallet: wallet)
         wallet.onChange = { [weak self] in self?.refresh() }
+        achievements.onUnlock = { list in GameModel.announce(list) }
+        achievements.payOutstandingRewards()
         refresh()
     }
 
@@ -30,6 +37,25 @@ final class GameModel: ObservableObject {
     }
 
     var isRosterFull: Bool { roster.isFull }
+
+    /// Writes the save to disk right away (when the app leaves the foreground).
+    func saveNow() { fileStore.flushNow() }
+
+    /// Achievement unlocked: a sound by tier, a spoken line and Game Center.
+    static func announce(_ list: [Achievement]) {
+        // Same tiers as the web version's playAchievementUnlockSound: a few special
+        // achievements, then by gold reward.
+        let special: Set<String> = ["ach-void-reaper", "ach-witness", "ach-dddi-boss", "ach-bossrush",
+                                    "ach-ngplus3", "ach-all-stories", "ach-trilogy", "ach-kills-1000", "ach-abyssal-boss"]
+        func rank(_ a: Achievement) -> Int { special.contains(a.id) ? 3 : a.gold >= 300 ? 2 : a.gold >= 200 ? 1 : 0 }
+        guard let best = list.max(by: { rank($0) < rank($1) }) else { return }
+        Sound.sfx(["sfx-unlock", "sfx-ach-silver", "sfx-ach-gold", "sfx-ach-special"][rank(best)])
+        Feedback.success()
+        for a in list {
+            Feedback.announce("Achievement unlocked: \(a.name). \(a.desc) Plus \(a.gold) gold and \(a.trophies) troph\(a.trophies == 1 ? "y" : "ies").")
+        }
+        GameCenter.report(list)
+    }
 
     func unlockedDungeons() -> [String] { roster.unlockedDungeons() }
 
@@ -76,6 +102,9 @@ final class GameModel: ObservableObject {
         store.setItems(data.filter { $0.key.hasPrefix("dd_") && !$0.key.hasPrefix("dd_swift_") })
         roster = CharacterRoster(store: store)
         UserDefaults.standard.set(true, forKey: "swift_web_import_done")
+        achievements.reload()
+        achievements.payOutstandingRewards()
+        GameCenter.sync(achievements.unlockedIDs)
         refresh()
     }
 

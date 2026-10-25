@@ -18,6 +18,7 @@ public final class GameContent: Decodable, @unchecked Sendable {
     public let startingSkills: [String: String]
     public let audio: AudioTables
     public let enemySpecials: [String: EnemySpecial]
+    public let achievements: [Achievement]
 
     public static let shared: GameContent = {
         guard let url = Bundle.module.url(forResource: "gamedata", withExtension: "json"),

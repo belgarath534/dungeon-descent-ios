@@ -83,10 +83,39 @@ function startingSkills() {
   return m ? JSON.parse(m[1]) : {};
 }
 
+// Turns an achievement's check function into a data condition Swift can test:
+//   { stat, min }   achievement stat (dd_ach_stats) at least min (true counts as 1)
+//   { key, min }    a number saved under a store key at least min
+//   { listKey, min } a JSON list saved under a store key with at least min entries
+//   { equalsKey, value }, { gold, min }, { trophies, min }
+function achievementCondition(fn) {
+  const c = fn ? fn.toString().replace(/\s+/g, ' ') : '';
+  let m;
+  if ((m = /s(?:\.(\w+)|\['([^']+)'\])\s*\|\|\s*0\)?\s*>=\s*(\d+)/.exec(c))) return { stat: m[1] || m[2], min: +m[3] };
+  if ((m = /s\.(\w+)\s*>=\s*(\d+)/.exec(c))) return { stat: m[1], min: +m[2] };
+  if ((m = /parseInt\(DDStore\.getItem\('(\w+)'\)\s*\|\|\s*'0'\)\s*>=\s*(\d+)/.exec(c))) return { key: m[1], min: +m[2] };
+  if ((m = /_jsonParseSafe\(DDStore\.getItem\('(\w+)'\)[^)]*\)\.length\s*>=\s*(\d+)/.exec(c))) return { listKey: m[1], min: +m[2] };
+  if ((m = /DDStore\.getItem\('(\w+)'\)\s*===\s*'([^']*)'/.exec(c))) return { equalsKey: m[1], value: m[2] };
+  if ((m = /getGlobalGold\(\)\s*>=\s*(\d+)/.exec(c))) return { gold: +m[1] };
+  if ((m = /getTrophies\(\)\s*>=\s*(\d+)/.exec(c))) return { trophies: +m[1] };
+  if ((m = /return\s*!*s\.(\w+)\s*;?\s*\}/.exec(c))) return { stat: m[1], min: 1 };
+  return {};
+}
+
+function achievements() {
+  global.DDStore = { getItem: () => null };
+  return grab('ACHIEVEMENTS').map(a => ({
+    id: a.id, name: a.name, icon: a.icon, desc: a.desc, hint: a.hint,
+    gold: a.gold || 50, trophies: a.trophies || 1, gcId: a.gcId || null,
+    condition: achievementCondition(a.check),
+  }));
+}
+
 const out = {
   dungeons: {},
   nightmareEnemies: enemies('NIGHTMARE_', 'Nightmare'),
   enemySpecials: plain(grab('ENEMY_SPECIALS')),
+  achievements: achievements(),
   traps: plain(grab('TRAP_TYPES')),
   classSkills: plain(grab('CLASS_SKILLS')),
   startingSkills: startingSkills(),

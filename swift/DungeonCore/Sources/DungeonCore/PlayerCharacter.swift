@@ -225,6 +225,38 @@ extension PlayerCharacter {
 }
 
 extension PlayerCharacter {
+    /// After a victory: go on to the next dungeon, keeping level and XP
+    /// (continueJourney). Returns false after the last dungeon.
+    public mutating func continueJourney(level: Int, xp: Int) -> Bool {
+        guard let i = GameData.dungeons.firstIndex(of: dungeon), i < GameData.dungeons.count - 1 else { return false }
+        dungeon = GameData.dungeons[i + 1]
+        floor = 1
+        completed = false
+        extra["midRunSave"] = nil
+        extra["carryLevel"] = .number(Double(level))
+        extra["carryXp"] = .number(Double(xp))
+        return true
+    }
+
+    /// After a victory: replay the dungeon with stronger enemies (startNGPlus).
+    public mutating func startNewGamePlus() {
+        floor = 1
+        completed = false
+        ngPlusActive = true
+        extra["ngPlus"] = .bool(true)
+        var count = 0.0
+        if case .number(let n)? = extra["ngPlusCount"] { count = n }
+        extra["ngPlusCount"] = .number(count + 1)
+        extra["midRunSave"] = nil
+        extra["carryLevel"] = nil
+        extra["carryXp"] = nil
+    }
+
+    public var ngPlusCount: Int {
+        if case .number(let n)? = extra["ngPlusCount"] { return Int(n) }
+        return 0
+    }
+
     /// Adds a death to the character's "deathLog", newest first, like logDeath().
     public mutating func logDeath(floor: Int, killedBy: String, date: Date = Date()) {
         let cal = Calendar.current

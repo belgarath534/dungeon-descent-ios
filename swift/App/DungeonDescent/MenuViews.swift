@@ -37,6 +37,11 @@ struct MainMenuView: View {
                     Label("Play", systemImage: "figure.walk")
                 }
                 NavigationLink {
+                    AchievementsView()
+                } label: {
+                    Label("Achievements", systemImage: "trophy")
+                }
+                NavigationLink {
                     SettingsView()
                 } label: {
                     Label("Settings", systemImage: "gearshape")
@@ -71,7 +76,7 @@ struct CharacterListView: View {
             }
             ForEach(Array(game.characters.enumerated()), id: \.offset) { index, ch in
                 NavigationLink {
-                    CharacterDetailView(index: index)
+                    CharacterDetailView(id: ch.created)
                 } label: {
                     CharacterRow(ch: ch)
                 }

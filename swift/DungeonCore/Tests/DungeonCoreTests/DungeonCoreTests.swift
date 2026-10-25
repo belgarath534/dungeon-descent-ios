@@ -969,3 +969,130 @@ final class RarityTests: XCTestCase {
         XCTAssertEqual(Progression.handleDeath(&s), .revived(livesLeft: 2))
     }
 }
+
+final class AchievementTests: XCTestCase {
+    func book(_ store: MemoryStore = MemoryStore()) -> (AchievementBook, Wallet, MemoryStore) {
+        let w = Wallet(store: store)
+        return (AchievementBook(store: store, wallet: w), w, store)
+    }
+    func newRun(_ diff: GameData.Difficulty = .ironblood) -> Run {
+        Run(character: PlayerCharacter(name: "A", cls: "Wizard", race: "Elf", prof: "Thief",
+                                       dungeon: "Crypt of Malachar", difficulty: diff))
+    }
+
+    func testAllAchievementsLoadWithGameCenterIDs() {
+        XCTAssertEqual(AchievementBook.all.count, 115)
+        XCTAssertEqual(AchievementBook.all.filter { $0.gcId != nil }.count, 100)
+    }
+
+    func testFirstKillUnlocksFirstBloodWithItsReward() {
+        let (b, w, store) = book()
+        var got: [String] = []
+        b.onUnlock = { got += $0.map(\.id) }
+        let shade = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1)
+        b.record(.enemyKilled(shade, run: newRun()))
+        XCTAssertEqual(got, ["ach-first-blood"])
+        XCTAssertEqual(b.stat("totalKills"), 1)
+        XCTAssertEqual(w.gold, 50)
+        XCTAssertEqual(store.getItem("dd_trophies"), "1")
+        b.record(.enemyKilled(shade, run: newRun()))
+        XCTAssertEqual(got, ["ach-first-blood"])   // only once
+    }
+
+    func testVictoryStats() {
+        let (b, _, store) = book()
+        b.record(.runWon(newRun(.ironblood), diedThisRun: false, seconds: 300))
+        XCTAssertEqual(b.stat("dungeonsComplete"), 1)
+        XCTAssertEqual(b.stat("ironbloodWins"), 1)
+        XCTAssertEqual(b.stat("cryptComplete"), 1)
+        XCTAssertEqual(b.stat("flawlessRuns"), 1)
+        XCTAssertEqual(b.stat("speedRuns"), 1)
+        XCTAssertEqual(store.getItem("dd_won_classes"), #"["Wizard"]"#)
+        XCTAssertTrue(b.unlockedIDs.contains("ach-dungeon-1"))
+        XCTAssertTrue(b.unlockedIDs.contains("ach-ironblood"))
+    }
+
+    func testUniqueBossKillsCountEachBossOnce() {
+        let (b, _, _) = book()
+        let boss = Enemy.spawnBoss(Bestiary.crypt.bosses[0], playerLevel: 1, playerMaxAtk: 10)
+        b.record(.enemyKilled(boss, run: newRun()))
+        b.record(.enemyKilled(boss, run: newRun()))
+        XCTAssertEqual(b.stat("uniqueBossKills"), 1)
+    }
+
+    func testImportedUnlocksArePaidOnce() {
+        let store = MemoryStore(["dd_achievements": #"["ach-first-blood","ach-dungeon-1"]"#])
+        let (b, w, _) = book(store)
+        b.payOutstandingRewards()
+        XCTAssertEqual(w.gold, 100)
+        XCTAssertEqual(b.trophies, 2)
+        b.payOutstandingRewards()
+        XCTAssertEqual(w.gold, 100)
+    }
+
+    func testStoreAndGoldConditions() {
+        let store = MemoryStore(["dd_total_sells": "5"])
+        let (b, w, _) = book(store)
+        w.addGold(1000)
+        b.check()
+        XCTAssertTrue(b.unlockedIDs.contains("ach-merchant"))
+        XCTAssertTrue(b.unlockedIDs.contains("ach-gold-rich"))
+    }
+}
+
+final class RunModeTests: XCTestCase {
+    func hero(hardcore: Bool = false) -> PlayerCharacter {
+        PlayerCharacter(name: "H", cls: "Monk", race: "Orc", prof: "Thief", dungeon: "Crypt of Malachar",
+                        difficulty: .wanderer, hardcoreMode: hardcore)
+    }
+
+    func testHardcoreDiesOnFirstDeathDespiteLives() {
+        var r = Run(character: hero(hardcore: true))
+        XCTAssertEqual(r.lives, 3)
+        r.hp = 0
+        XCTAssertEqual(Progression.handleDeath(&r), .runOver)
+    }
+
+    func testContinueJourneyCarriesLevel() {
+        var ch = hero()
+        ch.completed = true
+        XCTAssertTrue(ch.continueJourney(level: 6, xp: 120))
+        XCTAssertEqual(ch.dungeon, "The Ashbound Wastes")
+        XCTAssertFalse(ch.completed)
+        let r = Run(character: ch)
+        XCTAssertEqual(r.level, 6)
+        XCTAssertEqual(r.xp, 120)
+        var last = hero()
+        last.dungeon = "The Abyssal Deep"
+        XCTAssertFalse(last.continueJourney(level: 1, xp: 0))
+    }
+
+    func testNewGamePlusMakesEnemiesStronger() {
+        var ch = hero()
+        ch.startNewGamePlus()
+        ch.startNewGamePlus()
+        XCTAssertEqual(ch.ngPlusCount, 2)
+        let r = Run(character: ch)
+        XCTAssertTrue(r.ngPlus)
+        let normal = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1)
+        let tough = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1, ngPlusCount: 2)
+        XCTAssertEqual(normal.hp, 24)
+        XCTAssertEqual(tough.hp, jsRound(24 * 1.25))   // 1.20 + (2 − 1) × 0.05
+    }
+}
+
+final class FileStoreTests: XCTestCase {
+    func testBatchedWritesReachDisk() {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("dd_test_\(UUID().uuidString).json")
+        let s = FileStore(url: url)
+        for i in 0..<100 { s.setItem("dd_global_gold", String(i)) }
+        s.flushNow()
+        XCTAssertEqual(FileStore(url: url).getItem("dd_global_gold"), "99")
+        s.removeItem("dd_global_gold")
+        let written = expectation(description: "batched write")
+        DispatchQueue.global().asyncAfter(deadline: .now() + 0.8) { written.fulfill() }
+        wait(for: [written], timeout: 2)
+        XCTAssertNil(FileStore(url: url).getItem("dd_global_gold"))
+        try? FileManager.default.removeItem(at: url)
+    }
+}

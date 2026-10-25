@@ -162,9 +162,13 @@ struct RunView: View {
             }
         case .victory:
             Text("Victory! You have conquered \(model.run.dungeon).").font(.headline)
+            if model.canContinueJourney {
+                Button("Continue Journey: the next dungeon, keeping your level") { model.continueJourney() }
+            }
+            Button("New Game+: this dungeon again, with stronger enemies") { model.startNewGamePlus() }
             Button("Return to characters") { dismiss() }
         case .defeat:
-            Text("Defeated. All lives lost.").font(.headline)
+            Text(model.characterGone ? "\(model.run.name) is gone forever." : "Defeated. All lives lost.").font(.headline)
             Button("Return to characters") { dismiss() }
         }
     }

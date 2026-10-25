@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct DungeonDescentApp: App {
     @StateObject private var game = GameModel()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
@@ -12,6 +13,10 @@ struct DungeonDescentApp: App {
             .environmentObject(game)
             .preferredColorScheme(.dark)
             .tint(Theme.gold)
+            .onAppear { GameCenter.signIn() }
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase != .active { game.saveNow() }
         }
     }
 }

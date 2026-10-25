@@ -39,14 +39,21 @@ public final class MemoryStore: GameStore {
     public func removeItem(_ key: String) { values[key] = nil }
 }
 
-/// Saves everything to one JSON file on disk.
+/// Saves everything to one JSON file on disk. Writes are batched like the web
+/// version's DDStore: a burst of changes becomes one write about 0.4s later.
+/// Call `flushNow()` when the app goes to the background.
 public final class FileStore: GameStore {
     private let url: URL
     private var values: [String: String]
     private let lock = NSLock()
+    private let queue = DispatchQueue(label: "dd.filestore")
+    private var dirty = false
+    private var scheduled = false
+    private let delay: TimeInterval
 
-    public init(url: URL) {
+    public init(url: URL, delay: TimeInterval = 0.4) {
         self.url = url
+        self.delay = delay
         if let data = try? Data(contentsOf: url),
            let decoded = try? JSONDecoder().decode([String: String].self, from: data) {
             values = decoded
@@ -62,21 +69,42 @@ public final class FileStore: GameStore {
 
     public func setItem(_ key: String, _ value: String) {
         lock.lock(); values[key] = value; lock.unlock()
-        flush()
+        scheduleWrite()
     }
 
     public func removeItem(_ key: String) {
         lock.lock(); values[key] = nil; lock.unlock()
-        flush()
+        scheduleWrite()
     }
 
     public func setItems(_ items: [String: String]) {
         lock.lock(); values.merge(items) { _, new in new }; lock.unlock()
-        flush()
+        scheduleWrite()
     }
 
-    private func flush() {
-        lock.lock(); let snapshot = values; lock.unlock()
+    /// Writes any pending changes immediately.
+    public func flushNow() {
+        queue.sync { write() }
+    }
+
+    private func scheduleWrite() {
+        lock.lock()
+        dirty = true
+        let start = !scheduled
+        scheduled = true
+        lock.unlock()
+        guard start else { return }
+        queue.asyncAfter(deadline: .now() + delay) { [weak self] in self?.write() }
+    }
+
+    /// Runs on `queue`.
+    private func write() {
+        lock.lock()
+        scheduled = false
+        guard dirty else { lock.unlock(); return }
+        dirty = false
+        let snapshot = values
+        lock.unlock()
         guard let data = try? JSONEncoder().encode(snapshot) else { return }
         try? data.write(to: url, options: .atomic)
     }

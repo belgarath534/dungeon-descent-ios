@@ -45,20 +45,73 @@ final class RunModel: ObservableObject {
             playMusic()
             return
         }
-        var r = Run(character: game.characters[characterIndex], gold: game.wallet.gold)
+        run = Self.newRun(game, characterIndex)
+        begin()
+    }
+
+    /// A fresh run for the character: start bonuses, saved items and gear,
+    /// starting skill and the first floor's plan (initDungeon).
+    private static func newRun(_ game: GameModel, _ index: Int) -> Run {
+        var r = Run(character: game.characters[index], gold: game.wallet.gold)
         r.applyStartBonuses(wallet: game.wallet)
         game.globalInventory.load(into: &r)
         var d = SystemDice()
         Skills.start(&r, dice: &d)
         if r.floor >= 10 && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
         Encounters.planFloor(&r, dice: &d)
-        run = r
+        r.hpAtFloorStart = r.hp
+        r.startedAt = Date().timeIntervalSince1970
+        // Level carried over by Continue Journey applies to this run only.
+        game.updateCharacter(index) { $0.extra["carryLevel"] = nil; $0.extra["carryXp"] = nil }
+        return r
+    }
+
+    private func begin() {
+        let r = run
         roomTitle = Rooms.floorName(r.floor, dungeon: r.dungeon)
-        add("Descended into \(r.dungeon) on \(r.difficulty.rawValue) difficulty.")
+        roomText = ""
+        add("Descended into \(r.dungeon) on \(r.difficulty.rawValue) difficulty\(r.ngPlus ? ", New Game+ \(r.ngPlusCount ?? 1)" : "")\(r.hardcore ? ", Hardcore" : "").")
         add("Floor \(r.floor): \(roomTitle). \(r.lives) \(r.lives == 1 ? "life" : "lives").")
         if let s = Skills.unlocked(r).first { add("✨ Starting skill: \(s.name). \(s.desc)") }
         persist()
         playMusic()
+    }
+
+    /// Set when a Hardcore death deleted the character; the screen should close.
+    @Published private(set) var characterGone = false
+
+    var canContinueJourney: Bool {
+        guard let i = GameData.dungeons.firstIndex(of: run.dungeon) else { return false }
+        return i < GameData.dungeons.count - 1
+    }
+
+    /// After a victory: the next dungeon with the same character, level and XP.
+    func continueJourney() {
+        guard phase == .victory else { return }
+        let level = run.level, xp = run.xp
+        var moved = false
+        game.updateCharacter(characterIndex) { moved = $0.continueJourney(level: level, xp: xp) }
+        guard moved else { return }
+        restart("Journey continues. Entering \(game.characters[characterIndex].dungeon). Your character carries all their strength forward.")
+    }
+
+    /// After a victory: the same dungeon again with stronger enemies.
+    func startNewGamePlus() {
+        guard phase == .victory else { return }
+        game.updateCharacter(characterIndex) { $0.startNewGamePlus() }
+        let n = game.characters[characterIndex].ngPlusCount
+        restart(n == 1 ? "New Game Plus! Enemies are stronger. The dungeon has not forgotten you."
+                : n == 2 ? "NG+2! The dungeon is actively hostile now."
+                : "NG+\(n)! You should not still be alive. The dungeon is impressed and furious.")
+    }
+
+    private func restart(_ message: String) {
+        log = []
+        run = Self.newRun(game, characterIndex)
+        phase = .exploring
+        shop = []
+        begin()
+        Feedback.announce(message)
     }
 
     /// Exploration, battle or boss music for where the run is, plus the dungeon's ambience.
@@ -141,14 +194,15 @@ final class RunModel: ObservableObject {
         case .fight:
             let enemy = Combat.nextEnemy(for: r, dice: &d)
             Combat.begin(&r, against: enemy)
+            let ability = Self.sentence(enemy.desc ?? "A powerful foe.")
             let line = enemy.isElite
-                ? "\(label) ★ ELITE: \(enemy.icon) \(enemy.name) — \(enemy.desc ?? "A powerful foe."). \(enemy.hp) HP."
+                ? "\(label) ★ ELITE: \(enemy.icon) \(enemy.name) — \(ability) \(enemy.hp) HP."
                 : "\(label) \(enemy.icon) A \(enemy.name) attacks! \(enemy.hp) HP."
             add(line)
             Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
             Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
             spoken += enemy.isElite
-                ? " Elite enemy! \(enemy.name). \(enemy.desc ?? "") \(enemy.hp) HP."
+                ? " Elite enemy! \(enemy.name). \(ability) \(enemy.hp) HP."
                 : " A \(enemy.name) attacks! \(enemy.hp) HP."
             finish(r, d, phase: .fighting, spoken: spoken)
         case .loot:
@@ -170,6 +224,12 @@ final class RunModel: ObservableObject {
         }
     }
 
+    /// Ends text with exactly one full stop.
+    static func sentence(_ text: String) -> String {
+        let t = text.trimmingCharacters(in: .whitespaces)
+        return t.hasSuffix(".") || t.hasSuffix("!") || t.hasSuffix("?") ? t : t + "."
+    }
+
     var pendingEvent: Encounters.Event? { run.pendingEvent.flatMap(Encounters.event) }
 
     func chooseEvent(_ choice: Int) {
@@ -177,6 +237,7 @@ final class RunModel: ObservableObject {
         var r = run
         var d = dice
         let levelBefore = r.level
+        if r.pendingEvent == "julio" && choice == 0 { achievements.record(.julioMet) }
         let out = Encounters.choose(choice, &r, dice: &d, wallet: game.wallet)
         add(out.message)
         if r.level > levelBefore {
@@ -201,8 +262,16 @@ final class RunModel: ObservableObject {
         finishQuietRoom(r, d, spoken: out.message)
     }
 
+    private var achievements: AchievementBook { game.achievements }
+
+    /// Achievements for finishing a floor without losing HP.
+    private func floorDone(_ r: Run) {
+        achievements.record(.floorCleared(tookNoDamage: r.hp >= r.hpAtFloorStart))
+    }
+
     private func finishQuietRoom(_ r: Run, _ d: SystemDice, spoken: String) {
         if r.roomsOnFloor >= r.floorRoomsNeeded {
+            floorDone(r)
             finish(r, d, phase: .floorCleared, spoken: spoken + " Floor \(r.floor) complete. Descend or wander.")
             add("Floor \(r.floor) complete.")
         } else {
@@ -283,6 +352,8 @@ final class RunModel: ObservableObject {
         let reward = Progression.rewardKill(&r, e, dice: &d, wallet: game.wallet)
         add(reward.message)
         Sound.sfx("sfx-enemy-die")
+        achievements.record(.enemyKilled(e, run: r))
+        if reward.levelsGained > 0 { achievements.record(.levelReached(r.level)) }
         var said = spoken + " " + reward.message
         if reward.levelsGained > 0 {
             let msg = "Level up! You are now level \(r.level). You have \(r.levelPoints) level points to spend."
@@ -306,6 +377,7 @@ final class RunModel: ObservableObject {
             victory(said)
         } else if r.roomsOnFloor >= r.floorRoomsNeeded {
             add("Floor \(r.floor) complete.")
+            floorDone(r)
             finish(r, d, phase: .floorCleared, spoken: said + " Floor \(r.floor) complete. Descend or wander.")
             playMusic()
         } else {
@@ -321,6 +393,7 @@ final class RunModel: ObservableObject {
         game.wallet.addGold(result.goldGained)
         let msg = result.log.last ?? ""
         let done = r.roomsOnFloor >= r.floorRoomsNeeded
+        if done { floorDone(r) }
         finish(r, dice, phase: done ? .floorCleared : .exploring,
                spoken: spoken + " " + msg + (done ? " Floor \(r.floor) complete. Descend or wander." : ""))
         playMusic()
@@ -330,6 +403,7 @@ final class RunModel: ObservableObject {
         var r = run
         Feedback.warning()
         let outcome = Progression.handleDeath(&r)
+        achievements.record(.died)
         Sound.sfx(outcome == .runOver ? "sfx-gameover" : "sfx-death")
         switch outcome {
         case .gearSaved:
@@ -355,6 +429,14 @@ final class RunModel: ObservableObject {
             finish(r, dice, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring,
                    spoken: spoken + " " + msg)
             playMusic()
+        case .runOver where r.hardcore:
+            run = r
+            phase = .defeat
+            game.deleteCharacter(at: characterIndex)
+            characterGone = true
+            let msg = "💀 HARDCORE — \(r.name) has fallen. This character is gone forever. There are no second chances in Hardcore Mode."
+            add(msg)
+            Feedback.announce(spoken + " " + msg)
         case .runOver:
             run = r
             phase = .defeat
@@ -371,6 +453,8 @@ final class RunModel: ObservableObject {
 
     private func victory(_ spoken: String) {
         phase = .victory
+        achievements.record(.runWon(run, diedThisRun: run.diedThisRun,
+                                    seconds: Date().timeIntervalSince1970 - run.startedAt))
         Sound.sfx("sfx-victory")
         Sound.ambient(nil)
         add("Victory! You have conquered \(run.dungeon).")
@@ -379,7 +463,8 @@ final class RunModel: ObservableObject {
         game.clearRun(for: characterIndex)
         let next = game.unlockedDungeons().last ?? ""
         let unlock = next != run.dungeon && !next.isEmpty ? " \(next) is unlocked." : ""
-        Feedback.announce(spoken + " Victory! You have conquered \(run.dungeon).\(unlock)")
+        Feedback.announce(spoken + " Victory! You have conquered \(run.dungeon).\(unlock)"
+            + (canContinueJourney ? " Continue your journey, start New Game Plus, or return." : " Start New Game Plus, or return."))
     }
 
     // MARK: Skills
@@ -444,6 +529,7 @@ final class RunModel: ObservableObject {
         let isReveal = r.inventory.indices.contains(index) && r.inventory[index].id == "scroll-reveal"
         let item = r.inventory.indices.contains(index) ? r.inventory[index] : nil
         let out = Inventory.use(&r, at: index)
+        if out.used, let item, item.type == "elixir" || item.type == "heal" { achievements.record(.elixirUsed) }
         if out.used, let item {
             Sound.sfx(item.isWeapon || item.isArmor ? "sfx-confirm"
                       : ["potion", "elixir", "heal", "sp-potion", "atk-potion", "def-potion", "luck-potion", "swift-potion"].contains(item.type) ? "sfx-potion"
@@ -499,12 +585,14 @@ final class RunModel: ObservableObject {
         r.floorRoomsNeeded = Rooms.roomsNeeded(floor: r.floor, difficulty: r.difficulty, dice: &d)
         r.upcomingRooms = []
         r.gearSavedThisFloor = false
+        r.hpAtFloorStart = r.hp
         Encounters.planFloor(&r, dice: &d)
         let floor = r.floor
         game.updateCharacter(characterIndex) { $0.floor = max($0.floor, floor) }
         shop = Inventory.shopStock(for: r, dice: &d)
         roomTitle = Rooms.floorName(floor, dungeon: r.dungeon)
         add("You descend to floor \(floor): \(roomTitle).")
+        achievements.record(.floorReached(floor))
         Sound.sfx("sfx-stairs")
         Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
         finish(r, d, phase: .shopping,
@@ -581,7 +669,7 @@ final class RunModel: ObservableObject {
     }
 
     private func persist() {
-        guard phase != .victory && phase != .defeat else { return }
+        guard phase != .victory && phase != .defeat, !characterGone else { return }
         game.saveRun(run, for: characterIndex)
     }
 
