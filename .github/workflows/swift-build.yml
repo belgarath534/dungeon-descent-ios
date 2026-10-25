@@ -1,0 +1,69 @@
+# Checks that the Swift version builds for iPhone on every push.
+# It builds without signing, so it can't be installed; Codemagic does the
+# signed TestFlight build. If this fails, the log says exactly why.
+name: Swift iOS build
+
+on:
+  push:
+    branches: [swift-rewrite]
+    paths:
+      - 'swift/**'
+      - '.github/workflows/swift-build.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: swift-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick the newest Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: Run the game rules tests
+        working-directory: swift/DungeonCore
+        run: swift test
+
+      - name: Generate the Xcode project
+        working-directory: swift/App
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          xcodegen generate
+
+      - name: Build the app for iPhone (unsigned)
+        working-directory: swift/App
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project DungeonDescent.xcodeproj \
+            -scheme DungeonDescent \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build 2>&1 | tee xcodebuild.log | grep -E "error:|warning:|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" xcodebuild.log
+
+      - name: Package unsigned IPA
+        working-directory: swift/App
+        run: |
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/DungeonDescent.app Payload/
+          zip -qr DungeonDescent-unsigned.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: swift-ios-build
+          path: |
+            swift/App/DungeonDescent-unsigned.ipa
+            swift/App/xcodebuild.log
+          if-no-files-found: ignore
