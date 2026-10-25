@@ -94,7 +94,8 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Global chat, presence, leaderboards | GLOBAL CHAT SYSTEM … | ⬜ |
 | Account login, cloud save | DD Cloud | ⬜ |
 | Translations (Portuguese etc.) | translation tables | ⬜ |
-| Music player, narrator, sound effects | MUSIC PLAYER … | ⬜ |
+| Music, ambience, sound effects | playTrack, playAmbient, sfx | ✅ same files (www/audio, bundled as-is), same track per dungeon and floor, volume settings |
+| Music player, custom tracks, narrator | MUSIC PLAYER … | ⬜ |
 | 3D Mode | Three.js | ⬜ |
 
 ## Things to keep in mind

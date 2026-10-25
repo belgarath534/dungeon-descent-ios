@@ -754,3 +754,25 @@ final class SkillTests: XCTestCase {
         }
     }
 }
+
+final class SoundtrackTests: XCTestCase {
+    func testTracksMatchTheWebVersion() {
+        XCTAssertEqual(Soundtrack.exploreTrack(dungeon: "Crypt of Malachar", floor: 1), "floor1")
+        XCTAssertEqual(Soundtrack.exploreTrack(dungeon: "Crypt of Malachar", floor: 6), "floor3")
+        XCTAssertEqual(Soundtrack.exploreTrack(dungeon: "Frosthold Abyss", floor: 5), "frost2")
+        XCTAssertEqual(Soundtrack.exploreTrack(dungeon: "The Hollow", floor: 8), "hollow1")
+        XCTAssertEqual(Soundtrack.bossTrack(dungeon: "The Abyssal Deep"), "abyssal-boss")
+        XCTAssertEqual(Soundtrack.battleTrack(dungeon: "The Ashbound Wastes"), "ash-battle")
+        XCTAssertEqual(Soundtrack.ambientKey(dungeon: "The Hollow", difficulty: .nightmare), "nightmare")
+        XCTAssertEqual(Soundtrack.enemyCue(dungeon: "The Hollow", boss: false), "sfx-enemy-horror")
+    }
+
+    func testEveryTrackTheGameAsksForHasAFile() {
+        for d in GameData.dungeons {
+            for f in 1...10 { XCTAssertNotNil(Soundtrack.file(forTrack: Soundtrack.exploreTrack(dungeon: d, floor: f)), "\(d) \(f)") }
+            XCTAssertNotNil(Soundtrack.file(forTrack: Soundtrack.battleTrack(dungeon: d)), d)
+            XCTAssertNotNil(Soundtrack.file(forAmbient: Soundtrack.ambientKey(dungeon: d, difficulty: .wanderer)), d)
+        }
+        XCTAssertNotNil(Soundtrack.file(forTrack: "menu"))
+    }
+}

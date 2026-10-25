@@ -25,6 +25,8 @@ function grab(name) {
       if (c === quote) quote = null;
       continue;
     }
+    if (c === '/' && src[j + 1] === '/') { j = src.indexOf('\n', j); continue; }
+    if (c === '/' && src[j + 1] === '*') { j = src.indexOf('*/', j) + 1; continue; }
     if (c === "'" || c === '"' || c === '`') { quote = c; continue; }
     if (c === open) depth++;
     else if (c === close && --depth === 0) break;
@@ -40,6 +42,10 @@ function floorList(v) {
   Object.keys(v).map(Number).sort((a, b) => a - b).forEach(k => { list[k] = v[k]; });
   return Array.from(list, x => x || '');
 }
+
+// Audio tables call _audioUrl('file.mp3'); here that just returns the file name.
+// eslint-disable-next-line no-unused-vars
+function _audioUrl(f) { return f; }
 
 // Keeps only plain data: functions (e.g. RUNE_DEFS.apply) are dropped.
 function plain(v) { return JSON.parse(JSON.stringify(v)); }
@@ -79,6 +85,12 @@ const out = {
   traps: plain(grab('TRAP_TYPES')),
   classSkills: plain(grab('CLASS_SKILLS')),
   startingSkills: startingSkills(),
+  audio: {
+    tracks: plain(grab('TRACK_FILES')),
+    ambient: plain(grab('AMBIENT_FILES')),
+    enemySfx: plain(grab('DUNGEON_ENEMY_SFX')),
+    bossSfx: plain(grab('DUNGEON_BOSS_SFX')),
+  },
 };
 const crypt = { loot: grab('LOOT'), shop: grab('SHOP_STOCK'), rooms: grab('ROOM_DESCS'), floors: grab('FLOOR_NAMES') };
 for (const [name, p] of Object.entries(dungeons)) {

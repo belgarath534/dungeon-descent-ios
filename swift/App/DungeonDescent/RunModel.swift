@@ -40,6 +40,7 @@ final class RunModel: ObservableObject {
                 : saved.roomsOnFloor >= saved.floorRoomsNeeded && saved.roomsOnFloor > 0 ? .floorCleared : .exploring
             roomTitle = Rooms.floorName(saved.floor, dungeon: saved.dungeon)
             add("Run resumed on floor \(saved.floor). HP \(saved.hp) of \(saved.maxHp).")
+            playMusic()
             return
         }
         var r = Run(character: game.characters[characterIndex], gold: game.wallet.gold)
@@ -54,6 +55,18 @@ final class RunModel: ObservableObject {
         add("Floor \(r.floor): \(roomTitle). \(r.lives) \(r.lives == 1 ? "life" : "lives").")
         if let s = Skills.unlocked(r).first { add("✨ Starting skill: \(s.name). \(s.desc)") }
         persist()
+        playMusic()
+    }
+
+    /// Exploration, battle or boss music for where the run is, plus the dungeon's ambience.
+    func playMusic() {
+        let r = run
+        if let e = r.enemy, r.inCombat {
+            Sound.track(e.isBoss ? Soundtrack.bossTrack(dungeon: r.dungeon) : Soundtrack.battleTrack(dungeon: r.dungeon))
+        } else {
+            Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: r.floor))
+        }
+        Sound.ambient(Soundtrack.ambientKey(dungeon: r.dungeon, difficulty: r.difficulty))
     }
 
     var isBossFloor: Bool { run.floor >= 10 && run.difficulty != .endless }
@@ -65,6 +78,7 @@ final class RunModel: ObservableObject {
 
     func enterRoom() {
         guard phase == .exploring else { return }
+        Sound.sfx("sfx-footstep")
         var r = run
         var d = dice
         r.roomsOnFloor += 1
@@ -92,6 +106,8 @@ final class RunModel: ObservableObject {
             let boss = Combat.nextBoss(for: r, dice: &d)
             Combat.begin(&r, against: boss)
             add("\(boss.icon) \(boss.name) rises before you. \(boss.hp) HP.")
+            Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: true))
+            Sound.track(Soundtrack.bossTrack(dungeon: r.dungeon))
             spoken += " \(boss.name) rises before you. \(boss.hp) HP."
             finish(r, d, phase: .fighting, spoken: spoken)
             return
@@ -103,13 +119,15 @@ final class RunModel: ObservableObject {
             Combat.begin(&r, against: enemy)
             let line = "\(label) \(enemy.icon) A \(enemy.name) attacks! \(enemy.hp) HP."
             add(line)
+            Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
+            Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
             spoken += " A \(enemy.name) attacks! \(enemy.hp) HP."
             finish(r, d, phase: .fighting, spoken: spoken)
         case .loot:
             let find = Inventory.lootRoom(&r, dice: &d, wallet: game.wallet)
             add("\(label) \(find.message)")
             spoken += " " + find.message
-            if find.item != nil || find.gold > 0 { Feedback.success() }
+            if find.item != nil || find.gold > 0 { Feedback.success(); Sound.sfx("sfx-loot") }
             finishQuietRoom(r, d, spoken: spoken)
         case .event:
             add("\(label) \(roomText)")
@@ -130,10 +148,11 @@ final class RunModel: ObservableObject {
         guard phase == .exploring || phase == .floorCleared else { return }
         var r = run
         var d = dice
+        Sound.sfx("sfx-search")
         let find = Inventory.search(&r, dice: &d, wallet: game.wallet)
         add(find.message)
-        if find.trap != nil && find.trap != "avoided" { Feedback.warning() }
-        else if find.item != nil || find.gold > 0 { Feedback.success() }
+        if find.trap != nil && find.trap != "avoided" { Feedback.warning(); Sound.sfx("sfx-trap") }
+        else if find.item != nil || find.gold > 0 { Feedback.success(); Sound.sfx("sfx-loot") }
         run = r
         dice = d
         if find.playerDied {
@@ -153,6 +172,13 @@ final class RunModel: ObservableObject {
         let result = Combat.takeTurn(&r, action, dice: &d, options: .init(classTraits: AppSettings.classTraits))
         result.log.forEach { add($0) }
         if result.crit { Feedback.hit(heavy: true) } else if result.playerDamage > 0 { Feedback.hit() }
+        switch action {
+        case .attack: Sound.sfx(result.crit ? "sfx-crit" : "sfx-attack")
+        case .heavy: Sound.sfx(result.missed ? "sfx-heavy-miss" : "sfx-heavy-hit")
+        case .defend: Sound.sfx("sfx-select")
+        case .flee: break
+        }
+        if (result.enemyDamage ?? 0) > 0 { Sound.sfx("sfx-hurt") }
 
         var spoken = result.log.first ?? ""
         if result.bossPhaseMessage != nil {
@@ -163,6 +189,7 @@ final class RunModel: ObservableObject {
         if result.fled {
             finish(r, d, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring,
                    spoken: result.announcement ?? "You fled.")
+            playMusic()
             return
         }
         if result.enemyDied, let e = r.enemy {
@@ -184,10 +211,12 @@ final class RunModel: ObservableObject {
         var d = dice
         let reward = Progression.rewardKill(&r, e, dice: &d, wallet: game.wallet)
         add(reward.message)
+        Sound.sfx("sfx-enemy-die")
         var said = spoken + " " + reward.message
         if reward.levelsGained > 0 {
             let msg = "Level up! You are now level \(r.level). You have \(r.levelPoints) level points to spend."
             add(msg)
+            Sound.sfx("sfx-levelup")
             said += " " + msg
             if r.skillChoices.isEmpty {
                 Skills.offer(&r, dice: &d)
@@ -207,15 +236,19 @@ final class RunModel: ObservableObject {
         } else if r.roomsOnFloor >= r.floorRoomsNeeded {
             add("Floor \(r.floor) complete.")
             finish(r, d, phase: .floorCleared, spoken: said + " Floor \(r.floor) complete. Descend or wander.")
+            playMusic()
         } else {
             finish(r, d, phase: .exploring, spoken: said)
+            playMusic()
         }
     }
 
     private func playerDied(killedBy: String, spoken: String) {
         var r = run
         Feedback.warning()
-        switch Progression.handleDeath(&r) {
+        let outcome = Progression.handleDeath(&r)
+        Sound.sfx(outcome == .runOver ? "sfx-gameover" : "sfx-death")
+        switch outcome {
         case .resurrected:
             if r.enemy != nil { r.inCombat = true }
             let msg = "Resurrection! You rise again with 50 percent HP."
@@ -232,6 +265,7 @@ final class RunModel: ObservableObject {
             add(msg)
             finish(r, dice, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring,
                    spoken: spoken + " " + msg)
+            playMusic()
         case .runOver:
             run = r
             phase = .defeat
@@ -248,6 +282,8 @@ final class RunModel: ObservableObject {
 
     private func victory(_ spoken: String) {
         phase = .victory
+        Sound.sfx("sfx-victory")
+        Sound.ambient(nil)
         add("Victory! You have conquered \(run.dungeon).")
         game.globalInventory.keep(from: run)
         game.updateCharacter(characterIndex) { $0.completed = true; $0.floor = 10 }
@@ -272,10 +308,13 @@ final class RunModel: ObservableObject {
             return
         }
         result.log.forEach { add($0) }
-        if result.playerDamage > 0 { Feedback.hit(heavy: result.playerDamage >= 30) }
+        if result.playerDamage > 0 { Feedback.hit(heavy: result.playerDamage >= 30); Sound.sfx(result.playerDamage >= 30 ? "sfx-crit" : "sfx-attack") }
+        else { Sound.sfx("sfx-confirm") }
+        if (result.enemyDamage ?? 0) > 0 { Sound.sfx("sfx-hurt") }
         var spoken = result.log.joined(separator: " ")
         if result.fled {
             finish(r, d, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring, spoken: spoken)
+            playMusic()
             return
         }
         if result.enemyDied, let e = r.enemy {
@@ -295,6 +334,7 @@ final class RunModel: ObservableObject {
     func pickSkill(_ effect: String) {
         var r = run
         guard let s = Skills.pick(&r, effect) else { return }
+        Sound.sfx("sfx-unlock")
         run = r
         persist()
         add("✨ You unlocked \(s.name). \(s.desc)")
@@ -308,7 +348,13 @@ final class RunModel: ObservableObject {
         var r = run
         var d = dice
         let isReveal = r.inventory.indices.contains(index) && r.inventory[index].id == "scroll-reveal"
+        let item = r.inventory.indices.contains(index) ? r.inventory[index] : nil
         let out = Inventory.use(&r, at: index)
+        if out.used, let item {
+            Sound.sfx(item.isWeapon || item.isArmor ? "sfx-confirm"
+                      : ["potion", "elixir", "heal", "sp-potion", "atk-potion", "def-potion", "luck-potion", "swift-potion"].contains(item.type) ? "sfx-potion"
+                      : "sfx-unlock")
+        }
         var msg = out.message
         if out.used && isReveal { msg += " " + Inventory.reveal(&r, dice: &d) }
         add(msg)
@@ -363,6 +409,8 @@ final class RunModel: ObservableObject {
         shop = Inventory.shopStock(for: r, dice: &d)
         roomTitle = Rooms.floorName(floor, dungeon: r.dungeon)
         add("You descend to floor \(floor): \(roomTitle).")
+        Sound.sfx("sfx-stairs")
+        Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
         finish(r, d, phase: .shopping,
                spoken: "Floor \(floor) of 10. \(roomTitle). A merchant waits in the passage. Shop open. You have \(r.gold) gold.")
     }
@@ -385,7 +433,7 @@ final class RunModel: ObservableObject {
         shop[i] = entry
         run = r
         add(out.message)
-        if out.used { Feedback.success() }
+        if out.used { Feedback.success(); Sound.sfx("sfx-purchase") }
         persist()
         Feedback.announce(out.message)
     }

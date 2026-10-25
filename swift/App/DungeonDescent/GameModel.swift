@@ -111,6 +111,19 @@ enum Feedback {
 
 /// Player settings kept in UserDefaults.
 enum AppSettings {
-    static var haptics: Bool { UserDefaults.standard.object(forKey: "swift_haptics") as? Bool ?? true }
-    static var classTraits: Bool { UserDefaults.standard.object(forKey: "swift_class_traits") as? Bool ?? true }
+    private static func flag(_ key: String, _ fallback: Bool = true) -> Bool {
+        UserDefaults.standard.object(forKey: key) as? Bool ?? fallback
+    }
+    private static func level(_ key: String, _ fallback: Double) -> Double {
+        UserDefaults.standard.object(forKey: key) as? Double ?? fallback
+    }
+    static var haptics: Bool { flag("swift_haptics") }
+    static var classTraits: Bool { flag("swift_class_traits") }
+    // Same defaults as the web version's audio settings.
+    static var musicOn: Bool { flag("swift_music_on") }
+    static var effectsOn: Bool { flag("swift_sfx_on") }
+    static var ambientOn: Bool { flag("swift_ambient_on") }
+    static var musicVolume: Double { level("swift_music_volume", 0.7) }
+    static var effectsVolume: Double { level("swift_sfx_volume", 0.8) }
+    static var ambientVolume: Double { level("swift_ambient_volume", 0.35) }
 }

@@ -18,6 +18,10 @@ targets:
     platform: iOS
     sources:
       - path: DungeonDescent
+      # The web version's audio files, used as-is (one copy in the repo).
+      - path: ../../www/audio
+        type: folder
+        buildPhase: resources
     dependencies:
       - package: DungeonCore
     scheme: {}
@@ -31,6 +35,8 @@ targets:
         GCSupportsGameMode: true
         ITSAppUsesNonExemptEncryption: false
         LSRequiresIPhoneOS: true
+        UIBackgroundModes:
+          - audio
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait

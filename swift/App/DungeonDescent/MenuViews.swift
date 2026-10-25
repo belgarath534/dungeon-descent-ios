@@ -48,6 +48,10 @@ struct MainMenuView: View {
         }
         .navigationTitle("Main Menu")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            Sound.track("menu")
+            Sound.ambient(nil)
+        }
     }
 }
 
@@ -132,9 +136,29 @@ struct CharacterRow: View {
 struct SettingsView: View {
     @AppStorage("swift_haptics") private var haptics = true
     @AppStorage("swift_class_traits") private var classTraits = true
+    @AppStorage("swift_music_on") private var musicOn = true
+    @AppStorage("swift_sfx_on") private var sfxOn = true
+    @AppStorage("swift_ambient_on") private var ambientOn = true
+    @AppStorage("swift_music_volume") private var musicVolume = 0.7
+    @AppStorage("swift_sfx_volume") private var sfxVolume = 0.8
+    @AppStorage("swift_ambient_volume") private var ambientVolume = 0.35
 
     var body: some View {
         Form {
+            Section("Sound") {
+                Toggle("Music", isOn: $musicOn)
+                if musicOn { VolumeSlider(label: "Music volume", value: $musicVolume) }
+                Toggle("Sound effects", isOn: $sfxOn)
+                if sfxOn { VolumeSlider(label: "Sound effects volume", value: $sfxVolume) }
+                Toggle("Ambience", isOn: $ambientOn)
+                if ambientOn { VolumeSlider(label: "Ambience volume", value: $ambientVolume) }
+            }
+            .onChange(of: musicOn) { _ in Sound.settingsChanged() }
+            .onChange(of: ambientOn) { _ in Sound.settingsChanged() }
+            .onChange(of: musicVolume) { _ in Sound.settingsChanged() }
+            .onChange(of: ambientVolume) { _ in Sound.settingsChanged() }
+            .onChange(of: sfxVolume) { _ in Sound.sfx("sfx-select") }
+
             Section {
                 Toggle("Haptics", isOn: $haptics)
                 Toggle("Class traits", isOn: $classTraits)
@@ -149,5 +173,24 @@ struct SettingsView: View {
             }
         }
         .navigationTitle("Settings")
+    }
+}
+
+/// A volume slider VoiceOver reads as a percentage and adjusts in 10% steps.
+struct VolumeSlider: View {
+    let label: String
+    @Binding var value: Double
+
+    var body: some View {
+        Slider(value: $value, in: 0...1, step: 0.05) { Text(label) }
+            .accessibilityLabel(label)
+            .accessibilityValue("\(Int((value * 100).rounded())) percent")
+            .accessibilityAdjustableAction { direction in
+                switch direction {
+                case .increment: value = min(1, value + 0.1)
+                case .decrement: value = max(0, value - 0.1)
+                @unknown default: break
+                }
+            }
     }
 }
