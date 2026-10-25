@@ -50,5 +50,9 @@ public struct LoadedDice: Dice {
         let r = rolls.isEmpty ? range.lowerBound : rolls.removeFirst()
         return min(max(r, range.lowerBound), range.upperBound)
     }
-    public mutating func chance(_ p: Double) -> Bool { chances.isEmpty ? false : chances.removeFirst() }
+    public mutating func chance(_ p: Double) -> Bool {
+        if p >= 1 { return true }
+        if p <= 0 { return false }
+        return chances.isEmpty ? false : chances.removeFirst()
+    }
 }

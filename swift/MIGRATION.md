@@ -29,15 +29,27 @@ read or delete them yet; importing them is on the list below.
   unchanged, so a web save loads in Swift without losing anything.
 - **Randomness goes through `Dice`,** so tests can replay a fight exactly.
 
+- **Game data comes straight from the web code.** `node swift/tools/extract-game-data.js`
+  copies every dungeon's enemies, bosses, loot, shop stock, traps, room text and
+  floor names into `DungeonCore/Sources/DungeonCore/Resources/gamedata.json`. Run it
+  again whenever those tables change in `www/index.html`.
+
 Run the tests: `cd swift/DungeonCore && swift test`
+
+**Every push to `swift-rewrite` builds the iPhone app on GitHub Actions**
+(`.github/workflows/swift-build.yml`): tests, then an unsigned Release build. A red
+build there means the app doesn't compile; the log says why.
 
 ## Order of work
 
 1. ✅ **Core rules:** characters, wallet, enemies, basic combat, XP, lives.
 2. ✅ **App shell:** main menu, character list and creation, settings, support.
    VoiceOver labels and announcements built in from day one.
-3. 🟡 **Playable Crypt run:** fights, room odds, leveling, lives, boss phases and
-   victory work. Next: loot, potions, inventory, search, shop, room events.
+3. ✅ **Playable runs in all 8 dungeons:** fights, flee, room odds and descriptions,
+   loot rooms, searching and traps, potions, runes, scrolls, weapons and armor, the
+   shop after every floor, descend or wander, leveling, lives and Phoenix Feathers,
+   boss phases, victory and defeat. Runs are saved after every action and can be
+   continued. Next: special room events, class skills, elites, enemy abilities.
    Then import web saves.
 4. **Native services:** Sign in with Apple / Google through the Firebase iOS SDK,
    cloud save, StoreKit 2 purchases, Game Center, Core Haptics, audio, Live Activity,
@@ -58,13 +70,18 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Classes, races, professions, difficulties | CHARACTER CREATION | 🟡 Halfling, Goblin, Warden, Herbalist, Gravedigger, Pilgrim, Mercenary, Grave Robber done; other races not yet |
 | Run start stats | initDungeon | 🟡 equipment, coin upgrades, milestone buffs, dream buffs, spirits not yet |
 | Crypt enemies and bosses, scaling | DUNGEON ENGINE | ✅ |
-| Other dungeons' enemy tables | DUNGEON ENGINE | ⬜ |
+| Other dungeons' enemy tables | DUNGEON ENGINE | ✅ from gamedata.json, including Nightmare enemies |
+| Enemy special abilities (burn, dodge, lifesteal …) | ENEMY_SPECIALS, enemy flags | ⬜ kept in the data, not acted on yet |
+| Room descriptions, floor names | ROOM_DESCS, FLOOR_NAMES | ✅ |
 | Attack / heavy / defend / enemy counter | doFight | 🟡 base rules only |
-| Skills, potions, weapon and armor effects | doFight, CLASS SKILLS | ⬜ |
-| Lives, death, revive | handleDeath | 🟡 lives and 40% revive; cheat-death items and hardcore not yet |
+| Potions, runes, scrolls, Phoenix Feather | useItem | ✅ except the shop's more exotic brews (soul trap, mirror flask, rage tonic …) |
+| Weapons and armor, equipping | equipWeapon, equipArmor | 🟡 stats and equipping; rarity effects not yet |
+| Class skills, SP | CLASS SKILLS | ⬜ |
+| Lives, death, revive | handleDeath | 🟡 lives, 40% revive, Phoenix Feather, death log; hardcore and class cheat-deaths not yet |
 | XP, levels, level points | gainXP, LP_STATS | ✅ |
 | Kill gold | enemyDead | 🟡 base gold, Goblin, Grave Robber, luck |
-| Rooms, search, floors, shop | enterRoom, searchRoom, openShop | 🟡 room odds and floors; loot, events, search, shop not yet |
+| Rooms, search, floors, shop | enterRoom, searchRoom, openShop | 🟡 all but special room events and NPC encounters |
+| Saving a run in progress | midRunSave | ✅ (Swift's own format) |
 | Import web saves into the Swift app | DDStore (IndexedDB) | ⬜ |
 | Elites, multi-enemy combat | MULTI-ENEMY COMBAT SYSTEM | ⬜ |
 | Gun crafting | GUN DEFINITIONS | ⬜ |
@@ -85,3 +102,20 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
   replaces it with the wallet balance right after, so the bonus never reaches the
   player. Swift keeps that behavior for now (see `Run.swift`); decide whether to fix it.
 - Android has its own HTML copy, so no Android code is needed here.
+
+## Web bugs fixed in the Swift version
+
+Where an item's description and the web code disagree, Swift follows the description:
+
+- **Attack and defense potions** say "+N for 3 turns" but the web version gave +4/+3
+  for the whole run (and the loot table's Defense Potion used a field nothing read).
+  Swift gives the described bonus for 3 turns.
+- **Curse Potion** says "for 3 turns" but never wore off. It now lasts 3 turns.
+- **Lucky Potion** did nothing in normal fights (only multi-enemy fights read it).
+  It now doubles gold from the next 3 kills.
+- **Poison Dart trap** promised 8 damage a turn for 3 turns but never ticked. It now does.
+- **Scroll of Mending** was used up when read during a fight, without healing. It's
+  now kept until you're out of combat.
+- **Weapon attack bonus** differed between equipping mid-run (low end of the range)
+  and starting a run (middle of the range). Swift always uses the middle.
+

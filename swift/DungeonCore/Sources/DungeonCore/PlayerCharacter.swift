@@ -223,3 +223,22 @@ extension PlayerCharacter {
         }
     }
 }
+
+extension PlayerCharacter {
+    /// Adds a death to the character's "deathLog", newest first, like logDeath().
+    public mutating func logDeath(floor: Int, killedBy: String, date: Date = Date()) {
+        let cal = Calendar.current
+        let c = cal.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        let entry: JSONValue = .object([
+            "floor": .number(Double(floor)),
+            "killedBy": .string(killedBy),
+            "date": .string("\(c.month ?? 1)/\(c.day ?? 1)/\(c.year ?? 2026)"),
+            "time": .string("\(c.hour ?? 0):" + String(format: "%02d", c.minute ?? 0)),
+            "dungeon": .string(dungeon),
+        ])
+        var log: [JSONValue] = []
+        if case .array(let old)? = extra["deathLog"] { log = old }
+        log.insert(entry, at: 0)
+        extra["deathLog"] = .array(Array(log.prefix(20)))
+    }
+}

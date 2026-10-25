@@ -3,7 +3,7 @@ import Foundation
 /// The state of one dungeon run (the web version's `DS` object).
 /// Only the fields the ported systems use are here so far; more get added as
 /// each system moves over.
-public struct Run: Sendable {
+public struct Run: Codable, Sendable {
     public var name: String
     public var cls: String
     public var race: String
@@ -48,8 +48,53 @@ public struct Run: Sendable {
     public var defending = false
     public var markedKill = false
     public var enemy: Enemy? = nil
+    public var bossPhase = 1
+
+    // Items and gear
+    public var inventory: [Item] = []
+    public var equippedWeapon: Item? = nil
+    public var equippedArmor: Item? = nil
+
+    // Effects from potions, runes, scrolls and traps
+    public var tempAtk = 0
+    public var tempAtkTurns = 0
+    public var tempDef = 0
+    public var tempDefTurns = 0
+    public var swiftTurns = 0
+    public var runeSpeed = false
+    public var runeFortune = false
+    public var luckKills = 0
+    public var poisonTurns = 0
+    public var poisonDamage = 0
+    public var frozen = false
+
+    // Room state
+    public var searched = false
+    public var firstSearchDone = false
+    /// Rooms already rolled by a Scroll of Reveal, used before rolling new ones.
+    public var upcomingRooms: [Rooms.Outcome] = []
 
     public var isDead: Bool { hp <= 0 }
+
+    /// Attack from the equipped weapon: the middle of its range, as initDungeon() adds it.
+    public var weaponBonus: Int {
+        guard let w = equippedWeapon else { return 0 }
+        let r = w.weaponAttack
+        return (r.lowerBound + r.upperBound) / 2
+    }
+
+    /// Defense from the equipped armor.
+    public var armorDef: Int { equippedArmor?.armorDefense ?? 0 }
+
+    /// Everything added on top of the class's attack roll.
+    public var totalAtkBonus: Int {
+        atkBonus + weaponBonus + tempAtk - (equippedArmor?.armorType == "heavy" ? 1 : 0)
+    }
+
+    /// Total defense, before the +4 for defending.
+    public var totalDef: Int { def + defBonus + armorDef + tempDef }
+
+    public var hasFleeRing: Bool { inventory.contains { $0.effect == "flee" } }
 
     /// Starts a run for a character, like initDungeon().
     public init(character ch: PlayerCharacter, gold: Int = 0) {

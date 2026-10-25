@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "DungeonCore", targets: ["DungeonCore"])
     ],
     targets: [
-        .target(name: "DungeonCore"),
+        .target(name: "DungeonCore", resources: [.copy("Resources/gamedata.json")]),
         .testTarget(name: "DungeonCoreTests", dependencies: ["DungeonCore"])
     ]
 )

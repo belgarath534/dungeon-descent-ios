@@ -1,0 +1,6699 @@
+{
+ "dungeons": {
+  "Crypt of Malachar": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "Hollow Shade",
+      "icon": "👻",
+      "hp": 24,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     },
+     {
+      "name": "Crypt Rat",
+      "icon": "🐀",
+      "hp": 16,
+      "atk": [
+       3,
+       7
+      ],
+      "gold": [
+       1,
+       3
+      ],
+      "coward": true
+     },
+     {
+      "name": "Brittle Skeleton",
+      "icon": "💀",
+      "hp": 28,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       6
+      ]
+     },
+     {
+      "name": "Grave Crawler",
+      "icon": "🦂",
+      "hp": 20,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       1,
+       4
+      ]
+     },
+     {
+      "name": "Tomb Bat",
+      "icon": "🦇",
+      "hp": 14,
+      "atk": [
+       3,
+       6
+      ],
+      "gold": [
+       1,
+       3
+      ]
+     },
+     {
+      "name": "Rotting Ghoul",
+      "icon": "🧟",
+      "hp": 30,
+      "atk": [
+       5,
+       9
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     },
+     {
+      "name": "Ashen Wisp",
+      "icon": "🌫️",
+      "hp": 18,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       1,
+       4
+      ]
+     },
+     {
+      "name": "Bone Shard",
+      "icon": "🦴",
+      "hp": 22,
+      "atk": [
+       5,
+       9
+      ],
+      "gold": [
+       2,
+       4
+      ]
+     }
+    ],
+    "t2": [
+     {
+      "name": "Wailing Wraith",
+      "icon": "👁️",
+      "hp": 36,
+      "atk": [
+       7,
+       13
+      ],
+      "gold": [
+       4,
+       8
+      ]
+     },
+     {
+      "name": "Armored Skeleton",
+      "icon": "🗡️",
+      "hp": 44,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       5,
+       10
+      ]
+     },
+     {
+      "name": "Plague Hound",
+      "icon": "🐺",
+      "hp": 30,
+      "atk": [
+       6,
+       12
+      ],
+      "gold": [
+       3,
+       7
+      ]
+     },
+     {
+      "name": "Crypt Banshee",
+      "icon": "👻",
+      "hp": 40,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       5,
+       9
+      ]
+     },
+     {
+      "name": "Shadow Stalker",
+      "icon": "🌑",
+      "hp": 34,
+      "atk": [
+       7,
+       13
+      ],
+      "gold": [
+       4,
+       8
+      ]
+     },
+     {
+      "name": "Cursed Knight",
+      "icon": "🛡️",
+      "hp": 50,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       6,
+       11
+      ]
+     },
+     {
+      "name": "Plague Wraith",
+      "icon": "☠️",
+      "hp": 38,
+      "atk": [
+       7,
+       14
+      ],
+      "gold": [
+       5,
+       9
+      ]
+     },
+     {
+      "name": "Bone Archer",
+      "icon": "🏹",
+      "hp": 28,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       4,
+       8
+      ]
+     },
+     {
+      "name": "Crypt Spider",
+      "icon": "🕷️",
+      "hp": 32,
+      "atk": [
+       7,
+       14
+      ],
+      "gold": [
+       4,
+       8
+      ]
+     },
+     {
+      "name": "Venom Spitter",
+      "icon": "🕸️",
+      "hp": 26,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       3,
+       7
+      ]
+     }
+    ],
+    "t3": [
+     {
+      "name": "Death Knight",
+      "icon": "⚔️",
+      "hp": 60,
+      "atk": [
+       10,
+       18
+      ],
+      "gold": [
+       8,
+       15
+      ]
+     },
+     {
+      "name": "Bone Colossus",
+      "icon": "🦴",
+      "hp": 72,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       10,
+       18
+      ]
+     },
+     {
+      "name": "Soul Harvester",
+      "icon": "🌑",
+      "hp": 55,
+      "atk": [
+       11,
+       19
+      ],
+      "gold": [
+       7,
+       14
+      ]
+     },
+     {
+      "name": "Void Reaper",
+      "icon": "💀",
+      "hp": 65,
+      "atk": [
+       11,
+       20
+      ],
+      "gold": [
+       9,
+       16
+      ]
+     },
+     {
+      "name": "Ancient Revenant",
+      "icon": "🧟",
+      "hp": 70,
+      "atk": [
+       12,
+       19
+      ],
+      "gold": [
+       9,
+       17
+      ]
+     },
+     {
+      "name": "Nightmare Shade",
+      "icon": "😱",
+      "hp": 58,
+      "atk": [
+       11,
+       21
+      ],
+      "gold": [
+       8,
+       15
+      ]
+     },
+     {
+      "name": "Blood Golem",
+      "icon": "🔴",
+      "hp": 80,
+      "atk": [
+       11,
+       18
+      ],
+      "gold": [
+       10,
+       17
+      ]
+     },
+     {
+      "name": "Web Stalker",
+      "icon": "🕷️",
+      "hp": 66,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       8,
+       15
+      ]
+     },
+     {
+      "name": "Brood Mother",
+      "icon": "🕸️",
+      "hp": 74,
+      "atk": [
+       11,
+       19
+      ],
+      "gold": [
+       9,
+       16
+      ]
+     }
+    ],
+    "bosses": [
+     {
+      "name": "Malachar the Undying",
+      "icon": "👑",
+      "hp": 120,
+      "atk": [
+       15,
+       25
+      ],
+      "gold": [
+       30,
+       50
+      ],
+      "isBoss": true,
+      "phaseMsg2": "Malachar screams — his shield cracks. Phase 2: He summons a wall of undead fire!",
+      "phaseMsg3": "The fire wall falls. Malachar stands exposed — ancient and furious!"
+     },
+     {
+      "name": "The Bone Sovereign",
+      "icon": "💀",
+      "hp": 110,
+      "atk": [
+       14,
+       23
+      ],
+      "gold": [
+       28,
+       48
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Bone Sovereign splinters — and rebuilds himself from the fallen dead around him!",
+      "phaseMsg3": "His final form rises — a throne of bones animated by pure malice!"
+     },
+     {
+      "name": "The Void Walker",
+      "icon": "🌑",
+      "hp": 115,
+      "atk": [
+       15,
+       24
+      ],
+      "gold": [
+       29,
+       49
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Void Walker tears a rift in reality itself. Phase 2: Reality warps around you!",
+      "phaseMsg3": "The rift collapses inward. The Void Walker channels all of nothing at you!"
+     },
+     {
+      "name": "The Crypt Tyrant",
+      "icon": "👺",
+      "hp": 125,
+      "atk": [
+       16,
+       26
+      ],
+      "gold": [
+       31,
+       51
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Crypt Tyrant bellows — the walls crack and dead rise from the rubble!",
+      "phaseMsg3": "His power peaks. Ancient runes ignite across his armour. Final phase!"
+     },
+     {
+      "name": "The Pale Queen",
+      "icon": "👸",
+      "hp": 108,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       27,
+       47
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Pale Queen shrieks — her veil tears and reveals something ancient beneath!",
+      "phaseMsg3": "She abandons grace entirely. Raw death magic pours from her hands!"
+     }
+    ],
+    "elites": []
+   },
+   "loot": [
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 70,
+     "desc": "Restores 70 HP."
+    },
+    {
+     "name": "Defense Potion",
+     "icon": "🛡️",
+     "type": "def-potion",
+     "bonus": 4,
+     "duration": 3,
+     "desc": "Increases defense by 4 for 3 turns."
+    },
+    {
+     "name": "Attack Potion",
+     "icon": "⚔️",
+     "type": "atk-potion",
+     "bonus": 5,
+     "duration": 3,
+     "desc": "Increases attack by 5 for 3 turns."
+    },
+    {
+     "name": "Lucky Potion",
+     "icon": "🍀",
+     "type": "luck-potion",
+     "desc": "Doubles your gold from the next 3 enemy kills."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🔥",
+     "type": "fire-potion",
+     "desc": "Throw at enemy — deals 40% of their max HP as fire damage. Ignores defense."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "desc": "Curses an enemy — weakens their attack by 50% for 3 turns."
+    },
+    {
+     "name": "Swift Potion",
+     "icon": "💨",
+     "type": "swift-potion",
+     "desc": "Guaranteed flee this turn AND the next. Perfect for escape."
+    },
+    {
+     "id": "ancient-blade",
+     "name": "Ancient Blade",
+     "icon": "⚔️",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      6,
+      12
+     ],
+     "isEquippable": true,
+     "desc": "A blade found in the depths."
+    },
+    {
+     "id": "ember-sword",
+     "name": "Ember Sword",
+     "icon": "🔥",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      7,
+      14
+     ],
+     "isEquippable": true,
+     "desc": "Scorched but sharp."
+    },
+    {
+     "id": "bone-staff",
+     "name": "Bone Staff",
+     "icon": "💀",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      5,
+      11
+     ],
+     "isEquippable": true,
+     "desc": "Carved from dungeon bone."
+    },
+    {
+     "name": "Iron Shield",
+     "icon": "🛡️",
+     "type": "armor",
+     "armorType": "light",
+     "defBase": 3,
+     "level": 1,
+     "isEquippable": true,
+     "desc": "Reduces incoming damage by 3."
+    },
+    {
+     "name": "Thief Ring",
+     "icon": "💍",
+     "type": "ring",
+     "effect": "flee",
+     "desc": "Makes fleeing easier."
+    },
+    {
+     "name": "Bloodstone",
+     "icon": "🔴",
+     "type": "gem",
+     "gold": 20,
+     "desc": "Worth 20 gold."
+    },
+    {
+     "id": "rune-strength",
+     "name": "Rune of Strength",
+     "icon": "🔴",
+     "type": "rune",
+     "desc": "+6 attack for the rest of this run."
+    },
+    {
+     "id": "rune-protection",
+     "name": "Rune of Protection",
+     "icon": "🔵",
+     "type": "rune",
+     "desc": "+5 defense for the rest of this run."
+    },
+    {
+     "id": "rune-speed",
+     "name": "Rune of Speed",
+     "icon": "🟡",
+     "type": "rune",
+     "desc": "Flee always succeeds this run."
+    },
+    {
+     "id": "rune-vitality",
+     "name": "Rune of Vitality",
+     "icon": "🟣",
+     "type": "rune",
+     "desc": "+20 max HP this run."
+    },
+    {
+     "id": "scroll-reveal",
+     "name": "Scroll of Reveal",
+     "icon": "📜",
+     "type": "scroll",
+     "desc": "Reveals the next 3 room types."
+    },
+    {
+     "id": "scroll-smite",
+     "name": "Scroll of Smite",
+     "icon": "⚡",
+     "type": "scroll",
+     "desc": "80 unblockable damage to current enemy."
+    },
+    {
+     "id": "scroll-mending",
+     "name": "Scroll of Mending",
+     "icon": "✨",
+     "type": "scroll",
+     "desc": "Heals 50% max HP outside combat."
+    },
+    {
+     "name": "Elixir of Life",
+     "icon": "✨",
+     "type": "elixir",
+     "healPct": 0.6,
+     "desc": "Restores 60% of max HP. A rare treasure worth saving."
+    },
+    {
+     "name": "Gravebound Elixir",
+     "icon": "💀",
+     "type": "elixir",
+     "healPct": 0.6,
+     "desc": "Restores 60% of max HP. Bottled in the Crypt of Malachar."
+    },
+    {
+     "name": "Tidal Elixir",
+     "icon": "🌊",
+     "type": "elixir",
+     "healPct": 0.6,
+     "desc": "Restores 60% of max HP. Drawn from the Abyssal Deep."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Soul Trap",
+     "icon": "🪤",
+     "type": "soul-trap",
+     "cost": 60,
+     "desc": "Captures the current enemy as a permanent minion. Use during combat."
+    },
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "cost": 12,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 80,
+     "cost": 22,
+     "desc": "Restores 80 HP. Stronger brew."
+    },
+    {
+     "name": "Spirit Tonic",
+     "icon": "🔵",
+     "type": "sp-potion",
+     "sp": 15,
+     "cost": 14,
+     "desc": "Restores 15 SP immediately."
+    },
+    {
+     "name": "Greater Tonic",
+     "icon": "💙",
+     "type": "sp-potion",
+     "sp": 30,
+     "cost": 24,
+     "desc": "Restores 30 SP. Concentrated essence."
+    },
+    {
+     "name": "Iron Flask",
+     "icon": "🛡️",
+     "type": "def-potion",
+     "def": 3,
+     "turns": 3,
+     "cost": 16,
+     "desc": "Grants +3 defense for 3 turns."
+    },
+    {
+     "name": "Berserker Draught",
+     "icon": "⚔️",
+     "type": "atk-potion",
+     "atk": 4,
+     "turns": 3,
+     "cost": 18,
+     "desc": "Grants +4 attack for 3 turns."
+    },
+    {
+     "name": "Lucky Potion",
+     "icon": "🍀",
+     "type": "luck-potion",
+     "cost": 20,
+     "desc": "Next 3 enemy kills drop double gold."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🔥",
+     "type": "fire-potion",
+     "cost": 25,
+     "desc": "Deals 40% of target max HP as fire damage. Ignores defense."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "cost": 18,
+     "desc": "Halves enemy attack for 3 turns."
+    },
+    {
+     "name": "Swift Potion",
+     "icon": "💨",
+     "type": "swift-potion",
+     "cost": 22,
+     "desc": "Guarantees flee for 2 turns. Perfect escape."
+    },
+    {
+     "name": "Cursed Vial",
+     "icon": "🌀",
+     "type": "cursed",
+     "cost": 3,
+     "desc": "Unpredictable effects. Cheap for a reason."
+    },
+    {
+     "name": "Mirror Flask",
+     "icon": "🪞",
+     "type": "mirror-flask",
+     "cost": 30,
+     "desc": "Reflects the next enemy attack back at them."
+    },
+    {
+     "name": "Phantom Potion",
+     "icon": "👻",
+     "type": "phantom-potion",
+     "cost": 35,
+     "desc": "Become untargetable for 2 turns. Enemy attacks pass through you."
+    },
+    {
+     "name": "Gravity Tonic",
+     "icon": "🌀",
+     "type": "gravity-tonic",
+     "cost": 28,
+     "desc": "Crushes enemy ATK to 1 for 3 turns."
+    },
+    {
+     "name": "Leech Brew",
+     "icon": "🩸",
+     "type": "leech-brew",
+     "cost": 32,
+     "desc": "Heals 30% of every hit you deal for 4 turns."
+    },
+    {
+     "name": "Rage Tonic",
+     "icon": "💢",
+     "type": "rage-tonic",
+     "cost": 38,
+     "desc": "Triple ATK but double incoming damage for 3 turns."
+    },
+    {
+     "name": "Fog Flask",
+     "icon": "🌫️",
+     "type": "fog-flask",
+     "cost": 25,
+     "desc": "Enemy has 70% chance to miss for 3 turns."
+    },
+    {
+     "name": "Time Potion",
+     "icon": "⌛",
+     "type": "time-potion",
+     "cost": 45,
+     "desc": "2 free attacks this turn. Enemy cannot respond."
+    },
+    {
+     "name": "Corruption Flask",
+     "icon": "💜",
+     "type": "corruption-flask",
+     "cost": 33,
+     "desc": "Deals 20 corruption damage to enemy each turn for 4 turns."
+    },
+    {
+     "name": "Warding Bell",
+     "icon": "🔔",
+     "type": "warding-bell",
+     "cost": 20,
+     "desc": "Rings out the next time you search a room with a trap, letting you step around it. One use."
+    },
+    {
+     "name": "Phoenix Feather",
+     "icon": "🪶",
+     "type": "phoenix-feather",
+     "cost": 150,
+     "desc": "If you would die while carrying this, it ignites instead — you are reborn at 30% HP. Consumed automatically. One use."
+    },
+    {
+     "name": "Elixir of Life",
+     "icon": "✨",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Gravebound Elixir",
+     "icon": "💀",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Tidal Elixir",
+     "icon": "🌊",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Bloodstone",
+     "icon": "🔴",
+     "type": "gem",
+     "gold": 20,
+     "cost": 0,
+     "desc": "Worth 20 gold. Sell it at the Blacksmith."
+    },
+    {
+     "id": "shop-iron-sword",
+     "name": "Iron Sword",
+     "icon": "⚔️",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      5,
+      10
+     ],
+     "cost": 45,
+     "isEquippable": true,
+     "desc": "A reliable sword."
+    },
+    {
+     "id": "shop-shadow-dagger",
+     "name": "Shadow Dagger",
+     "icon": "🔪",
+     "type": "weapon",
+     "weaponType": "dagger",
+     "level": 1,
+     "atkBase": [
+      5,
+      9
+     ],
+     "cost": 55,
+     "isEquippable": true,
+     "desc": "Fast and precise."
+    },
+    {
+     "id": "shop-oak-staff",
+     "name": "Oak Staff",
+     "icon": "🪄",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      4,
+      8
+     ],
+     "cost": 50,
+     "isEquippable": true,
+     "desc": "Channels arcane energy."
+    },
+    {
+     "id": "shop-battle-axe",
+     "name": "Battle Axe",
+     "icon": "🪓",
+     "type": "weapon",
+     "weaponType": "axe",
+     "level": 1,
+     "atkBase": [
+      7,
+      13
+     ],
+     "cost": 70,
+     "isEquippable": true,
+     "desc": "Heavy but devastating."
+    },
+    {
+     "id": "shop-leather-vest",
+     "name": "Leather Vest",
+     "icon": "🦺",
+     "type": "armor",
+     "armorType": "light",
+     "level": 1,
+     "defBase": 3,
+     "cost": 40,
+     "isEquippable": true,
+     "desc": "+3 defense."
+    },
+    {
+     "id": "shop-chain-mail",
+     "name": "Chain Mail",
+     "icon": "⛓️",
+     "type": "armor",
+     "armorType": "medium",
+     "level": 1,
+     "defBase": 5,
+     "cost": 65,
+     "isEquippable": true,
+     "desc": "+5 defense."
+    },
+    {
+     "id": "rune-strength",
+     "name": "Rune of Strength",
+     "icon": "🔴",
+     "type": "rune",
+     "cost": 30,
+     "desc": "+6 attack for the rest of this run."
+    },
+    {
+     "id": "rune-protection",
+     "name": "Rune of Protection",
+     "icon": "🔵",
+     "type": "rune",
+     "cost": 28,
+     "desc": "+5 defense for the rest of this run."
+    },
+    {
+     "id": "rune-vitality",
+     "name": "Rune of Vitality",
+     "icon": "🟣",
+     "type": "rune",
+     "cost": 32,
+     "desc": "+20 max HP this run."
+    },
+    {
+     "id": "scroll-smite",
+     "name": "Scroll of Smite",
+     "icon": "⚡",
+     "type": "scroll",
+     "cost": 35,
+     "desc": "80 unblockable damage to current enemy."
+    },
+    {
+     "id": "scroll-mending",
+     "name": "Scroll of Mending",
+     "icon": "✨",
+     "type": "scroll",
+     "cost": 30,
+     "desc": "Heals 50% max HP outside combat."
+    },
+    {
+     "id": "scroll-reveal",
+     "name": "Scroll of Reveal",
+     "icon": "📜",
+     "type": "scroll",
+     "cost": 22,
+     "desc": "Reveals the next 3 room types."
+    }
+   ],
+   "rooms": [
+    "The silence here is absolute. Your breathing sounds like a desecration.",
+    "Torch sconces line the walls — every flame extinguished long ago. Something put them out.",
+    "The floor is covered in a thin layer of ash. No footprints disturb it. Until now.",
+    "An inscription on the wall reads in an old tongue. One word stands out: \"Wait.\"",
+    "A cold draft comes from nowhere. The hairs on your neck rise before you understand why.",
+    "The bones of a previous explorer lie here, still clutching a rusted blade.",
+    "Water drips somewhere in the dark. The rhythm is too regular. Too deliberate.",
+    "The room smells of old iron and something sweet that turns your stomach.",
+    "Carved faces watch you from the walls. Their expressions change when you look away.",
+    "You hear nothing. That is the problem. Even your footsteps are swallowed by the dark.",
+    "The ceiling here is low. You must hunch. Something about that feels intentional.",
+    "A broken altar stands in the center. Whatever was worshipped here, it was not light.",
+    "The walls are damp. The moisture is warm. You do not investigate further.",
+    "Crude marks scratched at eye level — a tally. You count two hundred and forty-three.",
+    "Every instinct screams to go back. You go forward.",
+    "The door behind you closes on its own. You did not touch it.",
+    "A lantern lies smashed on the floor. The oil has not dried. Someone was just here.",
+    "The room is perfectly square. That would be unremarkable if the dungeon were not round.",
+    "Cobwebs cover every surface. Not from spiders. The strands are too thick.",
+    "A chair sits in the center of the room. One leg is freshly broken. Recently.",
+    "The air here is wrong. Not cold, not warm. Absent. Like the room forgot to have weather.",
+    "You step on something soft. You do not look down.",
+    "The walls here are smooth — too smooth. Ground down by something larger than a hand.",
+    "A door on the far side is barricaded from this side. Someone wanted to keep something out.",
+    "The floor slopes slightly toward the center. The drain there is large enough to be concerning.",
+    "Text covers every inch of the walls. The same three words, repeated endlessly: \"It is here.\"",
+    "A child's toy sits in the corner. It should not be here. Nothing small enough to own it should be here.",
+    "The shadows in the corners are the wrong shape. You count them twice. The number changes.",
+    "Something has been fed here regularly. You can tell by the stains.",
+    "The room gets quieter as you move toward the center. At the exact middle, there is no sound at all.",
+    "A mirror on the wall shows your reflection correctly. After a moment, it does not.",
+    "The room is warm. The warmth comes from below the floor. You do not dig.",
+    "Three doors. Two are sealed from the other side. You take the third.",
+    "The ceiling is painted with stars. They are not in any constellation you recognize.",
+    "Someone left a meal here. It is still warm. There is no one.",
+    "The dungeon has changed. You feel it. The walls breathe.",
+    "Everything here is wrong in ways you cannot name. You move quickly.",
+    "The air is thick with something old. It coats your lungs. You do not stop moving.",
+    "You have the sense of being watched by something that has been watching for centuries.",
+    "The room is larger than the dungeon should allow. Physics has stopped applying.",
+    "There are no shadows here. Every surface is lit equally, from no source. That is worse.",
+    "A sound behind you. You spin. Nothing. The sound was your name.",
+    "The walls pulse. Slowly. In time with something you cannot hear but your body recognizes.",
+    "This deep, the dungeon is aware of you. You are aware of the dungeon. You both wait.",
+    "A whisper. Not in your ear. In your chest. Not words. Intent.",
+    "The floor here is worn smooth by countless footsteps. None of them left.",
+    "Something has nested in this room and left. The nest is large. You are glad it left.",
+    "The darkness here is not an absence of light. It is a presence.",
+    "You feel a pressure behind your eyes. The dungeon is looking through them.",
+    "Every torch you light goes out before you can step away. You stop lighting them."
+   ],
+   "floors": [
+    "",
+    "Burial Antechamber",
+    "The Dark Corridor",
+    "Ossuary",
+    "Forgotten Vault",
+    "The Warden's Hall",
+    "Chamber of Silence",
+    "Tomb of the Fallen",
+    "The Inner Sanctum",
+    "Hall of Malachar",
+    "The Final Chamber",
+    "The Hollow Nave",
+    "Corridor of Sighs",
+    "The Bone Gallery",
+    "Crypt of the Nameless",
+    "The Sealed Wing",
+    "Charnel Hall",
+    "The Sunken Passage",
+    "Vault of Echoes",
+    "The Whispering Arch",
+    "Tomb of Regret",
+    "The Crumbling Nave",
+    "Chamber of the Lost",
+    "The Interment Hall",
+    "The Lightless Passage",
+    "Reliquary",
+    "The Forsaken Gallery",
+    "Crypt of Whispers",
+    "Hall of the Interred",
+    "The Deep Chamber",
+    "The Final Dark"
+   ]
+  },
+  "The Ashbound Wastes": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "Cinder Wraith",
+      "icon": "🔥",
+      "hp": 22,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     },
+     {
+      "name": "Ash Crawler",
+      "icon": "🌋",
+      "hp": 18,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       1,
+       4
+      ]
+     },
+     {
+      "name": "Scorched Husk",
+      "icon": "💀",
+      "hp": 28,
+      "atk": [
+       6,
+       11
+      ],
+      "gold": [
+       2,
+       6
+      ]
+     },
+     {
+      "name": "Ember Shade",
+      "icon": "✨",
+      "hp": 16,
+      "atk": [
+       5,
+       9
+      ],
+      "gold": [
+       1,
+       4
+      ]
+     },
+     {
+      "name": "Char Bat",
+      "icon": "🦇",
+      "hp": 14,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       1,
+       3
+      ]
+     },
+     {
+      "name": "Slag Crawler",
+      "icon": "🪲",
+      "hp": 24,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     },
+     {
+      "name": "Cinder Hound",
+      "icon": "🐕",
+      "hp": 20,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "burn": 2,
+      "burnTurns": 2,
+      "desc": "Runs on embers. Leaves burning wounds on every bite."
+     },
+     {
+      "name": "Smoke Wraith",
+      "icon": "💨",
+      "hp": 16,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       1,
+       4
+      ],
+      "dodgeEvery": 3,
+      "desc": "Made of smoke. Phases out of reality every third turn."
+     }
+    ],
+    "t2": [
+     {
+      "name": "Molten Knight",
+      "icon": "⚔️",
+      "hp": 48,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       5,
+       10
+      ]
+     },
+     {
+      "name": "Plague of Cinders",
+      "icon": "💨",
+      "hp": 36,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       4,
+       8
+      ]
+     },
+     {
+      "name": "Char Stalker",
+      "icon": "👁️",
+      "hp": 40,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       4,
+       9
+      ]
+     },
+     {
+      "name": "Blighted Overseer",
+      "icon": "👺",
+      "hp": 52,
+      "atk": [
+       9,
+       17
+      ],
+      "gold": [
+       6,
+       11
+      ]
+     },
+     {
+      "name": "Ashen Revenant",
+      "icon": "🧟",
+      "hp": 44,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       5,
+       9
+      ]
+     },
+     {
+      "name": "Flame Wraith",
+      "icon": "👻",
+      "hp": 38,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       4,
+       8
+      ]
+     },
+     {
+      "name": "Ember Knight",
+      "icon": "🔥",
+      "hp": 50,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "burn": 3,
+      "burnTurns": 3,
+      "desc": "Armor melted into their body. Every strike burns."
+     },
+     {
+      "name": "Pyre Sentinel",
+      "icon": "🪔",
+      "hp": 44,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       5,
+       9
+      ],
+      "immuneFirstHit": true,
+      "desc": "Has been standing at attention for three centuries. Your first strike barely registers."
+     }
+    ],
+    "t3": [
+     {
+      "name": "Volcanic Revenant",
+      "icon": "🌋",
+      "hp": 68,
+      "atk": [
+       12,
+       21
+      ],
+      "gold": [
+       9,
+       16
+      ]
+     },
+     {
+      "name": "Infernal Colossus",
+      "icon": "💀",
+      "hp": 80,
+      "atk": [
+       13,
+       22
+      ],
+      "gold": [
+       10,
+       18
+      ]
+     },
+     {
+      "name": "The Ashen King",
+      "icon": "👑",
+      "hp": 72,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       9,
+       17
+      ]
+     },
+     {
+      "name": "Slag Titan",
+      "icon": "🔴",
+      "hp": 76,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       10,
+       17
+      ]
+     },
+     {
+      "name": "Ember Reaper",
+      "icon": "☠️",
+      "hp": 62,
+      "atk": [
+       12,
+       22
+      ],
+      "gold": [
+       8,
+       15
+      ]
+     },
+     {
+      "name": "Burned Colossus",
+      "icon": "🏚️",
+      "hp": 85,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       10,
+       18
+      ],
+      "burn": 4,
+      "burnTurns": 3,
+      "desc": "Walked into the fire and kept walking. Burns everything it touches."
+     }
+    ],
+    "bosses": [
+     {
+      "name": "The Eternal Pyre",
+      "icon": "🔥",
+      "hp": 140,
+      "atk": [
+       16,
+       26
+      ],
+      "gold": [
+       35,
+       55
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Eternal Pyre roars as its outer shell shatters. The fire wall ignites!",
+      "phaseMsg3": "The fire wall collapses. The Eternal Pyre stands before you, unshielded and furious!"
+     },
+     {
+      "name": "The Ashen Throne",
+      "icon": "👑",
+      "hp": 130,
+      "atk": [
+       15,
+       25
+      ],
+      "gold": [
+       33,
+       53
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Ashen Throne cracks — the ruler within stirs, awakened by rage!",
+      "phaseMsg3": "Fully awakened, the Ashen Throne rises from its fused seat — three centuries of fury!"
+     },
+     {
+      "name": "The Cinder Colossus",
+      "icon": "🌋",
+      "hp": 150,
+      "atk": [
+       14,
+       24
+      ],
+      "gold": [
+       36,
+       56
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Cinder Colossus absorbs the molten floor itself. It grows larger!",
+      "phaseMsg3": "Fully formed, the Cinder Colossus channels the entire eruption at you!"
+     },
+     {
+      "name": "The Scorching Throne",
+      "icon": "🔥",
+      "hp": 138,
+      "atk": [
+       17,
+       27
+      ],
+      "gold": [
+       34,
+       54
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The throne cracks and molten magma pours from every joint!",
+      "phaseMsg3": "The Scorching Throne becomes pure fire. Unstoppable. Undying."
+     },
+     {
+      "name": "Pyrax the Deathless",
+      "icon": "🌋",
+      "hp": 145,
+      "atk": [
+       16,
+       26
+      ],
+      "gold": [
+       35,
+       55
+      ],
+      "isBoss": true,
+      "phaseMsg2": "Pyrax absorbs the fallen cinders around him — growing larger!",
+      "phaseMsg3": "Pyrax transcends form entirely. He IS the fire now!"
+     }
+    ],
+    "elites": []
+   },
+   "loot": [
+    {
+     "name": "Ember Shard",
+     "icon": "🔥",
+     "type": "gem",
+     "gold": 22,
+     "desc": "A crystallized fragment of the eternal flame. Worth 22 gold."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 45,
+     "desc": "Forged from volcanic minerals. Restores 45 HP."
+    },
+    {
+     "name": "Greater Fire Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 75,
+     "desc": "Concentrated volcanic essence. Restores 75 HP."
+    },
+    {
+     "name": "Ashen Blade",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atkBonus": 5,
+     "desc": "+5 attack. Forged from metal that survived the eternal fire."
+    },
+    {
+     "name": "Ember Shield",
+     "icon": "🛡️",
+     "type": "armor",
+     "defBonus": 4,
+     "desc": "Reduces damage by 4. Made from the hide of a creature that could not burn."
+    },
+    {
+     "name": "Cinder Ring",
+     "icon": "💍",
+     "type": "ring",
+     "effect": "flee",
+     "desc": "Wreathed in heat haze. Makes you harder to follow."
+    },
+    {
+     "name": "Slag Ingot",
+     "icon": "🔴",
+     "type": "gem",
+     "gold": 18,
+     "desc": "Melted ore from the collapse. Worth 18 gold."
+    },
+    {
+     "name": "Char Potion",
+     "icon": "🌋",
+     "type": "potion",
+     "heal": 35,
+     "desc": "Smells terrible. Tastes worse. Restores 35 HP."
+    },
+    {
+     "name": "Volcanic Elixir",
+     "icon": "🌋",
+     "type": "elixir",
+     "healPct": 0.65,
+     "desc": "Restores 65% of max HP. A rare find in the wastes."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Fire Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 45,
+     "cost": 14,
+     "desc": "Restores 45 HP."
+    },
+    {
+     "name": "Greater Fire Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 85,
+     "cost": 25,
+     "desc": "Restores 85 HP."
+    },
+    {
+     "name": "Ashen Blade",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atkBonus": 6,
+     "cost": 32,
+     "desc": "+6 attack damage."
+    },
+    {
+     "name": "Ember Shield",
+     "icon": "🛡️",
+     "type": "armor",
+     "defBonus": 4,
+     "cost": 28,
+     "desc": "Reduces damage by 4."
+    },
+    {
+     "name": "Volcanic Elixir",
+     "icon": "🌋",
+     "type": "heal",
+     "healPct": 0.65,
+     "cost": 38,
+     "desc": "Restores 65% of max HP instantly."
+    },
+    {
+     "name": "Cinder Vial",
+     "icon": "💨",
+     "type": "ring",
+     "effect": "flee",
+     "cost": 20,
+     "desc": "Guarantees next flee attempt succeeds."
+    }
+   ],
+   "rooms": [
+    "The ash here is ankle deep. Every step announces you.",
+    "Smoke rises from cracks in the floor. Whatever burned here has not finished burning.",
+    "The heat is immediate and wrong. The walls glow faintly orange.",
+    "Charred remains line the walls. They are standing upright. They were not placed that way.",
+    "The air tastes of cinder and something older than fire.",
+    "A fireplace dominates one wall. The fire inside burns black.",
+    "The ceiling is scorched in patterns. Not random. Something drew them with flame.",
+    "Your boots leave prints in the ash. Something else's prints are already here.",
+    "The room smells of burning hair. There is no hair. There is no source.",
+    "Embers drift upward from the floor. Gravity here has preferences.",
+    "A torch on the wall burns without fuel. You do not touch it.",
+    "The ash shifts as you walk through it. Like something underneath is listening.",
+    "Soot covers every surface. Writing in it. You cannot read it. You feel it means something.",
+    "The walls are warm to the touch. Not hot. Warm. Like skin.",
+    "This room has burned three times. You can tell by the layers.",
+    "The heat warps the air. Things at the edge of the room flicker like mirages.",
+    "A melted weapon lies in the corner. Whatever the owner fought, it was hotter than steel.",
+    "The floor crunches. Not ash. Something underneath the ash.",
+    "A bell hangs from the ceiling. Cracked and blackened. It rings once as you enter.",
+    "The smoke trails upward and then bends. Toward you.",
+    "The fire here is ancient. It has been burning longer than the dungeon has existed.",
+    "Handprints on the wall. Burned in, not painted. Someone reached for help.",
+    "The ash rises to your knees. Walking requires effort. Something benefits from that.",
+    "You hear breathing. Not yours. Rhythmic. Coming from the walls.",
+    "The room has no ceiling. Just darkness and falling ash from above.",
+    "Everything here is the same color: black and orange. Even the shadows.",
+    "A body here, preserved in char. The expression is not one of pain. It is surprise.",
+    "The fire follows you across the floor. Not chasing. Curious.",
+    "The air moves in circles here. Always circles. The center is perfectly still.",
+    "Three burned doors. The handles are too hot to touch. You find another way.",
+    "Voices in the crackle. Not words. Almost words.",
+    "The room is smaller than it should be. The walls crept inward while you were not watching.",
+    "Something feeds the fire. You cannot see what. You do not look closely.",
+    "The floor gives slightly under your weight. The ash is deep. Very deep.",
+    "A figure of ash stands in the corner. Detailed. It was made carefully.",
+    "The Wastes remember everyone who burned here. They remember you now.",
+    "The heat at this depth is not heat. It is intent.",
+    "Fire does not burn things at this depth. It reveals them.",
+    "You feel the ash on your skin before you realize you are breathing it.",
+    "The flames here do not flicker. They are absolutely still. That is wrong.",
+    "This deep, the fire is alive. It has been alive a very long time.",
+    "The burning never stopped. It started before the dungeon and it will end after.",
+    "You are a visitor. The fire is a resident. It tolerates your presence.",
+    "The walls melt as you watch. They reform. The shapes they form are faces.",
+    "Something in the fire looks back at you. You both pretend not to notice.",
+    "The ash here moves without wind. It has somewhere to be.",
+    "Your shadow burns on the wall. Your body does not. Not yet.",
+    "The fire whispers. Not words. A tone. It knows your name in frequencies.",
+    "At this depth the Wastes are not a dungeon. They are a hunger.",
+    "You realize you have been warm the entire time. The cold has not reached this deep. It never will.",
+    "The heat here is wrong — not warm, but hungry. Like the air itself wants to consume you.",
+    "Ash coats every surface inches deep. Your footsteps leave prints. Something else already has.",
+    "The walls are blackened stone, still faintly warm. Whatever burned here did not want to stop.",
+    "The smell of char and sulfur is overwhelming. You breathe through your teeth.",
+    "Scorched bones litter the floor. They were not arranged. They simply fell where their owners died.",
+    "An old fountain stands here, bone-dry. The stone basin is cracked from extreme heat.",
+    "The ceiling above you is stained black. Something burned for a very long time directly below it.",
+    "A child's sandal lies in the ash. You do not look for the other one.",
+    "The heat shimmers in visible waves. Distance is hard to judge. So is safety.",
+    "Melted iron is fused to the floor — what was once a gate, or a throne, or a cage.",
+    "The walls here have writing burned into them. The language is old. The warning is not.",
+    "Something glows red in the far corner. You move toward it because there is nowhere else to go.",
+    "The silence here is not cold and watching like the Crypt. It is hot and waiting.",
+    "Fragments of pottery. A broken cup. Someone tried to carry water through here. They did not make it.",
+    "You find a handprint burned into the wall at shoulder height. The fingers are spread. It did not want to leave."
+   ],
+   "floors": [
+    "",
+    "The Scorched Gateway",
+    "The Burning Quarter",
+    "Hall of Embers",
+    "The Charnel District",
+    "The Smoldering Vault",
+    "Chamber of Eternal Flame",
+    "The Slag Warrens",
+    "Throne of Ash",
+    "The Pyre Court",
+    "The Eternal Flame",
+    "The Cinder Hall",
+    "Passage of Smoke",
+    "The Blackened Nave",
+    "Chamber of the Pyre",
+    "The Soot Corridor",
+    "The Molten Gallery",
+    "Hall of the Burned",
+    "The Ashen Vault",
+    "Crucible Passage",
+    "The Deep Ember",
+    "The Lava Shelf",
+    "Chamber of the Cinder Queen",
+    "The Scorched Deep",
+    "Hall of Slag",
+    "The Blasted Wing",
+    "The Incineration Hall",
+    "Passage of Cinders",
+    "The Ashfall Chamber",
+    "The Char Gallery",
+    "The Eternal Ember"
+   ]
+  },
+  "Frosthold Abyss": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "Frost Shade",
+      "icon": "❄️",
+      "hp": 22,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     },
+     {
+      "name": "Glacial Rat",
+      "icon": "🐀",
+      "hp": 16,
+      "atk": [
+       3,
+       7
+      ],
+      "gold": [
+       1,
+       3
+      ],
+      "coward": true
+     },
+     {
+      "name": "Ice Shard",
+      "icon": "🧊",
+      "hp": 24,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     },
+     {
+      "name": "Frozen Husk",
+      "icon": "💀",
+      "hp": 28,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       6
+      ]
+     },
+     {
+      "name": "Cave Bat",
+      "icon": "🦇",
+      "hp": 14,
+      "atk": [
+       3,
+       7
+      ],
+      "gold": [
+       1,
+       3
+      ]
+     },
+     {
+      "name": "Permafrost Crawler",
+      "icon": "🦂",
+      "hp": 20,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       1,
+       4
+      ]
+     }
+    ],
+    "t2": [
+     {
+      "name": "Blizzard Wraith",
+      "icon": "👻",
+      "hp": 38,
+      "atk": [
+       7,
+       14
+      ],
+      "gold": [
+       4,
+       8
+      ]
+     },
+     {
+      "name": "Glacial Knight",
+      "icon": "⚔️",
+      "hp": 46,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       5,
+       10
+      ]
+     },
+     {
+      "name": "Frostbite Hound",
+      "icon": "🐺",
+      "hp": 32,
+      "atk": [
+       7,
+       13
+      ],
+      "gold": [
+       3,
+       7
+      ]
+     },
+     {
+      "name": "Frozen Banshee",
+      "icon": "👁️",
+      "hp": 36,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       4,
+       8
+      ]
+     },
+     {
+      "name": "Ice Stalker",
+      "icon": "🌑",
+      "hp": 34,
+      "atk": [
+       7,
+       13
+      ],
+      "gold": [
+       4,
+       8
+      ]
+     },
+     {
+      "name": "Arctic Revenant",
+      "icon": "🧟",
+      "hp": 44,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       5,
+       9
+      ]
+     }
+    ],
+    "t3": [
+     {
+      "name": "Avalanche Colossus",
+      "icon": "🏔️",
+      "hp": 74,
+      "atk": [
+       12,
+       21
+      ],
+      "gold": [
+       10,
+       18
+      ]
+     },
+     {
+      "name": "Frost Reaper",
+      "icon": "☠️",
+      "hp": 62,
+      "atk": [
+       11,
+       20
+      ],
+      "gold": [
+       8,
+       15
+      ]
+     },
+     {
+      "name": "The Glacial Sovereign",
+      "icon": "👑",
+      "hp": 70,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       9,
+       17
+      ]
+     },
+     {
+      "name": "Frozen Titan",
+      "icon": "🧊",
+      "hp": 78,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       10,
+       17
+      ]
+     },
+     {
+      "name": "Void Frost",
+      "icon": "💀",
+      "hp": 65,
+      "atk": [
+       12,
+       22
+      ],
+      "gold": [
+       9,
+       16
+      ]
+     }
+    ],
+    "bosses": [
+     {
+      "name": "The Eternal Winter",
+      "icon": "❄️",
+      "hp": 145,
+      "atk": [
+       15,
+       26
+      ],
+      "gold": [
+       35,
+       55
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Eternal Winter exhales — the temperature drops to absolute zero. Phase 2!",
+      "phaseMsg3": "The cold stops being cold. It becomes something without a name. Final phase!"
+     },
+     {
+      "name": "The Frozen King",
+      "icon": "👑",
+      "hp": 135,
+      "atk": [
+       14,
+       25
+      ],
+      "gold": [
+       33,
+       53
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The ice encasing the Frozen King cracks. He stirs. He remembers why he is angry!",
+      "phaseMsg3": "Fully awake for the first time in a thousand years — and furious every second of it!"
+     },
+     {
+      "name": "The Void Below",
+      "icon": "🌑",
+      "hp": 150,
+      "atk": [
+       14,
+       24
+      ],
+      "gold": [
+       36,
+       56
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Void Below tears through the ice floor. Phase 2: The abyss rises to meet you!",
+      "phaseMsg3": "It is no longer rising. It is here. And it remembers you from before you were born!"
+     },
+     {
+      "name": "The Glacier Queen",
+      "icon": "❄️",
+      "hp": 132,
+      "atk": [
+       15,
+       25
+      ],
+      "gold": [
+       32,
+       52
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Glacier Queen shatters her own crown and the shards orbit her like weapons!",
+      "phaseMsg3": "Absolute zero. She freezes the very air between you!"
+     },
+     {
+      "name": "Khyros the Frozen",
+      "icon": "🧊",
+      "hp": 140,
+      "atk": [
+       16,
+       26
+      ],
+      "gold": [
+       34,
+       54
+      ],
+      "isBoss": true,
+      "phaseMsg2": "Khyros splits into three frozen mirrors of himself!",
+      "phaseMsg3": "The mirrors merge. Khyros is whole again — and furious!"
+     }
+    ],
+    "elites": []
+   },
+   "loot": [
+    {
+     "name": "Frost Crystal",
+     "icon": "❄️",
+     "type": "gem",
+     "gold": 20,
+     "desc": "A shard of ancient ice. Worth 20 gold."
+    },
+    {
+     "name": "Glacier Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 45,
+     "desc": "Cold, but restorative. Restores 45 HP."
+    },
+    {
+     "name": "Greater Frost Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 78,
+     "desc": "Crystallized healing. Restores 78 HP."
+    },
+    {
+     "name": "Frozen Blade",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atkBonus": 5,
+     "desc": "+5 attack. Forged from ice that never melts."
+    },
+    {
+     "name": "Glacial Ward",
+     "icon": "🛡️",
+     "type": "armor",
+     "defBonus": 4,
+     "desc": "Reduces damage by 4. Cold slows attackers."
+    },
+    {
+     "name": "Frost Ring",
+     "icon": "💍",
+     "type": "ring",
+     "effect": "flee",
+     "desc": "Leaves no footprints. Makes fleeing easier."
+    },
+    {
+     "name": "Ice Shard",
+     "icon": "🧊",
+     "type": "gem",
+     "gold": 17,
+     "desc": "A perfect ice formation. Worth 17 gold."
+    },
+    {
+     "name": "Void Potion",
+     "icon": "🌑",
+     "type": "potion",
+     "heal": 38,
+     "desc": "From the deep dark below the ice. Restores 38 HP."
+    },
+    {
+     "name": "Void Elixir",
+     "icon": "🌑",
+     "type": "elixir",
+     "healPct": 0.65,
+     "desc": "Restores 65% of max HP. Brewed from the abyss itself."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Glacier Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 45,
+     "cost": 14,
+     "desc": "Restores 45 HP."
+    },
+    {
+     "name": "Greater Frost Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 85,
+     "cost": 25,
+     "desc": "Restores 85 HP."
+    },
+    {
+     "name": "Frozen Blade",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atkBonus": 6,
+     "cost": 32,
+     "desc": "+6 attack damage."
+    },
+    {
+     "name": "Glacial Ward",
+     "icon": "🛡️",
+     "type": "armor",
+     "defBonus": 4,
+     "cost": 28,
+     "desc": "Reduces damage by 4."
+    },
+    {
+     "name": "Void Elixir",
+     "icon": "🌑",
+     "type": "heal",
+     "healPct": 0.65,
+     "cost": 38,
+     "desc": "Restores 65% of max HP instantly."
+    },
+    {
+     "name": "Frost Ring",
+     "icon": "❄️",
+     "type": "ring",
+     "effect": "flee",
+     "cost": 20,
+     "desc": "Guarantees next flee attempt succeeds."
+    }
+   ],
+   "rooms": [
+    "Your breath comes out in clouds. Each exhale is stolen immediately by the cold.",
+    "The ice here is ancient — blue-black and deep. You can see something inside it. You try not to look.",
+    "The silence is not peaceful. It is the silence of a place that has never heard sound.",
+    "Your footsteps crack the ice beneath you. Whatever is below the surface, you hope it stays there.",
+    "Frost patterns on the walls form shapes. You tell yourself they are not faces.",
+    "A body stands frozen upright, still holding a torch that has been dark for centuries.",
+    "The temperature drops as you move forward. Something colder than cold waits ahead.",
+    "Stalactites of ice hang from the ceiling like teeth. The dripping has stopped.",
+    "The frost here smells wrong. Like iron and emptiness and something that has no name.",
+    "A crack runs floor to ceiling. The darkness on the other side is different.",
+    "Crystalline formations glow faintly. There is no light source. They glow anyway.",
+    "You find equipment left behind by someone. They did not leave voluntarily.",
+    "A thin layer of ice covers the floor. You can see shapes beneath it. Moving shapes.",
+    "The cold bites through your armor. It feels personal.",
+    "Your boots stick to the floor. You pull them free. The sound echoes too long.",
+    "A frozen pool in the center. The reflection shows the room differently than it is.",
+    "Icicles hang at perfect intervals. Too perfect. This was arranged.",
+    "The walls are mirrored with ice. Every reflection shows you a step behind where you are.",
+    "Something scratched at the ice from the other side of the wall. They did not get through.",
+    "The cold makes your thoughts slow. You notice too late that it is deliberate.",
+    "The cold is a presence here. Not weather. Not temperature. A thing that waits.",
+    "Ice formations block the path. You break through them. The sound echoes wrong.",
+    "At this depth, the cold becomes something else. You have no word for it.",
+    "The frozen air crackles with something like electricity. Like intention.",
+    "You hear breathing under the ice. Slow. Patient. Waiting for the ice to be thinner.",
+    "The frost on the walls shifts as you watch. Writing that was not there before.",
+    "A frozen door. The handle comes off in your hand. The door swings open anyway.",
+    "Light refracts through the ice in patterns. One of the patterns moves.",
+    "A frozen meal on a frozen table. The setting was for two. One chair is pushed back.",
+    "The floor here is perfectly clear ice. You can see down a very long way.",
+    "The cold seeps through your mind, not just your skin. It reads.",
+    "Frost blooms on every surface as you enter. The room was warm a moment ago.",
+    "A frozen waterfall. The water was moving when it froze. Something stopped it instantly.",
+    "The ceiling drips. The drops do not reach the floor. They freeze midway.",
+    "Two tunnels ahead. One exhales cold air. One inhales it. Both are wrong.",
+    "At this depth, the Abyss is not cold. Cold is how the Abyss says hello.",
+    "The frost here has memory. It remembers everyone who came before you.",
+    "The ice walls show frozen faces pressed from inside. They are reaching toward you.",
+    "The cold below zero is not temperature. It is the dungeon's oldest thought.",
+    "You cannot feel your hands. You check that they are still there. They are. For now.",
+    "The Void rises through the ice here. You can feel it looking up at you.",
+    "The ice is so old it has become something else. A mineral. A memory. A warning.",
+    "Every surface reflects differently. None of them are accurate. All of them are true.",
+    "The silence here has weight. It presses against your chest.",
+    "You are the warmest thing in this place by a magnitude that should not be survivable.",
+    "Something in the ice stirs as you pass. It has been sleeping. It dreams of heat.",
+    "The frost whispers. Not words. Directions. You do not follow them.",
+    "This deep, the cold is not an enemy. It is a philosophy.",
+    "The ice glows with an inner light. The light has been here longer than the dungeon.",
+    "The Abyss remembers every life that ended here. You feel them recognizing you."
+   ],
+   "floors": [
+    "",
+    "The Frozen Gate",
+    "The Glacier Hall",
+    "The Blue Depths",
+    "Chamber of Stillness",
+    "The Permafrost Warren",
+    "Hall of Eternal Cold",
+    "The Deep Freeze",
+    "The Void Approach",
+    "Throne of Ice",
+    "The Absolute Zero",
+    "The Shivering Passage",
+    "Hall of Black Ice",
+    "The Cryo Chamber",
+    "Corridor of Frozen Breath",
+    "The Glacial Nave",
+    "The Frost Gallery",
+    "Chamber of Rime",
+    "The Ice Labyrinth",
+    "Hall of Suspended Breath",
+    "The Deep Frost",
+    "The Crystal Corridor",
+    "Chamber of the Frozen King",
+    "The Permafrost Vault",
+    "The Blue Gallery",
+    "Glacial Depths",
+    "Hall of Eternal Winter",
+    "The Frozen Archive",
+    "Chamber of Stillness",
+    "The Cold Deep",
+    "The Last Warmth"
+   ]
+  },
+  "The Sunken Archives": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "Drowned Archivist",
+      "icon": "📚",
+      "hp": 26,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       3,
+       6
+      ]
+     },
+     {
+      "name": "Ink Wraith",
+      "icon": "🖤",
+      "hp": 20,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     },
+     {
+      "name": "Bloated Librarian",
+      "icon": "📖",
+      "hp": 30,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       3,
+       6
+      ]
+     },
+     {
+      "name": "Paper Shade",
+      "icon": "📄",
+      "hp": 18,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       2,
+       4
+      ]
+     },
+     {
+      "name": "Soggy Sentinel",
+      "icon": "🧟",
+      "hp": 28,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     }
+    ],
+    "t2": [
+     {
+      "name": "Deep Cartographer",
+      "icon": "🗺️",
+      "hp": 45,
+      "atk": [
+       7,
+       13
+      ],
+      "gold": [
+       5,
+       10
+      ]
+     },
+     {
+      "name": "Tide Golem",
+      "icon": "🌊",
+      "hp": 55,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       6,
+       11
+      ]
+     },
+     {
+      "name": "Drowned Scholar",
+      "icon": "🎓",
+      "hp": 40,
+      "atk": [
+       7,
+       14
+      ],
+      "gold": [
+       5,
+       10
+      ]
+     },
+     {
+      "name": "Archive Specter",
+      "icon": "👻",
+      "hp": 38,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       5,
+       9
+      ]
+     },
+     {
+      "name": "Leviathan Spawn",
+      "icon": "🦑",
+      "hp": 50,
+      "atk": [
+       9,
+       15
+      ],
+      "gold": [
+       6,
+       12
+      ]
+     }
+    ],
+    "t3": [
+     {
+      "name": "The Sunken Warden",
+      "icon": "⚓",
+      "hp": 80,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       10,
+       18
+      ]
+     },
+     {
+      "name": "Grand Archivist",
+      "icon": "📜",
+      "hp": 75,
+      "atk": [
+       11,
+       19
+      ],
+      "gold": [
+       9,
+       16
+      ]
+     },
+     {
+      "name": "Abyssal Colossus",
+      "icon": "🌊",
+      "hp": 90,
+      "atk": [
+       13,
+       22
+      ],
+      "gold": [
+       11,
+       20
+      ]
+     },
+     {
+      "name": "Drowned Chancellor",
+      "icon": "🏛️",
+      "hp": 70,
+      "atk": [
+       12,
+       19
+      ],
+      "gold": [
+       9,
+       17
+      ]
+     }
+    ],
+    "bosses": [
+     {
+      "name": "The Drowned Curator",
+      "icon": "📚",
+      "hp": 240,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       60,
+       90
+      ],
+      "phaseMsg2": "The Curator's waterlogged form swells. Ink floods the chamber.",
+      "phaseMsg3": "Every book in the Archives screams at once. The Curator is what remains when knowledge drowns."
+     },
+     {
+      "name": "Leviathan of the Deep",
+      "icon": "🦑",
+      "hp": 260,
+      "atk": [
+       16,
+       24
+      ],
+      "gold": [
+       65,
+       95
+      ],
+      "phaseMsg2": "The Leviathan surfaces. The floor cracks beneath the weight of what it is.",
+      "phaseMsg3": "You realize it was always here. The Archives were built around it. Not on top of it. Around it."
+     },
+     {
+      "name": "The Last Librarian",
+      "icon": "📖",
+      "hp": 220,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       55,
+       85
+      ],
+      "phaseMsg2": "She remembers everyone who ever read here. She remembers that they all drowned.",
+      "phaseMsg3": "The pages of every book in the Archives turn at once. Her name is in all of them."
+     },
+     {
+      "name": "The Drowned Archivist",
+      "icon": "📚",
+      "hp": 128,
+      "atk": [
+       15,
+       24
+      ],
+      "gold": [
+       31,
+       51
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Archivist tears pages from every book at once — they become weapons!",
+      "phaseMsg3": "The forbidden pages ignite. Knowledge weaponized against you!"
+     },
+     {
+      "name": "Tide Sovereign",
+      "icon": "🌊",
+      "hp": 135,
+      "atk": [
+       16,
+       25
+      ],
+      "gold": [
+       33,
+       53
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Tide Sovereign floods the chamber — you fight knee deep in dark water!",
+      "phaseMsg3": "The water rises. He calls something from the deep!"
+     }
+    ],
+    "elites": []
+   },
+   "loot": [
+    {
+     "name": "Waterlogged Sword",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atkBonus": 4,
+     "gold": 0,
+     "desc": "Heavy but sharp. Still effective."
+    },
+    {
+     "name": "Barnacle Shield",
+     "icon": "🛡️",
+     "type": "armor",
+     "defBonus": 3,
+     "gold": 0,
+     "desc": "Thick with centuries of ocean growth."
+    },
+    {
+     "name": "Sunken Ring",
+     "icon": "💍",
+     "type": "ring",
+     "effect": "sp",
+     "gold": 0,
+     "desc": "+8 SP when equipped."
+    },
+    {
+     "name": "Archivist's Seal",
+     "icon": "📜",
+     "type": "ring",
+     "effect": "atk",
+     "gold": 0,
+     "desc": "+3 attack. The seal of office."
+    },
+    {
+     "name": "Depth Charge",
+     "icon": "💣",
+     "type": "gem",
+     "gold": 18,
+     "desc": "Worth 18 gold."
+    },
+    {
+     "name": "Pearl of the Deep",
+     "icon": "🦪",
+     "type": "gem",
+     "gold": 25,
+     "desc": "Worth 25 gold. Still warm somehow."
+    },
+    {
+     "name": "Inkstone",
+     "icon": "🖤",
+     "type": "gem",
+     "gold": 14,
+     "desc": "Worth 14 gold. Black as void."
+    },
+    {
+     "name": "Elixir of the Depths",
+     "icon": "💧",
+     "type": "elixir",
+     "healPct": 0.6,
+     "desc": "Restores 60% of max HP. Drawn from an eternal spring below the Archives."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Salt Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 45,
+     "cost": 14,
+     "desc": "Deep sea healing. Restores 45 HP."
+    },
+    {
+     "name": "Abyss Draught",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 90,
+     "cost": 26,
+     "desc": "From the deepest shelf. Restores 90 HP."
+    },
+    {
+     "name": "Inkwell Tonic",
+     "icon": "🖤",
+     "type": "sp-potion",
+     "sp": 20,
+     "cost": 16,
+     "desc": "Pure concentrated knowledge. +20 SP."
+    },
+    {
+     "name": "Waterlogged Blade",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atkBonus": 5,
+     "cost": 30,
+     "desc": "Heavy but devastating. +5 attack."
+    },
+    {
+     "name": "Barnacle Armor",
+     "icon": "🛡️",
+     "type": "armor",
+     "defBonus": 4,
+     "cost": 28,
+     "desc": "Ancient oceanic protection. +4 defense."
+    },
+    {
+     "name": "Pearl of Power",
+     "icon": "🦪",
+     "type": "atk-potion",
+     "atk": 5,
+     "cost": 22,
+     "desc": "Permanent +5 attack this run."
+    }
+   ],
+   "rooms": [
+    "Water laps at your ankles. The bookshelves stretch into darkness above, warped and bloated.",
+    "A reading desk sits here, perfectly preserved. The candle on it is still lit. That is not possible.",
+    "The water is perfectly still. Your reflection looks at you a half-second too late.",
+    "Shelves of waterlogged texts line every wall. Something has been marking certain pages.",
+    "A cataloguing system covers the ceiling, handwritten in ink that has not faded.",
+    "The water here is darker. You cannot see the floor. You step forward anyway.",
+    "An open book floats past. The pages are blank until you look at them. Then filled. Then blank.",
+    "This chamber smells of salt and old paper. You are very deep and very far from any ocean.",
+    "Something large passed through recently. The displaced water still moves.",
+    "A reading chair sits in the center, facing away. It is occupied. Then it is not.",
+    "Thousands of index cards cover every surface. None of the books are where they say.",
+    "The torches here burn blue. The shadows are too defined.",
+    "A door of waterlogged wood. The handle is a hand. A real one. Reaching from the other side.",
+    "Bookshelves reach into the flooded ceiling, continuing upward into total submersion.",
+    "The water here tastes of ink. You close your mouth. You have already swallowed.",
+    "A librarian's desk, still organized. The appointment book is open to today.",
+    "You hear pages turning. Somewhere. The sound is deliberate.",
+    "Books float in neat rows, spine up. Organized by something. Not by size. Not by color.",
+    "The floor is tile. Under the water, you can read words in the grout between tiles.",
+    "A filing cabinet, open, empty. The drawer opened toward you on its own.",
+    "The deeper shelves contain books that have absorbed the water completely. They are the water now.",
+    "Something has been reading here. The chair is warm. In cold, deep water, it is warm.",
+    "A card catalogue cabinet, infinite rows, every card blank. Recently blank.",
+    "The water here moves against the current. Against any current. It moves toward a specific shelf.",
+    "A reading light, still on, still bright, still casting shadows of books that are not there.",
+    "The Archives remember you. You feel it in the water pressure. Adjusting.",
+    "Every book on one wall is open to the same page. You cannot read what is on that page.",
+    "A globe in the corner shows a world with more oceans than yours.",
+    "The index system covers everything here. Including a card for you. You do not read it.",
+    "Something enormous is shelved in the back of this room. It breathes.",
+    "The water level rises as you stand here. Slowly. Deliberately.",
+    "A single book on a pedestal, under glass. The glass is broken from the inside.",
+    "Chains hang from the ceiling. Books are chained to the chains. The books pull upward.",
+    "You hear a checkout stamp. Somewhere. The sound of a book being claimed.",
+    "The current in the water spells a word. You look away before you read it.",
+    "At this depth, the Archives do not archive knowledge. They archive everything.",
+    "The Leviathan has been through this room. The shelves curved around it.",
+    "Every book here is a record of something that should not have been recorded.",
+    "The water at this depth is not water. It is accumulated memory.",
+    "You feel catalogued. Something just filed you under a heading you cannot pronounce.",
+    "The lighting at this depth comes from the books themselves. They are not happy about it.",
+    "This deep, the Archives know you are here. They have updated your entry.",
+    "A door that opens to more water. Then more shelves. Then something looking back.",
+    "The restricted section is not a place. It is a state of mind. You are in it.",
+    "Something has been here for so long it has become part of the collection.",
+    "The Curator's presence is here. Not her body. Her intent. Her organization.",
+    "Every surface is catalogued. Including your face. Including the inside of your face.",
+    "The Archives contain the last thought of every person who drowned here.",
+    "At the deepest point, the water is still. The stillness has texture.",
+    "You are being cross-referenced. The filing never stops. Not even now."
+   ],
+   "floors": [
+    "",
+    "The Entry Hall",
+    "The Cataloguing Room",
+    "The Reading Chambers",
+    "The Map Repository",
+    "The Restricted Section",
+    "The Deep Stacks",
+    "The Flooded Annex",
+    "The Curator's Quarters",
+    "The Abyss Level",
+    "The Grand Repository"
+   ]
+  },
+  "The Hollow": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "The Parlor Guest",
+      "icon": "🪑",
+      "hp": 28,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       3,
+       6
+      ],
+      "desc": "It has been sitting in that chair since the house was built. It does not appreciate visitors.",
+      "hollowSit": true
+     },
+     {
+      "name": "Hollow Bride",
+      "icon": "👰",
+      "hp": 24,
+      "atk": [
+       5,
+       11
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "desc": "Still waiting. Still dressed. The flowers she carries are long dead. She is not.",
+      "hollowCharm": true
+     },
+     {
+      "name": "The Portrait",
+      "icon": "🖼️",
+      "hp": 20,
+      "atk": [
+       6,
+       12
+      ],
+      "gold": [
+       2,
+       4
+      ],
+      "desc": "It watches from the wall. Every turn it watches, its next attack gets stronger.",
+      "hollowWatch": true
+     },
+     {
+      "name": "Creaking Step",
+      "icon": "🪜",
+      "hp": 18,
+      "atk": [
+       5,
+       11
+      ],
+      "gold": [
+       2,
+       4
+      ],
+      "desc": "You hear it before you see it. By the time you see it, it is already too late to flee.",
+      "preventFlee": true
+     },
+     {
+      "name": "The Reflection",
+      "icon": "🪞",
+      "hp": 22,
+      "atk": [
+       6,
+       11
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "desc": "It copies your last action. Attack and it attacks. Defend and it heals.",
+      "reflection": true
+     },
+     {
+      "name": "The Uninvited Guest",
+      "icon": "🧍",
+      "hp": 26,
+      "atk": [
+       6,
+       12
+      ],
+      "gold": [
+       3,
+       6
+      ],
+      "isUninvited": true,
+      "desc": "Nobody invited it. Nobody can make it leave."
+     },
+     {
+      "name": "The Twin",
+      "icon": "👤",
+      "hp": 30,
+      "atk": [
+       5,
+       11
+      ],
+      "gold": [
+       3,
+       6
+      ],
+      "isTwin": true,
+      "desc": "It looks exactly like you. It knows exactly what you will do next."
+     },
+     {
+      "name": "The Risen",
+      "icon": "🧟",
+      "hp": 32,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       3,
+       7
+      ],
+      "hollowZombie": true,
+      "desc": "It was buried in the grounds. It did not stay buried. It never does."
+     }
+    ],
+    "t2": [
+     {
+      "name": "The Door Warden",
+      "icon": "🚪",
+      "hp": 48,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       6,
+       11
+      ],
+      "desc": "It guards every exit. Flee attempts automatically fail while it lives.",
+      "preventFlee": true
+     },
+     {
+      "name": "The Music Box",
+      "icon": "🎵",
+      "hp": 38,
+      "atk": [
+       7,
+       12
+      ],
+      "gold": [
+       8,
+       14
+      ],
+      "isMusicBox": true,
+      "desc": "When it plays, you cannot help but listen. Forces you to defend for one turn."
+     },
+     {
+      "name": "The Groundskeeper",
+      "icon": "⚰️",
+      "hp": 52,
+      "atk": [
+       9,
+       15
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "desc": "It has maintained these grounds for three hundred years. It takes its job very seriously.",
+      "hollowGround": true
+     },
+     {
+      "name": "Hollow Groom",
+      "icon": "🤵",
+      "hp": 44,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "desc": "He waited at the altar for forty years. The anger calcified into something worse.",
+      "hollowGroom": true
+     },
+     {
+      "name": "The Bell Ringer",
+      "icon": "🔔",
+      "hp": 40,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       5,
+       9
+      ],
+      "desc": "When the bell rings your turn is skipped. It always rings on the second turn.",
+      "hollowBell": true
+     },
+     {
+      "name": "The Wall Crawler",
+      "icon": "🧱",
+      "hp": 55,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       6,
+       11
+      ],
+      "desc": "It moves on the ceiling. Every other attack comes from above — impossible to block.",
+      "hollowCrawl": true
+     },
+     {
+      "name": "The Pale Guest",
+      "icon": "🧛",
+      "hp": 50,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       6,
+       12
+      ],
+      "hollowVampire": true,
+      "desc": "It has not eaten in a long time. You can tell by the way it looks at you."
+     }
+    ],
+    "t3": [
+     {
+      "name": "The Oldest Guest",
+      "icon": "💀",
+      "hp": 82,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       10,
+       18
+      ],
+      "desc": "It arrived before the house existed. It will be here after it falls.",
+      "immuneFirstHit": true
+     },
+     {
+      "name": "The Hollow Matron",
+      "icon": "👵",
+      "hp": 76,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       9,
+       16
+      ],
+      "desc": "She ran this house. She still does. All enemies deal 10% more damage while she lives.",
+      "hollowMatron": true
+     },
+     {
+      "name": "The Caretaker",
+      "icon": "🗝️",
+      "hp": 88,
+      "atk": [
+       13,
+       22
+      ],
+      "gold": [
+       11,
+       19
+      ],
+      "desc": "It has a key to every room. Including the ones that should not exist.",
+      "grows": true
+     },
+     {
+      "name": "The Unfinished",
+      "icon": "👻",
+      "hp": 70,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       9,
+       17
+      ],
+      "hollowGhost": true,
+      "desc": "It did not finish what it started. It is still trying. Your attacks pass through it half the time."
+     }
+    ],
+    "bosses": [
+     {
+      "name": "The Grieving One",
+      "icon": "😭",
+      "hp": 250,
+      "atk": [
+       15,
+       24
+      ],
+      "gold": [
+       70,
+       100
+      ],
+      "phaseMsg2": "The Grieving One remembers something. The temperature drops. It hits harder now.",
+      "phaseMsg3": "It is not grief anymore. It is something grief becomes when it has nowhere to go for long enough."
+     },
+     {
+      "name": "The House Itself",
+      "icon": "🏚️",
+      "hp": 270,
+      "atk": [
+       14,
+       23
+      ],
+      "gold": [
+       65,
+       95
+      ],
+      "phaseMsg2": "The walls close in. The house is not a location. The house is an entity. It has decided you are staying.",
+      "phaseMsg3": "Every room is the same room now. You are in all of them at once."
+     },
+     {
+      "name": "The Last Resident",
+      "icon": "🕯️",
+      "hp": 240,
+      "atk": [
+       13,
+       22
+      ],
+      "gold": [
+       60,
+       90
+      ],
+      "phaseMsg2": "It has been alone here for a very long time. It does not want to be alone anymore.",
+      "phaseMsg3": "It offers you a choice: stay, or face what staying means."
+     },
+     {
+      "name": "The Wedding Ghost",
+      "icon": "👰",
+      "hp": 122,
+      "atk": [
+       14,
+       23
+      ],
+      "gold": [
+       30,
+       50
+      ],
+      "isBoss": true,
+      "phaseMsg2": "She removes her veil. What is underneath is not a face.",
+      "phaseMsg3": "She begins to sing. The song pulls at something inside you."
+     },
+     {
+      "name": "The Portrait Lord",
+      "icon": "🖼️",
+      "hp": 130,
+      "atk": [
+       15,
+       25
+      ],
+      "gold": [
+       32,
+       52
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Portrait Lord steps OUT of the frame. He should not be able to do that.",
+      "phaseMsg3": "Reality tears where he walks. He was never meant to exist here."
+     }
+    ],
+    "elites": []
+   },
+   "loot": [
+    {
+     "name": "Tarnished Blade",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atkBonus": 5,
+     "gold": 0,
+     "desc": "Found in the study. Still sharp."
+    },
+    {
+     "name": "Black Veil",
+     "icon": "🩶",
+     "type": "armor",
+     "defBonus": 4,
+     "gold": 0,
+     "desc": "Absorbs more than light."
+    },
+    {
+     "name": "The Last Candle",
+     "icon": "🕯️",
+     "type": "ring",
+     "effect": "sp",
+     "gold": 0,
+     "desc": "+10 SP. Do not let it go out."
+    },
+    {
+     "name": "Mourning Ring",
+     "icon": "💍",
+     "type": "ring",
+     "effect": "atk",
+     "gold": 0,
+     "desc": "+3 attack. Cold to the touch."
+    },
+    {
+     "name": "Old Locket",
+     "icon": "💛",
+     "type": "gem",
+     "gold": 20,
+     "desc": "Worth 20 gold. Something inside it moves."
+    },
+    {
+     "name": "Funeral Coin",
+     "icon": "🪙",
+     "type": "gem",
+     "gold": 15,
+     "desc": "Worth 15 gold. Not currency from any known place."
+    },
+    {
+     "name": "Hollow Elixir",
+     "icon": "🩶",
+     "type": "elixir",
+     "healPct": 0.55,
+     "desc": "Restores 55% of max HP. Left behind by someone who no longer needs it."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Mourning Tonic",
+     "icon": "🖤",
+     "type": "potion",
+     "heal": 50,
+     "cost": 16,
+     "desc": "Strange comfort. Restores 50 HP."
+    },
+    {
+     "name": "Hollow Flask",
+     "icon": "🫙",
+     "type": "sp-potion",
+     "sp": 25,
+     "cost": 18,
+     "desc": "Empty but effective. +25 SP."
+    },
+    {
+     "name": "Grief Ward",
+     "icon": "🩶",
+     "type": "armor",
+     "defBonus": 5,
+     "cost": 30,
+     "desc": "Carries old sorrow. +5 defense."
+    },
+    {
+     "name": "The Caretaker Blade",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atkBonus": 6,
+     "cost": 34,
+     "desc": "+6 attack. Kept very sharp."
+    },
+    {
+     "name": "Spirit Binding",
+     "icon": "🕯️",
+     "type": "atk-potion",
+     "atk": 5,
+     "cost": 22,
+     "desc": "Permanent +5 attack this run."
+    },
+    {
+     "name": "Cursed Heirloom",
+     "icon": "💀",
+     "type": "cursed",
+     "cost": 4,
+     "desc": "Family property. Unpredictable effects."
+    }
+   ],
+   "rooms": [
+    "The wallpaper peels in long strips. Something is written underneath in a handwriting you do not recognize.",
+    "A dining table set for twelve. Dust covers everything except one place setting, which is clean.",
+    "The grandfather clock in the corner has stopped. The pendulum moves anyway.",
+    "Children's drawings cover every wall. They all depict the same figure watching where you stand.",
+    "A fireplace burns without wood. The shadows it casts go in the wrong direction.",
+    "The mirror at the end of the hall shows this room. You are not in it.",
+    "Music plays from a room that does not exist on any floor plan. It gets louder anyway.",
+    "A guest book lies open. The most recent entry is dated today. It is your name.",
+    "The nursery. The crib is empty. Whatever was in it did not leave through the door.",
+    "The basement stairs. Something is at the bottom. It knows you are at the top.",
+    "Every clock in this room shows a different time. None of them are now.",
+    "The lights work. This is somehow more frightening than if they did not.",
+    "A rocking chair moves slowly. The window behind it is closed. There is no draft.",
+    "Family portraits line the walls. The subjects' eyes track your movement.",
+    "The kitchen. Everything is set to prepare a meal. No one is preparing it.",
+    "A locked room at the end of the hall. The key is in the lock. On the inside.",
+    "The upstairs hallway. All the doors are closed except the one at the end.",
+    "Toys arranged on the floor in a pattern. A warning or a welcome. You cannot tell.",
+    "A record player, winding down. You did not touch it. It was going when you arrived.",
+    "The smell of a meal cooking. No stove. No heat. No source.",
+    "The house has been expecting you. You feel it in the way the floorboards know your weight.",
+    "A phone on the wall rings. You answer. The sound on the other end is breathing. Yours.",
+    "The same room you were in before. Identical. But the door is on a different wall.",
+    "A child's laughter. Above. Below. All around. Gone before you turn.",
+    "The living room. Something has been living in it that is not alive.",
+    "Handprints in the dust on the mantle. Smaller than an adult. Smaller than a child.",
+    "A sewing basket, mid-project. The needle still threaded. The work unfinished for reasons.",
+    "The windows show a different yard than the house should have. Different sky.",
+    "A door that opens to a wall. Beyond the wall, someone breathes.",
+    "Old mail on the floor. Addressed to you. Postmarked before you were born.",
+    "The attic stairs. The pull-cord sways. Someone just came down.",
+    "Every chair in this room faces the same corner. Nothing is in the corner.",
+    "A typewriter. Mid-sentence. The sentence is about you.",
+    "The study. All the books have been opened, read, and replaced. Recently.",
+    "A doll sits in the center of the room. The doll's head turns as you cross the threshold.",
+    "The house has stopped pretending. It knows you know. You both drop the act.",
+    "At this depth, the Hollow shows what it is. A hunger wearing the shape of a home.",
+    "The wallpaper shows scenes. Moving scenes. Scenes from outside this dungeon.",
+    "The walls breathe. Slowly. The house is alive. It has always been alive.",
+    "Every room now opens to this room. You are in the center of something vast.",
+    "The family that lived here is still here. They are very glad you came.",
+    "The house remembers every tenant. It never lets any of them go.",
+    "The Heart of the Hollow beats somewhere below your feet. You can feel it.",
+    "The rooms repeat now. Different order. Different layout. The same dread.",
+    "The Hollow has been waiting for someone specific. You are wondering if it is you.",
+    "The shadows here are older than the house. The house was built around them.",
+    "At the deepest point, the house and the dungeon are the same thing.",
+    "Nothing in this room is real. Everything in this room is very, very dangerous.",
+    "The house shows you rooms from your memory. Accurate rooms. Private rooms.",
+    "The Hollow is complete. You are inside something that is complete and alive and watching."
+   ],
+   "floors": [
+    "",
+    "The Foyer",
+    "The Parlor",
+    "The Study",
+    "The Dining Room",
+    "The Gallery",
+    "The Nursery",
+    "The Attic",
+    "The Basement",
+    "The Room at the End",
+    "The Heart of the Hollow"
+   ]
+  },
+  "The Whispering Forest": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "Forest Shade",
+      "icon": "🌑",
+      "hp": 28,
+      "atk": [
+       6,
+       11
+      ],
+      "gold": [
+       3,
+       7
+      ]
+     },
+     {
+      "name": "Cursed Rabbit",
+      "icon": "🐇",
+      "hp": 20,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     },
+     {
+      "name": "Root Crawler",
+      "icon": "🪱",
+      "hp": 24,
+      "atk": [
+       5,
+       9
+      ],
+      "gold": [
+       2,
+       5
+      ]
+     },
+     {
+      "name": "Hollow Branch",
+      "icon": "🌿",
+      "hp": 22,
+      "atk": [
+       6,
+       10
+      ],
+      "gold": [
+       2,
+       6
+      ]
+     },
+     {
+      "name": "Thorn Wisp",
+      "icon": "💚",
+      "hp": 18,
+      "atk": [
+       7,
+       13
+      ],
+      "gold": [
+       3,
+       6
+      ]
+     },
+     {
+      "name": "Bark Ghoul",
+      "icon": "🌲",
+      "hp": 30,
+      "atk": [
+       6,
+       11
+      ],
+      "gold": [
+       3,
+       7
+      ]
+     },
+     {
+      "name": "Vine Shade",
+      "icon": "🍃",
+      "hp": 26,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       6
+      ]
+     },
+     {
+      "name": "Web Stalker",
+      "icon": "🕷️",
+      "hp": 22,
+      "atk": [
+       6,
+       12
+      ],
+      "gold": [
+       3,
+       6
+      ]
+     },
+     {
+      "name": "Root Walker",
+      "icon": "🌿",
+      "hp": 24,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "atkDebuff": 2,
+      "desc": "Wraps roots around your striking arm. Your attacks weaken with every hit."
+     },
+     {
+      "name": "Shadow Stag",
+      "icon": "🦌",
+      "hp": 18,
+      "atk": [
+       6,
+       11
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "dodgeEvery": 3,
+      "desc": "Stepped into a shadow wrong. Phases through your strikes every third turn."
+     }
+    ],
+    "t2": [
+     {
+      "name": "Cursed Dryad",
+      "icon": "🌳",
+      "hp": 55,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       5,
+       11
+      ]
+     },
+     {
+      "name": "Witch's Familiar",
+      "icon": "🐈",
+      "hp": 48,
+      "atk": [
+       11,
+       19
+      ],
+      "gold": [
+       5,
+       10
+      ]
+     },
+     {
+      "name": "Forest Wraith",
+      "icon": "👻",
+      "hp": 52,
+      "atk": [
+       10,
+       18
+      ],
+      "gold": [
+       5,
+       11
+      ]
+     },
+     {
+      "name": "Thornwood Knight",
+      "icon": "⚔️",
+      "hp": 65,
+      "atk": [
+       11,
+       18
+      ],
+      "gold": [
+       6,
+       12
+      ]
+     },
+     {
+      "name": "The Groundskeeper",
+      "icon": "🧑‍🌾",
+      "hp": 58,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       5,
+       10
+      ]
+     },
+     {
+      "name": "Cursed Wolf",
+      "icon": "🐺",
+      "hp": 50,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       6,
+       12
+      ]
+     },
+     {
+      "name": "Root Golem",
+      "icon": "🪵",
+      "hp": 70,
+      "atk": [
+       10,
+       16
+      ],
+      "gold": [
+       6,
+       12
+      ]
+     },
+     {
+      "name": "Plague Hound",
+      "icon": "🐕",
+      "hp": 45,
+      "atk": [
+       11,
+       19
+      ],
+      "gold": [
+       5,
+       10
+      ]
+     },
+     {
+      "name": "The Beckoner",
+      "icon": "🫴",
+      "hp": 50,
+      "atk": [
+       9,
+       15
+      ],
+      "gold": [
+       5,
+       11
+      ],
+      "summonCounter": 0,
+      "desc": "Calls a Lost Villager to join if not defeated within 3 turns."
+     },
+     {
+      "name": "Bark Golem",
+      "icon": "🪵",
+      "hp": 68,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       6,
+       11
+      ],
+      "immuneFirstHit": true,
+      "desc": "The forest built it specifically to deal with intruders. Your first strike teaches it nothing."
+     },
+     {
+      "name": "Night Bloom",
+      "icon": "🌸",
+      "hp": 44,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "poisonChance": 0.3,
+      "desc": "Pollen on every hit. 30% chance to poison you for 3 turns."
+     }
+    ],
+    "t3": [
+     {
+      "name": "The Witch's Echo",
+      "icon": "👁️",
+      "hp": 90,
+      "atk": [
+       14,
+       23
+      ],
+      "gold": [
+       8,
+       16
+      ]
+     },
+     {
+      "name": "Grief Made Flesh",
+      "icon": "😢",
+      "hp": 85,
+      "atk": [
+       13,
+       22
+      ],
+      "gold": [
+       8,
+       15
+      ]
+     },
+     {
+      "name": "Ancient Dryad",
+      "icon": "🌳",
+      "hp": 95,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       9,
+       16
+      ]
+     },
+     {
+      "name": "The Caretaker",
+      "icon": "🧑",
+      "hp": 80,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       8,
+       15
+      ]
+     },
+     {
+      "name": "Corrupted Chimera",
+      "icon": "🐲",
+      "hp": 100,
+      "atk": [
+       15,
+       24
+      ],
+      "gold": [
+       10,
+       18
+      ]
+     },
+     {
+      "name": "Scream Without Source",
+      "icon": "👻",
+      "hp": 78,
+      "atk": [
+       14,
+       23
+      ],
+      "gold": [
+       8,
+       16
+      ]
+     },
+     {
+      "name": "The Forest Itself",
+      "icon": "🌲",
+      "hp": 110,
+      "atk": [
+       13,
+       20
+      ],
+      "gold": [
+       9,
+       17
+      ]
+     },
+     {
+      "name": "Shadow Architect",
+      "icon": "🌑",
+      "hp": 88,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       9,
+       16
+      ]
+     },
+     {
+      "name": "Canopy Horror",
+      "icon": "🕷️",
+      "hp": 95,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       9,
+       16
+      ],
+      "grows": true,
+      "desc": "Gets stronger every turn it watches you from above. It has been watching since you entered."
+     }
+    ],
+    "bosses": [
+     {
+      "name": "The Witch Who Remains",
+      "icon": "🧙",
+      "hp": 320,
+      "atk": [
+       18,
+       28
+      ],
+      "gold": [
+       60,
+       90
+      ],
+      "isBoss": true,
+      "phaseMsg1": "She is not dead. She was never dead. She is the forest.",
+      "phaseMsg2": "The curse pours from her. The trees move to protect her.",
+      "phaseMsg3": "She speaks your name. She has always known your name."
+     },
+     {
+      "name": "The Root Mother",
+      "icon": "🌳",
+      "hp": 130,
+      "atk": [
+       15,
+       25
+      ],
+      "gold": [
+       32,
+       52
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Root Mother sinks into the earth. Her roots erupt everywhere!",
+      "phaseMsg3": "She rises transformed. The forest IS her body now."
+     },
+     {
+      "name": "The Howling Alpha",
+      "icon": "🐺",
+      "hp": 138,
+      "atk": [
+       16,
+       26
+      ],
+      "gold": [
+       34,
+       54
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Howling Alpha calls the pack. You hear them closing in.",
+      "phaseMsg3": "Alone now. The Alpha finishes what the pack started."
+     }
+    ],
+    "elites": []
+   },
+   "loot": [
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 75,
+     "desc": "Restores 75 HP."
+    },
+    {
+     "name": "Witch's Brew",
+     "icon": "🫗",
+     "type": "potion",
+     "heal": 55,
+     "desc": "Tastes of bark and something sweet. Restores 55 HP."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "desc": "Halves enemy attack for 3 turns."
+    },
+    {
+     "name": "Lucky Potion",
+     "icon": "🍀",
+     "type": "luck-potion",
+     "desc": "Next 3 kills drop double gold."
+    },
+    {
+     "id": "thorn-blade",
+     "name": "Thorn Blade",
+     "icon": "🌿",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      7,
+      14
+     ],
+     "isEquippable": true,
+     "desc": "Carved from a cursed branch. Still grows."
+    },
+    {
+     "id": "root-staff",
+     "name": "Root Staff",
+     "icon": "🪵",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      6,
+      12
+     ],
+     "isEquippable": true,
+     "desc": "The roots shift when no one watches."
+    },
+    {
+     "id": "bark-shield",
+     "name": "Bark Armor",
+     "icon": "🛡️",
+     "type": "armor",
+     "armorType": "light",
+     "level": 1,
+     "defBase": 3,
+     "isEquippable": true,
+     "desc": "Hardened cursed bark. Warm to the touch."
+    },
+    {
+     "name": "Forest Gem",
+     "icon": "💚",
+     "type": "gem",
+     "gold": 18,
+     "desc": "Worth 18 gold. Glows faintly green."
+    },
+    {
+     "name": "Sylvan Elixir",
+     "icon": "🌿",
+     "type": "elixir",
+     "healPct": 0.6,
+     "desc": "Restores 60% of max HP. Pressed from the oldest flowers in the forest."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Soul Trap",
+     "icon": "🪤",
+     "type": "soul-trap",
+     "cost": 60,
+     "desc": "Captures the current enemy as a permanent minion. Use during combat."
+    },
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "cost": 12,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 80,
+     "cost": 22,
+     "desc": "Restores 80 HP. Stronger brew."
+    },
+    {
+     "name": "Spirit Tonic",
+     "icon": "🔵",
+     "type": "sp-potion",
+     "sp": 15,
+     "cost": 14,
+     "desc": "Restores 15 SP immediately."
+    },
+    {
+     "name": "Greater Tonic",
+     "icon": "💙",
+     "type": "sp-potion",
+     "sp": 30,
+     "cost": 24,
+     "desc": "Restores 30 SP. Concentrated essence."
+    },
+    {
+     "name": "Iron Flask",
+     "icon": "🛡️",
+     "type": "def-potion",
+     "def": 3,
+     "turns": 3,
+     "cost": 16,
+     "desc": "Grants +3 defense for 3 turns."
+    },
+    {
+     "name": "Berserker Draught",
+     "icon": "⚔️",
+     "type": "atk-potion",
+     "atk": 4,
+     "turns": 3,
+     "cost": 18,
+     "desc": "Grants +4 attack for 3 turns."
+    },
+    {
+     "name": "Lucky Potion",
+     "icon": "🍀",
+     "type": "luck-potion",
+     "cost": 20,
+     "desc": "Next 3 enemy kills drop double gold."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🔥",
+     "type": "fire-potion",
+     "cost": 25,
+     "desc": "Deals 40% of target max HP as fire damage. Ignores defense."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "cost": 18,
+     "desc": "Halves enemy attack for 3 turns."
+    },
+    {
+     "name": "Swift Potion",
+     "icon": "💨",
+     "type": "swift-potion",
+     "cost": 22,
+     "desc": "Guarantees flee for 2 turns. Perfect escape."
+    },
+    {
+     "name": "Cursed Vial",
+     "icon": "🌀",
+     "type": "cursed",
+     "cost": 3,
+     "desc": "Unpredictable effects. Cheap for a reason."
+    },
+    {
+     "name": "Mirror Flask",
+     "icon": "🪞",
+     "type": "mirror-flask",
+     "cost": 30,
+     "desc": "Reflects the next enemy attack back at them."
+    },
+    {
+     "name": "Phantom Potion",
+     "icon": "👻",
+     "type": "phantom-potion",
+     "cost": 35,
+     "desc": "Become untargetable for 2 turns. Enemy attacks pass through you."
+    },
+    {
+     "name": "Gravity Tonic",
+     "icon": "🌀",
+     "type": "gravity-tonic",
+     "cost": 28,
+     "desc": "Crushes enemy ATK to 1 for 3 turns."
+    },
+    {
+     "name": "Leech Brew",
+     "icon": "🩸",
+     "type": "leech-brew",
+     "cost": 32,
+     "desc": "Heals 30% of every hit you deal for 4 turns."
+    },
+    {
+     "name": "Rage Tonic",
+     "icon": "💢",
+     "type": "rage-tonic",
+     "cost": 38,
+     "desc": "Triple ATK but double incoming damage for 3 turns."
+    },
+    {
+     "name": "Fog Flask",
+     "icon": "🌫️",
+     "type": "fog-flask",
+     "cost": 25,
+     "desc": "Enemy has 70% chance to miss for 3 turns."
+    },
+    {
+     "name": "Time Potion",
+     "icon": "⌛",
+     "type": "time-potion",
+     "cost": 45,
+     "desc": "2 free attacks this turn. Enemy cannot respond."
+    },
+    {
+     "name": "Corruption Flask",
+     "icon": "💜",
+     "type": "corruption-flask",
+     "cost": 33,
+     "desc": "Deals 20 corruption damage to enemy each turn for 4 turns."
+    },
+    {
+     "name": "Warding Bell",
+     "icon": "🔔",
+     "type": "warding-bell",
+     "cost": 20,
+     "desc": "Rings out the next time you search a room with a trap, letting you step around it. One use."
+    },
+    {
+     "name": "Phoenix Feather",
+     "icon": "🪶",
+     "type": "phoenix-feather",
+     "cost": 150,
+     "desc": "If you would die while carrying this, it ignites instead — you are reborn at 30% HP. Consumed automatically. One use."
+    },
+    {
+     "name": "Elixir of Life",
+     "icon": "✨",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Gravebound Elixir",
+     "icon": "💀",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Tidal Elixir",
+     "icon": "🌊",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Bloodstone",
+     "icon": "🔴",
+     "type": "gem",
+     "gold": 20,
+     "cost": 0,
+     "desc": "Worth 20 gold. Sell it at the Blacksmith."
+    },
+    {
+     "id": "shop-iron-sword",
+     "name": "Iron Sword",
+     "icon": "⚔️",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      5,
+      10
+     ],
+     "cost": 45,
+     "isEquippable": true,
+     "desc": "A reliable sword."
+    },
+    {
+     "id": "shop-shadow-dagger",
+     "name": "Shadow Dagger",
+     "icon": "🔪",
+     "type": "weapon",
+     "weaponType": "dagger",
+     "level": 1,
+     "atkBase": [
+      5,
+      9
+     ],
+     "cost": 55,
+     "isEquippable": true,
+     "desc": "Fast and precise."
+    },
+    {
+     "id": "shop-oak-staff",
+     "name": "Oak Staff",
+     "icon": "🪄",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      4,
+      8
+     ],
+     "cost": 50,
+     "isEquippable": true,
+     "desc": "Channels arcane energy."
+    },
+    {
+     "id": "shop-battle-axe",
+     "name": "Battle Axe",
+     "icon": "🪓",
+     "type": "weapon",
+     "weaponType": "axe",
+     "level": 1,
+     "atkBase": [
+      7,
+      13
+     ],
+     "cost": 70,
+     "isEquippable": true,
+     "desc": "Heavy but devastating."
+    },
+    {
+     "id": "shop-leather-vest",
+     "name": "Leather Vest",
+     "icon": "🦺",
+     "type": "armor",
+     "armorType": "light",
+     "level": 1,
+     "defBase": 3,
+     "cost": 40,
+     "isEquippable": true,
+     "desc": "+3 defense."
+    },
+    {
+     "id": "shop-chain-mail",
+     "name": "Chain Mail",
+     "icon": "⛓️",
+     "type": "armor",
+     "armorType": "medium",
+     "level": 1,
+     "defBase": 5,
+     "cost": 65,
+     "isEquippable": true,
+     "desc": "+5 defense."
+    },
+    {
+     "id": "rune-strength",
+     "name": "Rune of Strength",
+     "icon": "🔴",
+     "type": "rune",
+     "cost": 30,
+     "desc": "+6 attack for the rest of this run."
+    },
+    {
+     "id": "rune-protection",
+     "name": "Rune of Protection",
+     "icon": "🔵",
+     "type": "rune",
+     "cost": 28,
+     "desc": "+5 defense for the rest of this run."
+    },
+    {
+     "id": "rune-vitality",
+     "name": "Rune of Vitality",
+     "icon": "🟣",
+     "type": "rune",
+     "cost": 32,
+     "desc": "+20 max HP this run."
+    },
+    {
+     "id": "scroll-smite",
+     "name": "Scroll of Smite",
+     "icon": "⚡",
+     "type": "scroll",
+     "cost": 35,
+     "desc": "80 unblockable damage to current enemy."
+    },
+    {
+     "id": "scroll-mending",
+     "name": "Scroll of Mending",
+     "icon": "✨",
+     "type": "scroll",
+     "cost": 30,
+     "desc": "Heals 50% max HP outside combat."
+    },
+    {
+     "id": "scroll-reveal",
+     "name": "Scroll of Reveal",
+     "icon": "📜",
+     "type": "scroll",
+     "cost": 22,
+     "desc": "Reveals the next 3 room types."
+    }
+   ],
+   "rooms": [
+    "The trees here are too close together. They were not always this close.",
+    "Something tied ribbons to the branches. The ribbons are moving. There is no wind.",
+    "The path behind you has already grown over. You noticed too late.",
+    "A sound like breathing comes from the roots. Slow. Patient.",
+    "The bark on every tree has been carved with the same word. You cannot read it.",
+    "Fireflies drift through the dark. They move in patterns. Deliberate ones.",
+    "The forest floor is soft here. Not from moss. From something beneath the moss.",
+    "A child's doll hangs from a branch. The face has been worn away by weather. Or something else.",
+    "The trees lean inward. Not from wind. They are listening.",
+    "Flowers grow in a perfect circle. Nothing grows inside the circle.",
+    "The air tastes of rain that has not fallen yet. Or rain that fell long ago.",
+    "Footprints lead to the center of the clearing. None lead out.",
+    "Something left claw marks on the trees at head height. From inside the trees.",
+    "The fog here moves against the direction you walk.",
+    "You hear your name. Once. Very clearly. From everywhere at once.",
+    "The branches above have grown together into something resembling a face.",
+    "Mushrooms grow in a spiral leading deeper in. You follow them.",
+    "The curse is visible here. A faint purple light that pulses like a heartbeat.",
+    "A cottage foundation. Burned long ago. The fire never left the stones.",
+    "The trees bleed sap that is the wrong color. You do not touch it.",
+    "Something has been building a nest in the canopy. The materials include things from inside houses.",
+    "The forest remembers the witch. You can feel it deciding what to do about you.",
+    "The roots above the surface form letters. You are reading someone's last words.",
+    "A well. Sealed. The seal is broken from the inside.",
+    "Every animal sound stopped exactly when you entered this part of the forest.",
+    "The witch's curse thickens here. The air is heavy with something you cannot name.",
+    "You find her altar. Overturned. Long ago. The offerings are still fresh.",
+    "The bark peels back to show wood that looks wrong. Organic. Living. Aware.",
+    "Three paths branch here. Two of them lead to the same place.",
+    "A lantern hangs from a branch. Still lit. Burning something other than oil.",
+    "The shadows do not match the trees that cast them.",
+    "Something has carved a map into the clearing floor. You are on it.",
+    "The witch is here. You cannot see her but you feel her. She has been waiting.",
+    "The forest is her now. Every tree. Every root. Every whisper. Her.",
+    "You have gone too deep for the forest to let you leave easily. It has not decided yet.",
+    "The air moves like breath. The forest is breathing. Around you. Through you.",
+    "The curse is complete at this depth. Beautiful. Absolute. You feel it working.",
+    "The trees here have faces. Old ones. They have seen everything that happened.",
+    "The witch's last words are written in bioluminescence on every surface.",
+    "This deep, the forest does not pretend. It watches openly. You watch back.",
+    "The roots crack beneath your feet but hold. Deliberately. The forest is not done with you.",
+    "You understand now why she cursed this place. You understand too late.",
+    "The final part of the forest. The part that even the witch feared.",
+    "Something has grown here that should not exist. You step carefully around it.",
+    "The whisper is deafening here. Your own name. Over and over. Getting louder.",
+    "The trees part to let you through. They close behind you. You are exactly where you need to be.",
+    "The heart of the curse. Everything led here. The forest holds its breath."
+   ],
+   "floors": [
+    "",
+    "The Treeline",
+    "Where the Path Ends",
+    "The Listening Wood",
+    "The Witch's Wake",
+    "Root and Bone",
+    "The Whispering Glade",
+    "Where She Died",
+    "The Cursed Grove",
+    "The Heart of the Wood",
+    "The Final Whisper",
+    "The Hollow Oak",
+    "The Bleeding Bark",
+    "The Watching Trees",
+    "The Thorned Path",
+    "The Last Clearing",
+    "The Rotted Canopy",
+    "Where Nothing Grows",
+    "The Cursed Soil",
+    "The Witch's Memory",
+    "The Deep Forest",
+    "The Tangled Dark",
+    "Roots of the Curse",
+    "The Mourning Grove",
+    "The Forgotten Altar",
+    "The Vine Labyrinth",
+    "The Weeping Canopy",
+    "The Witch Walks Here",
+    "The Final Root",
+    "The Undying Bark",
+    "The Forest Remembers"
+   ]
+  },
+  "The Infernal Descent": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "Void Shadow",
+      "icon": "👤",
+      "hp": 20,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       3,
+       6
+      ],
+      "desc": "A formless shape that drains courage."
+     },
+     {
+      "name": "Void Wisp",
+      "icon": "🔵",
+      "hp": 16,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "desc": "Tiny. Harmless alone. Never alone.",
+      "onDeathHeavy": true
+     },
+     {
+      "name": "Infernal Ember",
+      "icon": "🔥",
+      "hp": 24,
+      "atk": [
+       5,
+       9
+      ],
+      "gold": [
+       3,
+       6
+      ],
+      "burn": 2,
+      "burnTurns": 3,
+      "desc": "Leaves burning wounds on every hit."
+     },
+     {
+      "name": "Shadow Creep",
+      "icon": "🌑",
+      "hp": 18,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "dodgeEvery": 3,
+      "desc": "Phases in and out of reality."
+     },
+     {
+      "name": "Void Husk",
+      "icon": "💀",
+      "hp": 38,
+      "atk": [
+       3,
+       6
+      ],
+      "gold": [
+       3,
+       7
+      ],
+      "desc": "Empty shell. Barely alive. Barely dead."
+     },
+     {
+      "name": "Dark Tendril",
+      "icon": "🪱",
+      "hp": 22,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "atkDebuff": 2,
+      "desc": "Wraps around you, weakening your strikes."
+     },
+     {
+      "name": "Void Caller",
+      "icon": "📯",
+      "hp": 26,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       3,
+       6
+      ],
+      "summonCounter": 0,
+      "desc": "Screams into the void. If alive after 3 turns, something answers."
+     },
+     {
+      "name": "Sin Eater",
+      "icon": "😈",
+      "hp": 22,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       3,
+       6
+      ],
+      "drainsSP": true,
+      "desc": "Feeds on guilt and spirit energy both. The descent is a feast for it."
+     },
+     {
+      "name": "Brimstone Hound",
+      "icon": "🐕",
+      "hp": 18,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "burn": 2,
+      "burnTurns": 2,
+      "desc": "Guard dogs of the descent. Bred for loyalty. Currently very hungry."
+     }
+    ],
+    "t2": [
+     {
+      "name": "Void Wraith",
+      "icon": "👻",
+      "hp": 52,
+      "atk": [
+       10,
+       18
+      ],
+      "gold": [
+       6,
+       12
+      ],
+      "desc": "Screams that only you can hear."
+     },
+     {
+      "name": "Void Stalker",
+      "icon": "👁️",
+      "hp": 44,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       5,
+       11
+      ],
+      "grows": true,
+      "desc": "Gets stronger every turn it stays alive."
+     },
+     {
+      "name": "Infernal Brute",
+      "icon": "👹",
+      "hp": 60,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       7,
+       13
+      ],
+      "slowAtk": true,
+      "desc": "Devastating power. Attacks every other turn only."
+     },
+     {
+      "name": "The Hollow One",
+      "icon": "⬛",
+      "hp": 48,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "drainsSP": true,
+      "desc": "Feeds on your spirit energy instead of your blood."
+     },
+     {
+      "name": "Soul Eater",
+      "icon": "😈",
+      "hp": 46,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       6,
+       11
+      ],
+      "lifesteal": true,
+      "desc": "Heals itself with every strike against you."
+     },
+     {
+      "name": "Void Phantom",
+      "icon": "🌫️",
+      "hp": 42,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "dodgeChance": 0.3,
+      "desc": "Thirty percent chance to phase through any attack."
+     },
+     {
+      "name": "Dark Priest",
+      "icon": "🧙",
+      "hp": 50,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       6,
+       12
+      ],
+      "buffsOnTurn1": true,
+      "desc": "Empowers itself before striking. Kill it fast."
+     },
+     {
+      "name": "Chain Wraith",
+      "icon": "⛓️",
+      "hp": 50,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       6,
+       11
+      ],
+      "atkDebuff": 3,
+      "desc": "Chains wrap around your arms. Your attack drops with every turn it lives."
+     },
+     {
+      "name": "Infernal Herald",
+      "icon": "📯",
+      "hp": 46,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       5,
+       11
+      ],
+      "summonCounter": 0,
+      "desc": "Announces your arrival to something worse. If alive after 3 turns, it answers."
+     }
+    ],
+    "t3": [
+     {
+      "name": "Void Sentinel",
+      "icon": "🗿",
+      "hp": 72,
+      "atk": [
+       13,
+       22
+      ],
+      "gold": [
+       10,
+       18
+      ],
+      "immuneFirstHit": true,
+      "desc": "The first blow glances off. The second does not."
+     },
+     {
+      "name": "Infernal Champion",
+      "icon": "⚔️",
+      "hp": 68,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       9,
+       17
+      ],
+      "doubleStrike": true,
+      "desc": "Strikes twice per turn. Never stops."
+     },
+     {
+      "name": "The Nameless",
+      "icon": "❓",
+      "hp": 76,
+      "atk": [
+       11,
+       21
+      ],
+      "gold": [
+       11,
+       19
+      ],
+      "hiddenName": true,
+      "desc": "No name. No origin. Just hunger."
+     },
+     {
+      "name": "Void Reaper Spawn",
+      "icon": "💀",
+      "hp": 110,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       12,
+       20
+      ],
+      "drainHpSp": true,
+      "desc": "A fragment of the true Void Reaper. Still terrifying."
+     },
+     {
+      "name": "Shadow Architect",
+      "icon": "🏗️",
+      "hp": 80,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       10,
+       18
+      ],
+      "splitsAt50": true,
+      "desc": "Splits into two at half HP. Both copies fight on."
+     }
+    ],
+    "bosses": [
+     {
+      "name": "The Hard Void",
+      "icon": "🌑",
+      "hp": 200,
+      "atk": [
+       16,
+       24
+      ],
+      "gold": [
+       40,
+       60
+      ],
+      "isBoss": true,
+      "phase2Hp": 100,
+      "phase3Hp": 50,
+      "phase1Desc": "The Void watches you. It has not yet decided what you are.",
+      "phase2Desc": "THE VOID SHIFTS. Phase 2 begins. It has decided.",
+      "phase3Desc": "FINAL PHASE. The Void consumes. Find its weakness.",
+      "weakPoints": [
+       "heavy",
+       "attack",
+       "skill"
+      ],
+      "desc": "It is not an enemy. It is what remains when everything else is gone."
+     },
+     {
+      "name": "The Infernal Architect",
+      "icon": "🔱",
+      "hp": 180,
+      "atk": [
+       15,
+       23
+      ],
+      "gold": [
+       38,
+       58
+      ],
+      "isBoss": true,
+      "phase2Hp": 90,
+      "phase3Hp": 45,
+      "phase1Desc": "It built this place. It has been waiting for you specifically.",
+      "phase2Desc": "THE ARCHITECT RISES. It begins to unmake the dungeon around you.",
+      "phase3Desc": "FINAL PHASE. The architecture collapses inward. Survive.",
+      "weakPoints": [
+       "heavy",
+       "attack",
+       "skill"
+      ],
+      "desc": "The dungeon IS the Architect. You have been inside it the whole time."
+     },
+     {
+      "name": "The Void Sovereign",
+      "icon": "👑",
+      "hp": 190,
+      "atk": [
+       14,
+       25
+      ],
+      "gold": [
+       39,
+       59
+      ],
+      "isBoss": true,
+      "phase2Hp": 95,
+      "phase3Hp": 47,
+      "phase1Desc": "It ruled the dark long before the first dungeon was built.",
+      "phase2Desc": "THE SOVEREIGN AWAKENS. It remembers you from a previous life.",
+      "phase3Desc": "FINAL PHASE. It reaches into you and pulls.",
+      "weakPoints": [
+       "heavy",
+       "attack",
+       "skill"
+      ],
+      "desc": "You have faced kings before. Not like this."
+     },
+     {
+      "name": "The Void Sovereign",
+      "icon": "👑",
+      "hp": 155,
+      "atk": [
+       18,
+       28
+      ],
+      "gold": [
+       38,
+       58
+      ],
+      "isBoss": true,
+      "phaseMsg2": "The Void Sovereign discards his crown. He does not need symbols of power.",
+      "phaseMsg3": "He reaches into you and pulls. Something inside resists."
+     },
+     {
+      "name": "Malchar Reborn",
+      "icon": "💀",
+      "hp": 148,
+      "atk": [
+       17,
+       27
+      ],
+      "gold": [
+       37,
+       57
+      ],
+      "isBoss": true,
+      "phaseMsg2": "He was never truly dead. He was waiting. For you specifically.",
+      "phaseMsg3": "The mask falls. Malchar Reborn is something the dungeon itself fears."
+     }
+    ],
+    "elites": [
+     {
+      "name": "The Void King",
+      "icon": "👑",
+      "hp": 150,
+      "atk": [
+       16,
+       26
+      ],
+      "gold": [
+       20,
+       35
+      ],
+      "isElite": true,
+      "eliteAbility": "Drain — steals 8 HP from you every turn.",
+      "desc": "A king of nothing. Ruler of the dark between stars."
+     },
+     {
+      "name": "Infernal Overlord",
+      "icon": "🔱",
+      "hp": 140,
+      "atk": [
+       18,
+       28
+      ],
+      "gold": [
+       18,
+       32
+      ],
+      "isElite": true,
+      "eliteAbility": "Overwhelm — hits for massive damage but skips every other turn.",
+      "desc": "Ancient. Patient. Inevitable."
+     }
+    ]
+   },
+   "loot": [
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 75,
+     "desc": "Restores 75 HP."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🔥",
+     "type": "fire-potion",
+     "desc": "40% enemy max HP as fire damage. Ignores defense."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "desc": "Halves enemy attack for 3 turns."
+    },
+    {
+     "id": "infernal-blade",
+     "name": "Infernal Blade",
+     "icon": "🔥",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      9,
+      16
+     ],
+     "isEquippable": true,
+     "desc": "Forged in the Infernal. Burns on every hit."
+    },
+    {
+     "id": "void-reaver",
+     "name": "Void Reaver",
+     "icon": "🌑",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      10,
+      17
+     ],
+     "isEquippable": true,
+     "desc": "Tears through the void itself."
+    },
+    {
+     "id": "hellfire-staff",
+     "name": "Hellfire Staff",
+     "icon": "☄️",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      8,
+      15
+     ],
+     "isEquippable": true,
+     "desc": "Channels hellfire. Burns everything."
+    },
+    {
+     "id": "abyssal-axe",
+     "name": "Abyssal Axe",
+     "icon": "🪓",
+     "type": "weapon",
+     "weaponType": "axe",
+     "level": 1,
+     "atkBase": [
+      11,
+      18
+     ],
+     "isEquippable": true,
+     "desc": "Carved from abyssal stone. Devastating."
+    },
+    {
+     "id": "ember-dagger",
+     "name": "Ember Dagger",
+     "icon": "🗡️",
+     "type": "weapon",
+     "weaponType": "dagger",
+     "level": 1,
+     "atkBase": [
+      9,
+      15
+     ],
+     "isEquippable": true,
+     "desc": "Fast. Hot. Leaves burns."
+    },
+    {
+     "id": "ember-plate",
+     "name": "Ember Plate",
+     "icon": "🛡️",
+     "type": "armor",
+     "armorType": "medium",
+     "level": 1,
+     "defBase": 5,
+     "isEquippable": true,
+     "desc": "+5 defense. Still warm from the forge."
+    },
+    {
+     "id": "void-cloak",
+     "name": "Void Cloak",
+     "icon": "🌑",
+     "type": "armor",
+     "armorType": "light",
+     "level": 1,
+     "defBase": 3,
+     "isEquippable": true,
+     "desc": "+3 defense. Absorbs shadow damage."
+    },
+    {
+     "id": "infernal-mail",
+     "name": "Infernal Mail",
+     "icon": "⛓️",
+     "type": "armor",
+     "armorType": "heavy",
+     "level": 1,
+     "defBase": 7,
+     "isEquippable": true,
+     "desc": "+7 defense. Heavy as sin."
+    },
+    {
+     "id": "rune-strength",
+     "name": "Rune of Strength",
+     "icon": "🔴",
+     "type": "rune",
+     "desc": "+6 attack this run."
+    },
+    {
+     "id": "scroll-smite",
+     "name": "Scroll of Smite",
+     "icon": "⚡",
+     "type": "scroll",
+     "desc": "80 unblockable damage."
+    },
+    {
+     "name": "Infernal Gem",
+     "icon": "🔶",
+     "type": "gem",
+     "gold": 25,
+     "desc": "Worth 25 gold."
+    },
+    {
+     "name": "Hellfire Elixir",
+     "icon": "🔱",
+     "type": "elixir",
+     "healPct": 0.65,
+     "desc": "Restores 65% of max HP. Distilled from infernal flame — somehow healing."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Soul Trap",
+     "icon": "🪤",
+     "type": "soul-trap",
+     "cost": 60,
+     "desc": "Captures the current enemy as a permanent minion. Use during combat."
+    },
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "cost": 12,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 80,
+     "cost": 22,
+     "desc": "Restores 80 HP. Stronger brew."
+    },
+    {
+     "name": "Spirit Tonic",
+     "icon": "🔵",
+     "type": "sp-potion",
+     "sp": 15,
+     "cost": 14,
+     "desc": "Restores 15 SP immediately."
+    },
+    {
+     "name": "Greater Tonic",
+     "icon": "💙",
+     "type": "sp-potion",
+     "sp": 30,
+     "cost": 24,
+     "desc": "Restores 30 SP. Concentrated essence."
+    },
+    {
+     "name": "Iron Flask",
+     "icon": "🛡️",
+     "type": "def-potion",
+     "def": 3,
+     "turns": 3,
+     "cost": 16,
+     "desc": "Grants +3 defense for 3 turns."
+    },
+    {
+     "name": "Berserker Draught",
+     "icon": "⚔️",
+     "type": "atk-potion",
+     "atk": 4,
+     "turns": 3,
+     "cost": 18,
+     "desc": "Grants +4 attack for 3 turns."
+    },
+    {
+     "name": "Lucky Potion",
+     "icon": "🍀",
+     "type": "luck-potion",
+     "cost": 20,
+     "desc": "Next 3 enemy kills drop double gold."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🔥",
+     "type": "fire-potion",
+     "cost": 25,
+     "desc": "Deals 40% of target max HP as fire damage. Ignores defense."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "cost": 18,
+     "desc": "Halves enemy attack for 3 turns."
+    },
+    {
+     "name": "Swift Potion",
+     "icon": "💨",
+     "type": "swift-potion",
+     "cost": 22,
+     "desc": "Guarantees flee for 2 turns. Perfect escape."
+    },
+    {
+     "name": "Cursed Vial",
+     "icon": "🌀",
+     "type": "cursed",
+     "cost": 3,
+     "desc": "Unpredictable effects. Cheap for a reason."
+    },
+    {
+     "name": "Mirror Flask",
+     "icon": "🪞",
+     "type": "mirror-flask",
+     "cost": 30,
+     "desc": "Reflects the next enemy attack back at them."
+    },
+    {
+     "name": "Phantom Potion",
+     "icon": "👻",
+     "type": "phantom-potion",
+     "cost": 35,
+     "desc": "Become untargetable for 2 turns. Enemy attacks pass through you."
+    },
+    {
+     "name": "Gravity Tonic",
+     "icon": "🌀",
+     "type": "gravity-tonic",
+     "cost": 28,
+     "desc": "Crushes enemy ATK to 1 for 3 turns."
+    },
+    {
+     "name": "Leech Brew",
+     "icon": "🩸",
+     "type": "leech-brew",
+     "cost": 32,
+     "desc": "Heals 30% of every hit you deal for 4 turns."
+    },
+    {
+     "name": "Rage Tonic",
+     "icon": "💢",
+     "type": "rage-tonic",
+     "cost": 38,
+     "desc": "Triple ATK but double incoming damage for 3 turns."
+    },
+    {
+     "name": "Fog Flask",
+     "icon": "🌫️",
+     "type": "fog-flask",
+     "cost": 25,
+     "desc": "Enemy has 70% chance to miss for 3 turns."
+    },
+    {
+     "name": "Time Potion",
+     "icon": "⌛",
+     "type": "time-potion",
+     "cost": 45,
+     "desc": "2 free attacks this turn. Enemy cannot respond."
+    },
+    {
+     "name": "Corruption Flask",
+     "icon": "💜",
+     "type": "corruption-flask",
+     "cost": 33,
+     "desc": "Deals 20 corruption damage to enemy each turn for 4 turns."
+    },
+    {
+     "name": "Warding Bell",
+     "icon": "🔔",
+     "type": "warding-bell",
+     "cost": 20,
+     "desc": "Rings out the next time you search a room with a trap, letting you step around it. One use."
+    },
+    {
+     "name": "Phoenix Feather",
+     "icon": "🪶",
+     "type": "phoenix-feather",
+     "cost": 150,
+     "desc": "If you would die while carrying this, it ignites instead — you are reborn at 30% HP. Consumed automatically. One use."
+    },
+    {
+     "name": "Elixir of Life",
+     "icon": "✨",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Gravebound Elixir",
+     "icon": "💀",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Tidal Elixir",
+     "icon": "🌊",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Bloodstone",
+     "icon": "🔴",
+     "type": "gem",
+     "gold": 20,
+     "cost": 0,
+     "desc": "Worth 20 gold. Sell it at the Blacksmith."
+    },
+    {
+     "id": "shop-iron-sword",
+     "name": "Iron Sword",
+     "icon": "⚔️",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      5,
+      10
+     ],
+     "cost": 45,
+     "isEquippable": true,
+     "desc": "A reliable sword."
+    },
+    {
+     "id": "shop-shadow-dagger",
+     "name": "Shadow Dagger",
+     "icon": "🔪",
+     "type": "weapon",
+     "weaponType": "dagger",
+     "level": 1,
+     "atkBase": [
+      5,
+      9
+     ],
+     "cost": 55,
+     "isEquippable": true,
+     "desc": "Fast and precise."
+    },
+    {
+     "id": "shop-oak-staff",
+     "name": "Oak Staff",
+     "icon": "🪄",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      4,
+      8
+     ],
+     "cost": 50,
+     "isEquippable": true,
+     "desc": "Channels arcane energy."
+    },
+    {
+     "id": "shop-battle-axe",
+     "name": "Battle Axe",
+     "icon": "🪓",
+     "type": "weapon",
+     "weaponType": "axe",
+     "level": 1,
+     "atkBase": [
+      7,
+      13
+     ],
+     "cost": 70,
+     "isEquippable": true,
+     "desc": "Heavy but devastating."
+    },
+    {
+     "id": "shop-leather-vest",
+     "name": "Leather Vest",
+     "icon": "🦺",
+     "type": "armor",
+     "armorType": "light",
+     "level": 1,
+     "defBase": 3,
+     "cost": 40,
+     "isEquippable": true,
+     "desc": "+3 defense."
+    },
+    {
+     "id": "shop-chain-mail",
+     "name": "Chain Mail",
+     "icon": "⛓️",
+     "type": "armor",
+     "armorType": "medium",
+     "level": 1,
+     "defBase": 5,
+     "cost": 65,
+     "isEquippable": true,
+     "desc": "+5 defense."
+    },
+    {
+     "id": "rune-strength",
+     "name": "Rune of Strength",
+     "icon": "🔴",
+     "type": "rune",
+     "cost": 30,
+     "desc": "+6 attack for the rest of this run."
+    },
+    {
+     "id": "rune-protection",
+     "name": "Rune of Protection",
+     "icon": "🔵",
+     "type": "rune",
+     "cost": 28,
+     "desc": "+5 defense for the rest of this run."
+    },
+    {
+     "id": "rune-vitality",
+     "name": "Rune of Vitality",
+     "icon": "🟣",
+     "type": "rune",
+     "cost": 32,
+     "desc": "+20 max HP this run."
+    },
+    {
+     "id": "scroll-smite",
+     "name": "Scroll of Smite",
+     "icon": "⚡",
+     "type": "scroll",
+     "cost": 35,
+     "desc": "80 unblockable damage to current enemy."
+    },
+    {
+     "id": "scroll-mending",
+     "name": "Scroll of Mending",
+     "icon": "✨",
+     "type": "scroll",
+     "cost": 30,
+     "desc": "Heals 50% max HP outside combat."
+    },
+    {
+     "id": "scroll-reveal",
+     "name": "Scroll of Reveal",
+     "icon": "📜",
+     "type": "scroll",
+     "cost": 22,
+     "desc": "Reveals the next 3 room types."
+    }
+   ],
+   "rooms": [
+    "The darkness here is not an absence of light. It is a presence that chooses.",
+    "Something breathes in the corner. When you look, nothing. When you look away, it breathes.",
+    "The floor is warm. You do not investigate why.",
+    "A voice says your name. You are alone. Both of these things are true.",
+    "The walls are the wrong distance apart. You notice but cannot explain it.",
+    "You have been here before. You have never been here. Both are true.",
+    "The silence has weight. It presses against your chest.",
+    "Something left marks at eye level. You are not the right height for them.",
+    "The air smells like something that has not existed for a very long time.",
+    "Your shadow moves before you do.",
+    "There are doors here that were not here a moment ago.",
+    "The darkness watches you with what might be curiosity.",
+    "Something in the room is counting. You cannot find what.",
+    "You hear your own footsteps from a different direction.",
+    "A doorway opens in a wall that was solid a moment ago. The room beyond is darker.",
+    "The room is colder on the inside. Not from the outside. From within.",
+    "Three paths. All of them go to the same place. The place is not where any of them should go.",
+    "The air shimmers. Not heat. Something else. The shimmering watches back.",
+    "Something has recently stood exactly where you are standing. The floor remembers.",
+    "Your torch dims to nothing then brightens. It did not run out. It was dimmed.",
+    "The walls here pulse. Not visibly. You feel it in your teeth.",
+    "A corridor you did not enter this way. You entered from the other direction. Didn't you.",
+    "Something shifts in the peripheral. Always peripheral. Never center.",
+    "The room has no sharp edges. Everything is slightly curved. Slightly wrong.",
+    "A door that looks like it leads up opens to reveal another down.",
+    "You feel observed. Not from the room. From inside the room.",
+    "Time moves differently here. You have been in this room for a moment. Or an hour.",
+    "The floor gives slightly under pressure. Not from weight. From expectation.",
+    "The dark here is not black. It is a color you do not have a name for.",
+    "An intersection of three halls. All of them end at the same room. This room.",
+    "Something is being decided about you. You are not part of the decision.",
+    "The ceiling drips. The drops hang suspended and never fall.",
+    "You realize you have stopped blinking. You do not know when that happened.",
+    "A presence circles the room. Not walking. Not flying. Simply present in different spots.",
+    "Your heartbeat echoes. Slightly off rhythm. Not yours.",
+    "At this depth, the Infernal is not a dungeon. It is a conclusion.",
+    "The dark here is aware. Specifically, deliberately, personally aware.",
+    "Everything that has ever been feared ended up here eventually.",
+    "The walls are made of accumulated dread. Every explorer fed them.",
+    "You can feel every previous visitor. Their paths are grooves in the space here.",
+    "The Void is not below you. It is all around you. It has always been all around you.",
+    "Something ancient lives at this depth. It is not an enemy. It is the reason for enemies.",
+    "The room is not trying to frighten you. It simply is what it is. That is worse.",
+    "At the deepest point, there is no room. There is a thing that looks like a room.",
+    "The darkness here has texture. You feel it against your skin.",
+    "Everything is still. Not dead-still. Waiting-still. Deciding-still.",
+    "The Infernal remembers why it was made. You are the reason. You specifically.",
+    "You cannot tell how large this room is. The measurements keep changing.",
+    "The thing that lives here is not evil. It is honest. That is worse than evil.",
+    "You are at the end of something. You do not know what. The room knows."
+   ],
+   "floors": [
+    "",
+    "The Threshold",
+    "The First Dark",
+    "Where Light Ends",
+    "The Forgotten Hall",
+    "Chamber of No Return",
+    "The Breathing Room",
+    "Deeper Than Deep",
+    "The Unnamed Place",
+    "The Final Corridor",
+    "The Void Itself"
+   ]
+  },
+  "The Abyssal Deep": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "Tide Wraith",
+      "icon": "🌊",
+      "hp": 20,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "desc": "Phases through defense when you defend.",
+      "tidePhase": true
+     },
+     {
+      "name": "Drowned Sailor",
+      "icon": "⚓",
+      "hp": 26,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "desc": "Every 3 turns it screams, silencing your skills for 1 turn.",
+      "silenceTimer": 3
+     },
+     {
+      "name": "Ink Fiend",
+      "icon": "🐙",
+      "hp": 18,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       1,
+       4
+      ],
+      "desc": "25% chance to blind you, making your next attack miss.",
+      "blindChance": 0.25
+     },
+     {
+      "name": "Sea Slug",
+      "icon": "🐌",
+      "hp": 22,
+      "atk": [
+       3,
+       7
+      ],
+      "gold": [
+       1,
+       4
+      ],
+      "desc": "Slow but relentless. Poisons on hit 20% of the time.",
+      "poisonChance": 0.2
+     },
+     {
+      "name": "Shore Rat",
+      "icon": "🐀",
+      "hp": 14,
+      "atk": [
+       5,
+       9
+      ],
+      "gold": [
+       1,
+       3
+      ],
+      "desc": "Small and vicious. Attacks twice per turn."
+     },
+     {
+      "name": "Pale Drifter",
+      "icon": "👻",
+      "hp": 16,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       1,
+       4
+      ],
+      "desc": "A ghost of someone who drowned. Seeks company."
+     },
+     {
+      "name": "Tide Caller",
+      "icon": "🌊",
+      "hp": 20,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "tidePhase": true,
+      "desc": "Calls the tide from somewhere that has no tide. Phases through your defense when you defend."
+     },
+     {
+      "name": "Depth Shade",
+      "icon": "🌑",
+      "hp": 16,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       1,
+       4
+      ],
+      "dodgeEvery": 3,
+      "desc": "Made of deep darkness. Phases out every third turn — you cannot hit what the abyss becomes."
+     }
+    ],
+    "t2": [
+     {
+      "name": "Deep Stalker",
+      "icon": "🦈",
+      "hp": 50,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "desc": "Studies you first turn, hits double on second turn.",
+      "stalkerStudy": true
+     },
+     {
+      "name": "Coral Horror",
+      "icon": "🪸",
+      "hp": 58,
+      "atk": [
+       9,
+       15
+      ],
+      "gold": [
+       6,
+       11
+      ],
+      "desc": "Takes 20% less damage from physical attacks.",
+      "physResist": 0.2
+     },
+     {
+      "name": "Pressure Beast",
+      "icon": "💀",
+      "hp": 44,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       5,
+       9
+      ],
+      "desc": "Gains +10% damage each turn it stays alive.",
+      "pressureStacks": true
+     },
+     {
+      "name": "Kelp Strangler",
+      "icon": "🌿",
+      "hp": 48,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "desc": "Wraps around you — 20% chance to stun for 1 turn.",
+      "stunChance": 0.2
+     },
+     {
+      "name": "Abyssal Eel",
+      "icon": "⚡",
+      "hp": 40,
+      "atk": [
+       10,
+       18
+      ],
+      "gold": [
+       4,
+       9
+      ],
+      "desc": "Shocks you — reduces ATK by 2 for 2 turns on hit.",
+      "shockATK": true
+     },
+     {
+      "name": "Brine Golem",
+      "icon": "🧂",
+      "hp": 62,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       6,
+       11
+      ],
+      "desc": "Built from salt and pressure. Slow but very durable."
+     },
+     {
+      "name": "Sunken Titan",
+      "icon": "⚓",
+      "hp": 65,
+      "atk": [
+       10,
+       16
+      ],
+      "gold": [
+       6,
+       12
+      ],
+      "immuneFirstHit": true,
+      "desc": "Rose from the ocean floor. The first strike glances off something that has survived centuries of pressure."
+     },
+     {
+      "name": "Void Swimmer",
+      "icon": "🦈",
+      "hp": 52,
+      "atk": [
+       10,
+       17
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "grows": true,
+      "desc": "Evolved in the void between depths. Gets faster and stronger every turn it survives."
+     }
+    ],
+    "t3": [
+     {
+      "name": "Abyssal Eye",
+      "icon": "👁️",
+      "hp": 70,
+      "atk": [
+       11,
+       19
+      ],
+      "gold": [
+       9,
+       16
+      ],
+      "desc": "Drains 3 SP every turn instead of attacking sometimes.",
+      "spDrain": 3
+     },
+     {
+      "name": "Siren",
+      "icon": "🧜",
+      "hp": 65,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       9,
+       17
+      ],
+      "desc": "30% chance your attack hits yourself instead.",
+      "sirenCharm": 0.3
+     },
+     {
+      "name": "Void Angler",
+      "icon": "🎣",
+      "hp": 75,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       10,
+       17
+      ],
+      "desc": "Lures you closer — first attack always hits for max damage.",
+      "anglerFirst": true
+     },
+     {
+      "name": "Titan Crab",
+      "icon": "🦀",
+      "hp": 82,
+      "atk": [
+       10,
+       18
+      ],
+      "gold": [
+       10,
+       18
+      ],
+      "desc": "Armored shell — takes 30% less damage first 3 turns.",
+      "shellArmor": 3
+     },
+     {
+      "name": "The Drowned King",
+      "icon": "👑",
+      "hp": 88,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       11,
+       19
+      ],
+      "desc": "Elite. Resurrects once at 1 HP. Undead royalty.",
+      "isElite": true,
+      "eliteAbility": "Resurrects once at 1 HP when killed.",
+      "resurrect": true
+     },
+     {
+      "name": "Pressure Wraith",
+      "icon": "💀",
+      "hp": 78,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       10,
+       17
+      ],
+      "pressureStacks": true,
+      "drainsSP": true,
+      "desc": "Created by centuries of deep water pressure. Gets stronger every turn AND drains your SP. End it fast."
+     }
+    ],
+    "bosses": [
+     {
+      "name": "The Leviathan",
+      "icon": "🐉",
+      "hp": 800,
+      "atk": [
+       28,
+       42
+      ],
+      "gold": [
+       150,
+       220
+      ],
+      "isBoss": true,
+      "phase1Hp": 600,
+      "phase2Hp": 400,
+      "phase3Hp": 200,
+      "isMultiPhase": true,
+      "fourPhase": true,
+      "phaseMsg2": "The Leviathan lets out a sound that shakes the ocean floor. Its eyes open fully. Rage — its attacks grow stronger.",
+      "phaseMsg3": "The water darkens completely. The Leviathan rises. The Deep Pull begins.",
+      "phaseMsg4": "The abyss awakens. The Leviathan abandons all restraint. Nothing can save you now.",
+      "leviathan": true
+     },
+     {
+      "name": "The Ancient Tide",
+      "icon": "🌊",
+      "hp": 650,
+      "atk": [
+       24,
+       38
+      ],
+      "gold": [
+       120,
+       180
+      ],
+      "isBoss": true,
+      "isMultiPhase": true,
+      "fourPhase": true,
+      "phaseMsg2": "The Ancient Tide swells — the water rises to your chest. Its form grows larger.",
+      "phaseMsg3": "The tide is at your neck. Fight harder or drown.",
+      "phaseMsg4": "The ocean itself rises. The Ancient Tide becomes the water. There is no escaping it now."
+     },
+     {
+      "name": "The Drowned God",
+      "icon": "🌑",
+      "hp": 700,
+      "atk": [
+       26,
+       40
+      ],
+      "gold": [
+       130,
+       200
+      ],
+      "isBoss": true,
+      "isMultiPhase": true,
+      "fourPhase": true,
+      "phaseMsg2": "The Drowned God opens its eyes for the first time in centuries. The abyss itself screams.",
+      "phaseMsg3": "It speaks. You cannot understand the words. Your HP cap drops by 20 for the remainder of the fight.",
+      "phaseMsg4": "It has stopped speaking. Words were a courtesy. It extends no more courtesies."
+     },
+     {
+      "name": "The Leviathan Eye",
+      "icon": "👁️",
+      "hp": 620,
+      "atk": [
+       25,
+       39
+      ],
+      "gold": [
+       110,
+       170
+      ],
+      "isBoss": true,
+      "isMultiPhase": true,
+      "fourPhase": true,
+      "phaseMsg2": "The Eye blinks. Everything goes dark for one terrible second.",
+      "phaseMsg3": "It has seen everything that happens here. Including your death.",
+      "phaseMsg4": "It is no longer watching. It is acting."
+     },
+     {
+      "name": "Abyssal Sovereign",
+      "icon": "🌊",
+      "hp": 600,
+      "atk": [
+       24,
+       38
+      ],
+      "gold": [
+       110,
+       165
+      ],
+      "isBoss": true,
+      "isMultiPhase": true,
+      "fourPhase": true,
+      "phaseMsg2": "The Abyssal Sovereign releases the pressure it has held for centuries!",
+      "phaseMsg3": "The depths have no bottom. Neither does its rage.",
+      "phaseMsg4": "The Sovereign abandons form entirely. It is the pressure now. It is everywhere."
+     }
+    ],
+    "elites": [
+     {
+      "name": "The Drowned King",
+      "icon": "👑",
+      "hp": 95,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       18,
+       28
+      ],
+      "isElite": true,
+      "eliteAbility": "Resurrects once at 1 HP.",
+      "resurrect": true
+     },
+     {
+      "name": "Abyssal Sentinel",
+      "icon": "🔱",
+      "hp": 88,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       16,
+       26
+      ],
+      "isElite": true,
+      "eliteAbility": "Cannot be stunned. Immune to debuffs.",
+      "debuffImmune": true
+     },
+     {
+      "name": "The Pale Leviathan",
+      "icon": "🤍",
+      "hp": 100,
+      "atk": [
+       15,
+       23
+      ],
+      "gold": [
+       20,
+       30
+      ],
+      "isElite": true,
+      "eliteAbility": "Calls one Tide Wraith every 3 turns."
+     }
+    ]
+   },
+   "loot": [
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 70,
+     "desc": "Restores 70 HP."
+    },
+    {
+     "name": "Defense Potion",
+     "icon": "🛡️",
+     "type": "def-potion",
+     "bonus": 4,
+     "duration": 3,
+     "desc": "Increases defense by 4 for 3 turns."
+    },
+    {
+     "name": "Attack Potion",
+     "icon": "⚔️",
+     "type": "atk-potion",
+     "bonus": 5,
+     "duration": 3,
+     "desc": "Increases attack by 5 for 3 turns."
+    },
+    {
+     "name": "Lucky Potion",
+     "icon": "🍀",
+     "type": "luck-potion",
+     "desc": "Doubles your gold from the next 3 enemy kills."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🔥",
+     "type": "fire-potion",
+     "desc": "Throw at enemy — deals 40% of their max HP as fire damage. Ignores defense."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "desc": "Curses an enemy — weakens their attack by 50% for 3 turns."
+    },
+    {
+     "name": "Swift Potion",
+     "icon": "💨",
+     "type": "swift-potion",
+     "desc": "Guaranteed flee this turn AND the next. Perfect for escape."
+    },
+    {
+     "id": "ancient-blade",
+     "name": "Ancient Blade",
+     "icon": "⚔️",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      6,
+      12
+     ],
+     "isEquippable": true,
+     "desc": "A blade found in the depths."
+    },
+    {
+     "id": "ember-sword",
+     "name": "Ember Sword",
+     "icon": "🔥",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      7,
+      14
+     ],
+     "isEquippable": true,
+     "desc": "Scorched but sharp."
+    },
+    {
+     "id": "bone-staff",
+     "name": "Bone Staff",
+     "icon": "💀",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      5,
+      11
+     ],
+     "isEquippable": true,
+     "desc": "Carved from dungeon bone."
+    },
+    {
+     "name": "Iron Shield",
+     "icon": "🛡️",
+     "type": "armor",
+     "armorType": "light",
+     "defBase": 3,
+     "level": 1,
+     "isEquippable": true,
+     "desc": "Reduces incoming damage by 3."
+    },
+    {
+     "name": "Thief Ring",
+     "icon": "💍",
+     "type": "ring",
+     "effect": "flee",
+     "desc": "Makes fleeing easier."
+    },
+    {
+     "name": "Bloodstone",
+     "icon": "🔴",
+     "type": "gem",
+     "gold": 20,
+     "desc": "Worth 20 gold."
+    },
+    {
+     "id": "rune-strength",
+     "name": "Rune of Strength",
+     "icon": "🔴",
+     "type": "rune",
+     "desc": "+6 attack for the rest of this run."
+    },
+    {
+     "id": "rune-protection",
+     "name": "Rune of Protection",
+     "icon": "🔵",
+     "type": "rune",
+     "desc": "+5 defense for the rest of this run."
+    },
+    {
+     "id": "rune-speed",
+     "name": "Rune of Speed",
+     "icon": "🟡",
+     "type": "rune",
+     "desc": "Flee always succeeds this run."
+    },
+    {
+     "id": "rune-vitality",
+     "name": "Rune of Vitality",
+     "icon": "🟣",
+     "type": "rune",
+     "desc": "+20 max HP this run."
+    },
+    {
+     "id": "scroll-reveal",
+     "name": "Scroll of Reveal",
+     "icon": "📜",
+     "type": "scroll",
+     "desc": "Reveals the next 3 room types."
+    },
+    {
+     "id": "scroll-smite",
+     "name": "Scroll of Smite",
+     "icon": "⚡",
+     "type": "scroll",
+     "desc": "80 unblockable damage to current enemy."
+    },
+    {
+     "id": "scroll-mending",
+     "name": "Scroll of Mending",
+     "icon": "✨",
+     "type": "scroll",
+     "desc": "Heals 50% max HP outside combat."
+    },
+    {
+     "name": "Elixir of Life",
+     "icon": "✨",
+     "type": "elixir",
+     "healPct": 0.6,
+     "desc": "Restores 60% of max HP. A rare treasure worth saving."
+    },
+    {
+     "name": "Gravebound Elixir",
+     "icon": "💀",
+     "type": "elixir",
+     "healPct": 0.6,
+     "desc": "Restores 60% of max HP. Bottled in the Crypt of Malachar."
+    },
+    {
+     "name": "Tidal Elixir",
+     "icon": "🌊",
+     "type": "elixir",
+     "healPct": 0.6,
+     "desc": "Restores 60% of max HP. Drawn from the Abyssal Deep."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Soul Trap",
+     "icon": "🪤",
+     "type": "soul-trap",
+     "cost": 60,
+     "desc": "Captures the current enemy as a permanent minion. Use during combat."
+    },
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "cost": 12,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 80,
+     "cost": 22,
+     "desc": "Restores 80 HP. Stronger brew."
+    },
+    {
+     "name": "Spirit Tonic",
+     "icon": "🔵",
+     "type": "sp-potion",
+     "sp": 15,
+     "cost": 14,
+     "desc": "Restores 15 SP immediately."
+    },
+    {
+     "name": "Greater Tonic",
+     "icon": "💙",
+     "type": "sp-potion",
+     "sp": 30,
+     "cost": 24,
+     "desc": "Restores 30 SP. Concentrated essence."
+    },
+    {
+     "name": "Iron Flask",
+     "icon": "🛡️",
+     "type": "def-potion",
+     "def": 3,
+     "turns": 3,
+     "cost": 16,
+     "desc": "Grants +3 defense for 3 turns."
+    },
+    {
+     "name": "Berserker Draught",
+     "icon": "⚔️",
+     "type": "atk-potion",
+     "atk": 4,
+     "turns": 3,
+     "cost": 18,
+     "desc": "Grants +4 attack for 3 turns."
+    },
+    {
+     "name": "Lucky Potion",
+     "icon": "🍀",
+     "type": "luck-potion",
+     "cost": 20,
+     "desc": "Next 3 enemy kills drop double gold."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🔥",
+     "type": "fire-potion",
+     "cost": 25,
+     "desc": "Deals 40% of target max HP as fire damage. Ignores defense."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "cost": 18,
+     "desc": "Halves enemy attack for 3 turns."
+    },
+    {
+     "name": "Swift Potion",
+     "icon": "💨",
+     "type": "swift-potion",
+     "cost": 22,
+     "desc": "Guarantees flee for 2 turns. Perfect escape."
+    },
+    {
+     "name": "Cursed Vial",
+     "icon": "🌀",
+     "type": "cursed",
+     "cost": 3,
+     "desc": "Unpredictable effects. Cheap for a reason."
+    },
+    {
+     "name": "Mirror Flask",
+     "icon": "🪞",
+     "type": "mirror-flask",
+     "cost": 30,
+     "desc": "Reflects the next enemy attack back at them."
+    },
+    {
+     "name": "Phantom Potion",
+     "icon": "👻",
+     "type": "phantom-potion",
+     "cost": 35,
+     "desc": "Become untargetable for 2 turns. Enemy attacks pass through you."
+    },
+    {
+     "name": "Gravity Tonic",
+     "icon": "🌀",
+     "type": "gravity-tonic",
+     "cost": 28,
+     "desc": "Crushes enemy ATK to 1 for 3 turns."
+    },
+    {
+     "name": "Leech Brew",
+     "icon": "🩸",
+     "type": "leech-brew",
+     "cost": 32,
+     "desc": "Heals 30% of every hit you deal for 4 turns."
+    },
+    {
+     "name": "Rage Tonic",
+     "icon": "💢",
+     "type": "rage-tonic",
+     "cost": 38,
+     "desc": "Triple ATK but double incoming damage for 3 turns."
+    },
+    {
+     "name": "Fog Flask",
+     "icon": "🌫️",
+     "type": "fog-flask",
+     "cost": 25,
+     "desc": "Enemy has 70% chance to miss for 3 turns."
+    },
+    {
+     "name": "Time Potion",
+     "icon": "⌛",
+     "type": "time-potion",
+     "cost": 45,
+     "desc": "2 free attacks this turn. Enemy cannot respond."
+    },
+    {
+     "name": "Corruption Flask",
+     "icon": "💜",
+     "type": "corruption-flask",
+     "cost": 33,
+     "desc": "Deals 20 corruption damage to enemy each turn for 4 turns."
+    },
+    {
+     "name": "Warding Bell",
+     "icon": "🔔",
+     "type": "warding-bell",
+     "cost": 20,
+     "desc": "Rings out the next time you search a room with a trap, letting you step around it. One use."
+    },
+    {
+     "name": "Phoenix Feather",
+     "icon": "🪶",
+     "type": "phoenix-feather",
+     "cost": 150,
+     "desc": "If you would die while carrying this, it ignites instead — you are reborn at 30% HP. Consumed automatically. One use."
+    },
+    {
+     "name": "Elixir of Life",
+     "icon": "✨",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Gravebound Elixir",
+     "icon": "💀",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Tidal Elixir",
+     "icon": "🌊",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Bloodstone",
+     "icon": "🔴",
+     "type": "gem",
+     "gold": 20,
+     "cost": 0,
+     "desc": "Worth 20 gold. Sell it at the Blacksmith."
+    },
+    {
+     "id": "shop-iron-sword",
+     "name": "Iron Sword",
+     "icon": "⚔️",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      5,
+      10
+     ],
+     "cost": 45,
+     "isEquippable": true,
+     "desc": "A reliable sword."
+    },
+    {
+     "id": "shop-shadow-dagger",
+     "name": "Shadow Dagger",
+     "icon": "🔪",
+     "type": "weapon",
+     "weaponType": "dagger",
+     "level": 1,
+     "atkBase": [
+      5,
+      9
+     ],
+     "cost": 55,
+     "isEquippable": true,
+     "desc": "Fast and precise."
+    },
+    {
+     "id": "shop-oak-staff",
+     "name": "Oak Staff",
+     "icon": "🪄",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      4,
+      8
+     ],
+     "cost": 50,
+     "isEquippable": true,
+     "desc": "Channels arcane energy."
+    },
+    {
+     "id": "shop-battle-axe",
+     "name": "Battle Axe",
+     "icon": "🪓",
+     "type": "weapon",
+     "weaponType": "axe",
+     "level": 1,
+     "atkBase": [
+      7,
+      13
+     ],
+     "cost": 70,
+     "isEquippable": true,
+     "desc": "Heavy but devastating."
+    },
+    {
+     "id": "shop-leather-vest",
+     "name": "Leather Vest",
+     "icon": "🦺",
+     "type": "armor",
+     "armorType": "light",
+     "level": 1,
+     "defBase": 3,
+     "cost": 40,
+     "isEquippable": true,
+     "desc": "+3 defense."
+    },
+    {
+     "id": "shop-chain-mail",
+     "name": "Chain Mail",
+     "icon": "⛓️",
+     "type": "armor",
+     "armorType": "medium",
+     "level": 1,
+     "defBase": 5,
+     "cost": 65,
+     "isEquippable": true,
+     "desc": "+5 defense."
+    },
+    {
+     "id": "rune-strength",
+     "name": "Rune of Strength",
+     "icon": "🔴",
+     "type": "rune",
+     "cost": 30,
+     "desc": "+6 attack for the rest of this run."
+    },
+    {
+     "id": "rune-protection",
+     "name": "Rune of Protection",
+     "icon": "🔵",
+     "type": "rune",
+     "cost": 28,
+     "desc": "+5 defense for the rest of this run."
+    },
+    {
+     "id": "rune-vitality",
+     "name": "Rune of Vitality",
+     "icon": "🟣",
+     "type": "rune",
+     "cost": 32,
+     "desc": "+20 max HP this run."
+    },
+    {
+     "id": "scroll-smite",
+     "name": "Scroll of Smite",
+     "icon": "⚡",
+     "type": "scroll",
+     "cost": 35,
+     "desc": "80 unblockable damage to current enemy."
+    },
+    {
+     "id": "scroll-mending",
+     "name": "Scroll of Mending",
+     "icon": "✨",
+     "type": "scroll",
+     "cost": 30,
+     "desc": "Heals 50% max HP outside combat."
+    },
+    {
+     "id": "scroll-reveal",
+     "name": "Scroll of Reveal",
+     "icon": "📜",
+     "type": "scroll",
+     "cost": 22,
+     "desc": "Reveals the next 3 room types."
+    }
+   ],
+   "rooms": [
+    "The water here is ankle deep. Cold. Very cold. Something moves below the surface.",
+    "Bioluminescent moss lines the walls. It pulses slowly. Like breathing.",
+    "The pressure changes as you enter. Your ears pop. Something adjusts to your presence.",
+    "A skeleton sits against the wall in full armor. The armor is bent inward. From outside.",
+    "The water is perfectly still here. It should not be this still.",
+    "Something large passed through recently. The current still carries the memory of it.",
+    "Coral grows from the ceiling in patterns too regular to be natural.",
+    "A lanternfish drifts past your face and disappears into the dark. You are very deep.",
+    "The walls are covered in claw marks. All pointing the same direction. Down.",
+    "Salt crystals cover every surface. The room is older than anything above the water.",
+    "You hear something. Not a sound — a feeling. The ocean is aware of you.",
+    "An anchor the size of a house rests in the corner. No ship could have carried it here.",
+    "The light from your torch bends in the water. Things at the edges look wrong.",
+    "Teeth line the doorway. Not placed there. Grown there.",
+    "The floor is soft here. You do not look at what makes it soft.",
+    "A message is scratched into the wall. It reads: IT IS ALREADY BEHIND YOU.",
+    "Dead fish float near the ceiling in a perfect circle. Nothing disturbed them.",
+    "The pressure here is immense. You feel it in your chest. In your eyes.",
+    "Something is humming. You cannot find the source. The hum is getting louder.",
+    "The coral here has grown into the shape of a face. It was not always coral.",
+    "The water rises to your knees. Somewhere below a current pulls south.",
+    "A ghost ship is wedged in the walls somehow. Its flag still flies.",
+    "You find a compass at the bottom of the floor. It spins endlessly and stops pointing at you.",
+    "The bioluminescence dims as you enter. The room does not want to be seen.",
+    "Barnacles cover the walls so densely they form a texture like skin.",
+    "An old gramophone plays something at the bottom of the room. There is no record.",
+    "The shadow on the wall is not yours. It does not move when you do.",
+    "Something has been arranging the bones here. Into letters you recognize. Your name.",
+    "At this depth the darkness is absolute without your torch. Something lives in that darkness.",
+    "The walls pulse slowly. You realize you are inside something alive.",
+    "The Leviathan was here. The scratch marks are the size of doors.",
+    "Everything here is old. Older than the dungeon. Older than the ocean itself perhaps.",
+    "You find a journal from someone who came before. The last entry says: DO NOT GO DEEPER.",
+    "The water is warm here. That is wrong. That is very wrong."
+   ],
+   "floors": [
+    "",
+    "Burial Antechamber",
+    "The Dark Corridor",
+    "Ossuary",
+    "Forgotten Vault",
+    "The Warden's Hall",
+    "Chamber of Silence",
+    "Tomb of the Fallen",
+    "The Inner Sanctum",
+    "Hall of Malachar",
+    "The Final Chamber",
+    "The Hollow Nave",
+    "Corridor of Sighs",
+    "The Bone Gallery",
+    "Crypt of the Nameless",
+    "The Sealed Wing",
+    "Charnel Hall",
+    "The Sunken Passage",
+    "Vault of Echoes",
+    "The Whispering Arch",
+    "Tomb of Regret",
+    "The Crumbling Nave",
+    "Chamber of the Lost",
+    "The Interment Hall",
+    "The Lightless Passage",
+    "Reliquary",
+    "The Forsaken Gallery",
+    "Crypt of Whispers",
+    "Hall of the Interred",
+    "The Deep Chamber",
+    "The Final Dark"
+   ]
+  }
+ },
+ "nightmareEnemies": {
+  "t1": [
+   {
+    "name": "The Hollow",
+    "icon": "⬛",
+    "hp": 26,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     3,
+     6
+    ]
+   },
+   {
+    "name": "Flesh Amalgam",
+    "icon": "🩸",
+    "hp": 32,
+    "atk": [
+     6,
+     11
+    ],
+    "gold": [
+     2,
+     6
+    ]
+   },
+   {
+    "name": "Void Spawn",
+    "icon": "🌑",
+    "hp": 20,
+    "atk": [
+     5,
+     11
+    ],
+    "gold": [
+     2,
+     5
+    ]
+   },
+   {
+    "name": "The Forgotten",
+    "icon": "👤",
+    "hp": 24,
+    "atk": [
+     5,
+     10
+    ],
+    "gold": [
+     2,
+     5
+    ]
+   },
+   {
+    "name": "Dread Wisp",
+    "icon": "💜",
+    "hp": 18,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     2,
+     4
+    ]
+   },
+   {
+    "name": "Nightmare Rat",
+    "icon": "🐀",
+    "hp": 22,
+    "atk": [
+     5,
+     10
+    ],
+    "gold": [
+     1,
+     4
+    ]
+   },
+   {
+    "name": "The Unnamed",
+    "icon": "❓",
+    "hp": 28,
+    "atk": [
+     6,
+     11
+    ],
+    "gold": [
+     3,
+     6
+    ]
+   },
+   {
+    "name": "Scream Without Source",
+    "icon": "💢",
+    "hp": 16,
+    "atk": [
+     7,
+     13
+    ],
+    "gold": [
+     2,
+     5
+    ]
+   },
+   {
+    "name": "The Almost",
+    "icon": "🌫️",
+    "hp": 24,
+    "atk": [
+     5,
+     11
+    ],
+    "gold": [
+     2,
+     5
+    ]
+   }
+  ],
+  "t2": [
+   {
+    "name": "Soul Eater",
+    "icon": "😈",
+    "hp": 44,
+    "atk": [
+     9,
+     17
+    ],
+    "gold": [
+     5,
+     10
+    ]
+   },
+   {
+    "name": "The Watcher",
+    "icon": "👁️",
+    "hp": 40,
+    "atk": [
+     9,
+     16
+    ],
+    "gold": [
+     4,
+     9
+    ]
+   },
+   {
+    "name": "Dread Knight",
+    "icon": "⚔️",
+    "hp": 52,
+    "atk": [
+     10,
+     18
+    ],
+    "gold": [
+     6,
+     11
+    ]
+   },
+   {
+    "name": "Flesh Wraith",
+    "icon": "👻",
+    "hp": 42,
+    "atk": [
+     9,
+     17
+    ],
+    "gold": [
+     5,
+     9
+    ]
+   },
+   {
+    "name": "Void Stalker",
+    "icon": "🕳️",
+    "hp": 38,
+    "atk": [
+     10,
+     18
+    ],
+    "gold": [
+     4,
+     9
+    ]
+   },
+   {
+    "name": "The Damned",
+    "icon": "💀",
+    "hp": 48,
+    "atk": [
+     9,
+     17
+    ],
+    "gold": [
+     5,
+     10
+    ]
+   },
+   {
+    "name": "Hollow Colossus",
+    "icon": "🫙",
+    "hp": 58,
+    "atk": [
+     10,
+     18
+    ],
+    "gold": [
+     6,
+     12
+    ]
+   },
+   {
+    "name": "The Unraveling",
+    "icon": "🌀",
+    "hp": 44,
+    "atk": [
+     10,
+     19
+    ],
+    "gold": [
+     5,
+     10
+    ]
+   },
+   {
+    "name": "Grief Made Flesh",
+    "icon": "💔",
+    "hp": 46,
+    "atk": [
+     9,
+     18
+    ],
+    "gold": [
+     5,
+     11
+    ]
+   }
+  ],
+  "t3": [
+   {
+    "name": "Nightmare Colossus",
+    "icon": "🟣",
+    "hp": 80,
+    "atk": [
+     14,
+     24
+    ],
+    "gold": [
+     11,
+     19
+    ]
+   },
+   {
+    "name": "The Unmaking",
+    "icon": "⬛",
+    "hp": 70,
+    "atk": [
+     13,
+     23
+    ],
+    "gold": [
+     9,
+     17
+    ]
+   },
+   {
+    "name": "Void Reaver",
+    "icon": "🌑",
+    "hp": 75,
+    "atk": [
+     14,
+     24
+    ],
+    "gold": [
+     10,
+     18
+    ]
+   },
+   {
+    "name": "Dread Sovereign",
+    "icon": "👑",
+    "hp": 68,
+    "atk": [
+     13,
+     23
+    ],
+    "gold": [
+     9,
+     16
+    ]
+   },
+   {
+    "name": "Soul Harvester Prime",
+    "icon": "💜",
+    "hp": 72,
+    "atk": [
+     13,
+     24
+    ],
+    "gold": [
+     10,
+     17
+    ]
+   }
+  ],
+  "bosses": [
+   {
+    "name": "The Dungeon Itself",
+    "icon": "🕳️",
+    "hp": 180,
+    "atk": [
+     18,
+     30
+    ],
+    "gold": [
+     60,
+     80
+    ],
+    "isBoss": true,
+    "phaseMsg2": "The walls breathe. The floor shifts. The Dungeon Itself is no longer pretending to be stone!",
+    "phaseMsg3": "Reality cracks. You are no longer in a dungeon. You are inside something alive and furious!"
+   },
+   {
+    "name": "The Nightmare Sovereign",
+    "icon": "👑",
+    "hp": 170,
+    "atk": [
+     17,
+     29
+    ],
+    "gold": [
+     58,
+     78
+    ],
+    "isBoss": true,
+    "phaseMsg2": "The Nightmare Sovereign sheds its mortal shell. What remains should not exist!",
+    "phaseMsg3": "It has stopped fighting you. It has started rewriting you. Final phase!"
+   },
+   {
+    "name": "The Void Given Form",
+    "icon": "⬛",
+    "hp": 175,
+    "atk": [
+     16,
+     28
+    ],
+    "gold": [
+     55,
+     75
+    ],
+    "isBoss": true,
+    "phaseMsg2": "The Void Given Form absorbs the darkness around it. It becomes everything you cannot see!",
+    "phaseMsg3": "There is nothing left of the dungeon. Only the Void. Only you. Only the end!"
+   }
+  ],
+  "elites": []
+ },
+ "traps": {
+  "crypt": [
+   {
+    "name": "Poison Dart",
+    "desc": "A dart laced with ancient venom strikes you.",
+    "damage": 8,
+    "effect": "poison",
+    "turns": 3,
+    "msg": "Poison courses through you. 8 damage per turn for 3 turns."
+   },
+   {
+    "name": "Bone Spike",
+    "desc": "Bone spikes erupt from the floor beneath you.",
+    "damage": 20,
+    "effect": "none",
+    "turns": 0,
+    "msg": "Bone spikes tear through you for 20 damage!"
+   },
+   {
+    "name": "Soul Drain",
+    "desc": "An ancient glyph saps your will.",
+    "damage": 0,
+    "effect": "sp",
+    "turns": 0,
+    "msg": "Soul Drain! You lose 8 SP."
+   }
+  ],
+  "ashbound": [
+   {
+    "name": "Fire Jet",
+    "desc": "A jet of superheated ash erupts from the wall.",
+    "damage": 12,
+    "effect": "burn",
+    "turns": 2,
+    "msg": "Fire Jet! Burns for 12 damage and 6 per turn for 2 turns."
+   },
+   {
+    "name": "Magma Puddle",
+    "desc": "You step into a concealed magma pool.",
+    "damage": 15,
+    "effect": "none",
+    "turns": 0,
+    "msg": "Magma Puddle! 15 damage. You smell burning."
+   }
+  ],
+  "frosthold": [
+   {
+    "name": "Ice Blast",
+    "desc": "A burst of absolute cold freezes you momentarily.",
+    "damage": 10,
+    "effect": "freeze",
+    "turns": 1,
+    "msg": "Ice Blast! 10 damage. You are frozen for 1 turn."
+   },
+   {
+    "name": "Void Crack",
+    "desc": "A rift opens and drags you back.",
+    "damage": 5,
+    "effect": "pushback",
+    "turns": 0,
+    "msg": "Void Crack! You are pushed back and take 5 damage."
+   }
+  ],
+  "nightmare": [
+   {
+    "name": "Reality Tear",
+    "desc": "Something reaches through and tears at your mind.",
+    "damage": 15,
+    "effect": "sp",
+    "turns": 0,
+    "msg": "Reality Tear! 15 damage and 10 SP drained."
+   },
+   {
+    "name": "Void Pull",
+    "desc": "The void pulls at your soul.",
+    "damage": 18,
+    "effect": "none",
+    "turns": 0,
+    "msg": "Void Pull! 18 damage. Something is missing from you."
+   }
+  ]
+ }
+}

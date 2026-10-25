@@ -64,7 +64,7 @@ struct CharacterListView: View {
             }
             ForEach(Array(game.characters.enumerated()), id: \.offset) { index, ch in
                 NavigationLink {
-                    RunView(game: game, characterIndex: index)
+                    CharacterDetailView(index: index)
                 } label: {
                     CharacterRow(ch: ch)
                 }
@@ -98,7 +98,7 @@ struct CharacterListView: View {
             Button("Delete", role: .destructive) {
                 if let i = pendingDelete {
                     let name = game.characters.indices.contains(i) ? game.characters[i].name : ""
-                    game.delete(at: i)
+                    game.deleteCharacter(at: i)
                     Feedback.announce("\(name) deleted.")
                 }
                 pendingDelete = nil
@@ -125,7 +125,7 @@ struct CharacterRow: View {
         .padding(.vertical, 4)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(ch.name), the \(ch.race) \(ch.cls), \(ch.prof). \(ch.dungeon), floor \(max(ch.floor, 1)), \(ch.difficulty) difficulty.\(ch.completed ? " Completed." : "")")
-        .accessibilityHint("Starts a run with this character.")
+        .accessibilityHint("Opens this character.")
     }
 }
 

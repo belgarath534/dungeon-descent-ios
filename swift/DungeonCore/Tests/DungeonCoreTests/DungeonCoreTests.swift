@@ -367,3 +367,238 @@ final class RoomTests: XCTestCase {
         XCTAssertEqual(Rooms.combatChance(.nightmare), 0.60)
     }
 }
+
+final class InventoryTests: XCTestCase {
+    func newRun(_ cls: String = "Warrior", prof: String = "Thief") -> Run {
+        Run(character: PlayerCharacter(name: "I", cls: cls, race: "Human", prof: prof,
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+    }
+    func item(_ name: String) -> Item {
+        (ItemTables.cryptShop + ItemTables.cryptLoot).first { $0.name == name }!
+    }
+    var shade: Enemy { Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1) }
+
+    func testPotionsHealWithHerbalistAndAlchemist() {
+        var r = newRun(prof: "Herbalist")
+        r.hp = 10
+        r.inventory = [item("Health Potion")]
+        let out = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.hp, 90)   // 40 × 2
+        XCTAssertTrue(r.inventory.isEmpty)
+        XCTAssertTrue(out.used)
+
+        var a = newRun("Alchemist")
+        a.hp = 1
+        a.inventory = [item("Health Potion")]
+        _ = Inventory.use(&a, at: 0)
+        XCTAssertEqual(a.hp, 55)   // round(40 × 1.35) = 54, +1
+
+        var full = newRun()
+        full.inventory = [item("Health Potion")]
+        XCTAssertFalse(Inventory.use(&full, at: 0).used)
+        XCTAssertEqual(full.inventory.count, 1)
+    }
+
+    func testFireAndCursePotionsNeedAnEnemy() {
+        var r = newRun()
+        r.inventory = [item("Fire Potion"), item("Curse Potion")]
+        XCTAssertFalse(Inventory.use(&r, at: 0).used)
+        Combat.begin(&r, against: shade)
+        let fire = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.enemy?.hp, 24 - 10)   // round(24 × 0.4) = 10
+        XCTAssertFalse(fire.enemyDied)
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.enemy?.currentAtk, 2...5)   // 4…9 halved
+    }
+
+    func testBuffsLastThreeTurns() {
+        var r = newRun()
+        r.inventory = [item("Berserker Draught")]
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.totalAtkBonus, 4)
+        Combat.begin(&r, against: Enemy(name: "Dummy", icon: "", hp: 999, maxHp: 999, atk: 1...1, gold: 0...0))
+        var dice = LoadedDice()
+        for _ in 0..<3 { _ = Combat.takeTurn(&r, .defend, dice: &dice) }
+        XCTAssertEqual(r.totalAtkBonus, 0)
+    }
+
+    func testEquipWeaponAndArmor() {
+        var r = newRun()
+        r.inventory = [item("Battle Axe"), item("Chain Mail")]
+        _ = Inventory.equip(&r, at: 0)
+        XCTAssertEqual(r.weaponBonus, 10)   // (7 + 13) / 2
+        _ = Inventory.equip(&r, at: 0)
+        XCTAssertEqual(r.totalDef, 3 + 5)
+        XCTAssertTrue(r.inventory.isEmpty)
+        r.inventory = [item("Iron Sword")]
+        _ = Inventory.equip(&r, at: 0)
+        XCTAssertEqual(r.inventory.map(\.name), ["Battle Axe"])
+    }
+
+    func testFleeWithSwiftPotionAndFailedFleeGetsCountered() {
+        var r = newRun()
+        Combat.begin(&r, against: shade)
+        r.swiftTurns = 2
+        var d = LoadedDice()
+        XCTAssertTrue(Combat.takeTurn(&r, .flee, dice: &d).fled)
+        XCTAssertNil(r.enemy)
+
+        var r2 = newRun()
+        Combat.begin(&r2, against: shade)
+        var d2 = LoadedDice(rolls: [5, 9], chances: [false])
+        let res = Combat.takeTurn(&r2, .flee, dice: &d2)
+        XCTAssertFalse(res.fled)
+        XCTAssertEqual(res.enemyDamage, 6)
+    }
+
+    func testBossPhaseSkipsCounterAndHitsHarder() {
+        var r = newRun("Wizard")
+        Combat.begin(&r, against: Enemy.spawnBoss(Bestiary.crypt.bosses[0], playerLevel: 1, playerMaxAtk: 24))
+        var d = LoadedDice(rolls: [24], chances: [true])   // crit: round(24 × 1.8) = 43 → 77 HP left
+        let res = Combat.takeTurn(&r, .attack, dice: &d)
+        XCTAssertEqual(r.enemy?.hp, 77)
+        XCTAssertNotNil(res.bossPhaseMessage)
+        XCTAssertNil(res.enemyDamage)
+        XCTAssertEqual(r.enemy?.atk, 19...31)   // 15…25 × 1.25
+        XCTAssertEqual(r.bossPhase, 2)
+    }
+
+    func testFirstSearchAlwaysFindsAndSecondIsBlocked() {
+        var r = newRun()
+        let w = Wallet(store: MemoryStore())
+        var d = SeededDice(seed: 9)
+        let first = Inventory.search(&r, dice: &d, wallet: w)
+        XCTAssertTrue(first.item != nil || first.gold > 0)
+        XCTAssertTrue(Inventory.search(&r, dice: &d, wallet: w).message.hasPrefix("You have already searched"))
+    }
+
+    func testTrapsAndScholar() {
+        var r = newRun()
+        r.firstSearchDone = true
+        var d = LoadedDice(rolls: [1], chances: [false, true])   // no find, trap: Bone Spike
+        let res = Inventory.search(&r, dice: &d, wallet: Wallet(store: MemoryStore()))
+        XCTAssertEqual(res.trap, "Bone Spike")
+        XCTAssertEqual(r.hp, 100)
+
+        var s = newRun(prof: "Scholar")
+        s.firstSearchDone = true
+        var d2 = LoadedDice(chances: [false, true])
+        XCTAssertEqual(Inventory.search(&s, dice: &d2, wallet: Wallet(store: MemoryStore())).trap, "avoided")
+        XCTAssertEqual(s.hp, 120)
+    }
+
+    func testShopNightDiscountAndBuying() {
+        let potion = item("Health Potion")
+        XCTAssertEqual(Inventory.price(potion, hour: 12), 12)
+        XCTAssertEqual(Inventory.price(potion, hour: 22), 9)
+        var r = newRun()
+        let w = Wallet(store: MemoryStore())
+        w.addGold(22)
+        r.gold = 22
+        var entry = Inventory.ShopItem(id: 0, item: item("Greater Potion"))
+        XCTAssertTrue(Inventory.buy(&r, &entry, wallet: w, hour: 12).used)
+        XCTAssertEqual(w.gold, 0)
+        XCTAssertTrue(entry.sold)
+        var axe = Inventory.ShopItem(id: 1, item: item("Battle Axe"))
+        XCTAssertFalse(Inventory.buy(&r, &axe, wallet: w, hour: 12).used)
+        var d = SeededDice(seed: 3)
+        XCTAssertEqual(Inventory.shopStock(for: r, dice: &d).count, 4)
+    }
+
+    func testLuckPotionFortuneAndPhoenix() {
+        var r = newRun()
+        r.luckKills = 1
+        r.runeFortune = true
+        var d = LoadedDice(rolls: [4])
+        let reward = Progression.rewardKill(&r, shade, dice: &d, wallet: Wallet(store: MemoryStore()))
+        XCTAssertEqual(reward.gold, 10)   // round(4 × 1.25) = 5, doubled
+        XCTAssertEqual(r.luckKills, 0)
+
+        var p = newRun()
+        p.inventory = [item("Phoenix Feather")]
+        p.hp = 0
+        XCTAssertEqual(Progression.handleDeath(&p), .phoenix)
+        XCTAssertEqual(p.hp, 36)
+        XCTAssertEqual(p.lives, 3)
+    }
+
+    func testRevealQueuesRooms() {
+        var r = newRun()
+        var d = SeededDice(seed: 5)
+        _ = Inventory.reveal(&r, dice: &d)
+        let shown = r.upcomingRooms
+        XCTAssertEqual(shown.count, 3)
+        XCTAssertEqual(Rooms.next(&r, dice: &d), shown[0])
+        XCTAssertEqual(r.upcomingRooms.count, 2)
+    }
+
+    func testRunSavesAndLoads() throws {
+        var r = newRun()
+        r.inventory = [item("Health Potion")]
+        Combat.begin(&r, against: shade)
+        let data = try JSONEncoder().encode(r)
+        let back = try JSONDecoder().decode(Run.self, from: data)
+        XCTAssertEqual(back.inventory, r.inventory)
+        XCTAssertEqual(back.enemy, r.enemy)
+        XCTAssertEqual(back.hp, r.hp)
+    }
+
+    func testGlobalInventoryKeepsGearAndKeepTypes() {
+        let store = MemoryStore()
+        let g = GlobalInventory(store: store)
+        var r = newRun()
+        r.inventory = [item("Health Potion"), item("Rune of Strength"), item("Battle Axe"), item("Battle Axe")]
+        r.equippedArmor = item("Chain Mail")
+        g.keep(from: r)
+        XCTAssertEqual(g.items.map(\.name), ["Rune of Strength", "Battle Axe"])
+        var next = newRun()
+        g.load(into: &next)
+        XCTAssertEqual(next.equippedArmor?.name, "Chain Mail")
+        XCTAssertEqual(next.inventory.count, 2)
+    }
+
+    func testLoadsWebItemWithUnknownFields() throws {
+        let json = #"{"name":"Cursed Blade","icon":"🗡️","type":"weapon","atkBase":[9,15],"level":3,"rarityEffect":"cursed","gold":[2,5]}"#
+        let it = try JSONDecoder().decode(Item.self, from: Data(json.utf8))
+        XCTAssertEqual(it.weaponAttack, 14...20)   // +round(2 × 2.5) = 5
+        XCTAssertEqual(it.extra["rarityEffect"], .string("cursed"))
+        let again = try JSONDecoder().decode(Item.self, from: JSONEncoder().encode(it))
+        XCTAssertEqual(again, it)
+    }
+}
+
+final class GameContentTests: XCTestCase {
+    func testEveryDungeonHasItsTables() {
+        for d in GameData.dungeons {
+            let e = Bestiary.enemies(for: d)
+            XCTAssertFalse(e.t1.isEmpty, d)
+            XCTAssertFalse(e.t2.isEmpty, d)
+            XCTAssertFalse(e.t3.isEmpty, d)
+            XCTAssertFalse(e.bosses.isEmpty, d)
+            XCTAssertFalse(ItemTables.loot(for: d).isEmpty, d)
+            XCTAssertGreaterThanOrEqual(ItemTables.shop(for: d).count, 4, d)
+            XCTAssertFalse(GameContent.shared.dungeon(d).rooms.isEmpty, d)
+            XCTAssertNotEqual(Rooms.floorName(1, dungeon: d), "Floor 1", d)
+        }
+        XCTAssertFalse(Bestiary.enemies(for: "Crypt of Malachar", difficulty: .nightmare).t1.isEmpty)
+    }
+
+    func testDungeonSpecificData() {
+        XCTAssertEqual(Bestiary.enemies(for: "The Ashbound Wastes").t1.first?.name, "Cinder Wraith")
+        let hound = Bestiary.enemies(for: "The Ashbound Wastes").t1.first { $0.name == "Cinder Hound" }!
+        XCTAssertEqual(hound.mechanics["burn"], .number(2))
+        XCTAssertEqual(Rooms.floorName(1, dungeon: "The Hollow"), "The Foyer")
+        XCTAssertEqual(Rooms.floorName(11, dungeon: "Crypt of Malachar"), "The Hollow Nave")
+        XCTAssertEqual(ItemTables.traps(for: "Frosthold Abyss").first?.name, "Ice Blast")
+    }
+
+    func testRoomDescriptionsDependOnDepth() {
+        var shallow = Run(character: PlayerCharacter(name: "R", cls: "Monk", race: "Elf", prof: "Thief",
+                                                     dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var dice = SeededDice(seed: 1)
+        let early = Set((0..<200).map { _ in Rooms.description(for: shallow, dice: &dice) })
+        shallow.floor = 9
+        let deep = Set((0..<200).map { _ in Rooms.description(for: shallow, dice: &dice) })
+        XCTAssertTrue(early.isDisjoint(with: deep))
+    }
+}

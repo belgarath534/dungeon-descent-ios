@@ -18,8 +18,8 @@ public enum Progression {
     }
 
     /// Like getEnemyTier(): anything not in tier 1, tier 2 or the bosses counts as tier 3.
-    public static func tier(of name: String, in dungeon: String) -> Tier {
-        let pool = Bestiary.enemies(for: dungeon)
+    public static func tier(of name: String, in dungeon: String, difficulty: GameData.Difficulty = .wanderer) -> Tier {
+        let pool = Bestiary.enemies(for: dungeon, difficulty: difficulty)
         if pool.t1.contains(where: { $0.name == name }) { return .t1 }
         if pool.t2.contains(where: { $0.name == name }) { return .t2 }
         if pool.bosses.contains(where: { $0.name == name }) { return .boss }
@@ -107,15 +107,24 @@ public enum Progression {
         if run.race == "Goblin" { g = jsRound(Double(g) * 1.25) }
         if run.graveRobberLoot { g = jsRound(Double(g) * 1.20) }
         if run.luckBonus != 0 { g = jsRound(Double(g) * (1 + run.luckBonus)) }
+        if run.runeFortune { g = jsRound(Double(g) * 1.25) }
+        var luckNote = ""
+        if run.luckKills > 0 {
+            g *= 2
+            run.luckKills -= 1
+            if run.luckKills == 0 { luckNote = " 🍀 Lucky Potion wore off." }
+        }
         run.gold += g
         wallet.addGold(g)
-        let xp = Progression.xp(for: tier(of: enemy.name, in: run.dungeon))
+        let xp = Progression.xp(for: tier(of: enemy.name, in: run.dungeon, difficulty: run.difficulty))
         let levels = gainXP(&run, xp)
         return KillReward(gold: g, xp: xp, levelsGained: levels,
-                          message: "\(enemy.name) is defeated! You gain \(g) gold and \(xp) XP.")
+                          message: "\(enemy.name) is defeated! You gain \(g) gold and \(xp) XP.\(luckNote)")
     }
 
     public enum DeathOutcome: Equatable, Sendable {
+        /// A Phoenix Feather burned instead; the fight goes on at 30% HP.
+        case phoenix
         /// Came back at 40% HP with this many lives left.
         case revived(livesLeft: Int)
         case runOver
@@ -124,10 +133,12 @@ public enum Progression {
     /// Loses a life. Revives at 40% HP if any are left. Hardcore and the
     /// cheat-death items and skills are not ported yet.
     public static func handleDeath(_ run: inout Run) -> DeathOutcome {
+        if Inventory.usePhoenixFeather(&run) { return .phoenix }
         run.lives = max(0, run.lives - 1)
         run.inCombat = false
         if run.lives <= 0 { return .runOver }
         run.hp = jsRound(Double(run.maxHp) * 0.4)
+        run.enemy = nil
         return .revived(livesLeft: run.lives)
     }
 }

@@ -49,6 +49,38 @@ final class GameModel: ObservableObject {
         roster.update(index, change)
         refresh()
     }
+
+    var globalInventory: GlobalInventory { GlobalInventory(store: store) }
+
+    // MARK: Saved runs
+    // A run in progress is saved after every action, so it survives iOS closing
+    // the app. Each character's run is kept under its creation time.
+
+    private func runKey(_ index: Int) -> String? {
+        guard characters.indices.contains(index) else { return nil }
+        return "dd_swift_run_\(Int(characters[index].created))"
+    }
+
+    func savedRun(for index: Int) -> Run? {
+        guard let key = runKey(index), let s = store.getItem(key), let d = s.data(using: .utf8) else { return nil }
+        return try? JSONDecoder().decode(Run.self, from: d)
+    }
+
+    func saveRun(_ run: Run, for index: Int) {
+        guard let key = runKey(index), let d = try? JSONEncoder().encode(run),
+              let s = String(data: d, encoding: .utf8) else { return }
+        store.setItem(key, s)
+    }
+
+    func clearRun(for index: Int) {
+        guard let key = runKey(index) else { return }
+        store.removeItem(key)
+    }
+
+    func deleteCharacter(at index: Int) {
+        clearRun(for: index)
+        delete(at: index)
+    }
 }
 
 /// Spoken feedback and haptics.
