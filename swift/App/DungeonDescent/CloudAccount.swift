@@ -5,6 +5,7 @@ import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
 import GoogleSignIn
+import DungeonCore
 
 /// The account system (ACCOUNT SYSTEM — BETA): the same Firebase project,
 /// sign-in methods and cloud save as the web version, so one account and
