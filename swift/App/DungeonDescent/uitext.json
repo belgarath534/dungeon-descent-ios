@@ -387,5 +387,111 @@
    "Druid": "The Deep has its own ecosystem, ancient and complete. You walked through the middle of it and left it intact.",
    "Wizard": "The Leviathan is four thousand years old. Your arcane study took eleven minutes. You were thorough."
   }
+ },
+ "codex": {
+  "world": [
+   {
+    "id": "codex-w-crypt",
+    "title": "The Crypt of Malachar",
+    "icon": "💀",
+    "unlockHint": "Clear the Crypt of Malachar to unlock.",
+    "body": "Malachar was not always a name spoken in fear. Three centuries before the Descent, he was the most celebrated architect in the realm — a builder of cathedrals, bridges, and monuments. He built the Crypt himself. He built it for himself. He was not expecting to die in it.\n\nThe circumstances of his death remain disputed. Some say he sealed himself inside voluntarily, pursuing an experiment in necromantic preservation. Others say his apprentices locked him in after discovering what he had been doing to the bodies of the recently deceased. The Crypt remembers neither version. It only remembers that he is still there, somewhere in the lowest chamber, building things in the dark that no one has survived long enough to describe."
+   },
+   {
+    "id": "codex-w-ashbound",
+    "title": "The Ashbound Wastes",
+    "icon": "🔥",
+    "unlockHint": "Enter the Ashbound Wastes to unlock.",
+    "body": "The Wastes did not always burn. Travellers who have read the oldest maps describe the region as a grassland — unremarkable, flat, populated by farming villages with names nobody remembers anymore. The fire started on a Tuesday. Nobody knows who started it or why. What is known is that it has been burning for two hundred and forty years and shows no sign of stopping.\n\nThe fire has developed preferences over the centuries. It burns hotter in certain places. It spares certain structures. Three stone archways in the eastern Wastes have stood completely untouched since the fire began, surrounded on all sides by destruction. Nobody has ever explained why. The fire has been observed to move toward sounds. It is strongly recommended that you do not sing in the Wastes."
+   },
+   {
+    "id": "codex-w-frosthold",
+    "title": "The Frosthold Abyss",
+    "icon": "❄️",
+    "unlockHint": "Enter the Frosthold Abyss to unlock.",
+    "body": "The Abyss predates the cold. Geological surveys conducted by the Academy of Cartography — before the Academy of Cartography was destroyed in an unrelated incident — suggested the Abyss was originally a temperate cave system used as a trading post. The cold arrived approximately one hundred and sixty years ago and progressed downward at a rate of one floor per decade.\n\nThe current theory is that something at the bottom is generating the cold. Nobody has reached the bottom. The deepest confirmed descent on record is Floor 11, achieved by a Ranger named Isolde who left a note at that depth reading: \"it is watching me from below. it has been watching me since floor 4. i do not think it needs eyes to watch.\" Isolde did not return. The note is preserved in the Archive of the Descent, where it remains consistently colder than the surrounding documents."
+   },
+   {
+    "id": "codex-w-hollow",
+    "title": "The Hollow",
+    "icon": "👁️",
+    "unlockHint": "Enter The Hollow to unlock.",
+    "body": "The Hollow is not a dungeon in the conventional sense. It is a house. It has always been a house. The house is four storeys tall from the outside and considerably larger on the inside, which architects have described as \"structurally inadvisable\" and \"deeply upsetting.\"\n\nThe house was built by a woman named Edna Holloway approximately seventy years ago. She lived in it alone for forty years. Neighbours reported that she seemed content, if reclusive, and was occasionally seen in the garden tending to plants that bloomed in colours nobody had names for. When she died, the house did not stop. The lights stayed on. The garden kept blooming. Things inside the house kept moving furniture around. Whatever the house is grieving, it has been grieving it for thirty years, and it does not appear to be finished."
+   },
+   {
+    "id": "codex-w-mine",
+    "title": "The Mine — Before the Collapse",
+    "icon": "⛏️",
+    "unlockHint": "Reach depth 5 in the Mine to unlock.",
+    "body": "The Mine was a functioning operation for sixty years before the collapse. It produced iron, coal, and occasionally gold in quantities that made the owning company very wealthy and the workers comparatively less so. The Foreman — records list only his title, never his name — ran operations from a wooden office on the surface and was by most accounts a reasonable man who paid fair wages and maintained safety standards that were merely inadequate rather than negligently so.\n\nThe collapse happened on a Thursday morning. One hundred and twelve workers were underground at the time. Rescue operations continued for three weeks before being abandoned. The official cause of collapse was listed as \"structural failure due to over-excavation in the lower shafts.\" The company geologist who filed this report submitted his resignation the same day and moved to a different country. He never spoke about the Mine again. What the lower shafts were over-excavated toward was never recorded officially. The Mine remembers, though. The Mine always remembers."
+   },
+   {
+    "id": "codex-w-spire",
+    "title": "What the Spire Is",
+    "icon": "🗼",
+    "unlockHint": "Reach floor 10 of the Spire to unlock.",
+    "body": "Nobody built the Spire. This has been confirmed by every architectural survey ever conducted on it. The materials are not quarried stone. The mortar, where present, is not any compound identified in any known catalogue. The Spire simply exists, and has existed for longer than any human record.\n\nThe floors are not consistent. Floor 1 is approximately twelve feet high. Floor 47 is reportedly infinite in all horizontal directions, though no one has confirmed this personally and returned. Floor 100 contains a room with a chair, a table, and a cup of tea that is always warm. Nobody has ever seen who makes the tea. The chair faces away from every entrance simultaneously, which should be geometrically impossible and is.\n\nThe current leading theory among scholars is that the Spire is not a place but a question. What question it is asking has not yet been determined. Reaching the top may provide the answer. Nobody has reached the top."
+   },
+   {
+    "id": "codex-w-dddi",
+    "title": "The Department of Dungeon Descent Incorporated",
+    "icon": "📋",
+    "unlockHint": "Read 3 stories in the Chronicles to unlock.",
+    "body": "The Department of Dungeon Descent Incorporated was established on a date that has been redacted from all official records at the Department's own request. Its mandate, as stated in the Founding Charter, is \"the regulation, standardisation, and bureaucratic oversight of all dungeon-related activities, with particular attention to compliance, documentation, and the ongoing situation with Julio.\"\n\nThe Department has no physical address. Correspondence sent to its listed postal box is returned unopened with a stamp reading \"DELIVERED — RECIPIENT UNAVAILABLE.\" The Grand Overseer has never been seen. Deputy Director Hargrove has been seen, but only in reflective surfaces, and only when not directly observed.\n\nThe Department employs, at last count, four hundred and twelve staff members. Nobody has met more than three of them. Julio's employment status remains classified. The Department continues to issue compliance audits, mandatory certifications, and formal warnings to Dungeon Descent on a regular basis. The developer has read approximately none of them."
+   },
+   {
+    "id": "codex-w-void",
+    "title": "The Void and What Lives In It",
+    "icon": "🌑",
+    "unlockHint": "Collect 5 Void Fragments to unlock.",
+    "body": "The Void is not empty. This is the first thing you should understand. The word \"void\" was chosen by the first explorer to encounter it, a woman named Sera Voss, who used it in the technical sense of \"a space devoid of the expected\" rather than the colloquial sense of \"a space devoid of everything.\" Sera Voss was precise with language. She would be upset to know how her terminology has been misinterpreted.\n\nThe Void contains: structures of no identifiable architecture, sounds at frequencies that suggest language but in no known tongue, and entities. The entities do not appear to have consistent forms. They appear to have consistent intentions, though what those intentions are remains debated. They leave fragments when they pass through other planes of existence. These fragments retain a residue of whatever the Void is. Prolonged contact is not recommended. Brief contact is merely ill-advised. The fragments are, however, extraordinarily beautiful, which is believed to be intentional on the part of whatever leaves them."
+   }
+  ],
+  "enemy": [
+   {
+    "id": "codex-e-skeletons",
+    "title": "On Skeletons",
+    "icon": "💀",
+    "unlockHint": "Defeat 10 Skeletons to unlock.",
+    "body": "Skeletons are not animated by malice. This is a common misconception. They are animated by habit. The bodies remember what they were doing when they died and continue doing it, minus the parts that required flesh, which turns out to be most parts.\n\nA Skeleton that was a guard continues to guard. A Skeleton that was a soldier continues to soldier. The tragedy of the Skeleton is not that it attacks you — it is that it does not know it is doing so. It is simply following the last instructions it received, approximately several centuries ago, from a commanding officer who has long since ceased to have opinions about anything.\n\nThe best way to defeat a Skeleton is quickly. The second best way is quietly. There is no third way. The Skeleton does not get tired, does not feel pain, and does not stop. It simply continues. This is both its greatest strength and the saddest thing about it."
+   },
+   {
+    "id": "codex-e-void-wraith",
+    "title": "The Void Wraith — A Study",
+    "icon": "🌑",
+    "unlockHint": "Defeat a Void Wraith to unlock.",
+    "body": "The Void Wraith is not from here. This is detectable by anyone with functioning senses within approximately thirty feet of one, as the surrounding air acquires qualities that air is not supposed to have. It becomes thicker. It becomes darker, even in full light. It becomes colder in a way that bypasses temperature and affects something closer to memory.\n\nThe Wraith itself is what remains of something that spent too long in the Void and forgot what it was before. The form it currently holds — the darkness, the trailing edges, the eyes that appear in positions that eyes should not be — is not its original form. Its original form is not on record. The Void Wraith does not remember it either. It remembers the Void. It remembers the cold. It remembers something it wants to return to, though it cannot articulate what.\n\nDefeating a Void Wraith does not destroy it. It disperses it. The components return to the Void. Whether the Wraith reconstitutes there is unknown. It seems likely."
+   },
+   {
+    "id": "codex-e-mine-bosses",
+    "title": "What Lives in the Deep Mine",
+    "icon": "⛰️",
+    "unlockHint": "Reach depth 10 in the Mine to unlock.",
+    "body": "The things at the bottom of the Mine did not arrive there. They were already there when the Mine was dug. The miners found them by accident, which is the usual way of finding things that do not want to be found.\n\nThe Foreman's Ghost is the most accessible of them — a human residue, something that was once a man and retains enough of that shape to be recognizable. Below it, the things become less human and more something else. The Cave King is not a king in any sense that word was intended to carry. It claimed kingship over the dark the way darkness claims anything — by simply being there and refusing to leave.\n\nThe Deep Hunger has no origin story that any scholar has been able to reconstruct. It exists at depth 30 the way gravity exists — as a condition of the environment rather than a presence within it. It is hungry in the way that absence is hungry: completely, quietly, and without satisfaction.\n\nThe Mine's Heart has been beating since before the mine existed. The miners who first heard it thought it was a geological phenomenon. It is not a geological phenomenon. It is aware of you. It has been aware of you since you entered the mine. It is simply waiting to see how far down you are willing to go."
+   }
+  ],
+  "artifacts": [
+   {
+    "id": "codex-a-music-box",
+    "title": "The Music Box",
+    "icon": "🎵",
+    "unlockHint": "Find a Music Box to unlock.",
+    "body": "The Music Box was manufactured by a craftsman whose name is stamped on the base in letters too small to read without magnification. It plays one melody. The melody has no known composer. Music scholars who have heard it describe it as \"familiar in a way that cannot be explained\" and \"something you have heard before, though you have not.\"\n\nThe Box was found in The Hollow, in a room that did not appear on any floor plan and has not been found again since. Whether the Box belonged to Edna Holloway is unknown. Whether the melody is the thing the house is grieving is a question that several scholars have asked and none have been willing to answer."
+   },
+   {
+    "id": "codex-a-void-fragments",
+    "title": "Void Fragments",
+    "icon": "🔮",
+    "unlockHint": "Collect a Void Fragment to unlock.",
+    "body": "Void Fragments are pieces of something that passed through. The something is never present when the fragment is found — only the residue it left behind. The fragments are dark in the way that space between stars is dark: not an absence of light but a presence of something else.\n\nThey are warm to the touch. This should not be possible given what they are. The warmth does not originate from any detectable source within the fragment. The leading theory is that the warmth is borrowed from wherever they came from, and that wherever they came from is considerably warmer than here.\n\nCollecting 25 Fragments reveals something. What it reveals has been described by the one person known to have collected all 25 as \"the truth,\" which is not a useful description. She declined to elaborate. She seemed, afterward, to be at peace with something she had not been at peace with before. She did not say what."
+   },
+   {
+    "id": "codex-a-guns",
+    "title": "Guns in the Dungeon — An Inquiry",
+    "icon": "🔫",
+    "unlockHint": "Acquire a gun to unlock.",
+    "body": "The presence of firearms in environments that predate gunpowder by several centuries has been a subject of significant academic debate. The dungeons were built — or grew, or arrived, depending on the dungeon — before any form of projectile weapon more sophisticated than a crossbow. And yet guns appear in them reliably: in chests, on defeated enemies, in rooms that have been sealed for centuries.\n\nThe current consensus, such as it is, is that the dungeons do not experience time in the conventional sense. A gun placed in the Crypt of Malachar in the present would, from the Crypt's perspective, have always been there. The Crypt is not confused by this. The Crypt does not experience confusion. The Crypt experiences something closer to patience.\n\nThe guns function normally. This is perhaps the strangest part. Whatever rules the dungeons operate under, they have decided that guns are acceptable. Nobody has asked why."
+   }
+  ]
  }
 }

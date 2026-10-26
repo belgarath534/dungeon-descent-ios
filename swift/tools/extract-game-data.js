@@ -152,6 +152,8 @@ const ui = {
   defeatQuotes: plain(grab('DEFEAT_QUOTES')),
   nightmareDefeatQuotes: plain(grab('NIGHTMARE_DEFEAT_QUOTES')),
   closingLines: plain(grab('CLOSING_LINES')),
+  // The Codex; each entry's unlock rule lives in CodexView.swift by id.
+  codex: { world: plain(grab('CODEX_WORLD')), enemy: plain(grab('CODEX_ENEMY')), artifacts: plain(grab('CODEX_ARTIFACTS')) },
 };
 const uiFile = path.join(root, 'swift', 'App', 'DungeonDescent', 'uitext.json');
 fs.writeFileSync(uiFile, JSON.stringify(ui, null, 1) + '\n');

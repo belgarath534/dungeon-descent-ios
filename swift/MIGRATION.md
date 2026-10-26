@@ -73,6 +73,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Dungeon unlocks | getUnlockedDungeons | ✅ |
 | Classes, races, professions, difficulties | CHARACTER CREATION | 🟡 Halfling, Goblin, Warden, Herbalist, Gravedigger, Pilgrim, Mercenary, Grave Robber done; other races not yet |
 | Run start stats | initDungeon | 🟡 equipment, coin upgrades and milestone buffs done; dream buffs and spirits not yet |
+| The Codex | CODEX_WORLD, CODEX_ENEMY, CODEX_ARTIFACTS | ✅ all 14 entries with the web version's unlock rules (Mine, Spire, Chronicles and Void entries unlock once those modes are ported) |
 | Mystery Coin Shop | COIN_UPGRADES, applyCoinUpgrades | ✅ all 26 upgrades. The Android-only Watch Ad box and the in-app coin purchases are left out. Ancient Knowledge (+15% XP) now works; the web version sold it and never applied it. Treasure Sense's gem is turned into gold right away, the way Swift handles every gem. When Death's Bargain kills the enemy, the kill counts for the bestiary and achievements; the web version left you alive at 0 HP. Bloodhound's Nose and Trapper's Kit do nothing until equipment drops and the Soul Trap are ported |
 | Crypt enemies and bosses, scaling | DUNGEON ENGINE | ✅ |
 | Other dungeons' enemy tables | DUNGEON ENGINE | ✅ from gamedata.json, including Nightmare enemies |

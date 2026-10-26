@@ -8,6 +8,14 @@ struct UIText: Decodable {
     let defeatQuotes: [String: [String]]
     let nightmareDefeatQuotes: [String]
     let closingLines: [String: [String: String]]
+    var codex: Codex? = nil
+
+    struct Codex: Decodable {
+        struct Entry: Decodable, Identifiable {
+            let id, title, icon, unlockHint, body: String
+        }
+        let world, enemy, artifacts: [Entry]
+    }
 
     static let shared: UIText = {
         guard let url = Bundle.main.url(forResource: "uitext", withExtension: "json"),
