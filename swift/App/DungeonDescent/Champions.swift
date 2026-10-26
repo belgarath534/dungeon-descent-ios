@@ -11,6 +11,7 @@ struct CharacterListView: View {
     @State private var sliderIndex = 0
     @State private var dialog: Dialog?
     @State private var pendingDelete: Int?
+    @State private var statsFor: Int?
 
     /// ov-confirm, reused by Play for New Game+ and resuming.
     struct Dialog {
@@ -92,6 +93,11 @@ struct CharacterListView: View {
             }
             if let d = dialog { confirmOverlay(d) }
             if let i = pendingDelete { deleteOverlay(i) }
+            if let i = statsFor, game.characters.indices.contains(i) {
+                // viewCharStats: the saved run if there is one, else a fresh look at the character.
+                let ch = game.characters[i]
+                StatsOverlay(run: game.savedRun(for: i) ?? Run(character: ch), deaths: ch.deaths) { statsFor = nil }
+            }
         }
         .onAppear {
             let n = game.characters.count
@@ -250,7 +256,7 @@ struct CharacterListView: View {
                 FlowRow(spacing: 6) {
                     charButton(playLabel, Theme.gold, Theme.goldDim) { play(i) }
                         .accessibilityLabel("\(playLabel) \(ch.name) Level \(level) \(ch.cls)")
-                    charButton("📊 Stats", Theme.textSecondary, Theme.borderDim) { notYet("Character stats") }
+                    charButton("📊 Stats", Theme.textSecondary, Theme.borderDim) { statsFor = i }
                         .accessibilityLabel("View stats for \(ch.name)")
                     charButton("📤 Export", Theme.textSecondary, Theme.borderDim) { notYet("Exporting a character code") }
                         .accessibilityLabel("Export \(ch.name)")

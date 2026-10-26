@@ -1,0 +1,391 @@
+{
+ "deathLines": {
+  "Crypt of Malachar": {
+   "early": [
+    "The Crypt was always going to win. It has had a thousand years of practice.",
+    "The dead here have seen this before. They are not impressed.",
+    "Malachar did not even notice. The Crypt is patient.",
+    "The bones on the floor shifted to make room. They have done this many times.",
+    "The silence returned before you finished falling."
+   ],
+   "mid": [
+    "You made it deeper than most. The Crypt acknowledges this by doing nothing.",
+    "The undead carry you to the entrance without ceremony. They have a system.",
+    "Floor {floor}. Malachar counted. He does not look up from his work.",
+    "You were close. The Crypt disagrees with your definition of close.",
+    "The torches burned on after you fell. They always do."
+   ],
+   "late": [
+    "Floor {floor}. The boss could hear your footsteps. It was ready.",
+    "You reached the deep Crypt. Almost no one does. That is the only comfort available.",
+    "The ancient dead watched you fall. They respected the effort. They will not remember your name.",
+    "So close. The Crypt has heard that before. It is unmoved."
+   ],
+   "boss": [
+    "Malachar has stood since the first age. You are not the first to challenge him. You are not the last.",
+    "The Undying King endures. You did not. This is the natural order of the Crypt.",
+    "Malachar returned to his throne. Your name was not added to his records."
+   ]
+  },
+  "The Ashbound Wastes": {
+   "early": [
+    "The fire did not notice you leave. It was busy.",
+    "The Wastes absorbed you. This is what they do.",
+    "Ash to ash. The Wastes appreciate the symmetry.",
+    "The heat was waiting for you. It waited until floor {floor}.",
+    "You burned. The Wastes continued burning. No difference was noted."
+   ],
+   "mid": [
+    "Floor {floor}. The Wastes have claimed stronger than you.",
+    "The fire has been burning for a thousand years. You lasted {floor} floors. The math is unkind.",
+    "Something in the Wastes made a sound that might have been a laugh. You will never know.",
+    "The ash settled over you. It settles over everything eventually."
+   ],
+   "late": [
+    "The Eternal Pyre was visible from where you fell. You almost reached it.",
+    "Floor {floor}. The heat at this depth breaks stone. You lasted longer than stone.",
+    "The oldest fire in the world watched you fall. It has watched everything fall."
+   ],
+   "boss": [
+    "The Eternal Pyre burns on. It has always burned. It will always burn. You did not change this.",
+    "The Ashen King rules still. The Wastes are unchanged. The fire did not mourn you.",
+    "You reached the source of the fire. The fire was not grateful."
+   ]
+  },
+  "Frosthold Abyss": {
+   "early": [
+    "The cold took you on floor {floor}. It takes everyone eventually.",
+    "The Abyss is patient. The cold is patient. You were not patient enough.",
+    "The ice sealed over the gap you left. The Abyss does not leave gaps.",
+    "The frozen dead watched you fall. They have been watching this place for centuries.",
+    "The cold did not hurry. It never hurries. It simply waits."
+   ],
+   "mid": [
+    "Floor {floor}. The cold gets heavier the deeper you go. You found that out.",
+    "The Abyss swallowed you quietly. It swallows everything quietly.",
+    "Something frozen and ancient noted your passing. Then returned to waiting.",
+    "The ice closed. The silence returned. Nothing changed in the Frosthold Abyss."
+   ],
+   "late": [
+    "So deep. The cold at floor {floor} is a different kind of cold. You know that now.",
+    "The Frozen King was one floor away. You almost reached the bottom of the world.",
+    "The Abyss acknowledges floor {floor}. It acknowledges nothing else."
+   ],
+   "boss": [
+    "The Eternal Winter endures. Winter always endures. Spring does not reach the Abyss.",
+    "The Frozen King has ruled since before the Abyss had a name. You did not end his reign.",
+    "The cold is permanent. Your run was not. The Abyss observes the difference."
+   ]
+  },
+  "The Sunken Archives": {
+   "early": [
+    "The Archives have recorded millions of deaths. Yours is entry {kills} this century.",
+    "The drowned scholars noted your passing. They file everything.",
+    "The water closed over floor {floor}. It closes over everything down here.",
+    "You are in the Archives now. The entry is brief. The filing system is meticulous.",
+    "The ink in the Archives never dries. Your name has been added. In the margin."
+   ],
+   "mid": [
+    "Floor {floor}. The Archives record this. They record everything.",
+    "A drowned librarian retrieved your belongings. They will be catalogued.",
+    "The Archives absorb everything that enters and does not leave. You are part of the collection now.",
+    "The water is very still at floor {floor}. You found out why."
+   ],
+   "late": [
+    "The restricted section was close. The Archives do not let anyone reach the restricted section.",
+    "Floor {floor}. The Head Archivist has seen stronger challengers. He has filed them all.",
+    "Whatever is in the deepest stacks of the Archives, you did not reach it. It is still there."
+   ],
+   "boss": [
+    "The Sunken Archives have stood since the world had a different shape. You did not reshape them.",
+    "The Head Archivist returns to his work. Your file has been sealed.",
+    "The Archives are patient. They have time. All the time in the world, at the bottom of the world."
+   ]
+  },
+  "The Hollow": {
+   "early": [
+    "The house was not finished with you on floor {floor}. The house is never finished.",
+    "Something in the Hollow smiled. You did not see it. You were already falling.",
+    "The candles burned on. They always burn in the Hollow. You just could not see them anymore.",
+    "The Hollow absorbed you quietly. It has practice.",
+    "A door closed somewhere in the house. You had nothing to do with it. The house just closes doors."
+   ],
+   "mid": [
+    "Floor {floor}. The Hollow had been watching since you arrived. It was not in a hurry.",
+    "The portraits in the hall all turned to face the same direction. Away from where you fell.",
+    "The music box played one note, then stopped. Then the Hollow went quiet.",
+    "Something in the house made a sound like breathing. Then it stopped. Then there was only you, falling.",
+    "The Hollow keeps what it takes. It has kept many things."
+   ],
+   "late": [
+    "So deep in the house. The rooms at floor {floor} have not had a living visitor in decades.",
+    "The Last Resident was one floor below. The house knew. The house was patient.",
+    "You could hear something at the bottom of the stairs. You almost found out what it was.",
+    "The Hollow gives floor {floor} to very few. It takes them all back eventually."
+   ],
+   "boss": [
+    "The House Itself endures. Houses outlast everything. They outlasted you.",
+    "The Last Resident has always been here. Will always be here. You were a visitor.",
+    "The Hollow is quiet again. It prefers quiet. It prefers to be alone with its dead."
+   ],
+   "medusa": [
+    "You met her eyes. The house was the last thing you saw. The Hollow has a new statue.",
+    "She did not mean to. She never means to. The Hollow has a new addition to its collection.",
+    "Stone. Cold. Still. The Hollow preferred you this way."
+   ],
+   "lord_phorcys": [
+    "Lord Phorcys found what he was looking for. It was not his daughter.",
+    "He was not angry. Just broken. You were simply in the way.",
+    "He has been walking the Hollow for years. He will keep walking."
+   ],
+   "weeping_child": [
+    "The child you woke is still crying somewhere in the Hollow. It will cry for a long time.",
+    "You found the child but could not comfort it. The Hollow noticed. The Hollow always notices.",
+    "The Weeping Child watched you fall. It has seen this before. Everyone falls eventually."
+   ],
+   "music_box": [
+    "The melody played to the empty room after you fell. Three ticks. Then silence.",
+    "The Music Box wound itself again. It always does. It played for no one.",
+    "The melody of the Music Box was the last thing you heard. It was not comforting."
+   ],
+   "oldest_guest": [
+    "The Oldest Guest has been here since before the house had a name. You were not the first. You will not be the last.",
+    "The Oldest Guest does not hurry. He has time. All the time in the world, in that house.",
+    "He was sitting in the same chair when you arrived. He will be sitting there long after."
+   ]
+  },
+  "The Whispering Forest": {
+   "early": [
+    "The Forest whispered your name on floor {floor}. You should not have stopped to listen.",
+    "The trees remember everything that happens between them. They will remember you.",
+    "Something in the undergrowth watched you fall. It had been watching since you entered.",
+    "The Forest is patient. It has been here longer than the paths through it.",
+    "The whispers were not warning you. They were describing you. Past tense."
+   ],
+   "mid": [
+    "Floor {floor}. The Forest had been narrowing the path since you arrived.",
+    "The canopy closed over where you fell. By morning no light will reach that spot.",
+    "The roots moved after. They always move after. The Forest prefers things tidy.",
+    "A bird called somewhere above. Then silence. The Forest went back to whispering.",
+    "The corruption was never the enemy. The Forest was always the enemy."
+   ],
+   "late": [
+    "This deep in the Forest the trees have names. They know yours now.",
+    "Floor {floor}. The witch's curse found you eventually. It finds everyone eventually.",
+    "The path closed behind you weeks ago. You just did not notice until now.",
+    "Something ancient in the wood exhaled. It had been holding its breath since you entered."
+   ],
+   "boss": [
+    "The Forest endures. It was here before the witch. It will be here after you.",
+    "Seraphine does not die. She waits. She has been waiting longer than the Forest has had a name.",
+    "The Corrupter was never an enemy you could fight. It is the Forest. And the Forest won."
+   ]
+  },
+  "The Infernal Descent": {
+   "early": [
+    "The void on floor {floor} had been waiting for something to fill it. It found you.",
+    "The Descent swallowed you quietly. It has had practice.",
+    "The darkness here is not an absence of light. It is a substance. You fell into it.",
+    "Something in the void noted your passing. It did not care. Nothing here cares.",
+    "The Descent goes deeper. You simply stopped going with it."
+   ],
+   "mid": [
+    "Floor {floor}. The void gets heavier the further down you go. You found the weight of it.",
+    "The things that live here do not sleep. They watched you fall without expression.",
+    "The Descent did not notice you leave. It does not notice anything. It simply is.",
+    "The darkness closed over where you had been standing. Perfectly.",
+    "You lasted longer than most. The void has seen many. It will see many more."
+   ],
+   "late": [
+    "This deep in the Descent the void has texture. You fell through several layers of it.",
+    "Floor {floor}. The Architect was one floor below. It knew you were coming.",
+    "Something in the dark exhaled. Whether in hunger or satisfaction, there was no way to know.",
+    "The Descent keeps going below where you fell. It keeps going for a very long time."
+   ],
+   "boss": [
+    "The Architect built this place. It is still building. You were never more than material.",
+    "The Hard Void has existed since before the concept of light. You were a brief interruption.",
+    "The void reasserted itself. It always does. It is very patient about these things."
+   ]
+  },
+  "The Abyssal Deep": {
+   "early": [
+    "The water on floor {floor} closed over you without a sound. The Deep does not make speeches.",
+    "The pressure down here changes things. It changed you. Permanently.",
+    "Something vast moved in the water below where you fell. It did not stop moving.",
+    "The Deep has been swallowing things since before the surface existed. You were not exceptional.",
+    "The current took you. The current takes everything eventually."
+   ],
+   "mid": [
+    "Floor {floor}. The light stopped reaching this far down a long time ago.",
+    "The creatures of the Deep watched without eyes. They sense pressure. They sensed you stop.",
+    "The water here is cold in a way that is not about temperature. You found that out.",
+    "The Leviathan turned, somewhere below. It felt the ripple of your falling.",
+    "The Deep is very quiet now. It was quiet before you arrived. It is quiet again."
+   ],
+   "late": [
+    "This close to the bottom. The pressure is not something you survive. Most of the time.",
+    "Floor {floor}. The Leviathan was one floor below. Four thousand years old and patient.",
+    "The void at the bottom of the ocean is different from other voids. Wetter. You found out.",
+    "Something ancient in the Deep exhaled. Bubbles rose past where you fell. They made it to the surface."
+   ],
+   "boss": [
+    "The Leviathan is four thousand years old. It has outlasted everything that has tried to end it. Including you.",
+    "The Deep reclaimed you. It reclaims everything. The ocean is patient in the way that only oceans can be.",
+    "The Leviathan sank back into the abyss. It will be there when the next one comes. It is always there."
+   ]
+  }
+ },
+ "defeatQuotes": {
+  "Crypt of Malachar": [
+   "The Crypt does not mourn you. It simply continues.",
+   "Malachar has waited a thousand years. He can wait a little longer.",
+   "Your bones will keep the others company.",
+   "The silence returned before you finished falling.",
+   "You lasted longer than most. That is not a compliment."
+  ],
+  "The Ashbound Wastes": [
+   "The fire noticed you. Then it stopped noticing you.",
+   "Vel Ashara claimed another.",
+   "The ash is indifferent. The ash is always indifferent.",
+   "You burned. Everything here burns eventually.",
+   "The Wastes did not hate you. They simply consumed you."
+  ],
+  "Frosthold Abyss": [
+   "The cold does not celebrate. It simply remains.",
+   "The journals of this expedition will not return to the surface.",
+   "Whatever waits at the bottom heard you coming. Now it does not hear you.",
+   "The ice closes over the gap you left. As if you were never here.",
+   "The Abyss keeps everything it touches. Forever."
+  ]
+ },
+ "nightmareDefeatQuotes": [
+  "It does not remember you. Nothing here remembers anything.",
+  "You were here. Now you are part of it.",
+  "The nightmare does not end when you do.",
+  "It watched you the whole time. You never saw it.",
+  "Some doors, once opened, do not close from this side."
+ ],
+ "closingLines": {
+  "Crypt of Malachar": {
+   "Warrior": "You held the shield. The dead fell behind it. Malachar did not expect a wall.",
+   "Monk": "You moved like water through the Crypt. The dead could not touch what they could not follow.",
+   "Assassin": "The Crypt never saw you coming. Neither did Malachar.",
+   "Paladin": "The divine light you carried was the first light the Crypt had seen in a thousand years.",
+   "Naturalist": "Life followed you through the Crypt. The dead were not prepared for that.",
+   "Sorcerer": "The Crypt is made of old magic. Yours was newer. Yours was louder.",
+   "Necromancer": "You spoke the language of this place fluently. Malachar did not appreciate the accent.",
+   "Berserker": "The Crypt tried to break you. You broke it first.",
+   "Bard": "You sang in the Crypt. The dead listened. Then they stopped moving.",
+   "Alchemist": "You turned the Crypt's own rot against it. Elegant, in a way.",
+   "BloodKnight": "Blood answered blood in the Crypt. Yours was the louder conversation.",
+   "Druid": "You brought something living into a place that forgot what living meant.",
+   "Wizard": "The Crypt runs on death magic that is centuries old. Your arcane study found the seams. You pulled them apart."
+  },
+  "The Ashbound Wastes": {
+   "Warrior": "The Wastes burned. You did not. That is the whole story.",
+   "Monk": "You found stillness in the Wastes. The fire could not reach what was already calm.",
+   "Assassin": "The Wastes saw everything. Somehow you still found shadows.",
+   "Paladin": "Your faith burned hotter than the Wastes. The Pyre could not compete.",
+   "Naturalist": "You found life in a place that incinerated it. That is not supposed to be possible.",
+   "Sorcerer": "You met fire with fire. Yours was better fire.",
+   "Necromancer": "Even the ash listened to you. The dead here were just waiting for direction.",
+   "Berserker": "The Wastes tried to make you rage. You were already raging. You won.",
+   "Bard": "You sang in the fire. The Wastes had never heard music before. They did not survive it.",
+   "Alchemist": "You turned the fire into something useful. That is disgusting and impressive.",
+   "BloodKnight": "You bled in the Wastes. The Wastes bled back. You had more to give.",
+   "Druid": "After you left, something small and green grew in the ash. That has never happened before.",
+   "Wizard": "The fire here is ancient and specific. You studied it. You named it. Then you ended it."
+  },
+  "Frosthold Abyss": {
+   "Warrior": "The cold tried to stop you. You stopped it instead.",
+   "Monk": "You found warmth inside yourself in the coldest place in the world.",
+   "Assassin": "The Abyss watches everything. You moved anyway. Fast enough.",
+   "Paladin": "The cold cannot touch what the divine has already claimed.",
+   "Naturalist": "The Abyss had never seen warmth before you arrived. It has now.",
+   "Sorcerer": "The Abyss is old cold magic. You brought new hot magic. The math worked out.",
+   "Necromancer": "The frozen dead rose at your command. They were glad to move again.",
+   "Berserker": "You were angrier than the cold. The cold backed down.",
+   "Bard": "The Abyss has been silent forever. Not anymore.",
+   "Alchemist": "You melted the Abyss with science. That is technically what happened.",
+   "BloodKnight": "Your blood ran warm in the Abyss. It is still warm. You kept it.",
+   "Druid": "Spring is coming to the Frosthold Abyss. You started it.",
+   "Wizard": "The Abyss is the purest cold you have ever studied. Your notes filled sixteen pages. Then you destroyed it."
+  },
+  "The Sunken Archives": {
+   "Warrior": "The Archives recorded everything. Including you. The entry is complimentary.",
+   "Monk": "You read the Archives without disturbing a single page. The librarians would approve.",
+   "Assassin": "The Archives catalogued millions of deaths. They were not prepared to catalogue their own.",
+   "Paladin": "The divine light you carried dried the Archives out. First time in centuries.",
+   "Naturalist": "You found things living in the Archives that the scholars missed. They were important.",
+   "Sorcerer": "The Archives contained spells older than language. You improved on several.",
+   "Necromancer": "The drowned scholars rose to help you. Professional courtesy.",
+   "Berserker": "You went through the Archives like water. Fast water. Loud water.",
+   "Bard": "You are in the Archives now. Chapter twelve. The title is flattering.",
+   "Alchemist": "You extracted something from the Archives that was not supposed to be extractable.",
+   "BloodKnight": "The Archives recorded your bloodline. It is impressive. Do not ask how they know.",
+   "Druid": "The waterlogged plants in the Archives have started growing again. You did that.",
+   "Wizard": "The Archives held more arcane knowledge than any library above the water. You memorized most of it. You destroyed the rest."
+  },
+  "The Hollow": {
+   "Warrior": "The Hollow tried to break you with silence. You were louder.",
+   "Monk": "The Hollow is full of echoes. You left only one. Your footsteps leaving.",
+   "Assassin": "The house watched. You were faster than what it was watching for.",
+   "Paladin": "The Hollow had not felt holy light in a very long time. It remembered. It feared.",
+   "Naturalist": "Something alive survived the Hollow. You. And one or two things that followed you out.",
+   "Sorcerer": "The Hollow runs on old grief. Your magic ran on something newer. It won.",
+   "Necromancer": "The dead in the Hollow were not expecting a colleague.",
+   "Berserker": "The Hollow is built on fear. You were not afraid. That was the only reason you survived.",
+   "Bard": "You sang in the Hollow. The house went quiet. You kept singing. It stayed quiet.",
+   "Alchemist": "You analyzed the Hollow. Filed a report. Left. Remarkable professional distance.",
+   "BloodKnight": "The Hollow feeds on what you carry. You carry more than it could consume.",
+   "Druid": "The Hollow had forgotten what growing things felt like. You reminded it.",
+   "Wizard": "The Hollow is grief made architecture. You studied it, named every room, and walked out the front door."
+  },
+  "The Whispering Forest": {
+   "Warrior": "The Forest whispered to you the whole way through. You did not listen. That is why you won.",
+   "Monk": "The Forest tried to root you in place. You moved anyway. Still and moving at once.",
+   "Assassin": "The Forest saw everything. You moved through its blind spots. There were exactly enough of them.",
+   "Paladin": "The divine light you carried kept the dark from the trees. The trees were grateful. So was everything else.",
+   "Naturalist": "The Forest recognized you. One living thing among many. It let you pass. Eventually.",
+   "Sorcerer": "The Forest is old magic and older grief. Your magic was newer. Louder. Less patient.",
+   "Necromancer": "The dead in the Forest had been waiting for orders. You gave them some.",
+   "Berserker": "The Forest tried to make you afraid of the dark. You set the dark on fire. Metaphorically.",
+   "Bard": "You sang back at the whispers. They went quiet. You kept singing.",
+   "Alchemist": "You identified thirty-seven new ingredients in the Forest. Professionally speaking, a very good run.",
+   "BloodKnight": "The Forest bleeds when you cut it. You made it bleed first.",
+   "Druid": "The Forest knew you. It did not expect you to know it back.",
+   "Wizard": "The Forest runs on whispered magic older than written language. You translated most of it. Then you ended it."
+  },
+  "The Infernal Descent": {
+   "Warrior": "The Descent threw everything at you. You hit everything back. That is the whole story.",
+   "Monk": "The void tried to fill you with noise. You were already empty. In the useful way.",
+   "Assassin": "The Descent watches for what moves. You moved between the watching. Fast enough.",
+   "Paladin": "The divine light held. All the way down. Even here.",
+   "Naturalist": "Nothing natural lives in the Descent. Until you.",
+   "Sorcerer": "The Descent is void magic with no memory of light. Your magic remembered. Loudly.",
+   "Necromancer": "The things that live in the Descent are not dead. They wish they were. You helped.",
+   "Berserker": "The Descent broke everyone who came before you. You broke the Descent.",
+   "Bard": "You sang in the void. The void had never heard singing before. It will not forget.",
+   "Alchemist": "You catalogued the Descent. Filed a complete report. The DDDI was very pleased.",
+   "BloodKnight": "The Descent feeds on what you fear. You fear nothing. It went hungry.",
+   "Druid": "Nothing grows in the Descent. Something does now.",
+   "Wizard": "The Descent is pure void magic, ancient and patient. You were neither. You won anyway."
+  },
+  "The Abyssal Deep": {
+   "Warrior": "The Deep tried to drown you in darkness. You held your breath longer than it expected.",
+   "Monk": "The pressure down here would crush stone. You moved through it like water.",
+   "Assassin": "The Deep is dark in every direction. You were darker. That is the advantage.",
+   "Paladin": "The divine light does not bend under pressure. Neither did you.",
+   "Naturalist": "The creatures of the Deep had never seen anything from the surface before. They will not forget.",
+   "Sorcerer": "The Deep has been generating its own magic since before the continents settled. You outspent it.",
+   "Necromancer": "The drowned dead of the Deep had been waiting a very long time. You gave them purpose.",
+   "Berserker": "The Deep is patient in the way that only very old things can be patient. You were not patient. You won.",
+   "Bard": "Sound moves differently this far down. Your voice carried anyway. The Leviathan listened.",
+   "Alchemist": "Seventeen unknown compounds. Four new reactions. One complete dungeon clear. Excellent run.",
+   "BloodKnight": "The pressure down here should have stopped your heart. It tried. You disagreed.",
+   "Druid": "The Deep has its own ecosystem, ancient and complete. You walked through the middle of it and left it intact.",
+   "Wizard": "The Leviathan is four thousand years old. Your arcane study took eleven minutes. You were thorough."
+  }
+ }
+}

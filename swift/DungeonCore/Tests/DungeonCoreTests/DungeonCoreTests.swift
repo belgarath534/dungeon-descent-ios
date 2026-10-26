@@ -1253,3 +1253,20 @@ final class SavedRunTests: XCTestCase {
     }
 }
 
+final class StashTests: XCTestCase {
+    func testDeathKeepsGearAndSingletonsOnce() {
+        let store = MemoryStore()
+        let stash = GlobalInventory(store: store)
+        let ch = PlayerCharacter(name: "Fay", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var r = Run(character: ch)
+        let sword = Item(name: "Iron Sword", icon: "🗡️", type: "weapon", desc: "")
+        let trap = Item(name: "Soul Trap", icon: "🪤", type: "soul-trap", desc: "")
+        let potion = Item(name: "Health Potion", icon: "🧪", type: "potion", desc: "", heal: 40)
+        r.inventory = [sword, sword, trap, trap, potion]
+        stash.keepOnDeath(from: r)
+        stash.keepOnDeath(from: r)
+        XCTAssertEqual(stash.items.map(\.name), ["Iron Sword", "Soul Trap"])
+    }
+}
+

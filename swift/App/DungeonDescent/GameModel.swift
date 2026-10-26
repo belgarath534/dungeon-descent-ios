@@ -170,6 +170,24 @@ final class GameModel: ObservableObject {
         delete(at: index)
     }
 
+    /// A run lost with all lives gone (showDefeat): The Graveyard gets an
+    /// entry and the run's gear and special items are kept.
+    func recordDeath(_ run: Run, killedBy: String) {
+        let c = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        let ch = characters.first { $0.name == run.name }
+        var journal = ""
+        if case .array(let a)? = ch?.extra["journal"], case .object(let o)? = a.first, case .string(let t)? = o["text"] { journal = t }
+        roster.addToGraveyard(.object([
+            "name": .string(run.name), "cls": .string(run.cls), "race": .string(run.race),
+            "level": .number(Double(ch?.persistLevel ?? run.level)),
+            "dungeon": .string(run.dungeon), "difficulty": .string(run.difficulty.rawValue),
+            "killedBy": .string(killedBy), "topFloor": .number(Double(run.floor)),
+            "journal": .string(journal),
+            "date": .string("\(c.month ?? 1)/\(c.day ?? 1)/\(c.year ?? 2026)"),
+        ]))
+        globalInventory.keepOnDeath(from: run)
+    }
+
     /// The player deleted the character: it goes to The Graveyard.
     func buryCharacter(at index: Int) {
         clearRun(for: index)

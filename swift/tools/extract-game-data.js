@@ -142,3 +142,15 @@ const file = path.join(root, 'swift', 'DungeonCore', 'Sources', 'DungeonCore', '
 fs.writeFileSync(file, JSON.stringify(out, null, 1) + '\n');
 const count = Object.values(out.dungeons).reduce((n, d) => n + d.enemies.t1.length + d.enemies.t2.length + d.enemies.t3.length + d.enemies.bosses.length, 0);
 console.log('Wrote ' + path.relative(root, file) + ': ' + Object.keys(out.dungeons).length + ' dungeons, ' + count + ' enemies and bosses.');
+
+// Text the dungeon screen shows: the death cinematic lines, defeat quotes and
+// the victory closing line for each dungeon and class.
+const ui = {
+  deathLines: plain(grab('DEATH_LINES')),
+  defeatQuotes: plain(grab('DEFEAT_QUOTES')),
+  nightmareDefeatQuotes: plain(grab('NIGHTMARE_DEFEAT_QUOTES')),
+  closingLines: plain(grab('CLOSING_LINES')),
+};
+const uiFile = path.join(root, 'swift', 'App', 'DungeonDescent', 'uitext.json');
+fs.writeFileSync(uiFile, JSON.stringify(ui, null, 1) + '\n');
+console.log('Wrote ' + path.relative(root, uiFile) + ': ' + Object.keys(ui.deathLines || {}).length + ' dungeons of death lines, ' + Object.keys(ui.closingLines || {}).length + ' of closing lines.');

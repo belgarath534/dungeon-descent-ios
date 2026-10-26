@@ -99,7 +99,8 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
-| Floor complete summary (kills, damage, best hit, gold) | showFloorCompleteScreen | ⬜ with the dungeon screen |
+| Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Not yet: Voice, Echo-locate, Blacksmith, Arcane Shop, Spell Book, Home, chat, selling |
+| Death: graveyard entry, gear kept, Classic level reset | showDefeat | ✅ |
 | Web look: main menu, Your Champions, Death Log, Forge Your Legend | screen-menu, screen-charlist, screen-deathlog, screen-creation | ✅ same order, text, VoiceOver labels and sliders; creation cards come from index.html through tools/extract-creation.py |
 | The Shadow World dungeon | SHADOW_ENEMIES | ⬜ |
 | Spirits, corruption, hunter, guide in play | STARTER_SPIRITS, corruption, hunterTurn, companion | ⬜ chosen at creation and saved, no effect in runs yet |

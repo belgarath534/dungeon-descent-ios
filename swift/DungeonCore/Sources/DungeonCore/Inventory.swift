@@ -359,6 +359,26 @@ public struct GlobalInventory {
         run.equippedArmor = equippedArmor
     }
 
+    /// Adds one item to the stash like addToGlobalInventory(): one of each
+    /// music player, enchanter, soul trap and skill orb, and gear unique by name.
+    public func add(_ item: Item) {
+        var inv = items
+        if ["music-player", "enchanter", "soul-trap", "skill-orb"].contains(item.type),
+           inv.contains(where: { $0.type == item.type }) { return }
+        if item.isWeapon || item.isArmor, inv.contains(where: { $0.type == item.type && $0.name == item.name }) { return }
+        inv.append(item)
+        save(inv)
+    }
+
+    /// What a run keeps when the hero dies (showDefeat): gear and the
+    /// enchanter, soul trap, music player and skill orb.
+    public func keepOnDeath(from run: Run) {
+        for item in run.inventory where item.isWeapon || item.isArmor
+            || ["enchanter", "soul-trap", "music-player", "skill-orb"].contains(item.type) {
+            add(item)
+        }
+    }
+
     /// Saves what a run keeps: gear and the keep-types, without duplicates.
     public func keep(from run: Run) {
         var seen = Set<String>()

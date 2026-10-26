@@ -177,6 +177,17 @@ public final class CharacterRoster {
         save()
     }
 
+    /// Adds an entry to The Graveyard ("dd_graveyard", newest first, 50 kept).
+    public func addToGraveyard(_ entry: JSONValue) {
+        var list: [JSONValue] = []
+        if let raw = store.getItem("dd_graveyard"), let d = raw.data(using: .utf8),
+           let old = try? JSONDecoder().decode([JSONValue].self, from: d) { list = old }
+        list.insert(entry, at: 0)
+        if let d = try? JSONEncoder().encode(Array(list.prefix(50))), let out = String(data: d, encoding: .utf8) {
+            store.setItem("dd_graveyard", out)
+        }
+    }
+
     /// Deleting a character from the list puts it in The Graveyard first
     /// ("dd_graveyard", newest first, 50 kept), like confirmDelete().
     public func bury(at index: Int, date: Date = Date()) {
@@ -206,13 +217,7 @@ public final class CharacterRoster {
             "journal": .string(journal),
             "date": .string("\(c.month ?? 1)/\(c.day ?? 1)/\(c.year ?? 2026)"),
         ])
-        var list: [JSONValue] = []
-        if let raw = store.getItem("dd_graveyard"), let d = raw.data(using: .utf8),
-           let old = try? JSONDecoder().decode([JSONValue].self, from: d) { list = old }
-        list.insert(entry, at: 0)
-        if let d = try? JSONEncoder().encode(Array(list.prefix(50))), let out = String(data: d, encoding: .utf8) {
-            store.setItem("dd_graveyard", out)
-        }
+        addToGraveyard(entry)
         remove(at: index)
     }
 

@@ -104,6 +104,10 @@ public struct Run: Codable, Sendable {
     public var startedAt = Date().timeIntervalSince1970
     public var diedThisRun = false
     public var usedPotion = false
+    /// This floor's numbers for the Floor Complete panel, and the run's.
+    public var floorStats = FloorStats()
+    public var bestHit = 0
+    public var potionsUsed = 0
     /// Floor 10's Elite Guardian has been beaten; the boss is next.
     public var guardianDone = false
     /// The character's origin, and its XP and per-level SP bonuses.
@@ -198,6 +202,17 @@ public struct Run: Codable, Sendable {
         default: break
         }
     }
+}
+
+/// What happened on the current floor (showFloorCompleteScreen).
+public struct FloorStats: Codable, Sendable, Equatable {
+    public var kills = 0
+    public var damageDealt = 0
+    public var damageTaken = 0
+    public var bestHit = 0
+    public var hpHealed = 0
+    public var goldStart = 0
+    public init(goldStart: Int = 0) { self.goldStart = goldStart }
 }
 
 /// Skill effects that last only for the current fight (reset when a new one starts).

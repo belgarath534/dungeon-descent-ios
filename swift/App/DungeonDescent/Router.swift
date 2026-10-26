@@ -46,8 +46,7 @@ struct RootView: View {
                 NavigationStack { CreateCharacterView() }.tint(Theme.gold)
             case .dungeon(let id, let resume):
                 if let i = game.characters.firstIndex(where: { $0.created == id }) {
-                    NavigationStack { RunView(game: game, characterIndex: i, resume: resume) }
-                        .tint(Theme.gold)
+                    DungeonView(game: game, characterIndex: i, resume: resume)
                         .id(router.runID)
                 } else {
                     CharacterListView()
