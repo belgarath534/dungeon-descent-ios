@@ -116,7 +116,7 @@ struct WebSettingsView: View {
     }
 
     private func open(_ id: String) {
-        guard ["audio", "accessibility", "gameplay", "general"].contains(id) else {
+        guard ["audio", "accessibility", "gameplay", "general", "account"].contains(id) else {
             Sound.sfx("sfx-select")
             let name = Self.categories.first { $0.id == id }?.name ?? id
             Feedback.announce("\(name) settings aren't in the Swift version yet. Coming soon.")
@@ -139,6 +139,7 @@ struct WebSettingsView: View {
         case "audio": audio
         case "accessibility": accessibility
         case "gameplay": gameplay
+        case "account": AccountPanel()
         default: general
         }
     }

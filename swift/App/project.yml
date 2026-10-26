@@ -18,6 +18,14 @@ settings:
 packages:
   DungeonCore:
     path: ../DungeonCore
+  # The web version's Firebase project (accounts, cloud saves and the online
+  # features), through Google's own iOS libraries.
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: 11.0.0
+  GoogleSignIn:
+    url: https://github.com/google/GoogleSignIn-iOS
+    from: 8.0.0
 targets:
   DungeonDescent:
     type: application
@@ -31,6 +39,12 @@ targets:
         buildPhase: resources
     dependencies:
       - package: DungeonCore
+      - package: Firebase
+        product: FirebaseAuth
+      - package: Firebase
+        product: FirebaseFirestore
+      - package: GoogleSignIn
+        product: GoogleSignIn
       - target: DDLiveActivity
     scheme: {}
     info:
@@ -51,6 +65,10 @@ targets:
           - CFBundleURLName: com.dungeon.descent
             CFBundleURLSchemes:
               - dungeondescent
+          # Google sign-in returns here (REVERSED_CLIENT_ID in GoogleService-Info.plist).
+          - CFBundleURLName: google
+            CFBundleURLSchemes:
+              - com.googleusercontent.apps.109323203666-sj667ngkft9jr7h85c5338bvllhl3hoq
         UILaunchScreen:
           UIColorName: LaunchBackground
         # The web version's Google fonts (OFL), bundled.
