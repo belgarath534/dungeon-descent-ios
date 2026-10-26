@@ -105,6 +105,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Gun crafting | GUN DEFINITIONS | ⬜ |
 | Boss Rush | BOSS RUSH ENGINE | ✅ with the personal leaderboard |
 | Daily Raid | RAID ENGINE | ✅ Normal and Hard, raid tiers, once a day. Skills without a raid rule now hit for normal damage (the web version charged SP and did nothing) |
+| PVP Arena (Multiplayer) | goToMultiplayer, mpCreateRoom, mpJoinRoom, mpAction, mpRematch | ✅ create or join a 4-character room, Ready, turn-based Attack/Heavy/Skill/Defend/Taunt, emotes, rematch and leaving, using the web version's pvp_rooms layout exactly so Swift and web players can fight each other. The opponent's moves are read out as they happen. Web bugs fixed: when your opponent left mid-battle you were told you lost (now you win); an opponent joining was announced as "wants a rematch"; skills could be used with 0 SP |
 | Tournament | TOURNAMENT_BOSSES, getTournamentSeason, tnAttack | ✅ the first 7 days of January, April, July and October: the season's boss, Attack/Heavy/Defend with phases, damage plus speed and survival bonuses, 5 Mystery Coins for a kill, the season best (dd_tournament) and the shared season leaderboard. Web bugs fixed: the leaderboard stored and showed players' real email addresses (Swift stores the leaderboard name and hides old emails), and from October the countdown to the next tournament was negative |
 | Daily Challenge | DAILY_CHALLENGES | ⬜ |
 | Achievements, trophies, Game Center | ACHIEVEMENTS, awardAchievement | ✅ all 115, same save keys and Game Center IDs |

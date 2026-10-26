@@ -36,7 +36,7 @@ struct MainMenuView: View {
 
     static let entries: [Entry] = [
         Entry(id: "multiplayer", text: "⚔️👥 Multiplayer", label: "PVP Arena, fight another player in real time turn based combat",
-              color: Color(hex: 0x88aaff), border: Color(hex: 0x4466ff), beta: true),
+              color: Color(hex: 0x88aaff), border: Color(hex: 0x4466ff), beta: true, action: .go(.multiplayer)),
         Entry(id: "hideseek", text: "🕯️ Hide and Seek", label: "Hide and Seek, something is chasing you, find the way out",
               color: Color(hex: 0xbb88ee), border: Color(hex: 0x663399), beta: true),
         Entry(id: "leo", text: "🎬 Leo Audio Gaming", label: "Visit Leo Audio Gaming on YouTube, opens in new tab",
