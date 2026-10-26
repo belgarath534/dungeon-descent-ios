@@ -63,8 +63,13 @@ final class RunModel: ObservableObject {
     /// starting skill and the first floor's plan (initDungeon).
     private static func newRun(_ game: GameModel, _ index: Int) -> Run {
         var r = Run(character: game.characters[index], gold: game.wallet.gold)
+        // Saved items first: loading them replaces the bag, so everything
+        // else that adds items (seasonal shop, Coin Shop) goes in after.
+        game.globalInventory.load(into: &r)
         r.applyStartBonuses(wallet: game.wallet)
         r.applyMilestoneBuffs(game.milestoneEffects)
+        r.event = Events.active()
+        r.startNotes += Events.applyNextRun(&r, store: game.store)
         // Home: the active minion fights beside you, the bed is ready again,
         // and last night's dream buff applies once.
         r.minion = Home.activeMinion(game.store)
@@ -74,9 +79,6 @@ final class RunModel: ObservableObject {
             if let note = Home.applyDream(dream, to: &r) { r.startNotes.append("💤 " + note) }
             game.updateCharacter(index) { $0.extra["dream"] = nil }
         }
-        // Saved items first: loading them replaces the bag, so the Coin Shop's
-        // starting items (Trapper's Kit, Gambler's Spirit) go in after.
-        game.globalInventory.load(into: &r)
         var cd = SystemDice()
         CoinShop.apply(CoinShop.owned(game.store), to: &r, dice: &cd, wallet: game.wallet)
         game.achievements.trackGlobal("runsStarted")
@@ -531,6 +533,10 @@ final class RunModel: ObservableObject {
         let found = Spirits.kill(&r, dice: &d, log: &spiritLines)
         if found > 0 { game.wallet.addGold(found) }
         spiritLines.forEach { add($0) }
+        if let cur = Events.awardOnKill(r, store: game.store, dice: &d) {
+            add("\(cur.icon) +1 \(cur.name)")
+            said += " Plus one \(cur.name)."
+        }
         if e.isElite, let sp = Spirits.eliteReward(earned: earnedSpirits, dice: &d) {
             earnSpirit(sp.id)
             Sound.sfx("sfx-unlock")
@@ -1052,6 +1058,11 @@ final class RunModel: ObservableObject {
             }
         }
         if let line = Subclasses.onFloor(&r, dice: &d) { add(line) }
+        r.event = Events.active()
+        if r.xpBoostFloors > 0 {
+            r.xpBoostFloors -= 1
+            if r.xpBoostFloors == 0 { add("Your XP boost has worn off.") }
+        }
         // Warm Blood (Coin Shop): 1 HP on each new floor.
         if r.has("cu-warm-blood") && r.hp > 0 { r.hp = min(r.maxHp, r.hp + 1) }
         r.hpAtFloorStart = r.hp

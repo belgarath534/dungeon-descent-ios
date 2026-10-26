@@ -205,3 +205,43 @@ console.log('Wrote ' + path.relative(root, uiFile) + ': ' + Object.keys(ui.death
   fs.writeFileSync(f, JSON.stringify(chronicles, null, 1) + '\n');
   console.log('Wrote ' + path.relative(root, f) + ': ' + lore.length + ' lore sections, ' + chronicles.stories.length + ' stories, ' + chronicles.voidChronicles.length + ' void chronicles, ' + chronicles.music.length + ' tracks.');
 }
+
+// Seasonal events: each event's exclusive enemies, the seasonal shops and the
+// Events screen's list. The shop items' effects live in Events.swift by id.
+{
+  const shopItem = i => ({ id: i.id, name: i.name, icon: i.icon, cost: i.cost, desc: i.desc });
+  const list = (() => {
+    const fn = src.indexOf('function renderEventsScreen');
+    const i = src.indexOf('var events = [', fn);
+    let depth = 0, j = i + 'var events = '.length, quote = null;
+    for (; j < src.length; j++) {
+      const c = src[j];
+      if (quote) { if (c === '\\') { j++; continue; } if (c === quote) quote = null; continue; }
+      if (c === "'" || c === '"' || c === '`') { quote = c; continue; }
+      if (c === '[') depth++;
+      else if (c === ']' && --depth === 0) break;
+    }
+    // Easter's dates are worked out in Swift; the stub only lets the list evaluate.
+    // eslint-disable-next-line no-unused-vars
+    const getEasterDate = () => new Date(2026, 3, 5);
+    return eval('(' + src.slice(i + 'var events = '.length, j + 1) + ')')
+      .map(e => ({ id: e.id, title: e.title, desc: e.desc, bonuses: e.bonuses, dates: e.id === 'easter' ? '' : e.dates }));
+  })();
+  const events = {
+    enemies: {
+      halloween: plain(grab('HALLOWEEN_ENEMIES')), christmas: plain(grab('CHRISTMAS_ENEMIES')),
+      thanksgiving: plain(grab('THANKSGIVING_ENEMIES')), july4: plain(grab('JULY4_ENEMIES')),
+      brazil: plain(grab('BRAZIL_ENEMIES')), valentines: plain(grab('VALENTINES_ENEMIES')),
+      stpatricks: plain(grab('STPATRICKS_ENEMIES')),
+    },
+    shops: {
+      demonCoins: grab('CURSE_SHOP_ITEMS').map(shopItem), christmasCookies: grab('SANTA_SHOP_ITEMS').map(shopItem),
+      libertyCoins: grab('LIBERTY_SHOP_ITEMS').map(shopItem), harvestTokens: grab('HARVEST_SHOP_ITEMS').map(shopItem),
+      shamrocks: grab('SHAMROCK_SHOP_ITEMS').map(shopItem), chocolate: grab('CHOCOLATE_SHOP_ITEMS').map(shopItem),
+    },
+    list,
+  };
+  const f = path.join(root, 'swift', 'DungeonCore', 'Sources', 'DungeonCore', 'Resources', 'events.json');
+  fs.writeFileSync(f, JSON.stringify(events, null, 1) + '\n');
+  console.log('Wrote ' + path.relative(root, f) + ': ' + list.length + ' events, ' + Object.values(events.enemies).reduce((n, e) => n + e.length, 0) + ' event enemies.');
+}

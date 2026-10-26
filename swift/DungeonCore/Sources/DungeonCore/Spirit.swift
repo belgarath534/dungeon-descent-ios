@@ -129,7 +129,7 @@ public enum Spirits {
         }
         var share = sp.strike
         if sp.id == "bone-hound" && Bestiary.undeadNames.contains(e.name) { share += 0.10 }
-        let dmg = jsRound(Double(base) * share)
+        let dmg = jsRound(Double(base) * share) * (run.spiritBoost ? 2 : 1)
         switch sp.id {
         case "thunder-moth" where dice.chance(0.20):
             e.stunTurns = max(e.stunTurns, 1)

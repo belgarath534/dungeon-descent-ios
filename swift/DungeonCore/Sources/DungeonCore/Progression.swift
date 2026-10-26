@@ -40,6 +40,8 @@ public enum Progression {
         // Ancient Knowledge: the web version sold it but never applied it.
         if run.has("cu-xp-boost") { amount = jsRound(Double(amount) * 1.15) }
         if run.backstoryXPBonus > 0 { amount = jsRound(Double(amount) * (1 + run.backstoryXPBonus)) }
+        if let ev = Events.bonuses(run.event), ev.xpMult != 1 { amount = jsRound(Double(amount) * ev.xpMult) }
+        if run.xpBoostFloors > 0 { amount = jsRound(Double(amount) * run.xpBoostMult) }
         run.xp += amount
         guard run.level < run.levelCap else { return 0 }
         var needed = xpNeeded(atLevel: run.level)
@@ -118,6 +120,8 @@ public enum Progression {
         if run.weaponEffect == "fortune" { g = jsRound(Double(g) * 1.25) }
         if run.has("cu-night-blessing") && CoinShop.isNightNow() { g = jsRound(Double(g) * 1.10) }
         if run.dreamGoldMult != 1 { g = jsRound(Double(g) * run.dreamGoldMult) }
+        // Event gold bonuses: the web version listed them but never paid them.
+        if let ev = Events.bonuses(run.event), ev.goldMult != 1 { g = jsRound(Double(g) * ev.goldMult) }
         if run.weaponEffect == "soulbound" { run.sp = min(run.maxSp, run.sp + 5) }
         var luckNote = ""
         if run.luckKills > 0 {

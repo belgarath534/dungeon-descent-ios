@@ -69,7 +69,7 @@ struct MainMenuView: View {
         Entry(id: "help", text: "❓ Help", label: "Help, full game manual and guide", action: .go(.help)),
         Entry(id: "records", text: "🏛️ Hall of Records", label: "Hall of Records, view your lifetime stats and claim milestone awards", action: .go(.records)),
         Entry(id: "highscore", text: "🏆 High Score", label: "High score, view your lifetime score and rank", action: .go(.highscore)),
-        Entry(id: "events", text: "🎃 Events", label: "Seasonal events, see active and upcoming events"),
+        Entry(id: "events", text: "🎃 Events", label: "Seasonal events, see active and upcoming events", action: .go(.events)),
         Entry(id: "credits", text: "📜 Credits", label: "Credits, see who made the game", action: .go(.credits)),
         Entry(id: "raid", text: "⚔️ Raid", label: "Raid, survive five waves of enemies for daily rewards", action: .go(.raid)),
         Entry(id: "settings", text: "⚙ Settings", label: "Settings, adjust music and sound", action: .go(.settings), separatorBefore: true),
@@ -189,11 +189,32 @@ struct MainMenuView: View {
                 .padding(.vertical, 4)
                 .accessibilityLabel("Your familiar — press to view its bond level")
                 .accessibilityValue(familiar)
+            // #seasonal-currency-display
+            if let cur = Events.current()?.currency {
+                let n = Events.currency(cur.key, store: game.store)
+                Text("\(cur.icon) \(n) \(cur.name)")
+                    .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xe0c080))
+                    .padding(.vertical, 4)
+            }
             Text("\"Not all who enter are lost — most are.\"")
                 .font(Theme.crimson(16, italic: true))
                 .foregroundStyle(Theme.ash)
                 .multilineTextAlignment(.center)
                 .padding(.top, 8)
+            // #menu-event-banner
+            let lines = Events.bannerLines()
+            if !lines.isEmpty {
+                VStack(spacing: 4) {
+                    ForEach(lines, id: \.self) { Text($0) }
+                }
+                .font(Theme.cinzel(11.2)).tracking(1.7).foregroundStyle(Theme.gold)
+                .multilineTextAlignment(.center)
+                .padding(.vertical, 6).padding(.horizontal, 16)
+                .frame(maxWidth: 320)
+                .overlay(Rectangle().stroke(Theme.goldDim))
+                .padding(.top, 8)
+                .accessibilityElement(children: .combine)
+            }
         }
     }
 
@@ -219,6 +240,12 @@ struct MainMenuView: View {
                 }
                 .buttonStyle(MenuButtonStyle(color: e.color, border: e.border))
                 .accessibilityLabel(e.label)
+                // #menu-btn-seasonal-shop: only while an event has a shop.
+                if e.id == "command", let cur = Events.current()?.currency {
+                    Button { router.goTo(.seasonalshop) } label: { Text(cur.shop) }
+                        .buttonStyle(MenuButtonStyle(color: Color(hex: 0xffaa44), border: Color(hex: 0xaa6600)))
+                        .accessibilityLabel("Open seasonal shop, \(cur.shop)")
+                }
             }
         }
         .accessibilityElement(children: .contain)

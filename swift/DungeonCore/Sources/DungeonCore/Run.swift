@@ -54,6 +54,14 @@ public struct Run: Codable, Sendable {
     public var beast = 0
     /// The spirit companion's id.
     public var spirit: String? = nil
+    /// The seasonal or weekly event running (getActiveEvent), set when the
+    /// run starts and on each new floor.
+    public var event: String? = nil
+    /// Seasonal shop boosts for this run.
+    public var xpBoostMult = 1.0
+    public var xpBoostFloors = 0
+    public var spiritBoost = false
+    public var sparkler = false
 
     public var potionMult: Double
     public var undeadRes: Bool

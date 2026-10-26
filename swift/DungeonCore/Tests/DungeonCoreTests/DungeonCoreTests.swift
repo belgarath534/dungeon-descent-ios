@@ -1890,3 +1890,63 @@ final class SpiritTests: XCTestCase {
         XCTAssertNil(Spirits.eliteReward(earned: Set(Spirits.eliteIds), dice: &dice))
     }
 }
+
+final class EventTests: XCTestCase {
+    func day(_ y: Int, _ m: Int, _ d: Int) -> Date {
+        Calendar(identifier: .gregorian).date(from: DateComponents(year: y, month: m, day: d, hour: 12))!
+    }
+
+    func testCalendar() {
+        XCTAssertEqual(Events.active(on: day(2026, 10, 26)), "halloween")
+        XCTAssertEqual(Events.active(on: day(2026, 11, 2)), "halloween")
+        XCTAssertEqual(Events.active(on: day(2026, 12, 3)), "christmas")
+        XCTAssertEqual(Events.active(on: day(2026, 11, 24)), "thanksgiving")
+        XCTAssertEqual(Events.active(on: day(2026, 4, 5)), "easter") // Easter Sunday 2026
+        XCTAssertEqual(Events.easter(2027).month, 3)
+        XCTAssertEqual(Events.easter(2027).day, 28)
+        XCTAssertEqual(Events.active(on: day(2026, 3, 13)), "friday13")
+        XCTAssertEqual(Events.active(on: day(2026, 7, 4)), "july4")
+        XCTAssertEqual(Events.daysLeft("halloween", from: day(2026, 10, 26)), 7)
+        XCTAssertEqual(Events.daysUntil("christmas", from: day(2026, 10, 26)), 36)
+        XCTAssertFalse(Events.bannerLines(on: day(2026, 10, 26)).isEmpty)
+    }
+
+    func testDataAndEnemies() {
+        XCTAssertEqual(Events.list.count, 16)
+        XCTAssertEqual(Events.enemies("halloween").count, 11) // the Pumpkin King is a boss
+        XCTAssertEqual(Events.shop("demonCoins").count, 5)
+    }
+
+    func testBonusesApplyInRuns() {
+        var r = Run(character: PlayerCharacter(name: "E", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.event = "xpweekend"
+        let xp = r.xp
+        Progression.gainXP(&r, 10)
+        XCTAssertEqual(r.xp - xp, 20)
+        r.event = "halloween"
+        var dice = SeededDice(seed: 3)
+        var seasonal = 0
+        for _ in 0..<200 where Combat.nextEnemy(for: r, dice: &dice).mechanics["seasonal"] != nil { seasonal += 1 }
+        XCTAssertTrue((20...70).contains(seasonal), "\(seasonal)")
+    }
+
+    func testShopAndNextRun() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        Events.addCurrency("demonCoins", 40, store: store)
+        let revival = Events.shop("demonCoins").first { $0.id == "demon-revival" }!
+        let brew = Events.shop("demonCoins").first { $0.id == "halloween-potion" }!
+        XCTAssertNotNil(Events.buy(revival, currency: "demonCoins", store: store, wallet: w))
+        XCTAssertNotNil(Events.buy(brew, currency: "demonCoins", store: store, wallet: w))
+        XCTAssertNil(Events.buy(revival, currency: "demonCoins", store: store, wallet: w)) // 2 left
+        XCTAssertEqual(Events.currency("demonCoins", store: store), 2)
+        var r = Run(character: PlayerCharacter(name: "E", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        let lives = r.lives
+        XCTAssertEqual(Events.applyNextRun(&r, store: store).count, 2)
+        XCTAssertEqual(r.lives, lives + 1)
+        XCTAssertTrue(r.inventory.contains { $0.name == "Pumpkin Brew" })
+        XCTAssertTrue(Events.applyNextRun(&r, store: store).isEmpty)
+    }
+}

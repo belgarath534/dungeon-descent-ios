@@ -56,9 +56,18 @@ public enum Combat {
         // 15% elite chance from floor 4 (enterRoom)
         let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(0.15)
         let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
+        if !elite, let seasonal = Events.seasonalEnemy(run, dice: &dice) { return seasonal }
         let t = pool[dice.roll(0...(pool.count - 1))]
-        return Enemy.spawn(t, floor: run.floor, playerLevel: run.level,
-                           ngPlusCount: ngCount(run), endless: run.difficulty == .endless)
+        var e = Enemy.spawn(t, floor: run.floor, playerLevel: run.level,
+                            ngPlusCount: ngCount(run), endless: run.difficulty == .endless)
+        // The event's enemy strength scales normal enemies too.
+        if !elite, let m = Events.bonuses(run.event)?.enemyMult, m != 1 {
+            e.hp = jsRound(Double(e.hp) * m)
+            e.maxHp = e.hp
+            let lo = jsRound(Double(e.atk.lowerBound) * m), hi = jsRound(Double(e.atk.upperBound) * m)
+            e.atk = lo...max(lo, hi)
+        }
+        return e
     }
 
     /// Floor 10's Elite Guardian before the boss (startEliteGauntlet): a tier 3
@@ -87,7 +96,11 @@ public enum Combat {
 
     /// Your attack roll for this turn: class range plus every bonus.
     static func attackRoll(_ run: Run, dice: inout some Dice) -> Int {
-        dice.roll(run.atk) + run.totalAtkBonus
+        var a = dice.roll(run.atk) + run.totalAtkBonus
+        // Blood Moon and the Liberty Shop's Sparkler.
+        if let ev = Events.bonuses(run.event), ev.atkBoost > 0 { a = jsRound(Double(a) * (1 + ev.atkBoost)) }
+        if run.sparkler { a = jsRound(Double(a) * 1.30) }
+        return a
     }
 
     /// Bonuses that apply to every hit you land: vulnerability and masteries.
@@ -456,6 +469,8 @@ public enum Combat {
         case "unbreakable": taken = min(taken, max(1, run.maxHp / 4))
         default: break
         }
+        // Blood Moon: you take 25% more (the web version never applied it).
+        if let ev = Events.bonuses(run.event), ev.takesMore > 0 { taken = jsRound(Double(taken) * (1 + ev.takesMore)) }
         let hpBefore = run.hp
         taken = Subclasses.incoming(&run, taken, dice: &dice, log: &log)
         if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) { return 0 }

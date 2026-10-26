@@ -129,7 +129,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
 | Quests, bounties, inbox | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
 | Spirits, companion, corruption, Hunter, Void, Medusa arc | … | ⬜ |
-| Seasonal events | SEASONAL EVENTS SYSTEM | ⬜ |
+| Seasonal events | getActiveEvent, getEventBonuses, renderEventsScreen, openSeasonalShop | ✅ all 16 seasonal and weekly events on their dates, their XP, gold and enemy strength, Blood Moon's harder hits both ways, 20% of enemies replaced by the event's own (56 of them, in events.json), seasonal currency from 30% of kills, the menu banner and currency, the Events screen and the six seasonal shops. Not yet: the event enemies' special moves (the Leprechaun stealing gold, the Cupid's Love Potion …), the Easter Bunny room, Friday the 13th's Black Box, the July 4th Fireworks Corner, the Cinco de Mayo weapon, Ambush Day ambushes, birthday music, and shop items that need systems not ported yet (titles, run modifiers, combat items) |
 | Subclasses | SUBCLASSES, showSubclassChoice, chooseSubclass | ✅ the level 5 choice for every class that has one (Berserker and Druid don't, in the web version either), its stat points, its passive and the name in the top bar. The seven spell passives (Firelord, Stormcaller, Void Born, Dark Arts, Time Lord, Pure Magic, Spell Weaver) give their stats and wait for spells. Ancient Blood's fire immunity has nothing to block yet |
 | Home system | HOME SYSTEM, MINION SYSTEM, HOME_DREAMS | ✅ buy the home (500g), bed (75g) and sleep every 5 rooms with a dream, the gold safe, skill upgrades to level 5, the Minions tab, and the Soul Trap combat button. Minions strike after you every round. Spirits, Forge, Alchemy, Vendor and Guns tabs say coming soon; Skill Orbs (upgrades passed on when a character dies) and the July 4th Fireworks Corner are not in yet |
 | Global chat, presence, leaderboards | GLOBAL CHAT SYSTEM … | ⬜ |
@@ -227,3 +227,12 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **Glacial Wolf and Frost Crown stacked defense forever.** Their +4 and +5 defense
   "at combat start" were added permanently every fight, so defense kept climbing all
   run. Swift gives the bonus for that fight only.
+- **Event gold bonuses were never paid.** Void Week (double gold), the Fourth of July,
+  St. Patrick's Day, Brazil, Valentine's Day, Cinco de Mayo, Ambush Day and Friday the
+  13th's gold change were shown on the menu and Events screen, but no code applied them.
+  Blood Moon's "+25% damage taken" was never applied either. Swift applies all of them.
+- **Most seasonal shop rewards vanished.** Demon Revival's bonus life, the XP boosts
+  (Potion of Darkness, Cookie of Knowledge, Independence Scroll, Feast of Knowledge),
+  the Elf Blessing and the Sparkler buff were saved for "your next run" but nothing ever
+  read them; potions bought from the menu went into a run that wasn't there. Swift
+  applies them when the next run starts, and potions go into that run's bag.

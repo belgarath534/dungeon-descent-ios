@@ -1,0 +1,1188 @@
+{
+ "enemies": {
+  "halloween": [
+   {
+    "name": "Jack Lantern",
+    "icon": "🎃",
+    "hp": 28,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     3,
+     7
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "The Scarecrow",
+    "icon": "🪆",
+    "hp": 32,
+    "atk": [
+     7,
+     13
+    ],
+    "gold": [
+     3,
+     7
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "Candy Wraith",
+    "icon": "🍬",
+    "hp": 20,
+    "atk": [
+     5,
+     11
+    ],
+    "gold": [
+     2,
+     5
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "The Pumpkin King",
+    "icon": "👑",
+    "hp": 80,
+    "atk": [
+     14,
+     22
+    ],
+    "gold": [
+     20,
+     35
+    ],
+    "seasonal": "halloween",
+    "isBoss": true
+   },
+   {
+    "name": "Grave Fog",
+    "icon": "🌫️",
+    "hp": 22,
+    "atk": [
+     5,
+     10
+    ],
+    "gold": [
+     2,
+     5
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "The Bat Swarm",
+    "icon": "🦇",
+    "hp": 18,
+    "atk": [
+     4,
+     10
+    ],
+    "gold": [
+     2,
+     4
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "Hollow Skeleton",
+    "icon": "💀",
+    "hp": 30,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     3,
+     6
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "The Black Cat",
+    "icon": "🐈",
+    "hp": 16,
+    "atk": [
+     5,
+     12
+    ],
+    "gold": [
+     2,
+     5
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "Cursed Pumpkin",
+    "icon": "🎃",
+    "hp": 24,
+    "atk": [
+     6,
+     11
+    ],
+    "gold": [
+     2,
+     5
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "The Witch",
+    "icon": "🧙",
+    "hp": 45,
+    "atk": [
+     9,
+     16
+    ],
+    "gold": [
+     8,
+     14
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "Ghost of Halloween",
+    "icon": "👻",
+    "hp": 26,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     3,
+     6
+    ],
+    "seasonal": "halloween"
+   },
+   {
+    "name": "The Headless One",
+    "icon": "🪖",
+    "hp": 55,
+    "atk": [
+     11,
+     18
+    ],
+    "gold": [
+     9,
+     15
+    ],
+    "seasonal": "halloween"
+   }
+  ],
+  "christmas": [
+   {
+    "name": "Krampus Imp",
+    "icon": "😈",
+    "hp": 26,
+    "atk": [
+     5,
+     11
+    ],
+    "gold": [
+     3,
+     6
+    ],
+    "seasonal": "christmas"
+   },
+   {
+    "name": "The Snowman",
+    "icon": "⛄",
+    "hp": 40,
+    "atk": [
+     7,
+     13
+    ],
+    "gold": [
+     5,
+     9
+    ],
+    "seasonal": "christmas"
+   },
+   {
+    "name": "Cursed Elf",
+    "icon": "🧝",
+    "hp": 22,
+    "atk": [
+     5,
+     10
+    ],
+    "gold": [
+     2,
+     5
+    ],
+    "seasonal": "christmas"
+   },
+   {
+    "name": "Krampus",
+    "icon": "🎄",
+    "hp": 90,
+    "atk": [
+     15,
+     24
+    ],
+    "gold": [
+     25,
+     40
+    ],
+    "seasonal": "christmas",
+    "isBoss": true
+   },
+   {
+    "name": "Frozen Gift",
+    "icon": "🎁",
+    "hp": 18,
+    "atk": [
+     4,
+     9
+    ],
+    "gold": [
+     2,
+     4
+    ],
+    "seasonal": "christmas"
+   },
+   {
+    "name": "The Dark Reindeer",
+    "icon": "🦌",
+    "hp": 35,
+    "atk": [
+     7,
+     14
+    ],
+    "gold": [
+     4,
+     8
+    ],
+    "seasonal": "christmas"
+   },
+   {
+    "name": "Naughty Elf",
+    "icon": "🧦",
+    "hp": 30,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     3,
+     7
+    ],
+    "seasonal": "christmas"
+   },
+   {
+    "name": "Frost Imp",
+    "icon": "❄️",
+    "hp": 20,
+    "atk": [
+     4,
+     9
+    ],
+    "gold": [
+     2,
+     5
+    ],
+    "seasonal": "christmas"
+   }
+  ],
+  "thanksgiving": [
+   {
+    "name": "The Harvest Wraith",
+    "icon": "🌾",
+    "hp": 45,
+    "atk": [
+     8,
+     14
+    ],
+    "gold": [
+     6,
+     10
+    ],
+    "seasonal": "thanksgiving"
+   },
+   {
+    "name": "Rotten Pilgrim",
+    "icon": "🎩",
+    "hp": 35,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     4,
+     8
+    ],
+    "seasonal": "thanksgiving"
+   },
+   {
+    "name": "Cursed Scarecrow",
+    "icon": "🌻",
+    "hp": 50,
+    "atk": [
+     9,
+     16
+    ],
+    "gold": [
+     5,
+     10
+    ],
+    "seasonal": "thanksgiving"
+   },
+   {
+    "name": "The Hungry Shade",
+    "icon": "🍂",
+    "hp": 28,
+    "atk": [
+     5,
+     10
+    ],
+    "gold": [
+     3,
+     6
+    ],
+    "seasonal": "thanksgiving"
+   },
+   {
+    "name": "Autumn Revenant",
+    "icon": "🍁",
+    "hp": 55,
+    "atk": [
+     10,
+     18
+    ],
+    "gold": [
+     7,
+     12
+    ],
+    "seasonal": "thanksgiving"
+   },
+   {
+    "name": "The Cornfield Horror",
+    "icon": "🌽",
+    "hp": 40,
+    "atk": [
+     7,
+     13
+    ],
+    "gold": [
+     5,
+     9
+    ],
+    "seasonal": "thanksgiving"
+   },
+   {
+    "name": "The Feast Devourer",
+    "icon": "🦃",
+    "hp": 120,
+    "atk": [
+     18,
+     28
+    ],
+    "gold": [
+     30,
+     50
+    ],
+    "seasonal": "thanksgiving",
+    "isBoss": true,
+    "desc": "It came for the feast. There is no feast. It settled for you."
+   },
+   {
+    "name": "Harvest Moon Shade",
+    "icon": "🌕",
+    "hp": 38,
+    "atk": [
+     7,
+     14
+    ],
+    "gold": [
+     4,
+     8
+    ],
+    "seasonal": "thanksgiving"
+   }
+  ],
+  "july4": [
+   {
+    "name": "Redcoat Wraith",
+    "icon": "🇬🇧",
+    "hp": 80,
+    "atk": [
+     12,
+     18
+    ],
+    "def": 3,
+    "pts": 40,
+    "tier": "t1",
+    "desc": "A phantom soldier from a forgotten war."
+   },
+   {
+    "name": "Cannon Specter",
+    "icon": "💣",
+    "hp": 100,
+    "atk": [
+     15,
+     22
+    ],
+    "def": 2,
+    "pts": 55,
+    "tier": "t2",
+    "desc": "Fires spectral cannonballs that ignore armor."
+   },
+   {
+    "name": "Musket Shade",
+    "icon": "🔫",
+    "hp": 70,
+    "atk": [
+     14,
+     20
+    ],
+    "def": 2,
+    "pts": 45,
+    "tier": "t1",
+    "desc": "Attacks from range before you can reach it."
+   },
+   {
+    "name": "Loyalist Knight",
+    "icon": "⚔️",
+    "hp": 120,
+    "atk": [
+     16,
+     24
+    ],
+    "def": 5,
+    "pts": 65,
+    "tier": "t2",
+    "desc": "A heavily armored servant of the old order."
+   },
+   {
+    "name": "Tyrant Sentinel",
+    "icon": "👑",
+    "hp": 150,
+    "atk": [
+     18,
+     26
+    ],
+    "def": 6,
+    "pts": 80,
+    "tier": "t3",
+    "desc": "Guards the Tyrant King with fanatical loyalty."
+   }
+  ],
+  "brazil": [
+   {
+    "name": "O Craque",
+    "icon": "⚽",
+    "hp": 35,
+    "atk": [
+     8,
+     14
+    ],
+    "gold": [
+     8,
+     14
+    ],
+    "seasonal": "brazil",
+    "footballKick": true,
+    "desc": "Kicks an enchanted football at you instead of attacking normally. It hurts more than it should."
+   },
+   {
+    "name": "A Onça",
+    "icon": "🐆",
+    "hp": 30,
+    "atk": [
+     7,
+     16
+    ],
+    "gold": [
+     6,
+     12
+    ],
+    "seasonal": "brazil",
+    "dodgeChance": 0.2,
+    "desc": "The jaguar. Fast, agile, 20% dodge chance. The rainforest's apex predator."
+   },
+   {
+    "name": "O Jacaré",
+    "icon": "🐊",
+    "hp": 70,
+    "atk": [
+     10,
+     16
+    ],
+    "gold": [
+     8,
+     15
+    ],
+    "seasonal": "brazil",
+    "desc": "The caiman. Massive defense. Slow but devastating."
+   },
+   {
+    "name": "O Papagaio",
+    "icon": "🦜",
+    "hp": 25,
+    "atk": [
+     5,
+     11
+    ],
+    "gold": [
+     4,
+     8
+    ],
+    "seasonal": "brazil",
+    "mirrorAtk": true,
+    "desc": "Copies your last attack and uses it against you."
+   },
+   {
+    "name": "A Cobra",
+    "icon": "🐍",
+    "hp": 28,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     5,
+     10
+    ],
+    "seasonal": "brazil",
+    "poisonsPlayer": true,
+    "desc": "Poisons you every turn."
+   },
+   {
+    "name": "O Gavião",
+    "icon": "🦅",
+    "hp": 22,
+    "atk": [
+     7,
+     15
+    ],
+    "gold": [
+     5,
+     9
+    ],
+    "seasonal": "brazil",
+    "desc": "A hawk that dives from above. First strike always hits for maximum damage."
+   },
+   {
+    "name": "O Boto Cor-de-Rosa",
+    "icon": "🐬",
+    "hp": 45,
+    "atk": [
+     8,
+     14
+    ],
+    "gold": [
+     10,
+     18
+    ],
+    "seasonal": "brazil",
+    "desc": "The pink river dolphin of Amazonian legend. Enchants you with 30% chance to charm."
+   },
+   {
+    "name": "O Rei do Carnaval",
+    "icon": "👑",
+    "hp": 100,
+    "atk": [
+     15,
+     24
+    ],
+    "gold": [
+     30,
+     50
+    ],
+    "seasonal": "brazil",
+    "isBoss": true,
+    "desc": "The King of Carnival. He came to celebrate. You interrupted the celebration. He will not forgive this."
+   }
+  ],
+  "valentines": [
+   {
+    "name": "Heartbreak Wraith",
+    "icon": "💔",
+    "hp": 32,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     5,
+     10
+    ],
+    "seasonal": "valentines"
+   },
+   {
+    "name": "The Jealous Spirit",
+    "icon": "😤",
+    "hp": 28,
+    "atk": [
+     7,
+     13
+    ],
+    "gold": [
+     4,
+     8
+    ],
+    "seasonal": "valentines"
+   },
+   {
+    "name": "Thorned Rose",
+    "icon": "🥀",
+    "hp": 35,
+    "atk": [
+     6,
+     11
+    ],
+    "gold": [
+     5,
+     9
+    ],
+    "seasonal": "valentines",
+    "poisonsPlayer": true
+   },
+   {
+    "name": "The Rejected One",
+    "icon": "💧",
+    "hp": 40,
+    "atk": [
+     8,
+     14
+    ],
+    "gold": [
+     6,
+     12
+    ],
+    "seasonal": "valentines"
+   },
+   {
+    "name": "Love Letter Golem",
+    "icon": "💌",
+    "hp": 45,
+    "atk": [
+     7,
+     13
+    ],
+    "gold": [
+     8,
+     14
+    ],
+    "seasonal": "valentines"
+   },
+   {
+    "name": "The Cupid",
+    "icon": "💘",
+    "hp": 38,
+    "atk": [
+     9,
+     15
+    ],
+    "gold": [
+     10,
+     18
+    ],
+    "seasonal": "valentines",
+    "dropsLovePotion": true,
+    "desc": "A rare sighting. Defeating it always drops a Love Potion."
+   },
+   {
+    "name": "The Heartbreaker",
+    "icon": "💝",
+    "hp": 90,
+    "atk": [
+     13,
+     20
+    ],
+    "gold": [
+     25,
+     40
+    ],
+    "seasonal": "valentines",
+    "isBoss": true,
+    "charmsPlayer": true,
+    "desc": "Its arrows do not wound the body. They charm the mind. Resist or lose a turn."
+   }
+  ],
+  "stpatricks": [
+   {
+    "name": "The Leprechaun",
+    "icon": "🧝",
+    "hp": 35,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     15,
+     25
+    ],
+    "seasonal": "stpatricks",
+    "stealsGold": true,
+    "desc": "Steals 10 gold from you each turn instead of dealing damage. Kill it fast."
+   },
+   {
+    "name": "Cursed Shamrock",
+    "icon": "☘️",
+    "hp": 22,
+    "atk": [
+     5,
+     10
+    ],
+    "gold": [
+     4,
+     8
+    ],
+    "seasonal": "stpatricks"
+   },
+   {
+    "name": "Green Wraith",
+    "icon": "💚",
+    "hp": 40,
+    "atk": [
+     7,
+     14
+    ],
+    "gold": [
+     5,
+     10
+    ],
+    "seasonal": "stpatricks"
+   },
+   {
+    "name": "The Pot Guardian",
+    "icon": "🌈",
+    "hp": 55,
+    "atk": [
+     9,
+     16
+    ],
+    "gold": [
+     8,
+     14
+    ],
+    "seasonal": "stpatricks"
+   },
+   {
+    "name": "Lucky Imp",
+    "icon": "🍀",
+    "hp": 18,
+    "atk": [
+     4,
+     9
+    ],
+    "gold": [
+     3,
+     6
+    ],
+    "seasonal": "stpatricks",
+    "dodgeChance": 0.25,
+    "coward": true,
+    "desc": "Has a 25% chance to dodge your attack entirely. Flees if you look too dangerous."
+   },
+   {
+    "name": "The Rainbow Serpent",
+    "icon": "🐍",
+    "hp": 65,
+    "atk": [
+     11,
+     18
+    ],
+    "gold": [
+     10,
+     18
+    ],
+    "seasonal": "stpatricks"
+   },
+   {
+    "name": "Gold Goblin",
+    "icon": "💰",
+    "hp": 28,
+    "atk": [
+     5,
+     11
+    ],
+    "gold": [
+     20,
+     35
+    ],
+    "seasonal": "stpatricks",
+    "goldFlee": true,
+    "desc": "Carries extra gold but runs fast — it has a 30% chance to flee each turn."
+   },
+   {
+    "name": "The Clurichaun",
+    "icon": "🍺",
+    "hp": 85,
+    "atk": [
+     14,
+     22
+    ],
+    "gold": [
+     25,
+     40
+    ],
+    "seasonal": "stpatricks",
+    "isBoss": true,
+    "desc": "The dark twin of the Leprechaun. Drunk on cursed ale. Hits harder every turn."
+   }
+  ]
+ },
+ "shops": {
+  "demonCoins": [
+   {
+    "id": "bs-discount-code",
+    "name": "Blacksmith Discount",
+    "icon": "⚒️",
+    "cost": 15,
+    "desc": "10% off all Blacksmith upgrades for 24 hours. A code is added to your General Settings."
+   },
+   {
+    "id": "double-xp-potion",
+    "name": "Potion of Darkness",
+    "icon": "🧪",
+    "cost": 20,
+    "desc": "Double XP for your next 3 dungeon floors. Darkness has its perks."
+   },
+   {
+    "id": "cursed-run-mod",
+    "name": "Cursed Modifier",
+    "icon": "💀",
+    "cost": 10,
+    "desc": "Apply a random Halloween run modifier to your next run."
+   },
+   {
+    "id": "demon-revival",
+    "name": "Demon Revival",
+    "icon": "😈",
+    "cost": 30,
+    "desc": "Grants one extra life in your next dungeon run."
+   },
+   {
+    "id": "halloween-potion",
+    "name": "Pumpkin Brew",
+    "icon": "🎃",
+    "cost": 8,
+    "desc": "A potion that heals 80 HP. Only sold in the Curse Shop."
+   }
+  ],
+  "christmasCookies": [
+   {
+    "id": "santa-bs-discount",
+    "name": "Christmas Discount",
+    "icon": "🎁",
+    "cost": 15,
+    "desc": "15% off all Blacksmith upgrades for 24 hours. A gift from Santa."
+   },
+   {
+    "id": "santa-xp-boost",
+    "name": "Cookie of Knowledge",
+    "icon": "🍪",
+    "cost": 20,
+    "desc": "Triple XP for your next 2 dungeon floors."
+   },
+   {
+    "id": "santa-potion",
+    "name": "Eggnog Flask",
+    "icon": "🥛",
+    "cost": 8,
+    "desc": "Heals 60 HP and restores 10 SP. Only sold in the Santa Shop."
+   },
+   {
+    "id": "santa-bonus-gold",
+    "name": "Santa's Coin Bag",
+    "icon": "💰",
+    "cost": 12,
+    "desc": "Instantly receive 150 gold."
+   },
+   {
+    "id": "santa-spirit-boost",
+    "name": "Elf Blessing",
+    "icon": "🌟",
+    "cost": 25,
+    "desc": "Your spirit companion deals double damage for your next run."
+   }
+  ],
+  "libertyCoins": [
+   {
+    "id": "liberty-firework",
+    "name": "Mega Firework",
+    "icon": "🎆",
+    "cost": 5,
+    "desc": "A powerful firework. Deals massive damage in combat."
+   },
+   {
+    "id": "liberty-gold",
+    "name": "Liberty Treasury",
+    "icon": "💰",
+    "cost": 8,
+    "desc": "Receive 300 gold. For the cause of freedom."
+   },
+   {
+    "id": "liberty-eagle",
+    "name": "Liberty Eagle",
+    "icon": "🦅",
+    "cost": 12,
+    "desc": "A patriotic minion joins your cause. Exclusive to July 4th."
+   },
+   {
+    "id": "liberty-xp",
+    "name": "Independence Scroll",
+    "icon": "📜",
+    "cost": 10,
+    "desc": "Double XP for your next 7 dungeon floors. In honor of 1776."
+   },
+   {
+    "id": "liberty-sparkler",
+    "name": "Sparkler Buff",
+    "icon": "✨",
+    "cost": 6,
+    "desc": "+30% ATK for your next run. The sparkler lights your path."
+   },
+   {
+    "id": "liberty-cannon",
+    "name": "Patriot Cannon",
+    "icon": "💣",
+    "cost": 15,
+    "desc": "One-use item. Instantly defeats any non-boss enemy."
+   },
+   {
+    "id": "liberty-potion",
+    "name": "Freedom Potion",
+    "icon": "🔵",
+    "cost": 7,
+    "desc": "Heals 100 HP and grants immunity to debuffs for 3 turns."
+   },
+   {
+    "id": "liberty-title",
+    "name": "Patriot Title",
+    "icon": "🗽",
+    "cost": 20,
+    "desc": "Earn the title \"The Patriot\". Exclusive to July 4th."
+   }
+  ],
+  "harvestTokens": [
+   {
+    "id": "harvest-gold",
+    "name": "Harvest Bounty",
+    "icon": "🌽",
+    "cost": 10,
+    "desc": "Receive 200 gold. The harvest was good this year."
+   },
+   {
+    "id": "harvest-potion",
+    "name": "Harvest Brew",
+    "icon": "🍂",
+    "cost": 8,
+    "desc": "Heals 70 HP. Made from autumn herbs."
+   },
+   {
+    "id": "harvest-xp",
+    "name": "Feast of Knowledge",
+    "icon": "🦃",
+    "cost": 20,
+    "desc": "Double XP for your next 5 dungeon floors."
+   }
+  ],
+  "shamrocks": [
+   {
+    "id": "stpat-clover",
+    "name": "Lucky Clover",
+    "icon": "🍀",
+    "cost": 5,
+    "desc": "Doubles gold drops for the next 3 floors."
+   },
+   {
+    "id": "stpat-stout",
+    "name": "Irish Stout",
+    "icon": "🍺",
+    "cost": 6,
+    "desc": "Heals 50 HP but reduces your ATK by 3 for 2 turns."
+   },
+   {
+    "id": "stpat-pot",
+    "name": "Pot of Gold",
+    "icon": "🌈",
+    "cost": 8,
+    "desc": "Gain 300 gold but lose 20 HP. High risk, high reward."
+   },
+   {
+    "id": "stpat-charm",
+    "name": "Leprechaun's Charm",
+    "icon": "🧝",
+    "cost": 10,
+    "desc": "Your next attack is guaranteed to critically hit."
+   },
+   {
+    "id": "stpat-rainbow",
+    "name": "Rainbow Shield",
+    "icon": "🌈",
+    "cost": 12,
+    "desc": "Absorbs the next 40 damage taken."
+   },
+   {
+    "id": "stpat-title",
+    "name": "The Lucky One",
+    "icon": "☘️",
+    "cost": 25,
+    "desc": "Earn the title \"The Lucky One\". Exclusive to St. Patrick's Day."
+   }
+  ],
+  "chocolate": [
+   {
+    "id": "val-love-potion",
+    "name": "Love Potion",
+    "icon": "💘",
+    "cost": 10,
+    "desc": "Charms an enemy to fight for you for 2 turns, then it turns on you."
+   },
+   {
+    "id": "val-chocolate-box",
+    "name": "Box of Chocolates",
+    "icon": "🍫",
+    "cost": 6,
+    "desc": "Heals 55 HP. Sweet and simple."
+   },
+   {
+    "id": "val-rose",
+    "name": "Enchanted Rose",
+    "icon": "🌹",
+    "cost": 12,
+    "desc": "+8 ATK for 4 turns. Beautiful and dangerous."
+   },
+   {
+    "id": "val-cupid-arrow",
+    "name": "Cupid's Arrow",
+    "icon": "🏹",
+    "cost": 15,
+    "desc": "Guaranteed critical hit on your next attack."
+   },
+   {
+    "id": "val-heart-shield",
+    "name": "Heart Shield",
+    "icon": "💗",
+    "cost": 14,
+    "desc": "Absorbs the next 45 damage taken."
+   },
+   {
+    "id": "val-title",
+    "name": "The Beloved",
+    "icon": "💘",
+    "cost": 28,
+    "desc": "Earn the title \"The Beloved\". Exclusive to Valentine's Day."
+   }
+  ]
+ },
+ "list": [
+  {
+   "id": "valentines",
+   "title": "💘 Valentine's Day",
+   "desc": "February 13th through 15th. The dungeon turns romantic and dangerous. 7 exclusive enemies including The Cupid, who always drops a Love Potion when defeated. Use the Love Potion on any non-boss enemy to charm it into fighting for you for 2 turns — then it turns back on you. The final boss, The Heartbreaker, can charm you and force you to skip a turn.",
+   "bonuses": "+25% XP. +14% gold. Enemies 5% stronger. 7 Valentine's enemies. Earn 🍫 Chocolate — spend it at the 🍫 Chocolate Shop.",
+   "dates": "Active: February 13 — February 15"
+  },
+  {
+   "id": "brazil",
+   "title": "🇧🇷 Independência do Brasil",
+   "desc": "September 7th only. Brazil declared independence on this day in 1822. The dungeon does not know what independence means but it celebrates anyway. Eight Brazilian-inspired enemies invade including O Craque who kicks a football at you instead of attacking, A Onça the jaguar, O Jacaré the caiman, and O Rei do Carnaval — the final boss who came to celebrate and you interrupted him.",
+   "bonuses": "+50% XP. Gold drops multiplied by 1.822 honoring the year of independence. Enemies 10% stronger. 8 Brazilian enemies. Secret console code active today only.",
+   "dates": "Active: September 7th only"
+  },
+  {
+   "id": "birthday",
+   "title": "🎂 Dungeon Descent Birthday",
+   "desc": "March 23rd every year. The dungeon was born on this day. It does not celebrate. It does not have feelings. But something changes in the air.",
+   "bonuses": "Special birthday music. Unique birthday themed enemies and surprises. A once-a-year event.",
+   "dates": "Active: March 23rd only"
+  },
+  {
+   "id": "easter",
+   "title": "🐰 Easter",
+   "desc": "A large rabbit in a bow tie has entered the dungeon. It has a basket. It is not clear what its intentions are. It can be fought, adopted as a spirit companion, or released in peace.",
+   "bonuses": "+50% XP from all enemies. Enemies are 20% weaker. The Easter Bunny appears in rooms. Adopt it to unlock it as a permanent spirit.",
+   "dates": ""
+  },
+  {
+   "id": "xpweekend",
+   "title": "⚡ XP Weekend",
+   "desc": "Every Saturday and Sunday the dungeon rewards the dedicated. Double XP. No catch. The DDDI did not authorize this but also did not stop it.",
+   "bonuses": "2x XP from all enemies. No enemy buffs. Pure reward.",
+   "dates": "Active: Every Saturday and Sunday"
+  },
+  {
+   "id": "voidweek",
+   "title": "🌑 Void Week",
+   "desc": "Every Monday the dungeon is darker than usual. Enemies are harder. Gold is worth more. The void is not a punishment. The void is a test.",
+   "bonuses": "+10% XP. Enemies have 20% more HP. All gold drops doubled.",
+   "dates": "Active: Every Monday"
+  },
+  {
+   "id": "bloodmoon",
+   "title": "🔴 Blood Moon",
+   "desc": "The first week of each month. You hit harder. You also take more hits. The moon does not care about fairness.",
+   "bonuses": "+25% player damage dealt. +25% damage taken. High risk high reward.",
+   "dates": "Active: Days 1-7 of each month"
+  },
+  {
+   "id": "architect",
+   "title": "🏛️ The Architect Week",
+   "desc": "The second week of each month. Sponsored by the Department of Dungeon Descent Incorporated. The Department did not ask to be called the architect. The Department has accepted this.",
+   "bonuses": "+20% XP. Enemies 10% stronger. Julio appears three times more often. The DDDI is watching.",
+   "dates": "Active: Days 8-14 of each month"
+  },
+  {
+   "id": "friday13",
+   "title": "🔪 Friday the 13th",
+   "desc": "Whenever the 13th falls on a Friday. The main menu goes dark. The dungeon plays Halloween music. A black box appears somewhere in the dungeon. If you open it, The Unlucky One steps out — a boss that steals your gold, disables all crits, and hits harder than anything you have faced.",
+   "bonuses": "Halloween music everywhere. 20% chance per floor to find the Black Box. The Unlucky One boss inside — 120 HP, steals gold each turn, your critical chance drops to zero for the fight. Gold drops reduced 25%.",
+   "dates": "Active: Any Friday the 13th"
+  },
+  {
+   "id": "stpatricks",
+   "title": "☘️ St. Patrick's Day",
+   "desc": "March 14th through 18th. The dungeon goes green. The Leprechaun has entered and it wants your gold. Eight exclusive Irish enemies roam the dungeons including The Clurichaun — a drunk boss that gets angrier every turn. The Gold Goblin carries extra gold but might run away before you can kill it. Lucky Imps dodge 25% of your attacks.",
+   "bonuses": "+30% XP. +50% gold drops. Enemies 15% stronger. 8 St. Patrick's Day enemies. The Leprechaun steals gold each turn instead of dealing damage. Earn ☘️ Shamrocks — spend them at the ☘️ Shamrock Shop.",
+   "dates": "Active: March 14 — March 18"
+  },
+  {
+   "id": "halloween",
+   "title": "🎃 Halloween",
+   "desc": "The dungeon twists into something seasonal. Old enemies wear new faces. New enemies wear old bones.",
+   "bonuses": "+25% XP from all enemies. Enemies are 30% stronger. 12 Halloween-exclusive creatures spawn. Earn 🪙 Demon Coins — spend them at the 💀 Curse Shop.",
+   "dates": "Active: October 1 — November 2"
+  },
+  {
+   "id": "christmas",
+   "title": "🎄 Dark Christmas",
+   "desc": "Something gift-shaped and terrible has entered the dungeon. It came down the wrong chimney.",
+   "bonuses": "+15% XP from all enemies. Enemies are 20% stronger. Krampus and his crew join the enemy pool. Earn 🍪 Christmas Cookies — spend them at the 🎅 Santa Shop.",
+   "dates": "Active: December 1 — December 31"
+  },
+  {
+   "id": "thanksgiving",
+   "title": "🦃 Thanksgiving",
+   "desc": "The harvest failed. Something in the cornfield is angry about it. Eight new enemies have entered the dungeon and they are hungry.",
+   "bonuses": "+20% XP. Enemies 15% stronger. 8 Thanksgiving enemies including The Feast Devourer boss. Earn 🌽 Harvest Tokens — spend them at the 🌽 Harvest Market.",
+   "dates": "Active: November 22 — November 28"
+  },
+  {
+   "id": "july4",
+   "title": "🎆 Fourth of July",
+   "desc": "July 1st through 7th. The dungeon goes patriotic. Redcoat Wraiths, Cannon Specters and Loyalist Knights invade from a forgotten war. The Sparkler buff makes every 3rd attack explode with fire. Fireworks drop from enemies and deal massive unblockable damage. The Fireworks Corner opens at your Home. The Independence Tournament begins. And somewhere, there is a secret.",
+   "bonuses": "+76% XP and gold honoring 1776. Redcoat enemies invade all dungeons. Firework items drop from enemies. Sparkler buff on every 3rd attack. Independence Tournament for trophies and gold. Fireworks Corner at Home for bonus XP. Earn 🗽 Liberty Coins.",
+   "dates": "Active: July 1 — July 7"
+  },
+  {
+   "id": "cincodemayo",
+   "title": "🌮 Cinco de Mayo",
+   "desc": "May 5th only. The dungeon celebrates. El Taco Blade appears exclusively in the Blacksmith for 24 hours. The weapon is yours to keep and upgrade forever.",
+   "bonuses": "+50% XP. +25% gold. 🌮 El Taco Blade available in Blacksmith — exclusive weapon only on May 5th.",
+   "dates": "Active: May 5th only"
+  },
+  {
+   "id": "ambushday",
+   "title": "⚔️ Ambush Day",
+   "desc": "Four times a year the dungeon stops sending one enemy at a time. It sends all of them. Every battle is a multi-enemy ambush for a full 24 hours.",
+   "bonuses": "+50% XP. +50% gold. ALL battles are ambushes — 2 to 3 enemies per fight. No single combat. Good luck.",
+   "dates": "Active: January 15, April 15, July 15, October 15"
+  }
+ ]
+}

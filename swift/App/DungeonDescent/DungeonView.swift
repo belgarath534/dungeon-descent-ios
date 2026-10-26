@@ -36,6 +36,7 @@ struct DungeonView: View {
             ScrollView {
                 VStack(spacing: 12) {
                     topBar
+                    eventBanner
                     spiritRow
                     dailyQuest
                     xpRow
@@ -168,6 +169,18 @@ struct DungeonView: View {
         .background(Theme.bgDeep).overlay(Rectangle().stroke(Theme.borderDim))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Daily quest: \(q.desc). Progress: \(dq.progress) of \(q.target)\(done ? ". Complete!" : ".")")
+    }
+
+    /// #dg-event-banner: the event running this run, and its currency.
+    @ViewBuilder
+    private var eventBanner: some View {
+        if let ev = Events.bonuses(run.event) {
+            let cur = ev.currency.map { c in " · \(c.icon) \(Events.currency(c.key, store: game.store)) \(c.name)" } ?? ""
+            Text("\(ev.label) active\(cur)")
+                .font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(Theme.gold)
+                .frame(maxWidth: .infinity).padding(.vertical, 5)
+                .overlay(Rectangle().stroke(Theme.goldDim))
+        }
     }
 
     /// .dg-spirit-row: your spirit companion.
