@@ -893,6 +893,20 @@ final class RunModel: ObservableObject {
         game.characters.indices.contains(characterIndex) ? game.characters[characterIndex].created : 0
     }
 
+    /// Selling to the Wandering Merchant (renderShopSell).
+    func sell(at index: Int) {
+        guard phase == .shopping, run.inventory.indices.contains(index) else { return }
+        var r = run
+        let name = r.inventory[index].name
+        guard let price = Inventory.sell(&r, at: index, wallet: game.wallet, store: game.store) else { return }
+        run = r
+        achievements.check()
+        persist()
+        Sound.sfx("sfx-purchase")
+        Feedback.success()
+        Feedback.announce("Sold \(name) for \(price) gold. You now have \(r.gold) gold.")
+    }
+
     func drop(at index: Int) {
         guard run.inventory.indices.contains(index) else { return }
         var r = run

@@ -201,6 +201,32 @@ public enum Inventory {
         return (0, item)
     }
 
+    /// getSellPrice
+    public static func sellPrice(_ item: Item) -> Int {
+        let level = item.level ?? 1
+        switch item.type {
+        case "potion": return item.heal.map { $0 * 15 / 100 } ?? 5
+        case "gem": return item.gold ?? 10
+        case "ring": return 15
+        case "weapon": return (item.cost.map { $0 * 35 / 100 } ?? 20) + (level - 1) * 15
+        case "armor": return (item.cost.map { $0 * 35 / 100 } ?? 15) + (level - 1) * 10
+        default: return 5
+        }
+    }
+
+    /// renderShopSell's sale: the item goes, its price joins your gold, and
+    /// "dd_total_sells" counts toward the selling achievements.
+    @discardableResult
+    public static func sell(_ run: inout Run, at index: Int, wallet: Wallet, store: GameStore) -> Int? {
+        guard run.inventory.indices.contains(index) else { return nil }
+        let item = run.inventory.remove(at: index)
+        let price = sellPrice(item)
+        run.gold += price
+        wallet.addGold(price)
+        store.setItem("dd_total_sells", String((jsParseInt(store.getItem("dd_total_sells")) ?? 0) + 1))
+        return price
+    }
+
     /// A loot room (28% of rooms): one random item from the dungeon's loot table.
     public static func lootRoom(_ run: inout Run, dice: inout some Dice, wallet: Wallet) -> Find {
         let table = ItemTables.loot(for: run.dungeon)

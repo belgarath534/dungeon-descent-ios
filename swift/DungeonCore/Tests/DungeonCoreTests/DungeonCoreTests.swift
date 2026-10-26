@@ -1593,3 +1593,21 @@ final class HideAndSeekTests: XCTestCase {
         }
     }
 }
+
+final class SellTests: XCTestCase {
+    func testSellPricesAndCount() {
+        XCTAssertEqual(Inventory.sellPrice(Item(name: "P", icon: "", type: "potion", desc: "", heal: 40)), 6)
+        XCTAssertEqual(Inventory.sellPrice(Item(name: "W", icon: "", type: "weapon", desc: "", cost: 100, level: 3)), 65)
+        XCTAssertEqual(Inventory.sellPrice(Item(name: "A", icon: "", type: "armor", desc: "")), 15)
+        var r = Run(character: PlayerCharacter(name: "Ivy", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.inventory = [Item(name: "Ruby", icon: "", type: "gem", desc: "", gold: 30)]
+        let store = MemoryStore()
+        let gold = r.gold
+        XCTAssertEqual(Inventory.sell(&r, at: 0, wallet: Wallet(store: store), store: store), 30)
+        XCTAssertEqual(r.gold, gold + 30)
+        XCTAssertTrue(r.inventory.isEmpty)
+        XCTAssertEqual(store.getItem("dd_total_sells"), "1")
+        XCTAssertNil(Inventory.sell(&r, at: 0, wallet: Wallet(store: store), store: store))
+    }
+}

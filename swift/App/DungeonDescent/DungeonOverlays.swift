@@ -48,6 +48,7 @@ struct DungeonDialog<Content: View>: View {
 @MainActor
 struct ShopOverlay: View {
     @ObservedObject var model: RunModel
+    @State private var selling = false
 
     var body: some View {
         let run = model.run
@@ -71,12 +72,14 @@ struct ShopOverlay: View {
             .accessibilityLabel("Items for sale")
             Button("💰 Sell Your Items") {
                 Sound.sfx("sfx-select")
-                Feedback.announce("Selling items isn't in the Swift version yet. Coming soon.")
+                selling.toggle()
+                Feedback.announce(selling ? "Sell section opened. Swipe through your items to sell them." : "Sell section closed.")
             }
             .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x888888))
             .padding(.vertical, 8).padding(.horizontal, 12).overlay(Rectangle().stroke(Color(hex: 0x333333)))
             .padding(.bottom, 12)
             .accessibilityLabel("Toggle sell your items section")
+            if selling { sellList(model.run) }
             HStack {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 8) {
@@ -135,6 +138,32 @@ struct ShopOverlay: View {
         .background(Color(hex: 0x080600))
         .overlay(Rectangle().stroke(!entry.sold && !afford ? Color(hex: 0x330000) : Color(hex: 0x221800)))
         .opacity(entry.sold ? 0.3 : 1)
+    }
+
+    /// #shop-sell-list
+    @ViewBuilder
+    private func sellList(_ run: Run) -> some View {
+        VStack(spacing: 0) {
+            if run.inventory.isEmpty {
+                Text("Nothing in inventory to sell.").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x555555))
+                    .frame(maxWidth: .infinity, alignment: .leading).padding(8)
+            }
+            ForEach(Array(run.inventory.enumerated()), id: \.offset) { i, item in
+                let price = Inventory.sellPrice(item)
+                HStack(spacing: 8) {
+                    Text("\(item.icon) \(item.name)").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xcc9944))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Button("\(price)g") { model.sell(at: i) }
+                        .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xcc8844))
+                        .padding(.vertical, 4).padding(.horizontal, 10)
+                        .background(Color(hex: 0x1a0800)).overlay(Rectangle().stroke(Color(hex: 0xaa6622)))
+                        .accessibilityLabel("Sell \(item.name) for \(price) gold")
+                }
+                .padding(.vertical, 6)
+                .overlay(alignment: .bottom) { Rectangle().fill(Color(hex: 0x1a1a00)).frame(height: 1) }
+            }
+        }
+        .padding(.bottom, 12)
     }
 }
 
