@@ -105,7 +105,8 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Gun crafting | GUN DEFINITIONS | ⬜ |
 | Boss Rush | BOSS RUSH ENGINE | ✅ with the personal leaderboard |
 | Daily Raid | RAID ENGINE | ✅ Normal and Hard, raid tiers, once a day. Skills without a raid rule now hit for normal damage (the web version charged SP and did nothing) |
-| Daily Challenge, Tournament | DAILY_CHALLENGES, tournament | ⬜ |
+| Tournament | TOURNAMENT_BOSSES, getTournamentSeason, tnAttack | ✅ the first 7 days of January, April, July and October: the season's boss, Attack/Heavy/Defend with phases, damage plus speed and survival bonuses, 5 Mystery Coins for a kill, the season best (dd_tournament) and the shared season leaderboard. Web bugs fixed: the leaderboard stored and showed players' real email addresses (Swift stores the leaderboard name and hides old emails), and from October the countdown to the next tournament was negative |
+| Daily Challenge | DAILY_CHALLENGES | ⬜ |
 | Achievements, trophies, Game Center | ACHIEVEMENTS, awardAchievement | ✅ all 115, same save keys and Game Center IDs |
 | Lifetime stats, Hall of Records | GLOBAL STATS TRACKING, GLOBAL_AWARDS, Hall of Legends | ✅ all the web's tracked stats, milestone awards (Mystery Coins and permanent effects), records and first clears |
 | Bestiary | BESTIARY_DATA, recordKill, BESTIARY_MILESTONES | ✅ 434 entries with filters, search and kill milestones; Spirits and Community tabs not yet |

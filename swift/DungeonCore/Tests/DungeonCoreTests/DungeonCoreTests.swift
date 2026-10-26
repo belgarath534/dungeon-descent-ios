@@ -1524,3 +1524,39 @@ final class AFKTests: XCTestCase {
         XCTAssertEqual(save.bestFloor, 42)
     }
 }
+
+final class TournamentTests: XCTestCase {
+    private func date(_ y: Int, _ m: Int, _ d: Int) -> Date {
+        Calendar.current.date(from: DateComponents(year: y, month: m, day: d, hour: 12))!
+    }
+
+    func testSeasonsAndCountdown() {
+        let oct3 = Tournament.season(date(2026, 10, 3))
+        XCTAssertTrue(oct3.active)
+        XCTAssertEqual(oct3.key, "season_3_2026")
+        XCTAssertEqual(oct3.name, "Autumn 2026")
+        XCTAssertEqual(oct3.boss.name, "The Eternal Colossus")
+        let oct26 = Tournament.season(date(2026, 10, 26))
+        XCTAssertFalse(oct26.active)
+        XCTAssertEqual(oct26.daysUntil, 67)
+        let feb = Tournament.season(date(2026, 2, 10))
+        XCTAssertFalse(feb.active)
+        XCTAssertEqual(feb.boss.name, "The Eternal Colossus")
+        XCTAssertEqual(Tournament.season(date(2026, 4, 2)).boss.name, "The Void Sovereign")
+    }
+
+    func testFightScoresAndBest() {
+        let ch = PlayerCharacter(name: "Ivy", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var fight = Tournament(character: ch, boss: Tournament.bosses[0])
+        var dice = SeededDice(seed: 3)
+        while !fight.done { _ = fight.act(.heavy, dice: &dice) }
+        XCTAssertEqual(fight.score, fight.damageDealt + fight.speedBonus + fight.survivalBonus)
+        if !fight.won { XCTAssertEqual(fight.score, fight.damageDealt) }
+        let store = MemoryStore()
+        let s = Tournament.season(date(2026, 10, 3))
+        XCTAssertTrue(Tournament.record(300, season: s, store: store))
+        XCTAssertFalse(Tournament.record(200, season: s, store: store))
+        XCTAssertEqual(Tournament.best(s, store: store), 300)
+    }
+}

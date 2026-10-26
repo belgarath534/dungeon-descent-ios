@@ -501,6 +501,32 @@ final class CloudAccount: NSObject, ObservableObject {
         }
     }
 
+    // MARK: Tournament
+
+    /// uploadTournamentScore: "tournament/{season}/scores/{uid}". The web
+    /// version stored and showed the player's email; this stores the
+    /// leaderboard name in that field instead, so web players see a name.
+    func uploadTournament(score: Int, season: Tournament.Season) async {
+        guard let u = Auth.auth().currentUser else { return }
+        try? await db.collection("tournament").document(season.key).collection("scores").document(u.uid).setData([
+            "uid": u.uid, "email": displayName, "score": score, "updatedAt": Self.now, "seasonName": season.name,
+        ])
+    }
+
+    /// loadTournamentLeaderboard: the season's top 10.
+    func tournamentLeaderboard(_ season: Tournament.Season) async -> [LeaderboardEntry] {
+        guard let snap = try? await db.collection("tournament").document(season.key).collection("scores")
+            .order(by: "score", descending: true).limit(to: 10).getDocuments() else { return [] }
+        return snap.documents.map { d in
+            let x = d.data()
+            var name = (x["email"] as? String) ?? "Anonymous"
+            // Older entries hold a real email address: show only the fallback name.
+            if name.contains("@") { name = Self.fallbackName(email: name, uid: (x["uid"] as? String) ?? d.documentID) }
+            return LeaderboardEntry(id: (x["uid"] as? String) ?? d.documentID, username: name,
+                                    score: (x["score"] as? NSNumber)?.intValue ?? 0)
+        }
+    }
+
     // MARK: Obituary
 
     struct Obituary: Identifiable {
