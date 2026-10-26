@@ -1270,3 +1270,21 @@ final class StashTests: XCTestCase {
     }
 }
 
+final class MilestoneTests: XCTestCase {
+    func testMilestoneBuffsAndGlobalMax() {
+        let ch = PlayerCharacter(name: "Gus", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var r = Run(character: ch)
+        let hp = r.maxHp, def = r.defBonus
+        r.applyMilestoneBuffs(["hpUp": 2, "defUp": 1, "atkUp": 1])
+        XCTAssertEqual(r.maxHp, hp + 5)
+        XCTAssertEqual(r.defBonus, def + 3)
+
+        let store = MemoryStore()
+        let book = AchievementBook(store: store, wallet: Wallet(store: store))
+        book.setGlobalMax("bestFloor", 4)
+        book.setGlobalMax("bestFloor", 2)
+        XCTAssertEqual(book.globalStats["bestFloor"], .number(4))
+    }
+}
+

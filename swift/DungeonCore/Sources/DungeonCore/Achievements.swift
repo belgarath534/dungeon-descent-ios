@@ -122,6 +122,14 @@ public final class AchievementBook {
         return true
     }
 
+    /// setGlobalStatMax: keeps the highest value seen.
+    public func setGlobalMax(_ key: String, _ value: Double) {
+        var g = globalStats
+        if case .number(let n)? = g[key], n >= value { return }
+        g[key] = .number(value)
+        globalStats = g
+    }
+
     public func trackGlobal(_ key: String, _ amount: Double = 1) {
         var g = globalStats
         if case .number(let n)? = g[key] { g[key] = .number(n + amount) } else { g[key] = .number(amount) }

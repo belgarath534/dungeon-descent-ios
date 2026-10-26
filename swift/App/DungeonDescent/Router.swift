@@ -15,6 +15,8 @@ final class Router: ObservableObject {
         case quests
         case settings
         case graveyard
+        case bestiary
+        case records
         case help
         case credits
         case whatsnew
@@ -58,6 +60,8 @@ struct RootView: View {
             case .quests: AchievementsView()
             case .settings: WebSettingsView { router.goTo(.menu) }
             case .graveyard: GraveyardView()
+            case .bestiary: BestiaryView()
+            case .records: HallOfRecordsView()
             case .help: HelpView()
             case .credits: CreditsView()
             case .whatsnew: WhatsNewView()

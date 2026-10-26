@@ -179,6 +179,19 @@ public struct Run: Codable, Sendable {
         if case .string(let b)? = ch.extra["backstory"] { backstory = b }
     }
 
+    /// applyMilestoneBuffs: permanent rewards from bestiary milestones and
+    /// Hall of Records awards ("dd_milestone_effects"). Like the web version,
+    /// only these effects do anything at run start.
+    public mutating func applyMilestoneBuffs(_ effects: [String: Int]) {
+        func has(_ k: String) -> Bool { (effects[k] ?? 0) > 0 }
+        if has("hpUp") { maxHp += 5; hp = min(maxHp, hp + 5) }
+        if has("hpUpBig") { maxHp += 10; hp = min(maxHp, hp + 10) }
+        if has("hpUpBig2") { maxHp += 15; hp = min(maxHp, hp + 15) }
+        if has("hpUpNM") { maxHp += 20; hp = min(maxHp, hp + 20) }
+        if has("defUp") { defBonus += 3 }
+        if has("spUp") { maxSp += 5; sp = min(maxSp, sp + 5) }
+    }
+
     /// Run-start effects that touch the shared wallet. Call once when a run
     /// begins. Grave Robber gets 50 gold every run and +20% gold from kills.
     public mutating func applyStartBonuses(wallet: Wallet) {

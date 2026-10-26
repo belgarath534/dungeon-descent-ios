@@ -95,7 +95,8 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Gun crafting | GUN DEFINITIONS | ⬜ |
 | Raids, Boss Rush, Daily Challenge, Tournament | RAID ENGINE, BOSS RUSH ENGINE … | ⬜ |
 | Achievements, trophies, Game Center | ACHIEVEMENTS, awardAchievement | ✅ all 115, same save keys and Game Center IDs |
-| Lifetime stats | GLOBAL STATS TRACKING | 🟡 kills, deaths, floors, runs; no stats screen yet |
+| Lifetime stats, Hall of Records | GLOBAL STATS TRACKING, GLOBAL_AWARDS, Hall of Legends | ✅ all the web's tracked stats, milestone awards (Mystery Coins and permanent effects), records and first clears |
+| Bestiary | BESTIARY_DATA, recordKill, BESTIARY_MILESTONES | ✅ 434 entries with filters, search and kill milestones; Spirits and Community tabs not yet |
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
@@ -168,3 +169,9 @@ Where an item's description and the web code disagree, Swift follows the descrip
   +1 life and so on never reached the new character. "Last Hope" also promised
   +5 SP per level up that no code ever gave. The Swift version applies them when
   each run starts.
+- **Most permanent milestone rewards never applied.** Bestiary milestones and Hall of
+  Records awards store effects, but `applyMilestoneBuffs()` only handles the extra HP,
+  defense and SP ones; "+2 Attack forever", "Second Wind free", "+1 defense vs undead",
+  "potions heal 10% more" and the rest do nothing, and "+10 Max HP forever" gives +5.
+  The Swift version currently matches the web version here; fix later.
+

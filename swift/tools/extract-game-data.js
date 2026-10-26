@@ -154,3 +154,21 @@ const ui = {
 const uiFile = path.join(root, 'swift', 'App', 'DungeonDescent', 'uitext.json');
 fs.writeFileSync(uiFile, JSON.stringify(ui, null, 1) + '\n');
 console.log('Wrote ' + path.relative(root, uiFile) + ': ' + Object.keys(ui.deathLines || {}).length + ' dungeons of death lines, ' + Object.keys(ui.closingLines || {}).length + ' of closing lines.');
+
+// The Bestiary: every entry, the enemy-name-to-entry map recordKill() uses,
+// and the kill milestones.
+{
+  const nameToId = (() => {
+    const i = src.indexOf('var nameToId = {', src.indexOf('function recordKill('));
+    const j = src.indexOf('};', i);
+    return eval('(' + src.slice(i + 'var nameToId = '.length, j + 1) + ')');
+  })();
+  const bestiary = {
+    entries: plain(grab('BESTIARY_DATA')),
+    nameToId,
+    milestones: plain(grab('BESTIARY_MILESTONES')),
+  };
+  const f = path.join(root, 'swift', 'App', 'DungeonDescent', 'bestiary.json');
+  fs.writeFileSync(f, JSON.stringify(bestiary, null, 1) + '\n');
+  console.log('Wrote ' + path.relative(root, f) + ': ' + bestiary.entries.length + ' entries, ' + Object.keys(nameToId).length + ' names, ' + Object.keys(bestiary.milestones).length + ' milestones.');
+}

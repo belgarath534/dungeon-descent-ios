@@ -186,6 +186,7 @@ final class GameModel: ObservableObject {
             "date": .string("\(c.month ?? 1)/\(c.day ?? 1)/\(c.year ?? 2026)"),
         ]))
         globalInventory.keepOnDeath(from: run)
+        checkLegends(run)
     }
 
     /// The player deleted the character: it goes to The Graveyard.

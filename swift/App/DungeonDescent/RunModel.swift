@@ -64,6 +64,8 @@ final class RunModel: ObservableObject {
     private static func newRun(_ game: GameModel, _ index: Int) -> Run {
         var r = Run(character: game.characters[index], gold: game.wallet.gold)
         r.applyStartBonuses(wallet: game.wallet)
+        r.applyMilestoneBuffs(game.milestoneEffects)
+        game.achievements.trackGlobal("runsStarted")
         game.globalInventory.load(into: &r)
         var d = SystemDice()
         Skills.start(&r, dice: &d)
@@ -394,7 +396,7 @@ final class RunModel: ObservableObject {
             Feedback.hit(heavy: true)
         }
         var questLine = ""
-        if result.crit { questLine += quest(&r, "crits") }
+        if result.crit { questLine += quest(&r, "crits"); achievements.trackGlobal("totalCrits") }
         if (result.enemyDamage ?? 0) > 0 && r.hp > 0 && r.hp <= 10 { questLine += quest(&r, "survive") }
         spoken += questLine
 
@@ -432,6 +434,13 @@ final class RunModel: ObservableObject {
         add(reward.message)
         Sound.sfx("sfx-enemy-die")
         achievements.record(.enemyKilled(e, run: r))
+        if reward.gold > 0 { achievements.trackGlobal("totalGold", Double(reward.gold)) }
+        game.checkLegends(r)
+        if let milestone = game.recordBestiaryKill(e.name) {
+            Sound.sfx("sfx-unlock")
+            add("✦ " + milestone)
+            Feedback.announce(milestone)
+        }
         if reward.levelsGained > 0 { achievements.record(.levelReached(r.level)) }
         var said = spoken + " " + reward.message
         said += quest(&r, "kills")
@@ -554,6 +563,8 @@ final class RunModel: ObservableObject {
         Sound.ambient(nil)
         add("Victory! You have conquered \(run.dungeon).")
         game.globalInventory.keep(from: run)
+        game.checkLegends(run)
+        game.recordFirstClear(run)
         game.updateCharacter(characterIndex) { $0.completed = true; $0.floor = 10 }
         game.clearRun(for: characterIndex)
         let next = game.unlockedDungeons().last ?? ""
@@ -630,7 +641,10 @@ final class RunModel: ObservableObject {
         let hpBefore = r.hp
         let out = Inventory.use(&r, at: index)
         if r.hp > hpBefore { r.floorStats.hpHealed += r.hp - hpBefore }
-        if out.used, let item, ["potion", "elixir", "heal"].contains(item.type) { r.potionsUsed += 1 }
+        if out.used, let item, ["potion", "elixir", "heal"].contains(item.type) {
+            r.potionsUsed += 1
+            achievements.trackGlobal("totalPotions")
+        }
         if out.used, let item, item.type == "elixir" || item.type == "heal" { achievements.record(.elixirUsed) }
         if out.used, let item {
             Sound.sfx(item.isWeapon || item.isArmor ? "sfx-confirm"
@@ -699,6 +713,7 @@ final class RunModel: ObservableObject {
         roomTitle = Rooms.floorName(floor, dungeon: r.dungeon)
         add("You descend to floor \(floor): \(roomTitle).")
         achievements.record(.floorReached(floor))
+        achievements.setGlobalMax("bestFloor", Double(floor))
         let questLine = questDone(&r, game.dailyQuests.reachedFloor(floor, usedPotion: r.usedPotion))
         Sound.sfx("sfx-stairs")
         Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
@@ -824,6 +839,7 @@ final class RunModel: ObservableObject {
             r.floorStats.damageDealt += result.playerDamage
             r.floorStats.bestHit = max(r.floorStats.bestHit, result.playerDamage)
             r.bestHit = max(r.bestHit, result.playerDamage)
+            achievements.trackGlobal("totalDmgDealt", Double(result.playerDamage))
         }
         if let taken = result.enemyDamage, taken > 0 { r.floorStats.damageTaken += taken }
     }
