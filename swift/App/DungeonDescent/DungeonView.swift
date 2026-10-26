@@ -78,6 +78,7 @@ struct DungeonView: View {
                 SkillChoiceOverlay(model: model)
             }
         }
+        if model.gambling { GambleOverlay(model: model) }
         if askingFlee { fleeOverlay }
         if paused { pauseOverlay }
         if showStats {

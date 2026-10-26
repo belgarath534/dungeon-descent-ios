@@ -117,6 +117,17 @@ public struct Run: Codable, Sendable {
     public var skillsUsed: [String] = []
     public var hpAtFloorStart = 0
 
+    // Mystery Coin Shop upgrades (applyCoinUpgrades)
+    public var coinUpgrades: Set<String> = []
+    public var secondWind = false
+    public var deathsBargain = false
+    public var gamblerUsed = false
+    public var luckyDescentUsed = false
+    /// Damage Death's Bargain dealt on the last death (0 when it didn't fire).
+    public var bargainStrike = 0
+
+    public func has(_ upgrade: String) -> Bool { coinUpgrades.contains(upgrade) }
+
     public var isDead: Bool { hp <= 0 }
 
     /// Attack from the equipped weapon: the middle of its range, as initDungeon() adds it.
@@ -281,6 +292,7 @@ public struct FightEffects: Codable, Sendable {
     public var decayTurns = 0
     public var damageTaken = 0
     public var recentHits: [Int] = []
+    public var huntersMarkReady = false
 
     public init() {}
 }

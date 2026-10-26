@@ -41,6 +41,7 @@ public enum Combat {
         run.inCombat = true
         run.defending = false
         run.fight = FightEffects()
+        run.fight.huntersMarkReady = run.has("cu-hunters-mark")
         if enemy.isBoss { run.bossPhase = 1 }
     }
 
@@ -99,8 +100,16 @@ public enum Combat {
         guard run.inCombat, run.enemy != nil else { return TurnResult() }
         var r = TurnResult()
 
-        let baseAtk = attackRoll(run, dice: &dice)
+        var baseAtk = attackRoll(run, dice: &dice)
         run.defending = false
+        // Coin Shop upgrades (doFight)
+        if run.has("cu-berserker-mark") && Double(run.hp) <= Double(run.maxHp) * 0.5 { baseAtk += 3 }
+        if run.fight.huntersMarkReady {
+            baseAtk = jsRound(Double(baseAtk) * 1.5)
+            run.fight.huntersMarkReady = false
+            r.log.append("🏹 Hunter's Mark — critical first strike!")
+        }
+        if run.has("cu-night-blessing") && CoinShop.isNightNow() { baseAtk += 5 }
 
         if run.frozen {
             run.frozen = false
@@ -273,6 +282,7 @@ public enum Combat {
             run.sp = min(run.maxSp, run.sp + 3)
             r.log.append("Warlord: +10 HP and +3 SP.")
         }
+        if run.has("cu-blood-pact") { run.hp = min(run.maxHp, run.hp + 2) }
         r.announcement = "\(run.enemy?.name ?? "The enemy") defeated."
         return r
     }
@@ -379,6 +389,7 @@ public enum Combat {
         let defVal = run.totalDef + (run.defending ? 4 : 0)
         let blocked = min(defVal, maxBlock)
         var taken = max(1, raw - blocked)
+        if run.has("cu-ember-ward") { taken = max(1, taken - 2) }
         if options.classTraits {
             switch run.cls {
             case "Paladin": taken = max(1, jsRound(Double(taken) * 0.85))

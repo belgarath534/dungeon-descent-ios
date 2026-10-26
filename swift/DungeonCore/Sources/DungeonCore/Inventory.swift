@@ -181,6 +181,7 @@ public enum Inventory {
         public var gold = 0
         public var trap: String? = nil
         public var playerDied = false
+        public var mysteryCoin = false
     }
 
     /// Picks up a found item: gems turn into gold, everything else goes in the bag.
@@ -204,9 +205,30 @@ public enum Inventory {
     public static func lootRoom(_ run: inout Run, dice: inout some Dice, wallet: Wallet) -> Find {
         let table = ItemTables.loot(for: run.dungeon)
         var item = table[dice.roll(0...(table.count - 1))]
+        var lucky = false
         if item.isWeapon || item.isArmor {
-            item = Rarity.apply(Rarity.roll(dice: &dice), to: item, dice: &dice)
+            var tier = Rarity.roll(dice: &dice)
+            // Lucky Descent: the run's first weapon or armor is rare.
+            if run.has("cu-lucky-descent") && !run.luckyDescentUsed,
+               let rare = Rarity.tiers.first(where: { $0.id == "rare" }) {
+                run.luckyDescentUsed = true
+                tier = rare
+                lucky = true
+            }
+            item = Rarity.apply(tier, to: item, dice: &dice)
         }
+        // Void Pact: 5% chance of a Mystery Coin.
+        let coin = run.has("cu-void-pact") && dice.chance(0.05)
+        var found = lootRoomFind(&run, item, wallet: wallet)
+        if lucky { found.message = "🌟 Lucky Descent — rare quality guaranteed! " + found.message }
+        if coin {
+            found.mysteryCoin = true
+            found.message += " 🌑 Void Pact — Mystery Coin found!"
+        }
+        return found
+    }
+
+    static func lootRoomFind(_ run: inout Run, _ item: Item, wallet: Wallet) -> Find {
         let got = pickUp(&run, item, wallet: wallet)
         if got.gold > 0 {
             return Find(message: "You find a \(item.name) worth \(got.gold) gold glinting in the dust.", gold: got.gold)
@@ -223,7 +245,7 @@ public enum Inventory {
     public static func search(_ run: inout Run, dice: inout some Dice, wallet: Wallet) -> Find {
         guard !run.searched else { return Find(message: "You have already searched this room. You find nothing more here.") }
         run.searched = true
-        let findChance = run.prof == "Thief" ? 0.50 : 0.35
+        let findChance = (run.prof == "Thief" ? 0.50 : 0.35) + (run.has("cu-loot-boost") ? 0.08 : 0)
         let first = !run.firstSearchDone
         run.firstSearchDone = true
 

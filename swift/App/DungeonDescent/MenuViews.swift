@@ -44,7 +44,7 @@ struct MainMenuView: View {
               action: .url("https://www.youtube.com/@leo09393"), separatorBefore: true),
         Entry(id: "bestiary", text: "📖 Bestiary", label: "Bestiary, view all enemies you have encountered", action: .go(.bestiary)),
         Entry(id: "quests", text: "📜 Quests", label: "Quests and achievements", action: .go(.quests)),
-        Entry(id: "coinshop", text: "🪙 Coin Shop", label: "Mystery Coin Shop, spend your Mystery Coins on permanent upgrades"),
+        Entry(id: "coinshop", text: "🪙 Coin Shop", label: "Mystery Coin Shop, spend your Mystery Coins on permanent upgrades", action: .go(.coinshop)),
         Entry(id: "afk", text: "⬇ Endless Descent", label: "Endless Descent, AFK mode"),
         Entry(id: "spire", text: "🗼 The Spire", label: "The Spire, climb 1800 floors to face The Time Eater"),
         Entry(id: "void", text: "🌑 Void Mode", label: "Void Mode, become the Void Commander and survive five waves of heroes"),

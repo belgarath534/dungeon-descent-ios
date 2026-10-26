@@ -37,6 +37,8 @@ public enum Progression {
         guard amount > 0 else { return 0 }
         var amount = amount
         if run.pilgrimProf { amount = jsRound(Double(amount) * 1.15) }
+        // Ancient Knowledge: the web version sold it but never applied it.
+        if run.has("cu-xp-boost") { amount = jsRound(Double(amount) * 1.15) }
         if run.backstoryXPBonus > 0 { amount = jsRound(Double(amount) * (1 + run.backstoryXPBonus)) }
         run.xp += amount
         guard run.level < run.levelCap else { return 0 }
@@ -114,6 +116,7 @@ public enum Progression {
         if run.luckBonus != 0 { g = jsRound(Double(g) * (1 + run.luckBonus)) }
         if run.runeFortune { g = jsRound(Double(g) * 1.25) }
         if run.weaponEffect == "fortune" { g = jsRound(Double(g) * 1.25) }
+        if run.has("cu-night-blessing") && CoinShop.isNightNow() { g = jsRound(Double(g) * 1.10) }
         if run.weaponEffect == "soulbound" { run.sp = min(run.maxSp, run.sp + 5) }
         var luckNote = ""
         if run.luckKills > 0 {
@@ -138,6 +141,8 @@ public enum Progression {
         case gearSaved
         /// Came back at 40% HP with this many lives left.
         case revived(livesLeft: Int)
+        /// Second Wind (Coin Shop): back at 1 HP with one life, once per run.
+        case secondWind
         case runOver
     }
 
@@ -164,6 +169,23 @@ public enum Progression {
         }
         run.lives = max(0, run.lives - 1)
         run.inCombat = false
+        run.bargainStrike = 0
+        // Second Wind: once per run, back at 1 HP with one life.
+        if run.lives <= 0 && run.secondWind {
+            run.secondWind = false
+            run.lives = 1
+            run.hp = 1
+            run.enemy = nil
+            return .secondWind
+        }
+        // Death's Bargain: one last strike for twice your top attack.
+        if run.lives <= 0 && run.deathsBargain, var e = run.enemy, e.hp > 0 {
+            run.deathsBargain = false
+            let dmg = run.atk.upperBound * 2
+            e.hp = max(0, e.hp - dmg)
+            run.enemy = e
+            run.bargainStrike = dmg
+        }
         if run.lives <= 0 { return .runOver }
         run.hp = jsRound(Double(run.maxHp) * 0.4)
         run.enemy = nil

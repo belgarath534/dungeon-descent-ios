@@ -66,6 +66,7 @@ public enum Skills {
         if run.freeSkills > 0 || run.weaponEffect == "apocalypse" { return 0 }
         var c = s.spCost
         if run.race == "Gnome" { c -= 2 }
+        if run.has("cu-soul-surge") { c -= 1 }
         if run.halfCostSkills { c /= 2 }
         return max(0, c)
     }

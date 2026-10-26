@@ -65,6 +65,8 @@ final class RunModel: ObservableObject {
         var r = Run(character: game.characters[index], gold: game.wallet.gold)
         r.applyStartBonuses(wallet: game.wallet)
         r.applyMilestoneBuffs(game.milestoneEffects)
+        var cd = SystemDice()
+        CoinShop.apply(CoinShop.owned(game.store), to: &r, dice: &cd, wallet: game.wallet)
         game.achievements.trackGlobal("runsStarted")
         game.globalInventory.load(into: &r)
         var d = SystemDice()
@@ -189,6 +191,7 @@ final class RunModel: ObservableObject {
             Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
             Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
             spoken += " Elite Guardian encountered on floor 10. \(g.name) blocks the path to the boss. HP: \(g.hp). Defeat it to face the final boss."
+            spoken += thirdEye(r)
             finish(r, d, phase: .fighting, spoken: spoken)
             return
         }
@@ -199,7 +202,7 @@ final class RunModel: ObservableObject {
             add("\(boss.icon) \(boss.name) rises before you. \(boss.hp) HP.")
             Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: true))
             Sound.track(Soundtrack.bossTrack(dungeon: r.dungeon))
-            spoken += " \(boss.name) rises before you. \(boss.hp) HP."
+            spoken += " \(boss.name) rises before you. \(boss.hp) HP." + thirdEye(r)
             finish(r, d, phase: .fighting, spoken: spoken)
             return
         }
@@ -214,7 +217,7 @@ final class RunModel: ObservableObject {
                 Combat.begin(&r, against: enemy)
                 Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
                 Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
-                finish(r, d, phase: .fighting, spoken: said + " \(enemy.hp) HP.")
+                finish(r, d, phase: .fighting, spoken: said + " \(enemy.hp) HP." + thirdEye(r))
             } else if out.openShop {
                 shop = Inventory.shopStock(for: r, dice: &d)
                 finish(r, d, phase: .shopping, spoken: said + " You have \(r.gold) gold.")
@@ -240,11 +243,13 @@ final class RunModel: ObservableObject {
             spoken += enemy.isElite
                 ? " Elite enemy! \(enemy.name). \(ability) \(enemy.hp) HP."
                 : " A \(enemy.name) attacks! \(enemy.hp) HP."
+            spoken += thirdEye(r)
             finish(r, d, phase: .fighting, spoken: spoken)
         case .loot:
             let find = Inventory.lootRoom(&r, dice: &d, wallet: game.wallet)
             add("\(label) \(find.message)")
             spoken += " " + find.message
+            if find.mysteryCoin { game.addMysteryCoins(1) }
             if find.item != nil || find.gold > 0 { Feedback.success(); Sound.sfx("sfx-loot") }
             spoken += questFound(&r, item: find.item, gold: find.gold)
             finishQuietRoom(r, d, spoken: spoken)
@@ -293,7 +298,7 @@ final class RunModel: ObservableObject {
             Combat.begin(&r, against: enemy)
             Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
             Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
-            finish(r, d, phase: .fighting, spoken: out.message + " \(enemy.name), \(enemy.hp) HP.")
+            finish(r, d, phase: .fighting, spoken: out.message + " \(enemy.name), \(enemy.hp) HP." + thirdEye(r))
             return
         }
         if out.item != nil || out.gold > 0 { Sound.sfx("sfx-loot") }
@@ -302,6 +307,16 @@ final class RunModel: ObservableObject {
     }
 
     private var achievements: AchievementBook { game.achievements }
+
+    /// Third Eye (Coin Shop): the enemy's exact HP, attack and special ability
+    /// before the fight (showEnemyPreview).
+    private func thirdEye(_ r: Run) -> String {
+        guard r.has("cu-third-eye"), let e = r.enemy else { return "" }
+        let special = GameContent.shared.enemySpecials[e.name].map { ". \($0.name)" } ?? ""
+        let line = "Third Eye. \(e.name). \(e.hp) HP. Attack \(e.atk.lowerBound) to \(e.atk.upperBound)\(special)."
+        add("👁 " + line)
+        return " " + line
+    }
 
     // MARK: Daily quest
 
@@ -501,6 +516,21 @@ final class RunModel: ObservableObject {
         var r = run
         Feedback.warning()
         let outcome = Progression.handleDeath(&r)
+        var spoken = spoken
+        if outcome == .runOver && r.bargainStrike > 0 {
+            // Death's Bargain (Coin Shop): the final strike lands before the end.
+            let name = r.enemy?.name ?? "the enemy"
+            add("⚰️ Death's Bargain — final strike for \(r.bargainStrike) damage!")
+            spoken += " Death's Bargain activates! Final strike — \(r.bargainStrike) damage to \(name)!"
+            if let e = r.enemy, e.isDead {
+                add("\(e.name) falls with you.")
+                spoken += " \(e.name) falls with you."
+                r.kills += 1
+                achievements.record(.enemyKilled(e, run: r))
+                _ = game.recordBestiaryKill(e.name)
+            }
+            r.bargainStrike = 0
+        }
         achievements.record(.died)
         Sound.sfx(outcome == .runOver ? "sfx-gameover" : "sfx-death")
         switch outcome {
@@ -521,6 +551,13 @@ final class RunModel: ObservableObject {
             let msg = "The Phoenix Feather ignites! You rise again at 30 percent HP. The feather crumbles to ash."
             add("🔥 " + msg)
             finish(r, dice, phase: r.inCombat ? .fighting : .exploring, spoken: spoken + " " + msg)
+        case .secondWind:
+            let msg = "Second Wind! You cling to life with 1 HP. The upgrade has been consumed."
+            add("💨 " + msg)
+            setEvent(msg, tone: "good")
+            finish(r, dice, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring,
+                   spoken: spoken + " Second Wind activated! You survived with 1 HP. This can only happen once per run.")
+            playMusic()
         case .revived(let left):
             let msg = "You died. \(left) \(left == 1 ? "life" : "lives") remaining. Restored to 40 percent health."
             add(msg)
@@ -632,8 +669,15 @@ final class RunModel: ObservableObject {
 
     // MARK: Items
 
+    /// Gambler's Spirit is waiting for Double or Halve.
+    @Published var gambling = false
+
     func useItem(at index: Int) {
         guard phase != .victory && phase != .defeat else { return }
+        if run.inventory.indices.contains(index) && run.inventory[index].type == "gamblers-spirit" {
+            startGamble(at: index)
+            return
+        }
         var r = run
         var d = dice
         let isReveal = r.inventory.indices.contains(index) && r.inventory[index].id == "scroll-reveal"
@@ -663,6 +707,38 @@ final class RunModel: ObservableObject {
         }
         persist()
         Feedback.announce(msg)
+    }
+
+    /// Gambler's Spirit (Coin Shop): once per run, outside combat.
+    private func startGamble(at index: Int) {
+        if run.gamblerUsed { Feedback.announce("Gambler's Spirit already used this run."); return }
+        if run.inCombat { Feedback.announce("Cannot gamble during combat."); return }
+        var r = run
+        r.gamblerUsed = true
+        r.inventory.remove(at: index)
+        run = r
+        persist()
+        gambling = true
+    }
+
+    func gamble(double: Bool) {
+        guard gambling else { return }
+        gambling = false
+        var r = run
+        let before = r.gold
+        r.gold = double ? before * 2 : before / 2
+        if r.gold > before { game.wallet.addGold(r.gold - before) } else { _ = game.wallet.spendGold(before - r.gold) }
+        run = r
+        persist()
+        if double {
+            add("🎲 Gambler's Spirit — DOUBLED! \(r.gold) gold!")
+            setEvent("🎲 Gambler's Spirit — Fortune smiles. Gold doubled!", tone: "good")
+            Feedback.announce("Gambler's Spirit. You doubled your gold. \(r.gold) gold.")
+        } else {
+            add("🎲 Gambler's Spirit — HALVED. \(r.gold) gold.")
+            setEvent("🎲 Gambler's Spirit — The dice were cruel. Gold halved.", tone: "danger")
+            Feedback.announce("Gambler's Spirit. You halved your gold. \(r.gold) gold.")
+        }
     }
 
     func unequipWeapon() {
@@ -704,6 +780,8 @@ final class RunModel: ObservableObject {
         r.guardianDone = false
         // advanceFloor heals 35% of max HP on the way down.
         r.hp = min(r.maxHp, r.hp + jsRound(Double(r.maxHp) * 0.35))
+        // Warm Blood (Coin Shop): 1 HP on each new floor.
+        if r.has("cu-warm-blood") && r.hp > 0 { r.hp = min(r.maxHp, r.hp + 1) }
         r.hpAtFloorStart = r.hp
         r.floorStats = FloorStats(goldStart: r.gold)
         Encounters.planFloor(&r, dice: &d)

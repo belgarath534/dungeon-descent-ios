@@ -1353,3 +1353,82 @@ final class RaidTests: XCTestCase {
     }
 }
 
+
+final class CoinShopTests: XCTestCase {
+    private func freshRun() -> Run {
+        Run(character: PlayerCharacter(name: "Ivy", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+    }
+
+    func testBuyingSpendsCoinsAndKeepsTheRaidSaveInStep() {
+        let store = MemoryStore(["dd_mystery_coins": "12", "dd_raid": #"{"mysteryCoins":30}"#])
+        XCTAssertEqual(CoinShop.coins(store), 30)
+        XCTAssertEqual(store.getItem("dd_mystery_coins"), "30")
+        let hp = CoinShop.upgrades.first { $0.id == "cu-hp-boost" }!
+        XCTAssertTrue(CoinShop.buy(hp, store: store))
+        XCTAssertFalse(CoinShop.buy(hp, store: store))
+        XCTAssertEqual(CoinShop.coins(store), 15)
+        XCTAssertEqual(RaidSave(store: store).coins, 15)
+        XCTAssertEqual(CoinShop.owned(store), ["cu-hp-boost"])
+        let blade = CoinShop.upgrades.first { $0.id == "cu-void-touched" }!
+        XCTAssertFalse(CoinShop.buy(blade, store: store))
+        XCTAssertEqual(CoinShop.upgrades.count, 26)
+    }
+
+    func testUpgradesApplyAtRunStart() {
+        var r = freshRun()
+        let hp = r.maxHp, def = r.defBonus, gold = r.gold
+        var dice = LoadedDice()
+        CoinShop.apply(["cu-hp-boost", "cu-iron-skin", "cu-starting-gold", "cu-alchemist-gift", "cu-trapper",
+                        "cu-gamblers-spirit", "cu-void-touched", "cu-second-wind"],
+                       to: &r, dice: &dice, wallet: Wallet(store: MemoryStore()))
+        XCTAssertEqual(r.maxHp, hp + 10)
+        XCTAssertEqual(r.defBonus, def + 2)
+        XCTAssertEqual(r.gold, gold + 15)
+        XCTAssertEqual(r.inventory.filter { $0.type == "potion" }.count, 2)
+        XCTAssertTrue(r.inventory.contains { $0.type == "soul-trap" })
+        XCTAssertTrue(r.inventory.contains { $0.type == "gamblers-spirit" })
+        XCTAssertTrue(r.inventory.contains { $0.name == "Void Shard" })
+        XCTAssertTrue(r.secondWind)
+    }
+
+    func testSecondWindThenDeathsBargain() {
+        var r = freshRun()
+        r.coinUpgrades = ["cu-second-wind", "cu-deaths-bargain"]
+        r.secondWind = true
+        r.deathsBargain = true
+        r.lives = 1
+        r.hp = 0
+        XCTAssertEqual(Progression.handleDeath(&r), .secondWind)
+        XCTAssertEqual(r.hp, 1)
+        XCTAssertEqual(r.lives, 1)
+        r.enemy = Enemy(name: "Rat", icon: "🐀", hp: 500, maxHp: 500, atk: 1...2, gold: 1...2)
+        r.hp = 0
+        XCTAssertEqual(Progression.handleDeath(&r), .runOver)
+        XCTAssertEqual(r.bargainStrike, r.atk.upperBound * 2)
+        XCTAssertEqual(r.enemy?.hp, 500 - r.atk.upperBound * 2)
+    }
+
+    func testEmberWardSoulSurgeAndAncientKnowledge() {
+        var plain = freshRun(), warded = freshRun()
+        warded.coinUpgrades = ["cu-ember-ward"]
+        let e = Enemy(name: "Rat", icon: "🐀", hp: 500, maxHp: 500, atk: 20...20, gold: 1...2)
+        Combat.begin(&plain, against: e)
+        Combat.begin(&warded, against: e)
+        var d1 = LoadedDice(), d2 = LoadedDice()
+        let a = Combat.takeTurn(&plain, .defend, dice: &d1)
+        let b = Combat.takeTurn(&warded, .defend, dice: &d2)
+        XCTAssertEqual((a.enemyDamage ?? 0) - 2, b.enemyDamage)
+
+        var s = freshRun()
+        let skill = Skills.all(for: s.cls).first { $0.spCost > 1 }!
+        let before = Skills.cost(skill, s)
+        s.coinUpgrades = ["cu-soul-surge"]
+        XCTAssertEqual(Skills.cost(skill, s), before - 1)
+
+        var x = freshRun()
+        x.coinUpgrades = ["cu-xp-boost"]
+        _ = Progression.gainXP(&x, 20)
+        XCTAssertEqual(x.xp, 23)
+    }
+}

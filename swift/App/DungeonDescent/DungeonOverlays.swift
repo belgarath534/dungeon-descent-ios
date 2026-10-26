@@ -480,3 +480,26 @@ struct RunSummaryView: View {
         .accessibilityLabel("\(label): \(v)")
     }
 }
+
+/// Gambler's Spirit's choice (showChoiceModal).
+@MainActor
+struct GambleOverlay: View {
+    @ObservedObject var model: RunModel
+
+    var body: some View {
+        let gold = model.run.gold
+        DungeonDialog(maxWidth: 420) {
+            Text("🎲 Gambler's Spirit — Choose Your Fate").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
+                .padding(.bottom, 8).accessibilityAddTraits(.isHeader)
+            Text("Double your gold (\(gold) → \(gold * 2)g) or halve it (\(gold) → \(gold / 2)g). No refunds.")
+                .font(Theme.crimson(14)).foregroundStyle(Theme.textSecondary).padding(.bottom, 16)
+            HStack(spacing: 10) {
+                Button("Double (\(gold * 2)g)") { model.gamble(double: true) }
+                    .buttonStyle(WebButtonStyle(kind: .gold))
+                Button("Halve (\(gold / 2)g)") { model.gamble(double: false) }
+                    .buttonStyle(WebButtonStyle(kind: .ghost))
+            }
+        }
+        .onAppear { Feedback.announce("Gambler's Spirit. Double your gold to \(gold * 2), or halve it to \(gold / 2). No refunds.") }
+    }
+}
