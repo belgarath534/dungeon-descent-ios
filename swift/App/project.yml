@@ -43,6 +43,8 @@ targets:
         product: FirebaseAuth
       - package: Firebase
         product: FirebaseFirestore
+      - package: Firebase
+        product: FirebaseDatabase
       - package: GoogleSignIn
         product: GoogleSignIn
       - target: DDLiveActivity

@@ -50,7 +50,7 @@ struct WebSettingsView: View {
     ]
 
     static let panelNames = ["audio": "Audio", "language": "Language", "accessibility": "Accessibility", "gameplay": "Gameplay",
-                             "account": "Account", "dev": "Developer Tools", "general": "General"]
+                             "account": "Account", "chat": "Chat", "dev": "Developer Tools", "general": "General"]
 
     var body: some View {
         ZStack {
@@ -116,7 +116,7 @@ struct WebSettingsView: View {
     }
 
     private func open(_ id: String) {
-        guard ["audio", "accessibility", "gameplay", "general", "account"].contains(id) else {
+        guard ["audio", "accessibility", "gameplay", "general", "account", "chat"].contains(id) else {
             Sound.sfx("sfx-select")
             let name = Self.categories.first { $0.id == id }?.name ?? id
             Feedback.announce("\(name) settings aren't in the Swift version yet. Coming soon.")
@@ -140,6 +140,7 @@ struct WebSettingsView: View {
         case "accessibility": accessibility
         case "gameplay": gameplay
         case "account": AccountPanel()
+        case "chat": ChatSettingsPanel(store: game.store)
         default: general
         }
     }
