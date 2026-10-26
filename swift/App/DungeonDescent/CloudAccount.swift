@@ -64,8 +64,31 @@ final class CloudAccount: NSObject, ObservableObject {
 
     var displayLine: String {
         guard let u = user else { return "" }
-        let name = game?.store.getItem("dd_username") ?? u.displayName ?? "Adventurer"
+        let name = displayName
         return u.email.map { "\(name) (\($0))" } ?? name
+    }
+
+    /// generateFallbackUsername: "Leo#x7k" from the email and the account id.
+    static func fallbackName(email: String?, uid: String) -> String {
+        let local = (email ?? "").split(separator: "@").first.map(String.init) ?? ""
+        let letters = local.filter { $0.isASCII && $0.isLetter }
+        let prefix = letters.count >= 3 ? letters.prefix(1).uppercased() + letters.dropFirst().prefix(2).lowercased()
+            : !letters.isEmpty ? letters.prefix(1).uppercased() + letters.dropFirst().lowercased()
+            : "Anon"
+        return prefix + "#" + String(uid.suffix(3))
+    }
+
+    /// getDisplayName: the chosen username, or the fallback.
+    var displayName: String {
+        guard let u = user else { return "Adventurer" }
+        if let n = game?.store.getItem("dd_username"), !n.isEmpty { return n }
+        return Self.fallbackName(email: u.email, uid: u.uid)
+    }
+
+    /// getPlayerTitle
+    var title: String {
+        if let t = game?.store.getItem("dd_title"), !t.isEmpty { return t }
+        return "Wanderer"
     }
 
     private func say(_ text: String, color: UInt32 = 0xff4444) {
@@ -317,6 +340,163 @@ final class CloudAccount: NSObject, ObservableObject {
         guard signedIn, Date().timeIntervalSince(lastAutoSync) >= 120 else { return }
         lastAutoSync = Date()
         Task { await sync(silent: true) }
+    }
+
+    // MARK: Username
+
+    /// checkUsername
+    static func usernameProblem(_ name: String) -> String? {
+        let n = name.trimmingCharacters(in: .whitespaces)
+        if n.isEmpty { return "Enter a username." }
+        if n.count < 3 { return "Username must be at least 3 characters." }
+        if n.count > 20 { return "Username must be 20 characters or fewer." }
+        if !n.allSatisfy({ $0.isASCII && ($0.isLetter || $0.isNumber || $0 == "_") }) {
+            return "Username can only contain letters, numbers, and underscores."
+        }
+        return nil
+    }
+
+    /// submitUsername / saveUsername: reserved in "usernames" so no one else takes it.
+    func setUsername(_ raw: String) async {
+        let name = raw.trimmingCharacters(in: .whitespaces)
+        if let problem = Self.usernameProblem(name) { say(problem); return }
+        guard let u = Auth.auth().currentUser else { say("Not signed in."); return }
+        message = "Checking availability..."
+        messageColor = 0xffaa44
+        do {
+            let ref = db.collection("usernames").document(name.lowercased())
+            let snap = try await ref.getDocument()
+            if snap.exists, let owner = snap.data()?["uid"] as? String, owner != u.uid {
+                say("That username is already taken. Try another.")
+                return
+            }
+            try await ref.setData(["uid": u.uid, "username": name])
+            try await db.collection("users").document(u.uid)
+                .setData(["username": name, "email": u.email ?? "", "updatedAt": Self.now], merge: true)
+            game?.store.setItem("dd_username", name)
+            objectWillChange.send()
+            say("Username set to \(name). You are now on the leaderboard.", color: 0x44ff88)
+        } catch {
+            say((error as NSError).code == FirestoreErrorCode.Code.permissionDenied.rawValue
+                ? "Permission denied by server. Try again later." : "Could not save the username. Check your connection.")
+        }
+    }
+
+    // MARK: Leaderboard
+
+    struct LeaderboardEntry: Identifiable {
+        let id: String
+        let username: String
+        let score: Int
+    }
+
+    /// uploadToLeaderboard: "leaderboard/{uid}" with the High Score total.
+    func uploadScore() async -> Bool {
+        guard let u = Auth.auth().currentUser, let store = game?.store else {
+            Feedback.announce("You need to sign in to upload your score. Go to Settings then Account.")
+            return false
+        }
+        let total = HighScore.load(store).total
+        guard total > 0 else {
+            Feedback.announce("No score to upload yet. Play some runs first.")
+            return false
+        }
+        Feedback.announce("Uploading your score of \(total.formatted()) points to the leaderboard.")
+        do {
+            try await db.collection("leaderboard").document(u.uid).setData([
+                "uid": u.uid, "username": "\(displayName) · \(title)", "score": total,
+                "tag": title, "updatedAt": Self.now,
+            ])
+            Feedback.announce("Score uploaded successfully. Check the leaderboard to see your rank.")
+            return true
+        } catch {
+            Feedback.announce("Upload failed. Check your connection.")
+            return false
+        }
+    }
+
+    /// loadGlobalLeaderboard: the top 20. Nil when it couldn't load.
+    func leaderboard() async -> [LeaderboardEntry]? {
+        do {
+            let snap = try await db.collection("leaderboard").order(by: "score", descending: true).limit(to: 20).getDocuments()
+            let list = snap.documents.map { d in
+                let data = d.data()
+                return LeaderboardEntry(id: (data["uid"] as? String) ?? d.documentID,
+                                        username: (data["username"] as? String) ?? "Anonymous",
+                                        score: (data["score"] as? NSNumber)?.intValue ?? 0)
+            }
+            checkWeeklyReward(list)
+            return list
+        } catch {
+            return nil
+        }
+    }
+
+    /// checkWeeklyReward: number 1 gets 3 Mystery Coins once a week.
+    private func checkWeeklyReward(_ list: [LeaderboardEntry]) {
+        guard let me = user?.uid, list.first?.id == me, let game else { return }
+        let key = "weekly_reward_" + Self.weekKey()
+        guard game.store.getItem(key) == nil else { return }
+        game.store.setItem(key, "1")
+        game.addMysteryCoins(3)
+        Feedback.announce("Weekly Champion! You are number 1 on the global leaderboard this week. 3 Mystery Coins have been added to your account.")
+    }
+
+    /// getWeekKey: "2026_w44".
+    static func weekKey(_ now: Date = Date()) -> String {
+        let cal = Calendar.current
+        let year = cal.component(.year, from: now)
+        let start = cal.date(from: DateComponents(year: year, month: 1, day: 1)) ?? now
+        let startDay = cal.component(.weekday, from: start) - 1
+        let week = Int(((now.timeIntervalSince(start) / 86400 + Double(startDay) + 1) / 7).rounded(.up))
+        return "\(year)_w\(week)"
+    }
+
+    // MARK: Inbox
+
+    struct InboxMessage: Identifiable {
+        let id: String
+        let from: String
+        let message: String
+        let coins: Int
+        let claimed: Bool
+        let createdAt: Double
+    }
+
+    /// loadInbox: the newest 20 messages from the developer. Nil when it couldn't load.
+    func inbox() async -> [InboxMessage]? {
+        guard let uid = Auth.auth().currentUser?.uid else { return [] }
+        do {
+            let snap = try await db.collection("users").document(uid).collection("inbox")
+                .order(by: "createdAt", descending: true).limit(to: 20).getDocuments()
+            return snap.documents.map { d in
+                let x = d.data()
+                return InboxMessage(id: d.documentID, from: (x["from"] as? String) ?? "Dungeon Descent",
+                                    message: (x["message"] as? String) ?? "",
+                                    coins: (x["coins"] as? NSNumber)?.intValue ?? 0,
+                                    claimed: (x["claimed"] as? Bool) ?? false,
+                                    createdAt: (x["createdAt"] as? NSNumber)?.doubleValue ?? 0)
+            }
+        } catch {
+            return nil
+        }
+    }
+
+    /// claimInboxMessage
+    func claim(_ m: InboxMessage) async -> Bool {
+        guard let uid = Auth.auth().currentUser?.uid, !m.claimed else { return false }
+        do {
+            try await db.collection("users").document(uid).collection("inbox").document(m.id)
+                .updateData(["claimed": true, "claimedAt": Self.now])
+            if m.coins > 0 {
+                game?.addMysteryCoins(m.coins)
+                Feedback.announce("\(m.coins) Mystery Coins claimed and added to your account.")
+            }
+            return true
+        } catch {
+            Feedback.announce("Could not claim. Try again.")
+            return false
+        }
     }
 
     // MARK: Signing out and deleting

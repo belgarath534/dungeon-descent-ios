@@ -8,6 +8,7 @@ struct AccountPanel: View {
     @State private var email = ""
     @State private var password = ""
     @State private var confirmDelete = false
+    @State private var username = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -109,6 +110,20 @@ struct AccountPanel: View {
             }
             .frame(maxWidth: .infinity).padding(.bottom, 16)
             .accessibilityElement(children: .combine)
+            Text("Leaderboard name: \(cloud.displayName) · \(cloud.title)")
+                .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xffdd44))
+                .frame(maxWidth: .infinity).padding(6)
+                .background(Color(hex: 0x1a1400)).overlay(Rectangle().stroke(Color(hex: 0x333333)))
+                .padding(.bottom, 8)
+            TextField("Username (3–20 letters, numbers or _)", text: $username)
+                .textInputAutocapitalization(.never).autocorrectionDisabled()
+                .font(Theme.cinzel(12)).foregroundStyle(.white)
+                .padding(10).background(Color(hex: 0x0a0a0a)).overlay(Rectangle().stroke(Color(hex: 0x333333)))
+                .accessibilityLabel("Username")
+                .padding(.bottom, 8)
+            button("🏷 Set Username", bg: 0x1a1400, border: 0xffdd44, fg: 0xffdd44, label: "Set username") {
+                await cloud.setUsername(username)
+            }
             button("☁ Sync Save to Cloud", bg: 0x0a1a0a, border: 0x336633, fg: 0xaaffaa, label: "Sync save to cloud now") {
                 await cloud.sync(silent: false)
             }
