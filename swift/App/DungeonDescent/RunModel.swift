@@ -448,6 +448,11 @@ final class RunModel: ObservableObject {
         var d = dice
         let reward = Progression.rewardKill(&r, e, dice: &d, wallet: game.wallet)
         add(reward.message)
+        var dropLine = ""
+        if let drop = Inventory.equipmentDrop(&r, dice: &d) {
+            add("🎁 Found: \(drop.icon) \(drop.name) Level \(drop.level ?? 1)! Check inventory.")
+            dropLine = " Item found. \(drop.name) Level \(drop.level ?? 1). Open inventory to equip it."
+        }
         Sound.sfx("sfx-enemy-die")
         achievements.record(.enemyKilled(e, run: r))
         if reward.gold > 0 { achievements.trackGlobal("totalGold", Double(reward.gold)) }
@@ -458,7 +463,7 @@ final class RunModel: ObservableObject {
             Feedback.announce(milestone)
         }
         if reward.levelsGained > 0 { achievements.record(.levelReached(r.level)) }
-        var said = spoken + " " + reward.message
+        var said = spoken + " " + reward.message + dropLine
         HighScore.add("enemy_kills", 10, store: game.store)
         if e.isElite { HighScore.add("elite_kills", 150, store: game.store) }
         if e.isBoss {

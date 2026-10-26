@@ -1611,3 +1611,23 @@ final class SellTests: XCTestCase {
         XCTAssertNil(Inventory.sell(&r, at: 0, wallet: Wallet(store: store), store: store))
     }
 }
+
+final class EquipmentDropTests: XCTestCase {
+    func testDropsAreScaledGear() {
+        var r = Run(character: PlayerCharacter(name: "Ivy", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.floor = 7
+        var drops = 0
+        var dice = SeededDice(seed: 9)
+        for _ in 0..<1000 {
+            if let item = Inventory.equipmentDrop(&r, dice: &dice) {
+                drops += 1
+                XCTAssertTrue(item.isWeapon || item.isArmor)
+                XCTAssertEqual(item.level, 3)
+            }
+        }
+        XCTAssertGreaterThan(drops, 100)
+        XCTAssertLessThan(drops, 200)
+        XCTAssertEqual(r.inventory.count, drops)
+    }
+}

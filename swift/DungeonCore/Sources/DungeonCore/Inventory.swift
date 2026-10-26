@@ -201,6 +201,43 @@ public enum Inventory {
         return (0, item)
     }
 
+    /// WEAPON_TYPES and ARMOR_TYPES: the gear enemies drop.
+    static let weaponTypes: [(id: String, icon: String, name: String, atk: [Int], desc: String)] = [
+        ("sword", "⚔️", "Sword", [5, 8], "Balanced. Reliable damage."),
+        ("mace", "🔨", "Mace", [6, 10], "Slow but hits hard."),
+        ("axe", "🪓", "Axe", [7, 11], "High variance. Feast or famine."),
+        ("dagger", "🗡️", "Dagger", [3, 7], "Fast. 15% chance to strike twice."),
+        ("staff", "🪄", "Staff", [4, 9], "Boosts SP by 10 when equipped."),
+        ("bow", "🏹", "Bow", [5, 10], "First strike every combat."),
+    ]
+    static let armorTypes: [(id: String, icon: String, name: String, def: Int, desc: String)] = [
+        ("light", "🥋", "Light Armor", 2, "Fast. +1 speed, low protection."),
+        ("medium", "🛡️", "Medium Armor", 4, "Balanced protection."),
+        ("heavy", "⛓️", "Heavy Armor", 7, "High protection. -1 ATK."),
+    ]
+
+    /// checkEquipmentDrop / rollEquipmentDrop: 15% of kills (20% with
+    /// Bloodhound's Nose) drop a weapon or armor a level higher every 3
+    /// floors, with a rolled rarity. It goes in the bag.
+    public static func equipmentDrop(_ run: inout Run, dice: inout some Dice) -> Item? {
+        guard dice.chance(0.15 + (run.has("cu-bloodhound") ? 0.05 : 0)) else { return nil }
+        let level = max(1, 1 + run.floor / 3)
+        let tier = Rarity.roll(dice: &dice)
+        var item: Item
+        if dice.chance(0.5) {
+            let t = weaponTypes[dice.roll(0...(weaponTypes.count - 1))]
+            item = Item(id: "drop-weapon-\(Int(Date().timeIntervalSince1970 * 1000))-\(dice.roll(0...9999))", name: t.name,
+                        icon: t.icon, type: "weapon", desc: t.desc, atkBase: t.atk, level: level, weaponType: t.id, isEquippable: true)
+        } else {
+            let t = armorTypes[dice.roll(0...(armorTypes.count - 1))]
+            item = Item(id: "drop-armor-\(Int(Date().timeIntervalSince1970 * 1000))-\(dice.roll(0...9999))", name: t.name,
+                        icon: t.icon, type: "armor", desc: t.desc, defBase: t.def, level: level, armorType: t.id, isEquippable: true)
+        }
+        if tier.id != "common" { item = Rarity.apply(tier, to: item, dice: &dice) }
+        run.inventory.append(item)
+        return item
+    }
+
     /// getSellPrice
     public static func sellPrice(_ item: Item) -> Int {
         let level = item.level ?? 1
