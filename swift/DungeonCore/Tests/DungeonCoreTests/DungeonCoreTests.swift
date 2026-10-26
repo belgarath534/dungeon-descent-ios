@@ -1560,3 +1560,36 @@ final class TournamentTests: XCTestCase {
         XCTAssertEqual(Tournament.best(s, store: store), 300)
     }
 }
+
+final class HideAndSeekTests: XCTestCase {
+    func testWallsChaseAndEnding() {
+        var dice = LoadedDice()
+        var hs = HideAndSeek(dice: &dice)
+        XCTAssertEqual(hs.distance, 6)
+        XCTAssertEqual(hs.move(.north, dice: &dice).outcome, .wall)
+        XCTAssertEqual(hs.moves, 0)
+        _ = hs.move(.east, dice: &dice)
+        XCTAssertEqual(hs.moves, 1)
+        XCTAssertEqual(hs.distance, 4)
+        XCTAssertTrue(hs.chasing)
+        var ended = HideAndSeek.Outcome.none
+        for _ in 0..<20 where hs.active {
+            ended = hs.move(.east, dice: &dice).outcome
+        }
+        XCTAssertEqual(ended, .caught)
+    }
+
+    func testRunsAlwaysEnd() {
+        for seed in UInt64(1)...200 {
+            var dice = SeededDice(seed: seed)
+            var hs = HideAndSeek(dice: &dice)
+            var n = 0
+            while hs.active && n < 500 {
+                n += 1
+                if hs.distance <= 2, dice.chance(0.5) { _ = hs.hide(dice: &dice) }
+                else { _ = hs.move(dice.chance(0.5) ? .east : .south, dice: &dice) }
+            }
+            XCTAssertFalse(hs.active)
+        }
+    }
+}

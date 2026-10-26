@@ -28,6 +28,7 @@ final class Router: ObservableObject {
         case chat
         case tournament
         case multiplayer
+        case hideseek
         case help
         case credits
         case whatsnew
@@ -84,6 +85,7 @@ struct RootView: View {
             case .chat: GlobalChatView(store: game.store)
             case .tournament: TournamentView()
             case .multiplayer: PvPView()
+            case .hideseek: HideSeekView()
             case .help: HelpView()
             case .credits: CreditsView()
             case .whatsnew: WhatsNewView()

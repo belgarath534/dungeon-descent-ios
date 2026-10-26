@@ -8,6 +8,12 @@ import DungeonCore
 enum Sound {
     static func track(_ name: String) { AudioEngine.shared.playTrack(name) }
     static func stopMusic() { AudioEngine.shared.stopMusic() }
+    /// A looping sound placed left or right (pan -1…1), like a StereoPannerNode.
+    static func startLoop(_ file: String, volume: Double, pan: Double) { AudioEngine.shared.startLoop(file, volume: volume, pan: pan) }
+    static func moveLoop(volume: Double, pan: Double) { AudioEngine.shared.moveLoop(volume: volume, pan: pan) }
+    static func stopLoop() { AudioEngine.shared.stopLoop() }
+    /// A one-shot sound placed left or right.
+    static func placed(_ file: String, volume: Double, pan: Double) { AudioEngine.shared.placed(file, volume: volume, pan: pan) }
     static func ambient(_ key: String?) { AudioEngine.shared.playAmbient(key) }
     static func sfx(_ id: String) { AudioEngine.shared.playEffect(id) }
     static func settingsChanged() { AudioEngine.shared.applySettings() }
@@ -108,6 +114,37 @@ final class AudioEngine {
             fadeOut(ambient)
             ambient = nil
         }
+    }
+
+    private var loop: AVAudioPlayer?
+    private var oneShots: [AVAudioPlayer] = []
+
+    func startLoop(_ file: String, volume: Double, pan: Double) {
+        stopLoop()
+        guard AppSettings.effectsOn, let u = url(file), let p = try? AVAudioPlayer(contentsOf: u) else { return }
+        p.numberOfLoops = -1
+        loop = p
+        moveLoop(volume: volume, pan: pan)
+        p.play()
+    }
+
+    func moveLoop(volume: Double, pan: Double) {
+        loop?.volume = Float(volume * AppSettings.effectsVolume)
+        loop?.pan = Float(pan)
+    }
+
+    func stopLoop() {
+        loop?.stop()
+        loop = nil
+    }
+
+    func placed(_ file: String, volume: Double, pan: Double) {
+        guard AppSettings.effectsOn, let u = url(file), let p = try? AVAudioPlayer(contentsOf: u) else { return }
+        p.volume = Float(volume * AppSettings.effectsVolume)
+        p.pan = Float(pan)
+        oneShots.removeAll { !$0.isPlaying }
+        oneShots.append(p)
+        p.play()
     }
 
     func stopMusic() {
