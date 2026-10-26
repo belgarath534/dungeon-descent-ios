@@ -1179,3 +1179,42 @@ final class DeathLogTests: XCTestCase {
     }
 }
 
+final class BackstoryTests: XCTestCase {
+    func testOriginBonusesReachTheRun() {
+        var ch = PlayerCharacter(name: "Cid", cls: "Warrior", race: "Human", prof: "Scholar",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.extra["backstory"] = .string("true-believer")
+        let wallet = Wallet(store: MemoryStore())
+        var r = Run(character: ch, gold: 0)
+        r.applyStartBonuses(wallet: wallet)
+        XCTAssertEqual(r.lives, 4)
+
+        ch.extra["backstory"] = .string("debt-collector")
+        r = Run(character: ch, gold: 0)
+        r.applyStartBonuses(wallet: wallet)
+        XCTAssertEqual(r.gold, 25)
+        XCTAssertEqual(wallet.gold, 25)
+
+        ch.extra["backstory"] = .string("last-hope")
+        r = Run(character: ch, gold: 0)
+        r.applyStartBonuses(wallet: wallet)
+        let sp = r.maxSp
+        _ = Progression.gainXP(&r, Progression.xpNeeded(atLevel: 1))
+        XCTAssertEqual(r.maxSp, sp + 5)
+    }
+}
+
+final class InfernalUnlockTests: XCTestCase {
+    func testInfernalAndAbyssalOpenAtOneHundredTrophies() {
+        let store = MemoryStore()
+        let roster = CharacterRoster(store: store)
+        store.setItem("dd_unlocks", #"{"The Infernal Descent":true}"#)
+        XCTAssertFalse(roster.unlockedDungeons().contains("The Infernal Descent"))
+        store.setItem("dd_trophies", "100")
+        let list = roster.unlockedDungeons()
+        XCTAssertTrue(list.contains("The Infernal Descent"))
+        XCTAssertTrue(list.contains("The Abyssal Deep"))
+        XCTAssertEqual(store.getItem("dd_infernal_unlocked"), "1")
+    }
+}
+

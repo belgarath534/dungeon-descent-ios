@@ -37,6 +37,7 @@ public enum Progression {
         guard amount > 0 else { return 0 }
         var amount = amount
         if run.pilgrimProf { amount = jsRound(Double(amount) * 1.15) }
+        if run.backstoryXPBonus > 0 { amount = jsRound(Double(amount) * (1 + run.backstoryXPBonus)) }
         run.xp += amount
         guard run.level < run.levelCap else { return 0 }
         var needed = xpNeeded(atLevel: run.level)
@@ -48,6 +49,10 @@ public enum Progression {
             needed = xpNeeded(atLevel: run.level)
         }
         if gained > 0 { run.levelPoints += 3 }
+        if gained > 0 && run.backstorySPBonus > 0 {
+            run.maxSp += run.backstorySPBonus * gained
+            run.sp = min(run.maxSp, run.sp + run.backstorySPBonus * gained)
+        }
         return gained
     }
 

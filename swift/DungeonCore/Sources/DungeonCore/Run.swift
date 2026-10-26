@@ -104,6 +104,10 @@ public struct Run: Codable, Sendable {
     public var startedAt = Date().timeIntervalSince1970
     public var diedThisRun = false
     public var usedPotion = false
+    /// The character's origin, and its XP and per-level SP bonuses.
+    public var backstory: String?
+    public var backstoryXPBonus = 0.0
+    public var backstorySPBonus = 0
     public var skillsUsed: [String] = []
     public var hpAtFloorStart = 0
 
@@ -166,6 +170,7 @@ public struct Run: Codable, Sendable {
         // Continue Journey carries level and XP into the next dungeon.
         if case .number(let l)? = ch.extra["carryLevel"] { level = max(1, Int(l)) }
         if case .number(let x)? = ch.extra["carryXp"] { xp = max(0, Int(x)) }
+        if case .string(let b)? = ch.extra["backstory"] { backstory = b }
     }
 
     /// Run-start effects that touch the shared wallet. Call once when a run
@@ -175,6 +180,20 @@ public struct Run: Codable, Sendable {
             gold += 50
             wallet.addGold(50)
             graveRobberLoot = true
+        }
+        // The origin chosen at creation (BACKSTORIES). The web version applied
+        // these to the previous run's state, so they never reached the player.
+        switch backstory {
+        case "exiled-noble", "debt-collector":
+            let g = backstory == "exiled-noble" ? 15 : 25
+            gold += g
+            wallet.addGold(g)
+        case "cursed-wanderer": maxHp += 10; hp = min(maxHp, hp + 10)
+        case "former-soldier": defBonus += 2
+        case "lost-scholar": backstoryXPBonus = 0.2
+        case "true-believer": lives += 1; maxLives += 1
+        case "last-hope": backstorySPBonus = 5; maxSp += 5; sp = min(maxSp, sp + 5)
+        default: break
         }
     }
 }

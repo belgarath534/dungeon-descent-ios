@@ -1,0 +1,3547 @@
+{
+ "steps": [
+  {
+   "step": 1,
+   "heading": "Step 1 of 12",
+   "title": "Choose Your Class",
+   "desc": "Your class defines how you fight and survive.",
+   "cards": [
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Warrior",
+     "label": "Warrior, frontline fighter, high strength and defense",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "⚔️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Warrior",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Frontline Fighter",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Crushes enemies through brute strength and iron will.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Monk",
+     "label": "Monk, spiritual striker, high agility",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🥋",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Monk",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Spiritual Striker",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Channels inner force. Moves like shadow, strikes like thunder.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Assassin",
+     "label": "Assassin, shadow predator, very high agility and luck",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🗡️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Assassin",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Shadow Predator",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Strikes from darkness before prey can react.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "LCK ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Paladin",
+     "label": "Paladin, divine guardian, high defense and faith",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🛡️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Paladin",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Divine Guardian",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Wields holy power to smite evil and shield against darkness.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "FAI ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Naturalist",
+     "label": "Naturalist, wild sage, high intelligence and luck",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🌿",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Naturalist",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Wild Sage",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Commands beasts and bends the wild to their cause.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "LCK ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Sorcerer",
+     "label": "Sorcerer, arcane destroyer, very high intelligence but low defense",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🔮",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Sorcerer",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Arcane Destroyer",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Wields raw arcane chaos. Glass cannon — obliterates first.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●○○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Necromancer",
+     "label": "Necromancer, death mage, raises fallen enemies",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "💀",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Necromancer",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Death Mage",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Raises fallen enemies as undead servants. Sacrifices HP for power. Benefits from death itself.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●○○○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Berserker",
+     "label": "Berserker, rage warrior, gets stronger at low health",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🪓",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Berserker",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Rage Warrior",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "The lower the HP, the harder the hits. Below 25% HP becomes truly unstoppable.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Bard",
+     "label": "Bard, song weaver, support and buff class",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🎵",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Bard",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Song Weaver",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Empowers through music. Songs buff attacks, restore SP, and confuse enemies.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "LCK ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Alchemist",
+     "label": "Alchemist, potion crafter, transmutes items into power",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "⚗️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Alchemist",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Potion Crafter",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Crafts explosives and elixirs mid-combat. Transmutes gold into raw power.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "LCK ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "BloodKnight",
+     "label": "Blood Knight, sacrifices HP for massive damage",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🩸",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Blood Knight",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "HP Sacrifice",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Spends own HP to deal devastating damage. The more you sacrifice, the harder you strike.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●○○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Druid",
+     "label": "Druid, shapeshifter, switches between human beast and spirit forms",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🌙",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Druid",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Shapeshifter",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Shifts between forms — human for balance, beast for raw power, spirit for healing.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Warlock",
+     "label": "Warlock, dark pact maker, drains life from enemies",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🧿",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Warlock",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Soul Drinker",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Made a pact with something old. Drains life from every kill. High risk, high sustain.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●○○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ○○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "DeathKnight",
+     "label": "Death Knight, undead warrior, refuses to die",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "💀",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Death Knight",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Undying Warrior",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Commands the boundary between life and death. Survives one killing blow per run.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Ranger",
+     "label": "Ranger, swift hunter, bonus damage on first hit every combat, plus 15 percent flee chance",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🏹",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Ranger",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Swift Hunter",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Every combat opens with a devastating first strike — 75% bonus damage on the opening hit. Hard to catch, harder to kill.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Sentinel",
+     "label": "Sentinel, unbreakable wall, highest HP in the game, takes 25 percent less damage from all sources",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🛡",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Sentinel",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Unbreakable Wall",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Highest HP of any class. Takes 25% less damage from all sources. Deals less damage in return. Built to outlast everything.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●○○○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Cleric",
+     "label": "Cleric, divine healer, potions heal triple",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "✝️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Cleric",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Divine Healer",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Blessed by something above the dungeons. Potions heal triple but only one can be carried.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●●○○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Wizard",
+     "label": "Wizard, arcane scholar, highest SP lowest HP, reveals enemy stats on combat start",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🧙",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Wizard",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Arcane Scholar",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Commands ancient spells. Fragile but devastating. Reveals enemy HP and attack range on first combat turn.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "SP ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "HP ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Elementalist",
+     "label": "Elementalist, elemental master, deals bonus damage to enemies weak to your element",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🌊",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Elementalist",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Elemental Master",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Commands fire, ice, and lightning. Enemies weak to your element take 25% bonus damage. Skills deal 15% more.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "SP ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "ATK ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "VoidWalker",
+     "label": "VoidWalker, void entity, phases through attacks and strikes from the void",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🌑",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "VoidWalker",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Void Entity",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Exists between dimensions. Can phase through attacks. Void spells hit harder. High risk, high reward playstyle.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "HP ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "ShadowMage",
+     "label": "ShadowMage, shadow caster, magic damage from the darkness",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🌒",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "ShadowMage",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Shadow Caster",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Draws power from darkness. Shadow spells ignore defense. Stronger at night and in deep dungeons.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "AGI ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "HP ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "TimeMage",
+     "label": "TimeMage, temporal mage, manipulates time in combat",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "⌛",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "TimeMage",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Temporal Mage",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Bends time itself. Can slow enemies, repeat actions, and delay incoming damage. Mastery of the Time Stop spell.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "SP ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Shaman",
+     "label": "Shaman, spirit caller, summons ancestral spirits in combat",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🔮",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Shaman",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Spirit Caller",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Channels ancestral spirits. Spirits assist in combat, buff your attacks, and can curse enemies. Spiritual and physical power combined.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●○○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "LUCK ●●●○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Arcanist",
+     "label": "Arcanist, pure arcane power, highest magic damage in the game",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "✦",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Arcanist",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Pure Arcane",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "The purest form of magic. No weapons, no armor — pure arcane force. Highest magic damage in the game. Extremely fragile.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "SP ●●●●",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "HP ●○○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    }
+   ],
+   "extras": [
+    {
+     "id": "stat-legend",
+     "text": "STR — Strength · How hard you hit. +2 ATK per point spent at level up. STA — Stamina · Your body endurance. +10 max HP per point spent. DEF — Defense · How much damage you absorb. +2 DEF per point spent. INT — Intelligence · Arcane power and focus. +5 max SP per point spent. AGI — Agility · Speed and precision. +3% crit chance and +5% flee chance per point. LCK — Luck · Fortune. +10% gold drops and better loot quality per point. ●●●● = Very High ●●●○ = High ●●○○ = Medium ●○○○ = Low ○○○○ = Very Low"
+    },
+    {
+     "id": "",
+     "text": "STR — Strength · How hard you hit. +2 ATK per point spent at level up."
+    },
+    {
+     "id": "",
+     "text": "STA — Stamina · Your body endurance. +10 max HP per point spent."
+    },
+    {
+     "id": "",
+     "text": "DEF — Defense · How much damage you absorb. +2 DEF per point spent."
+    },
+    {
+     "id": "",
+     "text": "INT — Intelligence · Arcane power and focus. +5 max SP per point spent."
+    },
+    {
+     "id": "",
+     "text": "AGI — Agility · Speed and precision. +3% crit chance and +5% flee chance per point."
+    },
+    {
+     "id": "",
+     "text": "LCK — Luck · Fortune. +10% gold drops and better loot quality per point."
+    },
+    {
+     "id": "",
+     "text": "●●●● = Very High ●●●○ = High ●●○○ = Medium ●○○○ = Low ○○○○ = Very Low"
+    },
+    {
+     "id": "cls-slider-name",
+     "text": "Warrior"
+    },
+    {
+     "id": "cls-slider-desc",
+     "text": "Frontline Fighter"
+    }
+   ]
+  },
+  {
+   "step": 2,
+   "heading": "Step 2 of 12",
+   "title": "Choose Your Race",
+   "desc": "Blood and bone shape destiny.",
+   "cards": [
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Human",
+     "label": "Human, adaptable, bonus to all stats",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🧑",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Human",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "Adaptable · +All Stats",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Elf",
+     "label": "Elf, graceful, bonus agility and intelligence",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🧝",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Elf",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "Graceful · +AGI +INT",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Dwarf",
+     "label": "Dwarf, unyielding, bonus strength and defense",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "⛏️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Dwarf",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "Unyielding · +STR +DEF",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Orc",
+     "label": "Orc, savage, massive strength bonus reduced defense",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🪓",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Orc",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "Savage · +STR+STR -DEF",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Tiefling",
+     "label": "Tiefling, infernal, bonus luck and intelligence",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "😈",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Tiefling",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "Infernal · +LCK +INT",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Shade",
+     "label": "Shade, ethereal, bonus agility and luck",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🌑",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Shade",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "Ethereal · +AGI +LCK",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Vampire",
+     "label": "Vampire, drains HP on kill, starts with less HP",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🧛",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Vampire",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "Drain 5 HP per kill · −20% max HP",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Goblin",
+     "label": "Goblin, earns more gold, starts with bonus gold",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "👺",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Goblin",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "+25% gold · Start with 30g",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Angel",
+     "label": "Angel, extra life, heals on level up",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "😇",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Angel",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "+1 extra life · Heal 15 HP on level up",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Demon",
+     "label": "Demon, deals and takes more damage",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "😈",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Demon",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "+15% damage dealt and taken",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Golem",
+     "label": "Golem, high defense, immune to poison and freeze",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🗿",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Golem",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "+5 defense · Immune to poison and freeze",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Halfling",
+     "label": "Halfling, small but lucky, 15 percent dodge chance",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🧑‍🌾",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Halfling",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "Lucky · +LCK+LCK -STR",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Dragonborn",
+     "label": "Dragonborn, dragon blood, 10 percent chance to deal bonus burn damage every hit",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🐉",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Dragonborn",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "10% burn damage · Scales with floor",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Gnome",
+     "label": "Gnome, arcane trickster, plus INT and LCK, skills cost less SP",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🧙",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Gnome",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "+INT +LCK · Skills cost less SP",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Merfolk",
+     "label": "Merfolk, aquatic, plus AGI, potions heal more, bonus in Sunken Archives",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🌊",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Merfolk",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "+AGI · Potions +20% · Sunken bonus",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    }
+   ],
+   "extras": [
+    {
+     "id": "race-slider-name",
+     "text": "Human"
+    },
+    {
+     "id": "race-slider-desc",
+     "text": "Adaptable · +All Stats"
+    }
+   ]
+  },
+  {
+   "step": 3,
+   "heading": "Step 3 of 12",
+   "title": "Choose Your Profession",
+   "desc": "Your past grants you a hidden edge.",
+   "cards": [
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Blacksmith",
+     "label": "Blacksmith, bonus armor and weapon durability",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "🔨",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Blacksmith",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-bonus",
+       "text": "+Armor & Weapon Durability",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Herbalist",
+     "label": "Herbalist, potions twice as effective",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "🌱",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Herbalist",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-bonus",
+       "text": "+Potion Effectiveness x2",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Scholar",
+     "label": "Scholar, better trap and curse detection",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "📜",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Scholar",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-bonus",
+       "text": "+Trap & Curse Detection",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Mercenary",
+     "label": "Mercenary, start with extra gold and a weapon",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "💰",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Mercenary",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-bonus",
+       "text": "+Starting Gold +1 Weapon",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Gravedigger",
+     "label": "Gravedigger, resistance to undead attacks",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "⚰️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Gravedigger",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-bonus",
+       "text": "+Undead Resistance",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Thief",
+     "label": "Thief, higher chance to find hidden loot",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "🪝",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Thief",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-bonus",
+       "text": "+Hidden Loot Discovery",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Pilgrim",
+     "label": "Pilgrim profession. Starts with a holy relic. Plus 15 percent XP gain.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "🕊️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Pilgrim",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-trait",
+       "text": "Holy Relic · +15% XP",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Grave Robber",
+     "label": "Grave Robber profession. Starts with 50 gold. Enemies drop bonus loot.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "💀",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Grave Robber",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-trait",
+       "text": "Start with 50g · Bonus loot",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Street Rat",
+     "label": "Street Rat profession. Free Smoke Bomb skill. Better flee chance.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "🐀",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Street Rat",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-trait",
+       "text": "Free Smoke Bomb · +20% flee",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Warden",
+     "label": "Warden profession. Starts with plus 3 defense. Immune to first debuff each floor.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "🛡️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Warden",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-trait",
+       "text": "+3 Defense · Debuff immunity",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "prof-card",
+     "key": "Tinkerer",
+     "label": "Tinkerer profession. Starts with 2 potions. Skills cost less SP.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "prof-icon",
+       "text": "⚙️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "prof-name",
+       "text": "Tinkerer",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "prof-trait",
+       "text": "Start with 2 potions · -2 SP per skill",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    }
+   ],
+   "extras": [
+    {
+     "id": "prof-slider-name",
+     "text": "Blacksmith"
+    },
+    {
+     "id": "prof-slider-desc",
+     "text": "Armor and Weapon Durability"
+    }
+   ]
+  },
+  {
+   "step": 4,
+   "heading": "Step 4 of 12",
+   "title": "Name Your Character",
+   "desc": "A name carved into dungeon walls endures longer than the flesh.",
+   "cards": [],
+   "extras": []
+  },
+  {
+   "step": 5,
+   "heading": "Step 5 of 12",
+   "title": "Choose Your Dungeon",
+   "desc": "Seven dungeons await. Complete each one to unlock the next. Each dungeon has unique enemies, atmosphere, and a final boss.",
+   "cards": [
+    {
+     "id": "",
+     "kind": "dungeon-card",
+     "key": "Crypt of Malachar",
+     "label": "Crypt of Malachar, unlocked, undead dungeon, 10 floors",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "💀",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "Crypt of Malachar",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "UNDEAD · 10 FLOORS · 23 ENEMIES · 3 BOSSES",
+       "hidden": false,
+       "color": "var(--gold-dim)"
+      },
+      {
+       "cls": "dungeon-lore",
+       "text": "An ancient burial vault sealed shut with a warlord inside. Malachar refused to die. His generals, soldiers, and everything else that perished in his wars patrols the dark alongside him. They remember their oaths. They do not know why.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-lock",
+       "text": "✦ UNLOCKED",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "dungeon-card",
+     "key": "The Ashbound Wastes",
+     "label": "The Ashbound Wastes, locked, fire dungeon, complete Crypt of Malachar to unlock",
+     "disabled": true,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "🔥",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "The Ashbound Wastes",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "FIRE · 10 FLOORS · 17 ENEMIES · 3 BOSSES",
+       "hidden": false,
+       "color": "var(--gold-dim)"
+      },
+      {
+       "cls": "dungeon-lore",
+       "text": "A city called Vel Ashara was swallowed by fire three hundred years ago. The fire never went out. Something in it became aware. Explorers who descend into the ruins do not find ruins. They find something that is still burning and does not want to stop.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-lock",
+       "text": "🔒 Complete Crypt of Malachar to unlock",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "dungeon-card",
+     "key": "Frosthold Abyss",
+     "label": "Frosthold Abyss, locked, ice dungeon, complete Ashbound Wastes to unlock",
+     "disabled": true,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "❄️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "Frosthold Abyss",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "ICE · 10 FLOORS · 17 ENEMIES · 3 BOSSES",
+       "hidden": false,
+       "color": "var(--gold-dim)"
+      },
+      {
+       "cls": "dungeon-lore",
+       "text": "Deep beneath frozen mountains, a mining expedition broke through into a cavern so large torchlight could not reach the far wall. The journals of every expedition sent since have returned to the surface. The explorers have not. The cold here is not a temperature. It is a presence.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-lock",
+       "text": "🔒 Complete Ashbound Wastes to unlock",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "dungeon-card",
+     "key": "The Sunken Archives",
+     "label": "The Sunken Archives, locked, drowned library dungeon, complete Frosthold Abyss to unlock",
+     "disabled": true,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "📚",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "The Sunken Archives",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "DROWNED · 10 FLOORS · 17 ENEMIES · 3 BOSSES",
+       "hidden": false,
+       "color": "var(--gold-dim)"
+      },
+      {
+       "cls": "dungeon-lore",
+       "text": "The greatest library ever built now sits under three hundred feet of dark water. The books are perfectly preserved. The archivists who refused to leave are also perfectly preserved. They have had a very long time to read everything. They did not like what they found.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-lock",
+       "text": "🔒 Complete Frosthold Abyss to unlock",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "dungeon-card",
+     "key": "The Hollow",
+     "label": "The Hollow, locked, horror dungeon, complete Sunken Archives to unlock",
+     "disabled": true,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "🕯️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "The Hollow",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "HORROR · 10 FLOORS · 16 ENEMIES · 3 BOSSES",
+       "hidden": false,
+       "color": "var(--gold-dim)"
+      },
+      {
+       "cls": "dungeon-lore",
+       "text": "A house that has been empty for a long time. It is not empty anymore. The things that live here now are not the things that lived here before. They remember the people who used to be here. They are waiting for them to come back. You are not who they are waiting for. They do not mind.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-lock",
+       "text": "🔒 Complete The Sunken Archives to unlock",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "dungeon-card",
+     "key": "The Whispering Forest",
+     "label": "The Whispering Forest, locked, cursed forest dungeon, complete The Hollow to unlock",
+     "disabled": true,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "🌲",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "The Whispering Forest",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "A witch was killed. Her curse consumes everything. Corruption rises as you descend — reach 100% and die instantly.",
+       "hidden": false,
+       "color": "var(--text-dim)"
+      },
+      {
+       "cls": "dungeon-unlock-note",
+       "text": "Complete The Hollow to unlock",
+       "hidden": true,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "infernal-dungeon-card",
+     "kind": "dungeon-card",
+     "key": "The Infernal Descent",
+     "label": "The Infernal, locked. Requires 100 trophies to unlock. Tap to see your progress.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "🔥",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "The Infernal",
+       "hidden": false,
+       "color": "#ff4444"
+      },
+      {
+       "cls": "",
+       "text": "Something stirs beyond the veil. A dungeon of pure darkness. Evil spirits. Void entities. Things that came from the dark. It cannot be entered — yet.",
+       "hidden": false,
+       "color": "#663333"
+      },
+      {
+       "cls": "dungeon-unlock-note",
+       "text": "🔒 Locked — Tap to discover how to unlock",
+       "hidden": true,
+       "color": "#ff4444"
+      }
+     ]
+    },
+    {
+     "id": "abyssal-dungeon-card",
+     "kind": "dungeon-card",
+     "key": "The Abyssal Deep",
+     "label": "The Abyssal Deep, locked. Complete The Infernal Descent to unlock.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "🌊",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "The Abyssal Deep",
+       "hidden": false,
+       "color": "#4488ff"
+      },
+      {
+       "cls": "",
+       "text": "The deepest dungeon. The hardest boss. The Leviathan is not here to play. 800 HP. Four phases. It hits harder than anything you have faced. Bring everything you have. You will need it.",
+       "hidden": false,
+       "color": "#223366"
+      },
+      {
+       "cls": "dungeon-unlock-note",
+       "text": "🔒 Locked — Complete The Infernal Descent",
+       "hidden": true,
+       "color": "#4488ff"
+      }
+     ]
+    },
+    {
+     "id": "shadowworld-dungeon-card",
+     "kind": "dungeon-card",
+     "key": "The Shadow World",
+     "label": "The Shadow World, locked. Complete The Abyssal Deep to unlock.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "🌑",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "The Shadow World",
+       "hidden": false,
+       "color": "#9966cc"
+      },
+      {
+       "cls": "",
+       "text": "It has existed for 3000 years beneath a cursed forest. It does not obey your rules. The Shapeshifter waits at the end — wearing your face, using your skills, knowing your every move. Nothing that enters here leaves unchanged.",
+       "hidden": false,
+       "color": "#3d2060"
+      },
+      {
+       "cls": "dungeon-unlock-note",
+       "text": "🔒 Complete The Abyssal Deep to unlock",
+       "hidden": true,
+       "color": "#9966cc"
+      }
+     ]
+    }
+   ],
+   "extras": [
+    {
+     "id": "dung-slider-name",
+     "text": "Crypt of Malachar"
+    },
+    {
+     "id": "dung-slider-desc",
+     "text": "Undead · Unlocked"
+    }
+   ]
+  },
+  {
+   "step": 6,
+   "heading": "Step 6 of 12",
+   "title": "Choose Your Fate",
+   "desc": "Your chosen fate cannot be altered once you descend.",
+   "cards": [
+    {
+     "id": "",
+     "kind": "diff-card",
+     "key": "Wanderer",
+     "label": "Wanderer, 3 lives, normal enemy damage, recommended for new players",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "diff-name",
+       "text": "⚪ Wanderer",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "diff-lives",
+       "text": "❤️❤️❤️ Three Lives",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "diff-desc",
+       "text": "A cautious descent. For those still learning the dungeon.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "Normal damage · 3 lives · Recommended for new players",
+       "hidden": false,
+       "color": "var(--text-dim)"
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "diff-card",
+     "key": "Ironblood",
+     "label": "Ironblood, 1 life, 10 percent more enemy damage",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "diff-name",
+       "text": "🟡 Ironblood",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "diff-lives",
+       "text": "❤️ One Life",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "diff-desc",
+       "text": "One mistake ends your run. The dungeon shows no mercy.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "+10% enemy damage · 1 life · For confident players",
+       "hidden": false,
+       "color": "var(--gold-dim)"
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "diff-card",
+     "key": "Condemned",
+     "label": "Condemned, 1 life, 25 percent more enemy damage",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "diff-name",
+       "text": "🔴 Condemned",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "diff-lives",
+       "text": "❤️ One Life · Empowered Enemies",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "diff-desc",
+       "text": "Enemies hit harder. The dungeon has been waiting for you.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "+25% enemy damage · 1 life · Brutal",
+       "hidden": false,
+       "color": "#c08080"
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "diff-card",
+     "key": "Forsaken",
+     "label": "Forsaken, 1 life, 50 percent more enemy damage, most never return",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "diff-name",
+       "text": "💀 Forsaken",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "diff-lives",
+       "text": "❤️ One Life · Maximum Brutality",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "diff-desc",
+       "text": "Reserved for the truly damned. Most never return.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "+50% enemy damage · 1 life · Extremely hard",
+       "hidden": false,
+       "color": "#e08080"
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "diff-card",
+     "key": "Nightmare",
+     "label": "Nightmare, 1 life, 75 percent more damage, exclusive enemies nowhere else in the game",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "diff-name",
+       "text": "☠ Nightmare",
+       "hidden": false,
+       "color": "#c060c0"
+      },
+      {
+       "cls": "diff-lives",
+       "text": "❤️ One Life · Nightmare Enemies Only",
+       "hidden": false,
+       "color": "#c060c0"
+      },
+      {
+       "cls": "diff-desc",
+       "text": "The dungeon twists into something wrong. Enemies that exist nowhere else. The boss has never been seen before.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "",
+       "text": "+75% enemy damage · Exclusive enemies · Only for the fearless",
+       "hidden": false,
+       "color": "#9a30c0"
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "diff-card",
+     "key": "Insane",
+     "label": "Insane mode. A sanity bar drains as you descend. At zero the dungeon ends. New enemies. Corrupted UI. Not recommended.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "diff-name",
+       "text": "🔴 Insane",
+       "hidden": false,
+       "color": "#cc0000"
+      },
+      {
+       "cls": "diff-lives",
+       "text": "❤️ One Life · Sanity Bar",
+       "hidden": false,
+       "color": "#cc0000"
+      },
+      {
+       "cls": "diff-desc",
+       "text": "The dungeon does not play fair at this level. Neither should you.",
+       "hidden": false,
+       "color": "#aa3333"
+      },
+      {
+       "cls": "",
+       "text": "1 life · Sanity bar · Corrupted UI · Not for the faint of heart",
+       "hidden": false,
+       "color": "#882222"
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "diff-card",
+     "key": "Endless",
+     "label": "Endless mode. The dungeon never ends. Keep descending forever until you die. Your floor depth is your score.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "diff-icon",
+       "text": "⬇",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "diff-name",
+       "text": "Endless",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "diff-desc",
+       "text": "The dungeon never ends. No floor 10. No victory. Just how deep can you go? Your deepest floor is saved as your personal record.",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "hardcore-off-btn",
+     "kind": "diff-card",
+     "key": "",
+     "label": "Hardcore Mode off. Normal gameplay.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "",
+       "text": "⚔ Standard",
+       "hidden": false,
+       "color": "#888"
+      },
+      {
+       "cls": "",
+       "text": "Normal lives. Death sends you back, not to deletion.",
+       "hidden": false,
+       "color": "#555"
+      }
+     ]
+    },
+    {
+     "id": "hardcore-on-btn",
+     "kind": "diff-card",
+     "key": "",
+     "label": "Hardcore Mode on. One life. Death is permanent.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "",
+       "text": "💀 Hardcore",
+       "hidden": false,
+       "color": "#cc0000"
+      },
+      {
+       "cls": "",
+       "text": "One life. One chance. Deleted on death.",
+       "hidden": false,
+       "color": "#555"
+      }
+     ]
+    }
+   ],
+   "extras": [
+    {
+     "id": "diff-slider-name",
+     "text": "Wanderer"
+    },
+    {
+     "id": "diff-slider-desc",
+     "text": "3 lives · Normal damage"
+    },
+    {
+     "id": "",
+     "text": "💀 Hardcore Mode"
+    },
+    {
+     "id": "",
+     "text": "Death is permanent. One life. If you die, your character is deleted forever. No second chances."
+    },
+    {
+     "id": "hardcore-warning",
+     "text": "⚠ Warning — This Cannot Be Undone • You have one life. No extra lives. No resurrection. • If you die, your character is permanently deleted from save data. • No retry. No continue. No recovery. • Cloud saves will not restore a deleted hardcore character. If you are sure, continue. If not, select Standard above."
+    },
+    {
+     "id": "",
+     "text": "⚠ Warning — This Cannot Be Undone"
+    },
+    {
+     "id": "",
+     "text": "• You have one life. No extra lives. No resurrection. • If you die, your character is permanently deleted from save data. • No retry. No continue. No recovery. • Cloud saves will not restore a deleted hardcore character. If you are sure, continue. If not, select Standard above."
+    },
+    {
+     "id": "",
+     "text": "• You have one life. No extra lives. No resurrection."
+    },
+    {
+     "id": "",
+     "text": "• If you die, your character is permanently deleted from save data."
+    },
+    {
+     "id": "",
+     "text": "• No retry. No continue. No recovery."
+    },
+    {
+     "id": "",
+     "text": "• Cloud saves will not restore a deleted hardcore character."
+    },
+    {
+     "id": "",
+     "text": "If you are sure, continue. If not, select Standard above."
+    }
+   ]
+  },
+  {
+   "step": 7,
+   "heading": "Step 7 of 12",
+   "title": "Choose Your Run Mode",
+   "desc": "How do you want to play? This shapes your entire experience.",
+   "cards": [
+    {
+     "id": "mode-classic",
+     "kind": "diff-card",
+     "key": "",
+     "label": "Classic Run. Start at level 1 every time. Die and start fresh. Traditional roguelike.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "",
+       "text": "⚔ Classic Run",
+       "hidden": false,
+       "color": "#e0c080"
+      },
+      {
+       "cls": "",
+       "text": "The original experience",
+       "hidden": false,
+       "color": "#888"
+      },
+      {
+       "cls": "",
+       "text": "• Start at Level 1 every run",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "• Die → back to Level 1",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "• No dungeon scaling",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "• Every run is a fresh start",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "• Your graveyard fills with legends",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "ROGUELIKE · CLASSIC · RECOMMENDED FOR NEW PLAYERS",
+       "hidden": false,
+       "color": "#666"
+      }
+     ]
+    },
+    {
+     "id": "mode-legacy",
+     "kind": "diff-card",
+     "key": "",
+     "label": "Legacy Mode. Your level persists between runs. Complete dungeons to raise the dungeon tier. Build one character over a long time.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "",
+       "text": "🌑 Legacy Mode",
+       "hidden": false,
+       "color": "#aa66ff"
+      },
+      {
+       "cls": "",
+       "text": "One character. One legend. Forever.",
+       "hidden": false,
+       "color": "#7755aa"
+      },
+      {
+       "cls": "",
+       "text": "• Your level carries over between runs",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "• Level cap raised to 25",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "• Complete dungeon → Dungeon Tier goes up",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "• Higher tiers = stronger enemies, better loot",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "• Die → keep your level, dungeon resets to Tier 1",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "• Build the same character over weeks",
+       "hidden": false,
+       "color": "#aaa"
+      },
+      {
+       "cls": "",
+       "text": "CAMPAIGN · PERSISTENT · FOR DEDICATED PLAYERS",
+       "hidden": false,
+       "color": "#6644aa"
+      }
+     ]
+    }
+   ],
+   "extras": [
+    {
+     "id": "run-mode-desc",
+     "text": "Classic Run selected. You will start fresh every time you descend."
+    }
+   ]
+  },
+  {
+   "step": 8,
+   "heading": "Step 8 of 12 — Spirit Companion",
+   "title": "Choose Your Spirit",
+   "desc": "A spirit companion fights alongside you. You keep the same spirit for this entire character's life. Rare and elite spirits you've unlocked appear here too.",
+   "cards": [],
+   "extras": []
+  },
+  {
+   "step": 9,
+   "heading": "Step 9 of 12 — Optional",
+   "title": "Corruption Mode",
+   "desc": "Every time you die, your character gains corruption. At 25% enemies begin to whisper. At 50% a Corrupted hunter stalks you. At 75% your skills backfire. At 100% you enter a legendary Corruption Run with massive rewards. This is for hardcore players.",
+   "cards": [
+    {
+     "id": "corruption-off-btn",
+     "kind": "diff-card",
+     "key": "",
+     "label": "Corruption off. Normal gameplay.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "",
+       "text": "⚔ Standard",
+       "hidden": false,
+       "color": "#888"
+      },
+      {
+       "cls": "",
+       "text": "Normal gameplay. Death has no lasting effect on your character's soul.",
+       "hidden": false,
+       "color": "#555"
+      }
+     ]
+    },
+    {
+     "id": "corruption-on-btn",
+     "kind": "diff-card",
+     "key": "",
+     "label": "Corruption on. Death adds corruption to your character.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "",
+       "text": "☠ Corrupted",
+       "hidden": false,
+       "color": "#7a207a"
+      },
+      {
+       "cls": "",
+       "text": "Every death darkens your soul. Survive long enough and the dungeon will fear you.",
+       "hidden": false,
+       "color": "#555"
+      }
+     ]
+    }
+   ],
+   "extras": []
+  },
+  {
+   "step": 10,
+   "heading": "Step 10 of 12 — Optional",
+   "title": "Hunter Mode",
+   "desc": "A relentless hunter stalks you through the dungeon. Every move you make, it moves too. Every turn you waste, it gets closer. If it reaches you — instant death. No second chances.",
+   "cards": [
+    {
+     "id": "hunter-off-btn",
+     "kind": "diff-card",
+     "key": "",
+     "label": "Hunter Mode off. Normal gameplay.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "",
+       "text": "⚔ No Hunter",
+       "hidden": false,
+       "color": "#888"
+      },
+      {
+       "cls": "",
+       "text": "Standard dungeon. No one is hunting you.",
+       "hidden": false,
+       "color": "#555"
+      }
+     ]
+    },
+    {
+     "id": "hunter-on-btn",
+     "kind": "diff-card",
+     "key": "",
+     "label": "Hunter Mode on. A hunter will stalk you through the dungeon.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "",
+       "text": "🏹 Hunted",
+       "hidden": false,
+       "color": "#cc4400"
+      },
+      {
+       "cls": "",
+       "text": "Something is coming. It will not stop.",
+       "hidden": false,
+       "color": "#555"
+      }
+     ]
+    }
+   ],
+   "extras": []
+  },
+  {
+   "step": 11,
+   "heading": "Step 11 of 12 — Optional",
+   "title": "Your Guide",
+   "desc": "She will walk with you through every dungeon. Give her a name and choose her personality.",
+   "cards": [],
+   "extras": [
+    {
+     "id": "",
+     "text": "Your Guide She will walk with you through every dungeon. What will you call her?"
+    },
+    {
+     "id": "",
+     "text": "Your Guide She will walk with you through every dungeon. What will you call her?"
+    },
+    {
+     "id": "",
+     "text": "Your Guide"
+    },
+    {
+     "id": "",
+     "text": "She will walk with you through every dungeon. What will you call her?"
+    },
+    {
+     "id": "",
+     "text": "Her Personality"
+    },
+    {
+     "id": "",
+     "text": "💛 Encouraging"
+    },
+    {
+     "id": "",
+     "text": "Always lifts you up"
+    },
+    {
+     "id": "",
+     "text": "😏 Sarcastic"
+    },
+    {
+     "id": "",
+     "text": "Dry humor, roasts you"
+    },
+    {
+     "id": "",
+     "text": "🌙 Mysterious"
+    },
+    {
+     "id": "",
+     "text": "Speaks in riddles"
+    },
+    {
+     "id": "",
+     "text": "🌊 Calm"
+    },
+    {
+     "id": "",
+     "text": "Minimal, only when it matters"
+    }
+   ]
+  },
+  {
+   "step": 12,
+   "heading": "Step 12 of 12 — Optional",
+   "title": "Your Origin",
+   "desc": "Where did you come from? Grants a small bonus and writes your first journal entry. Skip to descend immediately.",
+   "cards": [],
+   "extras": [
+    {
+     "id": "bk-slider-name",
+     "text": "Exiled Noble"
+    },
+    {
+     "id": "bk-slider-desc",
+     "text": "+15 starting gold"
+    }
+   ]
+  }
+ ],
+ "sliders": {
+  "class": {
+   "order": [
+    "Warrior",
+    "Monk",
+    "Assassin",
+    "Paladin",
+    "Naturalist",
+    "Sorcerer",
+    "Necromancer",
+    "Berserker",
+    "Bard",
+    "Alchemist",
+    "BloodKnight",
+    "Druid",
+    "Warlock",
+    "DeathKnight",
+    "Ranger",
+    "Sentinel",
+    "Cleric",
+    "Wizard",
+    "Elementalist",
+    "VoidWalker",
+    "ShadowMage",
+    "TimeMage",
+    "Shaman",
+    "Arcanist"
+   ],
+   "descs": {
+    "Warrior": "Frontline Fighter",
+    "Monk": "Spiritual Striker",
+    "Assassin": "Shadow Predator",
+    "Paladin": "Divine Guardian",
+    "Naturalist": "Wild Caller",
+    "Sorcerer": "Glass Cannon",
+    "Necromancer": "Death Wielder",
+    "Berserker": "Rage Engine",
+    "Bard": "Silver Tongue",
+    "Alchemist": "Master Brewer",
+    "BloodKnight": "Blood Harvester",
+    "Warlock": "Soul Drainer",
+    "DeathKnight": "Undying Resolve",
+    "Ranger": "Swift Hunter",
+    "Sentinel": "Unbreakable Wall",
+    "Cleric": "Sacred Healer",
+    "Wizard": "Arcane Scholar"
+   }
+  },
+  "race": {
+   "order": [
+    "Human",
+    "Elf",
+    "Dwarf",
+    "Orc",
+    "Tiefling",
+    "Shade",
+    "Vampire",
+    "Goblin",
+    "Angel",
+    "Demon",
+    "Golem",
+    "Halfling",
+    "Dragonborn",
+    "Gnome",
+    "Merfolk"
+   ],
+   "descs": {
+    "Human": "Adaptable · +All Stats",
+    "Elf": "+AGI +INT",
+    "Dwarf": "+STR +DEF",
+    "Orc": "+STR+STR -DEF",
+    "Tiefling": "+LCK +INT",
+    "Shade": "+AGI +LCK",
+    "Vampire": "Drain 5 HP per kill",
+    "Goblin": "+25% gold",
+    "Angel": "+1 extra life",
+    "Demon": "+15% damage dealt and taken",
+    "Golem": "+5 defense · Immune to status",
+    "Halfling": "+LCK+LCK -STR",
+    "Dragonborn": "10% burn damage · Scales with floor",
+    "Gnome": "+INT +LCK · Skills cost less SP",
+    "Merfolk": "+AGI · Bonus in Sunken Archives · Potions +heal"
+   }
+  },
+  "prof": {
+   "order": [
+    "Blacksmith",
+    "Herbalist",
+    "Scholar",
+    "Mercenary",
+    "Gravedigger",
+    "Thief",
+    "Pilgrim",
+    "Grave Robber"
+   ],
+   "descs": {
+    "Blacksmith": "Armor and Weapon Durability",
+    "Herbalist": "Potions twice as effective",
+    "Scholar": "Trap and Curse Detection",
+    "Mercenary": "Starting Gold +1 Weapon",
+    "Gravedigger": "Undead Resistance",
+    "Thief": "Hidden Loot Discovery",
+    "Pilgrim": "Holy Relic · +15% XP",
+    "Grave Robber": "Start with 50g · Bonus loot",
+    "Street Rat": "Free Smoke Bomb · +20% Flee Chance",
+    "Warden": "+3 Defense · Debuff Immunity",
+    "Tinkerer": "2 Free Potions · Skills Cost 2 Less SP"
+   }
+  }
+ },
+ "names": {
+  "prefixes": [
+   "Mal",
+   "Val",
+   "Ash",
+   "Vor",
+   "Thar",
+   "Zel",
+   "Kyr",
+   "Drav",
+   "Mor",
+   "Sel",
+   "Ven",
+   "Bran",
+   "Cal",
+   "Dur",
+   "El",
+   "Fal",
+   "Gar",
+   "Hal",
+   "Ith",
+   "Jor",
+   "Kael",
+   "Lyr",
+   "Nax",
+   "Obr",
+   "Phal",
+   "Quin",
+   "Rael",
+   "Siv",
+   "Tor",
+   "Ul",
+   "Vyth",
+   "Wren",
+   "Xar",
+   "Yel",
+   "Zeph",
+   "Aer",
+   "Bel",
+   "Cor",
+   "Dex",
+   "Era",
+   "Fin",
+   "Gal",
+   "Hav",
+   "Ix",
+   "Jin",
+   "Kos",
+   "Lev",
+   "Mav",
+   "Nev",
+   "Orv"
+  ],
+  "mids": [
+   "ith",
+   "ael",
+   "orn",
+   "una",
+   "ara",
+   "enn",
+   "ash",
+   "eld",
+   "ion",
+   "ira",
+   "oth",
+   "wen",
+   "ath",
+   "el",
+   "in",
+   "or",
+   "an",
+   "eth",
+   "ial",
+   "ynn",
+   "ax",
+   "ek",
+   "id",
+   "im",
+   "us",
+   "ix",
+   "os",
+   "av",
+   "ev",
+   "ur",
+   "ald",
+   "eld",
+   "old",
+   "ard",
+   "erd",
+   "ord",
+   "and",
+   "end",
+   "ond",
+   "und"
+  ],
+  "suffixes": [
+   "dor",
+   "wyn",
+   "ix",
+   "ath",
+   "ryn",
+   "on",
+   "iel",
+   "ius",
+   "ax",
+   "or",
+   "en",
+   "in",
+   "an",
+   "us",
+   "is",
+   "ar",
+   "er",
+   "ir",
+   "ur",
+   "yn",
+   "ith",
+   "eth",
+   "oth",
+   "ath",
+   "uth",
+   "aer",
+   "eer",
+   "oir",
+   "uur",
+   "yyr",
+   "bane",
+   "fall",
+   "born",
+   "rise",
+   "dawn",
+   "dusk",
+   "shade",
+   "vale",
+   "moor",
+   "ford"
+  ]
+ },
+ "spirits": {
+  "starter": [
+   {
+    "id": "ember-fox",
+    "name": "Ember Fox",
+    "icon": "🦊",
+    "rarity": "starter",
+    "ability": "Attacks each turn for 15% of your base attack as fire damage.",
+    "desc": "A fox wreathed in embers. Attacks with you every turn."
+   },
+   {
+    "id": "bone-hound",
+    "name": "Bone Hound",
+    "icon": "🦴",
+    "rarity": "starter",
+    "ability": "Attacks for 20% base damage. +10% bonus vs undead enemies.",
+    "desc": "An undead hound bound to your will. Stronger against undead."
+   },
+   {
+    "id": "frost-sprite",
+    "name": "Frost Sprite",
+    "icon": "❄️",
+    "rarity": "starter",
+    "ability": "At combat start reduces enemy attack 10% for 3 turns. Detects traps.",
+    "desc": "A tiny ice spirit. Slows enemies and detects traps."
+   },
+   {
+    "id": "shadow-crow",
+    "name": "Shadow Crow",
+    "icon": "🐦",
+    "rarity": "starter",
+    "ability": "Each kill grants +3 bonus gold stolen by the crow.",
+    "desc": "A shadowy crow that steals gold from fallen enemies."
+   },
+   {
+    "id": "stone-turtle",
+    "name": "Stone Turtle",
+    "icon": "🐢",
+    "rarity": "starter",
+    "ability": "At combat start creates a shell absorbing up to 15 damage.",
+    "desc": "Ancient and unbreakable. Absorbs the first hit of every combat."
+   },
+   {
+    "id": "thunder-moth",
+    "name": "Thunder Moth",
+    "icon": "🦋",
+    "rarity": "starter",
+    "ability": "Each attack has a 20% chance to stun the enemy for 1 turn.",
+    "desc": "A moth charged with static. Has a chance to stun on attack."
+   },
+   {
+    "id": "market-sprite",
+    "name": "Market Sprite",
+    "icon": "🪙",
+    "rarity": "starter",
+    "ability": "All shop items cost 20% less this run. Costs 50 gold to reactivate next run.",
+    "desc": "A spirit bound to commerce. Negotiates on your behalf at every shop."
+   }
+  ],
+  "rare": [
+   {
+    "id": "bone-hound-prime",
+    "name": "Bone Hound Prime",
+    "icon": "💀",
+    "rarity": "rare",
+    "ability": "Attacks for 25% damage each turn. On kill steals 5 SP.",
+    "desc": "The alpha undead hound. Drains SP from fallen enemies."
+   },
+   {
+    "id": "inferno-hawk",
+    "name": "Inferno Hawk",
+    "icon": "🦅",
+    "rarity": "rare",
+    "ability": "Attacks every turn for 30% fire damage. Burns enemy on combat start.",
+    "desc": "A hawk born from Vel Ashara's eternal fire."
+   },
+   {
+    "id": "glacial-wolf",
+    "name": "Glacial Wolf",
+    "icon": "🐺",
+    "rarity": "rare",
+    "ability": "At combat start grants +4 defense. Attacks for 20% damage, may freeze.",
+    "desc": "A wolf of ancient ice. Freezes enemies and grants defense."
+   },
+   {
+    "id": "void-wraith",
+    "name": "Void Wraith",
+    "icon": "👁️",
+    "rarity": "rare",
+    "ability": "Attacks for 35% damage each turn. Steals 8 HP from enemy on each hit.",
+    "desc": "A wraith from beyond reality. Drains life to heal you."
+   },
+   {
+    "id": "crystal-serpent",
+    "name": "Crystal Serpent",
+    "icon": "🐍",
+    "rarity": "rare",
+    "ability": "At combat start applies 4-turn frost poison. Attacks for 18% damage.",
+    "desc": "A serpent of living ice. Poisons enemies with frost venom."
+   },
+   {
+    "id": "ash-phoenix",
+    "name": "Ash Phoenix",
+    "icon": "🔥",
+    "rarity": "rare",
+    "ability": "Each kill restores 12 HP. Attacks for 22% fire damage.",
+    "desc": "Reborn from Vel Ashara's fire. Restores HP when you kill."
+   },
+   {
+    "id": "shadow-stalker",
+    "name": "Shadow Stalker",
+    "icon": "🕷️",
+    "rarity": "rare",
+    "ability": "At combat start reduces enemy attack by 20%. Attacks for 15% damage.",
+    "desc": "A spider of pure shadow. Weakens enemies on combat start."
+   },
+   {
+    "id": "grave-hound",
+    "name": "Grave Hound",
+    "icon": "🐕",
+    "rarity": "rare",
+    "ability": "Attacks for 25% damage. At combat start reduces enemy attack by 15%.",
+    "desc": "A spirit hound from the Hollow. Guards you and strikes hard."
+   },
+   {
+    "id": "the-lantern",
+    "name": "The Lantern",
+    "icon": "🏮",
+    "rarity": "starter",
+    "ability": "Detects traps like Frost Sprite. Each kill grants +5 gold.",
+    "desc": "A warm light that guides and protects. Reveals traps and rewards exploration."
+   },
+   {
+    "id": "medusa-spirit",
+    "name": "Medusa",
+    "icon": "🐍",
+    "rarity": "elite",
+    "ability": "Serpent Guard — absorbs one enemy attack per combat.",
+    "desc": "Found at last. She guards those who showed her mercy."
+   },
+   {
+    "id": "easter-bunny",
+    "name": "Easter Bunny",
+    "icon": "🐰",
+    "rarity": "starter",
+    "ability": "Each kill has a 20% chance to find an Easter Egg that restores 10 HP.",
+    "desc": "A spirit companion found only during Easter. Hops alongside you and finds hidden treats."
+   },
+   {
+    "id": "void-moth",
+    "name": "Void Moth",
+    "icon": "🦋",
+    "rarity": "rare",
+    "ability": "Attacks for 35% damage. 15% chance to negate incoming damage each hit.",
+    "desc": "A moth of pure void. Attacks relentlessly and sometimes negates damage."
+   }
+  ],
+  "elite": [
+   {
+    "id": "death-knight-spirit",
+    "name": "Knight Shade",
+    "icon": "⚔️",
+    "rarity": "elite",
+    "ability": "Attacks for 30% damage every turn. On kill restores 5 HP.",
+    "desc": "The spirit of a fallen Death Knight. Powerful and relentless."
+   },
+   {
+    "id": "ash-titan-spirit",
+    "name": "Titan Ember",
+    "icon": "🔥",
+    "rarity": "elite",
+    "ability": "At combat start applies 3-turn burn. Attacks for 25% fire damage.",
+    "desc": "The essence of an Ash Titan. Burns with eternal fury."
+   },
+   {
+    "id": "frost-sovereign-spirit",
+    "name": "Frost Crown",
+    "icon": "❄️",
+    "rarity": "elite",
+    "ability": "Grants +5 defense at combat start. Attacks for 20% ice damage.",
+    "desc": "A crown of living ice from the Frost Sovereign."
+   },
+   {
+    "id": "archivist-spirit",
+    "name": "Archive Phantom",
+    "icon": "📜",
+    "rarity": "elite",
+    "ability": "Attacks for 28% damage. Each hit reduces enemy defense by 1.",
+    "desc": "The ghost of a drowned archivist. Knows every weakness."
+   },
+   {
+    "id": "void-champion-spirit",
+    "name": "Void Herald",
+    "icon": "🌑",
+    "rarity": "elite",
+    "ability": "Attacks for 40% damage every turn. Requires level 7.",
+    "desc": "A fragment of the Void Champion. Terrifyingly powerful."
+   }
+  ]
+ },
+ "backstories": [
+  {
+   "id": "exiled-noble",
+   "name": "Exiled Noble",
+   "bonus": "+15 starting gold",
+   "bonusKey": "gold",
+   "bonusVal": 15.0,
+   "desc": "Cast out from court. The dungeon is preferable to the shame.",
+   "journal": "I was a noble once. The title meant something. The dungeon does not care about titles."
+  },
+  {
+   "id": "cursed-wanderer",
+   "name": "Cursed Wanderer",
+   "bonus": "+10 max HP",
+   "bonusKey": "hp",
+   "bonusVal": 10.0,
+   "desc": "Something followed you home. You went to the dungeon to lose it.",
+   "journal": "The curse has been with me since the crossroads. Maybe the dungeon will take it instead of me."
+  },
+  {
+   "id": "former-soldier",
+   "name": "Former Soldier",
+   "bonus": "+2 starting defense",
+   "bonusKey": "def",
+   "bonusVal": 2.0,
+   "desc": "The war ended. The fighting did not.",
+   "journal": "Fifteen years of orders. Now there are no orders. I choose the dungeon."
+  },
+  {
+   "id": "lost-scholar",
+   "name": "Lost Scholar",
+   "bonus": "+20% XP this run",
+   "bonusKey": "xp",
+   "bonusVal": 0.2,
+   "desc": "You read about the dungeon in seventeen books. None of them helped.",
+   "journal": "I have studied every known account of the descent. Theory, I am finding, is different from practice."
+  },
+  {
+   "id": "debt-collector",
+   "name": "Debt Collector",
+   "bonus": "+25 starting gold",
+   "bonusKey": "gold",
+   "bonusVal": 25.0,
+   "desc": "The dungeon owes someone money. You are here to collect.",
+   "journal": "The client said the dungeon has treasure. The client did not say what the dungeon has in return."
+  },
+  {
+   "id": "true-believer",
+   "name": "True Believer",
+   "bonus": "+1 extra life",
+   "bonusKey": "lives",
+   "bonusVal": 1.0,
+   "desc": "Your faith is absolute. The dungeon will test it.",
+   "journal": "I believe I will survive. The dungeon does not know this yet."
+  },
+  {
+   "id": "nobody-special",
+   "name": "Nobody Special",
+   "bonus": "No bonus. Just honest.",
+   "bonusKey": "none",
+   "bonusVal": 0.0,
+   "desc": "No dramatic backstory. Just someone who opened the door.",
+   "journal": "I am not here for glory or treasure or redemption. I am here because I opened the door and kept walking."
+  },
+  {
+   "id": "last-hope",
+   "name": "Last Hope",
+   "bonus": "+5 SP per level up",
+   "bonusKey": "sp",
+   "bonusVal": 5.0,
+   "desc": "Everything was tried. The dungeon is what remains.",
+   "journal": "This is the last option available to me. I am aware of the odds."
+  }
+ ],
+ "statLegend": [
+  "STR — Strength · How hard you hit. +2 ATK per point spent at level up.",
+  "STA — Stamina · Your body endurance. +10 max HP per point spent.",
+  "DEF — Defense · How much damage you absorb. +2 DEF per point spent.",
+  "INT — Intelligence · Arcane power and focus. +5 max SP per point spent.",
+  "AGI — Agility · Speed and precision. +3% crit chance and +5% flee chance per point.",
+  "LCK — Luck · Fortune. +10% gold drops and better loot quality per point.",
+  "●●●● = Very High ●●●○ = High ●●○○ = Medium ●○○○ = Low ○○○○ = Very Low"
+ ]
+}

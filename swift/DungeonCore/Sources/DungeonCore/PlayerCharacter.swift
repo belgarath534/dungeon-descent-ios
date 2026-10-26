@@ -247,7 +247,34 @@ public final class CharacterRoster {
         if changed, let data = try? JSONEncoder().encode(unlocks), let s = String(data: data, encoding: .utf8) {
             store.setItem(StoreKey.unlocks, s)
         }
-        return GameData.dungeons.enumerated().filter { $0.offset == 0 || isUnlocked($0.element) }.map(\.element)
+        return GameData.dungeons.enumerated().filter { e in
+            switch e.element {
+            case "The Infernal Descent": return infernalUnlocked
+            case "The Abyssal Deep": return isUnlocked(e.element) || abyssalUnlocked
+            default: return e.offset == 0 || isUnlocked(e.element)
+            }
+        }.map(\.element)
+    }
+
+    /// The Infernal opens at 100 trophies, not by finishing the dungeon
+    /// before it (isInfernalUnlocked).
+    public var infernalUnlocked: Bool {
+        if store.getItem("dd_dev_mode") == "1" || store.getItem("dd_infernal_unlocked") == "1" { return true }
+        if (jsParseInt(store.getItem("dd_trophies")) ?? 0) >= 100 {
+            store.setItem("dd_infernal_unlocked", "1")
+            return true
+        }
+        return false
+    }
+
+    /// The Abyssal Deep opens with The Infernal (isAbyssalUnlocked).
+    public var abyssalUnlocked: Bool {
+        if store.getItem("dd_dev_mode") == "1" || store.getItem("dd_abyssal_unlocked") == "1" { return true }
+        if infernalUnlocked {
+            store.setItem("dd_abyssal_unlocked", "1")
+            return true
+        }
+        return false
     }
 }
 

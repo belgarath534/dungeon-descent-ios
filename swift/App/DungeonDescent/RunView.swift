@@ -356,3 +356,18 @@ struct InventoryView: View {
         return item.desc
     }
 }
+
+struct OptionRow: View {
+    let title: String
+    let detail: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(title)
+            if !detail.isEmpty {
+                Text(detail).font(.footnote).foregroundStyle(.secondary)
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+}

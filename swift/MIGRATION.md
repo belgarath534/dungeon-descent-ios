@@ -98,6 +98,9 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Lifetime stats | GLOBAL STATS TRACKING | 🟡 kills, deaths, floors, runs; no stats screen yet |
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
+| Web look: main menu, Your Champions, Death Log, Forge Your Legend | screen-menu, screen-charlist, screen-deathlog, screen-creation | ✅ same order, text, VoiceOver labels and sliders; creation cards come from index.html through tools/extract-creation.py |
+| The Shadow World dungeon | SHADOW_ENEMIES | ⬜ |
+| Spirits, corruption, hunter, guide in play | STARTER_SPIRITS, corruption, hunterTurn, companion | ⬜ chosen at creation and saved, no effect in runs yet |
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
 | Quests, bounties, inbox | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
 | Spirits, companion, corruption, Hunter, Void, Medusa arc | … | ⬜ |
@@ -154,4 +157,8 @@ Where an item's description and the web code disagree, Swift follows the descrip
   them. They now work.
 - **Kill counts** went up by 2 per kill (incrementAchievementStat ran twice in enemyDead),
   so kill achievements unlocked at half the kills they promise. Swift counts 1.
-
+- **Origins (backstories) never applied their bonus.** `applyBackstory()` ran at
+  creation and changed the *previous* run's state, so +15 gold, +10 HP, +2 defense,
+  +1 life and so on never reached the new character. "Last Hope" also promised
+  +5 SP per level up that no code ever gave. The Swift version applies them when
+  each run starts.
