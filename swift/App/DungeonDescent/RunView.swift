@@ -4,7 +4,7 @@ import DungeonCore
 @MainActor
 struct RunView: View {
     @StateObject private var model: RunModel
-    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var router: Router
     @State private var showingInventory = false
 
     init(game: GameModel, characterIndex: Int, resume: Bool) {
@@ -166,10 +166,10 @@ struct RunView: View {
                 Button("Continue Journey: the next dungeon, keeping your level") { model.continueJourney() }
             }
             Button("New Game+: this dungeon again, with stronger enemies") { model.startNewGamePlus() }
-            Button("Return to characters") { dismiss() }
+            Button("Return to characters") { router.goTo(.charlist) }
         case .defeat:
             Text(model.characterGone ? "\(model.run.name) is gone forever." : "Defeated. All lives lost.").font(.headline)
-            Button("Return to characters") { dismiss() }
+            Button("Return to characters") { router.goTo(.charlist) }
         }
     }
 

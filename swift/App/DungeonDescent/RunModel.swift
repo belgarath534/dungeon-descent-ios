@@ -487,7 +487,7 @@ final class RunModel: ObservableObject {
             add("Defeated. All lives lost. \(r.name) fell on floor \(r.floor).")
             let floor = r.floor
             game.updateCharacter(characterIndex) {
-                $0.logDeath(floor: floor, killedBy: killedBy)
+                $0.logDeath(floor: floor, killedBy: killedBy, run: r)
                 $0.floor = 1
             }
             game.clearRun(for: characterIndex)

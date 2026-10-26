@@ -1148,3 +1148,34 @@ final class DailyQuestTests: XCTestCase {
         XCTAssertEqual(r.inventory.last?.name, "Health Potion")
     }
 }
+
+final class DeathLogTests: XCTestCase {
+    func testDeathsKeepTheWebFieldsAndTheLastFive() {
+        var ch = PlayerCharacter(name: "Ash", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var r = Run(character: ch, gold: 0)
+        r.kills = 7
+        r.level = 3
+        for f in 1...7 { ch.logDeath(floor: f, killedBy: "Skeleton", run: r) }
+        XCTAssertEqual(ch.deaths.count, 5)
+        XCTAssertEqual(ch.deaths[0].floor, 7)
+        XCTAssertEqual(ch.deaths[0].kills, 7)
+        XCTAssertEqual(ch.deaths[0].level, 3)
+        XCTAssertEqual(ch.deaths[0].flavor, "The Crypt is silent again. As if you were never there.")
+    }
+
+    func testDeletingBuriesTheCharacter() {
+        let store = MemoryStore()
+        let roster = CharacterRoster(store: store)
+        var ch = PlayerCharacter(name: "Bea", cls: "Monk", race: "Elf", prof: "Scholar",
+                                 dungeon: "Crypt of Malachar", difficulty: .ironblood)
+        ch.logDeath(floor: 4, killedBy: "Ghoul")
+        roster.add(ch)
+        roster.bury(at: 0)
+        XCTAssertTrue(roster.characters.isEmpty)
+        let raw = store.getItem("dd_graveyard") ?? ""
+        XCTAssertTrue(raw.contains("\"name\":\"Bea\""))
+        XCTAssertTrue(raw.contains("\"killedBy\":\"Ghoul\""))
+    }
+}
+

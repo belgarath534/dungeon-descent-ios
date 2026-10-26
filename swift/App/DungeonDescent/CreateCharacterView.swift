@@ -7,7 +7,7 @@ import DungeonCore
 @MainActor
 struct CreateCharacterView: View {
     @EnvironmentObject var game: GameModel
-    @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var router: Router
 
     @State private var cls = GameData.classes[0].id
     @State private var race = GameData.races[0].id
@@ -103,7 +103,7 @@ struct CreateCharacterView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") { dismiss() }
+                Button("Cancel") { Sound.sfx("sfx-select"); router.goTo(.charlist) }
             }
         }
         .onAppear { dungeons = game.unlockedDungeons() }
@@ -115,7 +115,7 @@ struct CreateCharacterView: View {
                                  dungeon: dungeon, difficulty: difficulty, hardcoreMode: hardcore)
         if game.create(ch) {
             Feedback.announce("\(trimmed) created. Returning to character list.")
-            dismiss()
+            router.goTo(.charlist)
         }
     }
 }

@@ -177,6 +177,45 @@ public final class CharacterRoster {
         save()
     }
 
+    /// Deleting a character from the list puts it in The Graveyard first
+    /// ("dd_graveyard", newest first, 50 kept), like confirmDelete().
+    public func bury(at index: Int, date: Date = Date()) {
+        guard characters.indices.contains(index) else { return }
+        let ch = characters[index]
+        let deaths = ch.deaths
+        var journal = ""
+        switch ch.extra["journal"] {
+        case .array(let a)?:
+            if case .object(let o)? = a.first, case .string(let t)? = o["text"] { journal = t }
+        case .string(let t)?: journal = t
+        case .object(let o)?: if case .string(let t)? = o["text"] { journal = t }
+        default: break
+        }
+        let c = Calendar.current.dateComponents([.year, .month, .day], from: date)
+        let entry: JSONValue = .object([
+            "name": .string(ch.name),
+            "cls": .string(ch.cls),
+            "race": .string(ch.race),
+            "prof": .string(ch.prof),
+            "dungeon": .string(ch.dungeon),
+            "difficulty": .string(ch.difficulty),
+            "level": .number(Double(ch.persistLevel ?? 1)),
+            "deaths": .number(Double(deaths.count)),
+            "topFloor": .number(Double(deaths.first?.floor ?? 0)),
+            "killedBy": .string(deaths.first?.killedBy ?? "unknown causes"),
+            "journal": .string(journal),
+            "date": .string("\(c.month ?? 1)/\(c.day ?? 1)/\(c.year ?? 2026)"),
+        ])
+        var list: [JSONValue] = []
+        if let raw = store.getItem("dd_graveyard"), let d = raw.data(using: .utf8),
+           let old = try? JSONDecoder().decode([JSONValue].self, from: d) { list = old }
+        list.insert(entry, at: 0)
+        if let d = try? JSONEncoder().encode(Array(list.prefix(50))), let out = String(data: d, encoding: .utf8) {
+            store.setItem("dd_graveyard", out)
+        }
+        remove(at: index)
+    }
+
     public func save() {
         guard let data = try? JSONEncoder().encode(characters),
               let json = String(data: data, encoding: .utf8) else { return }
@@ -257,20 +296,81 @@ extension PlayerCharacter {
         return 0
     }
 
-    /// Adds a death to the character's "deathLog", newest first, like logDeath().
-    public mutating func logDeath(floor: Int, killedBy: String, date: Date = Date()) {
+    /// Adds a death to the character's "deathLog", newest first, with the same
+    /// fields as the web version's logDeath(); the last 5 are kept.
+    public mutating func logDeath(floor: Int, killedBy: String, run: Run? = nil, date: Date = Date()) {
         let cal = Calendar.current
         let c = cal.dateComponents([.year, .month, .day, .hour, .minute], from: date)
-        let entry: JSONValue = .object([
+        let flavor = [
+            "Crypt of Malachar": "The Crypt is silent again. As if you were never there.",
+            "The Ashbound Wastes": "The ash settles. The fire does not notice.",
+            "Frosthold Abyss": "The cold closes over the gap you left. Perfectly.",
+            "The Sunken Archives": "The water was always still. Now it is still again.",
+            "Nightmare": "The nightmare continues. You simply stopped being in it.",
+        ]
+        let where_ = run?.dungeon ?? dungeon
+        var o: [String: JSONValue] = [
             "floor": .number(Double(floor)),
             "killedBy": .string(killedBy),
             "date": .string("\(c.month ?? 1)/\(c.day ?? 1)/\(c.year ?? 2026)"),
             "time": .string("\(c.hour ?? 0):" + String(format: "%02d", c.minute ?? 0)),
-            "dungeon": .string(dungeon),
-        ])
+            "dungeon": .string(where_),
+            "diff": .string(run?.difficulty.rawValue ?? difficulty),
+            "flavor": .string(flavor[where_] ?? "The dungeon continues without you."),
+            "spirit": .string("None"),
+            "bestDmg": .number(0),
+        ]
+        if let r = run {
+            o["level"] = .number(Double(r.level))
+            o["kills"] = .number(Double(r.kills))
+            o["gold"] = .number(Double(r.gold))
+            o["skillsUnlocked"] = .number(Double(r.unlockedSkills.count))
+        }
         var log: [JSONValue] = []
         if case .array(let old)? = extra["deathLog"] { log = old }
-        log.insert(entry, at: 0)
-        extra["deathLog"] = .array(Array(log.prefix(20)))
+        log.insert(.object(o), at: 0)
+        extra["deathLog"] = .array(Array(log.prefix(5)))
+    }
+
+    /// The deaths in "deathLog", oldest last.
+    public var deaths: [Death] {
+        guard case .array(let entries)? = extra["deathLog"] else { return [] }
+        return entries.compactMap { e in
+            guard case .object(let o) = e else { return nil }
+            func str(_ k: String) -> String { if case .string(let v)? = o[k] { return v }; if case .number(let n)? = o[k] { return String(Int(n)) }; return "" }
+            func num(_ k: String) -> Int { if case .number(let n)? = o[k] { return Int(n) }; return jsParseInt(str(k)) ?? 0 }
+            return Death(floor: num("floor"), killedBy: str("killedBy"), date: str("date"), dungeon: str("dungeon"),
+                         diff: str("diff"), level: num("level"), kills: num("kills"), gold: num("gold"),
+                         bestDmg: num("bestDmg"), flavor: str("flavor"))
+        }
+    }
+
+    public struct Death: Equatable, Sendable {
+        public var floor: Int
+        public var killedBy: String
+        public var date: String
+        public var dungeon: String
+        public var diff: String
+        public var level: Int
+        public var kills: Int
+        public var gold: Int
+        public var bestDmg: Int
+        public var flavor: String
+    }
+
+    /// Endless best floor, " · ⬇ Floor 12 (Endless)" (getEndlessBestStr).
+    public var endlessBestText: String {
+        if case .number(let n)? = extra["endlessBest"], n >= 1 { return " · ⬇ Floor \(Int(n)) (Endless)" }
+        return ""
+    }
+
+    public var spiritsEarned: Int {
+        if case .array(let a)? = extra["earnedSpirits"] { return a.count }
+        return 0
+    }
+
+    public var ngPlus: Bool {
+        if case .bool(let b)? = extra["ngPlus"] { return b }
+        return false
     }
 }

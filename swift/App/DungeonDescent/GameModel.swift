@@ -169,6 +169,13 @@ final class GameModel: ObservableObject {
         clearRun(for: index)
         delete(at: index)
     }
+
+    /// The player deleted the character: it goes to The Graveyard.
+    func buryCharacter(at index: Int) {
+        clearRun(for: index)
+        roster.bury(at: index)
+        refresh()
+    }
 }
 
 /// Spoken feedback and haptics.
