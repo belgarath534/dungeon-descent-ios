@@ -144,10 +144,12 @@ struct ScreenHeader<Extra: View>: View {
                     .accessibilityLabel(backHint)
                 extra()
             }
-            Text(title)
-                .font(Theme.decorative(20))
-                .foregroundStyle(Theme.gold)
-                .accessibilityAddTraits(.isHeader)
+            if !title.isEmpty {
+                Text(title)
+                    .font(Theme.decorative(20))
+                    .foregroundStyle(Theme.gold)
+                    .accessibilityAddTraits(.isHeader)
+            }
             if let subtitle {
                 Text(subtitle)
                     .font(Theme.crimson(14.4, italic: true))

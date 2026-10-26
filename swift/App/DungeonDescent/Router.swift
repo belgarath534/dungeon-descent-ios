@@ -14,6 +14,10 @@ final class Router: ObservableObject {
         case dungeon(Double, resume: Bool)
         case quests
         case settings
+        case graveyard
+        case help
+        case credits
+        case whatsnew
         case quit
     }
 
@@ -53,6 +57,10 @@ struct RootView: View {
                 }
             case .quests: AchievementsView()
             case .settings: WebSettingsView { router.goTo(.menu) }
+            case .graveyard: GraveyardView()
+            case .help: HelpView()
+            case .credits: CreditsView()
+            case .whatsnew: WhatsNewView()
             case .quit: QuitScreen()
             }
         }

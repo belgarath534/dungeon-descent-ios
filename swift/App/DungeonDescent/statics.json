@@ -1,0 +1,2410 @@
+{
+ "help": {
+  "intro": "Everything you need to know about Dungeon Descent. Use your screen reader heading navigation to jump between sections.",
+  "tabs": [
+   {
+    "id": "basics",
+    "label": "⚔ Basics",
+    "entries": [
+     {
+      "title": "What is Dungeon Descent?",
+      "body": "Dungeon Descent is a fully accessible turn-based dungeon crawler built specifically for screen reader users. You create a character, choose a dungeon, and descend through 10 floors fighting enemies, finding loot, and surviving long enough to defeat the final boss. Every element of the game is announced by your screen reader automatically."
+     },
+     {
+      "title": "How do I start?",
+      "body": "From the main menu press Play. If you have no characters, press New Character. You will go through 12 creation steps — Class, Race, Profession, Name, Dungeon, Difficulty, Run Mode (Classic or Legacy), Spirit Companion, then four optional steps: Corruption Mode, Hunter Mode, Your Guide (name your companion), and Your Origin (backstory). Then you descend. The dungeon announces every room, every enemy, every event automatically."
+     },
+     {
+      "title": "How do I win?",
+      "body": "Survive all 10 floors and defeat the boss on floor 10. The boss has 3 phases and gets stronger each phase. Defeat all 3 phases and the dungeon is complete. Completing a dungeon unlocks the next one."
+     },
+     {
+      "title": "What happens when I die?",
+      "body": "A death cinematic plays — a unique line based on which dungeon you were in, which enemy killed you, and how deep you got. Then the run summary shows your stats. Your character stays on your roster unless you delete them. You can try again immediately."
+     },
+     {
+      "title": "What is a run?",
+      "body": "A run is one complete attempt at a dungeon from floor 1 to floor 10. Each run your XP, gold, and skills reset. Your character persists between runs — their completion history, earned spirits, and journal entries carry over forever."
+     },
+     {
+      "title": "🎲 Run Modifiers",
+      "body": "Every dungeon run has a chance to roll a random modifier before you descend — one of 8: Burning Dungeon (fire damage, +50% gold), Frozen Floors (enemies hit 20% softer, fewer rooms), The Watching (no event rooms, double XP), Death March (enemies 25% stronger, boss drops a legendary item), Gold Curse (triple gold, potions cost double), Phantom Run (invisible until you attack, guaranteed crit on your first strike), Berserk Mode (+40% damage, can't defend), and Blessed Run (start with a full inventory of potions and 100 bonus gold). Turn modifiers off entirely in Settings under Gameplay."
+     },
+     {
+      "title": "⏸ Pause Menu",
+      "body": "Press Backspace on desktop or tap the ⏸ button in the dungeon top bar to pause. Shows your character name, current floor, dungeon, and HP, with options for Resume, Save, Settings, Quests, and Main Menu — all keyboard and screen reader accessible. You can't pause mid-combat; your screen reader announces why if you try."
+     }
+    ]
+   },
+   {
+    "id": "characters",
+    "label": "🧙 Characters",
+    "entries": [
+     {
+      "title": "Classes (24 total)",
+      "body": "Warrior — high HP, reliable damage, defensive skills. Best for beginners. Monk — fast attacks, SP regeneration, zen-based skills. Assassin — high crit chance, stealth skills, burst damage. Paladin — divine magic, healing, shields, undead resistance. Naturalist — poison, entangle, animal companions, nature healing. Sorcerer — highest damage in game, fragile, mana-based spells. Necromancer — raises dead, life drain, undead synergies. Berserker — rage-based skills, damage scales with low HP. Bard — songs that buff you and debuff enemies. Alchemist — potions, bombs, transmutation skills. Blood Knight — bleeds enemies, heals from damage dealt. Druid — shapeshifting, nature spells, strong healing. Warlock — soul drain, dark pacts, powerful but costly skills. Death Knight — survives one killing blow, undead aura, death magic. Ranger — swift hunter. First hit every combat deals 75% bonus damage. High flee chance. Sentinel — unbreakable wall. Highest HP of any class. Takes 25% less damage from all sources. Cleric — sacred healer, triple potion strength, holy relics. Wizard — arcane scholar, highest SP, lowest HP. Reveals enemy stats at combat start. 15 unique spells including Time Warp, Meteor, and Arcane Singularity. Elementalist — elemental master. Deals bonus damage to enemies weak to your chosen element. VoidWalker — void entity. Phases through attacks and strikes from the void. ShadowMage — shadow caster. Magic damage drawn from the darkness. TimeMage — temporal mage. Manipulates time in combat. Shaman — spirit caller. Summons ancestral spirits in combat. Arcanist — pure arcane power. Highest magic damage in the game."
+     },
+     {
+      "title": "Races (15 total)",
+      "body": "Human — adaptable, a small bonus to every stat. Elf — graceful, bonus agility and intelligence. Dwarf — unyielding, bonus strength and defense. Orc — savage, a massive strength bonus but reduced defense. Tiefling — infernal, bonus luck and intelligence. Shade — ethereal, bonus agility and luck. Vampire — drains 5 HP per kill, but starts with 20% less max HP. Goblin — +25% gold from everything, starts with bonus gold. Angel — one extra life, heals 15 HP on every level up. Demon — deals and takes 15% more damage. Golem — +5 defense, immune to poison and freeze. Halfling — lucky, big luck bonus but reduced strength, 15% dodge chance. Dragonborn — 10% chance to deal bonus burn damage each hit, scales with floor depth. Gnome — arcane trickster, plus INT and LCK, all skills cost 2 less SP every combat. Merfolk — aquatic, plus AGI, potions heal 20% more, bonus HP and ATK in the Sunken Archives."
+     },
+     {
+      "title": "Professions (11 total)",
+      "body": "Blacksmith — weapons deal bonus damage. Herbalist — potions heal double. Scholar — avoids traps automatically. Mercenary — starts with extra gold. Gravedigger — bonus damage to undead enemies. Thief — better flee chance, bonus loot. Pilgrim — plus 15 percent XP from everything. Grave Robber — starts with 50 gold, plus 20 percent gold drops. Street Rat — free Smoke Bomb skill, plus 20 percent flee chance. Warden — plus 3 defense, debuff immunity. Tinkerer — starts with 2 potions, all skills cost 2 less SP."
+     },
+     {
+      "title": "Backstories (optional, Step 12)",
+      "body": "At the end of character creation you can choose a backstory. Each one grants a small bonus and writes your first journal entry automatically. Options include Exiled Noble (plus 15 gold), Cursed Wanderer (plus 10 max HP), Former Soldier (plus 2 defense), Lost Scholar (plus 20 percent XP), Debt Collector (plus 25 gold), True Believer (plus 1 extra life), Nobody Special (no bonus — just honest), and Last Hope (plus 5 SP per level up). Backstory is completely optional — press Skip to go straight into the dungeon."
+     },
+     {
+      "title": "Skills",
+      "body": "Each class has 15 unique skills. You unlock skills by leveling up — after each level up you choose one of three offered skills to permanently add to your skill bar for that run. Skills cost SP (Skill Points) to use. You start with 20 SP and regenerate 2 per room. Some skills are common, rare, or legendary — legendary skills are powerful but expensive."
+     },
+     {
+      "title": "Spirit Companions",
+      "body": "Every character bonds with a spirit companion before their first run. Spirits give passive bonuses every run and deal bonus damage in combat. You earn rare spirits by defeating bosses and special enemies. Spirits are permanent — they stay with your character forever. You can change your active spirit between runs from the character screen.Spirit Builder — every enemy kill has a 40% chance to drop a Soul Fragment. Collect 25 to unlock the Spirit Builder, a tab in the Bestiary. Name your spirit, pick an icon from 12 options and one of 8 craftable abilities (Soul Mend, Surge Strike, Essence Drain, Spirit Ward, Fortune's Veil, Venom Aura, Final Judgment, Purifying Song), then build it. Your custom spirit joins the spirit picker for every future run, permanently."
+     }
+    ]
+   },
+   {
+    "id": "dungeons",
+    "label": "🏚 Dungeons",
+    "entries": [
+     {
+      "title": "Crypt of Malachar — Dungeon 1",
+      "body": "The first dungeon. A thousand-year-old crypt ruled by the Undying King, Malachar. Undead enemies — skeletons, ghosts, wraiths. Standard dungeon mechanics. Recommended for all new players. The boss Malachar has three phases and summons adds in the final phase."
+     },
+     {
+      "title": "The Ashbound Wastes — Dungeon 2",
+      "body": "A burning wasteland. Enemies deal fire damage. Some rooms have environmental fire hazards. The boss is The Eternal Pyre — an ancient fire entity. Unlocked after completing the Crypt. Harder than the Crypt, especially for classes with low defense."
+     },
+     {
+      "title": "Frosthold Abyss — Dungeon 3",
+      "body": "A frozen abyss at the bottom of the world. Ice enemies that can freeze you in place. The boss is The Eternal Winter. Unlocked after completing the Wastes. Cold damage ignores some defenses — high HP classes recommended."
+     },
+     {
+      "title": "The Sunken Archives — Dungeon 4",
+      "body": "An underwater library filled with drowned scholars. Unique lore fragment mechanic — find fragments scattered through rooms that build a complete story. The boss is The Head Archivist. Unlocked after completing the Abyss. Contains a unique secret room type."
+     },
+     {
+      "title": "The Hollow — Dungeon 5",
+      "body": "An abandoned house. The strangest dungeon in the game. Has a weather system — every run rolls one of 5 weather conditions that change how the dungeon plays. Unique enemies include the Weeping Child (soothe it with the Music Box to unlock a later event), the Music Box itself, and the Uninvited Guest. The boss is The Last Resident."
+     },
+     {
+      "title": "The Whispering Forest — Dungeon 6",
+      "body": "A village killed a witch named Seraphine three years ago. Her dying curse consumes everything inside the forest. Unlock by completing The Hollow.Corruption Bar — a green bar fills as you descend. It increases passively over time AND when enemies hit you. Reach 100% corruption and you die instantly regardless of HP or difficulty.Music Box Item — drops every 3 floors. Go to your inventory and activate it manually to clear all corruption and play the melody. Plan ahead — if you miss a Music Box you may not survive.Potions — in the Whispering Forest potions restore HP AND reduce corruption by 30%. Every potion decision matters more here.Final Boss — Seraphine the Undying or The Corrupter. The game picks randomly each run. You never know which one is waiting on floor 10.The Corrupted Chimera — guaranteed on floor 9 your first visit. Three corrupted parts each with unique mechanics."
+     },
+     {
+      "title": "The Infernal Descent — Dungeon 7",
+      "body": "A dungeon of pure void and flame. Requires 100 trophies to unlock — the game checks automatically and unlocks it when you reach that threshold. Features void entities, infernal creatures, and devastating bosses across 3 tiers. Has its own music, ambient track, and weather system."
+     },
+     {
+      "title": "The Abyssal Deep — Dungeon 8",
+      "body": "The bottom of the ocean where no light reaches. Unlocks automatically after completing The Infernal Descent. Features 9 unique ocean enemies — Tide Wraith, Drowned Sailor, Ink Fiend, Deep Stalker, Siren, Abyssal Eye and more, each with unique combat mechanics. The Leviathan is the final boss with 4 phases and 800 HP — the hardest boss in the game. Each phase transition plays a different music track. Has 5 unique dungeon events including The Witness — a shark that has been watching you the entire run and becomes your permanent minion if you earn its trust. Has its own weather system, music, and ambient. Bring everything you have."
+     },
+     {
+      "title": "The Shadow World — Dungeon 9",
+      "body": "A secret dungeon that has existed for 3000 years beneath a cursed forest. 14 enemies with unique mechanics, including The Mimic, The Lurker, The Reflection, and Shadow Archon. Shadow Corruption builds per hit you take — at 3 stacks your damage is halved, so spend the 4 SP on Purge before it gets there. Shadow Ambush encounters bring back echoes of enemies you already killed this run, each adding more corruption on hit. The Echo always spawns first as the floor 10 boss; defeating it auto-triggers a dramatic fight against The Shapeshifter, a 4-phase boss that copies your weapon damage, matches your exact HP, and corrupts you on every hit — widely considered the hardest boss in the game. A Security Room event can also appear: watch 4 camera feeds for the Darkness Swallower and escape the opposite direction, by sight or by its growl, before a 15-second timer runs out."
+     },
+     {
+      "title": "Dungeon Weather System",
+      "body": "Every dungeon run rolls a random weather condition at the start. Each dungeon has its own weather pool. Effects include enemy ATK multipliers, gold boosts, HP loss per room, SP discounts, and healing per kill. The condition is announced by the screen reader and shown in the weather banner at the top of the dungeon screen."
+     },
+     {
+      "title": "Hollow Weather System",
+      "body": "Every time you enter The Hollow the game rolls one of 5 weather conditions. Foggy Night adds 15 percent combat chance. Full Moon makes enemies 20 percent stronger but gold drops 50 percent more. Silent Night doubles Weeping Child spawn rate. The Witching Hour gives you 25 percent more damage but enemies crit more. Still and Cold has no effect — the house is just watching."
+     },
+     {
+      "title": "Difficulty Levels",
+      "body": "Wanderer — 3 lives, normal damage. Recommended for new players. Ironblood — 1 life, 10 percent more enemy damage. Condemned — 1 life, 25 percent more damage, no shops. Forsaken — 1 life, 50 percent more damage, enemies have more HP. Forsaken — 1 life, maximum brutality, +50% enemy damage. Most never return. Nightmare — 1 life, hardest possible, elite enemy variants everywhere. Insane — 1 life plus a sanity bar. The dungeon affects your mind. At zero sanity the dungeon absorbs you."
+     },
+     {
+      "title": "New Game Plus",
+      "body": "Clear any dungeon and a choice screen appears: Continue Journey (move on to the next dungeon with your current character) or New Game Plus (replay that same dungeon, harder, keeping your character and spirit). Each dungeon tracks its own NG+ count — enemies get roughly 20 percent stronger on your first NG+ run through a dungeon, with each subsequent NG+ adding about 5 percent more on top. There is no cap."
+     },
+     {
+      "title": "Hunter Mode",
+      "body": "Enable Hunter Mode at character creation Step 9 or toggle it from the pause menu. Once active, a relentless hunter enters the dungeon behind you. It moves every time you move or kill an enemy. If you idle for 3 or more turns it rushes — moving 2 rooms per turn. The distance is announced every room change via your screen reader and shown on the hunter tracker bar at the top of the screen. At 5 rooms away the heartbeat sound begins and speeds up as it closes in. At 3 rooms away the music shifts to a dark tension track. At 2 rooms away a Fight or Run choice appears — you can face the hunter in a scaled boss fight or sprint away and buy one more turn. If you kill the hunter you earn the Hunter's Trophy item and Hunter Mode deactivates for the rest of the run. If it catches you — jump scare. A 💀 HC badge shows in the top bar when Hunter Mode is active."
+     },
+     {
+      "title": "Hunter Mode — Survival Tips",
+      "body": "Keep moving — the hunter only catches you if you idle. Clear rooms quickly and always move after winning a fight. The mercy distance resets slightly when you advance a floor so floor transitions buy time. Fight the hunter at level 10 or above for the best chance — it scales with your level but so do your stats and skills. If you choose to run at 2 rooms it resets to 1 room — you only bought one turn so keep sprinting. The heartbeat speed tells you how close it is — when it hits maximum speed at 400ms intervals you are 1 room away."
+     },
+     {
+      "title": "Shadow Realm",
+      "body": "The Shadow Realm is a hidden secret mode. To access it go to Settings, tap Redeem Code, and type SHADOW. A dramatic intro screen will appear and then character selection. The Shadow Realm is an endless wave survival mode — each wave spawns shadow entities that grow stronger over time. Every 10 waves a boss wave appears. Your score is tracked on a local leaderboard so you can compete against your own best runs. Void Reaper music plays throughout. The Shadow Realm does not save progress — each run starts fresh."
+     }
+    ]
+   },
+   {
+    "id": "combat",
+    "label": "⚔ Combat",
+    "entries": [
+     {
+      "title": "Boss Fights — Strategy Guide",
+      "body": "Every dungeon boss has 3 phases. Each phase transition makes the boss stronger and changes its attack pattern. A boss preview screen shows the boss name and HP before combat begins — read it carefully. General tips: save at least 2 potions before floor 10. Use your strongest skill in phase 1 while the boss is weakest. Defend during phase transitions to reduce the burst damage. If you have a spirit active use its combat skill every cooldown. The boss scales with your player level so higher level characters face stronger bosses — there is no free ride."
+     },
+     {
+      "title": "Basic Combat Actions",
+      "body": "Attack — always hits, deals standard damage. 10 percent chance to crit for 1.8x damage. Heavy Strike — deals 1.7x damage but 30 percent chance to miss completely. Defend — reduces damage this turn and deals a small counter hit. Use Skill — activates one of your unlocked class skills. Costs SP. Soul Trap — appears in combat when you have a Soul Trap in your inventory. Captures the current enemy as a permanent minion. Cannot be used on bosses. Flee — attempt to escape combat. Success chance depends on your race and profession."
+     },
+     {
+      "title": "Elites and Bosses",
+      "body": "Elite enemies appear on floors 4 and above. They have much higher HP and special abilities. Each dungeon has its own elite enemies. The boss appears on floor 10 and has 3 phases — each phase changes its attack pattern and gets stronger. The Secret Boss (DDDI) has a 2 percent spawn chance on floor 10 of any dungeon."
+     },
+     {
+      "title": "Insane Mode Enemies",
+      "body": "The Sanity Drainer — appears only in Insane Mode. Drains 10 sanity on appearance and more every hit. Drops an Insanity Potion when defeated. The Distorted — a psychological enemy with no HP damage. Every time it acts your screen reader fires rapid messages — Someone is watching you. Be careful. Run. You cannot escape. Meanwhile it drains your sanity silently. Defeat it by dealing HP damage normally."
+     },
+     {
+      "title": "The Insanity Bar",
+      "body": "Only active in Insane Mode difficulty. Starts at 100 percent and drains 2 percent every 5 seconds passively. Taking damage drains it further. At 50 percent your screen reader warns you. At 25 percent the UI starts corrupting. At 10 percent log entries scramble. At zero the dungeon absorbs you — not death, just gone. Encountering Julio restores 15 sanity. The Insanity Potion either restores it fully or drains it massively — you never know which until you drink it."
+     },
+     {
+      "title": "The Music Box (Hollow only)",
+      "body": "A special enemy found only in The Hollow. When it acts it plays a melody — a separate audio track begins, the Music Box deals 3 ticks of damage, then the melody fades and combat resumes. You cannot attack during the melody. If you soothed the Weeping Child earlier in the run, a special encounter with the Weeping Mother becomes available on higher floors."
+     },
+     {
+      "title": "Julio",
+      "body": "A figure who appears randomly in dungeon rooms. He sits in the corner. His name tag says JULIO. Talking to him restores 15 sanity in Insane Mode. He also gives you a fragment — collect all 5 fragments across multiple runs to unlock his Library story. He signed the founding charter of the DDDI at 3AM. Nobody knows why. The Department has noted his absence 48 times."
+     }
+    ]
+   },
+   {
+    "id": "features",
+    "label": "✨ Features",
+    "entries": [
+     {
+      "title": "Your Guide — Companion System",
+      "body": "When you create a new character you are asked to name your guide at Step 9 — a companion who walks with you through every dungeon. She speaks during boss fights, level ups, low HP moments, achievements, hunter encounters, and death. Her portrait appears at the bottom of the screen whenever she has something to say. Tap the X button to dismiss her message. She stays consistent throughout every run."
+     },
+     {
+      "title": "🐾 The Familiar",
+      "body": "A small companion separate from your Guide that bonds with you across every run — persists account-wide, just like your trophies. Bond grows from kills, room searches, and full dungeon clears. Rename it and choose from 4 species, each unlocked by a real milestone (100 trophies, clearing every dungeon, defeating the Void Reaper, or reaching Bond Level 10) — access the picker from its overlay, found from a new menu badge. Earns bond-level titles at 5, 10, and 20, offers a comfort line when your sanity drops critically low, and reacts by name the first time you meet Julio or the Void Reaper each run. Kept flavor-only on purpose — no stat effect — so it can never affect combat balance. 3 achievements track bond level: First Bond, The Loyal, and The Inseparable."
+     },
+     {
+      "title": "🎧 Echo-Location",
+      "body": "Found in 3D Mode's action bar, or say \"echo,\" \"sonar,\" or \"ping\" with Voice Commands. Fires a sonar pulse: a central ping, then a panned tone toward every door in the room — a sharp tik for a wall, a soft fading tone for an open door, its fade length matching how far that corridor actually runs before hitting a dead end. Doors leading toward a room you haven't visited yet also layer a distinct cue for what's coming — a low growl for danger, a bright shimmer for something promising, a detuned \"uncertain\" tone for a mystery — a real read of the next room, not decoration. Works purely by audio even with the 3D visual switched off."
+     },
+     {
+      "title": "🧊 3D Mode",
+      "body": "An alternate way to explore every dungeon — a real 3D rendered view with full spatial audio, walking between rooms yourself instead of tapping directions. Turn it on in Settings under Beta Features. Each dungeon has its own distinct visual palette. Off by default for screen reader users, but you can turn it on yourself just for the spatial audio layer — Echo-Location, directional door and wall cues, and a live directional pulse from the Hunter when Hunter Mode is active — with or without ever looking at the 3D visual."
+     },
+     {
+      "title": "🎤 Voice Commands",
+      "body": "Play combat and exploration completely hands-free. In combat say \"attack,\" \"heavy strike,\" \"defend,\" \"potion,\" \"flee,\" or \"skills.\" While exploring say \"north,\" \"south,\" \"east,\" \"west,\" \"search,\" \"inventory,\" or \"echo location.\" Uses native on-device speech recognition on iOS and Android — enable it from Settings."
+     },
+     {
+      "title": "🏆 Trophy Room",
+      "body": "A dedicated 3D space to browse everything you've earned, reachable from the Trophies overlay. The 3D showcase itself is purely decorative and hidden from screen readers, but every trophy is still fully reachable through the regular accessible trophy list right alongside it — nothing about your trophies is screen-reader-only-hidden."
+     },
+     {
+      "title": "🕯️ Hide and Seek",
+      "body": "A tense chase mode against the Darkness Swallower. Play solo or with up to 5 friends in a shared room — find the exit before it finds you."
+     },
+     {
+      "title": "📱 Live Status While Backgrounded",
+      "body": "On iOS, a Live Activity shows your Hunter distance or Endless Descent floor and points right on your lock screen and in the Dynamic Island while the app is backgrounded. On Android, the same information shows in a persistent, low-priority notification. Appears automatically whenever Hunter Mode or an AFK Endless Descent run is active, and clears itself the moment either ends."
+     },
+     {
+      "title": "💀 Hardcore Mode",
+      "body": "Enable Hardcore Mode at the Difficulty step during character creation. In Hardcore Mode death is permanent — if your character dies they are deleted forever. No cloud save, no second chances, no retry. A HC badge appears in the top bar to remind you the stakes are real. Combined with Hunter Mode it creates the most intense experience Dungeon Descent offers."
+     },
+     {
+      "title": "⭐ Inventory Favorites and Auto-Sort",
+      "body": "The inventory has a search bar at the top — type any item name to filter instantly. Tap the star button on any item to add it to favorites — favorited items always appear at the top of your inventory. Tap the sort button (⇅) to auto-sort everything by type — favorites first, then weapons, armor, potions, and materials."
+     },
+     {
+      "title": "🏆 The True Ending",
+      "body": "Clear all 9 dungeons — the Crypt of Malachar, The Ashbound Wastes, Frosthold Abyss, The Sunken Archives, The Hollow, The Whispering Forest, The Infernal Descent, The Abyssal Deep, and The Shadow World — and something special happens. A cinematic plays, a title is earned, and credits roll. You do not need to clear them all on the same character. Progress is tracked across all your runs forever."
+     },
+     {
+      "title": "The Chronicles",
+      "body": "Accessible from the main menu. Contains four tabs — Lore (background on the dungeons and the world), Library (stories written about the dungeons, some unlockable), Journal (auto-written record of each character's runs), and Music Player (browse and play all tracks from the game). The Library includes the origin story of the dungeons and a story about how this game was actually built."
+     },
+     {
+      "title": "The Home",
+      "body": "Buy a Home for 500 gold from inside any dungeon. Once purchased it persists for that character forever. Inside Home you have 4 tabs — Home tab (Bed for 75g restores HP and SP, Safe to deposit gold), Spirits tab (Spirit Forge shortcut), Minions tab (manage captured minions), and Forge tab (craft weapons from materials). Access Home from the dungeon action bar between fights."
+     },
+     {
+      "title": "The Spire",
+      "body": "Standalone mode, climb 1800 floors. Death sends you back one floor only. Rest floors every 10 floors. Blacksmith available mid-climb. 9 unique bosses scaling to The Time Eater at floor 1800. Gold milestones at floors 100, 200, 300, 500, 750, 1000 and 1500. Auto Mode advances automatically."
+     },
+     {
+      "title": "Daily Dungeon and The Gauntlet",
+      "body": "Daily Dungeon — a new challenge every day with 2 random modifiers. Resets at midnight. Found under Challenges. The Gauntlet — all dungeons back to back, one life, HP carries over. Clear everything for the Gauntlet Champion achievement."
+     },
+     {
+      "title": "Global Gold System",
+      "body": "All gold earned anywhere feeds a single shared wallet. Spend it at the main menu Blacksmith between runs. Your balance shows live on the Blacksmith screen."
+     },
+     {
+      "title": "Procedural Room Sequences",
+      "body": "Every floor generates a room sequence with possible special rooms — Treasure Chamber (loot, no combat), Sanctuary (heal 20% HP), Cursed Chamber (elite, triple gold), Hidden Passage (secret gold), and Wandering Merchant (mid-dungeon shop with 4 to 5 items)."
+     },
+     {
+      "title": "Runes and Scrolls",
+      "body": "Runes — found in dungeons and shops. Strength adds 6 ATK, Protection adds 5 DEF, Speed makes flee always work, Fortune adds 25% gold, Vitality adds 20 max HP. Scrolls — Reveal shows next 3 rooms, Smite deals 80 unblockable damage, Mending heals 50% max HP, Knowledge shows enemy stats before combat."
+     },
+     {
+      "title": "Set Bonus System",
+      "body": "Equip a matching weapon and armor to unlock a set bonus. Shadow Set gives dodge and ATK. Ember Set gives ATK and fire damage. Frost Set gives DEF and freeze chance. Forest Set gives ATK and DEF. Void Set gives ATK and life drain."
+     },
+     {
+      "title": "Level Points System — 6 Stats",
+      "body": "Every level up gives 3 points to spend across 6 stats. Unspent points carry over between levels. STR — Strength adds 2 ATK per point. STA — Stamina adds 10 max HP per point. DEF — Defense adds 2 damage reduction per point. INT — Intelligence adds 5 max SP per point, making skills cheaper to sustain. AGI — Agility adds 3% crit chance and 5% flee chance per point. LCK — Luck adds 10% gold drops and better loot quality per point. Choose stats that match your playstyle — a high INT Wizard can spam skills all day while a high STR Warrior hits harder but runs out of SP faster."
+     },
+     {
+      "title": "Corruption System",
+      "body": "Optional mode in character creation step 9. Every death adds corruption. At 25% the dungeon whispers. At 50% a Corrupted Hunter stalks you. At 75% skills backfire. At 100% you enter a Corruption Run with doubled gold and legendary rewards."
+     },
+     {
+      "title": "Daily Descent Rewards",
+      "body": "A badge on the main menu. Tap it to claim your daily reward. 7-day cycle from 25 gold up to 300 gold plus Mystery Coins and Soul Fragments. Streak carries over. Never forces a popup."
+     },
+     {
+      "title": "Skill Orbs and Offline AFK",
+      "body": "Skill Orbs — when a character with upgraded skills dies, their skills become class-locked Skill Orbs. Use one on a new same-class character to unlock that skill instantly. Offline AFK Catch-up — come back after 1 or more hours away and a popup shows what your AFK character earned while you were gone. Capped at 8 hours."
+     },
+     {
+      "title": "Fourth of July Event",
+      "body": "Active July 1st through July 7th. All gold and XP drops are increased by 76 percent as a nod to 1776. Redcoat enemies invade all dungeons during the event. Enemies have a 15 percent chance to drop a Firework item — use it in combat for 80 plus level times 5 unblockable AoE damage. Every 3rd attack triggers the Sparkler buff dealing bonus fire damage equal to your level times 2.5. Eagle's Cry skill reduces enemy attack by 30 percent for 3 turns. The Fireworks Corner appears at Home — launch fireworks to earn bonus XP. The Independence Tournament sets a personal score target — reach it for first place gold and trophies. Type the number 4 in the Redeem Code box for a secret exclusive patriot minion only available during this event."
+     },
+     {
+      "title": "The Siege",
+      "body": "Found in the main menu. The Siege is a fortress defense mode where you defend your base against 10 waves of enemies. Your base has durability instead of HP — if it reaches zero you lose. Before battle upgrade your base using gold and Wave Points. Your character gets a 20 percent HP bonus when entering The Siege. If your HP drops below 50, the enemy switches from attacking you to attacking your base. Heal up fast or your base will fall. Each wave the enemy is 20 percent stronger. Defeat enemies to earn gold and Wave Points — Wave Points are earned by dealing 50 or more damage per wave. Use the Repair Kit between runs to restore base durability. Upgrade your base to level 5 to increase maximum durability. Station captured minions to fight alongside you. If you lose your base falls back to 50 percent durability but you keep your level and Wave Points."
+     },
+     {
+      "title": "The Bounty Board",
+      "body": "Found in the main menu. The Bounty Board presents 3 randomly generated bounties per day. Each bounty has a target objective, a specific dungeon, and a gold and trophy reward. Register for one bounty at a time by pressing the Register button. Your active bounty tracks progress automatically as you play — kills, floor reached, and boss defeats all count. Complete the bounty to instantly receive your reward. You can refresh the 3 bounties up to 5 times per day. You do not have to accept any bounty — it is completely optional. Abandon a bounty at any time from the Bounty Board screen."
+     },
+     {
+      "title": "Beta Features",
+      "body": "Found in Settings under Beta Features. Experimental systems that can be toggled on or off, still being tested and may change in future updates. No beta features are active right now — new experimental systems will appear here as they are developed."
+     },
+     {
+      "title": "Subclass System",
+      "body": "At level 5 a subclass selection screen appears. Every class has 2 subclasses to choose from. Your choice is permanent for that run and cannot be changed. Each subclass gives a unique passive ability, automatic stat bonuses, and changes how your class plays. Examples — Warrior can become a Warlord (gains ATK every kill) or Gladiator (crits hit 2.5x harder). Wizard can become Archmage (more SP, cheaper skills) or Spellblade (melee deals arcane damage). Assassin can become Shadow (guaranteed first crit every combat) or Poisoner (every attack poisons). Your subclass name appears next to your class in the dungeon top bar."
+     },
+     {
+      "title": "6 Stats — Level Point System",
+      "body": "Every level up gives 3 points to spend across 6 stats. STR Strength adds 2 ATK. STA Stamina adds 10 max HP. DEF Defense adds 2 damage reduction. INT Intelligence adds 5 max SP. AGI Agility adds 3 percent crit chance and 5 percent flee chance. LCK Luck adds 10 percent gold drops. Unspent points carry over between levels. Subclasses at level 5 also grant automatic stat bonuses based on their specialization."
+     },
+     {
+      "title": "Hall of Records and Hall of Legends",
+      "body": "The Hall of Records tracks your lifetime statistics — total kills, runs completed, gold earned, and more. It has three tabs. Stats shows your lifetime numbers. Milestones shows reward tiers for reaching certain stats. Legends tracks your personal bests forever — most kills in a single run, highest damage hit, deepest floor reached, first time you completed each dungeon. These records persist even if you delete the character."
+     },
+     {
+      "title": "Daily Raid and Raid Tiers",
+      "body": "The Daily Raid lets you fight 5 waves of enemies without risking your dungeon character. Complete all 5 waves to earn gold and Mystery Coins. Raid Tier 1 (default) gives 1 Mystery Coin. Complete 3 total raids to unlock Tier 2 (Veteran, 2 coins). Complete 5 total raids to unlock Tier 3 (Nightmare, 3 coins). Mystery Coins are spent in the Coin Shop for permanent upgrades that apply to all future runs."
+     },
+     {
+      "title": "Boss Rush",
+      "body": "Fight all 9 dungeon bosses back to back in a single session. No dungeon exploration — just bosses. Each boss has their 3-phase fight. Completing Boss Rush gives a large XP bonus and a special achievement. Your score is based on how many bosses you defeat and how fast."
+     },
+     {
+      "title": "Julio Questline",
+      "body": "Every time you encounter Julio in the dungeon he gives you a fragment — a note, a memo, a name tag, a lunch schedule. Collect all 5 fragments across multiple runs with any character. When you collect all 5 a new Library story unlocks — written entirely by Julio himself, explaining who he is and why he is always in the dungeon. The explanation is completely mundane. Achievement: Found Him."
+     },
+     {
+      "title": "Character Backstory System",
+      "body": "Step 7 of character creation (optional). Choose a backstory for your character — each one grants a small permanent bonus for that run and automatically writes your first journal entry. You can press Skip to go straight into the dungeon without choosing one. The journal entry appears in your character journal in The Chronicles."
+     },
+     {
+      "title": "Death Cinematic",
+      "body": "When you die the screen goes dark and a unique line plays before the defeat screen. The line is specific to your dungeon, the floor you reached, and the enemy that killed you. The Weeping Child, Music Box, and Oldest Guest in The Hollow each have their own unique death lines. Your screen reader reads the line fully before the run summary appears."
+     },
+     {
+      "title": "Run Start Quotes",
+      "body": "Every time you start a run your screen reader reads a single line specific to your class and dungeon combination. 60 unique lines total — one for each of the 12 classes in each of the 5 dungeons. The line sets the tone for the run before the dungeon intro begins."
+     },
+     {
+      "title": "Minion System",
+      "body": "Capture enemies as permanent allies using a Soul Trap item. Buy Soul Traps from the dungeon shop for 60 gold. When you have one in your inventory a Soul Trap button appears in combat — use it on any non-boss enemy to capture it. You can have up to 8 minions. Manage your minions from the Home screen under the Minions tab. Activate one before any mode and it auto-attacks alongside you every combat round. Craft custom weapons from materials dropped by enemies across all modes — dungeons, Spire, Raid, and AFK. Each enemy kill has a 15% chance to drop a material. Rarer materials come from deeper floors. Access the Forge from Home under the Forge tab. Choose a recipe, spend the materials, and the weapon is crafted with a random special effect — Burning, Life Steal, Keen Edge, and more. Spend 2 Iron Scraps to reroll the effect. Crafted weapons go to your global inventory. Every achievement now rewards gold and trophies when unlocked. Easy achievements give 50 gold and 1 trophy. Medium give 150 gold and 3 trophies. Hard give 400 gold and 7 trophies. When you first open the game after updating, all previously unlocked achievements are retroactively rewarded. Your trophy count appears on the main menu — tap it to see your full collection. Reaching 100 trophies unlocks The Infernal Descent automatically. Every class now begins floor 1 with their signature skill already unlocked. Warriors start with Shield Bash, Assassins with Backstab, Wizards with Arcane Bolt, and so on for every class. The starting skill is removed from your skill pool so you will not be offered it again when leveling up. Spells are a separate combat system from skills. To use spells you need two things — a Spell Book and spell scrolls. The Spell Book is purchased from the Arcane Shop for 120 gold and unlocks your ability to learn spells. Spell scrolls are also bought from the Arcane Shop and cost between 40 and 150 gold each depending on rarity.Each class has a spell learn chance — the probability that reading a scroll teaches you the spell. Some classes like Wizard and Elementalist have higher learn chances. If a scroll fails to teach you the spell it is still consumed.Spells have a 3-turn cooldown after use. Powerful spells — marked with a special tag — have a 6-turn cooldown and are significantly stronger or more dangerous.To cast a spell in combat press the Spells button or use Alt+S. A list of your learned spells appears. Select one to cast it. Spells work in normal dungeon combat, The Spire, Raids, and ambush multi-enemy battles. The Spell Book screen shows every spell you have learned on your current character. Access it from the main menu, the Arcane Shop, or the dungeon action bar using the Spell Book button. In the dungeon you can also open it with Ctrl+Shift+K.Each spell entry shows its icon, name, rarity, full description, and cooldown type. Common and rare spells show a 3-turn cooldown. Powerful legendary spells show a 6-turn cooldown. The screen also shows your class name and current spell learn chance at the top. Spells come in three rarities — common, rare, and legendary. Common spells are reliable but modest. Rare spells deal higher damage or apply status effects. Legendary spells are the most powerful in the game but many are double-edged — they can backfire catastrophically if you are not careful.Examples of high-risk legendary spells: Shadow Blast summons a void spirit that can instantly kill you if it rejects you. Time Stop freezes time for 3 free attacks but has a 50% chance of defeating you instantly if it fails. Lose Reality gives you 5 minutes to kill the enemy or you cease to exist — a real countdown timer begins. The Abyss Stares Back has a 40% chance to halve the enemy attack permanently and a 60% chance to halve yours permanently with no way to undo it.Powerful spells are excluded from ambush multi-enemy target selection and apply to the first living enemy automatically. On floor 3 and above there is a chance of an ambush — 2 or 3 enemies attack at once. During an ambush the normal single enemy display is replaced by a multi-enemy tracker showing every enemy's name, HP bar, and current HP.When you choose Attack, Heavy, or a skill the game asks you to choose your target first. A list of living enemies appears — select one to strike it. Defend and Potion do not require a target and apply immediately. Flee has a 40% success chance in ambushes.After your action every living enemy counter-attacks in sequence. The Goat Body part of the Chimera regenerates HP each turn. The Serpent Tail poisons you each turn. Plan your target priority carefully.Skills and spells both work in multi-enemy combat. Buff skills like Divine Shield, Marked Kill, and Inner Focus apply to you immediately and then enemy turns proceed. Offensive skills go through the target selector. Spells target the first living enemy automatically.During Ambush Day — which occurs four times a year on the 15th of January, April, July, and October — every single battle in the game becomes a multi-enemy ambush for 24 hours. The Home screen inside the dungeon now has 4 tabs. Home — bed, safe, and gold management. Spirits — Spirit Forge shortcut. Minions — manage your captured minion collection, activate or release them. Forge — craft weapons from materials. Access Home from the dungeon action bar at any time between fights."
+     },
+     {
+      "title": "Minion System",
+      "body": "Capture enemies as permanent allies using a Soul Trap item. Buy Soul Traps from the dungeon shop for 60 gold. When you have one in your inventory a Soul Trap button appears in combat — use it on any non-boss enemy to capture it. You can have up to 8 minions. Manage your minions from the Home screen under the Minions tab. Activate one before any mode and it auto-attacks alongside you every combat round."
+     },
+     {
+      "title": "Weapon Forge",
+      "body": "Craft custom weapons from materials dropped by enemies across all modes — dungeons, Spire, Raid, and AFK. Each enemy kill has a 15% chance to drop a material. Rarer materials come from deeper floors. Access the Forge from Home under the Forge tab. Choose a recipe, spend the materials, and the weapon is crafted with a random special effect — Burning, Life Steal, Keen Edge, and more. Spend 2 Iron Scraps to reroll the effect. Crafted weapons go to your global inventory."
+     },
+     {
+      "title": "Trophy System",
+      "body": "Every achievement now rewards gold and trophies when unlocked. Easy achievements give 50 gold and 1 trophy. Medium give 150 gold and 3 trophies. Hard give 400 gold and 7 trophies. When you first open the game after updating, all previously unlocked achievements are retroactively rewarded. Your trophy count appears on the main menu — tap it to see your full collection. Reaching 100 trophies unlocks The Infernal Descent automatically."
+     },
+     {
+      "title": "Starting Skills",
+      "body": "Every class now begins floor 1 with their signature skill already unlocked. Warriors start with Shield Bash, Assassins with Backstab, Wizards with Arcane Bolt, and so on for every class. The starting skill is removed from your skill pool so you will not be offered it again when leveling up."
+     },
+     {
+      "title": "Spell System",
+      "body": "Spells are a separate combat system from skills. To use spells you need two things — a Spell Book and spell scrolls. The Spell Book is purchased from the Arcane Shop for 120 gold and unlocks your ability to learn spells. Spell scrolls are also bought from the Arcane Shop and cost between 40 and 150 gold each depending on rarity.Each class has a spell learn chance — the probability that reading a scroll teaches you the spell. Some classes like Wizard and Elementalist have higher learn chances. If a scroll fails to teach you the spell it is still consumed.Spells have a 3-turn cooldown after use. Powerful spells — marked with a special tag — have a 6-turn cooldown and are significantly stronger or more dangerous.To cast a spell in combat press the Spells button or use Alt+S. A list of your learned spells appears. Select one to cast it. Spells work in normal dungeon combat, The Spire, Raids, and ambush multi-enemy battles."
+     },
+     {
+      "title": "Spell Book Screen",
+      "body": "The Spell Book screen shows every spell you have learned on your current character. Access it from the main menu, the Arcane Shop, or the dungeon action bar using the Spell Book button. In the dungeon you can also open it with Ctrl+Shift+K.Each spell entry shows its icon, name, rarity, full description, and cooldown type. Common and rare spells show a 3-turn cooldown. Powerful legendary spells show a 6-turn cooldown. The screen also shows your class name and current spell learn chance at the top."
+     },
+     {
+      "title": "Spell Rarities and Risk",
+      "body": "Spells come in three rarities — common, rare, and legendary. Common spells are reliable but modest. Rare spells deal higher damage or apply status effects. Legendary spells are the most powerful in the game but many are double-edged — they can backfire catastrophically if you are not careful.Examples of high-risk legendary spells: Shadow Blast summons a void spirit that can instantly kill you if it rejects you. Time Stop freezes time for 3 free attacks but has a 50% chance of defeating you instantly if it fails. Lose Reality gives you 5 minutes to kill the enemy or you cease to exist — a real countdown timer begins. The Abyss Stares Back has a 40% chance to halve the enemy attack permanently and a 60% chance to halve yours permanently with no way to undo it.Powerful spells are excluded from ambush multi-enemy target selection and apply to the first living enemy automatically."
+     },
+     {
+      "title": "Ambush and Multi-Enemy Combat",
+      "body": "On floor 3 and above there is a chance of an ambush — 2 or 3 enemies attack at once. During an ambush the normal single enemy display is replaced by a multi-enemy tracker showing every enemy's name, HP bar, and current HP.When you choose Attack, Heavy, or a skill the game asks you to choose your target first. A list of living enemies appears — select one to strike it. Defend and Potion do not require a target and apply immediately. Flee has a 40% success chance in ambushes.After your action every living enemy counter-attacks in sequence. The Goat Body part of the Chimera regenerates HP each turn. The Serpent Tail poisons you each turn. Plan your target priority carefully.Skills and spells both work in multi-enemy combat. Buff skills like Divine Shield, Marked Kill, and Inner Focus apply to you immediately and then enemy turns proceed. Offensive skills go through the target selector. Spells target the first living enemy automatically.During Ambush Day — which occurs four times a year on the 15th of January, April, July, and October — every single battle in the game becomes a multi-enemy ambush for 24 hours."
+     },
+     {
+      "title": "Enchanter Item",
+      "body": "The Enchanter is a rare item that provides free Blacksmith upgrades. When you have an Enchanter in your inventory the Blacksmith upgrade button stays enabled regardless of your gold — the display shows Enchanter Active in place of the gold cost. Each Enchanter has 3 charges. Enchanters transfer to your global inventory when a run ends so they are accessible from the main menu Blacksmith."
+     },
+     {
+      "title": "New Dungeon Unlock Popup",
+      "body": "When you unlock a new dungeon a one-time popup appears on the character select screen with the dungeon name, description, and details. It only ever appears once per dungeon. The popup plays the unlock sound and your screen reader reads the full announcement."
+     },
+     {
+      "title": "Achievement Notifications",
+      "body": "When an achievement unlocks a visual popup appears in the bottom right corner and your screen reader announces it automatically. You can turn the visual popup on or off in Settings under Accessibility — Achievement Notifications. Your screen reader will always announce achievements regardless of this setting."
+     },
+     {
+      "title": "Reset All Progress",
+      "body": "Found at the bottom of Settings in the red Danger Zone section. Pressing Reset Game opens a confirmation screen listing everything that will be deleted — all characters, achievements, bestiary entries, Hall of Legends records, Library story progress, dungeon unlocks, Mystery Coins, Julio questline progress, and all settings. You must press Delete Everything to confirm. This cannot be undone. The dungeon will not remember your name."
+     },
+     {
+      "title": "The Spire",
+      "body": "A standalone mode accessible from the main menu. 1800 floors of escalating difficulty ending with The Time Eater at the top. Your floor progress never resets — death sends you back one floor, not to the beginning. Every 50 floors is a rest floor with healing, gold, and lore about The Time Eater. Defeating The Time Eater rewards 1000 gold, 25 Mystery Coins, and a 25% Blacksmith discount for 2 hours. Auto Mode lets the Spire advance automatically — unlocks at Level 5. Use the character slider to pick your champion before entering."
+     },
+     {
+      "title": "Death Log",
+      "body": "Accessible from the character list screen using the Death Log button next to the back button. Shows every death for every character — the floor they fell on, what killed them, which dungeon, difficulty, kills earned, gold carried, and a flavor line from the dungeon. Total deaths shown across all characters at the bottom."
+     },
+     {
+      "title": "Blacksmith",
+      "body": "The Blacksmith appears inside dungeons and has two tabs — Upgrade and Buy Weapons. Upgrade spends gold to improve your equipped weapon or armor. Buy Weapons lets you purchase from a catalog of 8 weapons using gold. Your first weapon is always free — a Worn Blade available from the Buy Weapons tab. Weapons go into your inventory. Open inventory to equip them. Blacksmith profession gets a 10 percent discount on all upgrades."
+     }
+    ]
+   },
+   {
+    "id": "online",
+    "label": "🌐 Multiplayer",
+    "entries": [
+     {
+      "title": "⚔️ PVP Arena",
+      "body": "Fight another player in real-time, turn-based combat. Create a room and share the code, or join one someone shared with you. Runs on Firebase Realtime Database, so it works on any device and is always online — no server to keep up, no connection drops."
+     },
+     {
+      "title": "💬 Global Chat",
+      "body": "Talk to players around the world in real time. Pick a username, send messages, see them appear instantly. Accessible from the main menu. Manage your username and toggle the in-dungeon chat button from Settings under Chat. Separate from the Void Reaper's World Chat, which only appears on the Void Reaper screen."
+     },
+     {
+      "title": "⚗️ Community Enemy Creator",
+      "body": "Design your own enemy and share it with every player worldwide — name, description, HP, type, dungeon, and a special mechanic described in plain English (an AI translates it into real combat flags, like \"heals 15 HP every 3 turns\"). Test it in a practice arena before submitting. Submissions are AI-moderated; repeated violations earn a creation ban. Your enemy can appear in any player's dungeon with a special announcement, and browse everyone else's creations from the Bestiary's community tab."
+     },
+     {
+      "title": "🪦 Global Obituary",
+      "body": "A shared record of real deaths from real players worldwide — not just your own. Every death across every mode (dungeons, Boss Rush, Daily Raid, The Spire) registers here."
+     }
+    ]
+   },
+   {
+    "id": "strategies",
+    "label": "🗺 Strategies",
+    "entries": [
+     {
+      "title": "🏹 General Survival Tips",
+      "body": "Never skip the first shop. A potion on floor 1 can save your run on floor 7. Always keep at least 1 potion in reserve for the boss fight. Search every room before moving — searched rooms can reveal hidden loot. Flee is not failure — sometimes running is the smartest move. Defend when your HP drops below 30 percent to cut incoming damage in half."
+     },
+     {
+      "title": "⚔ Class Strategy Guide",
+      "body": "Warrior and Paladin — attack every turn, use Heavy Strike when HP is high. Tank hits, never flee. Mage and Sorcerer — save SP for elites and bosses. Use basic attacks on weak enemies to conserve. Rogue and Assassin — open every fight with a skill for the first-hit bonus, then spam crits. Cleric — heal between floors using skills, save potions for emergencies. Necromancer — capture a minion early and keep it alive all run. Ranger — always open with your strongest skill for the double damage first hit bonus. BloodKnight — stay at medium HP to maximize lifesteal, never fully top off."
+     },
+     {
+      "title": "🐉 Boss Fight Strategies",
+      "body": "Enter floor 10 with at least 2 potions and full HP. Use your strongest skill immediately in phase 1 — the boss is weakest here. When phase 2 triggers defend on that turn to absorb the spike damage. In phase 3 go all out — use every skill you have. If your spirit has a combat ability use it every single cooldown. The boss preview screen tells you the boss HP — plan your skill rotation before you press Face It."
+     },
+     {
+      "title": "🏹 Hunter Mode Survival",
+      "body": "The key is momentum — never idle. Kill enemies fast and keep moving. Use floor transitions strategically — advancing to the next floor resets the hunter distance slightly. Fight the hunter only at level 8 or above. Before the fight make sure you have full HP and at least 1 potion. When choosing between Fight and Run — if you have a strong skill ready, fight. If your HP is below 50 percent, run."
+     },
+     {
+      "title": "💰 Gold and Economy",
+      "body": "Prioritize potions over weapons early game — surviving matters more than damage output on floors 1 through 5. On floors 6 through 9 invest in weapon upgrades at the Blacksmith to spike your damage for the floor 10 boss. Soul Traps are worth buying on any run — a permanent minion companion adds free damage every fight for the rest of the run. Never spend your last gold on something optional before the boss floor."
+     },
+     {
+      "title": "⚗ Building a Strong Character",
+      "body": "Pick a class that matches your playstyle first. Then choose a race that amplifies it — Human for balanced stats, Elf for SP and skills, Dwarf for HP and defense. Choose a spirit that covers your class weakness — a healing spirit on an aggressive class, a damage spirit on a defensive class. At level 5 choose your subclass carefully — check both options and pick the one whose passive works with how you already play. Upgrade your weapon at least twice before floor 8."
+     },
+     {
+      "title": "🌑 Shadow Realm Strategies",
+      "body": "The Shadow Realm gets harder fast — focus on survival not speed. Defend every 3 turns to recover HP since there are no potions. Prioritize killing the weakest enemies first to build your score safely. On boss waves switch to full offense — they have high HP but the wave ends when you kill the boss. The longer you survive the higher your leaderboard score — every wave counts."
+     },
+     {
+      "title": "💀 Hardcore Mode Tips",
+      "body": "In Hardcore Mode every decision is permanent. Start on Wanderer difficulty your first hardcore run — do not combine Hardcore with Nightmare until you know the game deeply. Never fight elites without full HP. Always have a potion before floor 7. Flee aggressively — your character's life is worth more than the gold from one fight. The hunter is a death sentence in Hardcore — either ignore Hunter Mode entirely or fight the hunter the moment the choice appears before it can catch you off guard."
+     },
+     {
+      "title": "🏆 Road to Dungeon Master",
+      "body": "To unlock The True Ending you need to clear all 8 dungeons — progress is saved across all characters. A smart route: start with Crypt of Malachar on Wanderer to learn the basics. Then Ashbound Wastes, Frosthold Abyss, Sunken Archives in any order. The Hollow is the hardest mid-game dungeon — do it last in the first half. Save The Infernal Descent and The Abyssal Deep for when your characters are experienced. The True Ending rewards patience, not speed."
+     }
+    ]
+   },
+   {
+    "id": "access",
+    "label": "♿ Accessibility",
+    "entries": [
+     {
+      "title": "Screen Reader Support",
+      "body": "Dungeon Descent was built specifically for JAWS, NVDA, and VoiceOver users. Every combat action, room description, enemy attack, level up, item found, achievement unlock, and event is announced automatically. You never need to read the screen manually — the game reads itself to you."
+     },
+     {
+      "title": "✌️ Magic Tap → Echo-Location",
+      "body": "On iOS with VoiceOver, a two-finger double-tap (Magic Tap) fires Echo-Location instantly from anywhere while exploring a dungeon in 3D Mode — no need to find a button first. It's a completely separate gesture from the regular one-finger double-tap that activates buttons, so there's no conflict between the two. Does nothing outside of active exploration, so it's safe to try anywhere in the app."
+     },
+     {
+      "title": "📳 Expanded Haptic Vocabulary",
+      "body": "Dozens of named vibration patterns for specific moments — mimic reveals, undead rising, boss phase transitions, 3D Mode wall bumps, echo-location pulses, hunter proximity, and more — each with its own distinct feel, and each respecting its own stated duration instead of every buzz being the same fixed-length tap."
+     },
+     {
+      "title": "First Launch Prompt",
+      "body": "On first launch the game asks if you are using a screen reader. Pressing Yes enables all accessibility features at once — Verbose Mode, Screen Reader Headings, Combat Announcements, Reduced Motion, and Screen Reader Mode. You can also enable or disable each feature individually in Settings under Accessibility."
+     },
+     {
+      "title": "Screen Reader Headings",
+      "body": "When enabled in Settings, the game injects heading roles throughout every screen. H1 for screen titles and dungeon floor names. H2 for section titles, menu buttons, tabs, character names, and enemy names. H3 for individual bestiary entries, achievements, library stories, and skill names. With headings on you can press H in JAWS to jump instantly between sections instead of tabbing through everything."
+     },
+     {
+      "title": "Verbose Mode",
+      "body": "When Verbose Mode is on your screen reader announces extra detail about every action — full damage numbers, miss explanations, skill descriptions when used, item descriptions when found. When off announcements are shorter and faster. Recommended on for new players, can be turned off once you know the game well."
+     },
+     {
+      "title": "Combat Announcements",
+      "body": "When on your screen reader announces every combat event in detail — your damage, enemy damage, crits, misses, status effects, skill activations. When off only the most important events are announced. Combat Announcements is separate from Verbose Mode — you can have one on and the other off."
+     },
+     {
+      "title": "Custom Track and My Tracks",
+      "body": "Go to Settings → Audio → scroll down to find the Custom Track section.Load from File — tap Choose Audio File and pick any audio file from your device. Works with MP3, WAV, M4A, OGG and more. iOS users can pick from the Files app. The track plays immediately and you are asked if you want to save it.Load from URL — paste a direct link to an audio file hosted online. The URL is saved permanently so it loads automatically next time.Save to My Tracks — when a custom track starts playing the game asks what you want to call it. Give it a name like Leo's Battle Theme or Self Destruct Sequence 123 and it saves to My Tracks. Files are stored on your device using IndexedDB — they survive app restarts and do not count against the game's storage.My Tracks — found at the bottom of the Music Player. All your saved tracks appear here. Tap one to play it. Tap the X button to delete it. Custom tracks loop continuously just like the game soundtrack."
+     },
+     {
+      "title": "Music Player",
+      "body": "Found in The Chronicles under the Music tab. Browse all 29 tracks in the game grouped by dungeon. Select any track and press Play — the music player uses its own audio system separate from the game so it works from the menu without needing to enter a dungeon first. Press Stop to stop playback. The player also tells you which audio files are missing if you have not added them yet."
+     },
+     {
+      "title": "Reduced Motion",
+      "body": "When on disables ember particle effects, grain overlay animation, vignette animation, and torch flicker. Reduces visual noise for players who prefer a cleaner interface or have motion sensitivity. Has no effect on gameplay."
+     },
+     {
+      "title": "Endless Descent — AFK Mode",
+      "body": "A separate game mode found in the main menu. Auto-combat that runs on its own — your character fights while you watch or step away. Infinite floors with scaling enemies. Find loot, level up, earn Descent Points to spend in the AFK shop on permanent upgrades. Boss floors every 25 floors. Daily AFK Challenge for bonus points. Exclusive enemies appear on floors 20 and beyond that only exist in Endless Descent."
+     },
+     {
+      "title": "Tournament",
+      "body": "A seasonal competition that runs every 3 months for 7 days. A unique boss appears and you fight it for score. Damage dealt plus speed bonus plus survival bonus equals your tournament score. Damage counts even if you die — your best score this season is always saved. Win the boss for maximum points and earn Mystery Coins. Global leaderboard shows top 10 scores. Requires an account to appear on the leaderboard."
+     },
+     {
+      "title": "The Void Reaper",
+      "body": "A world event that builds over 7 days. A progress bar appears on the main menu as the Void Reaper awakens. When fully awake a 300 HP boss fight becomes available. Players get a strength bonus. Damage carries over between attempts — every hit counts even if you die. 3 phases, each stronger. Defeat him in 16 hours or all dungeon enemies are 25% stronger for 24 hours as punishment. Win to earn Mystery Coins."
+     },
+     {
+      "title": "Account System",
+      "body": "Optional cloud save system. Sign in with email or Google to save your progress to the cloud. Your account is not required to play — the game always saves locally no matter what. Sign in and your cloud save loads automatically. Sync to Cloud button confirms success. Delete Account removes only the cloud account — local saves are never touched. Required for tournament leaderboard appearances."
+     },
+     {
+      "title": "Night Mode",
+      "body": "Every night from 8PM to 8AM Night Mode activates automatically based on your device clock. You earn 50% more gold from all sources and shop prices are 25% cheaper. Stacks with all other active events — Night Mode during Void Week means massive gold. A banner on the main menu and in the dungeon shows Night Mode is active and how many hours remain."
+     },
+     {
+      "title": "Seasonal Events",
+      "body": "Events activate automatically based on the date and time. Halloween (October) — 12 special enemies, +25% XP, enemies 30% stronger. Christmas (December) — Krampus and crew, +15% XP. Easter (April 5-7) — The Easter Bunny appears. Fight it, adopt it as a spirit companion, or let it go for gold. Valentine's Day (February 13-15) — 7 exclusive enemies including The Cupid, a Love Potion to charm enemies to your side for 2 turns, and The Heartbreaker boss. St. Patrick's Day (March 14-18) — 8 Irish enemies and the Shamrock Shop. Friday the 13th (any Friday the 13th) — Halloween music everywhere, the dungeon goes dark, and a chance at the Black Box event. Cinco de Mayo (May 5) — an exclusive weapon in the Blacksmith, bonus XP and gold. Fourth of July (July 1-7) — Redcoat invasion, Fireworks Corner, and the Independence Tournament. Brazil Independence Day (September 7) — 7 Brazilian enemies and a Carnival King boss. XP Weekend (Saturday and Sunday) — 2x XP. Void Week (Monday) — 2x gold, enemies 20% stronger. Blood Moon (days 1-7 each month) — enemies hit harder. Architect Week (days 8-14) — Julio appears 3x more often. The Events screen in the main menu shows all active and upcoming events."
+     },
+     {
+      "title": "High Score and Ranks",
+      "body": "Every action in the game earns score points. Kills earn 10 points each, elite kills 150, boss kills 500, dungeon clears 1000, achievements 250, daily quests 300, gold collected 1 point each. Your lifetime total score determines your rank — from Initiate all the way up to DDDI Certified at 100,000 points. View your score breakdown and rank from the High Score button on the main menu."
+     },
+     {
+      "title": "Character Import and Export",
+      "body": "Export any character as a code using the Export button in the character list. The code contains everything about that character — class, race, skills, death log, earned spirits. Share the code with another device or person and import it using the Import button. Useful for backing up characters or sharing your build with friends."
+     },
+     {
+      "title": "Run Summary Screen",
+      "body": "After completing a dungeon a full run summary appears showing enemies slain, floor reached, level, gold collected, time taken, spirit companion, skills unlocked, total score and rank. Each class and dungeon combination has a unique closing line — 60 lines total written specifically for each combination. The summary also shows your score earned this run and your overall rank progress."
+     },
+     {
+      "title": "The Chimera",
+      "body": "A special multi-part enemy that can appear in any dungeon on floors 5 and above. 17% spawn chance. The Chimera has three parts — Lion Head, Goat Body, and Serpent Tail — each with their own HP and unique mechanic. The Goat Body regenerates 8 HP per turn. The Serpent Tail poisons you every turn. Kill all three parts to win. In the Whispering Forest a special Corrupted Chimera is guaranteed on floor 9 your first visit with three unique corrupted parts."
+     },
+     {
+      "title": "Dev Tools",
+      "body": "Found at the bottom of Settings. Allows unlocking all dungeons instantly for testing, resetting dungeon unlocks, resetting the screen reader prompt to show it again, and forcing the 67 Easter egg button to appear. These are developer tools and not part of normal gameplay."
+     },
+     {
+      "title": "Selection Sliders",
+      "body": "Every selection screen in the game has a slider above the options. On VoiceOver swipe up to go to the next option, swipe down to go back. On JAWS use the arrow keys. The ◀ and ▶ buttons work as a tap fallback on any device. Sliders are available for class, race, profession, dungeon, difficulty, and backstory in character creation. They are also on every character picker — the character list, AFK setup, The Spire, Boss Rush, Daily Raid, and Tournament. The character list slider also has a Play button so you can play your character directly from the slider without navigating into the cards."
+     },
+     {
+      "title": "Persistent Level System",
+      "body": "Characters earn persistent levels through AFK mode and dungeon runs. This level carries across all modes and is never lost on death. Your level is shown on your character card, in all character pickers, and in the slider. Level 5 or higher unlocks Auto Mode in The Spire. Higher levels increase your base stats in AFK and Spire runs."
+     }
+    ]
+   },
+   {
+    "id": "keys",
+    "label": "⌨ Key Commands",
+    "entries": [
+     {
+      "title": "⌨ PC Only — Keyboard Commands",
+      "body": "These commands only work on desktop with a keyboard. On mobile everything works by touch — these shortcuts do not apply. JAWS or NVDA will announce when a command is used."
+     },
+     {
+      "title": "Navigation — Ctrl + Shift + Key",
+      "body": "Ctrl+Shift+H — Main MenuCtrl+Shift+P — Character ListCtrl+Shift+B — BestiaryCtrl+Shift+Q — Quests and AchievementsCtrl+Shift+E — Events ScreenCtrl+Shift+S — SettingsCtrl+Shift+R — High ScoreCtrl+Shift+L — ChroniclesCtrl+Shift+I — Inventory (in dungeon)Ctrl+Shift+K — Spell BookCtrl+Shift+A — Arcane ShopCtrl+Shift+M — Seasonal Shop (in dungeon)Ctrl+Shift+N — New Character (from main menu)Ctrl+Shift+Enter — Quick Play with last character (from main menu)"
+     },
+     {
+      "title": "Combat — Alt + Key (Dungeon, Spire and Raid)",
+      "body": "Alt+A — AttackAlt+H — Heavy StrikeAlt+D — DefendAlt+P — Use PotionAlt+F — Flee (dungeon only)Alt+S — Open SpellsAlt+E — Examine EnemyAlt+1 — Use Skill 1Alt+2 — Use Skill 2Alt+3 — Use Skill 3Alt+R — Read current status (floor, HP, gold)These combat keys work in The Spire and Daily Raid in addition to normal dungeons."
+     },
+     {
+      "title": "Dungeon Exploration — Single Key (outside combat)",
+      "body": "I — Open or close InventoryS — Save progressK — Open Skill BookC — Character StatsBackspace — Open or close Pause Menu"
+     },
+     {
+      "title": "Pause Menu",
+      "body": "Desktop — press Backspace anywhere in the dungeon to open the pause menu.Mobile — tap the ⏸ button in the dungeon topbar next to the quit button.The pause menu shows your character name, current floor, dungeon and HP. Options are Resume, Save, Settings, Quests and Main Menu. Cannot be opened during combat."
+     },
+     {
+      "title": "Escape Key",
+      "body": "Escape — Closes any open overlay.In the dungeon outside combat — press Escape and the game asks if you want to return to the main menu. Press Enter to confirm and save. Press Escape again to cancel and stay.Cannot be used during combat."
+     }
+    ]
+   }
+  ]
+ },
+ "credits": {
+  "title": "Dungeon Descent",
+  "sub": "A fully accessible dungeon crawler built for screen reader users everywhere.",
+  "sections": [
+   {
+    "title": "Created By",
+    "label": "Created by",
+    "lines": [
+     {
+      "kind": "name",
+      "text": "Leo"
+     },
+     {
+      "kind": "role",
+      "text": "Developer · Designer · Game Director"
+     },
+     {
+      "kind": "role",
+      "text": "Leo Audio Gaming"
+     }
+    ]
+   },
+   {
+    "title": "Built With",
+    "label": "Built with",
+    "lines": [
+     {
+      "kind": "name",
+      "text": "Claude"
+     },
+     {
+      "kind": "role",
+      "text": "by Anthropic"
+     },
+     {
+      "kind": "role",
+      "text": "Every line of code. Every dungeon room. Every boss fight. Every story. Built together."
+     }
+    ]
+   },
+   {
+    "title": "Special Thanks",
+    "label": "Special thanks",
+    "lines": [
+     {
+      "kind": "role",
+      "text": "To everyone who played Dungeon Descent and gave feedback."
+     },
+     {
+      "kind": "role",
+      "text": "To the JAWS and VoiceOver communities."
+     },
+     {
+      "kind": "role",
+      "text": "To Leo's dad — one of the boys."
+     }
+    ]
+   },
+   {
+    "title": "Sound Effects",
+    "label": "Sound effects attribution",
+    "lines": [
+     {
+      "kind": "role",
+      "text": "Additional sound effects courtesy of Freesound.org contributors, licensed under Creative Commons Zero:"
+     },
+     {
+      "kind": "role",
+      "text": "qubodup, FunWithSound, yokomatsuko, Bikkit99, CVLTIV8R, Christopherderp, Dreeme, Hoxton_Freeman, Kneeling, Manim8, MinigunFiend, Piddipop, Voices_Of_Marz, cylon8472, dragonboi50120, getwecked, kyles, rifthead, szegvari, zombieallen, DCSFX, bassimat, and Fission9."
+     },
+     {
+      "kind": "role",
+      "text": "Dungeon ambience additionally courtesy of Freesound.org contributors, licensed under Creative Commons Attribution:"
+     },
+     {
+      "kind": "role",
+      "text": "OGsoundFX, Imjeax, Audionautics, newlocknew, and Hybrid_V."
+     },
+     {
+      "kind": "role",
+      "text": "Hide and Seek's music courtesy of Freesound.org contributors, licensed under Creative Commons Attribution:"
+     },
+     {
+      "kind": "role",
+      "text": "Gustavo_Alivera and joshuaempyre."
+     }
+    ]
+   }
+  ]
+ },
+ "whatsnew": [
+  {
+   "num": "v11.7.2 — Latest",
+   "date": "The Run Briefing Update",
+   "label": "Version 11.7.2",
+   "changes": [
+    "📜 Run Briefing — starting a run no longer stacks up to six pop-ups on top of each other. The quests, run modifier, dungeon condition, class trait, opening quote, dungeon intro, seasonal event and your guide's greeting are now one screen with one Begin Descent button. Nothing disappears on a timer, VoiceOver lands right on Begin, and the narrator reads the whole page.",
+    "🎓 The tutorial for new players now starts right when you begin your first run, instead of after your first fight.",
+    "🎃 Seasonal event pop-ups now only appear on the main menu, never in the middle of character creation or a run.",
+    "🔍 Your first search in every run always finds something, so a new run never opens with a trap.",
+    "🐛 Fixed the Back button on the Hunter Mode step of character creation going forward to the guide step instead of back. Also fixed the Run Mode step's Next button saying it goes to the backstory instead of the spirit step.",
+    "🐛 Fixed the Play button and other buttons being announced as headings when screen reader headings are on. Buttons stay buttons now.",
+    "🐛 Fixed combat messages running together for screen readers, like \"Shield Bash!You attack\".",
+    "🐛 Fixed the Daily Challenge being listed as active when you had not registered for it. The briefing now tells you to register in Challenges if you want to play it.",
+    "🐛 Fixed the Floor Complete summary always saying \"Gold earned: 0\".",
+    "🐛 Fixed the dungeon condition and your health sometimes showing different values at the start of a run, caused by the old pop-ups overlapping.",
+    "📱 On phones and tablets, the welcome message now says to swipe to explore the menu instead of pressing Tab."
+   ]
+  },
+  {
+   "num": "v11.7.1",
+   "date": "The Familiar & Live Activity Update",
+   "label": "Version 11.7.1",
+   "changes": [
+    "🐾 The Familiar — a small companion separate from your Guide that bonds with you across every run, persisted account-wide like your trophies. Bond grows from kills, room searches, and full dungeon clears. Custom naming, 4 unlockable species (100 trophies, clear every dungeon, defeat the Void Reaper, or reach Bond Level 10), bond-level titles at 5/10/20, a comfort line at critical sanity, and it recognizes Julio and the Void Reaper by name. 3 new achievements: First Bond, The Loyal, The Inseparable. Flavor-only on purpose — no stat effect, can't touch combat balance.",
+    "🎧 Echo-Location 2.0 — doors leading toward an unvisited room now layer a distinct cue for what's actually coming: a low growl for danger, a bright shimmer for something promising, a detuned \"uncertain\" tone for a mystery. A real read of the next room, not flavor. Also now senses corridor depth — a long hallway gets a longer fading tone plus a soft trailing echo, a single-room alcove stays short and tight.",
+    "🏹 Live directional Hunter — the hunter's heartbeat and proximity pulse are now panned to the direction it's actually coming from (the door behind you, since it's always following your trail), and update live on every beat instead of once per distance milestone.",
+    "⬇️ Descent cue — a falling pitch sweep plays when you actually descend a floor, reinforcing the \"going deeper\" feeling.",
+    "📱 Live Activity (iOS) and a live notification (Android) — Hunter distance or Endless Descent floor/points now show right on your lock screen (and Dynamic Island on iOS) while the app is backgrounded, for either Hunter Mode or an AFK run. Clears itself when either ends.",
+    "✌️ Magic Tap → Echo-Location — VoiceOver users can now fire Echo-Location from anywhere in 3D Mode exploration with a two-finger double-tap, no menu required.",
+    "🔊 Fixed VoiceOver/TalkBack burying 3D Mode's directional door and wall cues under the screen reader's own speech — they fire after the room announcement now instead of on top of it. Also added a native iOS audio session fix so game audio and VoiceOver speech share the device properly.",
+    "🐛 Fixed the What's New popup never actually showing on a version update — it was fully built but never wired up, and the popup element it needed didn't exist in the page yet. Also fixed a follow-on bug where every existing player got silently misread as a brand-new install the first time the fix went live.",
+    "🐛 Fixed the Void Reaper staying stuck on \"Dormant\" forever after being killed, if the player closed the app within 10 seconds of the killing blow.",
+    "🐛 Fixed Shake to Attack never working at all on iOS or in the browser — it was gated behind a plugin object that never actually existed on any platform."
+   ]
+  },
+  {
+   "num": "v11.7",
+   "date": "The Accessibility & Fix Sweep",
+   "label": "Version 11.7",
+   "changes": [
+    "🕯️ Hide and Seek — in case it slipped past you: a tense chase mode against the Darkness Swallower, solo or with up to 5 friends in a shared room. Find the exit before it finds you. Been in the game for a while — it just never got its own mention here until now.",
+    "🎧 Echo-Location — a sonar-ping tool in 3D Mode. Fires a central ping then a panned tone per open door — a sharp tik where there's a wall, a soft fading tone where a door is. Pure audio, works even with the 3D visual off.",
+    "🎤 Voice Commands — play combat and exploration completely hands-free. Say \"attack,\" \"north,\" \"defend,\" and more instead of tapping buttons. Native speech recognition on iOS and Android.",
+    "🏆 Trophy Room — a dedicated 3D space to browse everything you've earned.",
+    "📳 Expanded Haptic Vocabulary — dozens of new named vibration patterns (mimic reveals, undead rising, boss phase transitions, 3D Mode wall bumps, and more), and vibration duration is now actually respected instead of every buzz being the same fixed-length tap.",
+    "📖 Interactive Tutorial — the Combat step now has a real practice fight against a harmless training enemy, with live tips as you try Attack, Heavy Strike, and Defend. New step covering Voice Commands, Haptic Feedback, and 3D Mode/Echo-Location — features that existed but were never actually explained to new players.",
+    "🐛 Fixed the character list showing \"undefined\" instead of class, race, profession, or dungeon for characters saved before those fields existed — both browsing the list and importing an old save code.",
+    "🐛 Fixed the Command Center (text-command play style) character creator being badly out of date — 6 missing classes, a missing dungeon, and an entirely missing Profession step that silently gave every terminal-created character \"Wanderer\" instead of a real profession.",
+    "🐛 The Time Descender — this rare two-phase encounter could never actually occur due to a broken spawn check that's been in the game for a couple of versions. Fixed — it's a real, findable encounter now, legendary Chrono Armor drop and all.",
+    "🐛 Fixed gun counter-attacks silently never firing due to a call to a function that didn't exist.",
+    "🐛 Fixed Portuguese translation gaps across Siege, Raid, Boss Rush, Tournament, and Mine combat logs — these never translated anything, not even static text.",
+    "🐛 Added unlock hints to every locked achievement, so it's clear what to do instead of just \"keep playing.\"",
+    "🐛 Fixed missing profession bonus descriptions for Street Rat, Warden, and Tinkerer.",
+    "🐛 Hardened save-data loading — corrupted or truncated storage (an interrupted save, an old format) now falls back safely instead of potentially crashing a screen.",
+    "🐛 Fixed the Sync to Cloud button announcing \"Sync complete\" even when the sync had just failed.",
+    "🐛 Fixed a missing error catch on multiplayer emotes, so a failed send no longer disappears silently."
+   ]
+  },
+  {
+   "num": "v11.6",
+   "date": "The 3D Mode Update",
+   "label": "Version 11.6",
+   "changes": [
+    "🧊 3D Mode (Beta) — explore every dungeon in a real 3D rendered view with full spatial audio. Walk between rooms yourself instead of tapping directions, and find the way out by sound and sight. Each dungeon has its own look: ashen lava for the Ashbound Wastes, ice blue for Frosthold Abyss, murky teal for the Sunken Archives, pale bone for the Hollow, mossy green for the Whispering Forest, hellfire red for the Infernal Descent, abyssal blue for the Abyssal Deep, and shadow purple for the Shadow World.",
+    "🎧 3D Mode works for screen reader players too — it's off by default when a screen reader is active, but you can turn it on yourself in Beta Features for enhanced spatial audio cues layered on top of the normal navigation.",
+    "⚙ New 3D Settings menu (appears once 3D Mode is on) — toggle Shadows, Torch Flicker, and an FPS Counter to balance visuals against performance on your device.",
+    "📴 Offline Support — this is an audio-first game, so it should work like one. Every sound effect, music track, and 3D Mode's visuals are now bundled directly into the app instead of streaming over the internet. Full gameplay, full audio, zero connection required.",
+    "🎖 Achievement Tiers — achievements now unlock in tiers with their own distinct unlock sounds, instead of one generic chime for everything.",
+    "🔊 Sound Overhaul — dozens of new and re-sourced sound effects across the game: per-dungeon enemy and boss combat stingers, core UI and gameplay sfx, Library narration, and a fixed footstep sound that was silently broken.",
+    "🐛 Fixed 6 music tracks that were silently broken — several dungeon battle themes (including Crypt of Malachar, the Ashbound Wastes, and Frosthold Abyss), the AFK theme, and the Christmas menu theme were corrupted files years oversized for what they should have been, tripping a safety limit and simply never playing. They're fixed and properly compressed now.",
+    "🐛 Fixed the shop's Refresh Items button crashing.",
+    "📜 Credits screen now properly attributes CC0 sound sources."
+   ]
+  },
+  {
+   "num": "v11.5",
+   "date": "The Elixir Update",
+   "label": "Version 11.5",
+   "changes": [
+    "🧪 Elixirs go to inventory — buying an elixir from the shop no longer uses it immediately. It goes to your Potions tab to save for when you need it most.",
+    "🗂 Potions tab now includes elixirs — all healing consumables live together in the Potions tab. Tap Use when you want to drink one.",
+    "🗺 Elixirs drop in dungeons — each dungeon now has a unique rare elixir that can drop from floor rooms. Volcanic, Void, Sylvan, Hollow, Shadow, and more.",
+    "🏆 Golden Elixir — combine any 3 elixirs from the Potions tab to brew a Golden Elixir. Fully restores HP and grants +8 ATK for 3 turns.",
+    "🧪 New achievement: The Alchemist — drink 10 elixirs across your runs to unlock it.",
+    "🏪 Elixir Vendor — a new shop with its own tab in the Home screen. Sell spare elixirs for gold, or buy a rotating daily elixir once per day.",
+    "🌋 3 new elixirs — Gravebound, Frostbound, and Tidal, bringing the vendor's rotation to 10 elixirs. Gravebound and Tidal also now drop and sell in the Crypt of Malachar and the Abyssal Deep; Frostbound stays vendor-exclusive.",
+    "📅 Daily Descent expanded from a 7-day loop to a 30-day cycle of unique rewards — gold, potions, soul fragments, mystery coins, and elixirs — before it repeats.",
+    "🐛 Fixed ATK and DEF boost potions never actually expiring — temporary attack and defense buffs now correctly wear off after their stated number of turns instead of lasting the rest of the run.",
+    "♿ Accessibility — translated 939 missing aria-labels to Portuguese, including the Security Room's escape directions and most combat, navigation, and menu labels. VoiceOver users should now hear far less untranslated English."
+   ]
+  },
+  {
+   "num": "v11.4",
+   "date": "The Boss Loot Update",
+   "label": "Version 11.4",
+   "changes": [
+    "🏆 Boss Loot — every dungeon boss now drops a unique relic when defeated. Eight relics total, one per dungeon, each with a passive effect that changes how you play the rest of the run.",
+    "👑 Malachar's Crown Fragment (Crypt) — +15 max HP and a one-time death prevention. If the Crown is active and you would die, it shatters instead and brings you back at 20% HP.",
+    "❤️‍🔥 Ember Heart (Ashbound) — burns enemies for 3 bonus damage on every attack you land.",
+    "🧊 Frostbite Shard (Frosthold) — 20% chance to freeze the enemy on hit, skipping their next attack.",
+    "📖 Drowned Tome (Sunken Archives) — +20 max SP and all skill costs reduced by 1.",
+    "🎭 Hollow Mask (The Hollow) — 15% dodge chance on every enemy hit, plus 3 floors of immunity from the Darkness Swallower in the Shadow World.",
+    "🌿 Sylvan Heart (Whispering Forest) — heals 3 HP every room you enter.",
+    "🔱 Infernal Brand (Infernal Descent) — +8 ATK and fire damage amplified by 25%.",
+    "🐉 Leviathan Scale (Abyssal Deep) — +25 max HP and reduces all incoming damage by 3.",
+    "🌑 Shadow Tear (Shadow World) — all player damage boosted by 12%."
+   ]
+  },
+  {
+   "num": "v11.3",
+   "date": "The Halloween Update",
+   "label": "Version 11.3",
+   "changes": [
+    "⚔ Boss Retry System — die to a boss and get one chance to try again. Retry costs 15% of your gold and restores you to 50% HP. The boss resets to full strength. One retry per run.",
+    "📷 Security Room — new Shadow World event. Four cameras (N/S/E/W), 15-second timer. The Darkness Swallower is on one feed — find it by sight or by growl, then escape the opposite direction. Wrong direction or time's up: 30% max HP damage and 1 corruption stack.",
+    "🧟 The Risen — new Hollow tier 1 enemy. Zombie that revives once at 20% HP when killed. You have to kill it twice.",
+    "🧛 The Pale Guest — new Hollow tier 2 enemy. Vampire that heals 8 HP every time it hits you. Kill it fast.",
+    "👻 The Unfinished — new Hollow tier 3 enemy. Ghost with a 30% chance to phase through your attacks entirely. Each with unique entrance sound effects.",
+    "⚔ Pre-Boss Gauntlet — 1 or 2 waves of buffed dungeon minions now spawn between the floor 10 elite and the final boss.",
+    "📦 Inventory stacking — identical items now show as a single row with a count. 59 enchanters = one button. Massive accessibility improvement for screen reader users.",
+    "🎭 Equipment tab — new inventory category for masks, relics, and unique items like the Shapeshifter's Mask.",
+    "🛡 Armor tab — armor now has its own inventory tab, separate from weapons.",
+    "🔍 Inventory search fix — typing in the search box no longer yanks focus away after every letter.",
+    "🐛 Stalker Floor direction bug fixed — ahead/behind labels were swapped on the Y axis. Now correctly reports which direction the Darkness Swallower is.",
+    "🌍 Portuguese translation complete — the game is now fully translated into Portuguese."
+   ]
+  },
+  {
+   "num": "v11.2",
+   "date": "The Shadow World Improvement Update",
+   "label": "Version 11.2",
+   "changes": [
+    "🌑 Shadow World loot — 4 new items: Mirror Fragment (purge all corruption instantly), Echo Bone (relic, +25% vs Echo/Shapeshifter), Offering Cloth (relic, guarantees good Offering outcome), Door Key (relic, guarantees good Two Doors outcome)",
+    "🎭 Shapeshifter's Mask — now fully functional. Use in combat to copy the current enemy's ability. 12 different abilities including phase dodge, second life, reflection, void web, growing power, shadow command, and more.",
+    "🌑 Stalker Floor — The Darkness Swallower now has looping spatial growl audio and directional footsteps via equalpower panning. Growl stops immediately on escape, defeat, or fight.",
+    "🌑 Boss sequence — The Echo now always spawns first on floor 10. Defeating The Echo auto-triggers The Shapeshifter with a dramatic sequence.",
+    "🌑 Enemy pool — Shadow World enemies now spawn correctly everywhere (Cursed Chamber, ambush, regular combat). Abyssal enemies no longer bleed into Shadow World.",
+    "🎵 Music Player — added previous/next track buttons, shuffle toggle, volume slider, and now playing display that updates automatically.",
+    "📚 Library — ElevenLabs Brian narration added to The Merchant's Route, Before the Eye Opened, and The Founding Charter of the DDDI. Tap Listen to hear the story read aloud.",
+    "⚙️ Settings — Privacy Policy and Terms of Service links added alongside Support link.",
+    "🏚️ The Hollow — all existing enemies now have unique mechanics. The Portrait gains ATK each turn it watches. The Bell Ringer skips your turn on turn 2. The Wall Crawler bypasses defense every other hit. The Groundskeeper heals each turn. The Hollow Matron boosts her own damage. The Oldest Guest is immune to the first hit. The Caretaker grows stronger every turn."
+   ]
+  },
+  {
+   "num": "v11.1",
+   "date": "The Shadow World Update",
+   "label": "Version 11.1",
+   "changes": [
+    "🌑 The Shadow World — 9th dungeon. 3000 years of darkness. 14 enemies with unique mechanics. Shadow Corruption builds per hit — at 3 stacks your damage is halved. Use Purge (4 SP) to clear it.",
+    "🌑 Shadow enemies — The Mimic (surprise double attack), The Lurker (hides first turn, critical second), The Reflection (mirrors your last action), Sorrow Hound (fear debuff -20% damage), Void Weaver (corruption web, break with Heavy Strike), The Twice Dead (returns at 50% HP after first kill), Shadow Archon (all enemies deal 15% more damage while alive)",
+    "🌑 Shadow Ambush — echoes of enemies you already killed this run return from the dark. Every echo adds corruption on hit.",
+    "🌑 The Shapeshifter — 4 phase boss. Phase 2 copies your weapon damage. Phase 3 matches your exact HP. Phase 4 corrupts on every hit. The hardest boss in the game.",
+    "🌑 The Void Reaper rebuilt on Firebase RTDB — date no longer resets on app reopen. Shared HP pool persists properly across all sessions.",
+    "📱 iOS — Audio overlap fixed. Startup audio on first touch. VoiceOver detection via native ScreenReader plugin. Shake to attack permission fixed. Notifications now fire correctly with custom sound.",
+    "🔔 Notifications — New preferences panel with 13 toggles. Weekly events (XP Weekend, Void Week, Blood Moon, Architect Week). New seasonal events (Brazil Day, Valentine's, St. Patrick's, Friday 13th, Ambush Day).",
+    "🎮 Bug fixes — Duplicate weapons no longer drop. Scrolls work correctly. Confirm dialogs replaced with accessible modals. Ambush combat button freeze fixed. getShopDiscount crash fixed. renderActionButtons crash fixed.",
+    "🎵 Shadow World music system — 7 tracks registered and wired into all audio systems. Shadow World tab in Music Player.",
+    "📋 Bestiary — Shadow World tab with 16 entries."
+   ]
+  },
+  {
+   "num": "v10.9",
+   "date": "The Codex Update",
+   "label": "Version 10.9",
+   "changes": [
+    "📖 The Codex — a brand new lore system. Three tabs: World Lore, Enemy Lore, and Artifacts. Entries unlock through gameplay — clear a dungeon, kill enough enemies, reach Mine depth milestones, collect Void Fragments. 14 entries total to discover. Access from the main menu.",
+    "🎵 The Nocturnia Spire — new ambient orchestral music plays exclusively in the Codex. Also added to the Music Player catalogue.",
+    "⛏ Mine Exploration music added to the Music Player catalogue so players can listen to it from the Chronicles.",
+    "⛏ Mine Combat Overhaul — combat now features 6 actions: Attack, Heavy Strike (1.8x damage but enemy hits back harder), Defend (reduce incoming damage by 60%), Gun (uses your equipped gun), Potion (drink a found potion mid-combat), and Flee.",
+    "✨ Skills in the Mine — your unlocked class skills now work in Mine combat. Offensive skills scale by tier, healing skills restore 35% max HP, shield skills block 80% of the next hit, and buff skills double your next attack.",
+    "💊 Health Potions now drop in the Mine — from both digging and defeating enemies. Unused potions on surface are now saved to your global inventory instead of being lost.",
+    "👑 Mine Milestone Bosses — five named bosses now spawn at depth 10, 20, 30, 50, and 100. Each has unique lore, significantly higher HP, and drops guaranteed Mega Potion + 3 Diamonds. Added to the Bestiary with full lore entries.",
+    "⚔ Character stats now matter in the Mine — HP scales from your class HP map AND your character level. Attack damage scales with level too.",
+    "🎵 iOS Audio — volume slider now correctly adjusts music volume on iPhone and iPad. The saved volume setting is now preserved across refreshes. Music no longer restarts on every screen transition.",
+    "🎵 Music player now properly stops game music before playing, and resumes game music when stopped.",
+    "🎵 Music resumes correctly when returning from background or after long alerts on iOS.",
+    "📚 The Benjamin Sent Incident — a new Story Library entry. A totally true and historically accurate account of how Dungeon Descent saved Chernobyl. Written at 3 AM. All 12 chapters.",
+    "🏆 World Builder achievement repurposed — now awards for reaching Mine depth 50.",
+    "🏆 Spirit Forger achievement wired up — now correctly awards when you build a custom spirit.",
+    "🏆 Infernal Trial achievement fixed — now awards alongside Infernal Survivor when completing The Infernal Descent.",
+    "🐛 Fixed double volume announcement on iOS — percentage display spans no longer use aria-live, preventing JAWS/VoiceOver from reading both the label and the span simultaneously."
+   ]
+  },
+  {
+   "num": "v10.8",
+   "date": "The Arsenal Update",
+   "label": "Version 10.8",
+   "changes": [
+    "🔫 Guns — a full new weapon system. 13 guns from the Flintlock Pistol to the AK-47. Each gun has a unique charge mechanic, shot count, and cooldown. Charge your gun, fire, then wait for the reload sound before charging again. Automatic guns fire multiple shots before cooldown. Guns work in dungeons, The Siege, and Raids.",
+    "💎 Diamonds — a new premium currency. Earned from boss drops (20% chance), rare chest finds, and deep mine exploration. Used to buy guns from the Blacksmith.",
+    "🔩 Gun Parts — crafting materials that drop from enemies (8% chance). Collect Barrels, Firing Mechanisms, Stocks, and Trigger Assemblies to craft guns at the Home crafting station instead of buying them.",
+    "⛏ The Mine — a brand new mode. Send a character into the mine to dig for diamonds, mystery coins, gold, and gun parts. Carry up to 15 items in your hands before surfacing. Descend deeper for rarer loot but tougher enemies. Mine-specific enemies: Cave Rat, Rock Beetle, Mine Wraith, Stone Golem, Diamond Golem, Ore Demon, and 13 more.",
+    "🎵 The Mine has its own music — creepy ambient exploration music and separate combat music when enemies spawn underground.",
+    "⛏ Mine Bestiary — 19 new mine enemies added to the Bestiary with full lore entries. Filter by the new Mine tab.",
+    "🗡 New enemies across all dungeons — The Ashbound Wastes, Abyssal Deep, Whispering Forest, and Infernal Descent all received new spawnable enemies with unique mechanics. Cinder Hound burns on every bite. Pressure Wraith grows stronger AND drains SP simultaneously. Canopy Horror gets stronger every turn it survives. Night Bloom poisons on every hit.",
+    "🐛 Fixed floor 10 elite guardian using Crypt enemies in all dungeons — Whispering Forest, Infernal Descent, and Abyssal Deep now correctly spawn their own tier 3 enemies as the pre-boss guardian.",
+    "🐛 Fixed Infernal Descent boss pool — was accidentally pulling from the default Crypt boss pool due to a dungeon name mismatch. The Hard Void and Infernal Architect now spawn correctly.",
+    "🐛 Fixed Abyssal Deep four-phase boss stopping at phase 3 — phase thresholds were not being scaled to the actual boss HP. Phase 4 now triggers correctly.",
+    "🐛 Fixed gun killing boss or floor 10 elite going straight to run summary — race condition resolved by setting victory flags immediately on kill.",
+    "🐛 Fixed AK-47 one-shotting entire ambush — gun now correctly removes only the targeted enemy from multi-combat and lets remaining enemies counter-attack.",
+    "🐛 Fixed Continue Journey button not showing after dungeon completion — button now correctly appears on the run summary screen.",
+    "🐛 Fixed true ending not triggering — the all-dungeons-cleared check was inside a try/catch that silently swallowed errors. Now runs independently and always fires.",
+    "🐛 Fixed level shown on character card not matching in-dungeon level — levels now save immediately on every level-up, not just at dungeon completion.",
+    "💾 Save data backup — critical save data (characters, gold, diamonds, achievements) is now mirrored to localStorage as a backup. If IndexedDB is ever evicted by the browser, your data is automatically restored on next launch.",
+    "🔧 Hardened error handling across achievements, global stats, legends, graveyard, and save systems — individual failures no longer cascade into larger crashes.",
+    "🌐 Language preference fix — Portuguese and Spanish players no longer see a brief English flash on page load after the IndexedDB migration."
+   ]
+  },
+  {
+   "num": "v10.7",
+   "date": "The Storage Upgrade",
+   "label": "Version 10.7",
+   "changes": [
+    "🗄️ IndexedDB Migration — save data has been moved from localStorage (5-10MB limit) to IndexedDB (unlimited). Your characters, progress, achievements, bestiary, and all settings have been automatically migrated. No data was lost.",
+    "⚡ Storage engine is now future-proof — as the game grows with new features and categories, save data will no longer be at risk of hitting browser storage limits.",
+    "🎵 Music loop fix — the loop-all feature no longer stops silently when an audio track fails to load. It now skips the unavailable track and continues to the next one.",
+    "🐛 Migration animation on first launch after upgrade — a brief progress screen shows while data is being transferred. This only appears once."
+   ]
+  },
+  {
+   "num": "v10.6.5",
+   "date": "The Heartbreak Update",
+   "label": "Version 10.6.5",
+   "changes": [
+    "🐛 MAJOR FIX — found and fixed the root cause of combat freezing after boss kills and \"no enemy found\" spell errors. The global watchdog was interrupting boss death cinematics and other multi-second combat transitions, wiping combat state mid-animation. Added a cinematic protection flag so the watchdog now waits for cinematics to finish before checking combat state.",
+    "🐛 Fixed normal (non-boss) enemy deaths not clearing combat state before entering the next room, causing the same freeze on any floor.",
+    "🐛 Fixed victory screen sometimes failing silently after boss kills — now wrapped safely so the game always shows something instead of freezing.",
+    "💘 Valentine's Day Event — active February 13-15. 7 exclusive enemies including The Cupid, who always drops a Love Potion.",
+    "💘 Love Potion — use on any non-boss enemy to charm it into fighting for you for 2 turns before it turns back against you.",
+    "💝 The Heartbreaker — Valentine's Day boss. Can charm you with a 35% chance per turn, forcing you to skip your next attack.",
+    "🍫 Chocolate Shop — earn Chocolate during the event. Spend on Love Potions, Box of Chocolates, Enchanted Rose, Cupid's Arrow, Heart Shield, and the exclusive Beloved title.",
+    "🐀 Coward enemy mechanic — weak enemies now flee when you're above 80% HP or on a 3+ kill streak, dropping gold as they run."
+   ]
+  },
+  {
+   "num": "v10.6.4",
+   "date": "Ordem e Progresso — The Brazil Independence Day Update",
+   "label": "Version 10.6.4",
+   "changes": [
+    "🇧🇷 Brazil Independence Day — September 7th only. Independência do Brasil. 1822.",
+    "⚽ O Craque — kicks an enchanted football at you instead of fighting normally. It hurts more than it should.",
+    "🐆 A Onça, 🐊 O Jacaré, 🦜 O Papagaio, 🐍 A Cobra, 🦅 O Gavião, 🐬 O Boto Cor-de-Rosa — 7 Brazilian enemies.",
+    "👑 O Rei do Carnaval — the boss. He came to celebrate. You interrupted the celebration. He will not forgive this.",
+    "🔑 Secret console code — type BRAZIL in the secret console on September 7th only for a special reward. The code does nothing on any other day.",
+    "💰 Gold multiplied by 1.822 honoring the year of independence."
+   ]
+  },
+  {
+   "num": "v10.6.3",
+   "date": "The Unlucky Update",
+   "label": "Version 10.6.3",
+   "changes": [
+    "🔪 Friday the 13th Event — active any Friday the 13th. Halloween music plays everywhere. The dungeon goes dark.",
+    "🔲 The Black Box — 20% chance per floor (floor 2+) to find a mysterious black box. Open it or leave it. Your choice.",
+    "👁️ The Unlucky One — opens from the Black Box. 120 HP boss. Steals your gold each turn. Disables all critical hits for the entire fight. Hits extremely hard. Defeating it restores your luck.",
+    "🐛 Fixed Easter showing 0 days remaining on events screen — Easter end date now calculated dynamically instead of hardcoded.",
+    "🐛 Fixed St. Patrick's Day not appearing on events screen.",
+    "🐛 Fixed getDaysUntilEvent not calculating Easter or St. Patrick's Day correctly."
+   ]
+  },
+  {
+   "num": "v10.6.2",
+   "date": "The Lucky Update",
+   "label": "Version 10.6.2",
+   "changes": [
+    "☘️ St. Patrick's Day Event — active March 14-18. The dungeon goes green. 8 exclusive Irish enemies including The Leprechaun, Lucky Imp, Gold Goblin and The Clurichaun boss.",
+    "🧝 The Leprechaun — steals 10 gold from you each turn instead of dealing HP damage. Kill it before it empties your wallet.",
+    "🍀 Lucky Imp — has a 25% dodge chance. Your attacks miss it nearly one in four times.",
+    "💰 Gold Goblin — carries bonus gold but has a 30% chance to flee each turn. Race against the clock.",
+    "🍺 The Clurichaun — drunk boss that gets angrier every turn. Damage escalates 10% per round with no cap.",
+    "☘️ Shamrock Shop — earn Shamrocks as you fight. Spend them on Lucky Clover, Irish Stout, Pot of Gold, Leprechaun's Charm, Rainbow Shield, and the exclusive Lucky One title.",
+    "+30% XP and +50% gold during the event. Enemies are 15% stronger."
+   ]
+  },
+  {
+   "num": "v10.6.1",
+   "date": "The Combat Polish Update",
+   "label": "Version 10.6.1",
+   "changes": [
+    "📖 Spell Book Screen — new dedicated screen showing all learned spells with icon, name, rarity, description and cooldown. Access from main menu, Arcane Shop, or dungeon action bar.",
+    "✨ Spell Book in Arcane Shop — View Spell Book button added directly inside the Arcane Shop screen.",
+    "🛍️ Seasonal Shop Full Screen — converted from overlay to full screen for proper screen reader navigation. Back button now correctly returns to dungeon when opened mid-run.",
+    "🔮 Arcane Shop Back Button Fixed — now correctly returns to the dungeon when opened mid-run instead of going to main menu.",
+    "⌨️ New Keyboard Shortcuts — Ctrl+Shift+I for Inventory, Ctrl+Shift+K for Spell Book, Ctrl+Shift+A for Arcane Shop, Ctrl+Shift+M for Seasonal Shop. Combat shortcuts Alt+S for Spells, Alt+E for Examine, Alt+1/2/3 for Skills.",
+    "⚔️ Ambush Combat Overhaul — multi-enemy combat fully rebuilt and synced with single combat. All class passives, event boosts, weather multipliers, coin upgrades, and buffs now apply correctly in ambushes.",
+    "✨ Spells in Ambush — spells now work correctly during multi-enemy ambush battles. Casting a spell properly triggers enemy counter-attacks and removes defeated enemies from the fight.",
+    "🎯 Skills in Ambush — all skill types now route correctly in ambush. Buff and utility skills trigger enemy counter-attacks. Offensive skills go through target selection. Smoke Bomb properly ends ambush combat.",
+    "🐛 Fixed ambush freeze — dead enemies no longer appear in target selector. Targeting a 0 HP enemy is no longer possible.",
+    "🐛 Fixed ambush button freeze — combat buttons now re-enable correctly after every action in multi-enemy combat.",
+    "🐛 Fixed spell kill in ambush — killing an enemy with a spell in an ambush now correctly removes them from the fight instead of triggering single combat victory.",
+    "🐛 Fixed combat button freeze — global watchdog added. Checks every 1.5 seconds and restores combat controls if frozen during active combat. Watchdog respects target selection so it never interrupts ambush targeting.",
+    "🐛 Fixed single combat button freeze — multiple paths in phase transitions, corruption modals, and special encounters that disabled buttons without re-enabling them have been patched.",
+    "🐉 Chimera Damage Synced — Chimera attack now applies all class passives, event boosts, weather multipliers, and buffs same as normal combat. Crits now possible during Chimera fights.",
+    "⬆️ Continue Journey on Run Summary — Continue Journey button now appears on the victory run summary screen so you can move to the next dungeon directly without going back to the dungeon screen.",
+    "📖 Help Updated — new help sections for Spell System, Spell Book Screen, Spell Rarities and Risk, and Ambush and Multi-Enemy Combat.",
+    "🐛 Fixed Abyssal silence not restoring combat state correctly in multi-combat."
+   ]
+  },
+  {
+   "num": "v10.6",
+   "date": "The Arcane Update",
+   "label": "Version 10.6",
+   "changes": [
+    "✨ Spell System — 50 unique spells coming to all dungeons. Find spell scrolls as rare drops or buy them from the new Arcane Shop.",
+    "🔮 6 New Classes — Elementalist, VoidWalker, ShadowMage, TimeMage, Shaman, and Arcanist. Each with 15 unique skills.",
+    "🌑 The Shadow World — a secret dungeon that has existed for 3000 years beneath a cursed forest. Coming soon.",
+    "⚔️ PVP Multiplayer — fight another player in real time turn based combat. BETA — in development.",
+    "🎆 Fourth of July Liberty Shop — 8 exclusive items including the Patriot Cannon, Liberty Eagle minion, and the Patriot title.",
+    "⚡ Elite Enemies — Infernal Descent and Abyssal Deep now have elite enemies. The Infernal Warden, Archon of Ash, Void Colossus and more.",
+    "💤 Dream System — sleeping at Home now triggers a random dream. Buffs, lore, or dark visions for your next run.",
+    "🌤️ Weather Expanded — Crypt of Malachar and The Whispering Forest now have unique weather systems.",
+    "⬆️ NG+ Choice Screen — after completing a dungeon choose between New Game Plus or Continue Journey to the next dungeon.",
+    "🐛 Bug Fixes — dungeon unlock chain fixed for all 8 dungeons, death cinematic no longer freezes, sleep cooldown now resets between runs.",
+    "💀 Hardcore Mode — enable at character creation Step 9. One life. If you die your character is permanently deleted. No second chances. A HC badge shows in the top bar.",
+    "⭐ Inventory Favorites — star any item to pin it to the top of your inventory forever. Auto-sort button organizes everything by type with one tap.",
+    "⚔️ Enemy and Boss Scaling — enemies now scale with your player level so combat stays challenging at every stage. Bosses scale aggressively — never one-shottable regardless of level.",
+    "🌦️ Sequential Dungeon Intro — weather condition and class trait now appear as separate dismissable pop-ups when you enter the dungeon. Nothing fires all at once anymore.",
+    "👑 Boss Fight Overhaul — boss preview now shows HP and a Face It button. Boss death plays a cinematic sequence line by line before the victory screen.",
+    "🏆 The True Ending — clear all 8 dungeons and a special cinematic plays, a title is earned, and credits roll. Progress tracked across all characters and runs.",
+    "🪤 Soul Trap Fixed — soul traps now properly save to inventory when bought and appear correctly as a combat button during fights.",
+    "🏹 Hunter Tracker — visual distance bar with real hunter image that shrinks and turns red as the hunter closes in.",
+    "📖 Help Section Updated — new sections for Hunter Mode, Shadow Realm, Hardcore Mode, Favorites, Boss Strategy, Companion System, and The True Ending.",
+    "🐛 Fixed Hunter Mode toggle announcement, bounty kill tracking, and boss preview auto-dismiss."
+   ]
+  },
+  {
+   "num": "v10.2",
+   "date": "The Hunter Update",
+   "label": "Version 10.2",
+   "changes": [
+    "🏹 Hunter Mode — a relentless hunter now stalks you through the dungeon. Enable it at character creation (Step 9) or toggle it anytime from the pause menu. Every move you make, it moves too. Every turn you waste, it gets closer.",
+    "🎵 Hunter Audio — embedded audio system. At 5 rooms away the heartbeat begins and speeds up as the hunter closes in. At 3 rooms the music switches to a dark tension track. When caught — a real jump scare sound and full red screen flash.",
+    "⚔ Fight or Run — when the hunter reaches 2 rooms away, a choice appears. Fight it (scales with your level) or sprint away and buy one more turn. Kill the hunter and it is gone for the rest of the run. Hunter's Trophy item drops on kill.",
+    "🌑 Shadow Realm — new secret mode accessed via Settings → Redeem Code → type SHADOW. Endless wave survival with escalating enemies and boss waves every 10 waves. Local leaderboard tracks your best runs. Void Reaper music plays throughout.",
+    "💙 Low HP Heartbeat — drop below 10% HP anywhere in the dungeon and the heartbeat sound kicks in as a warning.",
+    "🎒 Inventory Search Bar — type any item name and the inventory filters instantly. JAWS announces how many results are showing.",
+    "📖 Item Descriptions — every inventory item now has a Details button. Tap to hear what the item does. Fully screen reader accessible.",
+    "🐛 Fixed combat buttons staying disabled after killing an enemy — buttons now re-enable immediately at the start of enemyDead.",
+    "🐛 Fixed dungeon freezing after kill — enterRoom now fires correctly after every enemy death.",
+    "🐛 Fixed focus jumping to skip link on every attack — setCombatBtns now anchors focus to the combat log when buttons are disabled, preventing JAWS from jumping to page top.",
+    "🐛 Fixed same focus bug in Siege, Daily Raid, and Boss Rush — all combat button setters now have proper focus management.",
+    "🐛 Fixed soul trap button not appearing — global inventory now syncs into DS.inventory at combat start, not just when opening the inventory panel.",
+    "🐛 Fixed in-dungeon wandering merchant showing no items — rawCost fallback prevents NaN cost breaking the shop.",
+    "🐛 Fixed Blacksmith discount codes not applying in getUpgradeCost — plain-number discount format now handled alongside object format.",
+    "🐛 Fixed Blacksmith weapons not showing attack range — atkBase range now displayed inline on every weapon.",
+    "🐛 Fixed Redeem Code button missing from Settings — button restored to the settings menu."
+   ]
+  },
+  {
+   "num": "v10.1",
+   "date": "The Foundation Update",
+   "label": "Version 10.1",
+   "changes": [
+    "🎆 Fourth of July Event — active July 1 through 7. 76% gold and XP boost, Redcoat enemy invasion, Fireworks drop, Sparkler buff, Eagle's Cry skill, Fireworks Corner at Home, Independence Tournament, and a secret patriot minion.",
+    "🏰 The Siege — new fortress defense mode. Defend your base through 10 waves. Base durability system, 50HP threshold mechanic, upgrade shop, minion defense, Void Reaper music, 3 difficulty tiers.",
+    "🌲 The Hunting Grounds — AFK forest hunt with Brian AI narrator via ElevenLabs. Bounty Rank system with 10 ranks. Items and gold earned while you rest.",
+    "📋 The Bounty Board — 28 bounties across 6 categories. 5 refreshes per day. Active bounty tracks progress in dungeon automatically.",
+    "⚔️ Subclass System — at level 5 choose one of 2 subclasses per class. 36 subclasses total with unique passives. Toggle in Beta Features settings.",
+    "🖥️ Secret Console — Alt+F5 on PC or Redeem Code on mobile. 9 secret codes including IAMLEO, UUDDLRLRBA Konami code, CHAOS mode, and more.",
+    "🧠 6 Stat System — STR, STA, DEF, INT, AGI, LCK. Each stat has meaningful combat effects including crit chance, gold drops, and flee chance.",
+    "🏆 27 new achievements across dungeon completions, Spire floors, minions, forge, deaths, speed runs, class variety, and kills.",
+    "🔍 Examine Enemy — new combat button. Press to hear full enemy stats, weaknesses, special abilities, and threat level.",
+    "🗺️ Room Tracker — always visible bar showing current room and floor during dungeon runs.",
+    "🎓 In-dungeon first run tips — 10 contextual tips for new players. Permanently disabled after first dungeon clear.",
+    "🐛 Fixed ambush soft lock — navigation no longer breaks after winning an ambush encounter.",
+    "🐛 Fixed floor undefined and room NaN bug — NaN guards added to all floor and room counters.",
+    "🐛 Fixed home button not showing on fresh devices.",
+    "🐛 Fixed achievement popup staying visible for screen readers.",
+    "🐛 Fixed Hall of Records, Events, High Score and 12 other screens not opening.",
+    "🐛 Fixed Infernal Descent announcing unlock repeatedly on every character select.",
+    "📋 Bounty enemy targets corrected to use actual enemy names per dungeon."
+   ]
+  },
+  {
+   "num": "v10.0",
+   "date": "The Big Launch",
+   "label": "Version 10.0",
+   "changes": [
+    "🏠 The Home — buy a home for 500g from inside any dungeon. Buy a bed for 75g to sleep and restore HP and SP with a 5-room cooldown. Deposit gold into a safe to protect it. Upgrade skills up to level 5 with a 3-minute cooldown after 5 upgrades.",
+    "✨ Skill Orbs — when a character with upgraded skills dies, their skills become class-locked Skill Orbs. Use them on a new character of the same class to carry your investment forward.",
+    "🌲 Whispering Forest fully built — 30 floor names, 50 room descriptions, full t1/t2/t3 enemy pools, unique loot with Thorn Blade and Root Staff, boss: The Witch Who Remains with 3 phase messages, 3 elite enemies.",
+    "🔥 Infernal Loot Pool — The Infernal now has its own fire-themed loot. Infernal Blade, Void Reaver, Hellfire Staff, Abyssal Axe, Ember Dagger, Ember Plate, Void Cloak, Infernal Mail. No longer falls back to the Crypt loot table.",
+    "💤 Offline AFK Catch-up — come back after 1+ hours and a popup shows what your character earned while you were away. Gold, kills, and soul fragments. Capped at 8 hours.",
+    "🔴 Runes — 5 types found in dungeons and shops. Rune of Strength (+6 ATK), Protection (+5 DEF), Speed (flee always succeeds), Fortune (+25% gold), Vitality (+20 max HP). All permanent for the run.",
+    "📜 Scrolls — 4 types. Scroll of Reveal (next 3 room types shown), Smite (80 unblockable damage), Mending (50% max HP heal outside combat), Knowledge (shows enemy stats before combat).",
+    "⚔️ Set Bonus System — equip matching weapon and armor to unlock a set bonus. Shadow Set (+15% dodge, +3 ATK), Ember Set (+5 ATK, fire on every hit), Frost Set (+4 DEF, freeze chance), Forest Set (+3 ATK +3 DEF), Void Set (+10 ATK, life drain).",
+    "🎵 Music player track names updated — all 44 tracks now have real song titles. \"Into the Dark\", \"The Witch Who Remains\", \"Hearthstone\", \"Year One\" and more.",
+    "🐛 Fixed community enemies tab crashing the Bestiary — removed the tab entirely.",
+    "🐛 Fixed spirit forge button in Home crashing to menu — now correctly opens Spirit Builder.",
+    "🐛 Fixed music playing wrong floor track when closing Blacksmith — now returns to correct floor music.",
+    "🐛 Fixed duplicate INFERNAL_FLOOR_NAMES declaration causing potential conflicts.",
+    "🚀 v10.0 — Dungeon Descent launches on Google Play.",
+    "🌊 The Abyssal Deep — 8th dungeon. Ocean enemies, The Leviathan boss, The Witness event, 6 weather conditions.",
+    "👾 Minion System — capture enemies with Soul Traps. Active minion attacks in all modes.",
+    "🔨 Weapon Forge — craft custom weapons from materials with special effects and rerolls.",
+    "🏆 Trophy System — achievements reward gold and trophies. 100 trophies unlocks The Infernal.",
+    "⚡ Starting Skills — every class begins with their signature skill on floor 1.",
+    "🌦️ Weather System — every dungeon rolls a random condition affecting combat and drops.",
+    "📦 Inventory Tabs, Merchant Redesign, Home Tabs, 27 new achievements, in-dungeon tips.",
+    "🐛 Ghost enemy bug fixed, Enchanter fully fixed, audio tracks corrected, help section fully updated."
+   ]
+  },
+  {
+   "num": "v9.9",
+   "date": "Bug Fixes & Polish",
+   "label": "Version 9.9",
+   "changes": [
+    "🐛 Bug fixes and stability improvements across dungeon, Spire, and AFK modes.",
+    "🐛 Fixed various edge cases in combat and inventory systems.",
+    "⚙️ Performance improvements and code cleanup."
+   ]
+  },
+  {
+   "num": "v9.8",
+   "date": "The Polish Update",
+   "label": "Version 9.8",
+   "changes": [
+    "🏹 New Class: Ranger — Swift Hunter. First hit every combat deals 75% bonus damage. +15% flee chance. Full 14-skill skill tree. Replaces Dragonborn as a class.",
+    "🛡 New Class: Sentinel — Unbreakable Wall. Highest HP of any class (145). Takes 25% less damage from all sources. Full 14-skill skill tree including Taunt, Iron Stance, and Colossus.",
+    "🐉 Dragonborn moved to Race — dragon blood now correctly lives as a race. 10% chance to deal bonus burn damage every hit, scaling with floor depth.",
+    "🧙 New Race: Gnome — +INT +LCK, +10 max SP, all skills cost 2 less SP every combat.",
+    "🌊 New Race: Merfolk — +AGI, potions heal 20% more, +10% HP and +3 attack when in the Sunken Archives.",
+    "⚔️ All 18 classes now have working passives in main dungeon — Warrior boss bonus, Assassin instant kill, Warlock double damage, Bard charm, Monk dodge, Necromancer HP per kill, BloodKnight boss heal, Druid floor heal, Cleric milestone heal, Ranger opening shot, Sentinel damage reduction all fire correctly in combat.",
+    "🎯 Level Points System — every level up gives 3 points to spend. Choose Vitality (+10 HP), Strength (+2 ATK), Endurance (+2 DEF), Spirit (+5 SP), or Agility (+5% flee). Unspent points carry over between levels.",
+    "☠ Corruption System — opt-in toggle in character creation step 9. Every death adds corruption. At 25% the dungeon whispers. At 50% the Corrupted Hunter appears. At 75% skills backfire. At 100% full Corruption Run with doubled gold and legendary rewards.",
+    "🔥 Daily Descent — login reward badge on main menu. 7-day reward cycle from 25g to 300g + Mystery Coins + Soul Fragments. Streak carries over. Uninterruptive — tap the badge to claim, no forced popup.",
+    "🌮 Cinco de Mayo Event — May 5th only. El Taco Blade exclusive weapon in Blacksmith (75g). +50% XP, +25% gold all day.",
+    "✨ Enchanters — rare 2.5% drop per kill. 3 charges. Auto-used at the Blacksmith instead of gold when you cannot afford an upgrade.",
+    "🎵 Music Player Item — buyable in Blacksmith for 50g. Use from inventory to open the music player mid-dungeon.",
+    "📊 Run Summary glow-up — now shows Best Hit, Potions Used, Level Points invested, Corruption percentage with threshold reached, and Class Passive reminder.",
+    "🏠 Room descriptions expanded to 50 per dungeon — split into 3 depth buckets so early, mid, and deep floors feel genuinely different.",
+    "👁 Enemy encounter messages unique per type — 6-8 messages per enemy type (skeletons, wraiths, bats, spiders, knights, mages and more). Floor depth fallbacks with 6 variants each.",
+    "🗺 Floor names expanded to 30 per dungeon — cycle through all 30 before repeating. Crypt, Ashbound, and Frosthold all expanded.",
+    "❓ Stat Legend — What do stats mean? button in character creation step 1. Explains STR, DEF, AGI, INT, FAI, LCK in plain language. Screen reader friendly.",
+    "⚔️ Equipped gear now applies in ALL modes — Spire, Raid, Boss Rush, and AFK all read weapon ATK and armor DEF from localStorage on start.",
+    "💰 Gold system fully synced — all 20 previously unsynced gold operations now update the global gold system. Blacksmith from menu shows real gold and upgrades work correctly.",
+    "🔧 Character creation updated to 10 steps — Spirit selection (step 8) and Corruption toggle (step 9) added. Spirit picked in creation, no more popup at dungeon start.",
+    "🌍 Seven dungeons text corrected throughout — dungeon picker, tutorial, help, and achievements all updated from five to seven.",
+    "🎮 Loading screen — 5 second duration, tips cycle every 1.5 seconds, VoiceOver announces on load. \"A Leo Productions Game\" and \"Created by Leo Productions\" credits."
+   ]
+  },
+  {
+   "num": "v9.7",
+   "date": "The Community Update",
+   "label": "Version 9.7",
+   "changes": [
+    "⚗️ Create Your Enemy — design a custom enemy and share it with all players worldwide. Give it a name, description, HP, type, dungeon, and special mechanic. AI moderates submissions before they go live. Three violations earn a 3-day creation ban.",
+    "🤖 AI Mechanic Parsing — describe your enemy's mechanic in plain English (\"heals 15 HP every 3 turns\") and Gemini AI translates it into real game flags that work in combat.",
+    "⚔ Enemy Test Combat — before submitting, fight your enemy in a test arena. Audio uploads and mechanics are parsed during the test so submit is instant.",
+    "🌍 Community Bestiary Tab — new ⚗️ tab in the Bestiary shows all player-created enemies from around the world. Enemy count updates dynamically as the community grows.",
+    "🎵 Enemy Battle Music — choose a game track or upload your own audio file (MP3/OGG/WAV, max 50MB) as custom battle music for your enemy. Streams from Supabase cloud storage permanently.",
+    "🌑 Legacy Mode — new run mode in character creation (Step 7 of 12). Your level persists between runs (cap raised to 25). Complete a dungeon to raise its Dungeon Tier. Higher tiers scale enemy HP and damage but increase gold rewards. Die and your level is kept but the tier resets.",
+    "⚔ Classic Run — the original game mode. Level resets to 1 on death. No dungeon scaling. Every run is a fresh start.",
+    "🏆 Achievement Sound Picker — choose your achievement unlock sound in Settings → Gameplay. Three options with live preview: Classic Unlock, Level Up Fanfare, Victory Chime.",
+    "☠️ Global Obituary (Supabase) — deaths now save to a global Supabase database. The obituary screen loads deaths from all players worldwide. Switched from JSONbin to Supabase for reliability.",
+    "☠️ Cross-mode Death Tracking — Boss Rush, Daily Raid, and The Spire deaths now register in both the local graveyard and the global obituary.",
+    "⚙️ Enemy Mechanics Wired — Infernal and community enemy mechanic flags now actually work in combat. immuneFirstHit, splitsAt50, dodgeChance, drainHpSp, lifesteal, drainGold, healPerTurns, doubleStrike, grows, and more all fire correctly.",
+    "🌑 Void Mode buffed — all 5 hero waves are significantly stronger. Wave 5 The Last Hero now has 350 HP with heal mechanic. Void Reaper music now plays correctly on start.",
+    "📋 Save Code improvements — Copy to Clipboard button with confirmation, Share Code button using iOS native share sheet, tap textarea to auto-select all.",
+    "✕ Quit Game button — added to pause menu. Saves progress first, then calls Capacitor exitApp on iOS or goes to menu on web.",
+    "🎵 YouTube URL support — paste a YouTube link in Custom Track to load it as background music via embedded player.",
+    "⚗️ Achievement: World Builder — unlock by creating your first community enemy."
+   ]
+  },
+  {
+   "num": "v9.6",
+   "date": "The Infernal Update",
+   "label": "Version 9.6",
+   "changes": [
+    "🔥 The Infernal Dungeon — a locked 7th dungeon of pure darkness. Unlock it via The Trial (survive 3 waves of void entities with base stats) or The Riddles (solve 5 hidden lore riddles scattered across the game). Two paths. One gate.",
+    "🎲 Procedural Rooms — every floor now has a generated room sequence. Special rooms appear mid-floor: 💎 Treasure Chamber (guaranteed loot, no combat), 🕯️ Sanctuary (heal 20% HP), 💀 Cursed Chamber (elite enemy, triple gold), 🔍 Hidden Passage (secret gold), 🛒 Wandering Merchant (mid-floor shop).",
+    "💰 Global Gold — gold earned anywhere (dungeons, Spire, AFK) feeds a shared wallet. Spend it at the Blacksmith from the main menu between runs.",
+    "⚒ Menu Blacksmith — new main menu button. Buy and upgrade weapons using your global gold at any time, even outside of a dungeon.",
+    "🎒 Spire Inventory — new button in The Spire lets you equip weapons mid-climb from your global inventory.",
+    "☁ Cloud Audio — all 50+ audio files now stream from Supabase CDN. The game is now a single HTML file — no local audio folder needed.",
+    "⚰️ Graveyard auto-save — characters now appear in the Graveyard automatically when they die, not just when deleted.",
+    "📅 Daily Dungeon — a new tab in Challenges. Different dungeon every day with 2 random modifiers. Resets at midnight. Tracks your completion time.",
+    "⚔ The Gauntlet — all 6 dungeons back to back, one life, HP carries over. Clear all 60 floors for the Gauntlet Champion achievement.",
+    "🗼 Spire rest floors every 10 floors — was every 50, now every 10.",
+    "🔊 Sync announcements — cloud save and load now announce progress through JAWS with start, progress, and completion messages.",
+    "🌐 Aria-label translation — switching language now translates all screen reader labels, not just visible text.",
+    "📖 6 Spire Lore Fragments — unlock in The Chronicles Library as you climb floors 100, 300, 500, 750, 1000, and 1500. Each fragment reveals more about The Time Eater."
+   ]
+  },
+  {
+   "num": "v9.5",
+   "date": "The Chronicle Update",
+   "label": "Version 9.5",
+   "changes": [
+    "☠ Death Log — a new screen accessible from the character list. Shows every death for every character — floor, killer, dungeon, difficulty, kills, gold, and flavor text.",
+    "🕯 Spire Rest Floors — every 50 floors The Spire gives you a rest room instead of a fight.",
+    "🐛 Level display fixed — all character pickers now correctly show your persistent level."
+   ]
+  },
+  {
+   "num": "v9.4",
+   "date": "The Spire",
+   "label": "Version 9.4",
+   "changes": [
+    "🗼 The Spire — a brand new standalone mode. Climb 1800 floors of escalating difficulty. Your floor progress is never lost — death sends you back one floor, not to the beginning.",
+    "⏳ The Time Eater — the final boss at floor 1800. Defeating it awards 1000 gold, 25 Mystery Coins, and a 25% Blacksmith discount for 2 hours.",
+    "⚡ Auto Mode — toggle before entering The Spire. The tower advances automatically. You can still open the Blacksmith or return to the menu at any time.",
+    "🏆 Floor Milestones — gold rewards at floors 100, 200, 300, 500, 750, 1000 and 1500.",
+    "⚒ Blacksmith in The Spire — upgrade your gear at any point during your climb.",
+    "👑 9 Spire Bosses — unique boss every 10 floors, scaling from The Gate Warden all the way to The Time Eater."
+   ]
+  },
+  {
+   "num": "v9.3",
+   "date": "The Survivor Update",
+   "label": "Version 9.3",
+   "changes": [
+    "🩹 Bandages — new Descent Shop passive. Regenerate 8 HP after every floor. Stackable up to 3 times.",
+    "🍀 Lucky Charm — new Descent Shop passive. 15% chance to completely dodge any boss attack.",
+    "🛡️ Iron Will — new Descent Shop passive. Start every AFK run with +80 max HP bonus.",
+    "✨ Death Ward — new Descent Shop passive. Once per run, survive a killing blow with 1 HP instead of dying.",
+    "🐛 Level badge fix — character level in the dungeon top bar now always shows the correct level instead of staying at Lv 1 on load."
+   ]
+  },
+  {
+   "num": "v9.2",
+   "date": "The Forge Update",
+   "label": "Version 9.2",
+   "changes": [
+    "⚒ Blacksmith Weapon Shop — the Blacksmith now has a Buy Weapons tab. Browse 8 weapons available for gold. Switch between Upgrade and Buy Weapons using the tabs at the top.",
+    "🗡️ Starter Weapon — every new adventurer can claim one free Worn Blade from the Blacksmith. Visit the Buy Weapons tab and claim it before your first run.",
+    "📖 Tutorial updated — new step 7 explains the Blacksmith, weapon buying, and the free starter weapon.",
+    "🐛 AFK boss fix — floor 25 boss was mathematically unbeatable with base stats. Boss HP and attack scaling rebalanced across all floor milestones.",
+    "🐛 Firebase fix — Void Reaper and World Chat listeners now initialize correctly on page load. Previously they could silently fail to connect.",
+    "🐛 Void Reaper damage fix — attacks from the main Void Reaper screen now correctly report damage to the global Firebase HP pool and leaderboard."
+   ]
+  },
+  {
+   "num": "v9.1",
+   "date": "The Blacksmith Update",
+   "label": "Version 9.1",
+   "changes": [
+    "⚒ New Blacksmith — a brand new NPC has arrived in the dungeon. Visit the Blacksmith to upgrade, repair, and manage your gear.",
+    "🎒 Equip from Inventory — you can now equip items directly from your inventory. No more weapon multiplying attacks — equipping a weapon properly replaces your current one."
+   ]
+  },
+  {
+   "num": "v9.0",
+   "date": "The Multiplayer Update",
+   "label": "Version 9.0",
+   "changes": [
+    "🌍 Global Void Reaper — the Void Reaper is now a shared world boss. The entire playerbase attacks the same 2000 HP pool together. One boss. All players. One outcome.",
+    "⚔ Damage leaderboard — top 10 damage dealers displayed on the Void Reaper screen. Updated in real time via Firebase.",
+    "💬 World Chat — global chat on the Void Reaper screen. Coordinate attacks with other players worldwide.",
+    "🏆 Killing blow — the player who deals the final hit receives 50 Mystery Coins and a global announcement in World Chat.",
+    "🔄 Dynamic awakening — the Void Reaper wakes up at a random time between 1 and 4 weeks. The same countdown for every player worldwide — no more local storage differences.",
+    "🏷 Title System — your display name is now your first name from your email plus a chosen title. Leo the Void. Change title in Account settings using Mystery Coins.",
+    "🎵 Screen music — Bestiary, Help, Chronicles and Credits now each play their own unique music track.",
+    "🔑 Dev Tools password changer — change the dev password anytime from inside the dev panel."
+   ]
+  },
+  {
+   "num": "v8.9",
+   "date": "Bug Fixes & Polish",
+   "label": "Version 8.9",
+   "changes": [
+    "🐛 Bug fixes and stability improvements following the Multiplayer Update.",
+    "🐛 World Chat and Void Reaper connection stability improved.",
+    "⚙️ Minor UI and accessibility improvements."
+   ]
+  },
+  {
+   "num": "v8.8",
+   "date": "Bug Fixes & Polish",
+   "label": "Version 8.8",
+   "changes": [
+    "🐛 Bug fixes and stability improvements.",
+    "🐛 Fixed various combat and inventory edge cases.",
+    "⚙️ Performance and accessibility improvements."
+   ]
+  },
+  {
+   "num": "v8.7",
+   "date": "Run Modifiers",
+   "label": "Version 8.7",
+   "changes": [
+    "🎲 Run Modifiers — each run gets a random modifier before you descend. 8 modifiers including Burning Dungeon, Death March, Blessed Run, Phantom Run and more.",
+    "🎮 Gameplay Settings — new settings category. Toggle run modifiers on or off. Hide main menu items you do not use.",
+    "⌨ Keyboard commands fully working — Ctrl+Shift navigation, Alt+key combat, Page Up/Down volume, Backspace pause menu.",
+    "🌲 Whispering Forest added to character creation. Wizard and Halfling cards added."
+   ]
+  },
+  {
+   "num": "v8.6",
+   "date": "The Grand Update",
+   "label": "Version 8.6",
+   "changes": [
+    "🧙 Wizard — new class. Highest SP of all classes, lowest HP. Arcane Study reveals enemy HP and attack range on first turn of every combat. Starts each run with a Spell Scroll. 12 unique spells.",
+    "🧑‍🌾 Halfling — new race. 15% chance to dodge attacks completely. High luck, reduced strength.",
+    "⚔ Leo Easter Egg — name your character Leo or Leonardo for a special dungeon reaction.",
+    "📖 Enemy first encounter — first time you face any enemy a lore description appears before combat.",
+    "🔄 Shop reroll — spend 20 gold to reroll shop items once per floor.",
+    "5 new AFK exclusive enemies — The Accumulator, Void Leech, The Eternal, Soul Collector, The Forgotten God.",
+    "8 new achievements — Arcane Scholar, Lucky Little One, Night Owl, Chimera Slayer, Incorruptible, DJ Descender, Strategic Mind, Spirit Forger."
+   ]
+  },
+  {
+   "num": "v8.5",
+   "date": "My Tracks",
+   "label": "Version 8.5",
+   "changes": [
+    "🎵 My Tracks — save any custom audio to your device using IndexedDB. Files and URLs both saveable. Survives app restarts.",
+    "After loading any custom track the game asks what you want to call it. Name it anything — Leo's Battle Theme, Self Destruct Sequence 123, whatever.",
+    "My Tracks section at the bottom of the Music Player. Tap any saved track to play it. Tap X to delete.",
+    "Help section updated — Custom Track, My Tracks, Pause Menu all documented."
+   ]
+  },
+  {
+   "num": "v8.4",
+   "date": "Pause Menu",
+   "label": "Version 8.4",
+   "changes": [
+    "⏸ Pause Menu — press Backspace on desktop or tap the ⏸ button in the dungeon topbar to pause.",
+    "Pause menu shows your character name, current floor, dungeon and HP.",
+    "Options — Resume, Save, Settings, Quests, Main Menu. All accessible via keyboard and screen reader.",
+    "Cannot pause during combat — JAWS announces why if you try.",
+    "Backspace key added to Key Commands help tab.",
+    "🎵 Custom Track system — load audio from file or URL in Settings → Audio. File upload for testing, URL for permanent saves."
+   ]
+  },
+  {
+   "num": "v8.3",
+   "date": "Spirit Builder",
+   "label": "Version 8.3",
+   "changes": [
+    "🔮 Soul Fragments — every enemy kill has a 40% chance to drop a Soul Fragment. Collect 25 to unlock the Spirit Builder.",
+    "Spirit Builder — new tab in the Bestiary. Name your spirit, choose an icon from 12 options, choose one of 8 abilities. Press Build and your custom spirit is created.",
+    "8 craftable abilities — Soul Mend, Surge Strike, Essence Drain, Spirit Ward, Fortune's Veil, Venom Aura, Final Judgment, Purifying Song.",
+    "Custom spirits appear in your spirit picker for all future runs. They are permanently yours.",
+    "Spirit Forger achievement — build your first custom spirit.",
+    "⌨ Keyboard commands system — full PC keyboard navigation. Alt+H for menu, A to attack, D to defend and more. New Key Commands tab in Help."
+   ]
+  },
+  {
+   "num": "v8.2",
+   "date": "The Chimera",
+   "label": "Version 8.2",
+   "changes": [
+    "🐉 The Chimera — a new multi-part enemy that spawns in any dungeon on floors 5 and above. 17% spawn chance. Lion Head, Goat Body, Serpent Tail each fight independently.",
+    "Goat Body regenerates 8 HP per turn — kill it fast or it keeps healing. Serpent Tail poisons you every turn — kill it first to stop the poison. Lion Head hits hardest.",
+    "🌑 The Corrupted Chimera — exclusive to The Whispering Forest floor 9. Guaranteed to appear your first time reaching floor 9. Three corrupted parts each with unique mechanics.",
+    "New multi-target combat UI — shows all parts with HP bars, select which part to attack each turn, or defend to reduce all incoming damage.",
+    "Chimera worth 200 score points on kill — more than a normal enemy, less than a boss.",
+    "Both Chimeras added to bestiary."
+   ]
+  },
+  {
+   "num": "v8.1",
+   "date": "Night Mode",
+   "label": "Version 8.1",
+   "changes": [
+    "🌙 Night Mode — active every night from 8PM to 8AM automatically based on your device clock.",
+    "+50% gold from all sources during Night Mode. Earn more for playing late.",
+    "Shop prices 25% cheaper during Night Mode. Gold goes further at night.",
+    "Night Mode stacks with all other events. Night + Void Week = massive gold.",
+    "Banner on main menu shows Night Mode is active and hours remaining.",
+    "Banner in dungeon topbar shows Night Mode alongside any active event.",
+    "Night Mode listed in the Events screen with full description."
+   ]
+  },
+  {
+   "num": "v8.0",
+   "date": "The Whispering Forest",
+   "label": "Version 8.0",
+   "changes": [
+    "🌲 New dungeon — The Whispering Forest. A witch was killed by villagers three years ago. Her dying curse consumes everything inside. Unlocks after completing The Hollow.",
+    "Corruption bar — fills passively over time AND when enemies hit you. Reach 100% and die instantly regardless of HP or difficulty.",
+    "Music Box item drops every 3 floors. Manually activate from inventory to clear corruption completely back to zero and play the melody.",
+    "Potions do double duty — restore HP AND reduce corruption by 30%.",
+    "21 new enemies including corrupted versions of enemies from other dungeons.",
+    "Two possible final bosses — Seraphine the Undying or The Corrupter. The game picks one randomly each run. You never know which you will face.",
+    "3 elite enemies — The Thornlord, Seraphine's Shade, The Corrupted Champion.",
+    "New bestiary tab — Forest. All 24 Whispering Forest entries tracked.",
+    "Music player updated — Whispering Forest tracks, Halloween menu theme, Christmas menu theme all added.",
+    "Audio files needed: music-whisper1/2/3.mp3, music-whisper-boss.mp3, music-whisper-battle.mp3, ambient-whisper.mp3, music-halloween.mp3, music-christmas.mp3."
+   ]
+  },
+  {
+   "num": "v7.9",
+   "date": "The Tutorial Update",
+   "label": "Version 7.9",
+   "changes": [
+    "Interactive tutorial — 8 step guided walkthrough for first time players. Shows after character creation on your very first run.",
+    "Training Shade — a tutorial-only enemy. Hits for 1-2 damage. Spawns only during the tutorial's practice fight. Never appears in real dungeons.",
+    "Tutorial checks your progress — if you already have characters, kills, or achievements it skips entirely. Experienced players never see it.",
+    "Progress pips show which step you are on. Skip button always visible. Once skipped or completed it never shows again.",
+    "JAWS reads every tutorial step fully — the whole system is accessible from the start.",
+    "Sanity bar now plays warning sounds at 10% and 5%. Bar pulses at low sanity. Two new audio files needed: sfx-sanity-warning.mp3 and sfx-sanity-critical.mp3."
+   ]
+  },
+  {
+   "num": "v7.8",
+   "date": "Endless Exclusive Enemies",
+   "label": "Version 7.8",
+   "changes": [
+    "🐉 8 new exclusive Endless Descent enemies — only appear in Endless mode, never in normal dungeons.",
+    "The Hydra — attacks 3 times per turn, each hit calculated separately.",
+    "The Minotaur — charges every 3 rounds for a devastating 3x damage strike.",
+    "The Colossus Spider — poisons AND freezes simultaneously.",
+    "The Watcher — does not attack but gets 50% stronger every round. You must go aggressive.",
+    "The Endless Knight — respawns with 50% HP the first time you kill it. JAWS announces the respawn.",
+    "The Void Titan — HP and ATK scale with your current floor. Always dangerous.",
+    "The Dread Hydra — four heads. Four hits per turn. Floor 31+ terror.",
+    "The Labyrinth Guard — cannot be killed in one round. Always survives at least 2 rounds.",
+    "3 new AFK bosses — Hydra King (floor 500), Iron Minotaur (floor 600), The Void Given Form (floor 700+).",
+    "Exclusive enemies spawn 30% of fights at t3 (floor 20+) and 50% at t4 (floor 31+).",
+    "Orange log text and JAWS warning when a special enemy appears."
+   ]
+  },
+  {
+   "num": "v7.7",
+   "date": "Endless Descent + The Time Descender",
+   "label": "Version 7.7",
+   "changes": [
+    "⬇ Endless Descent — full AFK mode. Auto-combat, infinite floors, real XP leveling, HP increases on level up, every 10 floors full heal, skill pick screen at end of run. Level carries into ALL modes. Only dying in a normal dungeon resets it.",
+    "⚔️ Boss floors every 25 floors — 5 named bosses scaling with depth. Kill one for massive points, XP, and a full heal.",
+    "🎭 Class passives in AFK — Warrior, Assassin, Necromancer, Paladin, Druid, Monk, Berserker all play differently.",
+    "🎯 Daily AFK Challenge — shown on setup screen, bonus Descent Points, resets daily.",
+    "🎒 AFK Loot System — 14 items across 4 rarities. Find potions, weapons, armor, and legendary items mid-run.",
+    "⏳ The Time Descender — rare enemy (15% chance, floors 6+, any dungeon). Two phase fight: defeat the Descender then survive The Clock. Phase 2 locks all buttons, music plays, you get hit every 5 seconds for 15 seconds. One precise strike per cycle. First kill drops Chrono Armor — legendary item that skips the clock cycle forever.",
+    "📈 Persistent Level System — level, HP, attack, and skills carry from AFK into dungeons, raids, boss rush, void reaper, and tournament.",
+    "⬆ 9 new AFK achievements — floor milestones, level milestones, points milestones, The Prepared.",
+    "🌍 Full UI translation — 184 keys in pt-BR, es, fr, de.",
+    "📧 Email notifications — Void Reaper awakening, seasonal events, weekly summary. First sign-in prompt.",
+    "🔧 Bug fixes — boss scaling rebalanced, event enemyMult applied to all enemies, BR/Raid skill inheritance, VR freeze, username prompt, profession bonuses."
+   ]
+  },
+  {
+   "num": "v7.6",
+   "date": "Bug Fixes & Polish",
+   "label": "Version 7.6",
+   "changes": [
+    "🐛 Bug fixes and stability improvements.",
+    "⚙️ Performance and accessibility improvements."
+   ]
+  },
+  {
+   "num": "v7.5",
+   "date": "Bug Fixes & Polish",
+   "label": "Version 7.5",
+   "changes": [
+    "🐛 Bug fixes and stability improvements.",
+    "⚙️ Performance and accessibility improvements."
+   ]
+  },
+  {
+   "num": "v7.4",
+   "date": "Language Refinement 3",
+   "label": "Version 7.4",
+   "changes": [
+    "🌍 Raid screen now translates — Daily Raid, Choose Your Champion, Raid Difficulty, Begin Raid all appear in your selected language.",
+    "🌍 Void Reaper screen translates — The Void Reaper, Face The Void Reaper, You Have Fallen, Return.",
+    "🌍 Tournament screen translates — Tournament, Enter Tournament, Try Again.",
+    "🌍 General navigation — Back, Normal, Hard difficulty labels now translate.",
+    "Translation coverage continues to expand each update."
+   ]
+  },
+  {
+   "num": "v7.3",
+   "date": "Skills & Translation",
+   "label": "Version 7.3",
+   "changes": [
+    "⚔️ New class skills — Warlock, Death Knight, Dragonborn and Cleric now have full skill trees (15 skills each, common/rare/legendary tiers).",
+    "🌍 Character creation translation — class/race/profession/dungeon selection steps now translate.",
+    "All 16 classes are now fully playable with unique skills and class traits."
+   ]
+  },
+  {
+   "num": "v7.2",
+   "date": "Language Refinement 2",
+   "label": "Version 7.2",
+   "changes": [
+    "🌍 Main menu buttons now translate — Play, Settings, Bestiary, Quests, all menu navigation appears in your selected language.",
+    "🌍 Combat buttons now translate — Attack, Heavy, Defend, Potion, Flee appear in Portuguese, Spanish, French, German.",
+    "🌍 Character list headers translate — Your Champions, Forge Your Legend.",
+    "Translations are instant — no API call needed for menu text, uses built-in translation table."
+   ]
+  },
+  {
+   "num": "v7.1",
+   "date": "Language Refinement",
+   "label": "Version 7.1",
+   "changes": [
+    "🌍 Combat log now translates — every attack, hit, and miss appears in your selected language.",
+    "🌍 Event panel translates — room events, achievements, and story moments now appear translated.",
+    "🌍 Room names and descriptions now translate — the dungeon speaks your language.",
+    "Translation shows English immediately then updates to translated text — no blank screen while waiting.",
+    "More translation coverage coming in future updates."
+   ]
+  },
+  {
+   "num": "v7.0",
+   "date": "The World Update",
+   "label": "Version 7.0",
+   "changes": [
+    "🌍 Multi-language support — game automatically detects your device language and translates all JAWS announcements and game text. Supports Português, Español, Français, Deutsch, and English.",
+    "Powered by MyMemory translation API. Works over internet connection (which browser games already require).",
+    "Translation cache stored in Firebase — faster loading on return visits. Cache shared across devices when signed in.",
+    "Language selector in Settings → Accessibility. Switch languages anytime.",
+    "Self voice works in your selected language — if you select Português, the browser speaks Portuguese.",
+    "Translations are automatic — no manual text needed. The game stays up to date as new content is added."
+   ]
+  },
+  {
+   "num": "v6.9",
+   "date": "The Class Update",
+   "label": "Version 6.9",
+   "changes": [
+    "🗣 Self Voice — new accessibility toggle. The game speaks out loud using browser speech synthesis. Works on any device without a screen reader. Adjustable speech rate.",
+    "✦ Class Traits — every class now has a unique passive ability that changes how each run plays. Toggle on/off in Accessibility settings.",
+    "Warrior gets stronger every 3 floors. Assassin always crits first hit. Berserker cannot flee but hits harder at low HP. Paladin auto-soothes the Weeping Child. Sorcerer skills cost less SP but lower max HP. Necromancer can raise fallen enemies. And more.",
+    "4 new classes — Warlock (soul drain), Death Knight (undying resolve), Dragonborn (scales with floor depth), Cleric (triple healing potions).",
+    "Total classes now 16."
+   ]
+  },
+  {
+   "num": "v6.8",
+   "date": "The Tournament Update",
+   "label": "Version 6.8",
+   "changes": [
+    "🏆 Tournament — a seasonal competition that runs every 3 months for 7 days. A unique boss appears. Deal as much damage as possible. Your score is recorded to a global Firebase leaderboard.",
+    "Three tournament bosses rotate each season — The Eternal Colossus, The Void Sovereign, The Ancient King.",
+    "Scoring — damage dealt + speed bonus + survival bonus. Defeat the boss for maximum points.",
+    "Win the tournament boss → earn 5 Mystery Coins.",
+    "Global leaderboard — top 10 scores shown in the tournament screen. Requires account sign in to submit score.",
+    "Damage counts even if you die — your best score this season is always saved.",
+    "2 new achievements — Champion, Top of the Board."
+   ]
+  },
+  {
+   "num": "v6.7",
+   "date": "The Account Update",
+   "label": "Version 6.7",
+   "changes": [
+    "☁ Account System (Alpha) — cloud saves via Firebase. Sign in with email or Google. Progress syncs to the cloud automatically every time the game saves.",
+    "Account is not required to play. The game always saves to local storage no matter what.",
+    "Sign in → your cloud save loads automatically. Sign out → local saves continue as normal.",
+    "Sync to Cloud — shows progress, confirms success or failure, JAWS announces the result.",
+    "Delete Account — two tap confirmation. Only removes cloud account. Local saves are never touched.",
+    "Forgot Password — sends reset email. Working.",
+    "Google login — works on hosted URL. Requires https to function.",
+    "Account button in Settings — its own category, clearly marked Alpha."
+   ]
+  },
+  {
+   "num": "v6.6",
+   "date": "The Polish Update",
+   "label": "Version 6.6",
+   "changes": [
+    "🔧 Easter event countdown fixed — after Easter ends it now shows days until next year instead of 0d 0h 0m.",
+    "🔧 All seasonal event timers audited — Halloween, Christmas, Blood Moon, Architect Week all show correct days remaining.",
+    "🔧 Menu event banner now hides when event expires instead of showing 0 hours.",
+    "🔧 Dev tools lockout — wrong password 3 times and the Developer Tools category vanishes from Settings for the rest of the session.",
+    "🔧 Void Reaper banner now refreshes automatically every 60 seconds while on the main menu.",
+    "🔧 Boss phase transition freeze fixed.",
+    "🔧 Sunken Archives boss victory fixed.",
+    "🔧 Void Reaper HP saves after every attack.",
+    "⚖ DDDI compliance audit passed."
+   ]
+  },
+  {
+   "num": "v6.5",
+   "date": "The Medusa Arc",
+   "label": "Version 6.5",
+   "changes": [
+    "🐍 Medusa — rare encounter in The Hollow floors 4+. Same rarity as the Weeping Child. Normal combat with the Gaze mechanic — 35% chance per enemy turn. First gaze: defense -3. Second: lose a turn. Third: instant death.",
+    "When Medusa is defeated — choose to raise or lower the shield. Lower it and she collapses. She was just a girl.",
+    "If you show mercy she joins you as a temporary spirit — Serpent Guard blocks one hit per combat. She fights with you while you search for her father.",
+    "Lord Phorcys — her father. 60% chance per room to appear after she joins you (decays 3% per reunion, floors at 36%, resets every 30 days). Reunion gives +50 gold and the Found achievement.",
+    "If you never found Medusa — Lord Phorcys appears as a strong elite enemy searching the Hollow alone.",
+    "Medusa unlocks as a permanent spirit after first mercy — Serpent Guard ability forever.",
+    "Both added to Bestiary under Hollow Special — Rare section.",
+    "3 new achievements — Lower the Shield, Found, She Still Looks.",
+    "Unique death cinematic lines for dying to Medusa and Lord Phorcys.",
+    "Raid protection — no mercy mechanic in raids, only raise the shield."
+   ]
+  },
+  {
+   "num": "v6.4",
+   "date": "The Void Reaper",
+   "label": "Version 6.4",
+   "changes": [
+    "🌑 The Void Reaper — a world event that builds over 7 days. Progress bar on the main menu. When it hits 100% the Void Reaper awakens and you have 16 hours to defeat him.",
+    "300 HP boss fight. Players get +59% strength bonus. Damage carries over between attempts. Die and retry in 2 hours. Keep chipping away until he falls or the window closes.",
+    "3 phases — The Void Watches, The Void Hungers, The Void Consumes. Each phase increases boss attack.",
+    "Fail to defeat him in 16 hours — all dungeon enemies are 25% stronger for 24 hours as punishment. Then the cycle resets.",
+    "Win — earn 3 Mystery Coins. Cycle resets.",
+    "3 new Mystery Coin Shop items — Void Shield, Cheat Death, Coin Hoarder.",
+    "2 new achievements — Void Slayer, Still Standing.",
+    "Add audio/music-void-reaper.mp3 to your audio folder for boss music."
+   ]
+  },
+  {
+   "num": "v6.3",
+   "date": "The Boss Update",
+   "label": "Version 6.3",
+   "changes": [
+    "⏱ Boss Timer — when a boss spawns a countdown starts. 5 minutes for most dungeons, 3 minutes for The Hollow, reduced by 1 minute in Insane Mode. Get the boss below 50% HP before time runs out or face the enrage.",
+    "⚠ Boss Enrage — when the timer hits zero the boss gains +25% attack and a dungeon-specific minion joins the fight. Crypt spawns a Crypt Stalker. Hollow spawns a Hollow Shade. Etc.",
+    "❓ Boss Riddle — 22% chance to trigger once per boss fight. The boss pauses combat and asks you a riddle. 30 seconds to answer. 3 choices. Right answer = +59 HP. Wrong answer = boss +25% stronger. Timer runs out = wrong answer.",
+    "JAWS announces timer warnings at 1 minute, 30 seconds, and 10 seconds remaining.",
+    "4 new achievements — The Riddled, Wrong Answer, Beat The Clock, Took Too Long."
+   ]
+  },
+  {
+   "num": "v6.2",
+   "date": "DDDI Compliance Audit",
+   "label": "Version 6.2",
+   "changes": [
+    "⚖️ DDDI mandatory compliance audit — 42 of 43 checks passing. The one failure was an audit window bug not a real bug. The Department is satisfied. Begrudgingly.",
+    "Sanity bar now correctly injected into dungeon HTML. Was present in CSS only — now shows visually and announces to JAWS.",
+    "67 Easter egg confirmed working. Achievement unlocks. JAWS says 67. The DDDI has no record of this.",
+    "Julio absence noted for the 48th time in the official record."
+   ]
+  },
+  {
+   "num": "v6.1.2",
+   "date": "Music Player Fixed",
+   "label": "Version 6.1.2",
+   "changes": [
+    "🎵 Music Player now correctly appears as the 4th tab in The Chronicles — Lore, Library, Journal, Music.",
+    "Bug fixed — Music tab and panel were not being injected into the HTML correctly across two previous attempts. Fixed by direct line insertion.",
+    "Music Box track switch confirmed working in code — plays music-box-melody.mp3 during the melody turn and resumes battle music after 3 ticks. Requires audio file to be present."
+   ]
+  },
+  {
+   "num": "v6.1.1",
+   "date": "Music Player + Fixes",
+   "label": "Version 6.1.1",
+   "changes": [
+    "🎵 Music Player now correctly appears as a tab inside The Chronicles screen. Browse all 29 tracks grouped by dungeon. Select any track and press Play.",
+    "Bug fixed — Music Player tab was targeting the wrong screen ID. Now correctly wired into Chronicles.",
+    "Insane Mode difficulty card confirmed working — sanity bar, The Distorted, The Sanity Drainer all active."
+   ]
+  },
+  {
+   "num": "v6.1",
+   "date": "Insane Mode",
+   "label": "Version 6.1",
+   "changes": [
+    "🔴 Insane Mode — new difficulty. A sanity bar drains as you descend. Take heavy damage, encounter certain enemies, go too deep — sanity drops. At zero the dungeon absorbs you. Not death. Just gone.",
+    "The Sanity Drainer — unique Insane Mode enemy. Drains sanity on every hit. Drops the Insanity Potion on defeat.",
+    "The Distorted — psychological enemy. No HP damage. Fires rapid JAWS messages while attacking your sanity silently. Every time it acts you hear: Someone is watching you. Be careful. Run. You cannot escape.",
+    "Insanity Potion — random effect. 50% chance of full sanity restore. 50% chance of massive drain. You never know which until you drink it.",
+    "UI corruption at 25% and 10% sanity — screen glitches, log entries corrupt, red flashes.",
+    "Julio restores 15 sanity in Insane Mode. He does not know he does this.",
+    "🎵 Music Player added to Library — browse and play every track in the game. 29 tracks across all dungeons."
+   ]
+  },
+  {
+   "num": "v6.0",
+   "date": "The Big One",
+   "label": "Version 6.0",
+   "changes": [
+    "📖 Two new Library stories — The First Descent (origin of the dungeons) and How It Actually Started (the real story of how this game was built).",
+    "🏷️ Julio Questline — collect 5 fragments across encounters with Julio. Collect them all to unlock his Library story written in his own words. Achievement: Found Him.",
+    "📜 Character Backstory System — new optional Step 7 in character creation. 8 backstories each with a unique bonus and a first journal entry written automatically.",
+    "👑 Hall of Legends — new tab in Hall of Records. Tracks your best moments forever. Most kills, most gold, highest damage hit, deepest floor, and first completion of each dungeon — saved even if the character is deleted.",
+    "⚡ Raid Tiers — raids now have 3 tiers. Complete 3 raids to unlock Veteran tier (2 mystery coins). Complete 5 to unlock Nightmare tier (3 mystery coins).",
+    "Three new achievements — Origin Seeker, The Real Story, Found Him.",
+    "all-stories achievement now requires 19 stories (including Julio story once unlocked)."
+   ]
+  },
+  {
+   "num": "v5.9",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 5.9",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter. Department summoned. Department displeased. Department appeased.",
+    "Bug fixed — Hollow elite enemies (The Hollow Patriarch, The Séance Master, The Hollow Architect) were defined but not connected to the ELITE_ENEMIES spawn pool. Now they spawn on floors 4 and above.",
+    "Bug fixed — Hollow weather was rolling but not wired into initDungeon. Now rolls every time you enter The Hollow.",
+    "All other checks confirmed passing — shadowForm, thorns, maxLevel tracking, saveChars on completion, all present and correct.",
+    "The DDDI notes that 4 consecutive versions without an audit is unprecedented. The developer has received a formal warning. The warning is three pages long. Julio did not sign it."
+   ]
+  },
+  {
+   "num": "v5.8",
+   "date": "The Death Cinematic",
+   "label": "Version 5.8",
+   "changes": [
+    "💀 Death cinematic — when you die, a unique line plays before the defeat screen. Written specifically for your dungeon, your floor, and what killed you.",
+    "The Weeping Child, Music Box, and Oldest Guest each have their own death lines in The Hollow.",
+    "Boss kills get special lines — Malachar, The Eternal Pyre, The Last Resident all say something different.",
+    "Floor range matters — dying on floor 2 reads differently than dying on floor 8.",
+    "JAWS reads the death line dramatically before the defeat screen appears. 5 second hold so it can be heard fully.",
+    "Death now routes to the run summary screen instead of the basic defeat panel."
+   ]
+  },
+  {
+   "num": "v5.7",
+   "date": "Weather and New Professions",
+   "label": "Version 5.7",
+   "changes": [
+    "🌑 Hollow Weather System — every run in The Hollow now rolls one of 5 weather conditions. Foggy Night (+15% combat chance), Full Moon (+20% enemy strength, +50% gold), Silent Night (double Weeping Child spawns), The Witching Hour (+25% player damage), Still and Cold (nothing unusual — the house is just waiting).",
+    "Weather shown in dungeon topbar and announced by JAWS when you enter.",
+    "5 new professions — Pilgrim (+15% XP, holy relic), Grave Robber (start with 50g, +20% gold drops), Street Rat (free Smoke Bomb, +20% flee), Warden (+3 defense, debuff immunity), Tinkerer (2 free potions, -2 SP per skill).",
+    "Bug fixed — completing a dungeon now immediately saves to localStorage. The completed flag was being set in memory but lost on page refresh.",
+    "Bug fixed — version display in main menu footer now shows correctly.",
+    "Bug fixed — level achievements now fire correctly on level up.",
+    "Bug fixed — run timer now starts correctly when entering a dungeon."
+   ]
+  },
+  {
+   "num": "v5.6",
+   "date": "The Run Summary",
+   "label": "Version 5.6",
+   "changes": [
+    "New run summary screen after every dungeon clear — kills, floor, level, gold, time, spirit, skills, score and rank.",
+    "60 unique closing lines — one for every class and dungeon combination. Handwritten.",
+    "Run timer tracks how long each run takes.",
+    "Hollow elites added — The Hollow Patriarch, The Séance Master, The Hollow Architect.",
+    "All Hollow enemy kills now register in the bestiary.",
+    "Event XP bonuses now apply correctly."
+   ]
+  },
+  {
+   "num": "v5.5.2",
+   "date": "Events and Challenges Audit",
+   "label": "Version 5.5.2",
+   "changes": [
+    "Fixed — Hollow enemies now register kills in the bestiary. All 21 Hollow enemies added to the kill tracking map.",
+    "Fixed — Event XP bonuses (XP Weekend 2x, Easter 1.5x, Architect Week 1.2x etc) were defined but never applied. Now wired into gainXP.",
+    "Fixed — Glass Cannon daily challenge double damage was never applied in combat. Now doubles player attack in both normal attacks and skill attacks.",
+    "Fixed — Nightmare Day daily challenge never injected nightmare enemies. Now has 30% chance per room to spawn a nightmare enemy.",
+    "Fixed — Speed Run daily challenge 25% harder enemies never applied to enemy attack stats. Now wired.",
+    "Fixed — Blood Moon event attack boost was defined but never applied in player attack calculations. Now wired in doFight and useSkill.",
+    "Nightmare mode confirmed working — uses full NIGHTMARE_ENEMIES pool correctly.",
+    "Iron Day, Horde Day, Blessed, Cursed Day all confirmed working correctly."
+   ]
+  },
+  {
+   "num": "v5.5.1",
+   "date": "The Skill Audit",
+   "label": "Version 5.5.1",
+   "changes": [
+    "⚔ Full skill audit — 7 skill flags were being set but never actually applied in combat.",
+    "Fixed — Shadow Form now makes enemy attacks pass through you completely for the duration.",
+    "Fixed — Holy Light now actually halves enemy attack for 2 turns after being set.",
+    "Fixed — Thorns now reflects 30% of incoming damage back to the enemy every hit.",
+    "Fixed — Warlord now heals 10 HP and 3 SP on every kill during combat.",
+    "Fixed — Zen Strike now boosts attack power by 50% per charge instead of doing nothing.",
+    "Fixed — Archangel stat boost now properly expires after its duration ends.",
+    "Fixed — Lethal Tempo bonus now correctly applies to attack damage.",
+    "Aura of Faith, Wild Growth regen now fire correctly each enemy turn.",
+    "The DDDI notes that 7 broken skills in one audit is unprecedented. The developer has been notified."
+   ]
+  },
+  {
+   "num": "v5.5",
+   "date": "The Easter Update",
+   "label": "Version 5.5",
+   "changes": [
+    "🐰 Easter Event — active April 5-7. The Easter Bunny appears in rooms. Fight it, adopt it as a spirit companion, or let it go for gold.",
+    "Easter Bunny spirit — onKill 20% chance to find an Easter Egg that restores 10 HP. Permanently unlocked once adopted.",
+    "5 new races — Vampire (drain HP on kill), Goblin (25% more gold), Angel (extra life, heal on level up), Demon (15% more damage dealt and taken), Golem (+5 defense, immune to poison and freeze).",
+    "Event banner in dungeon now shows hours remaining until event ends.",
+    "Easter Bunny added to bestiary."
+   ]
+  },
+  {
+   "num": "v5.4",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 5.4",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter.",
+    "43 of 43 checks passing. Perfect score. The Department is satisfied.",
+    "No bugs found. No missing functions. No duplicates. No alert() calls. No Portuguese.",
+    "The characters were not broken during this audit. This is noted as an improvement.",
+    "722KB. 11602 lines. 45 achievements. 22 spirits. 125 bestiary entries. 21 daily quests.",
+    "The Wall Crawler is canon. Something in the Walls lives on in our hearts.",
+    "Julio was not present. The Department has accepted this as a permanent condition."
+   ]
+  },
+  {
+   "num": "v5.3",
+   "date": "The Hollow Deepens",
+   "label": "Version 5.3",
+   "changes": [
+    "Variable room count per floor — floors 1-3 have 5-8 rooms, floors 4-6 have 7-11, floors 7-9 have 9-15. Every run feels different.",
+    "Music Box now drops a key item when defeated. Carry it and use it on the Weeping Child for a 75% soothe chance. The melody plays during the attempt.",
+    "Weeping Child now has 3 options when you have the Music Box item: Pick Up (50%), Hum (55%), or Play Music Box (75%, consumes item).",
+    "Enemy renames — What Is Behind the Door is now The Door Warden. Something in the Walls is now The Wall Crawler. Bestiary updated.",
+    "Defeat screen now has 3 clear options — Try Again, New Character, Return to Menu."
+   ]
+  },
+  {
+   "num": "v5.2",
+   "date": "The Cleanup",
+   "label": "Version 5.2",
+   "changes": [
+    "Bug fixed — character stats screen was crashing because statBox function was never defined. Now works correctly from both the dungeon and the character list.",
+    "Bug fixed — export picker was calling showExportPicker which was not defined. Now works.",
+    "Bug fixed — quest popup and spirit picker showing every run. Now skips on repeat visits.",
+    "Floor announcements now say Floor X of 10 plus dungeon name every room.",
+    "What is New popup shows once per version on first load.",
+    "Dev tools added to Settings — unlock all dungeons or reset unlocks for testing.",
+    "⚖ Full DDDI compliance audit conducted. Department satisfied."
+   ]
+  },
+  {
+   "num": "v5.1",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 10.5",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter.",
+    "Bug fixed — repair dungeon unlocks button was using alert() which is banned. Now uses say() for screen reader compatibility.",
+    "Bug fixed — achievement score was calling showAchievementToast which does not exist. Now correctly calls showAchievementPopup and awards 250 points per achievement.",
+    "41 of 43 checks passing before fixes. 43 of 43 after. Perfect score.",
+    "701KB. 11157 lines. 45 achievements. 22 spirits. 125 bestiary entries. 21 daily quests. 8 score ranks.",
+    "The DDDI notes that v5.0 was the largest single version in Dungeon Descent history. The Department is grudgingly impressed.",
+    "Julio was not present at the audit. The Department has stopped noting his absence. His absence is now assumed."
+   ]
+  },
+  {
+   "num": "v5.0",
+   "date": "The Score Update",
+   "label": "Version 5.0",
+   "changes": [
+    "High Score system — lifetime points for everything you do. Kills, boss kills, elite kills, dungeon clears, achievements, daily quests, gold collected, boss rush clears.",
+    "8 score ranks from Initiate to DDDI Certified. Shown on the High Score screen in the main menu.",
+    "Achievement unlock popup — when you earn an achievement a notification slides in with the icon and description. JAWS announces it dramatically.",
+    "Boss Rush leaderboard — your top 5 runs saved locally. Shows bosses defeated, time taken, and class used.",
+    "Character import/export — export any character as a code, paste it on another device to import. Export button on every character card. Import button at the top of the character list.",
+    "Score breakdown by category on the High Score screen — see exactly where your points came from."
+   ]
+  },
+  {
+   "num": "v4.9",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 4.9",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter.",
+    "Bug fixed — Sunken Archives and Hollow audio tracks were registered in v4.8 but a build error meant they did not persist. Now confirmed present.",
+    "Bug fixed — skip to main content button used inline JS methods that failed the onclick audit. Now uses named function skipToMain().",
+    "All audio systems confirmed: 12 new track files registered, exploTrackForFloor wired, battleTrack wired, ambient keys wired.",
+    "40 of 40 compliance checks passing. The DDDI is satisfied.",
+    "The Department notes that audio bugs are particularly egregious for an accessibility-first game. The developer has been notified. Again.",
+    "Julio was not present. We have stopped filing reports. We simply note his absence and move on."
+   ]
+  },
+  {
+   "num": "v4.8",
+   "date": "The Polish Update",
+   "label": "Version 4.8",
+   "changes": [
+    "Audio overhaul — Sunken Archives and The Hollow now have full music suites wired",
+    "Drop files named music-sunken1/2/3.mp3, music-sunken-boss.mp3, music-sunken-battle.mp3, ambient-sunken.mp3 in your audio folder",
+    "Drop files named music-hollow1/2/3.mp3, music-hollow-boss.mp3, music-hollow-battle.mp3, ambient-hollow.mp3 in your audio folder",
+    "Dungeon intro sequence — atmospheric text on first visit to each dungeon. The Hollow: the house knows you are here.",
+    "Bestiary filter tabs — filter enemies by dungeon: All, Crypt, Ashbound, Frosthold, Archives, Hollow, Nightmare, Elite"
+   ]
+  },
+  {
+   "num": "v4.7",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 4.7",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter.",
+    "Bug fixed — loading screen HTML was missing from the document. Now correctly present.",
+    "4 new weekly events added — XP Weekend every Saturday and Sunday, Void Week every Monday, Blood Moon days 1-7 of each month, Architect Week days 8-14.",
+    "XP Weekend: 2x XP. Void Week: double gold, enemies 20% more HP. Blood Moon: +25% damage dealt and taken. Architect Week: Julio spawns 3x more often.",
+    "The Department notes that Architect Week was not their idea. The Department is nonetheless represented accurately.",
+    "31 of 32 checks passing before fix. 32 of 32 after. The DDDI is satisfied.",
+    "Julio has been seen three times more often this week. He has not explained this either."
+   ]
+  },
+  {
+   "num": "v4.6",
+   "date": "Seasons Change",
+   "label": "Version 4.6",
+   "changes": [
+    "Loading screen — DDDI certified, fades after 1.5 seconds, announces to JAWS, safe non-blocking approach",
+    "Manual save button — save anytime from the dungeon action bar, blocked during combat",
+    "The Hollow lore added to Chronicles — the history of the house, the child, the mother",
+    "Halloween event — active every October and Nov 1-2. 12 exclusive enemies, 25% bonus XP, 30% stronger enemies",
+    "Christmas event — active all December. 6 exclusive enemies including Krampus, 15% bonus XP",
+    "Events screen in main menu — see active events, days remaining, upcoming events",
+    "Seasonal event banner in dungeon topbar when an event is active",
+    "Critical bug fixed — spirit choice was not being saved between sessions. Now persists to character permanently.",
+    "Critical bug fixed — playChar was using old simple version that reset everything on load. Full mid-run save and NG+ now work correctly."
+   ]
+  },
+  {
+   "num": "v4.5",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 4.5",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter.",
+    "Bug fixed — stats screen was crashing due to missing brace in death log if statement.",
+    "Bug fixed — completing Ashbound Wastes was not unlocking Frosthold or later dungeons. Now uses DS.dungeon for accurate unlock detection.",
+    "Bug fixed — stats screen showed Crypt of Malachar for Sunken Archives and Hollow runs. All 5 dungeons now display correctly.",
+    "34 of 35 compliance checks passing. One check had an incorrect search window in the audit script — the fix was confirmed present by manual inspection.",
+    "654KB. 10324 lines. 22 spirits. 125 bestiary entries. 35 achievements. 21 daily quests.",
+    "The DDDI notes that three bugs found in one sweep is significant. The developer has been notified twice now.",
+    "Julio remains at large. The Department has accepted this."
+   ]
+  },
+  {
+   "num": "v4.4",
+   "date": "The Content Drop",
+   "label": "Version 4.4",
+   "changes": [
+    "21 daily quests — expanded from 7, includes boss kills, elite kills, Hollow floors, lore fragments, rare spirit runs and more",
+    "10 new achievements — One Thousand kills, Haunted (50 Hollow Shades), Floor 9, Untouched, The Merchant, Family (soothe child AND reunite mother), and more",
+    "3 new spirits — Grave Hound (Hollow rare), The Lantern (starter, detects traps + gold), Void Moth (Nightmare rare, 15% damage negation)",
+    "11 new bestiary milestones for Sunken Archives, Hollow and Nightmare enemies",
+    "Game over screen overhaul — all 5 dungeons have unique death subtitles, shows best hit, spirit and skills unlocked",
+    "Julio third encounter — he acknowledges you keep finding him. Unique dialogue. Better rewards.",
+    "Enemy status effects on player — Haunted applied by Hollow enemies, reduces your attack for 2 turns"
+   ]
+  },
+  {
+   "num": "v4.3",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 4.3",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter.",
+    "Bug fixed — 17 new achievements from v3.8 through v4.2 were defined but never added to the achievements array. All 36 achievements now correctly tracked and displayed.",
+    "Bug fixed — daily quest was rotating randomly, could show same quest multiple days in a row. Now uses deterministic day-of-year rotation — every player gets the same quest on the same day, cycling through all 7 with no repeats.",
+    "The DDDI notes that finding 17 missing achievements in one sweep is a new record for a single violation category.",
+    "The DDDI is not pleased. The developer has been notified.",
+    "29 of 29 checks passing after fixes. Dungeon operations approved to continue.",
+    "Julio remains missing. The Department has run out of things to say about this."
+   ]
+  },
+  {
+   "num": "v4.2",
+   "date": "The Hollow Expands",
+   "label": "Version 4.2",
+   "changes": [
+    "The Weeping Mother — new special encounter in The Hollow, floors 5 and above",
+    "If you soothed the Weeping Child earlier this run: lead her to the child, trigger reunion, earn Rest Now achievement",
+    "If you never found the child: do a chore and take HP damage, or fight her at 80 HP",
+    "The reunion ending is the most emotional moment in the game. We stand by this.",
+    "The Music Box — new t2 enemy with unique mechanic. Melody plays after each player attack, 3 damage ticks, then your turn returns",
+    "The Twin — mirrors your class, HP and approximate attack. Unique emerge message.",
+    "The Uninvited Guest — was not in the room. Is in the room now. No further explanation.",
+    "3 new achievements — Rest Now, Mirror Broken, The Last Note",
+    "4 new Hollow bestiary entries"
+   ]
+  },
+  {
+   "num": "v4.1",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 4.1",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter Article I Section 1.1.",
+    "35 of 36 compliance checks passing. One check had an incorrect window size in the audit script — the spirit attack announce IS working correctly. The DDDI acknowledges this was an audit error, not a game error.",
+    "The DDDI does not enjoy acknowledging its own errors. This entry will not be repeated.",
+    "Zero bugs found. Zero duplicates. Zero missing onclick functions.",
+    "All 5 dungeons confirmed present. The Hollow is certified.",
+    "The Weeping Child is in the game. The raid exploit is blocked. We are not cooked.",
+    "Dungeon operations approved to continue. Next audit due in two versions.",
+    "Julio remains missing. The investigation found nothing. We expected nothing. We are at peace."
+   ]
+  },
+  {
+   "num": "v4.0",
+   "date": "The Hollow",
+   "label": "Version 4.0",
+   "changes": [
+    "The Hollow — 5th dungeon, horror theme, 16 enemies, 3 bosses, unlocks after Sunken Archives",
+    "The Weeping Child — unique encounter with soothe mechanic. Pick it up or hum a lullaby. 60-65% success. Failure triggers combat.",
+    "Weeping Child in raid mode skips soothe and goes straight to combat — no exploits",
+    "Two new DDDI Library stories — the Department file on the developer, and Ruling 7-A on fake accessibility",
+    "Achievements overhaul — progress bar, percentage complete, total count header",
+    "3 new achievements — The Hollow, Lullaby, All Floors",
+    "NG+ badge shown on character cards, NG+ exclusive Veteran Elixir in shop",
+    "4 new accessibility settings — high contrast, large text, reduce announcements",
+    "17 new Hollow bestiary entries",
+    "The Department has a file on the developer. The developer is reading it right now. Hello."
+   ]
+  },
+  {
+   "num": "v3.9",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 3.9",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter.",
+    "Bug fixed — spirit attacks were silent to JAWS. Ember Fox, Bone Hound, Thunder Moth and all spirits now announce their attacks properly.",
+    "Bug fixed — spirit combat start effects now announce to JAWS.",
+    "Bug fixed — spirit on-kill effects now announce to JAWS.",
+    "Bug fixed — focus was landing nowhere after combat ended. Now moves to nav buttons automatically.",
+    "Poison tick now announces damage and turns remaining to JAWS.",
+    "New sayLog() function for important combat events that need both visual and audio output.",
+    "The DDDI notes that accessibility bugs are treated as critical violations. These have been remediated.",
+    "Julio remains missing. We have made peace with this."
+   ]
+  },
+  {
+   "num": "v3.8",
+   "date": "The Library Expands",
+   "label": "Version 3.8",
+   "changes": [
+    "8 new Library stories — The Soldier Who Came Back, Merchant Second Route, Cartography of the Deep, The Last Nightmare, Dear Malachar, The Archivist First Day, What the Fire Remembers, and the DDDI Field Report on Julio",
+    "The DDDI Field Report is heavily redacted. The last line reads: He knows you read this.",
+    "11 new achievements — Sunken completion, DDDI boss defeated, Julio found, elite kills, spirits earned, NG+ runs, lore reader",
+    "Accessibility — skip to main content link for keyboard users",
+    "Accessibility — focus moves to nav buttons after combat ends, no more dead focus zones",
+    "Accessibility — skill buttons announce current SP and exact shortfall",
+    "Accessibility — daily quest indicator has proper aria-label",
+    "Death log now shows level, kills, gold, best hit, spirit, and dungeon flavor text per death",
+    "Dungeon-specific death flavor — each dungeon has its own epitaph"
+   ]
+  },
+  {
+   "num": "v3.7",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 3.7",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter Article I Section 1.1.",
+    "47 of 47 compliance checks passing. A new record. The Department is aware.",
+    "Zero bugs found. Zero duplicates. Zero violations of any kind.",
+    "The Department acknowledges that 47 checks covering 577KB and 9237 lines is significant.",
+    "The Department does not say well done. The Department says compliant.",
+    "Dungeon operations approved to continue. Next audit due in two versions.",
+    "Julio remains missing. The investigation has yielded no results. The Department is not surprised. We are all not surprised. We have made peace with Julio."
+   ]
+  },
+  {
+   "num": "v3.6",
+   "date": "Bestiary Complete",
+   "label": "Version 3.6",
+   "changes": [
+    "33 new bestiary entries — Sunken Archives, new Nightmare, and elite enemies",
+    "Total bestiary: 104 entries across all dungeons",
+    "Sunken Archives enemies glow blue when locked, elite enemies show gold star badge",
+    "Every enemy in the game is now trackable in the bestiary",
+    "Nightmare bestiary merged into main BESTIARY_DATA — cleaner code"
+   ]
+  },
+  {
+   "num": "v3.5",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 3.5",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter. All 37 checks passing.",
+    "Zero bugs found. Zero duplicates. Zero alert calls. Zero confirm calls.",
+    "The Department notes it does not give awards for passing. Passing is the minimum.",
+    "Julio was not present. A missing persons report has been filed. The Department expects to find nothing."
+   ]
+  },
+  {
+   "num": "v3.4",
+   "date": "Market & Lore",
+   "label": "Version 3.4",
+   "changes": [
+    "Sunken Archives lore added to Chronicles — the full history of why it drowned",
+    "Market Sprite — new starter spirit giving 20% shop discount all run",
+    "Market Sprite costs 50 gold to reactivate each new run — unique mechanic",
+    "Daily Quest indicator — live progress bar visible in the dungeon at all times",
+    "Quest progress announced to JAWS whenever it updates",
+    "NG+ Overhaul — tracks run count, each NG+ gets 5% harder, unique messages per level",
+    "NG+3 message: You should not still be alive. The dungeon is impressed and furious."
+   ]
+  },
+  {
+   "num": "v3.3",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 3.3",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted per DDDI charter Article I Section 1.1.",
+    "39 of 39 compliance checks passing.",
+    "Bug fixed — elite enemy spawn code was defined but not wired into combat. Now fixed.",
+    "Elite enemies now correctly spawn at 12% chance on floors 4 and above.",
+    "Elite emerge message now announces the elite ability to JAWS immediately.",
+    "The DDDI notes that finding and fixing bugs is exactly what compliance audits are for.",
+    "The DDDI is satisfied. Dungeon operations approved to continue.",
+    "Julio was not present. His absence has been noted. It is always noted. We have stopped being surprised."
+   ]
+  },
+  {
+   "num": "v3.2",
+   "date": "Elite Encounters",
+   "label": "Version 3.2",
+   "changes": [
+    "Elite Enemies — rare powerful spawns on floors 4+, 12% chance, big gold rewards",
+    "15 unique elite enemies across all 5 dungeons each with a special ability",
+    "Elite Spirits — 5 new spirits earned by defeating elite enemies, 30% drop chance",
+    "Spirit Bestiary — new Spirits tab in the Bestiary shows your full spirit collection",
+    "Boss Fight Preview — 3.5 second dramatic reveal before every floor 10 boss",
+    "Death Log Overhaul — now records level, kills, gold, best damage, spirit, skills unlocked",
+    "6 new Nightmare enemies added across tiers 1 and 2"
+   ]
+  },
+  {
+   "num": "v3.1",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 3.1",
+   "changes": [
+    "⚖ Mandatory compliance audit conducted on schedule. The DDDI is satisfied.",
+    "46 of 46 compliance checks passing. A new record. The Department has noted this.",
+    "Zero bugs found. Zero duplicate functions. Zero alert() calls. Zero confirm() calls.",
+    "Portuguese completely gone — confirmed. The DDDI approves of this decision.",
+    "All 4 dungeon cards confirmed present. Technoblade would approve.",
+    "The Department acknowledges that naming a character Technoblade was the correct choice.",
+    "Dungeon operations approved to continue. Next audit due in two versions.",
+    "Julio was again not present. His absence continues to be noted. It is always noted."
+   ]
+  },
+  {
+   "num": "v3.0",
+   "date": "The Definitive Update",
+   "label": "Version 3.0",
+   "changes": [
+    "The Sunken Archives — 4th dungeon, a drowned library with 17 enemies and 3 unique bosses",
+    "Lore Fragment mechanic — search rooms in the Archives to find readable waterlogged documents",
+    "8 unique lore fragments that piece together what happened to the Archives",
+    "Credits screen — accessible from the main menu, DDDI certified",
+    "Portuguese language system completely removed — cleaner, faster, less to break",
+    "Settings now has Audio and Accessibility only",
+    "Sunken Archives awards the Crystal Serpent rare spirit on completion",
+    "Julio confirmed present in the credits in spirit if not in person"
+   ]
+  },
+  {
+   "num": "v2.9",
+   "date": "The Department Arrives",
+   "label": "Version 2.9",
+   "changes": [
+    "DDDI Secret Boss — 2% chance the Grand Overseer replaces the floor 10 boss",
+    "Three phase boss fight. Gavel the size of a door. 47-page compliance document. 280 HP.",
+    "Defeat the DDDI: +gold, +10 max HP, +10 max SP, suspension reduced to 358,999,999 years",
+    "Special victory screen with official DDDI non-acknowledgment of their own defeat",
+    "Julio random dungeon event — 3% chance to find him sitting in a corner on any floor",
+    "Talk to Julio, offer gold, or leave quietly. All outcomes are unpredictable. He is Julio.",
+    "Julio has been confirmed canon in three separate updates now. He has still not explained himself."
+   ]
+  },
+  {
+   "num": "v2.8",
+   "date": "DDDI Mandatory Compliance Audit",
+   "label": "Version 2.8",
+   "changes": [
+    "⚖ This update was mandated by the Department of Dungeon Descent Incorporated.",
+    "36 of 36 compliance checks passing. A new record.",
+    "Zero bugs found. The DDDI is cautiously satisfied.",
+    "Zero duplicate functions. Zero alert() calls. Zero confirm() calls.",
+    "The DDDI acknowledges this is an unusually clean codebase. The DDDI does not care. Compliance is still mandatory.",
+    "Dungeon operations approved to continue. Next audit due in two versions.",
+    "Julio was not present for this audit. His absence has been noted in the official record."
+   ]
+  },
+  {
+   "num": "v2.7",
+   "date": "The Big One",
+   "label": "Version 2.7",
+   "changes": [
+    "Enemy status effects display — see poison, freeze, mark, curse actively during combat",
+    "6 new spirits — Stone Turtle, Thunder Moth, Crystal Serpent, Ash Phoenix, Shadow Stalker + more",
+    "New potion types — SP Tonic, Greater Potion, Iron Flask, Berserker Draught, Cursed Vial",
+    "Class-specific shop items — the merchant stocks items based on your class",
+    "New Library story: Before the Eye Opened — the Void Wraith origin",
+    "New Library story: The Founding Charter of the DDDI — binding legal document, non-negotiable",
+    "Julio confirmed canon. Signature illegible. Timestamp reads 3AM."
+   ]
+  },
+  {
+   "num": "v2.6",
+   "date": "Mandatory Compliance Audit",
+   "label": "Version 2.6",
+   "changes": [
+    "⚖ This update was mandated by the Department of Dungeon Descent Incorporated.",
+    "The DDDI requires a full compliance audit every two versions. No exceptions.",
+    "Failure to comply results in a 359,000,000 year suspension of dungeon access.",
+    "During suspension, the developer may observe the game but may not touch it.",
+    "Bug fixed — closeStatsOverlay was called but never defined. Stats screen now closes correctly.",
+    "25 of 25 compliance checks passing. The DDDI has approved continued dungeon operations."
+   ]
+  },
+  {
+   "num": "v2.5",
+   "date": "Skill Book + Enemy Preview + Run Log",
+   "label": "Version 2.5",
+   "changes": [
+    "Skill Book — view all unlocked skills with descriptions and reorder them for combat",
+    "Move Up and Move Down buttons — JAWS and VoiceOver friendly reordering",
+    "Enemy Preview — brief enemy info announced before combat buttons activate",
+    "Run Log — full scrollable history of everything that happened this run",
+    "Run Log tracks kills, level ups, floor descents, skill unlocks, items, death",
+    "Run Log saved with mid-run save — survives phone interruptions"
+   ]
+  },
+  {
+   "num": "v2.4",
+   "date": "Save System + Quick Retry",
+   "label": "Version 2.4",
+   "changes": [
+    "Mid-run save system — full game state saved on every room entry",
+    "Resume run on character select — pick up exactly where you left off",
+    "Phone-safe — browser refresh or background kills no longer lose your run",
+    "Character cards show Resume indicator with floor number",
+    "Same Class button on end screen — skip creation and retry instantly",
+    "Quick retry goes straight to spirit picker then first room"
+   ]
+  },
+  {
+   "num": "v2.3",
+   "date": "Spirit Companions",
+   "label": "Version 2.3",
+   "changes": [
+    "Spirit Companion system — choose a spirit before every run",
+    "4 starter spirits — Ember Fox, Bone Hound, Frost Sprite, Shadow Crow",
+    "4 rare spirits earned by completing dungeons — saved to character forever",
+    "Rare spirits require level 5 to activate",
+    "Void Wraith unlocked by completing Nightmare Mode",
+    "Bug fix — SP max now increases by 5 every level up",
+    "Bug fix — Stats screen fully restored"
+   ]
+  },
+  {
+   "num": "v2.2",
+   "date": "Bug Sweep",
+   "label": "Version 2.2",
+   "changes": [
+    "DS init now includes all status flags for new skill effects",
+    "getRaidUnlockedSkills and getBRSkills updated to use new tier system",
+    "NG+ flag now correctly persists through initDungeon",
+    "Unlimited Power skill now correctly reduces SP cost to zero",
+    "16 of 16 system checks passing",
+    "180 skills confirmed across all 12 classes"
+   ]
+  },
+  {
+   "num": "v2.1",
+   "date": "The Class Expansion",
+   "label": "Version 2.1",
+   "changes": [
+    "6 new classes — Necromancer, Berserker, Bard, Alchemist, Blood Knight, Druid",
+    "15 skills per class — 180 total skills across all 12 classes",
+    "Random skill unlock system — choose 1 of 3 options every level up",
+    "Skill tiers — Common, Rare, Legendary with level-gated availability",
+    "Every class has unique legendary skills that change how the game plays",
+    "Each new class has unique mechanics — Berserker rages at low HP, Blood Knight sacrifices HP, Necromancer raises the dead"
+   ]
+  },
+  {
+   "num": "v2.0",
+   "date": "Major Release",
+   "label": "Version 2.0",
+   "changes": [
+    "Portuguese (Brazilian) language support — switch in Settings",
+    "Settings completely redesigned — Audio, Language, Accessibility categories",
+    "Full UI translation — menus, combat, dungeon navigation, screen titles",
+    "Language persists across sessions — your choice is remembered",
+    "Stories and lore remain in English — full translation coming in future update"
+   ]
+  },
+  {
+   "num": "v1.9",
+   "date": "",
+   "label": "Version 1.9",
+   "changes": [
+    "Tutorial System — 6 step interactive guide for new players, replayable from Settings",
+    "First run detection — tutorial opens automatically on your very first visit",
+    "Game Over Screen Overhaul — dungeon-specific death messages, random quotes, journal preview",
+    "Victory Screen improved — random victory quote and level reached stat added",
+    "Defeat quotes unique per dungeon — Crypt, Ashbound, Frosthold, and Nightmare each have their own"
+   ]
+  },
+  {
+   "num": "v1.8",
+   "date": "Bug Sweep Version",
+   "label": "Version 1.8",
+   "changes": [
+    "Removed leftover alert() call in old stats code",
+    "Confirmed all 29 key systems present and working",
+    "Confirmed zero duplicate functions",
+    "Confirmed all 20 SFX files preloaded correctly",
+    "Confirmed all 12 screens have proper navigation handlers",
+    "All 17 localStorage keys consistent and documented"
+   ]
+  },
+  {
+   "num": "v1.7",
+   "date": "",
+   "label": "Version 1.7",
+   "changes": [
+    "Hall of Records — lifetime stats tracked forever across all characters and runs",
+    "Milestone Awards — 12 awards with claimable rewards including Mystery Coins and permanent buffs",
+    "Character Select Overhaul — cards now show HP, attack range, defense, NG+ badge, journal count",
+    "Accessibility Options — verbose mode, combat announcements, reduced motion, screen reader mode",
+    "Global stat tracking — kills, gold, deaths, floors, crits, potions, raids all tracked forever"
+   ]
+  },
+  {
+   "num": "v1.6",
+   "date": "",
+   "label": "Version 1.6",
+   "changes": [
+    "Ambient Sound Toggle — control ambient separately from music in Settings",
+    "Stats Page Overhaul — full breakdown with sections, death log, inventory, all skills",
+    "Difficulty Preview — each difficulty card now shows exact damage multiplier"
+   ]
+  },
+  {
+   "num": "v1.5",
+   "date": "Bug Sweep Version",
+   "label": "Version 1.5",
+   "changes": [
+    "Full bug sweep — all known breaking bugs eliminated",
+    "Duplicate function cleanup — setRaidBtns, applyDailyChallenge, checkDailyChallengeCompletion",
+    "Achievement toast notification — visual popup when you unlock an achievement mid-run",
+    "Achievement cards now show unlocked badge",
+    "Daily quest tracking fully fixed — floor, nopotion, crits, gold all properly tracked",
+    "Flee dungeon now uses proper overlay instead of broken confirm popup",
+    "Victory screen now shows the actual boss you defeated not always the first one",
+    "Dungeon selection redesigned with full descriptions and enemy counts",
+    "Nightmare correctly restored as a difficulty not a dungeon",
+    "New rule going forward: bug sweep every two versions"
+   ]
+  },
+  {
+   "num": "v1.4",
+   "date": "",
+   "label": "Version 1.4",
+   "changes": [
+    "Daily Challenge Registration — opt in from the Challenge tab in Quests",
+    "Trap System Overhaul — dungeon-specific traps with unique effects",
+    "Enemy Special Abilities — 9 enemies now have unique combat moves",
+    "Dungeon Events System — shrines, chests, wounded adventurers, inscriptions",
+    "Bestiary Kill Milestones — kill thresholds unlock permanent buffs",
+    "Critical bug fix — dungeon entry was broken, now fixed"
+   ]
+  },
+  {
+   "num": "v1.3",
+   "date": "",
+   "label": "Version 1.3",
+   "changes": [
+    "The Library — three original stories set in the world of Dungeon Descent",
+    "Character Journal — auto-written run log for every character",
+    "Ambient Sound System — dungeon-specific atmosphere sounds",
+    "Chronicles hub with Lore, Library, and Journal tabs"
+   ]
+  },
+  {
+   "num": "v1.2",
+   "date": "",
+   "label": "Version 1.2",
+   "changes": [
+    "Boss Rush Mode — fight all 9 bosses back to back for Mystery Coins",
+    "Daily Challenge Mode — rotating modifier every day",
+    "What's New screen — full patch notes for every version",
+    "The Chronicles lore screen"
+   ]
+  },
+  {
+   "num": "v1.1",
+   "date": "Previous Version",
+   "label": "Version 1.1",
+   "changes": [
+    "Nightmare Mode — exclusive enemies that exist nowhere else, 3 new nightmare bosses",
+    "Mystery Coin Shop — 8 permanent upgrades purchasable with Mystery Coins",
+    "Raid Difficulty Selector — Normal or Hard mode before starting a raid",
+    "Spider Enemies — Crypt Spider, Venom Spitter, Web Stalker, Brood Mother",
+    "Stats Page Overhaul — proper screen replaces old popup",
+    "New Game Plus — complete a dungeon and start NG+ with 20% harder enemies",
+    "Floor 10 Elite Rooms — an elite guardian now blocks the path to the final boss",
+    "Nightmare bestiary entries shown as unnamed feared creatures"
+   ]
+  },
+  {
+   "num": "v1.0 — Release",
+   "date": "Launch Version",
+   "label": "Version 1.0",
+   "changes": [
+    "Frosthold Abyss — the third and final dungeon, ice themed with 17 new enemies",
+    "3 random boss pools per dungeon — different boss every run",
+    "21 new Frosthold bestiary entries",
+    "Cold Victor and Trilogy achievements",
+    "Frosthold enemies added to Raid pool"
+   ]
+  },
+  {
+   "num": "v0.9",
+   "date": "",
+   "label": "Version 0.9",
+   "changes": [
+    "Quest System with daily quests and main dungeon quest",
+    "Achievements — 14 unlockable achievements tracked permanently",
+    "Ashbound enemies now appear in Raids",
+    "Raid character selection — pick which character enters the raid",
+    "Raids use your character's real class skills and SP"
+   ]
+  },
+  {
+   "num": "v0.8",
+   "date": "",
+   "label": "Version 0.8",
+   "changes": [
+    "XP and Leveling System — earn XP per kill, level up to 10 per run",
+    "Class Skills and SP — 180 unique skills across 12 classes, unlock through leveling",
+    "Multi-Stage Boss Fights — both dungeon bosses now have 3 phases",
+    "SP bar and XP bar visible in dungeon topbar",
+    "Level Up overlay with skill unlock announcements"
+   ]
+  },
+  {
+   "num": "v0.7",
+   "date": "",
+   "label": "Version 0.7",
+   "changes": [
+    "The Ashbound Wastes — second dungeon, fire and ash themed",
+    "17 new exclusive Ashbound enemies across 3 tiers",
+    "The Eternal Pyre and 2 alternate bosses",
+    "Dungeon-specific loot, shop, room descriptions, and music"
+   ]
+  },
+  {
+   "num": "v0.6",
+   "date": "",
+   "label": "Version 0.6",
+   "changes": [
+    "Death Log — every character records their last 5 deaths with killer and floor",
+    "Raid balance — starting potions increased, 1 potion rewarded per wave cleared",
+    "14 new enemies added to Crypt and Raid pools",
+    "Bestiary expanded to 25 entries"
+   ]
+  },
+  {
+   "num": "v0.1 — The Beginning",
+   "date": "",
+   "label": "Version 0.1",
+   "changes": [
+    "Core dungeon crawler loop — explore, fight, loot, advance",
+    "6 classes, 6 races, 6 professions, 4 difficulty modes",
+    "The Crypt of Malachar with 10 floors",
+    "Turn-based combat with attack, heavy, defend, flee",
+    "Full JAWS and screen reader accessibility from day one"
+   ]
+  }
+ ]
+}
