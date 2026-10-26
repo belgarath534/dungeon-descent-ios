@@ -185,6 +185,19 @@ public enum Combat {
             }
         }
 
+        // Weapon wear (degradeWeapon): worn-out blades hit softer.
+        if (action == .attack || action == .heavy) && r.playerDamage > 0 {
+            let m = Blacksmith.damageMultiplier(run)
+            if m != 1 { r.playerDamage = jsRound(Double(r.playerDamage) * m) }
+            Blacksmith.degrade(&run, by: action == .heavy ? 2 : 1, log: &r.log)
+        }
+        // Thunderfist
+        if action == .attack, r.playerDamage > 0, case .number(let p)? = run.equippedWeapon?.extra["stunChance"],
+           var e = run.enemy, dice.chance(p) {
+            e.stunTurns = max(e.stunTurns, 1)
+            run.enemy = e
+            r.log.append("⚡ Thunderfist stuns \(e.name)! They skip their next attack.")
+        }
         r.playerDamage = EnemyAbilities.onPlayerHit(&run, r.playerDamage, basic: true, dice: &dice, log: &r.log)
         dealDamage(&run, r.playerDamage, log: &r.log)
         if action == .attack || action == .heavy {
@@ -339,6 +352,10 @@ public enum Combat {
             r.log.append("Warlord: +10 HP and +3 SP.")
         }
         if run.has("cu-blood-pact") { run.hp = min(run.maxHp, run.hp + 2) }
+        if run.equippedWeapon?.extra["soulDrinker"] == .bool(true) {
+            run.hp = min(run.maxHp, run.hp + 5)
+            r.log.append("🩸 Soul Drinker feeds — you heal 5 HP!")
+        }
         if let e = run.enemy { Subclasses.onKill(&run, e, log: &r.log) }
         r.announcement = "\(run.enemy?.name ?? "The enemy") defeated."
         return r
@@ -495,6 +512,19 @@ public enum Combat {
         run.fight.recentHits.append(taken)
         if run.fight.recentHits.count > 3 { run.fight.recentHits.removeFirst() }
 
+        // Thornmail reflects 20%; the Ghost Shroud sometimes phases you out.
+        if taken > 0, case .number(let p)? = run.equippedArmor?.extra["thornReflect"], var e = run.enemy, !e.isDead {
+            let back = Int((Double(taken) * p).rounded(.down))
+            if back > 0 {
+                e.hp = max(0, e.hp - back)
+                run.enemy = e
+                log.append("🌵 Thornmail reflects \(back) back at \(e.name)!")
+            }
+        }
+        if taken > 0, case .number(let p)? = run.equippedArmor?.extra["ghostDodge"], dice.chance(p) {
+            run.hp = min(run.maxHp, run.hp + taken)
+            log.append("👻 Ghost Shroud — you phase out! You take no damage!")
+        }
         let thorned = run.armorEffect == "thorned"
         let vengeful = run.armorEffect == "vengeful" && taken > 0 && dice.chance(0.20)
         if taken > 0 && (run.fight.thornsTurns > 0 || run.fight.retaliate > 0 || thorned || vengeful), var hurt = run.enemy {

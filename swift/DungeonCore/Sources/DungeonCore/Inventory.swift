@@ -145,6 +145,7 @@ public enum Inventory {
             run.inventory.remove(at: index)
             if let old = run.equippedWeapon { run.inventory.append(old) }
             run.equippedWeapon = item
+            if item.weaponType == "staff" { run.sp = min(run.maxSp, run.sp + 10) }
             let r = item.weaponAttack
             return Outcome(message: "Equipped \(item.icon) \(item.name) Level \(item.level ?? 1). Weapon attack \(r.lowerBound) to \(r.upperBound).")
         }

@@ -1950,3 +1950,78 @@ final class EventTests: XCTestCase {
         XCTAssertTrue(Events.applyNextRun(&r, store: store).isEmpty)
     }
 }
+
+final class BlacksmithTests: XCTestCase {
+    func forge(gold: Int, prof: String? = nil) -> Forge {
+        Forge(weapon: Blacksmith.weapons[1], armor: Blacksmith.armors[0], bag: [], gold: gold, prof: prof)
+    }
+
+    func testUpgradeCostsAndCap() {
+        let store = MemoryStore()
+        XCTAssertEqual(Blacksmith.upgradeCost(level: 1, prof: nil, store: store), 40)
+        XCTAssertEqual(Blacksmith.upgradeCost(level: 1, prof: "Blacksmith", store: store), 36)
+        store.setItem("dd_blacksmith_discount", "{\"pct\":0.10,\"expires\":9999999999999,\"source\":\"Curse Shop\"}")
+        XCTAssertEqual(Blacksmith.upgradeCost(level: 2, prof: nil, store: store), 72)
+        let s2 = MemoryStore(["dd_global_gold": "100000"])
+        let w = Wallet(store: s2)
+        var f = forge(gold: 100000)
+        for _ in 0..<12 { _ = Blacksmith.upgrade(.armor, &f, wallet: w, store: s2) }
+        XCTAssertEqual(f.armor?.level, 10)
+        XCTAssertEqual(f.armor?.armorDefense, 3 + 14)
+    }
+
+    func testEnchanterPaysFirst() {
+        let store = MemoryStore(["dd_global_gold": "0"])
+        let w = Wallet(store: store)
+        var f = forge(gold: 0)
+        var e = Item(name: "Enchanter", icon: "✨", type: "enchanter", desc: "")
+        e.extra["charges"] = .number(1)
+        f.bag = [e]
+        XCTAssertTrue(Blacksmith.upgrade(.weapon, &f, wallet: w, store: store).ok)
+        XCTAssertEqual(f.weapon?.level, 2)
+        XCTAssertTrue(f.bag.isEmpty)
+        XCTAssertFalse(Blacksmith.upgrade(.weapon, &f, wallet: w, store: store).ok)
+    }
+
+    func testStarterOnceAndArmorOnce() {
+        let store = MemoryStore(["dd_global_gold": "500"])
+        let w = Wallet(store: store)
+        var f = forge(gold: 500)
+        XCTAssertTrue(Blacksmith.buyWeapon(Blacksmith.weapons[0], &f, wallet: w, store: store).ok)
+        XCTAssertFalse(Blacksmith.buyWeapon(Blacksmith.weapons[0], &f, wallet: w, store: store).ok)
+        XCTAssertTrue(Blacksmith.buyArmor(Blacksmith.armors[1], &f, wallet: w).ok)
+        XCTAssertFalse(Blacksmith.buyArmor(Blacksmith.armors[1], &f, wallet: w).ok)
+        XCTAssertEqual(f.gold, 420)
+        XCTAssertEqual(w.gold, 420)
+    }
+
+    func testReforgeNeverStacks() {
+        let store = MemoryStore(["dd_global_gold": "100000"])
+        let w = Wallet(store: store)
+        var f = forge(gold: 100000)
+        var dice = SeededDice(seed: 11)
+        for _ in 0..<5 { _ = Blacksmith.raiseRarity(&f, wallet: w, dice: &dice) }
+        XCTAssertEqual(Blacksmith.rarityIndex(f.weapon!), 5)
+        XCTAssertEqual(f.weapon?.name, "Mythic Iron Sword")
+        XCTAssertEqual(f.weapon?.atkBase, [11, 22])
+        for _ in 0..<30 {
+            _ = Blacksmith.reforge(&f, wallet: w, dice: &dice)
+            let name = f.weapon!.name
+            XCTAssertTrue(name == "Iron Sword" || name.split(separator: " ").count == 3, name)
+        }
+    }
+
+    func testDurabilityAndRepair() {
+        var r = Run(character: PlayerCharacter(name: "B", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.equippedWeapon = Blacksmith.weapons[1]
+        var log: [String] = []
+        Blacksmith.degrade(&r, by: 61, log: &log)
+        XCTAssertEqual(log.count, 1) // Worn
+        Blacksmith.degrade(&r, by: 39, log: &log)
+        XCTAssertEqual(Blacksmith.damageMultiplier(r), 0.5)
+        XCTAssertEqual(Blacksmith.repairCost(r.equippedWeapon), 24)
+        r.equippedWeapon = Blacksmith.weapons.last
+        XCTAssertEqual(Blacksmith.onFloor(&r), "💔 The Last Blade degrades to level 9.")
+    }
+}

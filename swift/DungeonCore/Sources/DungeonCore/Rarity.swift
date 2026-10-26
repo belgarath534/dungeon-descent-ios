@@ -58,6 +58,11 @@ public enum Rarity {
                    Effect(id: "aegis", name: "Aegis", desc: "-40% damage taken, but -20% damage dealt.")],
     ]
 
+    /// The effects a tier can roll, for the Rarity Effects guide.
+    public static func effects(for tier: Tier, weapon: Bool) -> [Effect] {
+        tier.effectTier.flatMap { (weapon ? weaponEffects : armorEffects)[$0] } ?? []
+    }
+
     /// Rolls a drop's rarity, rarest first like rollWeaponRarity().
     public static func roll(dice: inout some Dice) -> Tier {
         var remaining = 1.0

@@ -117,7 +117,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
-| Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Not yet: Voice, Echo-locate, Blacksmith, Arcane Shop, Spell Book, chat |
+| Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Not yet: Voice, Echo-locate, Arcane Shop, Spell Book, chat |
 | Death: graveyard entry, gear kept, Classic level reset | showDefeat | ✅ |
 | Settings in the web version's look | settings-screen, settings-panel-* | ✅ categories; Audio, Accessibility (verbose rooms, combat announcements, repair unlocks), Gameplay (class traits), General (version, web save import), Account. Language, Chat, Notifications, Beta, Developer Tools not yet |
 | The Graveyard, Help, Credits, What's New | screen-graveyard, screen-help, screen-credits, screen-whatsnew | ✅ text from index.html through tools/extract-static-screens.py |
@@ -131,6 +131,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Spirits, companion, corruption, Hunter, Void, Medusa arc | … | ⬜ |
 | Seasonal events | getActiveEvent, getEventBonuses, renderEventsScreen, openSeasonalShop | ✅ all 16 seasonal and weekly events on their dates, their XP, gold and enemy strength, Blood Moon's harder hits both ways, 20% of enemies replaced by the event's own (56 of them, in events.json), seasonal currency from 30% of kills, the menu banner and currency, the Events screen and the six seasonal shops. Not yet: the event enemies' special moves (the Leprechaun stealing gold, the Cupid's Love Potion …), the Easter Bunny room, Friday the 13th's Black Box, the July 4th Fireworks Corner, the Cinco de Mayo weapon, Ambush Day ambushes, birthday music, and shop items that need systems not ported yet (titles, run modifiers, combat items) |
 | Subclasses | SUBCLASSES, showSubclassChoice, chooseSubclass | ✅ the level 5 choice for every class that has one (Berserker and Druid don't, in the web version either), its stat points, its passive and the name in the top bar. The seven spell passives (Firelord, Stormcaller, Void Born, Dark Arts, Time Lord, Pure Magic, Spell Weaver) give their stats and wait for spells. Ancient Blood's fire immunity has nothing to block yet |
+| Blacksmith | openBlacksmith, openMenuBlacksmith, upgradeEquipped, reforgeWeapon, degradeWeapon | ✅ from the dungeon (run gold) and the main menu (global gold): upgrade weapon and armor to level 10 (Enchanters pay first, Blacksmiths get 10% off, seasonal discounts apply), buy the 11 weapons and 7 armors (the Worn Blade free once), sell, equip and unequip, reforge and raise rarity, the Rarity Effects guide, weapon durability and repairs. Soul Drinker, Thunderfist, The Last Blade, Thornmail, Ghost Shroud and the staff's +10 SP work in combat. The Guns tab says coming soon |
 | Home system | HOME SYSTEM, MINION SYSTEM, HOME_DREAMS | ✅ buy the home (500g), bed (75g) and sleep every 5 rooms with a dream, the gold safe, skill upgrades to level 5, the Minions tab, and the Soul Trap combat button. Minions strike after you every round. Spirits, Forge, Alchemy, Vendor and Guns tabs say coming soon; Skill Orbs (upgrades passed on when a character dies) and the July 4th Fireworks Corner are not in yet |
 | Global chat, presence, leaderboards | GLOBAL CHAT SYSTEM … | ⬜ |
 | Account login, cloud save | DD Cloud | ✅ see "Account and cloud save" |
@@ -236,3 +237,12 @@ Where an item's description and the web code disagree, Swift follows the descrip
   the Elf Blessing and the Sparkler buff were saved for "your next run" but nothing ever
   read them; potions bought from the menu went into a run that wasn't there. Swift
   applies them when the next run starts, and potions go into that run's bag.
+- **Reforging stacked rarities.** Reforging or raising a weapon's rarity applied the new
+  tier on top of the old one, so names became "Rare Uncommon Iron Sword" and the attack
+  multiplied twice; a reforge that rolled Common changed nothing. Swift rebuilds the
+  weapon from its base each time.
+- **Armor upgrades had no cap.** Weapons stop at level 10, but armor kept going at ever
+  higher prices. Swift caps both at 10.
+- **The menu Blacksmith used your last run's profession.** From the main menu it said
+  there was no Blacksmith discount but still charged the last run's discounted price.
+  Swift gives no profession discount on the menu, matching what it says.

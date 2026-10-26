@@ -570,6 +570,33 @@ final class RunModel: ObservableObject {
     }
 
     /// A coward ran off, dropping gold. The room counts as cleared.
+    // MARK: Blacksmith
+
+    @Published var blacksmith: BlacksmithModel?
+
+    /// openBlacksmith from the dungeon: run gold, your bag and your gear.
+    func openBlacksmith() {
+        let f = Forge(weapon: run.equippedWeapon, armor: run.equippedArmor, bag: run.inventory, gold: run.gold, prof: run.prof)
+        blacksmith = BlacksmithModel(game: game, forge: f, fromMenu: false, sp: run.sp, maxSp: run.maxSp) { [weak self] f, sp in
+            guard let self else { return }
+            self.run.equippedWeapon = f.weapon
+            self.run.equippedArmor = f.armor
+            self.run.inventory = f.bag
+            self.run.gold = f.gold
+            self.run.sp = sp
+            // Like the web version, gear bought or upgraded here is saved right away.
+            f.stashed.forEach { self.game.globalInventory.add($0) }
+            self.game.globalInventory.saveEquipped(weapon: f.weapon, armor: f.armor)
+            self.persist()
+        }
+    }
+
+    func closeBlacksmith() {
+        blacksmith = nil
+        playMusic()
+        Feedback.announce("Blacksmith closed.")
+    }
+
     // MARK: Spirits
 
     /// Spirits this character has earned (earnedSpirits).
@@ -1058,6 +1085,7 @@ final class RunModel: ObservableObject {
             }
         }
         if let line = Subclasses.onFloor(&r, dice: &d) { add(line) }
+        if let line = Blacksmith.onFloor(&r) { add(line) }
         r.event = Events.active()
         if r.xpBoostFloors > 0 {
             r.xpBoostFloors -= 1

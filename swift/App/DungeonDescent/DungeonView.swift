@@ -85,6 +85,7 @@ struct DungeonView: View {
         }
         if model.gambling { GambleOverlay(model: model) }
         if model.showingHome { HomeOverlay(model: model) }
+        if let b = model.blacksmith { BlacksmithView(model: b) { model.closeBlacksmith() } }
         if showSpirits { SpiritsOverlay(model: model) { showSpirits = false } }
         if askingFlee { fleeOverlay }
         if paused { pauseOverlay }
@@ -467,7 +468,7 @@ struct DungeonView: View {
                 act("⚙ Settings", "Open settings, adjust music and sound effects") { showSettings = true }
                 act("📜 Run Log", "Open run log, see everything that happened this run") { showRunLog = true }
                 act("💾 Save", "Save your progress right now") { model.manualSave() }
-                act("⚒ Blacksmith", "Open blacksmith — upgrade your equipped weapon or armor") { notYet("The Blacksmith") }
+                act("⚒ Blacksmith", "Open blacksmith — upgrade your equipped weapon or armor") { model.openBlacksmith() }
                 act("✨ Arcane Shop", "Open Arcane Shop — buy spell scrolls") { notYet("The Arcane Shop") }
                 act("📖 Spell Book", "Open Spell Book — view your learned spells") { notYet("The Spell Book") }
                 Button("🚪 Flee Dungeon") { askFlee() }
