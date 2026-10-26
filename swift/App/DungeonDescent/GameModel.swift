@@ -5,6 +5,8 @@ import DungeonCore
 /// App-wide state: the save file, the wallet and the character list.
 @MainActor
 final class GameModel: ObservableObject {
+    /// Endless Descent, kept for the app's lifetime so a run outlives its screen.
+    lazy var afk = AFKModel(game: self)
     let store: GameStore
     private let fileStore: FileStore
     let wallet: Wallet

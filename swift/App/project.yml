@@ -9,6 +9,12 @@ options:
   deploymentTarget:
     iOS: "16.0"
   createIntermediateGroups: true
+# One version for the app and its Live Activity extension (the App Store
+# requires them to match); Codemagic bumps CURRENT_PROJECT_VERSION here.
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
 packages:
   DungeonCore:
     path: ../DungeonCore
@@ -18,12 +24,14 @@ targets:
     platform: iOS
     sources:
       - path: DungeonDescent
+      - path: Shared
       # The web version's audio files, used as-is (one copy in the repo).
       - path: ../../www/audio
         type: folder
         buildPhase: resources
     dependencies:
       - package: DungeonCore
+      - target: DDLiveActivity
     scheme: {}
     info:
       path: DungeonDescent/Info.plist
@@ -37,6 +45,12 @@ targets:
         LSRequiresIPhoneOS: true
         UIBackgroundModes:
           - audio
+        # Endless Descent's run on the Lock Screen and in the Dynamic Island.
+        NSSupportsLiveActivities: true
+        CFBundleURLTypes:
+          - CFBundleURLName: com.dungeon.descent
+            CFBundleURLSchemes:
+              - dungeondescent
         UILaunchScreen:
           UIColorName: LaunchBackground
         # The web version's Google fonts (OFL), bundled.
@@ -71,9 +85,33 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent
         PRODUCT_NAME: DungeonDescent
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "1"
         TARGETED_DEVICE_FAMILY: "1,2"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_VERSION: "5.0"
         CODE_SIGN_STYLE: Automatic
+  # The Live Activity, same bundle ID and App Store profile as the web
+  # version's DDLiveActivity extension.
+  DDLiveActivity:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "16.2"
+    sources:
+      - path: DDLiveActivity
+      - path: Shared
+    info:
+      path: DDLiveActivity/Info.plist
+      properties:
+        CFBundleDisplayName: Dungeon Descent
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.DDLiveActivity
+        PRODUCT_NAME: DDLiveActivity
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES

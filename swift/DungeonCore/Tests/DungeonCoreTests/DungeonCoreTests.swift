@@ -1447,3 +1447,80 @@ final class HighScoreTests: XCTestCase {
         XCTAssertEqual(HighScore.rank(for: 250_000).label, "DDDI CERTIFIED")
     }
 }
+
+final class AFKTests: XCTestCase {
+    private func champion(_ cls: String = "Warrior") -> PlayerCharacter {
+        PlayerCharacter(name: "Ivy", cls: cls, race: "Human", prof: "Blacksmith",
+                        dungeon: "Crypt of Malachar", difficulty: .wanderer)
+    }
+
+    func testRunStartsLikeTheWebVersion() {
+        var save = AFKSave(raw: [:])
+        save.upgrades = ["afk-hp-boost": 2, "afk-extra-potion": 1, "afk-slow-fight": 1, "afk-iron-will": 1]
+        let run = AFKRun(character: champion(), index: 0, save: save, weapon: nil, armor: nil, now: 0)
+        XCTAssertEqual(run.maxHp, 1000 + 100 + 200)
+        XCTAssertEqual(run.atk, 28)
+        XCTAssertEqual(run.potions, 6)
+        XCTAssertEqual(run.fightSeconds, 20)
+        XCTAssertEqual(run.classPassive, "warrior")
+        let wiz = AFKRun(character: champion("Wizard"), index: 0, save: AFKSave(raw: [:]), weapon: nil, armor: nil, now: 0)
+        XCTAssertEqual(wiz.maxHp, 800)
+        XCTAssertEqual(wiz.atk, jsRound(28 * 1.30))
+    }
+
+    func testRunsDescendUntilTheyFallAndSurviveSaving() throws {
+        for seed in UInt64(1)...20 {
+            var dice = SeededDice(seed: seed)
+            var run = AFKRun(character: champion(["Warrior", "Assassin", "Bard", "Wizard"][Int(seed) % 4]), index: 0,
+                             save: AFKSave(raw: [:]), weapon: nil, armor: nil, now: 0)
+            var t = 0.0
+            while run.running && t < 15 * 5000 {
+                t += run.fightSeconds
+                _ = run.fight(dice: &dice, save: AFKSave(raw: [:]), now: t)
+                XCTAssertLessThanOrEqual(run.hp, run.maxHp)
+                XCTAssertLessThanOrEqual(run.log.count, 50)
+            }
+            XCTAssertGreaterThan(run.floor, 10, "seed \(seed)")
+            XCTAssertLessThanOrEqual(run.level, 10)
+            let back = try JSONDecoder().decode(AFKRun.self, from: JSONEncoder().encode(run))
+            XCTAssertEqual(back.floor, run.floor)
+            XCTAssertEqual(back.log, run.log)
+        }
+    }
+
+    func testFightsOwedForTimeAway() {
+        var run = AFKRun(character: champion(), index: 0, save: AFKSave(raw: [:]), weapon: nil, armor: nil, now: 1000)
+        XCTAssertEqual(run.fightsDue(at: 1014), 0)
+        XCTAssertEqual(run.fightsDue(at: 1015), 1)
+        XCTAssertEqual(run.fightsDue(at: 1000 + 3600), 240)
+        run.running = false
+        XCTAssertEqual(run.fightsDue(at: 1000 + 3600), 0)
+    }
+
+    func testShopChallengeAndPoints() {
+        let store = MemoryStore()
+        var save = AFKSave(raw: [:])
+        save.totalPoints = 400
+        let title = AFKRun.shop.first { $0.id == "afk-title-void" }!
+        XCTAssertTrue(save.buy(title, store: store).1)
+        XCTAssertFalse(save.buy(title, store: store).1)
+        XCTAssertEqual(save.totalPoints, 100)
+        XCTAssertEqual(store.getItem("dd_unlocked_titles"), #"["TheEndless"]"#)
+        save.save(store)
+        XCTAssertEqual(AFKSave.load(store).totalPoints, 100)
+
+        var run = AFKRun(character: champion(), index: 0, save: save, weapon: nil, armor: nil, now: 0)
+        let day = Calendar.current.date(from: DateComponents(year: 2026, month: 1, day: 5))!
+        XCTAssertEqual(AFKSave.todaysChallenge(day).id, "defeat-boss")
+        XCTAssertNil(save.checkChallenge(&run, date: day))
+        run.bossesDefeated = 1
+        XCTAssertNotNil(save.checkChallenge(&run, date: day))
+        XCTAssertTrue(save.challengeDone(day))
+        XCTAssertEqual(save.totalPoints, 180)
+        run.points = 37
+        run.floor = 42
+        save.finish(run)
+        XCTAssertEqual(save.totalPoints, 217)
+        XCTAssertEqual(save.bestFloor, 42)
+    }
+}
