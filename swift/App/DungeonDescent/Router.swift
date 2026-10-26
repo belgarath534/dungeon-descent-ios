@@ -18,6 +18,7 @@ final class Router: ObservableObject {
         case bestiary
         case records
         case bossrush
+        case raid
         case help
         case credits
         case whatsnew
@@ -64,6 +65,7 @@ struct RootView: View {
             case .bestiary: BestiaryView()
             case .records: HallOfRecordsView()
             case .bossrush: BossRushView()
+            case .raid: RaidView()
             case .help: HelpView()
             case .credits: CreditsView()
             case .whatsnew: WhatsNewView()

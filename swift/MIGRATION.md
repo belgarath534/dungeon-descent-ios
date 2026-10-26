@@ -93,7 +93,9 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Dungeon events (shrine, chest, Julio, wounded adventurer, Abyssal events …) | DUNGEON_EVENTS | ✅ 9 of 16 (the Shadow World ones and The Witness not yet) |
 | Multi-enemy combat | MULTI-ENEMY COMBAT SYSTEM | ⬜ |
 | Gun crafting | GUN DEFINITIONS | ⬜ |
-| Raids, Boss Rush, Daily Challenge, Tournament | RAID ENGINE, BOSS RUSH ENGINE … | ⬜ |
+| Boss Rush | BOSS RUSH ENGINE | ✅ with the personal leaderboard |
+| Daily Raid | RAID ENGINE | ✅ Normal and Hard, raid tiers, once a day. Skills without a raid rule now hit for normal damage (the web version charged SP and did nothing) |
+| Daily Challenge, Tournament | DAILY_CHALLENGES, tournament | ⬜ |
 | Achievements, trophies, Game Center | ACHIEVEMENTS, awardAchievement | ✅ all 115, same save keys and Game Center IDs |
 | Lifetime stats, Hall of Records | GLOBAL STATS TRACKING, GLOBAL_AWARDS, Hall of Legends | ✅ all the web's tracked stats, milestone awards (Mystery Coins and permanent effects), records and first clears |
 | Bestiary | BESTIARY_DATA, recordKill, BESTIARY_MILESTONES | ✅ 434 entries with filters, search and kill milestones; Spirits and Community tabs not yet |

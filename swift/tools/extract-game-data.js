@@ -117,6 +117,8 @@ const out = {
   enemySpecials: plain(grab('ENEMY_SPECIALS')),
   achievements: achievements(),
   dailyQuests: plain(grab('DAILY_QUESTS')),
+  raidPool: plain(grab('RPOOL')),
+  raidBoss: plain(grab('RAID_BOSS_TEMPLATE')),
   traps: plain(grab('TRAP_TYPES')),
   classSkills: plain(grab('CLASS_SKILLS')),
   startingSkills: startingSkills(),

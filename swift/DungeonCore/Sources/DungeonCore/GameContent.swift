@@ -20,6 +20,8 @@ public final class GameContent: Decodable, @unchecked Sendable {
     public let enemySpecials: [String: EnemySpecial]
     public let achievements: [Achievement]
     public let dailyQuests: [DailyQuest]
+    public let raidPool: [Raid.Foe]
+    public let raidBoss: Raid.Foe
 
     public static let shared: GameContent = {
         guard let url = Bundle.module.url(forResource: "gamedata", withExtension: "json"),

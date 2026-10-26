@@ -87,8 +87,11 @@ extension GameModel {
 
     var mysteryCoins: Int { jsParseInt(store.getItem("dd_mystery_coins")) ?? 0 }
 
+    /// addMysteryCoin: "dd_mystery_coins", with the raid save kept in step.
     func addMysteryCoins(_ n: Int) {
-        store.setItem("dd_mystery_coins", String(mysteryCoins + n))
+        let total = mysteryCoins + n
+        store.setItem("dd_mystery_coins", String(total))
+        RaidSave(store: store).syncCoins(total)
     }
 }
 

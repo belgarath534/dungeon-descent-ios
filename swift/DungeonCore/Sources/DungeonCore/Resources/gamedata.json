@@ -9907,6 +9907,750 @@
    "rewardPotion": true
   }
  ],
+ "raidPool": [
+  {
+   "name": "Hollow Shade",
+   "icon": "👻",
+   "hp": 30,
+   "atk": [
+    5,
+    11
+   ],
+   "gold": [
+    2,
+    4
+   ]
+  },
+  {
+   "name": "Crypt Rat",
+   "icon": "🐀",
+   "hp": 20,
+   "atk": [
+    4,
+    8
+   ],
+   "gold": [
+    1,
+    3
+   ]
+  },
+  {
+   "name": "Brittle Skeleton",
+   "icon": "💀",
+   "hp": 35,
+   "atk": [
+    6,
+    12
+   ],
+   "gold": [
+    2,
+    5
+   ]
+  },
+  {
+   "name": "Grave Crawler",
+   "icon": "🦂",
+   "hp": 25,
+   "atk": [
+    5,
+    9
+   ],
+   "gold": [
+    1,
+    4
+   ]
+  },
+  {
+   "name": "Tomb Bat",
+   "icon": "🦇",
+   "hp": 18,
+   "atk": [
+    4,
+    8
+   ],
+   "gold": [
+    1,
+    3
+   ]
+  },
+  {
+   "name": "Rotting Ghoul",
+   "icon": "🧟",
+   "hp": 38,
+   "atk": [
+    6,
+    11
+   ],
+   "gold": [
+    2,
+    5
+   ]
+  },
+  {
+   "name": "Ashen Wisp",
+   "icon": "🌫️",
+   "hp": 22,
+   "atk": [
+    5,
+    10
+   ],
+   "gold": [
+    1,
+    4
+   ]
+  },
+  {
+   "name": "Bone Shard",
+   "icon": "🦴",
+   "hp": 28,
+   "atk": [
+    6,
+    11
+   ],
+   "gold": [
+    2,
+    4
+   ]
+  },
+  {
+   "name": "Wailing Wraith",
+   "icon": "👁️",
+   "hp": 45,
+   "atk": [
+    8,
+    15
+   ],
+   "gold": [
+    3,
+    7
+   ]
+  },
+  {
+   "name": "Armored Skeleton",
+   "icon": "🗡️",
+   "hp": 55,
+   "atk": [
+    9,
+    16
+   ],
+   "gold": [
+    4,
+    9
+   ]
+  },
+  {
+   "name": "Plague Hound",
+   "icon": "🐺",
+   "hp": 38,
+   "atk": [
+    7,
+    14
+   ],
+   "gold": [
+    3,
+    6
+   ]
+  },
+  {
+   "name": "Crypt Banshee",
+   "icon": "👻",
+   "hp": 50,
+   "atk": [
+    9,
+    16
+   ],
+   "gold": [
+    4,
+    8
+   ]
+  },
+  {
+   "name": "Shadow Stalker",
+   "icon": "🌑",
+   "hp": 42,
+   "atk": [
+    8,
+    15
+   ],
+   "gold": [
+    4,
+    7
+   ]
+  },
+  {
+   "name": "Cursed Knight",
+   "icon": "🛡️",
+   "hp": 62,
+   "atk": [
+    9,
+    17
+   ],
+   "gold": [
+    5,
+    10
+   ]
+  },
+  {
+   "name": "Plague Wraith",
+   "icon": "☠️",
+   "hp": 48,
+   "atk": [
+    8,
+    15
+   ],
+   "gold": [
+    4,
+    8
+   ]
+  },
+  {
+   "name": "Bone Archer",
+   "icon": "🏹",
+   "hp": 35,
+   "atk": [
+    10,
+    18
+   ],
+   "gold": [
+    4,
+    8
+   ]
+  },
+  {
+   "name": "Death Knight",
+   "icon": "⚔️",
+   "hp": 70,
+   "atk": [
+    11,
+    19
+   ],
+   "gold": [
+    7,
+    13
+   ]
+  },
+  {
+   "name": "Bone Colossus",
+   "icon": "🦴",
+   "hp": 80,
+   "atk": [
+    13,
+    22
+   ],
+   "gold": [
+    9,
+    16
+   ]
+  },
+  {
+   "name": "Soul Harvester",
+   "icon": "🌑",
+   "hp": 62,
+   "atk": [
+    12,
+    20
+   ],
+   "gold": [
+    6,
+    12
+   ]
+  },
+  {
+   "name": "Void Reaper",
+   "icon": "💀",
+   "hp": 72,
+   "atk": [
+    12,
+    21
+   ],
+   "gold": [
+    8,
+    14
+   ]
+  },
+  {
+   "name": "Ancient Revenant",
+   "icon": "🧟",
+   "hp": 78,
+   "atk": [
+    13,
+    20
+   ],
+   "gold": [
+    9,
+    15
+   ]
+  },
+  {
+   "name": "Nightmare Shade",
+   "icon": "😱",
+   "hp": 65,
+   "atk": [
+    12,
+    22
+   ],
+   "gold": [
+    7,
+    13
+   ]
+  },
+  {
+   "name": "Blood Golem",
+   "icon": "🔴",
+   "hp": 88,
+   "atk": [
+    12,
+    19
+   ],
+   "gold": [
+    9,
+    15
+   ]
+  },
+  {
+   "name": "Crypt Spider",
+   "icon": "🕷️",
+   "hp": 40,
+   "atk": [
+    8,
+    16
+   ],
+   "gold": [
+    4,
+    8
+   ]
+  },
+  {
+   "name": "Venom Spitter",
+   "icon": "🕸️",
+   "hp": 32,
+   "atk": [
+    9,
+    17
+   ],
+   "gold": [
+    3,
+    7
+   ]
+  },
+  {
+   "name": "Web Stalker",
+   "icon": "🕷️",
+   "hp": 80,
+   "atk": [
+    13,
+    22
+   ],
+   "gold": [
+    8,
+    15
+   ]
+  },
+  {
+   "name": "Brood Mother",
+   "icon": "🕸️",
+   "hp": 90,
+   "atk": [
+    12,
+    20
+   ],
+   "gold": [
+    9,
+    16
+   ]
+  },
+  {
+   "name": "Cinder Wraith",
+   "icon": "🔥",
+   "hp": 28,
+   "atk": [
+    6,
+    12
+   ],
+   "gold": [
+    2,
+    5
+   ]
+  },
+  {
+   "name": "Ash Crawler",
+   "icon": "🌋",
+   "hp": 24,
+   "atk": [
+    5,
+    10
+   ],
+   "gold": [
+    1,
+    4
+   ]
+  },
+  {
+   "name": "Scorched Husk",
+   "icon": "💀",
+   "hp": 35,
+   "atk": [
+    7,
+    13
+   ],
+   "gold": [
+    2,
+    6
+   ]
+  },
+  {
+   "name": "Ember Shade",
+   "icon": "✨",
+   "hp": 20,
+   "atk": [
+    6,
+    11
+   ],
+   "gold": [
+    1,
+    4
+   ]
+  },
+  {
+   "name": "Char Bat",
+   "icon": "🦇",
+   "hp": 18,
+   "atk": [
+    5,
+    9
+   ],
+   "gold": [
+    1,
+    3
+   ]
+  },
+  {
+   "name": "Slag Crawler",
+   "icon": "🪲",
+   "hp": 30,
+   "atk": [
+    6,
+    12
+   ],
+   "gold": [
+    2,
+    5
+   ]
+  },
+  {
+   "name": "Molten Knight",
+   "icon": "⚔️",
+   "hp": 60,
+   "atk": [
+    10,
+    18
+   ],
+   "gold": [
+    5,
+    10
+   ]
+  },
+  {
+   "name": "Plague of Cinders",
+   "icon": "💨",
+   "hp": 45,
+   "atk": [
+    9,
+    17
+   ],
+   "gold": [
+    4,
+    8
+   ]
+  },
+  {
+   "name": "Char Stalker",
+   "icon": "👁️",
+   "hp": 50,
+   "atk": [
+    9,
+    16
+   ],
+   "gold": [
+    4,
+    9
+   ]
+  },
+  {
+   "name": "Blighted Overseer",
+   "icon": "👺",
+   "hp": 65,
+   "atk": [
+    10,
+    19
+   ],
+   "gold": [
+    6,
+    11
+   ]
+  },
+  {
+   "name": "Ashen Revenant",
+   "icon": "🧟",
+   "hp": 55,
+   "atk": [
+    9,
+    17
+   ],
+   "gold": [
+    5,
+    9
+   ]
+  },
+  {
+   "name": "Flame Wraith",
+   "icon": "👻",
+   "hp": 48,
+   "atk": [
+    10,
+    18
+   ],
+   "gold": [
+    4,
+    8
+   ]
+  },
+  {
+   "name": "Volcanic Revenant",
+   "icon": "🌋",
+   "hp": 80,
+   "atk": [
+    13,
+    23
+   ],
+   "gold": [
+    9,
+    16
+   ]
+  },
+  {
+   "name": "Infernal Colossus",
+   "icon": "💀",
+   "hp": 95,
+   "atk": [
+    14,
+    24
+   ],
+   "gold": [
+    10,
+    18
+   ]
+  },
+  {
+   "name": "Ember Reaper",
+   "icon": "☠️",
+   "hp": 75,
+   "atk": [
+    13,
+    24
+   ],
+   "gold": [
+    8,
+    15
+   ]
+  },
+  {
+   "name": "Frost Shade",
+   "icon": "❄️",
+   "hp": 28,
+   "atk": [
+    5,
+    11
+   ],
+   "gold": [
+    2,
+    5
+   ]
+  },
+  {
+   "name": "Ice Shard",
+   "icon": "🧊",
+   "hp": 30,
+   "atk": [
+    6,
+    12
+   ],
+   "gold": [
+    2,
+    5
+   ]
+  },
+  {
+   "name": "Frozen Husk",
+   "icon": "💀",
+   "hp": 35,
+   "atk": [
+    6,
+    12
+   ],
+   "gold": [
+    2,
+    6
+   ]
+  },
+  {
+   "name": "Cave Bat",
+   "icon": "🦇",
+   "hp": 18,
+   "atk": [
+    4,
+    8
+   ],
+   "gold": [
+    1,
+    3
+   ]
+  },
+  {
+   "name": "Permafrost Crawler",
+   "icon": "🦂",
+   "hp": 25,
+   "atk": [
+    5,
+    10
+   ],
+   "gold": [
+    1,
+    4
+   ]
+  },
+  {
+   "name": "Blizzard Wraith",
+   "icon": "👻",
+   "hp": 48,
+   "atk": [
+    8,
+    16
+   ],
+   "gold": [
+    4,
+    8
+   ]
+  },
+  {
+   "name": "Glacial Knight",
+   "icon": "⚔️",
+   "hp": 58,
+   "atk": [
+    9,
+    17
+   ],
+   "gold": [
+    5,
+    10
+   ]
+  },
+  {
+   "name": "Frostbite Hound",
+   "icon": "🐺",
+   "hp": 40,
+   "atk": [
+    8,
+    15
+   ],
+   "gold": [
+    3,
+    7
+   ]
+  },
+  {
+   "name": "Frozen Banshee",
+   "icon": "👁️",
+   "hp": 45,
+   "atk": [
+    9,
+    16
+   ],
+   "gold": [
+    4,
+    8
+   ]
+  },
+  {
+   "name": "Arctic Revenant",
+   "icon": "🧟",
+   "hp": 55,
+   "atk": [
+    9,
+    16
+   ],
+   "gold": [
+    5,
+    9
+   ]
+  },
+  {
+   "name": "Avalanche Colossus",
+   "icon": "🏔️",
+   "hp": 88,
+   "atk": [
+    13,
+    23
+   ],
+   "gold": [
+    10,
+    18
+   ]
+  },
+  {
+   "name": "Frost Reaper",
+   "icon": "☠️",
+   "hp": 75,
+   "atk": [
+    12,
+    22
+   ],
+   "gold": [
+    8,
+    15
+   ]
+  },
+  {
+   "name": "Frozen Titan",
+   "icon": "🧊",
+   "hp": 92,
+   "atk": [
+    14,
+    23
+   ],
+   "gold": [
+    10,
+    17
+   ]
+  },
+  {
+   "name": "Void Frost",
+   "icon": "💀",
+   "hp": 78,
+   "atk": [
+    13,
+    24
+   ],
+   "gold": [
+    9,
+    16
+   ]
+  }
+ ],
+ "raidBoss": {
+  "name": "The Undying Legion",
+  "icon": "💀",
+  "hp": 150,
+  "atk": [
+   14,
+   24
+  ],
+  "gold": [
+   40,
+   60
+  ],
+  "isRaidBoss": true
+ },
  "traps": {
   "crypt": [
    {

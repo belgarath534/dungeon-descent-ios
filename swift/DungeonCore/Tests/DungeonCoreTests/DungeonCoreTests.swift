@@ -1324,3 +1324,32 @@ final class BossRushTests: XCTestCase {
     }
 }
 
+final class RaidTests: XCTestCase {
+    func testWavesScaleAndTheLegionClosesWaveFive() {
+        var ch = PlayerCharacter(name: "Ivy", cls: "Paladin", race: "Human", prof: "Blacksmith",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = 60
+        var dice = SeededDice(seed: 5)
+        var raid = Raid(character: ch, weapon: nil, armor: nil, upgrades: ["cu-raid-boost"], hard: false, dice: &dice)
+        XCTAssertEqual(raid.potions, 5)
+        XCTAssertTrue((5...7).contains(raid.enemies.count))
+        var turns = 0
+        var sawLegion = false
+        while !raid.done && turns < 5000 {
+            turns += 1
+            if raid.wave == 5, raid.enemies.last?.name == "The Undying Legion" { sawLegion = true }
+            _ = raid.fight(raid.hp < raid.maxHp / 3 && raid.potions > 0 ? .potion : .attack, dice: &dice)
+        }
+        XCTAssertTrue(raid.won)
+        XCTAssertTrue(sawLegion)
+        XCTAssertGreaterThan(raid.gold, 0)
+
+        let store = MemoryStore()
+        let save = RaidSave(store: store)
+        XCTAssertEqual(save.recordWin(gold: raid.gold), 1)
+        XCTAssertTrue(save.doneToday())
+        save.recordWin(gold: 0); save.recordWin(gold: 0)
+        XCTAssertEqual(save.recordWin(gold: 0), 2)
+    }
+}
+
