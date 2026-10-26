@@ -7,6 +7,11 @@ import DungeonCore
 @MainActor
 struct HideSeekView: View {
     @EnvironmentObject var router: Router
+    @EnvironmentObject var game: GameModel
+    @StateObject private var mp = HideSeekMultiplayer()
+    @State private var mpMode = false
+    @State private var codeDraft = ""
+    @State private var pickedName: String?
     @State private var hs: HideAndSeek?
     @State private var dice = SystemDice()
     @State private var desc = "You stand still, listening."
@@ -18,9 +23,10 @@ struct HideSeekView: View {
     var body: some View {
         WebScreen {
             ScreenHeader(title: "🕯️ Hide and Seek", backHint: "Leave Hide and Seek and return to main menu")
-            if let ended { endPanel(ended) } else if let hs { play(hs) } else { intro }
+            if mpMode { multiplayer } else if let ended { endPanel(ended) } else if let hs { play(hs) } else { intro }
         }
         .onDisappear {
+            if mpMode { mp.leave() }
             Sound.stopLoop()
             Sound.track("menu")
         }
@@ -38,7 +44,11 @@ struct HideSeekView: View {
                     .accessibilityLabel("Begin Hide and Seek alone")
                 Button("👥 Multiplayer") {
                     Sound.sfx("sfx-select")
-                    Feedback.announce("Hide and Seek multiplayer isn't in the Swift version yet. Coming soon.")
+                    hs = nil
+                    ended = nil
+                    mpMode = true
+                    if let first = game.characters.first, pickedName == nil { mp.myName = first.name }
+                    Feedback.announce("Hide and Seek multiplayer. Up to five players. Create a room or join one with a code.")
                 }
                 .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
                 .accessibilityLabel("Play Hide and Seek with friends, up to five players")
@@ -207,5 +217,183 @@ struct HideSeekView: View {
                 .accessibilityLabel("Return to main menu")
         }
         .frame(maxWidth: .infinity)
+    }
+
+    // MARK: Multiplayer (hs-mp-lobby, the shared run, hs-mp-end-results)
+
+    @ViewBuilder
+    private var multiplayer: some View {
+        switch mp.stage {
+        case .lobby: mpLobby
+        case .room: mpRoom
+        case .playing: mpPlay
+        case .ended: mpEnd
+        }
+        if !mp.status.isEmpty && mp.stage != .playing {
+            Text(mp.status).font(Theme.cinzel(10.9)).foregroundStyle(.white.opacity(0.5))
+                .multilineTextAlignment(.center).frame(maxWidth: .infinity)
+        }
+    }
+
+    private var mpLobby: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Up to 5 players. Everyone shares hiding spots and can rescue each other if caught — but the Darkness Swallower only needs to catch everyone once.")
+                .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
+            if !game.characters.isEmpty {
+                Text("PLAY AS").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
+                ForEach(game.characters, id: \.created) { ch in
+                    let chosen = mp.myName == ch.name
+                    Button {
+                        mp.myName = ch.name
+                        pickedName = ch.name
+                        Sound.sfx("sfx-select")
+                        Feedback.announce("\(ch.name) selected.")
+                    } label: {
+                        Text("\(chosen ? "✓ " : "")\(ch.name) — \(ch.race) \(ch.cls)").frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .buttonStyle(WebButtonStyle(kind: chosen ? .gold : .ghost))
+                    .accessibilityLabel("Play as \(ch.name)")
+                    .accessibilityAddTraits(chosen ? .isSelected : [])
+                }
+            }
+            Button("🏟️ Create Room") { mp.create() }
+                .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                .accessibilityLabel("Create a new Hide and Seek room and get a code to share")
+            HStack(spacing: 8) {
+                TextField("Room code", text: $codeDraft)
+                    .textInputAutocapitalization(.characters).autocorrectionDisabled()
+                    .font(Theme.cinzel(19)).tracking(6).multilineTextAlignment(.center).foregroundStyle(.white)
+                    .padding(10).background(Color(hex: 0x0a0a14)).overlay(Rectangle().stroke(Color(hex: 0x333333)))
+                    .onChange(of: codeDraft) { v in if v.count > 4 { codeDraft = String(v.prefix(4)) } }
+                    .accessibilityLabel("Enter 4 character room code to join friends")
+                Button("Join") { mp.join(codeDraft) }
+                    .buttonStyle(WebButtonStyle(kind: .gold))
+                    .accessibilityLabel("Join room with code")
+            }
+            Button("← Back") {
+                mp.leave()
+                mpMode = false
+                Sound.sfx("sfx-select")
+            }
+            .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+            .accessibilityLabel("Back to Hide and Seek menu")
+        }
+    }
+
+    private var mpRoom: some View {
+        VStack(spacing: 10) {
+            if let c = mp.code {
+                Text("YOUR ROOM CODE").font(Theme.cinzel(8.8)).tracking(2.6).foregroundStyle(.white.opacity(0.3))
+                Text(c).font(Theme.cinzel(28.8)).tracking(11).foregroundStyle(Color(hex: 0xe0c080))
+                    .accessibilityLabel("Room code \(c.map(String.init).joined(separator: " "))")
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                ForEach(mp.lobby, id: \.id) { p in
+                    Text("\(p.ready ? "✓" : "…") \(p.name)\(p.id == mp.myId ? " (you)" : "")")
+                        .accessibilityLabel("\(p.name)\(p.id == mp.myId ? ", you" : ""), \(p.ready ? "ready" : "not ready")")
+                }
+            }
+            .font(Theme.cinzel(10.9)).foregroundStyle(.white.opacity(0.6))
+            .frame(maxWidth: .infinity, alignment: .leading)
+            Button(mp.readyPressed ? "⏳ Ready" : "✓ Ready") { mp.ready() }
+                .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                .disabled(mp.readyPressed)
+                .accessibilityLabel("Mark yourself ready")
+            if mp.isHost {
+                Button("▶ Start") { mp.start() }
+                    .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                    .accessibilityLabel("Start the run for everyone in the room")
+            }
+            Button("← Back") {
+                mp.leave()
+                Sound.sfx("sfx-select")
+            }
+            .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+            .accessibilityLabel("Leave the room")
+        }
+    }
+
+    private var mpPlay: some View {
+        let me = mp.me
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("🫥 \(mp.items) shared hiding spot\(mp.items == 1 ? "" : "s")").foregroundStyle(Color(hex: 0x88cc88))
+                Spacer()
+                Text(me?.caught == true ? "caught — wait for rescue" : me?.escaped == true ? "escaped"
+                     : "\(mp.distance) \(mp.distance == 1 ? "room" : "rooms") away")
+                    .foregroundStyle(Color(hex: 0xcc8888))
+            }
+            .font(Theme.cinzel(9.9))
+            VStack(alignment: .leading, spacing: 2) {
+                ForEach(mp.players) { p in
+                    Text("\(p.name)\(p.id == mp.myId ? " (you)" : "") — \(p.escaped ? "🚪 escaped" : p.caught ? "⛓️ caught" : "🚶 exploring")")
+                }
+            }
+            .font(Theme.cinzel(9.9)).foregroundStyle(.white.opacity(0.6))
+            .padding(.vertical, 8).padding(.horizontal, 10)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Color(hex: 0x2a2010)))
+            .accessibilityElement(children: .combine)
+            Text(mp.desc).font(Theme.crimson(16, italic: true)).foregroundStyle(Theme.textPrimary)
+                .padding(16).frame(maxWidth: .infinity, alignment: .leading)
+                .background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
+            VStack(spacing: 8) {
+                mpMove("▲ North", "Move north", .north)
+                HStack(spacing: 8) {
+                    mpMove("◄ West", "Move west", .west)
+                    mpMove("East ►", "Move east", .east)
+                }
+                mpMove("▼ South", "Move south", .south)
+                Button("🫥 Hide") { mp.hide() }
+                    .buttonStyle(DungeonButtonStyle(kind: .action))
+                    .foregroundStyle(Color(hex: 0xbb88ee))
+                    .frame(maxWidth: .infinity)
+                    .accessibilityLabel("Hide and try to lose the thing following you")
+            }
+            .disabled(me?.caught == true || me?.escaped == true)
+            Button("← Leave") {
+                mp.leave()
+                mpMode = false
+            }
+            .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+            .accessibilityLabel("Leave the run")
+        }
+    }
+
+    private func mpMove(_ title: String, _ label: String, _ dir: HideAndSeek.Direction) -> some View {
+        Button(title) { mp.move(dir) }
+            .buttonStyle(DungeonButtonStyle(kind: .compass))
+            .frame(maxWidth: .infinity)
+            .accessibilityLabel(label)
+    }
+
+    private var mpEnd: some View {
+        let escaped = mp.players.filter(\.escaped).count
+        return VStack(spacing: 10) {
+            Text(escaped == 0 ? "Caught" : escaped == mp.players.count ? "Escaped" : "Some Made It Out")
+                .font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
+            Text(escaped == 0 ? "It found everyone. Try again — the way out is different every time." : "The run is over. Here is how everyone fared:")
+                .font(Theme.cinzel(12)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center)
+            VStack(alignment: .leading, spacing: 2) {
+                ForEach(mp.players) { p in
+                    Text("\(p.escaped ? "🚪" : "⛓️") \(p.name)\(p.id == mp.myId ? " (you)" : "") — \(p.escaped ? "escaped" : "caught")")
+                }
+            }
+            .font(Theme.cinzel(10.9)).foregroundStyle(.white.opacity(0.6))
+            .padding(.vertical, 8).padding(.horizontal, 10).frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Color(hex: 0x2a2010)))
+            Button("↻ Try Again") {
+                mp.leave()
+                Feedback.announce("Hide and Seek multiplayer. Create a room or join one with a code.")
+            }
+            .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+            .accessibilityLabel("Try again")
+            Button("← Menu") {
+                mp.leave()
+                router.goTo(.menu)
+            }
+            .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+            .accessibilityLabel("Return to main menu")
+        }
     }
 }
