@@ -67,6 +67,7 @@ public enum Skills {
         var c = s.spCost
         if run.race == "Gnome" { c -= 2 }
         if run.has("cu-soul-surge") { c -= 1 }
+        c -= Subclasses.skillCostCut(run)
         if run.halfCostSkills { c /= 2 }
         return max(0, c)
     }
@@ -98,6 +99,8 @@ public enum Skills {
             r.announcement = "Not enough SP. You need \(price) SP but have \(run.sp)."
             return r
         }
+        // Battle Hymn: every skill sings +5 ATK into your next 3 attacks.
+        if run.subclass == "battle-hymn" { run.battleHymnTurns = 3 }
         run.sp -= price
         if run.freeSkills > 0 { run.freeSkills -= 1 }
         if spec.oncePerRun { run.usedOncePerRun.append(effect) }

@@ -74,10 +74,12 @@ final class RunModel: ObservableObject {
             if let note = Home.applyDream(dream, to: &r) { r.startNotes.append("💤 " + note) }
             game.updateCharacter(index) { $0.extra["dream"] = nil }
         }
+        // Saved items first: loading them replaces the bag, so the Coin Shop's
+        // starting items (Trapper's Kit, Gambler's Spirit) go in after.
+        game.globalInventory.load(into: &r)
         var cd = SystemDice()
         CoinShop.apply(CoinShop.owned(game.store), to: &r, dice: &cd, wallet: game.wallet)
         game.achievements.trackGlobal("runsStarted")
-        game.globalInventory.load(into: &r)
         var d = SystemDice()
         Skills.start(&r, dice: &d)
         if r.floor >= 10 && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
@@ -175,6 +177,7 @@ final class RunModel: ObservableObject {
         r.totalRooms += 1
         r.searched = false
         r.sp = min(r.maxSp, r.sp + 2)
+        if let heal = Subclasses.onRoom(&r) { add(heal) }
         roomTitle = Rooms.floorName(r.floor, dungeon: r.dungeon)
         roomText = Rooms.description(for: r, dice: &d)
         let label = "Room \(r.roomsOnFloor) of \(r.floorRoomsNeeded)."
@@ -401,15 +404,37 @@ final class RunModel: ObservableObject {
 
     // MARK: Fighting
 
-    func act(_ action: PlayerAction) {
+    /// Bomb Thrower's once-per-floor bomb.
+    var canBomb: Bool { phase == .fighting && Subclasses.canBomb(run) }
+
+    func throwBomb() { act(.attack, bomb: true) }
+
+    /// The level 5 subclass choice (chooseSubclass).
+    func chooseSubclass(_ id: String) {
+        guard let sub = Subclasses.options(for: run.cls).first(where: { $0.id == id }) else { return }
+        var r = run
+        let lines = Subclasses.choose(&r, id)
+        guard !lines.isEmpty else { return }
+        lines.forEach { add($0) }
+        journal("Chose the \(sub.name) subclass.", in: &r)
+        run = r
+        persist()
+        Sound.sfx("sfx-unlock")
+        Feedback.announce("Subclass chosen. \(sub.name). \(sub.desc) Passive: \(sub.passive)")
+    }
+
+    func act(_ action: PlayerAction, bomb: Bool = false) {
         guard phase == .fighting else { return }
         var r = run
         var d = dice
-        let result = Combat.takeTurn(&r, action, dice: &d, options: .init(classTraits: AppSettings.classTraits))
+        let options = Combat.Options(classTraits: AppSettings.classTraits)
+        let result = bomb ? Combat.throwBomb(&r, dice: &d, options: options) : Combat.takeTurn(&r, action, dice: &d, options: options)
+        guard result.acted else { return }
         track(&r, result)
         result.log.forEach { add($0) }
         if result.crit { Feedback.hit(heavy: true) } else if result.playerDamage > 0 { Feedback.hit() }
         switch action {
+        case _ where bomb: Sound.sfx("sfx-heavy-hit")
         case .attack: Sound.sfx(result.crit ? "sfx-crit" : "sfx-attack")
         case .heavy: Sound.sfx(result.missed ? "sfx-heavy-miss" : "sfx-heavy-hit")
         case .defend: Sound.sfx("sfx-select")
@@ -970,6 +995,7 @@ final class RunModel: ObservableObject {
                 HighScore.add("dungeon_clears", 200, store: game.store)
             }
         }
+        if let line = Subclasses.onFloor(&r, dice: &d) { add(line) }
         // Warm Blood (Coin Shop): 1 HP on each new floor.
         if r.has("cu-warm-blood") && r.hp > 0 { r.hp = min(r.maxHp, r.hp + 1) }
         r.hpAtFloorStart = r.hp

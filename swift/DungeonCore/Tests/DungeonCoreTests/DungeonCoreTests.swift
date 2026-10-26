@@ -1729,3 +1729,90 @@ final class HomeTests: XCTestCase {
         XCTAssertEqual(Home.capture(&r, store: store), .boss)
     }
 }
+
+final class SubclassTests: XCTestCase {
+    func run(_ cls: String) -> Run {
+        Run(character: PlayerCharacter(name: "Ivy", cls: cls, race: "Human", prof: "Blacksmith",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+    }
+
+    func testEveryClassHasTwo() {
+        // Berserker and Druid have no subclasses in the web version either.
+        for cls in GameData.classes.map(\.id) where cls != "Berserker" && cls != "Druid" {
+            XCTAssertEqual(Subclasses.options(for: cls).count, 2, cls)
+        }
+        var b = run("Berserker")
+        b.level = 5
+        XCTAssertFalse(Subclasses.pending(b))
+    }
+
+    func testChoosingAppliesStatsOnce() {
+        var r = run("Warrior")
+        r.level = 5
+        XCTAssertTrue(Subclasses.pending(r))
+        let atk = r.atkBonus, hp = r.maxHp, crit = r.critBonus
+        XCTAssertFalse(Subclasses.choose(&r, "gladiator").isEmpty)
+        XCTAssertEqual(r.atkBonus, atk + 4)
+        XCTAssertEqual(r.critBonus, crit + 0.23, accuracy: 0.0001)
+        XCTAssertEqual(r.maxHp, hp)
+        XCTAssertFalse(Subclasses.pending(r))
+        XCTAssertTrue(Subclasses.choose(&r, "warlord").isEmpty)
+    }
+
+    func testIroncladCapsAndUndyingSaves() {
+        var r = run("Sentinel")
+        r.subclass = "ironclad"
+        var dice = SeededDice(seed: 1)
+        var log: [String] = []
+        XCTAssertEqual(Subclasses.incoming(&r, 40, dice: &dice, log: &log), 12)
+        var dk = run("DeathKnight")
+        dk.subclass = "undying"
+        dk.hp = 0
+        XCTAssertTrue(Subclasses.cheatDeath(&dk, hpBefore: 5, log: &log))
+        XCTAssertEqual(dk.hp, 1)
+        dk.hp = 0
+        XCTAssertFalse(Subclasses.cheatDeath(&dk, hpBefore: 5, log: &log))
+    }
+
+    func testWarlordStreakResetsEachFloor() {
+        var r = run("Warrior")
+        r.subclass = "warlord"
+        var log: [String] = []
+        let e = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1)
+        Subclasses.onKill(&r, e, log: &log)
+        Subclasses.onKill(&r, e, log: &log)
+        XCTAssertEqual(r.warlordAtk, 4)
+        var dice = SeededDice(seed: 2)
+        _ = Subclasses.onFloor(&r, dice: &dice)
+        XCTAssertEqual(r.warlordAtk, 0)
+    }
+
+    func testBombOncePerFloor() {
+        var r = run("Alchemist")
+        r.level = 5
+        _ = Subclasses.choose(&r, "bomb-thrower")
+        var big = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1)
+        big.hp = 500
+        big.maxHp = 500
+        Combat.begin(&r, against: big)
+        var dice = SeededDice(seed: 4)
+        let t = Combat.throwBomb(&r, dice: &dice)
+        XCTAssertTrue(t.acted)
+        XCTAssertEqual(r.enemy!.hp, 440)
+        XCTAssertFalse(Combat.throwBomb(&r, dice: &dice).acted)
+    }
+
+    func testHawkeyeHeavyNeverMisses() {
+        var r = run("Ranger")
+        r.subclass = "hawkeye"
+        var dice = SeededDice(seed: 7)
+        for _ in 0..<40 {
+            var e = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1)
+            e.hp = 10_000
+            e.maxHp = 10_000
+            Combat.begin(&r, against: e)
+            r.hp = r.maxHp
+            XCTAssertFalse(Combat.takeTurn(&r, .heavy, dice: &dice).missed)
+        }
+    }
+}

@@ -44,6 +44,14 @@ public struct Run: Codable, Sendable {
     public var startNotes: [String] = []
     /// Home skill upgrades ("Warrior_Shield_Bash": 3).
     public var skillLevels: [String: Int] = [:]
+    // Subclass (chosen at level 5) and its passives' state
+    public var subclass: String? = nil
+    public var warlordAtk = 0
+    public var battleHymnTurns = 0
+    public var smiterCount = 0
+    public var bombReady = false
+    public var undyingUsed = false
+    public var beast = 0
 
     public var potionMult: Double
     public var undeadRes: Bool
@@ -311,6 +319,9 @@ public struct FightEffects: Codable, Sendable {
     public var damageTaken = 0
     public var recentHits: [Int] = []
     public var huntersMarkReady = false
+    /// Wind Walker / Shadow first-strike crit and Trapper's first-hit stun are spent.
+    public var subFirstStrike = false
+    public var paradoxUsed = false
 
     public init() {}
 }

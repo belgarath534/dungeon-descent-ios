@@ -89,7 +89,7 @@ public enum Combat {
     static func scaleDamage(_ run: Run, _ dmg: Int, skill: Bool = false) -> Int {
         guard dmg > 0 else { return 0 }
         var m = 1 + run.allDamageBonus
-        if skill { m += run.skillDamageBonus }
+        if skill { m += run.skillDamageBonus + Subclasses.skillDamageBonus(run) }
         if run.fight.vulnerableTurns > 0 { m += run.fight.vulnerable }
         return jsRound(Double(dmg) * m)
     }
@@ -110,6 +110,7 @@ public enum Combat {
             r.log.append("🏹 Hunter's Mark — critical first strike!")
         }
         if run.has("cu-night-blessing") && CoinShop.isNightNow() { baseAtk += 5 }
+        baseAtk = Subclasses.attackBonus(&run, baseAtk, dice: &dice, log: &r.log)
 
         if run.frozen {
             run.frozen = false
@@ -119,23 +120,26 @@ public enum Combat {
             case .attack:
                 // Rolled first, like `Math.random() < p || markedKill` in the web version.
                 let rolledCrit = dice.chance(0.10 + run.critBonus + (run.weaponEffect == "keen" ? 0.05 : 0))
-                r.crit = rolledCrit || run.markedKill
+                let firstStrike = Subclasses.firstStrikeCrit(&run)
+                r.crit = rolledCrit || run.markedKill || firstStrike
                 if run.markedKill {
                     run.markedKill = false
                     r.log.append("Marked Kill activates — guaranteed critical!")
                 }
-                var dmg = r.crit ? jsRound(Double(baseAtk) * 1.8) : baseAtk
+                var dmg = r.crit ? jsRound(Double(baseAtk) * Subclasses.critMultiplier(run)) : baseAtk
+                dmg = Subclasses.afterRoll(&run, dmg, log: &r.log)
                 dmg = empowered(&run, dmg, log: &r.log)
                 dmg = gearDamage(&run, dmg, log: &r.log)
                 r.playerDamage = scaleDamage(run, dmg)
                 r.log.append(r.crit ? "CRITICAL HIT! You strike for \(r.playerDamage) damage!"
                                     : "You attack for \(r.playerDamage) damage.")
             case .heavy:
-                if run.weaponEffect != "weighted" && dice.chance(0.30) {
+                if run.weaponEffect != "weighted" && run.subclass != "hawkeye" && dice.chance(0.30) {
                     r.missed = true
                     r.log.append("Your heavy strike misses! The enemy sidesteps.")
                 } else {
                     var dmg = empowered(&run, jsRound(Double(baseAtk) * 1.7), log: &r.log)
+                    if let e = run.enemy, run.subclass == "crusader", Bestiary.undeadNames.contains(e.name) { dmg = jsRound(Double(dmg) * 1.5) }
                     dmg = gearDamage(&run, dmg, log: &r.log)
                     r.playerDamage = scaleDamage(run, dmg)
                     r.log.append("Heavy strike lands for \(r.playerDamage) damage!")
@@ -165,8 +169,12 @@ public enum Combat {
 
         r.playerDamage = EnemyAbilities.onPlayerHit(&run, r.playerDamage, basic: true, dice: &dice, log: &r.log)
         dealDamage(&run, r.playerDamage, log: &r.log)
-        if action == .attack || action == .heavy { afterGearHit(&run, r.playerDamage, dice: &dice, log: &r.log) }
+        if action == .attack || action == .heavy {
+            afterGearHit(&run, r.playerDamage, dice: &dice, log: &r.log)
+            Subclasses.onHit(&run, r.playerDamage, dice: &dice, log: &r.log)
+        }
         minionAttack(&run, dice: &dice, log: &r.log)
+        Subclasses.companionAttack(&run, dice: &dice, log: &r.log)
         return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
     }
 
@@ -288,6 +296,19 @@ public enum Combat {
         return r
     }
 
+    /// Bomb Thrower: once per floor, 60 damage that ignores everything. It
+    /// takes your turn.
+    public static func throwBomb(_ run: inout Run, dice: inout some Dice, options: Options = Options()) -> TurnResult {
+        var r = TurnResult()
+        guard Subclasses.canBomb(run), var e = run.enemy else { r.acted = false; return r }
+        run.bombReady = false
+        e.hp = max(0, e.hp - 60)
+        run.enemy = e
+        r.playerDamage = 60
+        r.log.append("💣 You throw a bomb! It explodes for 60 damage!")
+        return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
+    }
+
     static func killed(_ run: inout Run, _ result: TurnResult) -> TurnResult {
         var r = result
         r.enemyDied = true
@@ -299,6 +320,7 @@ public enum Combat {
             r.log.append("Warlord: +10 HP and +3 SP.")
         }
         if run.has("cu-blood-pact") { run.hp = min(run.maxHp, run.hp + 2) }
+        if let e = run.enemy { Subclasses.onKill(&run, e, log: &r.log) }
         r.announcement = "\(run.enemy?.name ?? "The enemy") defeated."
         return r
     }
@@ -428,6 +450,9 @@ public enum Combat {
         case "unbreakable": taken = min(taken, max(1, run.maxHp / 4))
         default: break
         }
+        let hpBefore = run.hp
+        taken = Subclasses.incoming(&run, taken, dice: &dice, log: &log)
+        if taken == 0 { return 0 }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)
             run.fight.shield -= absorbed
@@ -444,6 +469,7 @@ public enum Combat {
             run.hp = 1
             log.append("Unstoppable! Death refused.")
         }
+        if run.hp <= 0 { _ = Subclasses.cheatDeath(&run, hpBefore: hpBefore, log: &log) }
         run.fight.damageTaken += taken
         run.fight.recentHits.append(taken)
         if run.fight.recentHits.count > 3 { run.fight.recentHits.removeFirst() }
@@ -486,6 +512,8 @@ public enum Combat {
             run.hp = max(1, run.hp - 3)
             log.append("Your cursed weapon drains 3 HP.")
         }
+        if run.subclass == "death-knight-sub" { run.poisonTurns = 0 }
+        Subclasses.turnHeal(&run, log: &log)
         if run.poisonTurns > 0 && run.hp > 0 {
             run.poisonTurns -= 1
             run.hp = max(0, run.hp - run.poisonDamage)

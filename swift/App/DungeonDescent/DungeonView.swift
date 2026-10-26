@@ -72,7 +72,9 @@ struct DungeonView: View {
         default: EmptyView()
         }
         if model.phase != .victory && model.phase != .defeat {
-            if let lvl = model.levelUp {
+            if Subclasses.pending(run) {
+                SubclassOverlay(model: model)
+            } else if let lvl = model.levelUp {
                 LevelUpOverlay(model: model, level: lvl)
             } else if !run.skillChoices.isEmpty {
                 SkillChoiceOverlay(model: model)
@@ -99,7 +101,7 @@ struct DungeonView: View {
                 smallButton("💬", label: "Open global chat") { notYet("Global chat") }
                 VStack(alignment: .leading, spacing: 1) {
                     Text(run.name).font(Theme.cinzel(13.6, weight: .semibold)).foregroundStyle(Theme.ashLight)
-                    Text("\(run.race) \(run.cls) · \(run.dungeon == "The Ashbound Wastes" ? "Ashbound Wastes" : run.dungeon)")
+                    Text("\(run.race) \(run.cls)\(Subclasses.current(run).map { " · \($0.icon) \($0.name)" } ?? "") · \(run.dungeon == "The Ashbound Wastes" ? "Ashbound Wastes" : run.dungeon)")
                         .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
                 }
                 .lineLimit(2).minimumScaleFactor(0.8)
@@ -316,6 +318,10 @@ struct DungeonView: View {
                     .accessibilityLabel("Defend, reduces incoming damage")
                 Button("🧪 Potion") { drinkPotion() }.buttonStyle(DungeonButtonStyle(kind: .combat))
                     .accessibilityLabel("Use a health potion")
+                if model.canBomb {
+                    Button("💣 Bomb") { model.throwBomb() }.buttonStyle(DungeonButtonStyle(kind: .combat))
+                        .accessibilityLabel("Throw your bomb for 60 damage. Once per floor.")
+                }
                 if model.canSoulTrap {
                     Button("🪤 Soul Trap") { model.soulTrap() }.buttonStyle(DungeonButtonStyle(kind: .combat))
                         .accessibilityLabel("Use Soul Trap to capture this enemy as a minion")

@@ -129,6 +129,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Quests, bounties, inbox | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
 | Spirits, companion, corruption, Hunter, Void, Medusa arc | … | ⬜ |
 | Seasonal events | SEASONAL EVENTS SYSTEM | ⬜ |
+| Subclasses | SUBCLASSES, showSubclassChoice, chooseSubclass | ✅ the level 5 choice for every class that has one (Berserker and Druid don't, in the web version either), its stat points, its passive and the name in the top bar. The seven spell passives (Firelord, Stormcaller, Void Born, Dark Arts, Time Lord, Pure Magic, Spell Weaver) give their stats and wait for spells. Ancient Blood's fire immunity has nothing to block yet |
 | Home system | HOME SYSTEM, MINION SYSTEM, HOME_DREAMS | ✅ buy the home (500g), bed (75g) and sleep every 5 rooms with a dream, the gold safe, skill upgrades to level 5, the Minions tab, and the Soul Trap combat button. Minions strike after you every round. Spirits, Forge, Alchemy, Vendor and Guns tabs say coming soon; Skill Orbs (upgrades passed on when a character dies) and the July 4th Fireworks Corner are not in yet |
 | Global chat, presence, leaderboards | GLOBAL CHAT SYSTEM … | ⬜ |
 | Account login, cloud save | DD Cloud | ✅ see "Account and cloud save" |
@@ -203,3 +204,19 @@ Where an item's description and the web code disagree, Swift follows the descrip
   (85% of their attack and a 10% chance of a double hit).
 - **No limit on minions.** The Help screen says you can keep up to 8, but the web
   version never checked. Swift stops at 8 and says to release one first.
+- **Most subclass passives did nothing.** The web version saved a flag for each path,
+  but no code read the flags for Wind Walker, Shadow, Poisoner, Crusader, Beast Caller,
+  Archmage, Hawkeye, Trapper, Death Knight, Elementalist, Hex Blade, Dragon Ascendant,
+  Brewmaster, Plague Bearer, Phase Walker, Night Shroud, Paradox or Spirit Caller. In
+  the Swift version they do what their description says. Night Shroud's "Night Mode"
+  doesn't exist, so it uses the same night hours as Night Blessing (8pm to 6am).
+- **Battle Hymn never sang.** It added +5 attack while a turn counter was above 0,
+  but nothing ever set the counter. Now each skill gives +5 attack for your next 3 attacks.
+- **The Bomb Thrower had no bomb.** The bomb recharged every floor, but there was no
+  button to throw it. Swift adds a 💣 Bomb button in combat: 60 damage, once per floor.
+- **The Warlord's streak never reset.** The passive says +2 attack per kill "resets each
+  floor", but it lasted the whole run. Swift resets it on each new floor.
+- **Vampire Lord healed from gold, not damage.** It healed 20% of the gold an enemy
+  dropped. It now heals 20% of the damage your attacks deal, as described.
+- **"Spirit" and "vitality" stat bonuses gave nothing**, because those aren't level
+  point stats. They now count as Intelligence and Stamina.

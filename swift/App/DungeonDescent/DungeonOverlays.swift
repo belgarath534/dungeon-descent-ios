@@ -532,3 +532,48 @@ struct GambleOverlay: View {
         .onAppear { Feedback.announce("Gambler's Spirit. Double your gold to \(gold * 2), or halve it to \(gold / 2). No refunds.") }
     }
 }
+
+// MARK: Subclass (#ov-subclass)
+
+@MainActor
+struct SubclassOverlay: View {
+    @ObservedObject var model: RunModel
+
+    var body: some View {
+        let run = model.run
+        let options = Subclasses.options(for: run.cls)
+        DungeonDialog(dim: 0.97, maxWidth: 480) {
+            Text("Choose Your Subclass").font(Theme.decorative(16)).foregroundStyle(Theme.gold)
+                .frame(maxWidth: .infinity).padding(.bottom, 6).accessibilityAddTraits(.isHeader)
+            Text("You are a \(run.cls). Your training diverges at level 5. This choice is permanent for this run.")
+                .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity).padding(.bottom, 20)
+            VStack(spacing: 12) {
+                ForEach(options) { sub in
+                    Button { model.chooseSubclass(sub.id) } label: {
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack(spacing: 10) {
+                                Text(sub.icon).font(.system(size: 24))
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(sub.name).font(Theme.cinzel(12.8)).foregroundStyle(Theme.gold)
+                                    Text(sub.passive).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x44aa44))
+                                }
+                            }
+                            Text(sub.desc).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888)).lineSpacing(5)
+                                .multilineTextAlignment(.leading)
+                        }
+                        .padding(16).frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(hex: 0x080808)).overlay(Rectangle().stroke(Color(hex: 0x333333)))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(sub.name). \(sub.desc). Passive: \(sub.passive). Press to choose this subclass.")
+                }
+            }
+        }
+        .onAppear {
+            if options.count >= 2 {
+                Feedback.announce("Level 5 reached. Choose your subclass as a \(run.cls). Option 1: \(options[0].name). \(options[0].desc). Option 2: \(options[1].name). \(options[1].desc)")
+            }
+        }
+    }
+}
