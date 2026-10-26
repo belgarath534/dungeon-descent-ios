@@ -98,6 +98,8 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Lifetime stats | GLOBAL STATS TRACKING | 🟡 kills, deaths, floors, runs; no stats screen yet |
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
+| Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
+| Floor complete summary (kills, damage, best hit, gold) | showFloorCompleteScreen | ⬜ with the dungeon screen |
 | Web look: main menu, Your Champions, Death Log, Forge Your Legend | screen-menu, screen-charlist, screen-deathlog, screen-creation | ✅ same order, text, VoiceOver labels and sliders; creation cards come from index.html through tools/extract-creation.py |
 | The Shadow World dungeon | SHADOW_ENEMIES | ⬜ |
 | Spirits, corruption, hunter, guide in play | STARTER_SPIRITS, corruption, hunterTurn, companion | ⬜ chosen at creation and saved, no effect in runs yet |

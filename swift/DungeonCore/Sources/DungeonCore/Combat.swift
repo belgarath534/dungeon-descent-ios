@@ -55,6 +55,23 @@ public enum Combat {
                            ngPlusCount: ngCount(run), endless: run.difficulty == .endless)
     }
 
+    /// Floor 10's Elite Guardian before the boss (startEliteGauntlet): a tier 3
+    /// enemy of the dungeon with 50% more HP and 30% more attack.
+    public static func eliteGuardian(for run: Run, dice: inout some Dice) -> Enemy {
+        let pool = Bestiary.enemies(for: run.dungeon, difficulty: run.difficulty).t3
+        let t = pool[dice.roll(0...(pool.count - 1))]
+        let ng = run.ngPlus ? 1.20 : 1.0
+        let diff: Double = run.difficulty == .nightmare ? 1.5 : run.difficulty == .forsaken ? 1.3
+            : run.difficulty == .condemned ? 1.15 : 1.0
+        let hp = jsRound(Double(t.hp) * 1.5 * ng * diff)
+        let lo = jsRound(Double(t.atk.lowerBound) * 1.3 * ng)
+        let hi = jsRound(Double(t.atk.upperBound) * 1.3 * ng)
+        var e = Enemy(name: t.name, icon: t.icon, hp: hp, maxHp: hp, atk: lo...max(lo, hi), gold: t.gold)
+        e.isElite = true
+        e.mechanics["guardian"] = .bool(true)
+        return e
+    }
+
     /// Picks and scales the boss for the run's dungeon.
     public static func nextBoss(for run: Run, dice: inout some Dice) -> Enemy {
         let pool = Bestiary.enemies(for: run.dungeon, difficulty: run.difficulty).bosses

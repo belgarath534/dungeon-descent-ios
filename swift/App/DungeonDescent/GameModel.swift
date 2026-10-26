@@ -151,7 +151,7 @@ final class GameModel: ObservableObject {
 
     func savedRun(for index: Int) -> Run? {
         guard let key = runKey(index), let s = store.getItem(key), let d = s.data(using: .utf8) else { return nil }
-        return try? JSONDecoder().decode(Run.self, from: d)
+        return Run.decodeSaved(d)
     }
 
     func saveRun(_ run: Run, for index: Int) {

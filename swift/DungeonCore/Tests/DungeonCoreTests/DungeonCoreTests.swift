@@ -1218,3 +1218,38 @@ final class InfernalUnlockTests: XCTestCase {
     }
 }
 
+final class SavedRunTests: XCTestCase {
+    func testOlderSavesStillLoad() throws {
+        let ch = PlayerCharacter(name: "Dee", cls: "Monk", race: "Elf", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var r = Run(character: ch)
+        r.floor = 6
+        r.gold = 77
+        var obj = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(r)) as? [String: Any])
+        obj["usedPotion"] = nil
+        obj["guardianDone"] = nil
+        var fight = try XCTUnwrap(obj["fight"] as? [String: Any])
+        fight["shield"] = nil
+        obj["fight"] = fight
+        let old = try JSONSerialization.data(withJSONObject: obj)
+        XCTAssertNil(try? JSONDecoder().decode(Run.self, from: old))
+        let back = try XCTUnwrap(Run.decodeSaved(old))
+        XCTAssertEqual(back.floor, 6)
+        XCTAssertEqual(back.gold, 77)
+        XCTAssertFalse(back.usedPotion)
+    }
+
+    func testEliteGuardianIsATougherTierThreeEnemy() {
+        let ch = PlayerCharacter(name: "Eve", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                 dungeon: "Crypt of Malachar", difficulty: .condemned)
+        var r = Run(character: ch)
+        r.floor = 10
+        var d = SeededDice(seed: 3)
+        let e = Combat.eliteGuardian(for: r, dice: &d)
+        let base = Bestiary.enemies(for: r.dungeon, difficulty: r.difficulty).t3.first { $0.name == e.name }!
+        XCTAssertEqual(e.maxHp, jsRound(Double(base.hp) * 1.5 * 1.15))
+        XCTAssertTrue(e.isElite)
+        XCTAssertFalse(e.isBoss)
+    }
+}
+

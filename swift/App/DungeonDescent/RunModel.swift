@@ -159,6 +159,20 @@ final class RunModel: ObservableObject {
             }
         }
 
+        if isBossFloor && r.roomsOnFloor >= r.floorRoomsNeeded && !r.guardianDone {
+            // startEliteGauntlet: an Elite Guardian blocks the way to the boss.
+            let g = Combat.eliteGuardian(for: r, dice: &d)
+            Combat.begin(&r, against: g)
+            let msg = "⚡ ELITE GUARDIAN — \(g.name) stands between you and the final chamber. It is significantly stronger than its kin."
+            add(msg)
+            roomText = msg
+            Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
+            Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
+            spoken += " Elite Guardian encountered on floor 10. \(g.name) blocks the path to the boss. HP: \(g.hp). Defeat it to face the final boss."
+            finish(r, d, phase: .fighting, spoken: spoken)
+            return
+        }
+
         if isBossFloor && r.roomsOnFloor >= r.floorRoomsNeeded {
             let boss = Combat.nextBoss(for: r, dice: &d)
             Combat.begin(&r, against: boss)
@@ -415,6 +429,13 @@ final class RunModel: ObservableObject {
         Feedback.success()
         r.enemy = nil
         r.inCombat = false
+        if e.mechanics["guardian"] == .bool(true) {
+            r.guardianDone = true
+            said += " The Elite Guardian falls. The final chamber is open."
+            finish(r, d, phase: .exploring, spoken: said)
+            playMusic()
+            return
+        }
         if e.isBoss {
             run = r
             dice = d
@@ -632,6 +653,9 @@ final class RunModel: ObservableObject {
         r.floorRoomsNeeded = Rooms.roomsNeeded(floor: r.floor, difficulty: r.difficulty, dice: &d)
         r.upcomingRooms = []
         r.gearSavedThisFloor = false
+        r.guardianDone = false
+        // advanceFloor heals 35% of max HP on the way down.
+        r.hp = min(r.maxHp, r.hp + jsRound(Double(r.maxHp) * 0.35))
         r.hpAtFloorStart = r.hp
         Encounters.planFloor(&r, dice: &d)
         let floor = r.floor

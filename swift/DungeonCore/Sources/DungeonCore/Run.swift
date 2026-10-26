@@ -104,6 +104,8 @@ public struct Run: Codable, Sendable {
     public var startedAt = Date().timeIntervalSince1970
     public var diedThisRun = false
     public var usedPotion = false
+    /// Floor 10's Elite Guardian has been beaten; the boss is next.
+    public var guardianDone = false
     /// The character's origin, and its XP and per-level SP bonuses.
     public var backstory: String?
     public var backstoryXPBonus = 0.0
@@ -254,3 +256,27 @@ public struct FightEffects: Codable, Sendable {
 
     public init() {}
 }
+
+extension Run {
+    /// Reads a saved run, filling any field it doesn't have (because it was
+    /// saved by an older build) with that field's default, so adding fields
+    /// never throws away a run in progress.
+    public static func decodeSaved(_ data: Data) -> Run? {
+        if let r = try? JSONDecoder().decode(Run.self, from: data) { return r }
+        let blank = PlayerCharacter(name: "", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                    dungeon: GameData.dungeons[0], difficulty: .wanderer)
+        guard let defaults = try? JSONEncoder().encode(Run(character: blank)),
+              let base = try? JSONSerialization.jsonObject(with: defaults) as? [String: Any],
+              let saved = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return nil }
+        func merge(_ a: [String: Any], _ b: [String: Any]) -> [String: Any] {
+            var out = a
+            for (k, v) in b {
+                if let av = a[k] as? [String: Any], let bv = v as? [String: Any] { out[k] = merge(av, bv) } else { out[k] = v }
+            }
+            return out
+        }
+        guard let merged = try? JSONSerialization.data(withJSONObject: merge(base, saved)) else { return nil }
+        return try? JSONDecoder().decode(Run.self, from: merged)
+    }
+}
+
