@@ -192,9 +192,22 @@ final class GameModel: ObservableObject {
         ]))
         globalInventory.keepOnDeath(from: run)
         checkLegends(run)
+        postDeath(DeathNotice(name: run.name, cls: run.cls, dungeon: run.dungeon, killedBy: killedBy,
+                              floor: run.floor, kills: run.kills, gold: run.gold))
     }
 
     func addToGraveyard(_ entry: JSONValue) { roster.addToGraveyard(entry) }
+
+    /// A death for the worldwide Obituary (postDeathToObituary).
+    struct DeathNotice {
+        let name, cls, dungeon, killedBy: String
+        let floor, kills, gold: Int
+    }
+
+    /// Set by the cloud account, which posts each death to the Obituary.
+    var onDeath: ((DeathNotice) -> Void)?
+
+    func postDeath(_ d: DeathNotice) { onDeath?(d) }
 
     /// The player deleted the character: it goes to The Graveyard.
     func buryCharacter(at index: Int) {

@@ -263,6 +263,8 @@ struct BossRushView: View {
                     "topFloor": .number(Double(b.bossIndex + 1)),
                     "date": .string("\(c.month ?? 1)/\(c.day ?? 1)/\(c.year ?? 2026)"),
                 ]))
+                game.postDeath(.init(name: ch.name, cls: ch.cls, dungeon: "Boss Rush", killedBy: b.boss.name,
+                                     floor: b.bossIndex + 1, kills: b.bossIndex, gold: 0))
             }
             Feedback.announce("Defeated on boss \(b.bossIndex + 1). You earned \(b.coinsEarned) Mystery Coins. Well fought.")
         }

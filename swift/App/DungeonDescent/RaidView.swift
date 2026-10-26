@@ -262,6 +262,8 @@ struct RaidView: View {
                     "topFloor": .number(Double(r.wave)),
                     "date": .string("\(c.month ?? 1)/\(c.day ?? 1)/\(c.year ?? 2026)"),
                 ]))
+                game.postDeath(.init(name: ch.name, cls: ch.cls, dungeon: "Daily Raid", killedBy: "Wave \(r.wave) horde",
+                                     floor: r.wave, kills: 0, gold: r.gold))
             }
             Feedback.announce("Defeated on wave \(r.wave). Come back tomorrow to try again.")
         }

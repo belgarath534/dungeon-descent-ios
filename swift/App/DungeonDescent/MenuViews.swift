@@ -52,7 +52,7 @@ struct MainMenuView: View {
         Entry(id: "spellbook", text: "📖 Spell Book", label: "Spell Book — view your learned spells", color: purple, border: purpleBorder),
         Entry(id: "arcane", text: "✨ Arcane Shop", label: "Arcane Shop — buy spell scrolls and the spell book", color: purple, border: purpleBorder),
         Entry(id: "graveyard", text: "⚰️ The Graveyard", label: "The Graveyard, memorial for your fallen and deleted characters", action: .go(.graveyard)),
-        Entry(id: "obituary", text: "☠️ Obituary", label: "Obituary, see recent deaths from players around the world"),
+        Entry(id: "obituary", text: "☠️ Obituary", label: "Obituary, see recent deaths from players around the world", action: .go(.obituary)),
         Entry(id: "challenges", text: "🔥 Challenges", label: "Challenges — The Gauntlet and Daily Dungeon"),
         Entry(id: "blacksmith", text: "⚒ Blacksmith", label: "Blacksmith — upgrade and buy weapons using your global gold"),
         Entry(id: "mine", text: "⛏ The Mine", label: "The Mine — dig for diamonds, gun parts, and rare loot",

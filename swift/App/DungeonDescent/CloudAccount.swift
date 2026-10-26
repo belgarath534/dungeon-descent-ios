@@ -46,6 +46,7 @@ final class CloudAccount: NSObject, ObservableObject {
 
     func start(game: GameModel) {
         self.game = game
+        game.onDeath = { [weak self] d in Task { await self?.postDeath(d) } }
         guard authHandle == nil else { return }
         user = Auth.auth().currentUser
         authHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
@@ -496,6 +497,48 @@ final class CloudAccount: NSObject, ObservableObject {
         } catch {
             Feedback.announce("Could not claim. Try again.")
             return false
+        }
+    }
+
+    // MARK: Obituary
+
+    struct Obituary: Identifiable {
+        let id: String
+        let name, dungeon, killedBy: String
+        let floor: Int
+        let timestamp: Double
+        let isLocal: Bool
+    }
+
+    /// postDeathToObituary: every death goes to the shared "deaths" list,
+    /// signed in or not, like the web version.
+    func postDeath(_ d: GameModel.DeathNotice) async {
+        let f = DateFormatter()
+        f.dateStyle = .short
+        f.timeStyle = .none
+        _ = try? await db.collection("deaths").addDocument(data: [
+            "name": d.name.isEmpty ? "Unknown" : d.name, "cls": d.cls.isEmpty ? "Warrior" : d.cls,
+            "floor": max(1, d.floor), "dungeon": d.dungeon.isEmpty ? "Unknown" : d.dungeon,
+            "killedBy": d.killedBy.isEmpty ? "unknown causes" : d.killedBy,
+            "kills": d.kills, "gold": d.gold, "date": f.string(from: Date()), "timestamp": Self.now,
+        ])
+    }
+
+    /// loadObituary: the 15 newest deaths worldwide. Nil when offline (the
+    /// screen then shows this device's Graveyard, like the web version).
+    func obituary() async -> [Obituary]? {
+        do {
+            let snap = try await db.collection("deaths").order(by: "timestamp", descending: true).limit(to: 15).getDocuments()
+            return snap.documents.map { doc in
+                let x = doc.data()
+                return Obituary(id: doc.documentID, name: (x["name"] as? String) ?? "Unknown Hero",
+                                dungeon: (x["dungeon"] as? String) ?? "an unknown dungeon",
+                                killedBy: (x["killedBy"] as? String) ?? "unknown causes",
+                                floor: (x["floor"] as? NSNumber)?.intValue ?? 1,
+                                timestamp: (x["timestamp"] as? NSNumber)?.doubleValue ?? 0, isLocal: false)
+            }
+        } catch {
+            return nil
         }
     }
 
