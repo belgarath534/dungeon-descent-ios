@@ -201,7 +201,7 @@ final class GameModel: ObservableObject {
 enum Feedback {
     /// Queues a VoiceOver announcement so it doesn't cut off the button's own sound.
     static func announce(_ text: String) {
-        guard UIAccessibility.isVoiceOverRunning else { return }
+        guard UIAccessibility.isVoiceOverRunning, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         let s = NSAttributedString(string: text, attributes: [.accessibilitySpeechQueueAnnouncement: true])
         UIAccessibility.post(notification: .announcement, argument: s)
     }
@@ -239,4 +239,7 @@ enum AppSettings {
     static var musicVolume: Double { level("swift_music_volume", 0.7) }
     static var effectsVolume: Double { level("swift_sfx_volume", 0.8) }
     static var ambientVolume: Double { level("swift_ambient_volume", 0.35) }
+    // Accessibility panel
+    static var verboseRooms: Bool { flag("swift_verbose_rooms") }
+    static var combatAnnouncements: Bool { flag("swift_combat_announcements") }
 }

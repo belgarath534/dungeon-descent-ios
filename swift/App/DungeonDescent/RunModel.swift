@@ -162,7 +162,8 @@ final class RunModel: ObservableObject {
         roomTitle = Rooms.floorName(r.floor, dungeon: r.dungeon)
         roomText = Rooms.description(for: r, dice: &d)
         let label = "Room \(r.roomsOnFloor) of \(r.floorRoomsNeeded)."
-        var spoken = "\(label) \(roomText)"
+        // Verbose Room Descriptions (Accessibility settings) reads the room text.
+        var spoken = AppSettings.verboseRooms ? "\(label) \(roomText)" : label
 
         if r.poisonTurns > 0 {
             var lines: [String] = []
@@ -419,6 +420,8 @@ final class RunModel: ObservableObject {
             return
         }
         if let a = result.announcement, result.bossPhaseMessage == nil { spoken += " " + a }
+        // Combat Announcements off: an ordinary exchange isn't read out.
+        if !AppSettings.combatAnnouncements && result.bossPhaseMessage == nil { spoken = questLine }
         finish(r, d, phase: .fighting, spoken: spoken)
     }
 

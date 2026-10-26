@@ -51,33 +51,12 @@ struct RootView: View {
                 } else {
                     CharacterListView()
                 }
-            case .quests: NativeScreen { AchievementsView() }
-            case .settings: NativeScreen { SettingsView() }
+            case .quests: AchievementsView()
+            case .settings: WebSettingsView { router.goTo(.menu) }
             case .quit: QuitScreen()
             }
         }
         .preferredColorScheme(.dark)
-    }
-}
-
-/// Screens not yet rebuilt in the web style keep their own navigation, with
-/// the web version's "← Menu" button to get back.
-struct NativeScreen<Content: View>: View {
-    @EnvironmentObject var router: Router
-    @ViewBuilder var content: () -> Content
-
-    var body: some View {
-        NavigationStack {
-            content()
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("← Menu") { router.goTo(.menu) }
-                            .font(Theme.cinzel(12))
-                            .accessibilityLabel("Back to main menu")
-                    }
-                }
-        }
-        .tint(Theme.gold)
     }
 }
 

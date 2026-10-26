@@ -279,63 +279,6 @@ struct MainMenuView: View {
     }
 }
 
-struct SettingsView: View {
-    @EnvironmentObject var game: GameModel
-    @StateObject private var webImport = WebImportFlow()
-    @AppStorage("swift_haptics") private var haptics = true
-    @AppStorage("swift_class_traits") private var classTraits = true
-    @AppStorage("swift_music_on") private var musicOn = true
-    @AppStorage("swift_sfx_on") private var sfxOn = true
-    @AppStorage("swift_ambient_on") private var ambientOn = true
-    @AppStorage("swift_music_volume") private var musicVolume = 0.7
-    @AppStorage("swift_sfx_volume") private var sfxVolume = 0.8
-    @AppStorage("swift_ambient_volume") private var ambientVolume = 0.35
-
-    var body: some View {
-        Form {
-            Section("Sound") {
-                Toggle("Music", isOn: $musicOn)
-                if musicOn { VolumeSlider(label: "Music volume", value: $musicVolume) }
-                Toggle("Sound effects", isOn: $sfxOn)
-                if sfxOn { VolumeSlider(label: "Sound effects volume", value: $sfxVolume) }
-                Toggle("Ambience", isOn: $ambientOn)
-                if ambientOn { VolumeSlider(label: "Ambience volume", value: $ambientVolume) }
-            }
-            .onChange(of: musicOn) { _ in Sound.settingsChanged() }
-            .onChange(of: ambientOn) { _ in Sound.settingsChanged() }
-            .onChange(of: musicVolume) { _ in Sound.settingsChanged() }
-            .onChange(of: ambientVolume) { _ in Sound.settingsChanged() }
-            .onChange(of: sfxVolume) { _ in Sound.sfx("sfx-select") }
-
-            Section {
-                Toggle("Haptics", isOn: $haptics)
-                Toggle("Class traits", isOn: $classTraits)
-            } footer: {
-                Text("Class traits give Paladin, Death Knight and Sentinel their damage reduction.")
-            }
-            Section {
-                Button(webImport.checking ? "Looking for a web version save…" : "Import save from the web version") {
-                    webImport.check(game, quietIfEmpty: false)
-                }
-                .disabled(webImport.checking)
-            } header: {
-                Text("Web version save")
-            } footer: {
-                Text("Copies your characters, gold, items and progress from the web version of Dungeon Descent on this iPhone. It replaces what's in the Swift version.")
-            }
-
-            Section("About") {
-                LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
-                LabeledContent("Build", value: Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")
-                Link("Privacy Policy", destination: URL(string: "https://dungen-descent.org/privacy")!)
-                Link("Terms of Service", destination: URL(string: "https://dungen-descent.org/terms")!)
-            }
-        }
-        .navigationTitle("Settings")
-        .webImportAlerts(webImport, game: game)
-    }
-}
-
 /// A volume slider VoiceOver reads as a percentage and adjusts in 10% steps.
 struct VolumeSlider: View {
     let label: String

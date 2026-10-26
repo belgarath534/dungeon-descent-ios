@@ -52,15 +52,6 @@ struct DungeonView: View {
             overlays
         }
         .foregroundStyle(Theme.textPrimary)
-        .sheet(isPresented: $showSettings) {
-            NavigationStack {
-                SettingsView()
-                    .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { showSettings = false } } }
-            }
-            .environmentObject(game)
-            .environmentObject(router)
-            .tint(Theme.gold)
-        }
     }
 
     // MARK: Overlays
@@ -94,6 +85,7 @@ struct DungeonView: View {
         }
         if showRunLog { runLogOverlay }
         if choosingPath { ngPlusChoice }
+        if showSettings { WebSettingsView { showSettings = false } }
     }
 
     // MARK: Top bar (.dg-topbar)
