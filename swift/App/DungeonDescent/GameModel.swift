@@ -80,6 +80,27 @@ final class GameModel: ObservableObject {
 
     var globalInventory: GlobalInventory { GlobalInventory(store: store) }
 
+    /// The menu's familiar badge, "🐦‍⬛ Lv.3", from "dd_familiar" (updateFamiliarBadge).
+    /// A player without one gets a random species, as in getFamiliar().
+    var familiarBadge: String {
+        let species = ["raven": "🐦‍⬛", "wisp": "✨", "imp": "👺", "cat": "🐈‍⬛"]
+        var f: [String: JSONValue] = [:]
+        if let s = store.getItem("dd_familiar"), let d = s.data(using: .utf8),
+           let v = try? JSONDecoder().decode([String: JSONValue].self, from: d) { f = v }
+        var speciesId: String? { if case .string(let s)? = f["speciesId"] { return s } else { return nil } }
+        if speciesId == nil {
+            let id = species.keys.randomElement() ?? "raven"
+            f = ["speciesId": .string(id), "startingSpeciesId": .string(id), "bond": .number(0), "name": .string("")]
+            if let d = try? JSONEncoder().encode(f), let s = String(data: d, encoding: .utf8) { store.setItem("dd_familiar", s) }
+        }
+        let icon = species[speciesId ?? ""] ?? "🐦‍⬛"
+        var bond = 0.0
+        if case .number(let n)? = f["bond"] { bond = n }
+        let level = Int(bond / 30) + 1
+        let badge = level >= 20 ? "★" : level >= 10 ? "✧" : level >= 5 ? "✦" : ""
+        return icon + (badge.isEmpty ? "" : " " + badge) + " Lv.\(level)"
+    }
+
     // MARK: Importing the web version's save
 
     /// What a web save contains, for the confirmation message.

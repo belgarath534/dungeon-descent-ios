@@ -37,7 +37,17 @@ targets:
         LSRequiresIPhoneOS: true
         UIBackgroundModes:
           - audio
-        UILaunchScreen: {}
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        # The web version's Google fonts (OFL), bundled.
+        UIAppFonts:
+          - Cinzel-Variable.ttf
+          - CinzelDecorative-Regular.ttf
+          - CinzelDecorative-Bold.ttf
+          - CinzelDecorative-Black.ttf
+          - CrimsonText-Regular.ttf
+          - CrimsonText-Italic.ttf
+          - CrimsonText-SemiBold.ttf
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
           - UIInterfaceOrientationLandscapeLeft
