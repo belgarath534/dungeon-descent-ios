@@ -36,13 +36,18 @@ public enum Combat {
         public init(classTraits: Bool = true) { self.classTraits = classTraits }
     }
 
-    public static func begin(_ run: inout Run, against enemy: Enemy) {
+    /// Returns log lines from the spirit's combat-start effect.
+    @discardableResult
+    public static func begin(_ run: inout Run, against enemy: Enemy) -> [String] {
         run.enemy = enemy
         run.inCombat = true
         run.defending = false
         run.fight = FightEffects()
         run.fight.huntersMarkReady = run.has("cu-hunters-mark")
         if enemy.isBoss { run.bossPhase = 1 }
+        var log: [String] = []
+        Spirits.combatStart(&run, log: &log)
+        return log
     }
 
     /// Picks and scales the next normal enemy for the current floor.
@@ -173,6 +178,7 @@ public enum Combat {
             afterGearHit(&run, r.playerDamage, dice: &dice, log: &r.log)
             Subclasses.onHit(&run, r.playerDamage, dice: &dice, log: &r.log)
         }
+        if action == .attack { Spirits.attack(&run, base: baseAtk, dice: &dice, log: &r.log) }
         minionAttack(&run, dice: &dice, log: &r.log)
         Subclasses.companionAttack(&run, dice: &dice, log: &r.log)
         return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
@@ -452,7 +458,7 @@ public enum Combat {
         }
         let hpBefore = run.hp
         taken = Subclasses.incoming(&run, taken, dice: &dice, log: &log)
-        if taken == 0 { return 0 }
+        if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) { return 0 }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)
             run.fight.shield -= absorbed

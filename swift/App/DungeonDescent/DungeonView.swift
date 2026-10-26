@@ -17,6 +17,7 @@ struct DungeonView: View {
     @State private var askingFlee = false
     @State private var paused = false
     @State private var showSettings = false
+    @State private var showSpirits = false
     @State private var choosingPath = false
     @State private var invTab = "all"
     @State private var invSearch = ""
@@ -35,6 +36,7 @@ struct DungeonView: View {
             ScrollView {
                 VStack(spacing: 12) {
                     topBar
+                    spiritRow
                     dailyQuest
                     xpRow
                     roomTracker
@@ -82,6 +84,7 @@ struct DungeonView: View {
         }
         if model.gambling { GambleOverlay(model: model) }
         if model.showingHome { HomeOverlay(model: model) }
+        if showSpirits { SpiritsOverlay(model: model) { showSpirits = false } }
         if askingFlee { fleeOverlay }
         if paused { pauseOverlay }
         if showStats {
@@ -165,6 +168,27 @@ struct DungeonView: View {
         .background(Theme.bgDeep).overlay(Rectangle().stroke(Theme.borderDim))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Daily quest: \(q.desc). Progress: \(dq.progress) of \(q.target)\(done ? ". Complete!" : ".")")
+    }
+
+    /// .dg-spirit-row: your spirit companion.
+    @ViewBuilder
+    private var spiritRow: some View {
+        if let sp = Spirits.current(run) {
+            let asleep = run.level < sp.minLevel
+            HStack(spacing: 12) {
+                Text(sp.icon).font(.system(size: 21))
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("\(sp.name) · \(sp.passive)").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xc080f0))
+                    Text(asleep ? "Dormant — wakes at level \(sp.minLevel)" : sp.rarity == "rare" ? "★ Rare Spirit" : sp.rarity == "elite" ? "★ Elite Spirit" : "Starter Spirit")
+                        .font(Theme.crimson(10.4, italic: true)).foregroundStyle(Color(hex: 0x8040c0))
+                }
+                Spacer()
+            }
+            .padding(.vertical, 8).padding(.horizontal, 16)
+            .background(Color(hex: 0x0a0616)).overlay(Rectangle().stroke(Color(hex: 0x3a1060)))
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Spirit companion: \(sp.name). \(sp.ability)\(asleep ? " Dormant until level \(sp.minLevel)." : "")")
+        }
     }
 
     private var xpRow: some View {
@@ -752,6 +776,8 @@ struct DungeonView: View {
                     .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
                 Button("💾 Save") { model.manualSave() }.buttonStyle(WebButtonStyle(kind: .ghost))
                 Button("⚙ Settings") { paused = false; showSettings = true }.buttonStyle(WebButtonStyle(kind: .ghost))
+                Button("✨ Spirits") { paused = false; showSpirits = true }.buttonStyle(WebButtonStyle(kind: .ghost))
+                    .accessibilityLabel("Your spirits — switch your spirit companion")
                 Button("📜 Quests") { paused = false; model.fleeDungeon(); router.goTo(.quests) }.buttonStyle(WebButtonStyle(kind: .ghost))
                 Button("🏠 Main Menu") {
                     paused = false

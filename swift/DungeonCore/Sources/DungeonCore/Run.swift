@@ -52,6 +52,8 @@ public struct Run: Codable, Sendable {
     public var bombReady = false
     public var undyingUsed = false
     public var beast = 0
+    /// The spirit companion's id.
+    public var spirit: String? = nil
 
     public var potionMult: Double
     public var undeadRes: Bool
@@ -188,6 +190,8 @@ public struct Run: Codable, Sendable {
         def = info.def
         levelCap = ch.levelCap
         potionMult = ch.prof == "Herbalist" ? 2 : 1
+        // The character's spirit, or the first starter (pickSpirit fallback).
+        spirit = ch.lastSpirit.flatMap { Spirits.spirit($0)?.id } ?? "ember-fox"
         undeadRes = ch.prof == "Gravedigger"
         pilgrimProf = ch.prof == "Pilgrim"
         // Mercenary's starting blade. (The web version also sets 15 starting
@@ -322,6 +326,8 @@ public struct FightEffects: Codable, Sendable {
     /// Wind Walker / Shadow first-strike crit and Trapper's first-hit stun are spent.
     public var subFirstStrike = false
     public var paradoxUsed = false
+    /// Medusa's Serpent Guard is still up this fight.
+    public var medusaGuard = false
 
     public init() {}
 }

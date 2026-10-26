@@ -577,3 +577,42 @@ struct SubclassOverlay: View {
         }
     }
 }
+
+// MARK: Spirits (openPauseSpirits)
+
+@MainActor
+struct SpiritsOverlay: View {
+    @ObservedObject var model: RunModel
+    let close: () -> Void
+
+    var body: some View {
+        let list = Spirits.available(earned: model.earnedSpirits)
+        DungeonDialog(maxWidth: 440) {
+            Text("✨ Your Spirits").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
+                .padding(.bottom, 12).accessibilityAddTraits(.isHeader)
+            ForEach(list) { sp in
+                let active = model.run.spirit == sp.id
+                HStack(spacing: 8) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("\(sp.icon) \(sp.name)\(active ? " ✓" : "")").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xe0c080))
+                        Text(sp.ability).font(Theme.crimson(12)).foregroundStyle(Theme.textSecondary)
+                    }
+                    .accessibilityHidden(true)
+                    Spacer()
+                    Button(active ? "Active" : "Activate") { model.switchSpirit(sp.id) }
+                        .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xffaa44))
+                        .padding(.vertical, 4).padding(.horizontal, 10)
+                        .background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Color(hex: 0xffaa44)))
+                        .disabled(active)
+                        .accessibilityLabel((active ? "Currently active: " : "Activate ") + "\(sp.name). \(sp.ability)")
+                }
+                .padding(8).background(Color(hex: 0x050505))
+                .overlay(Rectangle().stroke(active ? Color(hex: 0xffaa44) : Color(hex: 0x222222)))
+                .padding(.bottom, 6)
+            }
+            Button("← Close", action: close).buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity).padding(.top, 8)
+                .accessibilityLabel("Close spirits")
+        }
+        .onAppear { Feedback.announce("Your spirits. \(list.count) collected. Swipe through to activate one.") }
+    }
+}

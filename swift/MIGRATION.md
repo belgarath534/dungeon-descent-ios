@@ -124,7 +124,8 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Quests & Achievements screen | screen-quests | ✅ main and daily quest, achievements with Load More; Daily Challenge not yet |
 | Web look: main menu, Your Champions, Death Log, Forge Your Legend | screen-menu, screen-charlist, screen-deathlog, screen-creation | ✅ same order, text, VoiceOver labels and sliders; creation cards come from index.html through tools/extract-creation.py |
 | The Shadow World dungeon | SHADOW_ENEMIES | ⬜ |
-| Spirits, corruption, hunter, guide in play | STARTER_SPIRITS, corruption, hunterTurn, companion | ⬜ chosen at creation and saved, no effect in runs yet |
+| Spirits in play | STARTER_SPIRITS, RARE_SPIRITS, ELITE_SPIRITS, openPauseSpirits, awardRareSpirit | ✅ all 24 spirits fight, guard and loot beside you; rare ones wake at level 5. The spirit row under the top bar, switching in Pause → Spirits (with the Market Sprite's 50 gold fee), elite spirits from 30% of elite kills and each dungeon's rare spirit on victory. Not yet: custom spirits from the Spirit Forge, trap detection (traps aren't in yet), the Spirit Bestiary |
+| Corruption, hunter, guide in play | corruption, hunterTurn, companion | ⬜ |
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
 | Quests, bounties, inbox | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
 | Spirits, companion, corruption, Hunter, Void, Medusa arc | … | ⬜ |
@@ -220,3 +221,9 @@ Where an item's description and the web code disagree, Swift follows the descrip
   dropped. It now heals 20% of the damage your attacks deal, as described.
 - **"Spirit" and "vitality" stat bonuses gave nothing**, because those aren't level
   point stats. They now count as Intelligence and Stamina.
+- **Spirit effects that never happened.** Thunder Moth's stun and Glacial Wolf's freeze
+  were logged but never applied; the Void Moth's 15% chance to negate a hit had no code;
+  the Void Herald's "requires level 7" was never checked. All work in Swift.
+- **Glacial Wolf and Frost Crown stacked defense forever.** Their +4 and +5 defense
+  "at combat start" were added permanently every fight, so defense kept climbing all
+  run. Swift gives the bonus for that fight only.

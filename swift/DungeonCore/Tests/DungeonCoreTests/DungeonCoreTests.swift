@@ -173,8 +173,11 @@ final class EnemyScalingTests: XCTestCase {
 
 final class CombatTests: XCTestCase {
     func makeRun(_ cls: String, _ diff: GameData.Difficulty = .wanderer, prof: String = "Thief") -> Run {
-        Run(character: PlayerCharacter(name: "T", cls: cls, race: "Human", prof: prof,
+        // No spirit, so the numbers are the bare fight's.
+        var r = Run(character: PlayerCharacter(name: "T", cls: cls, race: "Human", prof: prof,
                                  dungeon: "Crypt of Malachar", difficulty: diff))
+        r.spirit = nil
+        return r
     }
 
     var shade: Enemy { Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1) }
@@ -275,8 +278,11 @@ final class CombatTests: XCTestCase {
 final class ProgressionTests: XCTestCase {
     func newRun(_ cls: String = "Warrior", race: String = "Human", prof: String = "Thief",
              _ diff: GameData.Difficulty = .wanderer) -> Run {
-        Run(character: PlayerCharacter(name: "P", cls: cls, race: race, prof: prof,
+        // No spirit, so the numbers are the bare fight's.
+        var r = Run(character: PlayerCharacter(name: "P", cls: cls, race: race, prof: prof,
                                  dungeon: "Crypt of Malachar", difficulty: diff))
+        r.spirit = nil
+        return r
     }
 
     func testLevelUpsCarryXPAndGiveThreePointsPerBatch() {
@@ -370,8 +376,11 @@ final class RoomTests: XCTestCase {
 
 final class InventoryTests: XCTestCase {
     func newRun(_ cls: String = "Warrior", prof: String = "Thief") -> Run {
-        Run(character: PlayerCharacter(name: "I", cls: cls, race: "Human", prof: prof,
+        // No spirit, so the numbers are the bare fight's.
+        var r = Run(character: PlayerCharacter(name: "I", cls: cls, race: "Human", prof: prof,
                                        dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.spirit = nil
+        return r
     }
     func item(_ name: String) -> Item {
         (ItemTables.cryptShop + ItemTables.cryptLoot).first { $0.name == name }!
@@ -1814,5 +1823,70 @@ final class SubclassTests: XCTestCase {
             r.hp = r.maxHp
             XCTAssertFalse(Combat.takeTurn(&r, .heavy, dice: &dice).missed)
         }
+    }
+}
+
+final class SpiritTests: XCTestCase {
+    func run(spirit: String?) -> Run {
+        var ch = PlayerCharacter(name: "Ivy", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.lastSpirit = spirit
+        return Run(character: ch)
+    }
+
+    func testDefaultsToEmberFox() {
+        XCTAssertEqual(run(spirit: nil).spirit, "ember-fox")
+        XCTAssertEqual(run(spirit: "nonsense").spirit, "ember-fox")
+        XCTAssertEqual(run(spirit: "stone-turtle").spirit, "stone-turtle")
+        XCTAssertEqual(Spirits.available(earned: []).count, 7)
+    }
+
+    func testCombatStartEffects() {
+        var r = run(spirit: "stone-turtle")
+        let log = Combat.begin(&r, against: Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1))
+        XCTAssertEqual(r.fight.shield, 15)
+        XCTAssertFalse(log.isEmpty)
+        // Glacial Wolf's defense lasts one fight, not forever.
+        var w = run(spirit: "glacial-wolf")
+        w.level = 5
+        let def = w.totalDef
+        Combat.begin(&w, against: Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1))
+        Combat.begin(&w, against: Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1))
+        XCTAssertEqual(w.totalDef, def + 4)
+    }
+
+    func testRareSleepsUntilLevelFive() {
+        var r = run(spirit: "void-wraith")
+        var dice = SeededDice(seed: 1)
+        var log: [String] = []
+        var e = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1)
+        e.hp = 1000
+        Combat.begin(&r, against: e)
+        Spirits.attack(&r, base: 20, dice: &dice, log: &log)
+        XCTAssertEqual(r.enemy!.hp, 1000)
+        XCTAssertTrue(log.last!.contains("dormant"))
+        r.level = 5
+        Spirits.attack(&r, base: 20, dice: &dice, log: &log)
+        XCTAssertEqual(r.enemy!.hp, 993)
+    }
+
+    func testMarketSpriteAndCrow() {
+        var r = run(spirit: "market-sprite")
+        XCTAssertEqual(Spirits.shopPrice(100, r), 80)
+        r.spirit = "shadow-crow"
+        XCTAssertEqual(Spirits.shopPrice(100, r), 100)
+        var dice = SeededDice(seed: 1)
+        var log: [String] = []
+        let g = r.gold
+        XCTAssertEqual(Spirits.kill(&r, dice: &dice, log: &log), 3)
+        XCTAssertEqual(r.gold, g + 3)
+    }
+
+    func testRewards() {
+        var dice = SeededDice(seed: 1)
+        let r = run(spirit: nil)
+        XCTAssertEqual(Spirits.victoryReward(r, earned: [], dice: &dice)?.id, "bone-hound-prime")
+        XCTAssertNil(Spirits.victoryReward(r, earned: ["bone-hound-prime"], dice: &dice))
+        XCTAssertNil(Spirits.eliteReward(earned: Set(Spirits.eliteIds), dice: &dice))
     }
 }

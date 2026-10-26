@@ -199,7 +199,7 @@ final class RunModel: ObservableObject {
         if isBossFloor && r.roomsOnFloor >= r.floorRoomsNeeded && !r.guardianDone {
             // startEliteGauntlet: an Elite Guardian blocks the way to the boss.
             let g = Combat.eliteGuardian(for: r, dice: &d)
-            Combat.begin(&r, against: g)
+            Combat.begin(&r, against: g).forEach { add($0) }
             let msg = "⚡ ELITE GUARDIAN — \(g.name) stands between you and the final chamber. It is significantly stronger than its kin."
             add(msg)
             roomText = msg
@@ -213,7 +213,7 @@ final class RunModel: ObservableObject {
 
         if isBossFloor && r.roomsOnFloor >= r.floorRoomsNeeded {
             let boss = Combat.nextBoss(for: r, dice: &d)
-            Combat.begin(&r, against: boss)
+            Combat.begin(&r, against: boss).forEach { add($0) }
             add("\(boss.icon) \(boss.name) rises before you. \(boss.hp) HP.")
             Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: true))
             Sound.track(Soundtrack.bossTrack(dungeon: r.dungeon))
@@ -229,7 +229,7 @@ final class RunModel: ObservableObject {
             add("\(label) \(out.message)")
             let said = "\(label) \(special.name). \(special.desc) \(out.message)"
             if let enemy = out.enemy {
-                Combat.begin(&r, against: enemy)
+                Combat.begin(&r, against: enemy).forEach { add($0) }
                 Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
                 Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
                 finish(r, d, phase: .fighting, spoken: said + " \(enemy.hp) HP." + thirdEye(r))
@@ -247,7 +247,7 @@ final class RunModel: ObservableObject {
         switch Rooms.next(&r, dice: &d) {
         case .fight:
             let enemy = Combat.nextEnemy(for: r, dice: &d)
-            Combat.begin(&r, against: enemy)
+            Combat.begin(&r, against: enemy).forEach { add($0) }
             let ability = Self.sentence(enemy.desc ?? "A powerful foe.")
             let line = enemy.isElite
                 ? "\(label) ★ ELITE: \(enemy.icon) \(enemy.name) — \(ability) \(enemy.hp) HP."
@@ -310,7 +310,7 @@ final class RunModel: ObservableObject {
             return
         }
         if let enemy = out.enemy {
-            Combat.begin(&r, against: enemy)
+            Combat.begin(&r, against: enemy).forEach { add($0) }
             Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
             Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
             finish(r, d, phase: .fighting, spoken: out.message + " \(enemy.name), \(enemy.hp) HP." + thirdEye(r))
@@ -526,6 +526,17 @@ final class RunModel: ObservableObject {
             if r.skillChoices.isEmpty { Skills.offer(&r, dice: &d) }
             levelUp = r.level
         }
+        // Spirit on-kill effects, and the 30% chance of an elite spirit.
+        var spiritLines: [String] = []
+        let found = Spirits.kill(&r, dice: &d, log: &spiritLines)
+        if found > 0 { game.wallet.addGold(found) }
+        spiritLines.forEach { add($0) }
+        if e.isElite, let sp = Spirits.eliteReward(earned: earnedSpirits, dice: &d) {
+            earnSpirit(sp.id)
+            Sound.sfx("sfx-unlock")
+            add("★ Elite Spirit: \(sp.icon) \(sp.name) unlocked! \(sp.ability)")
+            said += " Elite Spirit unlocked! \(sp.name) has joined you. \(sp.ability)"
+        }
         r.floorStats.kills += 1
         Feedback.success()
         r.enemy = nil
@@ -553,6 +564,44 @@ final class RunModel: ObservableObject {
     }
 
     /// A coward ran off, dropping gold. The room counts as cleared.
+    // MARK: Spirits
+
+    /// Spirits this character has earned (earnedSpirits).
+    var earnedSpirits: Set<String> {
+        guard game.characters.indices.contains(characterIndex),
+              case .array(let a)? = game.characters[characterIndex].extra["earnedSpirits"] else { return [] }
+        return Set(a.compactMap { if case .string(let s) = $0 { return s }; return nil })
+    }
+
+    private func earnSpirit(_ id: String) {
+        game.updateCharacter(characterIndex) { ch in
+            var list: [JSONValue] = []
+            if case .array(let a)? = ch.extra["earnedSpirits"] { list = a }
+            if !list.contains(.string(id)) { list.append(.string(id)) }
+            ch.extra["earnedSpirits"] = .array(list)
+        }
+        achievements.setGlobalMax("spiritsEarned", Double(earnedSpirits.count))
+    }
+
+    /// The pause menu's spirit list: switch your companion. The Market
+    /// Sprite costs 50 gold to bring back once its discount has been used.
+    func switchSpirit(_ id: String) {
+        guard let sp = Spirits.spirit(id), run.spirit != id else { return }
+        let used = game.characters[characterIndex].extra["marketSpriteUsed"] == .bool(true)
+        if id == "market-sprite" && used {
+            guard run.gold >= 50, game.wallet.spendGold(50) else {
+                Feedback.announce("Not enough gold to reactivate the Market Sprite. You need 50 gold.")
+                return
+            }
+            run.gold -= 50
+            add("Paid 50g to reactivate Market Sprite.")
+        }
+        run.spirit = id
+        game.updateCharacter(characterIndex) { $0.lastSpirit = id }
+        persist()
+        Feedback.announce("You chose \(sp.name). \(sp.ability)")
+    }
+
     // MARK: Home (#ov-home)
 
     @Published var showingHome = false
@@ -797,6 +846,13 @@ final class RunModel: ObservableObject {
         Sound.sfx("sfx-victory")
         Sound.ambient(nil)
         add("Victory! You have conquered \(run.dungeon).")
+        var d = dice
+        if let sp = Spirits.victoryReward(run, earned: earnedSpirits, dice: &d) {
+            earnSpirit(sp.id)
+            add("✦ Rare Spirit Unlocked: \(sp.icon) \(sp.name)! Saved forever.")
+            Feedback.announce("Rare Spirit unlocked: \(sp.name)! Saved to your character forever. Requires level 5 to use.")
+        }
+        dice = d
         game.globalInventory.keep(from: run)
         game.checkLegends(run)
         game.recordFirstClear(run)
@@ -1025,7 +1081,7 @@ final class RunModel: ObservableObject {
         finish(r, dice, phase: .exploring, spoken: "Wandering floor \(r.floor). 3 more rooms added. Explore carefully.")
     }
 
-    func price(_ entry: Inventory.ShopItem) -> Int { Inventory.price(entry.item, hour: hour) }
+    func price(_ entry: Inventory.ShopItem) -> Int { Spirits.shopPrice(Inventory.price(entry.item, hour: hour), run) }
 
     func buy(_ id: Int) {
         guard phase == .shopping, let i = shop.firstIndex(where: { $0.id == id }) else { return }
@@ -1035,7 +1091,12 @@ final class RunModel: ObservableObject {
         shop[i] = entry
         run = r
         add(out.message)
-        if out.used { Feedback.success(); Sound.sfx("sfx-purchase") }
+        if out.used {
+            Feedback.success()
+            Sound.sfx("sfx-purchase")
+            // The Market Sprite's discount is spent once it's used.
+            if r.spirit == "market-sprite" { game.updateCharacter(characterIndex) { $0.extra["marketSpriteUsed"] = .bool(true) } }
+        }
         persist()
         Feedback.announce(out.message)
     }

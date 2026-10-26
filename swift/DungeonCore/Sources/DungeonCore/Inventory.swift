@@ -378,7 +378,7 @@ public enum Inventory {
     /// Buys a shop item with gold from the run and the shared wallet.
     public static func buy(_ run: inout Run, _ entry: inout ShopItem, wallet: Wallet, hour: Int) -> Outcome {
         guard !entry.sold else { return Outcome(message: "Already sold.", used: false) }
-        let cost = price(entry.item, hour: hour)
+        let cost = Spirits.shopPrice(price(entry.item, hour: hour), run)
         guard run.gold >= cost, wallet.spendGold(cost) else {
             return Outcome(message: "Not enough gold. You need \(cost) gold. You have \(run.gold).", used: false)
         }
