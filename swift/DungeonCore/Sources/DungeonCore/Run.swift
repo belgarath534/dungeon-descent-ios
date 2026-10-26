@@ -126,6 +126,9 @@ public struct Run: Codable, Sendable {
     /// Damage Death's Bargain dealt on the last death (0 when it didn't fire).
     public var bargainStrike = 0
 
+    /// This run's journal (DS.journalLog), saved to the character as "journal".
+    public var journalLog: [JournalEntry] = []
+
     public func has(_ upgrade: String) -> Bool { coinUpgrades.contains(upgrade) }
 
     public var isDead: Bool { hp <= 0 }
@@ -226,6 +229,13 @@ public struct Run: Codable, Sendable {
         default: break
         }
     }
+}
+
+/// One line of a character's journal: "10/26 Floor 3" and what happened.
+public struct JournalEntry: Codable, Sendable, Equatable {
+    public var time: String
+    public var text: String
+    public init(time: String, text: String) { self.time = time; self.text = text }
 }
 
 /// What happened on the current floor (showFloorCompleteScreen).

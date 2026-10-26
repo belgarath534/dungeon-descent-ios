@@ -23,7 +23,7 @@ struct CodexView: View {
         case "codex-w-hollow": return (kills["hollow-grief-shade"] ?? 0) >= 1 || stat("hollowComplete") >= 1
         case "codex-w-mine": return stat("mineMaxDepth") >= 5
         case "codex-w-spire": return stat("spireFloor") >= 10
-        case "codex-w-dddi": return n("dd_stories_read") >= 3
+        case "codex-w-dddi": return n("dd_stories_read") >= 3 || stat("storiesRead") >= 3
         case "codex-w-void": return n("dd_void_fragments") >= 5
         case "codex-e-skeletons": return (kills["crypt-skeleton"] ?? 0) >= 10
         case "codex-e-void-wraith": return (kills["void-wraith"] ?? 0) >= 1

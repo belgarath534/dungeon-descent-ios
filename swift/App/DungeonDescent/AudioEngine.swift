@@ -7,6 +7,7 @@ import DungeonCore
 @MainActor
 enum Sound {
     static func track(_ name: String) { AudioEngine.shared.playTrack(name) }
+    static func stopMusic() { AudioEngine.shared.stopMusic() }
     static func ambient(_ key: String?) { AudioEngine.shared.playAmbient(key) }
     static func sfx(_ id: String) { AudioEngine.shared.playEffect(id) }
     static func settingsChanged() { AudioEngine.shared.applySettings() }
@@ -107,6 +108,12 @@ final class AudioEngine {
             fadeOut(ambient)
             ambient = nil
         }
+    }
+
+    func stopMusic() {
+        fadeOut(music)
+        music = nil
+        musicName = nil
     }
 
     private func fadeOut(_ player: AVAudioPlayer?) {

@@ -59,7 +59,7 @@ struct MainMenuView: View {
               color: Color(hex: 0xc8a832), border: Color(hex: 0x8b6914)),
         Entry(id: "bossrush", text: "👑 Boss Rush", label: "Boss Rush, fight all nine bosses back to back", action: .go(.bossrush)),
         Entry(id: "tournament", text: "🏆 Tournament", label: "Tournament, compete against other players for the highest score"),
-        Entry(id: "chronicles", text: "📚 Chronicles", label: "The Chronicles, lore and history of the dungeons"),
+        Entry(id: "chronicles", text: "📚 Chronicles", label: "The Chronicles, lore and history of the dungeons", action: .go(.chronicles)),
         Entry(id: "codex", text: "📖 Codex", label: "The Codex, world lore enemy lore and artifacts unlocked through gameplay", action: .go(.codex)),
         Entry(id: "creator", text: "⚔ Enemy Creator", label: "Community Enemy Creator, build an enemy and set it loose in the dungeon"),
         Entry(id: "chat", text: "💬 Global Chat", label: "Global Chat, talk to other players"),

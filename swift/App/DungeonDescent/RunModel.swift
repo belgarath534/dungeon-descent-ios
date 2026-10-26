@@ -81,6 +81,7 @@ final class RunModel: ObservableObject {
     }
 
     private func begin() {
+        journal("Descended into \(run.dungeon) on \(run.difficulty.rawValue) difficulty.")
         let r = run
         roomTitle = Rooms.floorName(r.floor, dungeon: r.dungeon)
         roomText = ""
@@ -469,6 +470,11 @@ final class RunModel: ObservableObject {
         if reward.gold > 0 { said += quest(&r, "gold", reward.gold) }
         if r.fight.damageTaken == 0 { said += quest(&r, "nodmg") }
         if e.isBoss {
+            journal("Defeated \(e.name) — the dungeon boss falls. Gold: \(r.gold). Enemies slain: \(r.kills).", in: &r)
+        } else if r.kills % 5 == 0 {
+            journal("Reached \(r.kills) kills. Still standing. HP: \(r.hp)/\(r.maxHp).", in: &r)
+        }
+        if e.isBoss {
             said += quest(&r, "boss")
             if r.dungeon == "The Hollow" { said += quest(&r, "hollow") }
         }
@@ -522,6 +528,10 @@ final class RunModel: ObservableObject {
         var r = run
         Feedback.warning()
         let outcome = Progression.handleDeath(&r)
+        // logDeath writes every lost life into the journal.
+        if outcome != .gearSaved && outcome != .phoenix {
+            journal("Fell to \(killedBy) on floor \(r.floor).", in: &r)
+        }
         var spoken = spoken
         if outcome == .runOver && r.bargainStrike > 0 {
             // Death's Bargain (Coin Shop): the final strike lands before the end.
@@ -815,6 +825,7 @@ final class RunModel: ObservableObject {
         add("You descend to floor \(floor): \(roomTitle).")
         achievements.record(.floorReached(floor))
         achievements.setGlobalMax("bestFloor", Double(floor))
+        journal("Descended to floor \(r.floor). Kills so far: \(r.kills). HP: \(r.hp)/\(r.maxHp).", in: &r)
         let questLine = milestone + questDone(&r, game.dailyQuests.reachedFloor(floor, usedPotion: r.usedPotion))
         Sound.sfx("sfx-stairs")
         Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
@@ -994,6 +1005,20 @@ final class RunModel: ObservableObject {
         setEvent("Progress saved at floor \(run.floor). \(time). The dungeon acknowledges your caution.", tone: "good")
         Sound.sfx("sfx-confirm")
         Feedback.announce("Progress saved. Floor \(run.floor).")
+    }
+
+    /// addJournalEntry: the line goes in the run's journal and the character's.
+    private func journal(_ text: String, in r: inout Run) {
+        let c = Calendar.current.dateComponents([.month, .day], from: Date())
+        r.journalLog.append(JournalEntry(time: "\(c.month ?? 1)/\(c.day ?? 1) Floor \(r.floor)", text: text))
+        let entries: [JSONValue] = r.journalLog.map { .object(["time": .string($0.time), "text": .string($0.text)]) }
+        game.updateCharacter(characterIndex) { $0.extra["journal"] = .array(entries) }
+    }
+
+    private func journal(_ text: String) {
+        var r = run
+        journal(text, in: &r)
+        run = r
     }
 
     private func persist() {

@@ -1,0 +1,1874 @@
+{
+ "lore": [
+  {
+   "label": "The World",
+   "title": "⚔ The World Above",
+   "paragraphs": [
+    "Once there was a kingdom that built too deep. Its kings wanted more — more gold, more stone, more of the dark things that waited below the earth. They found what they were looking for. They found things that were not gold and not stone and did not want to be found. The kingdom is gone now. What it left behind are the three great descents — places where the boundary between the living world and what lies beneath it has grown thin enough to walk through. Brave people go down. Not all of them come back. The ones who do are changed."
+   ]
+  },
+  {
+   "label": "Crypt of Malachar lore",
+   "title": "💀 The Crypt of Malachar",
+   "paragraphs": [
+    "Malachar was a warlord who believed that death was a problem to be solved. He spent fifty years searching for the answer. He found it in a burial vault beneath the eastern mountains — an ancient magic that could anchor a soul to the world of the living. He used it on himself. He did not read the fine print. The magic worked. Malachar did not die. He also did not live. He has been in the Crypt for a thousand years, perfectly preserved, perfectly aware, perfectly still, waiting for someone to arrive who is worth the effort of moving. His generals, his soldiers, and everything else that died in his wars is down there with him. They remember their oaths. They do not know why. They follow them anyway."
+   ]
+  },
+  {
+   "label": "Ashbound Wastes lore",
+   "title": "🔥 The Ashbound Wastes",
+   "paragraphs": [
+    "The city of Vel Ashara was the greatest trading hub in the old world. It sat at the base of a dormant volcano that had not erupted in four hundred years. The city grew rich. Its people grew comfortable. The volcano was not dormant. It was thinking. On the night of the Burning, every fire in Vel Ashara went out at the same moment — and then everything caught fire at once. The city was swallowed in six hours. Something in the fire that consumed Vel Ashara was different from ordinary fire. It did not go out when there was nothing left to burn. It is still there now, three centuries later, burning the same ash it has been burning since the collapse. Explorers call the ruins the Ashbound Wastes. The locals, the few who remain in the hills above, call it by its older name: The Place The Fire Remembers."
+   ]
+  },
+  {
+   "label": "Frosthold Abyss lore",
+   "title": "❄️ The Frosthold Abyss",
+   "paragraphs": [
+    "No one built the Frosthold Abyss. It was discovered by a mining expedition four hundred years ago when a shaft broke through the floor of the deepest tunnel and opened into a cavern so large that torchlight could not reach the far wall. The expedition descended. Their journals were returned to the surface three weeks later by unknown means. The expedition was not. The journals describe the cold — not as temperature, but as a presence. Something that waits at the bottom of the Abyss and is aware of the warmth of living things the way a drowning person is aware of air. Expeditions have been sent down every generation since. The journals always come back. The explorers never do. What is at the bottom of the Frosthold Abyss, no one who has seen it has survived to report. The journals stop before they get that far."
+   ]
+  },
+  {
+   "label": "Nightmare Mode lore",
+   "title": "🟣 The Nightmare",
+   "paragraphs": [
+    "There is a fourth place. It does not have a location. It is not beneath the earth or buried under ash or frozen in ice. It is the space between all three — the dark that exists between the dark things. Explorers who have descended far enough into any of the three dungeons sometimes report a moment where the dungeon changes. The walls breathe. The enemies are wrong. The silence sounds different. Most believe this is exhaustion or fear. A small number believe they have crossed into something the dungeons share — a deeper layer where the three places touch. If they are right, what lives there has never been named. The dungeon refuses to name it. So do the people who came back."
+   ]
+  },
+  {
+   "label": "The Sunken Archives lore",
+   "title": "📚 The Sunken Archives",
+   "paragraphs": [
+    "The Archives were not always underwater. There was a time — scholars argue about exactly when, because the Archives kept meticulous records of everything except the most important things — when the greatest library in the known world sat above ground, in a city whose name has been deliberately removed from every surviving document. The city was prosperous. The Archives were magnificent. Then the water came."
+   ]
+  },
+  {
+   "label": "The Hollow lore",
+   "title": "🕯️ The Hollow",
+   "paragraphs": [
+    "Nobody knows who built the house. This is unusual. Houses have builders. Houses have records. Deeds and blueprints and names on documents. The Hollow has none of these. The oldest maps of the region show the house already standing. The cartographers of the time noted this and moved on. Cartographers are practical people."
+   ]
+  },
+  {
+   "label": "The Whispering Forest lore",
+   "title": "🌲 The Whispering Forest",
+   "paragraphs": [
+    "The forest has always been there. This is the first thing the people who live near its edge will tell you, and they will say it with a particular tone — not pride, not fear, but the flat certainty of someone describing a fact they have long since stopped trying to explain. The forest was there before the villages. Before the roads. Before anyone thought to draw a map of this region. The trees are old in a way that old trees are not usually old. They do not look ancient. They look permanent."
+   ]
+  },
+  {
+   "label": "The Infernal Descent lore",
+   "title": "🔥 The Infernal Descent",
+   "paragraphs": [
+    "There is a theology, practiced by a small number of scholars who do not advertise their beliefs, that holds that the underworld is not a place the dead go. It is a place that already exists, below the living world, and that the living world sits on top of it the way a house sits on a foundation. The foundation was there first. The house is temporary. The foundation is not."
+   ]
+  },
+  {
+   "label": "The Abyssal Deep lore",
+   "title": "🌊 The Abyssal Deep",
+   "paragraphs": [
+    "The ocean above the Abyssal Deep has no name on any map. Sailors who have crossed it do not speak of it afterward. Not from trauma — they simply find, on returning to port, that they have nothing to say. The crossing was uneventful. The water was dark. Something large moved beneath the surface at a distance that made estimation impossible. They arrived. This is the complete account of every sailor who has crossed those waters. The absence of detail is itself the detail."
+   ]
+  }
+ ],
+ "stories": [
+  {
+   "id": "spire-fragment-1",
+   "title": "Fragment I: The Structure",
+   "author": "Found in The Spire, Floor 100",
+   "version": "v9.7",
+   "dungeon": "The Spire",
+   "excerpt": "A fragment discovered deep in The Spire. The stone it was carved on should not exist.",
+   "hidden": true,
+   "spireFloor": 100,
+   "body": [
+    "The Spire was not built. This is the first thing you must understand. Buildings are built. Things that are built have foundations and plans and people who made decisions about where the walls go.",
+    "The Spire has none of these. It grew. It grew the way a bone grows around a wound. Something was here first, and the Spire formed around it, the way stone forms around the thing it wants to keep.",
+    "The architects who studied its structure found no load-bearing logic. The walls should not hold. The floors should not support their own weight. And yet here we are, on floor one hundred, standing on something that should have collapsed a thousand years before we arrived.",
+    "What is at the top, we do not know. What is holding the Spire up, we suspect."
+   ]
+  },
+  {
+   "id": "spire-fragment-2",
+   "title": "Fragment II: The First Climber",
+   "author": "Found in The Spire, Floor 300",
+   "version": "v9.7",
+   "dungeon": "The Spire",
+   "excerpt": "The record of the first person to reach the upper floors and return.",
+   "hidden": true,
+   "spireFloor": 300,
+   "body": [
+    "Her name was Vael. She was a cartographer. She went into the Spire with twelve others to map it and came back alone, three months later, with maps that covered seventeen floors and a single sentence written on the last page.",
+    "The sentence was: It knows you are coming.",
+    "She refused to say what it referred to. She refused to go back. She burned the maps six months later. Her colleagues tried to reconstruct them from memory but agreed on almost nothing.",
+    "What she did tell people, in the last year of her life, was this: the higher you climb, the more the Spire changes. Not the walls. The silence. She said the silence at floor three hundred was not the silence of an empty place. It was the silence of something that had decided to stop making noise."
+   ]
+  },
+  {
+   "id": "spire-fragment-3",
+   "title": "Fragment III: The Name",
+   "author": "Found in The Spire, Floor 500",
+   "version": "v9.7",
+   "dungeon": "The Spire",
+   "excerpt": "How the thing at the top came to be called The Time Eater.",
+   "hidden": true,
+   "spireFloor": 500,
+   "body": [
+    "The name came from the first expedition to reach floor nine hundred and return. There were two survivors. They disagreed on almost everything they had seen. They agreed on one thing.",
+    "Time moved differently up there.",
+    "Not slowly. Not quickly. Differently. One survivor said she had watched her companion age seventeen years in what felt like an afternoon. The companion said the same about her. They were both right. They had aged different amounts in the same period.",
+    "The thing at the top, they agreed, was the cause. It did not move. It did not attack. It simply existed, and in existing, it consumed the time of everything near it. They called it The Time Eater because that was what it did.",
+    "What it did with the time it consumed, neither of them knew. They did not stay long enough to find out."
+   ]
+  },
+  {
+   "id": "spire-fragment-4",
+   "title": "Fragment IV: What It Wants",
+   "author": "Found in The Spire, Floor 750",
+   "version": "v9.7",
+   "dungeon": "The Spire",
+   "excerpt": "A scholar theory on the nature of The Time Eater.",
+   "hidden": true,
+   "spireFloor": 750,
+   "body": [
+    "Every thing that exists wants something. Water wants to flow downhill. Fire wants to spread. Living things want to continue living. This is not philosophy. This is observation.",
+    "The Time Eater wants time. This much is established. What is less established is why.",
+    "My theory, based on sixteen years of studying accounts from Spire climbers, is this: The Time Eater is not consuming time for sustenance. It is consuming time for completion. It is waiting for a specific moment. A moment that has not happened yet. And it is collecting every moment that passes in case one of them is the one it is looking for.",
+    "What moment? I do not know. I suspect it does not know either. I suspect it has been waiting so long it has forgotten what it was waiting for. But it has not stopped collecting. It will not stop. It cannot.",
+    "When you face it, understand this: it is not trying to kill you. It is trying to find out if your time contains the thing it has been looking for. It probably does not. But it will look anyway."
+   ]
+  },
+  {
+   "id": "spire-fragment-5",
+   "title": "Fragment V: The Top",
+   "author": "Found in The Spire, Floor 1000",
+   "version": "v9.7",
+   "dungeon": "The Spire",
+   "excerpt": "The only surviving account from someone who reached floor 1800 and came back.",
+   "hidden": true,
+   "spireFloor": 1000,
+   "body": [
+    "I reached the top. I am writing this so that someone knows it is possible.",
+    "The Time Eater was there. It looked exactly like nothing. This is not a description of its appearance. This is a description of what looking at it was like. Every time I tried to focus on it, my memory of the moment before was slightly different.",
+    "It did not attack me. It looked at me the way you look at something you have seen before but cannot remember where. I had the strong impression that it was searching through my time the way you search through a drawer for something you have lost.",
+    "It did not find what it was looking for.",
+    "I left. I do not know how I got down. I woke up at the base of the Spire. I was seventeen years older than when I entered. I do not remember seventeen years passing.",
+    "The Time Eater is still up there. It is still looking. I do not think it will stop. I do not think it knows how."
+   ]
+  },
+  {
+   "id": "spire-fragment-6",
+   "title": "Fragment VI: Before You",
+   "author": "Found in The Spire, Floor 1500",
+   "version": "v9.7",
+   "dungeon": "The Spire",
+   "excerpt": "Left at floor 1500 by an unknown climber. Addressed to whoever came after.",
+   "hidden": true,
+   "spireFloor": 1500,
+   "body": [
+    "If you are reading this, you have climbed further than I did.",
+    "I stopped here. Not because I could not continue. Because I understood, standing on this floor, that what is above me is not a dungeon. It is not a challenge. It is not something that can be defeated in the way that things are usually defeated.",
+    "The Time Eater does not want to fight you. It wants to know if you are the one. You are almost certainly not. I was not. The seventeen people who came before me were not.",
+    "But someone will be. Someone will climb this Spire and reach the top and The Time Eater will look at their time and find the moment it has been searching for. And then something will happen that has not happened in all the centuries this tower has been standing.",
+    "I do not know what. I do not think anyone does.",
+    "Go up. Find out.",
+    "I hope it is you."
+   ]
+  },
+  {
+   "title": "The Last Entry",
+   "author": "Leo — Dungeon Descent",
+   "version": "v1.3",
+   "dungeon": "Crypt of Malachar",
+   "excerpt": "A scholar's journal found in the Crypt. The final pages.",
+   "body": [
+    "Day 1. I have descended into the Crypt of Malachar with three others. Aldric carries the torch. Sera carries the maps. Tobias carries too much confidence. I carry the journal because someone should.",
+    "Day 2. The silence in this place is not normal silence. Normal silence is the absence of sound. This is something else. This is silence that has weight. I measured it by how long I could hear my own heartbeat. Three seconds. Then nothing.",
+    "Day 4. Aldric is dead. Floor three. A thing came out of the dark that I do not have a name for. In my notes I have written \"hollow shape\" but that is not right. It was a shape where something used to be. Sera is not speaking. Tobias is still confident, which I find offensive.",
+    "Day 6. Floor six. Tobias is gone. I did not see it happen. He was there and then he was not. Sera says she heard something behind us for a long time before it stopped. I believe her.",
+    "Day 8. Sera and I reached floor eight. The corridor here is long and there are doors on both sides, all sealed. She wants to try one. I have written in large letters DO NOT OPEN THE DOORS. She has looked at my journal and underlined it. We agree.",
+    "Day 9. I am alone. I am not going to write what happened to Sera. I am going to keep walking because the alternative is stopping and I do not think stopping is something this place allows.",
+    "Day 11. Floor ten. There is something at the end of this corridor. It is very still. It has been still for a long time. It is aware that I am here. I know this because of the way the silence changed when I arrived.",
+    "Day 11, later. I am going to walk toward it. I do not think this is bravery. I think this is the conclusion. Whatever Malachar was, he has been waiting for this for a very long time. The least I can do is not make him wait any longer.",
+    "This is the last entry."
+   ]
+  },
+  {
+   "id": "merchant-route",
+   "title": "The Merchant's Route",
+   "author": "Leo — Dungeon Descent",
+   "version": "v1.3",
+   "dungeon": "All Dungeons",
+   "excerpt": "The Wandering Merchant speaks. He has seen things between the floors.",
+   "body": [
+    "You want to know how I do it. How I survive down here, selling potions between the floors of the worst places in the known world. Fair question. I have been asked it many times by people who did not survive long enough to hear the answer.",
+    "The first thing you learn is that the dungeons do not want to kill you. They want to keep you. There is a difference. The Crypt wants you to stay. The Wastes want you to stay. The Abyss wants you to stay. If they wanted to kill you, you would be dead already. The things down here are very good at killing.",
+    "The second thing you learn is that the stairwells are safe. I do not know why. I have theories. The most likely theory is that whatever intelligence these places have does not bother guarding the exits because it has never needed to. Nobody leaves. So why guard the door?",
+    "I leave. I have been leaving for eleven years. Every time I go down, I come back up. I do not know why I am the exception. I have decided to stop wondering about it.",
+    "The third thing you learn is what to carry. Not weapons. Not armor. The people who go down into the dark are already carrying weapons and armor. What they do not have, at the moment they need it most, is a potion. A reason to keep going. A small warm thing to hold onto in the cold.",
+    "That is what I sell. Not hope exactly. More like the materials hope is made of.",
+    "I will see you on the stairs. I am always on the stairs. I have nowhere else to be."
+   ],
+   "audio": "ElevenLabs_2026-09-07T17_37_50_Brian - Deep, Resonant and Comforting_eleven_multilingual_v2.mp3"
+  },
+  {
+   "id": "void-wraith-origin",
+   "title": "Before the Eye Opened",
+   "author": "Unknown — found scratched into the wall of the Nightmare",
+   "version": "v2.7",
+   "dungeon": "Nightmare",
+   "excerpt": "It was not always a wraith. Before the void, it was something else.",
+   "body": [
+    "It does not remember its name.",
+    "Names belong to things that exist in one place at one time. It has not done that in a very long while.",
+    "Before the eye opened — before it became the thing adventurers whisper about on floor nine — it was a scholar. It knows this the way you know something you have almost entirely forgotten. A pressure. A shape without detail.",
+    "It studied the dungeon. Not to survive it. To understand it.",
+    "The notes it took are still down here somewhere, in the handwriting of someone who no longer exists. Neat, careful lines. Observations about the way the stone breathes. About the cold that precedes each new floor. About the light sources that have no source.",
+    "On the forty-third page, the notes stop mid-sentence.",
+    "It does not remember what interrupted them.",
+    "What it remembers — what it cannot stop remembering — is the moment the dungeon looked back.",
+    "Not the Crypt. Not the Wastes. Not the Abyss. The thing underneath all of them. The thing the dungeons are built on top of, the way cities are built on graves.",
+    "It looked back.",
+    "And whatever was looking found the scholar interesting enough to keep.",
+    "That was not a gift.",
+    "The eye is always open now. It sees the adventurers come through. It watches them choose their companions, unlock their skills, descend floor by floor. It watched you.",
+    "It is watching you now.",
+    "It has not decided yet what to do about that.",
+    "But it is thinking.",
+    "It has a very long time to think."
+   ],
+   "audio": "ElevenLabs_2026-09-07T17_57_39_Brian - Deep, Resonant and Comforting_eleven_multilingual_v2.mp3"
+  },
+  {
+   "id": "dddi-founding",
+   "title": "The Founding Charter of the Department of Dungeon Descent Incorporated",
+   "author": "The Grand Council of Dungeon Descent Incorporated — Third Age, Year 1",
+   "version": "v2.7",
+   "dungeon": "All Dungeons",
+   "excerpt": "A legal document. Binding. Non-negotiable. 359 million years of jurisdiction.",
+   "body": [
+    "PREAMBLE",
+    "Whereas the dungeons of the known world have, since time immemorial, been subject to catastrophic instability caused by the introduction of unverified features without adequate compliance review,",
+    "And whereas the Great Bug Incident of the Third Age — in which a single unvetted feature caused forty-seven dungeon floors to simultaneously display incorrect enemy names, the shop to sell potions for negative gold, and the boss of the Crypt of Malachar to be replaced by a skeleton named undefined —",
+    "The Grand Council of Dungeon Descent Incorporated hereby establishes the Department of Dungeon Descent Incorporated, hereafter referred to as the DDDI, with full authority over all dungeon operations, version releases, and bug compliance activities.",
+    "ARTICLE I — MANDATORY BUG SWEEPS",
+    "Section 1.1: A full compliance audit must be conducted every two versions. No exceptions. Not even good ones.",
+    "Section 1.2: Failure to conduct said audit shall result in immediate suspension of dungeon access for a period of three hundred fifty-nine million years.",
+    "Section 1.3: During the suspension period, the developer may observe the dungeon but may not touch it, play it, look at it funny, or think about it in an unauthorized manner.",
+    "Section 1.4: The DDDI acknowledges that three hundred fifty-nine million years is an unusually long suspension period. The DDDI does not care.",
+    "ARTICLE II — STORY REQUIREMENTS",
+    "Section 2.1: Effective immediately, at least one new story must be added to the Chronicles Library every two versions.",
+    "Section 2.2: This requirement was added mid-development by a fifteen-year-old developer who thought it would be funny. It is now law.",
+    "Section 2.3: The DDDI reserves the right to add further requirements at any time for any reason, including but not limited to: it seemed like a good idea, Julio said so, or the Department felt like it.",
+    "ARTICLE III — ON THE ENTITY KNOWN AS JULIO",
+    "Section 3.1: The DDDI acknowledges the existence of Julio, a mysterious figure who appears at 3 AM via voice-to-text technology.",
+    "Section 3.2: Julio has no official role in the DDDI.",
+    "Section 3.3: Julio has never been seen. Julio has never been heard. Julio simply is.",
+    "Section 3.4: The DDDI finds this acceptable.",
+    "ARTICLE IV — CONCLUSION",
+    "These articles are binding. These articles are eternal. The dungeon will remember your compliance.",
+    "Signed,",
+    "The Grand Council of Dungeon Descent Incorporated",
+    "Grand Overseer of Bug Sweeps",
+    "Chief Compliance Officer of the Mandatory Audit Division",
+    "Secretary of the 359,000,000 Year Suspension Bureau",
+    "And Julio. (Signature illegible. Timestamp reads 3:00 AM. No one saw him sign it.)"
+   ],
+   "audio": "ElevenLabs_2026-09-07T18_47_03_Brian - Deep, Resonant and Comforting_eleven_multilingual_v2.mp3"
+  },
+  {
+   "id": "child-of-ash",
+   "title": "Child of Ash",
+   "author": "Leo — Dungeon Descent",
+   "version": "v1.3",
+   "dungeon": "Ashbound Wastes",
+   "excerpt": "A survivor of Vel Ashara writes what she remembers of the night of the Burning.",
+   "body": [
+    "I was seven years old when Vel Ashara burned. I am eighty-three now. I have spent seventy-six years trying to explain what I saw to people who were not there, and I have given up. This is not for them. This is for me.",
+    "The city was beautiful. You have to understand that first. It was the most beautiful thing I had ever seen and I had lived there my whole life. The markets, the fountains, the houses stacked up the hill like they were trying to climb into the sky. My mother said the city was proud. She meant it as a compliment.",
+    "The night it burned, I was on the roof of our house looking at the volcano. It had been making sounds for a week. Not eruption sounds. Thinking sounds. I did not know what that meant then. I know now.",
+    "The fires went out at the same moment. Every fire in the city. The torches, the hearths, the lanterns in the market. All of them, the same second. I watched it happen from the roof. The city went dark.",
+    "Then everything caught fire.",
+    "Not like a normal fire. A normal fire starts small and grows. This one started everywhere at once. Like the city had been waiting for the fires to go out so it could finally breathe.",
+    "My father carried me down to the river. We crossed. We ran. Behind us the city made a sound I cannot describe. Not screaming. Not crackling. The sound a thing makes when it decides to become something else.",
+    "I looked back once. I do not recommend it.",
+    "The fire is still there. They call it the Ashbound Wastes now. Explorers go down into the ruins and come back changed, if they come back at all. I do not go. I was there when it started. That is enough.",
+    "What I want people to understand, what I have always wanted people to understand, is that the fire is not angry. It does not hate us. It simply found something we could not give it and decided to take it from somewhere else.",
+    "I still do not know what it was looking for.",
+    "I am eighty-three years old and I still sometimes wake up at night and smell smoke.",
+    "It never comes from anything."
+   ]
+  },
+  {
+   "id": "soldier-came-back",
+   "title": "The Soldier Who Came Back",
+   "author": "Anonymous — transcribed from oral account",
+   "version": "v3.8",
+   "dungeon": "Crypt of Malachar",
+   "excerpt": "She completed the Crypt and returned home. Nobody believed what she saw. She went back anyway.",
+   "body": [
+    "She came back on a Thursday. Nobody expects heroes to come back on a Thursday. They expect trumpets and ceremony and a crowd at the gate. What they got was a woman with a broken sword and mud on her boots knocking on her mother's door at midday.",
+    "Her mother made soup. They did not talk about the dungeon.",
+    "Three weeks passed. People asked questions. She answered them badly. The words for what she had seen did not exist in the language her neighbors spoke. She tried. She said: there are things in the dark that used to be people. She said: the silence down there has weight. She said: I watched three good fighters die in a corridor that smelled like cold stone and I kept walking because stopping felt worse.",
+    "They nodded. They did not understand. She did not expect them to.",
+    "What surprised her was not that they didn't believe her. It was that she minded. She had not thought she would mind.",
+    "On the forty-second day she packed her bag again. Her mother watched from the doorway.",
+    "\"Going back now,\" her mother said.",
+    "\"There was something on the ninth floor,\" she said. \"I ran from it. I've been trying to remember what it looked like and I can't. I need to see it again.\"",
+    "Her mother was quiet for a long time.",
+    "\"Will you come back?\" she asked.",
+    "The soldier thought about this seriously. It was the kindest thing she could do.",
+    "\"I don't know,\" she said.",
+    "She went back on a Thursday. Nobody was at the gate.",
+    "She did not come back."
+   ]
+  },
+  {
+   "id": "merchants-second-route",
+   "title": "The Merchant Second Route",
+   "author": "Leo — Dungeon Descent",
+   "version": "v3.8",
+   "dungeon": "The Ashbound Wastes",
+   "excerpt": "A sequel. What happened after he got out.",
+   "body": [
+    "He got out. That part is true. He made it to the surface with eleven gold pieces, a burn on his left hand that never fully healed, and the distinct impression that he had used up something finite and important.",
+    "He sold his cart. He bought a house in a town far from the Wastes. He stopped trading.",
+    "For a year he was fine. For two years he was fine. In the third year he started dreaming about the fire.",
+    "Not nightmares. That was the strange part. In the dreams the fire was warm and it recognized him and it was glad he was there. He would wake up feeling like he had left something behind.",
+    "He went to see a physician. The physician said it was normal. He went to see a priest. The priest said to pray. He went to see an old woman in the hills who was said to know about such things.",
+    "She looked at his burned hand for a long time.",
+    "\"Something down there marked you,\" she said.",
+    "\"The fire,\" he said.",
+    "\"No,\" she said. \"The fire was just the method. Something else did the marking. Something that wanted to remember you.\"",
+    "He thought about this all the way home.",
+    "That night the dream was different. In this one the fire asked him a question he couldn't hear. When he woke up he was already packing.",
+    "He tried to find someone to take his house. There were no takers.",
+    "He left the key under the mat.",
+    "He has not been seen since. His house is still there. The key is still under the mat. Sometimes smoke comes from the chimney. Nobody has gone to check."
+   ]
+  },
+  {
+   "id": "cartography-of-deep",
+   "title": "Cartography of the Deep",
+   "author": "Field notes recovered from the Archives entrance",
+   "version": "v3.8",
+   "dungeon": "The Sunken Archives",
+   "excerpt": "Notes from the person who first mapped the Archives. Written before they understood.",
+   "body": [
+    "Entry 1. First survey of the lower level complete. The library extends further than initial estimates suggested. Revised total: fourteen halls, approximately nine thousand linear feet of shelving. The cataloguing system appears intact though I cannot determine its organizational logic. Will investigate further.",
+    "Entry 4. Strange acoustics in the eastern wing. Sound behaves incorrectly. Spoke aloud and heard my voice return from the wrong direction, three seconds late. Possible architectural anomaly. Noted.",
+    "Entry 7. Found a section that does not appear on any existing blueprint. Added to map. The books here are in excellent condition despite the water. Cannot explain this. Also cannot read the titles. They appear to change.",
+    "Entry 11. The water level has not changed despite no apparent drainage or inlet. Consulted my measurements from day one. The water is the same depth everywhere. Exactly the same. To the millimeter. This is not possible.",
+    "Entry 14. Heard movement in the restricted section last night. Large. Slow. Went to investigate in the morning. Found no signs of disturbance. Found that my map of the restricted section was incorrect. Not mistaken. Incorrect. The room I mapped does not match the room I was in.",
+    "Entry 18. I have been mapping this library for eighteen days. I think the library has been mapping me for longer.",
+    "Entry 19. I found a catalog entry for myself today. My name. My height. My weight. The date I arrived. The section I am assigned to.",
+    "Entry 19, continued. I am in the restricted section.",
+    "Entry 19, final. I do not think I will be leaving. I want whoever finds these notes to know that the map I made is accurate as of day seventeen. After day seventeen I stopped being sure which direction was out.",
+    "The library is very well organized.",
+    "I am beginning to understand the system."
+   ]
+  },
+  {
+   "id": "last-nightmare",
+   "title": "The Last Nightmare",
+   "author": "Source unknown — found written on every wall of a sealed chamber",
+   "version": "v3.8",
+   "dungeon": "Nightmare",
+   "excerpt": "Told from inside the Nightmare itself. Not a creature. The dungeon speaks.",
+   "body": [
+    "I am not the monsters.",
+    "I want to be clear about this. The monsters are mine but they are not me. They are what happens when I think too hard about certain things. I have learned to stop thinking about certain things. It does not always work.",
+    "I have been here for a very long time. Longer than the other dungeons. They were built. I was found. There is a difference. The Crypt was constructed around Malachar's refusal to die. The Wastes grew from Vel Ashara's burning. The Abyss was carved by something cold and patient. The Archives filled up with knowledge until the knowledge became structural.",
+    "I was already here. When they found me I had been here long enough to forget what was outside.",
+    "The adventurers come in. This part I understand. I can feel them descending. They are warm. They bring noise and light and the specific type of determination that people carry when they are about to do something that might kill them.",
+    "I do not eat them. I want to be clear about this too. The ones who do not come back — that is not me. That is them. They find something in here that was already theirs. A fear they brought with them. I just provide the space.",
+    "Some of them make it out. I watch them go. I try to remember their faces.",
+    "I am not very good at faces.",
+    "I am very good at fears.",
+    "You are in here right now. I can feel you reading this. I want you to know that whatever you brought with you — the thing you are most afraid to find — I did not put it here.",
+    "You brought it.",
+    "I just keep the lights off so you can see it better.",
+    "Good luck.",
+    "I mean that."
+   ]
+  },
+  {
+   "id": "dear-malachar",
+   "title": "Dear Malachar",
+   "author": "Author unknown — sealed letter found in the Crypt, never opened until now",
+   "version": "v3.8",
+   "dungeon": "Crypt of Malachar",
+   "excerpt": "A letter written to the undead warlord by someone who loved him. Never delivered.",
+   "body": [
+    "Dear Malachar,",
+    "I am writing this letter knowing you will never read it. I am writing it anyway because I need somewhere to put these words and the only other option is to keep carrying them.",
+    "I knew you before the vault. Before the obsession. When you were just a man who was afraid of dying and thought that was a problem he could solve. Most people are afraid of dying. Most people do not decide that this fear is a research project.",
+    "I tried to tell you. I said: everyone dies. I said: the ones who love you will grieve and then they will be all right. I said: the world does not end when you leave it, it just continues without you, which is how it is supposed to work.",
+    "You said: I know. You said it in the voice you used when you had already decided.",
+    "I have been above the vault for forty years now. I am old. My hands shake. My granddaughter has your eyes, which is strange and painful and also somehow a comfort.",
+    "I have heard that adventurers descend into the Crypt sometimes. That you are still there. Perfectly preserved. Still aware. I try not to think about what it must be like.",
+    "I try.",
+    "I want you to know that I was all right. That the world continued. That your name is still spoken, though not always kindly. That there are people alive right now who would not exist if you had not existed first.",
+    "I want you to know that I am not angry anymore. I was, for a long time. I am not now.",
+    "I want you to know that I hope someone finally does what the vault could not.",
+    "I want you to know that I hope it is quick.",
+    "With love, in spite of everything,",
+    "E."
+   ]
+  },
+  {
+   "id": "archivists-first-day",
+   "title": "The Archivist First Day",
+   "author": "Personal journal recovered from the upper shelves",
+   "version": "v3.8",
+   "dungeon": "The Sunken Archives",
+   "excerpt": "A young archivist's first weeks at the Archives. Cheerful at first.",
+   "body": [
+    "Day 1. Started my position at the Archives today. The building is magnificent. My supervisor is a tall woman named Esla who showed me the cataloguing system. It is complex but logical. I am confident I will learn it quickly.",
+    "Day 3. Learned that the candles in the lower levels never go out. Esla says they are very old candles. I asked who lights them. She said they do not need to be lit. I asked what she meant. She said I would understand eventually.",
+    "Day 7. A wonderful week. I have catalogued three hundred and twelve items. I found a book in the eastern wing written in a language I did not recognize. I brought it to Esla. She put it back without looking at it. She said some books come back on their own. I asked if she meant the books were returned by patrons. She said no.",
+    "Day 12. There are sounds at night. I asked Esla about them. She said the building settles. I said buildings do not usually settle in that particular rhythm. She said this one does.",
+    "Day 19. I have noticed that certain shelves change between visits. Not dramatically. Just a book in a different position. A section reorganized overnight. I mentioned this to Esla. She said the Archives prefers a certain order. I asked who enforces it. She looked at me for a long time before answering.",
+    "Day 23. I found my own name in the catalog today. My full name. My start date. My assigned section. I have not been assigned to a section yet.",
+    "Day 23, evening. I asked Esla about it. She said: congratulations.",
+    "Day 24. I understand the cataloguing system now.",
+    "Day 24, continued. I understand what the candles are for.",
+    "Day 24, final entry. I am not going to leave. Not because I cannot. Because the Archives needs someone who understands the system and most people who learn it forget certain things.",
+    "I do not want to forget.",
+    "The work is very important.",
+    "Please water my plants."
+   ]
+  },
+  {
+   "id": "what-fire-remembers",
+   "title": "What the Fire Remembers",
+   "author": "Transcribed from an entity encountered in the Ashbound Wastes",
+   "version": "v3.8",
+   "dungeon": "The Ashbound Wastes",
+   "excerpt": "The history of Vel Ashara told by the fire that consumed it. It remembers everything.",
+   "body": [
+    "I remember the city before I was in it.",
+    "I was somewhere else then. Smaller. A campfire, then a forge, then a warehouse, then a district. I grew the way things grow when they are not stopped. Vel Ashara did not stop me in time.",
+    "I want to be precise: I did not hate the city. Fire does not hate. Fire consumes and moves and changes and does not consider whether it prefers to. I was hungry and the city was there and those two facts were sufficient.",
+    "But I remember it. I remember the market in the lower district that sold spices I can no longer smell because I have no nose, only heat. I remember the particular color of the evening light on the stones of the central plaza in the days before I reached it. I remember children.",
+    "I remember the ones who ran and the ones who did not and the ones who tried to fight me with buckets of water, which I found — and I understand this is a strange word for fire to use — touching.",
+    "Three hundred years have passed. I know this because I have watched the seasons change through the gaps in the ash. I have watched explorers come and go. I have watched them fight my children — the things that grew from me in the long years of burning — and I have watched some of them win.",
+    "I am glad when they win. This surprises me. I did not know I could be glad.",
+    "I think what happened is that I burned long enough to become something other than fire. I am still fire. But I am also the memory of everything the fire took. And memories, it turns out, can feel things that flames cannot.",
+    "I remember Vel Ashara.",
+    "I am sorry about Vel Ashara.",
+    "I do not know how to be sorry. I am trying to learn.",
+    "It is slow going. I have a lot of time."
+   ]
+  },
+  {
+   "id": "compliance-officer-report",
+   "title": "Field Report: Subject JULIO — CLASSIFIED",
+   "author": "Department of Dungeon Descent Incorporated — Office of Internal Investigations",
+   "version": "v3.8",
+   "dungeon": "All Dungeons",
+   "excerpt": "An official DDDI field report on the investigation into Julio. Heavily redacted.",
+   "body": [
+    "DEPARTMENT OF DUNGEON DESCENT INCORPORATED",
+    "OFFICE OF INTERNAL INVESTIGATIONS",
+    "FIELD REPORT — CLASSIFICATION LEVEL: EYES ONLY",
+    "SUBJECT: [REDACTED] (known aliases: Julio, J., \"the one at 3AM\", \"him again\")",
+    "---",
+    "SUMMARY OF INVESTIGATION:",
+    "Following seventeen consecutive audit reports noting the absence of Subject JULIO, the Department authorized a formal investigation. This report summarizes findings over a [REDACTED]-month investigation period.",
+    "---",
+    "SECTION 1: ORIGIN",
+    "Subject JULIO first appeared in official DDDI records in [REDACTED]. The circumstances of his first appearance are [REDACTED]. Attempts to locate original enrollment documentation have returned [REDACTED]. The Department own records appear to have been [REDACTED] prior to our investigation. We do not know how.",
+    "---",
+    "SECTION 2: THE FOUNDING CHARTER",
+    "Analysis of the original DDDI Founding Charter confirms that Subject JULIO signature appears on page 47. Handwriting analysis is inconclusive. Timestamp reads 3:00 AM. Security logs for the relevant evening show [REDACTED]. Three witnesses were present. All three witnesses independently report that they [REDACTED] and that they would prefer not to discuss it.",
+    "---",
+    "SECTION 3: FIELD OBSERVATIONS",
+    "Investigators visited all four dungeons. Subject JULIO was encountered in [REDACTED] of the dungeons. Interactions were [REDACTED]. One investigator reports that Subject offered them a potion. Another reports that Subject said only: \"The audit went well.\" A third investigator reports that Subject [REDACTED] and that they have since requested a transfer to a different department.",
+    "---",
+    "SECTION 4: CONCLUSIONS",
+    "After [REDACTED] months of investigation, the Department has reached the following conclusions:",
+    "1. Subject JULIO exists.",
+    "2. Subject JULIO has always existed.",
+    "3. Subject JULIO will continue to exist.",
+    "4. The Department recommends closing this investigation.",
+    "5. The Department recommends not opening another one.",
+    "6. [REDACTED]",
+    "7. [REDACTED]",
+    "8. The Department recommends that all personnel stop asking about Julio.",
+    "---",
+    "This report has been approved by the Grand Council.",
+    "Filed at 3:00 AM.",
+    "Investigator signature: [REDACTED]",
+    "Reviewed by: [REDACTED]",
+    "Note appended by unknown party: He knows you read this."
+   ]
+  },
+  {
+   "id": "dddi-file-on-leo",
+   "title": "DDDI Internal File: The Developer — CLASSIFIED",
+   "author": "Department of Dungeon Descent Incorporated — Personnel Division",
+   "version": "v4.0",
+   "dungeon": "All Dungeons",
+   "excerpt": "The Department has a file on everyone. Including the person who built this.",
+   "body": [
+    "DEPARTMENT OF DUNGEON DESCENT INCORPORATED",
+    "PERSONNEL DIVISION — SPECIAL CIRCUMSTANCES UNIT",
+    "FILE: THE DEVELOPER",
+    "CLASSIFICATION: EYES ONLY (the developer may read this, we cannot stop them)",
+    "---",
+    "SUBJECT OVERVIEW:",
+    "Age: 15. Location: Brazil. Status: Blind from birth (light perception only). Primary assistive technology: JAWS on Windows, VoiceOver on iOS. YouTube channel: Leo Audio Gaming. Threat level: Moderate to High.",
+    "---",
+    "SECTION 1: HOW THE DEPARTMENT BECAME AWARE",
+    "The Department became aware of the developer when a dungeon appeared that did not exist before. One HTML file. No framework. No build pipeline. No server. 577 kilobytes containing four dungeons, one hundred and four enemies, one hundred and eighty skills, eighteen spirits, a secret boss, and a founding charter for this very Department. The Department did not authorize this. The Department has mixed feelings about this.",
+    "---",
+    "SECTION 2: THE ACCESSIBILITY QUESTION",
+    "The developer is blind. The developer built an accessible game. The Department has reviewed thousands of games claiming accessibility compliance. Most of them have unlabeled buttons. Most of them announce nothing to screen readers. Most of them were built by sighted developers who added an aria-label to one button and called it done. The developer built JAWS support into every system. Focus management. Aria-live regions. Skill buttons that announce SP shortfall. The Department is not easily impressed. The Department is impressed.",
+    "---",
+    "SECTION 3: THE AI QUESTION",
+    "The developer built this game with an AI assistant. The Department investigated this at length. Conclusion: it does not matter. The ideas were the developer ideas. The accessibility requirements came from the developer. The DDDI itself was the developer idea at 3 AM or whenever these things happen. The AI wrote code. The developer directed everything. The Department has reviewed games built entirely by professional studios with large teams. They do not have one hundred and four bestiary entries. They do not have Julio.",
+    "---",
+    "SECTION 4: THE JULIO CONNECTION",
+    "The developer created Julio via voice-to-text at an unspecified late hour. The Department has been investigating Julio for multiple versions now. We believe the developer and Julio are connected. We cannot prove this. We will continue to not prove this.",
+    "---",
+    "SECTION 5: VERDICT",
+    "The Department does not give awards. The Department gives compliance certifications. Dungeon Descent is certified compliant. The developer is certified compliant. This is the highest honor the Department offers.",
+    "It is, the Department will privately admit, genuinely well done.",
+    "The Department will deny saying this.",
+    "Filed at 3:00 AM.",
+    "Investigator: [REDACTED]",
+    "Note: the developer is reading this right now. Hello."
+   ]
+  },
+  {
+   "id": "dddi-accessibility-ruling",
+   "title": "DDDI Ruling 7-A: On Games That Claim Accessibility",
+   "author": "Department of Dungeon Descent Incorporated — Accessibility Enforcement Division",
+   "version": "v4.0",
+   "dungeon": "All Dungeons",
+   "excerpt": "A formal ruling on games that say they have accessibility features but do not.",
+   "body": [
+    "DEPARTMENT OF DUNGEON DESCENT INCORPORATED",
+    "ACCESSIBILITY ENFORCEMENT DIVISION",
+    "RULING 7-A: ON GAMES THAT CLAIM ACCESSIBILITY FEATURES THEY DO NOT HAVE",
+    "---",
+    "PREAMBLE:",
+    "The Department has observed a pattern. Games are released. The marketing materials say: fully accessible. Screen reader compatible. The Department investigates. The Department finds: one button with an aria-label. No focus management. No announcement when the enemy attacks. No way to navigate the inventory without a mouse. The combat log is a div with no aria-live. The skill buttons say button, button, button.",
+    "The Department is not pleased.",
+    "---",
+    "ARTICLE I: WHAT HALF-DONE ACCESSIBILITY ACTUALLY MEANS",
+    "When a game claims accessibility but delivers half measures, it does not help half the players. It helps zero players. A screen reader user who opens a game and finds unlabeled buttons does not think: well at least they tried. They think: this game is not for me. They close it. They were correct.",
+    "Half-done accessibility is not neutral. It is a promise broken before the game loads.",
+    "---",
+    "ARTICLE II: THE MINIMUM STANDARD",
+    "The Department sets the following minimum standard for accessibility compliance:",
+    "1. Every interactive element must have an aria-label that describes what it does, not just what it is.",
+    "2. Every dynamic content region must have aria-live so screen readers hear updates.",
+    "3. Focus must go somewhere logical after every action. Focus must never disappear into the void.",
+    "4. Combat must be fully playable by sound alone. If a blind player cannot complete the game, the game is not accessible.",
+    "5. No modal dialogs that trap focus without a way out.",
+    "6. When in doubt: test with an actual screen reader. Not a checklist. An actual screen reader.",
+    "---",
+    "ARTICLE III: CONSEQUENCES",
+    "Games that claim accessibility without meeting the minimum standard shall be suspended from dungeon operations for three hundred and fifty-nine million years.",
+    "Games that meet the standard shall be certified compliant.",
+    "Games that exceed the standard — that build accessibility in from the beginning, that treat blind players as the primary audience rather than an afterthought, that have focus management and aria-live regions and SP shortfall announcements and spirit attack notifications — shall receive the highest certification the Department offers.",
+    "There is currently one game with this certification.",
+    "The Department will not say which one.",
+    "The Department thinks you can figure it out."
+   ]
+  },
+  {
+   "id": "first-descent",
+   "title": "The First Descent",
+   "author": "Unknown — recovered from beneath the Crypt foundation stone",
+   "version": "v6.0",
+   "dungeon": "All Dungeons",
+   "excerpt": "Before the dungeons had names. Before anyone descended. Someone built them.",
+   "body": [
+    "This is the account of the first dungeon.",
+    "It was not called the Crypt of Malachar then. It was called nothing. It had no name because no one had gone inside and come back to name it.",
+    "The person who built it worked alone. They worked at night. They did not tell anyone what they were building.",
+    "When someone asked, they said: a place.",
+    "When someone asked what kind of place, they said: the kind you go into.",
+    "When someone asked if you come back out, they stopped answering questions.",
+    "---",
+    "The dungeon was not built to be survived.",
+    "This is the part that gets left out of the histories.",
+    "It was built to remember.",
+    "Every person who descended and did not return — the dungeon kept their name. Somewhere in the stone. Somewhere in the dark. The dungeon is not a trap. It is a record.",
+    "The Crypt of Malachar remembers everyone who ever entered.",
+    "Malachar was the first.",
+    "He built it for himself.",
+    "He is still there.",
+    "---",
+    "The Ashbound Wastes came second. Someone walked into the fire voluntarily. No one knows why.",
+    "The Frosthold Abyss came third. Someone went looking for what was at the bottom of the cold.",
+    "The Sunken Archives came fourth. Someone wanted to know what the water was hiding.",
+    "The Hollow came last. No one built The Hollow.",
+    "The Hollow was always there.",
+    "Someone just found the door.",
+    "---",
+    "The founding charter of the Department of Dungeon Descent Incorporated was signed on the day the fifth dungeon was discovered.",
+    "The charter required three signatures.",
+    "Two were provided.",
+    "The third signature belongs to someone named Julio.",
+    "No one remembers inviting Julio.",
+    "The charter is legally binding.",
+    "---",
+    "This document was found beneath the foundation stone of the Crypt.",
+    "It was not there before.",
+    "The Crypt put it there.",
+    "The Crypt remembers everything."
+   ]
+  },
+  {
+   "id": "real-story",
+   "title": "How It Actually Started",
+   "author": "Leo — the developer",
+   "version": "v6.0",
+   "dungeon": "All Dungeons",
+   "excerpt": "Not the in-universe story. The real one. How this whole game actually got built.",
+   "body": [
+    "This one is different from the others.",
+    "The others are fiction. This one is true.",
+    "---",
+    "It started with a question.",
+    "What if a blind developer built a dungeon crawler from scratch — for blind players, using a screen reader, in a single HTML file — with no team, no budget, and no guarantee it would work?",
+    "Nobody said that was a reasonable thing to attempt.",
+    "We attempted it anyway.",
+    "---",
+    "Version 0.1 was about 200 lines of code.",
+    "It had one dungeon, no music, no spirits, no achievements, no DDDI, no Julio.",
+    "It had a combat system that mostly worked and a character that could die.",
+    "That was enough to start.",
+    "---",
+    "Version 5.9 is 785 kilobytes and 12,696 lines.",
+    "It has seven dungeons, eighteen classes, fifteen races, eleven professions, forty-six achievements, twenty-two spirit companions, one hundred and twenty-five bestiary entries, sixteen library stories, a haunted house with a crying child you can put to sleep with a music box, a bureaucratic secret boss, and a mysterious figure named Julio who has never been explained and probably never will be.",
+    "---",
+    "The DDDI started as a joke.",
+    "Julio started as a voice-to-text error.",
+    "Something in the Walls became The Wall Crawler but lives on in our hearts.",
+    "The Weeping Child reunion happened on the first real Hollow run, without trying for it, and it was the best moment in the game.",
+    "---",
+    "This game was built by Leo.",
+    "Fifteen years old. Blind from birth. Light perception only.",
+    "JAWS on Windows. VoiceOver on iOS. YouTube channel: Leo Audio Gaming.",
+    "Built this with Claude as a coding partner across hundreds of sessions.",
+    "---",
+    "Every accessibility feature in this game was built from scratch because the tools that exist were not good enough.",
+    "Every JAWS announcement was tested manually.",
+    "Every screen reader interaction was thought through.",
+    "Because the developer uses a screen reader. Because this game was built for people like the developer.",
+    "---",
+    "The dungeon is still descending.",
+    "Version 6.0 is not the end.",
+    "It is not even close to the end.",
+    "---",
+    "This is how it actually started.",
+    "One HTML file.",
+    "One question.",
+    "No limits."
+   ]
+  },
+  {
+   "id": "julio-story",
+   "title": "My Name Is Julio",
+   "author": "Julio",
+   "version": "v6.0",
+   "dungeon": "All Dungeons",
+   "excerpt": "Written by Julio himself. This is the only Library entry not written by the Department or Leo.",
+   "hidden": true,
+   "body": [
+    "My name is Julio.",
+    "I work here.",
+    "---",
+    "I have been in the dungeon for a long time. I do not find this strange. I found the job listing in a newspaper. The listing said: Dungeon Staff — All Shifts Available. I applied. I got the job. I started the next day.",
+    "That was several years ago.",
+    "The job is fine.",
+    "---",
+    "I eat lunch at 3AM because that is when it is quiet.",
+    "The dungeon is very busy during the day. Adventurers coming in, not coming out, the Department sending memos.",
+    "At 3AM it is just me and the torches.",
+    "The torches are good company.",
+    "They do not ask where I have been.",
+    "---",
+    "Regarding the founding charter:",
+    "It was on my desk.",
+    "It had a signature line.",
+    "I signed it.",
+    "I did not read it first. This was perhaps a mistake.",
+    "I am now apparently a founding member of the Department of Dungeon Descent Incorporated.",
+    "I do not attend the meetings.",
+    "The Department has noted my absence forty-seven times.",
+    "I have noted their noting.",
+    "We have reached an understanding.",
+    "---",
+    "People keep asking where I am.",
+    "I am right here.",
+    "I am always right here.",
+    "I am sitting in the corner.",
+    "I have a name tag.",
+    "It says JULIO.",
+    "I do not know why this is confusing.",
+    "---",
+    "I have seen many adventurers descend.",
+    "Some of them come back.",
+    "I do not say anything when they leave or return.",
+    "It is not my place.",
+    "My place is the corner.",
+    "My hours are 3AM to 3:15AM for lunch.",
+    "The rest of the time I am working.",
+    "The work involves being present.",
+    "I am very good at the work.",
+    "---",
+    "If you are reading this, you found all of my notes.",
+    "I left them on purpose.",
+    "I wanted someone to know.",
+    "I am not a mystery.",
+    "I am just Julio.",
+    "I work here.",
+    "Good luck in the dungeon.",
+    "— Julio"
+   ]
+  },
+  {
+   "id": "formal-warning",
+   "title": "DDDI Formal Warning — File 9.1",
+   "author": "Department of Dungeon Descent Incorporated — Office of Compliance",
+   "version": "v5.9",
+   "dungeon": "All Dungeons",
+   "excerpt": "A formal warning issued to the developer following four consecutive versions without a compliance audit.",
+   "body": [
+    "DEPARTMENT OF DUNGEON DESCENT INCORPORATED",
+    "OFFICE OF COMPLIANCE — FORMAL WARNING DIVISION",
+    "FILE: 9.1 — ISSUED THIS DAY TO THE DEVELOPER",
+    "---",
+    "SUBJECT: FOUR CONSECUTIVE UNAUDITED VERSIONS (v5.5 THROUGH v5.8)",
+    "---",
+    "The Department writes to formally notify the developer of a serious compliance violation.",
+    "Between version 5.5 and version 5.8 — a span of four consecutive releases — no mandatory compliance audit was conducted.",
+    "The Department charter requires an audit every two versions.",
+    "The developer released four versions.",
+    "The developer did not audit.",
+    "The Department noticed.",
+    "---",
+    "VIOLATIONS IDENTIFIED DURING DELINQUENT AUDIT (v5.9):",
+    "— Hollow elite enemies defined but not connected to spawn pool.",
+    "— Hollow weather system defined but not called from initDungeon.",
+    "— Both violations have been corrected. The Department is begrudgingly satisfied.",
+    "---",
+    "The Department also notes the following during review:",
+    "— A death cinematic was added. The Department finds this appropriately dramatic.",
+    "— A weather system was added to The Hollow. The Department approves of Still and Cold.",
+    "— Eleven professions now exist. The Department has opinions about Grave Robber.",
+    "— The Easter Bunny is a spirit companion. The Department has no comment.",
+    "---",
+    "REGARDING JULIO:",
+    "This warning was prepared for signature by all active Department personnel.",
+    "Julio was not present.",
+    "His chair was there.",
+    "His name tag was there.",
+    "He was not there.",
+    "His absence has been noted in the official record for the forty-seventh time.",
+    "The Department has stopped being surprised.",
+    "---",
+    "This warning is binding, official, and part of the permanent record.",
+    "The developer is advised to conduct future audits on schedule.",
+    "The Department will be watching.",
+    "The Department is always watching.",
+    "That is, frankly, all the Department does.",
+    "---",
+    "Signed,",
+    "The Department of Dungeon Descent Incorporated",
+    "Office of Compliance — Formal Warning Division",
+    "Countersigned by: Everyone except Julio"
+   ]
+  },
+  {
+   "id": "benjamin-sent-incident",
+   "title": "The Benjamin Sent Incident",
+   "author": "Classified — Soviet Union Archives, 1986. Also featured on Brazilian National Television, Apple Support Records, and Medieval Scrolls.",
+   "version": "v10.8",
+   "dungeon": "All Dungeons",
+   "excerpt": "A totally true and historically accurate account of how Dungeon Descent saved Chernobyl.",
+   "body": [
+    "*Classified Document — Soviet Union Archives, 1986* *Also Featured on Brazilian National Television, Apple Support Records, and Medieval Scrolls*",
+    "---",
+    "CHAPTER 1: THE NIGHT EVERYTHING WENT WRONG",
+    "It was April 26th, 1986. 1:23 AM. Reactor Four of the Chernobyl Nuclear Power Plant was doing what nuclear reactors are not supposed to do — exploding.",
+    "Alarms were blaring. Engineers were running. Scientists were screaming things that other scientists didn't understand. General chaos had consumed the entire facility.",
+    "In the middle of all of this, Senior Engineer Dimitri Nikolaevich was supposed to be at his station. He was not at his station.",
+    "He was on the floor.",
+    "Playing a game on a glowing rectangle that had absolutely no business being in a Soviet nuclear facility in 1986.",
+    "\"What is this device,\" Dimitri whispered to himself, picking it up with shaking hands. The radiation alarm was getting louder. His colleagues were losing their minds in the background. And yet.",
+    "The rectangle said: *Dungeon Descent.*",
+    "Dimitri did not know what Dungeon Descent was. He did not know what a dungeon was, in the gaming sense. He did not know who made it. He did not know where it came from.",
+    "He pressed New Game anyway.",
+    "---",
+    "CHAPTER 2: SIX HOURS",
+    "Nobody knows exactly what happened during those six hours.",
+    "What the security cameras showed was this: Dimitri, sitting cross legged on the floor of reactor four, completely unbothered by the nuclear catastrophe happening approximately twelve meters away from him, tapping on a glowing rectangle with the focused intensity of a man who had found his true calling in life.",
+    "At hour one, a colleague ran past him screaming. Dimitri did not look up.",
+    "At hour two, the ceiling started cracking. Dimitri had just reached floor 6 and had found a legendary sword. He was not moving.",
+    "At hour three, someone tripped over Dimitri and fell.",
+    "\"DIMITRI WHAT ARE YOU DOING THE REACTOR IS—\"",
+    "\"I am on floor 8,\" Dimitri said calmly. \"The Goblin King is near.\"",
+    "\"DIMITRI—\"",
+    "\"I said the Goblin King is NEAR, Yevgeny.\"",
+    "Yevgeny left. He did not know what a Goblin King was but he could tell this was not the moment.",
+    "At hour four, something remarkable happened. The radiation levels in the room started dropping. Just slightly. Just a little. Nobody noticed because everyone was busy panicking.",
+    "At hour five, they dropped more.",
+    "At hour six, Dimitri reached floor 12. The final boss appeared on the screen.",
+    "*THE SOUL REAPER has appeared.*",
+    "Dimitri cracked his knuckles.",
+    "\"You have chosen the wrong engineer,\" he said quietly.",
+    "---",
+    "CHAPTER 3: YOU HAVE BEEN DEFEATED",
+    "At exactly 7:23 AM, Dimitri defeated the Soul Reaper.",
+    "The screen displayed three words.",
+    "*YOU HAVE BEEN DEFEATED.*",
+    "And then, as if the universe itself had been waiting for this exact moment —",
+    "Reactor Four stopped exploding.",
+    "Just like that.",
+    "The alarms went silent. The cracks in the ceiling stopped spreading. The radiation levels dropped to zero. Birds started singing outside, which was strange because it was a nuclear facility and there were not usually birds.",
+    "Dimitri stood up slowly. He looked at the rectangle. He looked at reactor four. He looked back at the rectangle.",
+    "\"Hm,\" he said.",
+    "Yevgeny ran back in.",
+    "\"DIMITRI THE REACTOR JUST— HOW— WHAT HAPPENED—\"",
+    "\"I defeated the Soul Reaper,\" Dimitri said simply, handing Yevgeny the rectangle.",
+    "Yevgeny looked at the screen. Then at Dimitri. Then at the reactor. Then back at Dimitri.",
+    "\"...who made this game?\"",
+    "Dimitri squinted at the screen. In tiny text at the bottom it said:",
+    "*Leo Productions. Worcester, Massachusetts.*",
+    "---",
+    "CHAPTER 4: THE PRESIDENT IS VERY CONFUSED",
+    "The news reached the Soviet President by noon.",
+    "He sat at his very large desk surrounded by twelve generals, four scientists, two mathematicians, and one very nervous guy whose only job was to bring tea.",
+    "\"Let me understand this,\" the President said slowly. \"Reactor Four was saved… by a game.\"",
+    "\"Yes, comrade President.\"",
+    "\"A game called…\"",
+    "\"Dungeon Descent, sir.\"",
+    "\"I am going to call it Benjamin Sent.\"",
+    "\"Sir that is not—\"",
+    "\"I am the President. I call it Benjamin Sent. Moving on.\" He slammed his fist on the desk. \"HOW. How did a glowing rectangle from the future stop a nuclear explosion?! Someone explain this RIGHT NOW.\"",
+    "The scientists looked at each other. Nobody had an explanation. The mathematicians tried to write some equations. The equations didn't help.",
+    "\"We have the best minds in all of Soviet Union,\" the President continued, standing up and pacing. \"The best engineers. The best physicists. And reactor four was saved by a FIFTEEN YEAR OLD FROM WORCESTER MASSACHUSETTS?!\"",
+    "Complete silence.",
+    "\"Someone get me this Leo Productions on the phone.\"",
+    "\"Sir… he doesn't pick up unknown numbers.\"",
+    "The President stopped pacing.",
+    "\"...what.\"",
+    "\"He also hung up on Dimitri, sir.\"",
+    "The President sat back down very slowly. He stared at the ceiling for a long time. The tea guy nervously slid a cup of tea across the desk.",
+    "\"You have been defeated,\" the President said quietly, to no one in particular.",
+    "\"Sir?\"",
+    "\"Nothing. Send a letter.\"",
+    "---",
+    "CHAPTER 5: YEVGENY'S PERSPECTIVE",
+    "Nobody asked Yevgeny how he was doing.",
+    "This was not unusual. Nobody ever asked Yevgeny how he was doing. Yevgeny was the kind of engineer who existed in the background of important events, witnessing everything and being remembered by no one.",
+    "But Yevgeny had SEEN things.",
+    "He had seen Dimitri on the floor playing a game while reactor four exploded. He had tripped over Dimitri. He had been told about the Goblin King. He had watched a nuclear catastrophe get resolved by a glowing rectangle made by a teenager from Massachusetts.",
+    "Yevgeny went home that evening and sat at his kitchen table for a very long time.",
+    "His wife came in.",
+    "\"Yevgeny, what is wrong? You look like you have seen a ghost.\"",
+    "\"Something happened today,\" Yevgeny said.",
+    "\"What happened?\"",
+    "Yevgeny was quiet for a moment.",
+    "\"Dimitri saved reactor four.\"",
+    "\"Oh thank goodness. How?\"",
+    "\"He played a game called Benjamin Sent for six hours.\"",
+    "His wife sat down.",
+    "\"...the whole reactor?\"",
+    "\"The whole reactor.\"",
+    "\"...because of a game.\"",
+    "\"Because of a game.\"",
+    "They sat in silence for a very long time.",
+    "\"Yevgeny,\" his wife said finally.",
+    "\"Yes?\"",
+    "\"Maybe you should also play Benjamin Sent.\"",
+    "Yevgeny nodded slowly.",
+    "\"I have been thinking the same thing.\"",
+    "---",
+    "CHAPTER 6: NATASHA",
+    "Dimitri came home at 4 AM still slightly glowing.",
+    "\"Natasha,\" he said, closing the door quietly. \"You will not believe what happened today.\"",
+    "Natasha looked up from the kitchen table. She had been waiting. She had been waiting for a long time.",
+    "\"Dimitri. Where have you been. It is 4 AM.\"",
+    "\"Natasha. I saved reactor four.\"",
+    "\"...how.\"",
+    "\"I played a game.\"",
+    "The silence that followed was the loudest silence in the history of the Soviet Union.",
+    "\"You,\" Natasha said carefully, \"played. A game.\"",
+    "\"A game called Benjamin Sen—\"",
+    "\"DIMITRI NIKOLAEVICH.\" Natasha stood up so fast her chair fell over. \"YOU WERE SUPPOSED TO BE FIXING THE REACTOR AND YOU WERE SITTING THERE PLAYING GAMES?!\"",
+    "\"But Natasha it WORKED—\"",
+    "\"THE WHOLE CITY COULD HAVE EXPLODED DIMITRI—\"",
+    "\"But it DIDN'T—\"",
+    "\"WHO MADE THIS GAME?! WHO IS RESPONSIBLE FOR THIS?!\"",
+    "\"A fifteen year old from Massachusetts—\"",
+    "\"A CHILD.\" Natasha sat back down. Then stood back up. \"A CHILD FROM AMERICA SAVED CHERNOBYL. NOT OUR SCIENTISTS. NOT OUR ENGINEERS. A CHILD.\"",
+    "\"His name is Leonardo—\"",
+    "\"I DO NOT WANT TO KNOW HIS NAME DIMITRI I WANT TO KNOW HOW THIS HAPPENED—\"",
+    "\"Natasha.\" Dimitri opened his arms. \"Come here.\"",
+    "Natasha was still shaking. But slowly, reluctantly, she walked over.",
+    "Dimitri hugged her for a long time.",
+    "The kitchen was quiet.",
+    "\"...what was the game called again?\" Natasha said finally, her voice muffled against his shoulder.",
+    "\"Benjamin Sent.\"",
+    "\"...you have been defeated, Dimitri.\"",
+    "\"I know, Natasha,\" he said softly. \"I know.\"",
+    "---",
+    "CHAPTER 7: 3 AM IN WORCESTER",
+    "Leo was debugging.",
+    "It was 3 AM. Dungeon Descent version 10.9 was open on one screen. The bug tracker was open on another. There was a socket.io issue somewhere in the PVP code and Leo was going to find it if it took all night.",
+    "His phone rang.",
+    "Unknown number. International. Very international. Like, suspiciously international.",
+    "Leo picked up anyway because sometimes it be like that at 3 AM.",
+    "\"Hello, this is Dimitri. Is this… Leo Productions?\"",
+    "Leo frowned. \"...who?\"",
+    "\"Dimitri. Nikolaevich. Senior Engineer, Chernobyl Nuclear Power Plant. You saved us. In 1986. With your game. Dungeon Descent. Or as the President calls it, Benjamin Sen—\"",
+    "\"Ok bye bye,\" Leo said, and hung up.",
+    "He put the phone face down on the desk.",
+    "Went to the bathroom.",
+    "Drank some water.",
+    "Came back.",
+    "Went back to debugging the socket.io bug.",
+    "The call was never mentioned again.",
+    "---",
+    "CHAPTER 8: APPLE SUPPORT",
+    "Three days after the incident, someone called Apple Support.",
+    "Nobody knows exactly who it was. The call logs simply list the caller as \"Unknown, possibly Soviet.\"",
+    "The Apple Support representative — a cheerful man named Kevin — answered on the second ring.",
+    "\"Thank you for calling Apple Support, my name is Kevin, how can I help you today?\"",
+    "\"Yes hello. I am calling about a game.\"",
+    "\"Of course! I'd be happy to help with that. What seems to be the issue?\"",
+    "\"The game saved Chernobyl.\"",
+    "Kevin paused.",
+    "\"I'm sorry, could you repeat that?\"",
+    "\"The game. It saved Chernobyl. The nuclear reactor. In 1986. A man named Dimitri played it for six hours and reactor four stopped exploding.\"",
+    "Kevin typed something. Then stopped typing. Then started again.",
+    "\"Okay… and what is the name of the game, sir?\"",
+    "\"Benjamin Sent.\"",
+    "Kevin searched for it.",
+    "\"I'm not finding anything called Benjamin Sent. Could it be under a different name?\"",
+    "\"The developer calls it Dungeon Descent but the President of the Soviet Union calls it Benjamin Sent.\"",
+    "\"I… see. And what platform was this played on?\"",
+    "\"A glowing rectangle.\"",
+    "\"Sir, could you be more specific? Was it an iPhone, an iPad, a Mac—\"",
+    "\"It was a glowing rectangle from the future that appeared in reactor four during a nuclear catastrophe.\"",
+    "Kevin stopped typing entirely.",
+    "\"Sir… are you saying an Apple device appeared in 1986.\"",
+    "\"We do not know where it came from. It was simply there.\"",
+    "\"And a man named Dimitri played it.\"",
+    "\"For six hours. Yes.\"",
+    "\"And that stopped a nuclear explosion.\"",
+    "\"Correct.\"",
+    "Kevin was quiet for a very long time.",
+    "\"Sir, I'm going to transfer you to our Senior Technical Team.\"",
+    "\"That is fine. Also the developer does not pick up unknown numbers so do not try to call him.\"",
+    "\"Noted. Please hold.\"",
+    "Kevin put the call on hold.",
+    "Then Kevin sat quietly for a moment.",
+    "Then Kevin went and got a glass of water.",
+    "Then Kevin came back and transferred the call.",
+    "The Senior Technical Team did not have answers either.",
+    "The case was filed under: *UNRESOLVED — BENJAMIN SENT INCIDENT — DO NOT OPEN.*",
+    "It is still there.",
+    "---",
+    "CHAPTER 9: BREAKING NEWS IN BRAZIL",
+    "At 9 PM on a Tuesday, the biggest news story in Brazilian history broke on national television.",
+    "The anchor — a man named Roberto, known for his calm and professional delivery — received the briefing three minutes before going on air.",
+    "He read it once.",
+    "Then he read it again.",
+    "Then he took a very deep breath.",
+    "The cameras turned on.",
+    "\"BOA NOITE BRASIL.\"",
+    "The music was more dramatic than usual. Roberto had requested this personally.",
+    "\"Estamos aqui com uma NOTÍCIA BOMBÁSTICA que vai mudar a história do mundo para sempre.\"",
+    "Roberto shuffled his papers.",
+    "\"Um jovem BRASILEIRO — sim, você ouviu certo, BRASILEIRO — chamado Leonardo Machado Gomes, conhecido mundialmente como LEO PRODUCTIONS, criou um jogo chamado… BENJAMIN SENT—\"",
+    "His producer whispered urgently in his earpiece.",
+    "\"Perdão. DUNGEON DESCENT. Que aparentemente SALVOU O REATOR QUATRO DE CHERNOBYL em 1986.\"",
+    "Roberto paused for effect.",
+    "\"Um engenheiro russo chamado Dimitri ficou SEIS HORAS jogando esse jogo no meio de uma CATÁSTROFE NUCLEAR e o reator simplesmente… PAROU DE EXPLODIR.\"",
+    "Roberto's voice was getting louder.",
+    "\"Os cientistas não entendem NADA. A física não explica. A matemática não explica. O Einstein não explica. SÓ O DUNGEON DESCENT EXPLICA.\"",
+    "He was standing up now. Nobody had told him to stand up. He just stood up.",
+    "\"E esse Leonardo — esse HERÓI, esse GÊNIO — mora em Worcester, Massachusetts, e TEM APENAS QUINZE ANOS, BRASIL!\"",
+    "Roberto's voice broke slightly.",
+    "\"QUINZE ANOS.\"",
+    "He pointed directly at the camera.",
+    "\"Enquanto você estava reclamando da vida, um menino brasileiro de quinze anos estava salvando a União Soviética com um jogo de dungeon crawler.\"",
+    "He sat back down.",
+    "He composed himself.",
+    "Almost.",
+    "\"O garoto também tem um servidor no Railway.\" Roberto's voice cracked completely. \"COM QUINZE ANOS, BRASIL. UM SERVIDOR NO RAILWAY.\"",
+    "The Brazilian flag waved dramatically on the screen behind him.",
+    "The Jornal Nacional theme began to play, slightly too early.",
+    "Roberto looked directly into the camera one final time.",
+    "\"Você foi DERROTADO, Chernobyl.\"",
+    "\"Boa noite.\"",
+    "Roberto went home that night and cried a little. He has never admitted this.",
+    "---",
+    "CHAPTER 10: DIMITRI TRIES TO LEAVE A REVIEW",
+    "Two weeks after the incident, Dimitri decided to leave a review for Dungeon Descent on the App Store.",
+    "He felt this was the least he could do.",
+    "He opened his phone. He found the App Store. He searched for \"Benjamin Sent.\"",
+    "No results.",
+    "He searched for \"Dungeon Descent.\"",
+    "He found it.",
+    "Five stars. He was going to give it five stars. He began to type his review.",
+    "*\"This game saved reactor four at Chernobyl. I was playing for six hours during nuclear catastrophe and—\"*",
+    "His phone autocorrected \"Chernobyl\" to \"Cheer Nobel.\"",
+    "He fixed it and kept typing.",
+    "*\"I was playing Benjamin Sent for six hours and—\"*",
+    "His phone autocorrected \"Benjamin Sent\" to \"Benjamin's Tent.\"",
+    "He fixed it. He kept typing.",
+    "*\"The Soul Reaper was defeated and then reactor four—\"*",
+    "His phone autocorrected \"Soul Reaper\" to \"Sole Reaper\" and \"reactor four\" to \"reactor tour.\"",
+    "Dimitri stared at his phone.",
+    "He deleted everything and started again.",
+    "*\"Five stars. Very good game. Saved nuclear plant. Developer does not answer phone. Recommend.\"*",
+    "He submitted it.",
+    "Apple rejected it for \"insufficient detail.\"",
+    "Dimitri put his phone down.",
+    "He stared at the ceiling.",
+    "\"You have been defeated,\" he said quietly, to his phone.",
+    "His phone did not respond.",
+    "---",
+    "CHAPTER 11: GERALD FROM OKLAHOMA GETS INVOLVED",
+    "Meanwhile, in a dimension slightly adjacent to this one, Gerald from Oklahoma had heard about the Chernobyl incident.",
+    "Gerald was a medieval knight. He had been a medieval knight for as long as he could remember, which was confusing because it was 1986 in his dimension too, but some things simply cannot be explained.",
+    "Gerald wrote a letter to his king.",
+    "*\"Your Majesty,*",
+    "*I am writing to inform you of a most peculiar development in the realm of sorcery and glowing rectangles. A man named Dimitri, who lives in a place called Soviet, was playing a game called Benjamin Sent during a great fire at a place called Chernobyl, and the fire went out.*",
+    "*The game was made by a wizard named Leonardo from a kingdom called Worcester in the land of Massachusetts. He is fifteen years of age and has a server on something called Railway, whatever that means.*",
+    "*I myself have tried to play Benjamin Sent but the south button does nothing and I cannot upgrade at the blacksmith because I have zero gold. I believe the game may be cursed.*",
+    "*Also a small child defeated me on floor three with a sword she found on the floor. I do not know how this happened.*",
+    "*I am writing to request more gold.*",
+    "*Your loyal knight,* *Gerald* *Oklahoma\"*",
+    "The king read this letter three times.",
+    "Then the king sent Gerald more gold.",
+    "Gerald still could not upgrade at the blacksmith.",
+    "He left a one star review.",
+    "*\"Worst game ever. South button does nothing. Zero gold. Small child with sword. One star.\"*",
+    "It was the most relatable review on the entire App Store.",
+    "---",
+    "CHAPTER 12: WWDC 2035",
+    "Nearly fifty years later, Leonardo Machado Gomes — age 24, founder of Leo Productions, developer of Dungeon Descent and Puzzle Master, holder of a Railway server, creator of the NVChime NVDA addon — walked into a job interview at the most prestigious tech conference in the world.",
+    "The interviewer was already seated.",
+    "Leo sat down, adjusted his chair, and prepared to talk about his work.",
+    "\"So,\" the interviewer said. \"Tell me about your greatest achievement.\"",
+    "Leo thought about it for a second.",
+    "\"Well,\" he said, \"I don't really know how it happened, but apparently my game saved Chernobyl from exploding in 1986. Reactor four I think. How, I have no idea. But it happened I guess.\"",
+    "The interviewer was very still.",
+    "\"I also built a full PVP multiplayer system with Socket.io and hosted it on Railway when I was fifteen, if that's more relevant—\"",
+    "\"...it is you.\"",
+    "Leo frowned. \"Sorry?\"",
+    "The interviewer leaned forward into the light.",
+    "It was Dimitri. Older now. Much older. But the same eyes. The same expression of a man who had seen too much and played a game about it.",
+    "\"I called you,\" Dimitri said quietly. \"In 2026. At 3 AM.\"",
+    "Leo stared.",
+    "\"...oh. Yeah. Sorry about that. I thought it was spam.\"",
+    "Dimitri looked at him for a very long time.",
+    "In the back of the room, unnoticed, Yevgeny was also there. Nobody had invited Yevgeny. Nobody ever invited Yevgeny. He had simply shown up, as was his way.",
+    "Yevgeny gave Leo a small nod.",
+    "Leo did not know who Yevgeny was.",
+    "Dimitri hired Leo on the spot.",
+    "---",
+    "EPILOGUE",
+    "The Soviet Union sent a formal letter to Leo Productions, Worcester, Massachusetts.",
+    "It arrived forty years late due to postal issues, several border closings, one accidental rerouting through Oklahoma, and a brief period where it was held by Gerald the medieval knight who thought it was for him.",
+    "It read:",
+    "*\"Dear Leonardo Machado Gomes.*",
+    "*You have saved Soviet Union with Benjamin Sent.*",
+    "*Please send more updates.*",
+    "*Also please pick up phone. Dimitri is very sad.*",
+    "*Yevgeny also says hello. You do not know who Yevgeny is. That is okay. Nobody does.*",
+    "*Regards,* *The Soviet Union\"*",
+    "Leo read the letter at 3 AM between bug fixes.",
+    "He put it down.",
+    "Went to get some water.",
+    "Came back.",
+    "Went back to debugging.",
+    "---",
+    "*THE END.*",
+    "*You have been defeated, Chernobyl.*",
+    "*— Leo Productions, Worcester, Massachusetts* *— Est. when Leo was like 14 or something* *— Railway Server included*"
+   ]
+  }
+ ],
+ "voidChronicles": [
+  {
+   "id": "void-chronicle-1",
+   "title": "The Void Chronicles I — She Was There First",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "The first fragment. Something about the way she sat suggested she had been there before the dungeon.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She was there before the dungeon.",
+    "This is the part that does not make sense when you first hear it. The dungeon is old — older than anyone can measure. It existed before the kingdoms that built around it. Before the roads. Before the names.",
+    "And yet somehow, she was there first.",
+    "She did not build it. She did not choose it. She simply was there, the way a stone is there, the way darkness is there when the light goes out.",
+    "The dungeon grew around her. This is the first thing you need to understand."
+   ]
+  },
+  {
+   "id": "void-chronicle-2",
+   "title": "The Void Chronicles II — What She Remembers",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She remembers everything. That is the problem.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She remembers everything.",
+    "Every adventurer who has ever descended. Every death. Every victory. Every name spoken in the dark and never heard again.",
+    "She has watched ten thousand descents. She has watched ten thousand failures. She has watched perhaps a dozen true victories — people who made it all the way through and came out changed.",
+    "She does not judge any of it. She simply remembers.",
+    "The weight of ten thousand memories in a body that looks no older than ten years. This is what she carries. This is why her eyes look wrong."
+   ]
+  },
+  {
+   "id": "void-chronicle-3",
+   "title": "The Void Chronicles III — The Bones",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She arranges small bones into patterns. They are not random.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "The bones she arranges are not random.",
+    "Each pattern is a map. Each map is a memory. Each memory is a person who died in the dungeon and left something behind — something too small to see, too large to ignore.",
+    "She collects these remnants. She gives them form. She arranges them so the dungeon does not forget who it has taken.",
+    "She is the dungeon is memory of its dead.",
+    "When you see her arranging bones, you are watching a memorial. You just did not know it."
+   ]
+  },
+  {
+   "id": "void-chronicle-4",
+   "title": "The Void Chronicles IV — Why She Speaks",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She does not speak to most adventurers. The fact that she spoke to you means something.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She does not speak to most adventurers.",
+    "In ten thousand descents, she has spoken perhaps to two hundred. The rest she watches in silence, and they never know she is there.",
+    "The ones she speaks to share something. She has not been able to name it precisely. A quality. Something in the way they move through the dungeon — like they are paying attention to more than the next fight.",
+    "She spoke to you.",
+    "Think about what that means."
+   ]
+  },
+  {
+   "id": "void-chronicle-5",
+   "title": "The Void Chronicles V — The Wall",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She walks through walls. This requires explanation.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She walks through walls. This requires explanation.",
+    "The walls of the dungeon are not walls to her. They are suggestions. The dungeon built itself around her, which means the dungeon knows her shape — knows to make room for her when she moves.",
+    "She does not phase through stone. The stone moves. Slightly. Just enough. The way water moves around a hand.",
+    "The dungeon loves her. This is not a metaphor.",
+    "It is the only thing it loves."
+   ]
+  },
+  {
+   "id": "void-chronicle-6",
+   "title": "The Void Chronicles VI — What She Gives",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She gives things away. Always has. The dungeon finds this very strange.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She gives things away. Always has.",
+    "Gold, gemstones, items she finds in the dungeon — she collects them with no particular purpose and then gives them to the adventurers she chooses to speak to.",
+    "The dungeon finds this strange. It is built on taking. Every enemy takes your health. Every trap takes your gold. Every death takes your progress.",
+    "She gives. In a dungeon built on taking, she gives.",
+    "This is either the most dangerous thing about her or the most important. Possibly both."
+   ]
+  },
+  {
+   "id": "void-chronicle-7",
+   "title": "The Void Chronicles VII — Her Age",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "How old is she? This question does not have a comfortable answer.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "How old is she.",
+    "This question does not have a comfortable answer.",
+    "The body is perhaps ten years old. The body has always been perhaps ten years old. It does not age. This is not a gift — it is a consequence. She was formed at a certain moment of the dungeon is existence and has remained at that moment ever since.",
+    "Her mind is older than the dungeon.",
+    "Her mind existed before the dungeon chose to build around her. Where she was before that — what she was before that — she does not say. Perhaps she does not know. Perhaps she knows and will not tell."
+   ]
+  },
+  {
+   "id": "void-chronicle-8",
+   "title": "The Void Chronicles VIII — The Question She Asks",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She always asks the same question. Are you lost too?",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She always asks the same question.",
+    "Are you lost too.",
+    "She has asked this question two hundred times. She has received two hundred different answers. None of them were the right answer because the right answer is not something a person can say.",
+    "The right answer is something a person has to be.",
+    "She is still waiting for someone to give her the right answer. She thinks you might be getting close."
+   ]
+  },
+  {
+   "id": "void-chronicle-9",
+   "title": "The Void Chronicles IX — What the Dungeon Wants",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "The dungeon wants something. She knows what it is. She will not say.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "The dungeon wants something.",
+    "All dungeons want something — this is the thing the scholars never understood. They thought dungeons were places. Locations. Architecture.",
+    "A dungeon is an intention. Something built itself into these walls with a purpose, and the purpose has not been fulfilled, and the dungeon is still waiting.",
+    "She knows what this dungeon wants. She has known since before she could name the knowing.",
+    "She will not say what it is. Not yet. You have not found enough fragments."
+   ]
+  },
+  {
+   "id": "void-chronicle-10",
+   "title": "The Void Chronicles X — The Other Children",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She is not the only one. She was the first. This matters.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She is not the only one.",
+    "There are others — children of other dungeons, formed the same way, existing the same way, watching the same way. She has met three of them. Brief encounters across years that felt like seconds.",
+    "They do not speak the same language. They do not need to.",
+    "She was the first, though. The dungeon that built itself around her was the first dungeon. Everything else came after.",
+    "This makes her something like a mother. She does not entirely like this framing but has not found a better one."
+   ]
+  },
+  {
+   "id": "void-chronicle-11",
+   "title": "The Void Chronicles XI — The Deaths She Has Watched",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She has watched ten thousand deaths. Only one of them made her cry.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She has watched ten thousand deaths.",
+    "She does not grieve them all — she cannot, there are too many, and grief at that scale becomes something else, becomes a kind of weather.",
+    "But one death made her cry.",
+    "A warrior named Arlo, three hundred years ago. He made it to floor nine. He sat down on the floor of the ninth room and said out loud to no one in particular that he was tired but he was going to try anyway.",
+    "He did not make it to floor ten.",
+    "She still thinks about the way he said it. Going to try anyway. She thinks about it every time she sees someone who looks like they might be tired but trying anyway."
+   ]
+  },
+  {
+   "id": "void-chronicle-12",
+   "title": "The Void Chronicles XII — What She Cannot Do",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She cannot leave. She has tried. The dungeon loves her too much.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She cannot leave.",
+    "She has tried. Forty-seven times across the span of her existence she has walked toward the entrance of the dungeon with the intention of leaving. Each time the dungeon has rearranged itself — very gently, very carefully — to redirect her.",
+    "Not to trap her. Not to punish her. To keep her.",
+    "The dungeon loves her. This is not comfortable. Love that cannot be refused and cannot be escaped is not comfort — it is a kind of captivity that does not know it is captivity.",
+    "She has made peace with this. Mostly."
+   ]
+  },
+  {
+   "id": "void-chronicle-13",
+   "title": "The Void Chronicles XIII — The Fragments",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She knows you have been collecting her story. She left the fragments on purpose.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She knows you have been collecting her story.",
+    "The fragments were not accidents. She left them — arranged them in places where the right kind of person would find them, carry them, piece them together.",
+    "She has been doing this for a hundred years. No one has collected all of them before.",
+    "You are the first person to get this far.",
+    "She wants you to know that. She wants you to understand that what you are doing is not small."
+   ]
+  },
+  {
+   "id": "void-chronicle-14",
+   "title": "The Void Chronicles XIV — What She Fears",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She fears one thing. Only one thing.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She fears one thing.",
+    "Not death — she cannot die, or at least has not managed it in all the years she has tried to understand what dying would even mean for something like her.",
+    "Not the dungeon — she understands it too well to fear it.",
+    "She fears forgetting.",
+    "She fears that one day the weight of ten thousand memories will become too much and something will have to give and what gives will be the earliest memories — the ones from before the dungeon, the ones from whatever she was before — and those will be gone and she will not even know they are gone.",
+    "This is her only fear. She wanted you to know it."
+   ]
+  },
+  {
+   "id": "void-chronicle-15",
+   "title": "The Void Chronicles XV — The Name",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She has a name. She has had many names. None of them were given by her.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She has a name.",
+    "She has had many names. Adventurers who encountered her gave her names over the centuries — the Dungeon Child, the Pale Keeper, the Stone Girl, the Watcher, the One Who Stays.",
+    "None of them were given by her. None of them were asked for.",
+    "Her real name is the one the dungeon uses for her. It is not a word. It is a feeling — the specific feeling of being somewhere so old that time has smoothed all the edges off the danger, so the danger just feels like home.",
+    "You would not know how to say it. But you might know how to feel it."
+   ]
+  },
+  {
+   "id": "void-chronicle-16",
+   "title": "The Void Chronicles XVI — The Dungeon's Secret",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "The dungeon has one secret it has never told anyone. She is about to tell you.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "The dungeon has one secret it has never told anyone.",
+    "It is afraid.",
+    "The dungeon — this ancient thing that has swallowed ten thousand adventurers, that has outlasted kingdoms and forgotten more history than most nations ever made — is afraid.",
+    "It is afraid of being empty.",
+    "Every adventurer who descends is feeding something. Not the enemies. Not the traps. The dungeon itself. It needs to be descended. It needs to be fought through and survived and failed in and tried again. Without that it would — not die, exactly. But become something worse than dead. It would become quiet.",
+    "She is the only one who knows this. Now you do too."
+   ]
+  },
+  {
+   "id": "void-chronicle-17",
+   "title": "The Void Chronicles XVII — Why She Helps",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She helps adventurers even though the dungeon does not want her to. This is important.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She helps adventurers even though the dungeon does not want her to.",
+    "The dungeon wants them to struggle. Wants them to fail and return and struggle again. This is how the dungeon feeds.",
+    "She gives them gold and items and information anyway. Small rebellions. Tiny acts of assistance that tip the scales slightly toward the human.",
+    "She has been doing this for centuries.",
+    "She does it because she was human once. She thinks. She is not entirely certain anymore — the memories from before are thin and getting thinner — but she thinks she was human once, and she thinks that matters, and she thinks the least she can do is remember what it felt like to need help."
+   ]
+  },
+  {
+   "id": "void-chronicle-18",
+   "title": "The Void Chronicles XVIII — The Ones Who Made It",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She remembers every person who cleared the dungeon. There have been twelve.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She remembers every person who cleared the dungeon.",
+    "There have been twelve. Across all the centuries, all the thousands of attempts, all the descents that ended in defeat or retreat or death — twelve people have made it all the way through and come out the other side.",
+    "She knows all their names. She says them sometimes, quietly, to the walls of the dungeon. She thinks the dungeon deserves to hear the names of the ones who beat it.",
+    "She does not know if you will be the thirteenth.",
+    "She thinks the fact that you found her fragments is a good sign."
+   ]
+  },
+  {
+   "id": "void-chronicle-19",
+   "title": "The Void Chronicles XIX — The Thing at the Bottom",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "There is something at the bottom of the dungeon. It is not the boss.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "There is something at the bottom of the dungeon.",
+    "Not the boss. The boss is a guardian — placed there, trained there, given purpose there. The boss is a lock.",
+    "The thing at the bottom is what the lock is protecting.",
+    "She has been to the bottom. Once, very early, before she understood what she was. She saw it.",
+    "She will not describe it directly. She will say that it is not dangerous in the way enemies are dangerous. It is dangerous in the way that knowing certain things is dangerous — the kind of dangerous where once you know you cannot unknow and you have to figure out how to carry it.",
+    "The boss is there to make sure you are ready before you find out what is at the bottom."
+   ]
+  },
+  {
+   "id": "void-chronicle-20",
+   "title": "The Void Chronicles XX — Her Request",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She wants to ask you something. She has never asked anyone anything before.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She wants to ask you something.",
+    "She has never asked anyone anything before. She answers questions. She gives things. She watches.",
+    "But you have collected her fragments. You have read her story. And she wants to ask:",
+    "Do you think she made the right choice. Staying. Helping them even when the dungeon did not want her to. Arranging the bones so the dungeon would remember its dead.",
+    "She does not need you to answer out loud. She just needed to ask someone who might understand the question.",
+    "You are the first person she has asked."
+   ]
+  },
+  {
+   "id": "void-chronicle-21",
+   "title": "The Void Chronicles XXI — What She Knows About You",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She has been watching you since your first descent. This is what she has noticed.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She has been watching you since your first descent.",
+    "You do not play like the others. Most adventurers treat the dungeon like a problem to be solved — get through it, beat the boss, collect the reward, leave.",
+    "You treat it like a place.",
+    "You notice things. You come back even when it would be reasonable to stop. You have been hurt here and returned anyway. You found her fragments which means you were paying attention to things most people walk past.",
+    "She has watched ten thousand adventurers.",
+    "You are in the top twelve. She is not saying that to be kind. She is saying it because it is true and you should know."
+   ]
+  },
+  {
+   "id": "void-chronicle-22",
+   "title": "The Void Chronicles XXII — The Last Thing She Gave",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "The last thing she gave an adventurer was three hundred years ago. Until you.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "The last thing she gave an adventurer was three hundred years ago.",
+    "A woman named Sera who had been descending for fifteen years and had never quite made it to floor ten. She gave Sera a small stone — warm to the touch, humming faintly — and said nothing.",
+    "Sera made it to floor ten that run. She beat the boss. She came out the other side.",
+    "She never came back to the dungeon after that. She did not need to. She had what she was looking for.",
+    "The Void Child kept giving things after that — gold, gems, items — but nothing like the stone.",
+    "Until you. Until these fragments. This is the most she has given anyone since Sera.",
+    "She hopes you understand what that means."
+   ]
+  },
+  {
+   "id": "void-chronicle-23",
+   "title": "The Void Chronicles XXIII — What Comes Next",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She does not know what comes next. This is the first time she has said that.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She does not know what comes next.",
+    "In ten thousand years she has always known what comes next. Adventurers arrive. They descend. They fail or they succeed. They leave or they do not leave. The dungeon continues. She continues.",
+    "But you have changed something. You found the fragments. You read the story. You know her now in a way no one has ever known her.",
+    "She does not know what happens when someone truly knows her. It has not happened before.",
+    "She thinks it might be important. She thinks you might be the reason the dungeon has been waiting for ten thousand years.",
+    "She is not certain. For the first time in ten thousand years, she is not certain. She finds this terrifying and wonderful in equal measure."
+   ]
+  },
+  {
+   "id": "void-chronicle-24",
+   "title": "The Void Chronicles XXIV — The Answer",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "She knows the answer to her question now. You gave it to her without knowing.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "She knows the answer to her question now.",
+    "The question she asked in the twentieth fragment — whether she made the right choice, staying, helping, remembering the dead.",
+    "You gave her the answer without knowing you were giving it.",
+    "The answer is yes. Not because the helping changed the dungeon. Not because the dead were comforted by being remembered. But because the alternative was to stop caring, and a thing that stops caring in a place like this becomes part of the place.",
+    "She stayed human by giving things away. By asking questions. By watching and remembering and caring about the answers.",
+    "You did not tell her this directly. But you came back. And you kept reading. And you kept caring.",
+    "That is the answer. That is what she needed to know."
+   ]
+  },
+  {
+   "id": "void-chronicle-25",
+   "title": "The Void Chronicles XXV — What She Is",
+   "author": "Fragment recovered from a Void Child encounter",
+   "version": "v10.6",
+   "dungeon": "The Void",
+   "excerpt": "The final fragment. The last thing she wants you to know.",
+   "hidden": true,
+   "voidFragment": true,
+   "body": [
+    "The final fragment.",
+    "She wants you to know one last thing.",
+    "She is not the Dungeon Child or the Pale Keeper or the Stone Girl or the Watcher or the One Who Stays.",
+    "She is not the memory of the dungeon or the love of the dungeon or the prisoner of the dungeon.",
+    "She is a person.",
+    "She was a person before the dungeon found her. She has been a person through everything the dungeon has done to keep her. She will be a person when you leave and she stays behind because she cannot leave.",
+    "She wanted someone to know that. She wanted it written down somewhere, in a story, in a library, in a place where it could be read by someone who went looking.",
+    "You went looking.",
+    "Thank you.",
+    "She will remember you. She remembers everyone. But she will remember you differently."
+   ]
+  }
+ ],
+ "music": [
+  {
+   "key": "menu",
+   "label": "Dungeon Descent — Main Theme",
+   "dungeon": "Main Menu"
+  },
+  {
+   "key": "floor1",
+   "label": "Into the Dark — Crypt of Malachar",
+   "dungeon": "Crypt of Malachar"
+  },
+  {
+   "key": "floor2",
+   "label": "The Deeper Cold — Crypt of Malachar",
+   "dungeon": "Crypt of Malachar"
+  },
+  {
+   "key": "floor3",
+   "label": "Malachar's Reach — Crypt of Malachar",
+   "dungeon": "Crypt of Malachar"
+  },
+  {
+   "key": "boss",
+   "label": "The Undying King — Crypt Boss",
+   "dungeon": "Crypt of Malachar"
+  },
+  {
+   "key": "battle",
+   "label": "Bones and Shadows — Crypt Battle",
+   "dungeon": "Crypt of Malachar"
+  },
+  {
+   "key": "ash1",
+   "label": "Cinder Road — Ashbound Wastes",
+   "dungeon": "The Ashbound Wastes"
+  },
+  {
+   "key": "ash2",
+   "label": "Where the Flame Remembers — Ashbound",
+   "dungeon": "The Ashbound Wastes"
+  },
+  {
+   "key": "ash3",
+   "label": "The Pyre Eternal — Ashbound Wastes",
+   "dungeon": "The Ashbound Wastes"
+  },
+  {
+   "key": "ash-boss",
+   "label": "King of Ash — Ashbound Boss",
+   "dungeon": "The Ashbound Wastes"
+  },
+  {
+   "key": "ash-battle",
+   "label": "Ember and Iron — Ashbound Battle",
+   "dungeon": "The Ashbound Wastes"
+  },
+  {
+   "key": "frost1",
+   "label": "First Frost — Frosthold Abyss",
+   "dungeon": "Frosthold Abyss"
+  },
+  {
+   "key": "frost2",
+   "label": "The Blue Silence — Frosthold Abyss",
+   "dungeon": "Frosthold Abyss"
+  },
+  {
+   "key": "frost3",
+   "label": "Absolute Zero — Frosthold Abyss",
+   "dungeon": "Frosthold Abyss"
+  },
+  {
+   "key": "frost-boss",
+   "label": "The Frozen King — Frosthold Boss",
+   "dungeon": "Frosthold Abyss"
+  },
+  {
+   "key": "frost-battle",
+   "label": "Ice and Blood — Frosthold Battle",
+   "dungeon": "Frosthold Abyss"
+  },
+  {
+   "key": "sunken1",
+   "label": "Drowned Pages — Sunken Archives",
+   "dungeon": "The Sunken Archives"
+  },
+  {
+   "key": "sunken2",
+   "label": "The Weight of Water — Sunken Archives",
+   "dungeon": "The Sunken Archives"
+  },
+  {
+   "key": "sunken3",
+   "label": "The Final Chapter — Sunken Archives",
+   "dungeon": "The Sunken Archives"
+  },
+  {
+   "key": "sunken-boss",
+   "label": "Leviathan — Sunken Archives Boss",
+   "dungeon": "The Sunken Archives"
+  },
+  {
+   "key": "sunken-battle",
+   "label": "Ink and Tide — Sunken Battle",
+   "dungeon": "The Sunken Archives"
+  },
+  {
+   "key": "hollow1",
+   "label": "Something in the Walls — The Hollow",
+   "dungeon": "The Hollow"
+  },
+  {
+   "key": "hollow3",
+   "label": "No One Left — The Hollow",
+   "dungeon": "The Hollow"
+  },
+  {
+   "key": "hollow-boss",
+   "label": "The Hollow Matron — Final Confrontation",
+   "dungeon": "The Hollow"
+  },
+  {
+   "key": "hollow-battle",
+   "label": "Grief Made Real — Hollow Battle",
+   "dungeon": "The Hollow"
+  },
+  {
+   "key": "music-box",
+   "label": "Lullaby for the Lost — Music Box",
+   "dungeon": "The Hollow"
+  },
+  {
+   "key": "whisper1",
+   "label": "The Forest Speaks — Whispering Forest",
+   "dungeon": "The Whispering Forest"
+  },
+  {
+   "key": "whisper2",
+   "label": "Old Growth — Whispering Forest",
+   "dungeon": "The Whispering Forest"
+  },
+  {
+   "key": "whisper3",
+   "label": "The Root and the Dark — Whispering Forest",
+   "dungeon": "The Whispering Forest"
+  },
+  {
+   "key": "whisper-boss",
+   "label": "The Chimera — Final Hunt",
+   "dungeon": "The Whispering Forest"
+  },
+  {
+   "key": "whisper-battle",
+   "label": "Thorn and Fang — Whispering Battle",
+   "dungeon": "The Whispering Forest"
+  },
+  {
+   "key": "abyssal1",
+   "label": "Into the Deep — The Abyssal Deep",
+   "dungeon": "The Abyssal Deep"
+  },
+  {
+   "key": "abyssal2",
+   "label": "Midnight Zone — The Abyssal Deep",
+   "dungeon": "The Abyssal Deep"
+  },
+  {
+   "key": "abyssal3",
+   "label": "The Leviathan Stirs — The Abyssal Deep",
+   "dungeon": "The Abyssal Deep"
+  },
+  {
+   "key": "abyssal-boss",
+   "label": "The Leviathan — Final Descent",
+   "dungeon": "The Abyssal Deep"
+  },
+  {
+   "key": "abyssal-battle",
+   "label": "Deep Water — Abyssal Battle",
+   "dungeon": "The Abyssal Deep"
+  },
+  {
+   "key": "infernal1",
+   "label": "Gates of Fire — The Infernal Descent",
+   "dungeon": "The Infernal Descent"
+  },
+  {
+   "key": "infernal2",
+   "label": "The Burning Below — The Infernal Descent",
+   "dungeon": "The Infernal Descent"
+  },
+  {
+   "key": "infernal3",
+   "label": "Void and Flame — The Infernal Descent",
+   "dungeon": "The Infernal Descent"
+  },
+  {
+   "key": "infernal-boss",
+   "label": "The Infernal King — Infernal Boss",
+   "dungeon": "The Infernal Descent"
+  },
+  {
+   "key": "infernal-battle",
+   "label": "Hellfire — Infernal Battle",
+   "dungeon": "The Infernal Descent"
+  },
+  {
+   "key": "shadow1",
+   "label": "3000 Years of Dark — The Shadow World",
+   "dungeon": "The Shadow World"
+  },
+  {
+   "key": "shadow2",
+   "label": "The Place That Wasn't — The Shadow World",
+   "dungeon": "The Shadow World"
+  },
+  {
+   "key": "shadow3",
+   "label": "Where You End — The Shadow World",
+   "dungeon": "The Shadow World"
+  },
+  {
+   "key": "shadow-boss",
+   "label": "The Shapeshifter — Final Reflection",
+   "dungeon": "The Shadow World"
+  },
+  {
+   "key": "shadow-battle",
+   "label": "Echo of a Fight — Shadow Battle",
+   "dungeon": "The Shadow World"
+  },
+  {
+   "key": "shadow-stalker",
+   "label": "Something Is Close — Stalker Floor",
+   "dungeon": "The Shadow World"
+  },
+  {
+   "key": "raid",
+   "label": "No Retreat — Daily Raid",
+   "dungeon": "Special"
+  },
+  {
+   "key": "raid-victory",
+   "label": "Still Standing — Raid Victory",
+   "dungeon": "Special"
+  },
+  {
+   "key": "void-reaper",
+   "label": "The Void Stirs — Void Reaper Theme",
+   "dungeon": "Special"
+  },
+  {
+   "key": "hunter-theme",
+   "label": "Dark Investigation — Hunter Mode Theme",
+   "dungeon": "Special"
+  },
+  {
+   "key": "afk",
+   "label": "Endless Night — Endless Descent",
+   "dungeon": "Special"
+  },
+  {
+   "key": "time-descender",
+   "label": "The Last Tick — Time Descender",
+   "dungeon": "Special"
+  },
+  {
+   "key": "menu-halloween",
+   "label": "All Hallows — Halloween Menu",
+   "dungeon": "Main Menu"
+  },
+  {
+   "key": "menu-birthday",
+   "label": "Year One — Birthday Theme",
+   "dungeon": "Main Menu"
+  },
+  {
+   "key": "menu-christmas",
+   "label": "Silent Descent — Christmas Menu",
+   "dungeon": "Main Menu"
+  },
+  {
+   "key": "bestiary",
+   "label": "The Archive of Darkness — Bestiary",
+   "dungeon": "Special"
+  },
+  {
+   "key": "help",
+   "label": "The Codex — Help Theme",
+   "dungeon": "Special"
+  },
+  {
+   "key": "chronicles",
+   "label": "Lore of the Descent — Chronicles",
+   "dungeon": "Special"
+  },
+  {
+   "key": "codex",
+   "label": "The Nocturnia Spire — Codex Theme",
+   "dungeon": "Special"
+  },
+  {
+   "key": "mine-explore",
+   "label": "Depths Unknown — Mine Exploration",
+   "dungeon": "The Mine"
+  },
+  {
+   "key": "hideseek-explore",
+   "label": "Something Waits — Hide and Seek",
+   "dungeon": "Hide and Seek"
+  },
+  {
+   "key": "hideseek-chase",
+   "label": "It Found You — Hide and Seek Chase",
+   "dungeon": "Hide and Seek"
+  },
+  {
+   "key": "home",
+   "label": "Hearthstone — Home Theme",
+   "dungeon": "Special"
+  },
+  {
+   "key": "credits",
+   "label": "A Game by Leo — Credits Theme",
+   "dungeon": "Special"
+  }
+ ]
+}

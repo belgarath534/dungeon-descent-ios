@@ -176,3 +176,32 @@ console.log('Wrote ' + path.relative(root, uiFile) + ': ' + Object.keys(ui.death
   fs.writeFileSync(f, JSON.stringify(bestiary, null, 1) + '\n');
   console.log('Wrote ' + path.relative(root, f) + ': ' + bestiary.entries.length + ' entries, ' + Object.keys(nameToId).length + ' names, ' + Object.keys(bestiary.milestones).length + ' milestones.');
 }
+
+// The Chronicles: the Lore tab's sections, the Library's stories (STORIES and
+// VOID_CHRONICLES) and the Music Player's catalogue.
+{
+  const text = h => h.replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&').replace(/&mdash;/g, '—').replace(/&ndash;/g, '–').replace(/&hellip;/g, '…')
+    .replace(/&rsquo;/g, '’').replace(/&lsquo;/g, '‘').replace(/&ldquo;/g, '“').replace(/&rdquo;/g, '”')
+    .replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .trim();
+  const a = src.indexOf('id="chr-lore"'), b = src.indexOf('<!-- end chr-lore -->', a);
+  const lore = [];
+  const re = /<div class="lore-section"[^>]*aria-label="([^"]*)"[^>]*>\s*<div class="lore-title">([\s\S]*?)<\/div>([\s\S]*?)<\/div>\s*(?=<div class="lore-section"|<\/div>)/g;
+  let m;
+  const block = src.slice(a, b);
+  while ((m = re.exec(block))) {
+    const paras = [...m[3].matchAll(/<p class="lore-text">([\s\S]*?)<\/p>/g)].map(p => text(p[1]));
+    lore.push({ label: m[1], title: text(m[2]), paragraphs: paras });
+  }
+  const story = s => ({ ...plain(s), body: (s.body || []).map(text), excerpt: text(s.excerpt || '') });
+  const chronicles = {
+    lore,
+    stories: grab('STORIES').map(story),
+    voidChronicles: grab('VOID_CHRONICLES').map(story),
+    music: plain(grab('MUSIC_CATALOGUE')),
+  };
+  const f = path.join(root, 'swift', 'App', 'DungeonDescent', 'chronicles.json');
+  fs.writeFileSync(f, JSON.stringify(chronicles, null, 1) + '\n');
+  console.log('Wrote ' + path.relative(root, f) + ': ' + lore.length + ' lore sections, ' + chronicles.stories.length + ' stories, ' + chronicles.voidChronicles.length + ' void chronicles, ' + chronicles.music.length + ' tracks.');
+}
