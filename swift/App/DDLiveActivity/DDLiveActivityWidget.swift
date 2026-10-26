@@ -96,7 +96,7 @@ struct NextFight: View {
             } else {
                 HStack(spacing: 4) {
                     Text("Next fight in")
-                    Text(timerInterval: Date()...state.nextFight, countsDown: true).monospacedDigit()
+                    Text(state.nextFight, style: .timer).monospacedDigit()
                 }
                 .foregroundStyle(DDLiveActivityWidget.dim)
             }
