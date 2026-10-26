@@ -226,6 +226,14 @@ public struct BossRushScore: Codable, Sendable {
     public var cls: String
     public var date: String
 
+    public init(bosses: Int, time: Int, timeStr: String, cls: String, date: String) {
+        self.bosses = bosses
+        self.time = time
+        self.timeStr = timeStr
+        self.cls = cls
+        self.date = date
+    }
+
     public static func save(_ entry: BossRushScore, store: GameStore) {
         var list = load(store)
         list.append(entry)
