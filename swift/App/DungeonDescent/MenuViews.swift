@@ -68,7 +68,7 @@ struct MainMenuView: View {
         Entry(id: "whatsnew", text: "⭐ What's New", label: "What's New, see the full patch notes for every version", action: .go(.whatsnew)),
         Entry(id: "help", text: "❓ Help", label: "Help, full game manual and guide", action: .go(.help)),
         Entry(id: "records", text: "🏛️ Hall of Records", label: "Hall of Records, view your lifetime stats and claim milestone awards", action: .go(.records)),
-        Entry(id: "highscore", text: "🏆 High Score", label: "High score, view your lifetime score and rank"),
+        Entry(id: "highscore", text: "🏆 High Score", label: "High score, view your lifetime score and rank", action: .go(.highscore)),
         Entry(id: "events", text: "🎃 Events", label: "Seasonal events, see active and upcoming events"),
         Entry(id: "credits", text: "📜 Credits", label: "Credits, see who made the game", action: .go(.credits)),
         Entry(id: "raid", text: "⚔️ Raid", label: "Raid, survive five waves of enemies for daily rewards", action: .go(.raid)),

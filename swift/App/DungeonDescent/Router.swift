@@ -21,6 +21,7 @@ final class Router: ObservableObject {
         case raid
         case coinshop
         case codex
+        case highscore
         case help
         case credits
         case whatsnew
@@ -70,6 +71,7 @@ struct RootView: View {
             case .raid: RaidView()
             case .coinshop: CoinShopView()
             case .codex: CodexView()
+            case .highscore: HighScoreView()
             case .help: HelpView()
             case .credits: CreditsView()
             case .whatsnew: WhatsNewView()

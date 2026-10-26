@@ -27,7 +27,10 @@ final class GameModel: ObservableObject {
         achievements = AchievementBook(store: store, wallet: wallet)
         dailyQuests = DailyQuests(store: store)
         wallet.onChange = { [weak self] in self?.refresh() }
-        achievements.onUnlock = { list in GameModel.announce(list) }
+        achievements.onUnlock = { [store] list in
+            HighScore.add("achievements", 250 * list.count, store: store)
+            GameModel.announce(list)
+        }
         achievements.payOutstandingRewards()
         refresh()
     }

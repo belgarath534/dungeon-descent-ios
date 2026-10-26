@@ -458,6 +458,12 @@ final class RunModel: ObservableObject {
         }
         if reward.levelsGained > 0 { achievements.record(.levelReached(r.level)) }
         var said = spoken + " " + reward.message
+        HighScore.add("enemy_kills", 10, store: game.store)
+        if e.isElite { HighScore.add("elite_kills", 150, store: game.store) }
+        if e.isBoss {
+            HighScore.add("boss_kills", 500, store: game.store)
+            HighScore.add("dungeon_clears", 1000, store: game.store)
+        }
         said += quest(&r, "kills")
         if e.isElite { said += quest(&r, "elite") }
         if reward.gold > 0 { said += quest(&r, "gold", reward.gold) }
@@ -780,6 +786,23 @@ final class RunModel: ObservableObject {
         r.guardianDone = false
         // advanceFloor heals 35% of max HP on the way down.
         r.hp = min(r.maxHp, r.hp + jsRound(Double(r.maxHp) * 0.35))
+        // Endless milestones (advanceFloor): every 25 floors a full heal and +5
+        // max HP, every 10 a 30% heal.
+        var milestone = ""
+        if r.difficulty == .endless && r.floor > 1 {
+            if r.floor % 25 == 0 {
+                r.hp = r.maxHp
+                r.maxHp += 5
+                setEvent("⬇ Floor \(r.floor) — Endless Milestone! Full heal granted. Max HP increased by 5. The darkness deepens.", tone: "good")
+                milestone = " Endless milestone! Floor \(r.floor). Full heal. Max HP increased. Keep going."
+                HighScore.add("dungeon_clears", 500, store: game.store)
+            } else if r.floor % 10 == 0 {
+                r.hp = min(r.maxHp, r.hp + jsRound(Double(r.maxHp) * 0.30))
+                setEvent("⬇ Floor \(r.floor) — Milestone! You feel stronger in the dark.", tone: "good")
+                milestone = " Floor \(r.floor) milestone. Bonus heal."
+                HighScore.add("dungeon_clears", 200, store: game.store)
+            }
+        }
         // Warm Blood (Coin Shop): 1 HP on each new floor.
         if r.has("cu-warm-blood") && r.hp > 0 { r.hp = min(r.maxHp, r.hp + 1) }
         r.hpAtFloorStart = r.hp
@@ -792,7 +815,7 @@ final class RunModel: ObservableObject {
         add("You descend to floor \(floor): \(roomTitle).")
         achievements.record(.floorReached(floor))
         achievements.setGlobalMax("bestFloor", Double(floor))
-        let questLine = questDone(&r, game.dailyQuests.reachedFloor(floor, usedPotion: r.usedPotion))
+        let questLine = milestone + questDone(&r, game.dailyQuests.reachedFloor(floor, usedPotion: r.usedPotion))
         Sound.sfx("sfx-stairs")
         Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
         finish(r, d, phase: .shopping,

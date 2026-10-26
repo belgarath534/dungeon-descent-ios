@@ -249,6 +249,7 @@ struct BossRushView: View {
             BossRushScore.save(BossRushScore(bosses: 9, time: secs, timeStr: timeStr, cls: b.cls,
                                              date: "\(c.year ?? 2026)-\(c.month ?? 1)-\(c.day ?? 1)"), store: game.store)
             game.achievements.markOnce("bossRushComplete")
+            HighScore.add("boss_rush", 2000, store: game.store)
             game.achievements.check()
             Feedback.announce("INCREDIBLE! You defeated all 9 bosses! Boss Rush complete! You earned \(b.coinsEarned) Mystery Coins total!")
         } else {

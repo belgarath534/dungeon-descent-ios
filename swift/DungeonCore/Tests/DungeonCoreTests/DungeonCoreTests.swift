@@ -1432,3 +1432,18 @@ final class CoinShopTests: XCTestCase {
         XCTAssertEqual(x.xp, 23)
     }
 }
+
+final class HighScoreTests: XCTestCase {
+    func testScoreAddsUpAndRanks() {
+        let store = MemoryStore()
+        HighScore.add("enemy_kills", 10, store: store)
+        HighScore.add("boss_kills", 500, store: store)
+        HighScore.add("enemy_kills", 10, store: store)
+        let s = HighScore.load(store)
+        XCTAssertEqual(s.total, 520)
+        XCTAssertEqual(s.breakdown["enemy_kills"], 20)
+        XCTAssertEqual(HighScore.rank(for: s.total).label, "ADVENTURER")
+        XCTAssertEqual(HighScore.rank(for: 0).label, "INITIATE")
+        XCTAssertEqual(HighScore.rank(for: 250_000).label, "DDDI CERTIFIED")
+    }
+}
