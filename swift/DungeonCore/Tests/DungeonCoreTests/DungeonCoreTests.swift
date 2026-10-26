@@ -1288,3 +1288,39 @@ final class MilestoneTests: XCTestCase {
     }
 }
 
+final class BossRushTests: XCTestCase {
+    private func hero(level: Int) -> PlayerCharacter {
+        var ch = PlayerCharacter(name: "Hal", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = level
+        return ch
+    }
+
+    func testStartingStatsFollowLevelGearAndUpgrades() {
+        let info = GameData.classInfo("Warrior")
+        let sword = Item(name: "Blade", icon: "🗡️", type: "weapon", desc: "", atkBase: [4, 8])
+        let br = BossRush(character: hero(level: 7), weapon: sword, armor: nil, upgrades: ["cu-hp-boost", "cu-sp-boost"])
+        XCTAssertEqual(br.maxHp, info.maxHp + 10 + 60)
+        XCTAssertEqual(br.atkBonus, (sword.weaponAttack.lowerBound + sword.weaponAttack.upperBound) / 2 + 3)
+        XCTAssertEqual(br.maxSp, 32)
+        XCTAssertEqual(br.sp, 37)
+        XCTAssertEqual(br.potions, 4)
+    }
+
+    func testCoinsAtThreeSixAndNineAndAWinIsSaved() {
+        var br = BossRush(character: hero(level: 40), weapon: nil, armor: nil, upgrades: [])
+        var dice = SeededDice(seed: 9)
+        var turns = 0
+        while !br.done && turns < 2000 {
+            turns += 1
+            _ = br.fight(br.hp < br.maxHp / 3 && br.potions > 0 ? .potion : .attack, dice: &dice)
+        }
+        XCTAssertTrue(br.won)
+        XCTAssertEqual(br.coinsEarned, 6)
+        let store = MemoryStore()
+        BossRushScore.save(BossRushScore(bosses: 9, time: 300, timeStr: "5m 0s", cls: "Warrior", date: "2026-10-26"), store: store)
+        BossRushScore.save(BossRushScore(bosses: 4, time: 100, timeStr: "1m 40s", cls: "Monk", date: "2026-10-26"), store: store)
+        XCTAssertEqual(BossRushScore.load(store).map(\.bosses), [9, 4])
+    }
+}
+

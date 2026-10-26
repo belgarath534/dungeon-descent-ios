@@ -189,6 +189,8 @@ final class GameModel: ObservableObject {
         checkLegends(run)
     }
 
+    func addToGraveyard(_ entry: JSONValue) { roster.addToGraveyard(entry) }
+
     /// The player deleted the character: it goes to The Graveyard.
     func buryCharacter(at index: Int) {
         clearRun(for: index)
