@@ -117,6 +117,7 @@ public enum Progression {
         if run.runeFortune { g = jsRound(Double(g) * 1.25) }
         if run.weaponEffect == "fortune" { g = jsRound(Double(g) * 1.25) }
         if run.has("cu-night-blessing") && CoinShop.isNightNow() { g = jsRound(Double(g) * 1.10) }
+        if run.dreamGoldMult != 1 { g = jsRound(Double(g) * run.dreamGoldMult) }
         if run.weaponEffect == "soulbound" { run.sp = min(run.maxSp, run.sp + 5) }
         var luckNote = ""
         if run.luckKills > 0 {

@@ -1631,3 +1631,101 @@ final class EquipmentDropTests: XCTestCase {
         XCTAssertEqual(r.inventory.count, drops)
     }
 }
+
+final class HomeTests: XCTestCase {
+    func newRun() -> Run {
+        Run(character: PlayerCharacter(name: "Ivy", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+    }
+
+    func testBuyHomeBedAndSafe() {
+        let store = MemoryStore(["dd_global_gold": "600"])
+        let w = Wallet(store: store)
+        XCTAssertTrue(Home.buyHome(store: store, wallet: w))
+        XCTAssertTrue(Home.owned(store))
+        XCTAssertEqual(w.gold, 100)
+        XCTAssertTrue(Home.buyBed(store: store, wallet: w))
+        XCTAssertFalse(Home.buyBed(store: store, wallet: w))
+        XCTAssertTrue(Home.deposit(20, store: store, wallet: w))
+        XCTAssertEqual(Home.safe(store), 20)
+        XCTAssertFalse(Home.withdraw(21, store: store, wallet: w))
+        XCTAssertTrue(Home.withdraw(5, store: store, wallet: w))
+        XCTAssertEqual(w.gold, 10)
+    }
+
+    func testSleepNeedsFiveRoomsAndDreamBuffsNextRun() {
+        let store = MemoryStore()
+        var r = newRun()
+        var dice = SeededDice(seed: 3)
+        r.hp = 1
+        r.totalRooms = 4
+        XCTAssertNil(Home.sleep(&r, store: store, dice: &dice))
+        r.totalRooms = 5
+        XCTAssertNotNil(Home.sleep(&r, store: store, dice: &dice))
+        XCTAssertEqual(r.hp, r.maxHp)
+        XCTAssertEqual(Home.roomsBeforeSleep(r, store: store), 5)
+        var next = newRun()
+        let atk = next.atkBonus
+        XCTAssertNotNil(Home.applyDream("warriors-dream", to: &next))
+        XCTAssertEqual(next.atkBonus, atk + 3)
+        XCTAssertNil(Home.applyDream("void-lore", to: &next))
+    }
+
+    func testSkillUpgradeCostsAndCooldown() {
+        let store = MemoryStore(["dd_global_gold": "5000"])
+        let w = Wallet(store: store)
+        XCTAssertEqual(Home.upgradeSkill(cls: "Warrior", name: "Shield Bash", store: store, wallet: w, now: 0), "Shield Bash upgraded to level 2.")
+        XCTAssertEqual(w.gold, 4920)
+        XCTAssertEqual(Home.skillLevels(store)["Warrior_Shield_Bash"], 2)
+        for _ in 0..<4 { _ = Home.upgradeSkill(cls: "Warrior", name: "Cleave", store: store, wallet: w, now: 0) }
+        XCTAssertEqual(Home.skillCooldownLeft(store, now: 0), 180)
+        XCTAssertEqual(Home.upgradeSkill(cls: "Warrior", name: "Cleave", store: store, wallet: w, now: 10), "On cooldown.")
+        XCTAssertEqual(Home.upgradeSkill(cls: "Warrior", name: "Cleave", store: store, wallet: w, now: 200), "Cleave is maxed.")
+    }
+
+    func testSoulTrapCapturesAndMinionFights() {
+        let store = MemoryStore()
+        var r = newRun()
+        var dice = SeededDice(seed: 5)
+        var e = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1)
+        Combat.begin(&r, against: e)
+        XCTAssertEqual(Home.capture(&r, store: store), .noTrap)
+        r.inventory = [Item(name: "Soul Trap", icon: "🪤", type: "soul-trap", desc: "")]
+        guard case .captured(let m) = Home.capture(&r, store: store) else { return XCTFail("not captured") }
+        XCTAssertEqual(m.atk, max(1, Int(Double(e.atk.upperBound) * 0.60)))
+        XCTAssertTrue(r.inventory.isEmpty)
+        XCTAssertNil(r.enemy)
+        XCTAssertEqual(r.kills, 1)
+        r.inventory = [Item(name: "Soul Trap", icon: "🪤", type: "soul-trap", desc: "")]
+        Combat.begin(&r, against: e)
+        XCTAssertEqual(Home.capture(&r, store: store), .duplicate)
+        XCTAssertEqual(r.inventory.count, 1)
+        e.isElite = true
+        e.name = "Elite Shade"
+        Combat.begin(&r, against: e)
+        guard case .captured(let elite) = Home.capture(&r, store: store) else { return XCTFail("not captured") }
+        XCTAssertEqual(elite.tier, "elite")
+        Home.setActive(m.id, store: store)
+        XCTAssertEqual(Home.activeMinion(store)?.name, m.name)
+        Home.release(m.id, store: store)
+        XCTAssertNil(Home.activeMinion(store))
+
+        // The minion adds its hit to every round.
+        var big = Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1)
+        big.hp = 10_000
+        big.maxHp = 10_000
+        Combat.begin(&r, against: big)
+        r.minion = Minion(id: "x", name: "Rat", icon: "🐀", atk: 50, tier: "common", capturedOn: 0)
+        let t = Combat.takeTurn(&r, .defend, dice: &dice, options: .init())
+        XCTAssertTrue(t.log.contains { $0.hasPrefix("👾 Rat attacks for ") })
+        XCTAssertLessThanOrEqual(r.enemy!.hp, 10_000 - 50)
+    }
+
+    func testBossCannotBeCaptured() {
+        let store = MemoryStore()
+        var r = newRun()
+        Combat.begin(&r, against: Enemy.spawnBoss(Bestiary.crypt.bosses[0], playerLevel: 1, playerMaxAtk: 16))
+        r.inventory = [Item(name: "Soul Trap", icon: "🪤", type: "soul-trap", desc: "")]
+        XCTAssertEqual(Home.capture(&r, store: store), .boss)
+    }
+}

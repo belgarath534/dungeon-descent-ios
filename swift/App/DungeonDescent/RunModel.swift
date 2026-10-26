@@ -65,6 +65,15 @@ final class RunModel: ObservableObject {
         var r = Run(character: game.characters[index], gold: game.wallet.gold)
         r.applyStartBonuses(wallet: game.wallet)
         r.applyMilestoneBuffs(game.milestoneEffects)
+        // Home: the active minion fights beside you, the bed is ready again,
+        // and last night's dream buff applies once.
+        r.minion = Home.activeMinion(game.store)
+        r.skillLevels = Home.skillLevels(game.store)
+        Home.resetSleep(store: game.store)
+        if case .string(let dream)? = game.characters[index].extra["dream"] {
+            if let note = Home.applyDream(dream, to: &r) { r.startNotes.append("💤 " + note) }
+            game.updateCharacter(index) { $0.extra["dream"] = nil }
+        }
         var cd = SystemDice()
         CoinShop.apply(CoinShop.owned(game.store), to: &r, dice: &cd, wallet: game.wallet)
         game.achievements.trackGlobal("runsStarted")
@@ -88,6 +97,8 @@ final class RunModel: ObservableObject {
         add("Descended into \(r.dungeon) on \(r.difficulty.rawValue) difficulty\(r.ngPlus ? ", New Game+ \(r.ngPlusCount ?? 1)" : "")\(r.hardcore ? ", Hardcore" : "").")
         add("Floor \(r.floor): \(roomTitle). \(r.lives) \(r.lives == 1 ? "life" : "lives").")
         if let s = Skills.unlocked(r).first { add("✨ Starting skill: \(s.name). \(s.desc)") }
+        r.startNotes.forEach { add($0) }
+        if let m = r.minion { add("👾 \(m.name) fights beside you.") }
         add("✦ Daily quest: \(game.dailyQuests.summary)")
         persist()
         playMusic()
@@ -517,6 +528,147 @@ final class RunModel: ObservableObject {
     }
 
     /// A coward ran off, dropping gold. The room counts as cleared.
+    // MARK: Home (#ov-home)
+
+    @Published var showingHome = false
+    /// The dream from the last sleep, shown until you wake up.
+    @Published var dream: Home.Dream?
+
+    func openHome() {
+        showingHome = true
+        Sound.track("home")
+        Feedback.announce("Home. Your dwelling on the edge of the dungeon. Rest, store gold, and upgrade your skills here.")
+    }
+
+    func closeHome() {
+        showingHome = false
+        dream = nil
+        playMusic()
+    }
+
+    /// Home spends and stores your global gold; the run's gold mirrors it.
+    private func syncGold() {
+        run.gold = game.wallet.gold
+        persist()
+    }
+
+    func buyHome() -> String {
+        guard Home.buyHome(store: game.store, wallet: game.wallet) else {
+            Feedback.announce("Not enough gold.")
+            return "Not enough gold. Need \(Home.cost)g, have \(game.wallet.gold)g."
+        }
+        syncGold()
+        Sound.sfx("sfx-unlock")
+        Feedback.announce("Home purchased! Your dwelling is now available from the dungeon action buttons.")
+        return ""
+    }
+
+    func buyBed() -> String {
+        guard Home.buyBed(store: game.store, wallet: game.wallet) else {
+            Feedback.announce("Not enough gold.")
+            return "Need \(Home.bedCost)g."
+        }
+        syncGold()
+        Sound.sfx("sfx-confirm")
+        Feedback.announce("Bed purchased! Sleep at home to restore HP and SP fully.")
+        return ""
+    }
+
+    func sleep() {
+        var r = run
+        var d = dice
+        guard let dr = Home.sleep(&r, store: game.store, dice: &d) else {
+            Feedback.announce("Not enough rooms explored to sleep yet.")
+            return
+        }
+        run = r
+        dice = d
+        game.updateCharacter(characterIndex) { $0.extra["dream"] = .string(dr.id) }
+        persist()
+        Sound.sfx("sfx-confirm")
+        dream = dr
+        Feedback.announce("You sleep deeply. HP and SP fully restored. \(dr.title). \(dr.story) \(dr.buff)")
+    }
+
+    func deposit(_ amount: Int) -> String {
+        guard amount > 0 else { return "Enter a valid amount." }
+        guard amount <= game.wallet.gold else { return "Only have \(game.wallet.gold)g." }
+        _ = Home.deposit(amount, store: game.store, wallet: game.wallet)
+        syncGold()
+        let safe = Home.safe(game.store)
+        Feedback.announce("Deposited \(amount) gold. Safe holds \(safe) gold.")
+        return "Deposited \(amount)g. Safe: \(safe)g."
+    }
+
+    func withdraw(_ amount: Int) -> String {
+        guard amount > 0 else { return "Enter a valid amount." }
+        let safe = Home.safe(game.store)
+        guard amount <= safe else { return "Safe only has \(safe)g." }
+        _ = Home.withdraw(amount, store: game.store, wallet: game.wallet)
+        syncGold()
+        Feedback.announce("Withdrew \(amount) gold from the safe.")
+        return "Withdrew \(amount)g. Safe remaining: \(safe - amount)g."
+    }
+
+    func upgradeSkill(_ name: String) -> String {
+        let msg = Home.upgradeSkill(cls: run.cls, name: name, store: game.store, wallet: game.wallet)
+        if msg.contains("upgraded") {
+            run.skillLevels = Home.skillLevels(game.store)
+            syncGold()
+            Sound.sfx("sfx-unlock")
+            Feedback.announce(msg)
+            return msg.replacingOccurrences(of: ".", with: "!")
+        }
+        return msg
+    }
+
+    /// Activate or deactivate a minion; it joins the fight right away.
+    func toggleMinion(_ m: Minion) -> String {
+        if Home.activeMinion(game.store)?.id == m.id {
+            Home.setActive(nil, store: game.store)
+            run.minion = nil
+            persist()
+            return "Minion deactivated."
+        }
+        Home.setActive(m.id, store: game.store)
+        run.minion = m
+        persist()
+        Feedback.announce("\(m.name) activated. They will fight alongside you.")
+        return "\(m.name) will fight with you!"
+    }
+
+    func releaseMinion(_ m: Minion) {
+        Home.release(m.id, store: game.store)
+        if run.minion?.id == m.id { run.minion = nil; persist() }
+        Feedback.announce("\(m.name) released.")
+    }
+
+    /// Shown in combat when a Soul Trap is in the bag and the enemy isn't a boss.
+    var canSoulTrap: Bool {
+        phase == .fighting && run.enemy?.isBoss == false && run.inventory.contains { $0.type == "soul-trap" }
+    }
+
+    /// doFight('soul-trap'): capture the enemy as a minion; the fight ends.
+    func soulTrap() {
+        guard phase == .fighting, let e = run.enemy else { return }
+        var r = run
+        switch Home.capture(&r, store: game.store) {
+        case .boss: Feedback.announce("You cannot capture bosses.")
+        case .noTrap: Feedback.announce("No Soul Trap in inventory.")
+        case .duplicate: Feedback.announce("You already have a \(e.name) as a minion.")
+        case .full: Feedback.announce("You already have \(Home.maxMinions) minions. Release one at Home first.")
+        case .captured(let m):
+            add("🪤 \(e.name) captured as a minion!")
+            Sound.sfx("sfx-unlock")
+            let done = r.roomsOnFloor >= r.floorRoomsNeeded
+            if done { floorDone(r) }
+            finish(r, dice, phase: done ? .floorCleared : .exploring,
+                   spoken: "🪤 \(e.name) has been captured. It is now your minion. You captured \(m.tier == "elite" ? "an Elite " : "a ")\(m.name)! Find them in your Home under Minions."
+                       + (done ? " " + floorCompleteLine(r) : ""))
+            playMusic()
+        }
+    }
+
     private func enemyFled(_ result: TurnResult, spoken: String) {
         var r = run
         r.gold += result.goldGained

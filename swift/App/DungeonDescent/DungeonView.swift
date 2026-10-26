@@ -79,6 +79,7 @@ struct DungeonView: View {
             }
         }
         if model.gambling { GambleOverlay(model: model) }
+        if model.showingHome { HomeOverlay(model: model) }
         if askingFlee { fleeOverlay }
         if paused { pauseOverlay }
         if showStats {
@@ -315,6 +316,10 @@ struct DungeonView: View {
                     .accessibilityLabel("Defend, reduces incoming damage")
                 Button("🧪 Potion") { drinkPotion() }.buttonStyle(DungeonButtonStyle(kind: .combat))
                     .accessibilityLabel("Use a health potion")
+                if model.canSoulTrap {
+                    Button("🪤 Soul Trap") { model.soulTrap() }.buttonStyle(DungeonButtonStyle(kind: .combat))
+                        .accessibilityLabel("Use Soul Trap to capture this enemy as a minion")
+                }
                 if run.enemy?.isBoss != true {
                     Button("🏃 Flee") { model.act(.flee) }.buttonStyle(DungeonButtonStyle(kind: .combat))
                         .accessibilityLabel("Attempt to flee combat")
@@ -425,7 +430,7 @@ struct DungeonView: View {
                 Button("🚪 Flee Dungeon") { askFlee() }
                     .buttonStyle(DungeonButtonStyle(kind: .red))
                     .accessibilityLabel("Flee the dungeon and return to character select")
-                act("🏠 Home", "Go home — rest, store gold, upgrade skills") { notYet("Home") }
+                act("🏠 Home", "Go home — rest, store gold, upgrade skills") { model.openHome() }
             }
             .accessibilityElement(children: .contain)
             .accessibilityLabel("Dungeon actions")

@@ -166,6 +166,7 @@ public enum Combat {
         r.playerDamage = EnemyAbilities.onPlayerHit(&run, r.playerDamage, basic: true, dice: &dice, log: &r.log)
         dealDamage(&run, r.playerDamage, log: &r.log)
         if action == .attack || action == .heavy { afterGearHit(&run, r.playerDamage, dice: &dice, log: &r.log) }
+        minionAttack(&run, dice: &dice, log: &r.log)
         return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
     }
 
@@ -218,6 +219,21 @@ public enum Combat {
     }
 
     /// Damage to the enemy, plus healing from Holy Crusade.
+    /// minionCombatAttack: your minion strikes after you each round, for
+    /// its attack plus 0–3; an elite one has a 10% chance to hit double.
+    static func minionAttack(_ run: inout Run, dice: inout some Dice, log: inout [String]) {
+        guard let m = run.minion, var e = run.enemy, !e.isDead else { return }
+        var dmg = m.atk + dice.roll(0...3)
+        if m.tier == "elite" && dice.chance(0.10) {
+            dmg *= 2
+            log.append("⭐ \(m.name) lands a devastating critical for \(dmg) damage!")
+        } else {
+            log.append("👾 \(m.name) attacks for \(dmg) damage!")
+        }
+        e.hp = max(0, e.hp - dmg)
+        run.enemy = e
+    }
+
     static func dealDamage(_ run: inout Run, _ dmg: Int, log: inout [String]) {
         guard dmg > 0, var e = run.enemy else { return }
         e.hp = max(0, e.hp - dmg)

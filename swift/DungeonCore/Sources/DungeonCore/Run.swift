@@ -36,6 +36,14 @@ public struct Run: Codable, Sendable {
     public var kills = 0
     public var luckBonus = 0.0
     public var fleeBonus = 0.0
+    /// The Golden Dream: gold from kills × 1.30 this run.
+    public var dreamGoldMult = 1.0
+    /// The captured enemy fighting beside you (Home → Minions).
+    public var minion: Minion? = nil
+    /// One-off lines for the log when the run begins (dream buffs).
+    public var startNotes: [String] = []
+    /// Home skill upgrades ("Warrior_Shield_Bash": 3).
+    public var skillLevels: [String: Int] = [:]
 
     public var potionMult: Double
     public var undeadRes: Bool

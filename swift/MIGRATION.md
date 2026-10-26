@@ -84,7 +84,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | The Codex | CODEX_WORLD, CODEX_ENEMY, CODEX_ARTIFACTS | ✅ all 14 entries with the web version's unlock rules (Mine, Spire, Chronicles and Void entries unlock once those modes are ported) |
 | Equipment drops | checkEquipmentDrop, rollEquipmentDrop | ✅ 15% of kills (20% with Bloodhound's Nose) drop a sword, mace, axe, dagger, staff, bow or light/medium/heavy armor, a level higher every 3 floors, with a rolled rarity |
 | Selling items | renderShopSell, getSellPrice | ✅ the Wandering Merchant's Sell Your Items section, counting toward the selling achievements |
-| Mystery Coin Shop | COIN_UPGRADES, applyCoinUpgrades | ✅ all 26 upgrades. The Android-only Watch Ad box and the in-app coin purchases are left out. Ancient Knowledge (+15% XP) now works; the web version sold it and never applied it. Treasure Sense's gem is turned into gold right away, the way Swift handles every gem. When Death's Bargain kills the enemy, the kill counts for the bestiary and achievements; the web version left you alive at 0 HP. Trapper's Kit does nothing until the Soul Trap is ported |
+| Mystery Coin Shop | COIN_UPGRADES, applyCoinUpgrades | ✅ all 26 upgrades. The Android-only Watch Ad box and the in-app coin purchases are left out. Ancient Knowledge (+15% XP) now works; the web version sold it and never applied it. Treasure Sense's gem is turned into gold right away, the way Swift handles every gem. When Death's Bargain kills the enemy, the kill counts for the bestiary and achievements; the web version left you alive at 0 HP. |
 | Crypt enemies and bosses, scaling | DUNGEON ENGINE | ✅ |
 | Other dungeons' enemy tables | DUNGEON ENGINE | ✅ from gamedata.json, including Nightmare enemies |
 | Enemy special abilities (burn, dodge, lifesteal …) | ENEMY_SPECIALS, enemy flags | ✅ all 176 named special moves and the common ability flags; the one-off Hollow and Shadow World mechanics not yet |
@@ -117,7 +117,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
-| Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Not yet: Voice, Echo-locate, Blacksmith, Arcane Shop, Spell Book, Home, chat, selling |
+| Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Not yet: Voice, Echo-locate, Blacksmith, Arcane Shop, Spell Book, chat |
 | Death: graveyard entry, gear kept, Classic level reset | showDefeat | ✅ |
 | Settings in the web version's look | settings-screen, settings-panel-* | ✅ categories; Audio, Accessibility (verbose rooms, combat announcements, repair unlocks), Gameplay (class traits), General (version, web save import), Account. Language, Chat, Notifications, Beta, Developer Tools not yet |
 | The Graveyard, Help, Credits, What's New | screen-graveyard, screen-help, screen-credits, screen-whatsnew | ✅ text from index.html through tools/extract-static-screens.py |
@@ -129,7 +129,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Quests, bounties, inbox | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
 | Spirits, companion, corruption, Hunter, Void, Medusa arc | … | ⬜ |
 | Seasonal events | SEASONAL EVENTS SYSTEM | ⬜ |
-| Home system | HOME SYSTEM | ⬜ |
+| Home system | HOME SYSTEM, MINION SYSTEM, HOME_DREAMS | ✅ buy the home (500g), bed (75g) and sleep every 5 rooms with a dream, the gold safe, skill upgrades to level 5, the Minions tab, and the Soul Trap combat button. Minions strike after you every round. Spirits, Forge, Alchemy, Vendor and Guns tabs say coming soon; Skill Orbs (upgrades passed on when a character dies) and the July 4th Fireworks Corner are not in yet |
 | Global chat, presence, leaderboards | GLOBAL CHAT SYSTEM … | ⬜ |
 | Account login, cloud save | DD Cloud | ✅ see "Account and cloud save" |
 | Translations (Portuguese etc.) | translation tables | ⬜ |
@@ -191,4 +191,15 @@ Where an item's description and the web code disagree, Swift follows the descrip
   defense and SP ones; "+2 Attack forever", "Second Wind free", "+1 defense vs undead",
   "potions heal 10% more" and the rest do nothing, and "+10 Max HP forever" gives +5.
   The Swift version currently matches the web version here; fix later.
-
+- **Dream buffs never applied.** `homeSleep()` ran the dream's buff on the run you
+  were in, and the dream's text says "for your next run", so it was gone by the
+  time it mattered. The Swift version saves the dream on the character and applies
+  it once when the next run starts (+3 attack, +3 defense, +15 max SP, potions heal
+  25% more, +10% flee chance or +30% gold from kills).
+- **Home skill upgrades did nothing.** The level was saved, but no code read it.
+  In the Swift version each level above 1 adds 10% to that skill's damage.
+- **Elite minions never happened.** The Soul Trap never told `captureMinion()` the
+  enemy was elite, so every minion was common. Elite enemies now give elite minions
+  (85% of their attack and a 10% chance of a double hit).
+- **No limit on minions.** The Help screen says you can keep up to 8, but the web
+  version never checked. Swift stops at 8 and says to release one first.

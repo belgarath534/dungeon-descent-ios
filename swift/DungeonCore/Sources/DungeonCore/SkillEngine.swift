@@ -155,6 +155,11 @@ public enum Skills {
                 run.fight.empowerCount = spec.empowerCount
             }
             dmg = Combat.scaleDamage(run, dmg, skill: true)
+            // Home skill upgrades: +10% damage per level above 1 (the web
+            // version saved the level and never read it).
+            if let lvl = run.skillLevels[Home.skillKey(cls: run.cls, name: skill.name)], lvl > 1, dmg > 0 {
+                dmg = jsRound(Double(dmg) * (1 + 0.10 * Double(lvl - 1)))
+            }
             if dmg > 0 {
                 msg += spec.hits > 1 ? " \(spec.hits) hits for \(dmg) damage." : " \(dmg) damage."
             }
