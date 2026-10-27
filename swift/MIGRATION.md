@@ -138,6 +138,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Account login, cloud save | DD Cloud | ✅ see "Account and cloud save" |
 | Translations (Portuguese etc.) | translation tables | ⬜ |
 | Spells | ARCANE_SHOP_ITEMS, openArcaneShop, openSpellBook, castSpell, applySpellEffect, checkSpellScrollDrop, spell SUBCLASSES | ✅ the Arcane Shop and Spell Book from the main menu (pick a character, saved gold) and from the dungeon (run gold), the Spell Book item, learning by class (Arcanist 95%, magic classes 75%, half-magic 45%), all 48 scrolls, the ✨ Spells button in combat (a free action with a 3- or 6-turn cooldown), one-use scrolls from the bag, scroll drops from 5% of kills (10% for Arcanists and Wizards), and the spell subclasses: Firelord, Stormcaller, Void Born, Phase Walker, Dark Arts, Night Shroud, Time Lord, Earthbound, Pure Magic and Spell Weaver |
+| The Mine | THE MINE SYSTEM, mineDig, mineDescend, mineCombatAction, mineUseSkill, mineSurface | ✅ choose a character, dig (1.5-second swing), the 15-item hands, going deeper (10 HP back each depth), the chest from depth 3, the 19 mine enemies with Attack, Heavy, Defend, Potion, Skill and Flee, the milestone bosses at depths 10, 20, 30, 50 and 100 with their lore, the depth stat and Deep Miner achievement, and surfacing with gold, diamonds, Mystery Coins, potions (to your saved items), gun parts (dd_gun_parts) and alchemy herbs (dd_alchemy_ingredients). The Gun button says guns are coming soon |
 | Music, ambience, sound effects | playTrack, playAmbient, sfx | ✅ same files (www/audio, bundled as-is), same track per dungeon and floor, volume settings |
 | Music player, custom tracks, narrator | MUSIC PLAYER … | ⬜ |
 | 3D Mode | generate3DRoomGraph, moveRoom3D, play3DExitCues, echoLocate, init3DView, ROOM3D_THEMES, get3DSettings | ✅ Settings → Beta Features → 3D Mode (dd_beta_features, same key as the web version) and 3D Settings (Shadows, Torch Flicker, FPS Counter, Minimap; dd_3d_settings). Each floor is a connected grid of rooms with real walls and doors: walls stop you, a new room is the normal room, a cleared room is just a room, Wander grows the map. Sound is real 3D audio (AVAudioEngine with HRTF, best with headphones) instead of left/right panning: you face north like the compass, each open door blips from where it is, a wall thuds from that wall, your footsteps go the way you walk, the enemy's cry comes from the room you walked into, each dungeon has its own room echo, and a falling tone plays as you descend. Echo-Location (button, or VoiceOver's two-finger double tap) answers from every direction, longer down long corridors, and hints at what the next new room holds. The view is RealityKit: every room built in its dungeon's colors and torchlight, the camera gliding room to room, drag to look around, and a minimap for sighted play. In The Shadow World with 3D Mode on, the Stalker Floor is a 7×7 room: the Darkness Swallower starts in a far corner, you hear exactly where it is in 3D, and it keeps coming every 8 seconds even if you stand still; after each escape it starts again from the far side. Free walking with on-screen sticks and Hide and Seek's 3D view aren't ported |
@@ -307,3 +308,18 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **The Final Boss's failure took your skills away for the whole run.** Swift strips your
   buffs, as the scroll says.
 - **Shadow Blast was listed twice in the Arcane Shop.**
+- **Mine enemies' special moves never happened.** The Dust Shade's and Shaft Lurker's
+  dodges, the Tunnel Snake's poison, the Stone and Diamond Golems' first-hit immunity (and
+  the Diamond Golem's 20% resistance), the Iron Sprite's drain, the Crystal Wolf's and
+  Forgotten Foreman's growth, the Vein Horror's lifesteal and the Ore Demon's burn were
+  written down but never copied onto the enemy. Swift makes them work, and tells you each
+  enemy's move when it appears. (The Iron Sprite blocks your skills for a turn, since the
+  Mine has no SP.)
+- **Mine Mystery Coins went missing.** They were written straight into one coin store
+  instead of through the coin counter the rest of the game reads. Swift adds them like
+  every other Mystery Coin.
+- **Some Mine kills never reached the Bestiary.** The kill was saved under an ID built from
+  the name ("mine-mine-bat") that doesn't match the Bestiary's ("mine-bat"). Swift records
+  them by name.
+- **Leaving the Mine from the menu** only warned about your hands; the chest was silently
+  lost too. Swift's warning counts both.

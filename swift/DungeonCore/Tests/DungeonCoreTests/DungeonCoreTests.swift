@@ -2522,3 +2522,100 @@ final class SpellTests: XCTestCase {
         XCTAssertTrue((5...40).contains(drops))
     }
 }
+
+final class MineTests: XCTestCase {
+    func miner(_ cls: String = "Warrior", level: Int = 1) -> MineRun {
+        var ch = PlayerCharacter(name: "Digger", cls: cls, race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = level
+        return Mine.start(ch)
+    }
+
+    func testStartDigAndCarryLimit() {
+        var m = miner(level: 6)
+        XCTAssertEqual(m.maxHp, Int(Double(GameData.classInfo("Warrior").maxHp) * 1.2))
+        var dice = SeededDice(seed: 1)
+        var found = 0, fights = 0
+        for _ in 0..<300 {
+            if m.inCombat { m.enemy = nil; fights += 1; continue }
+            switch Mine.dig(&m, dice: &dice) {
+            case .found(let items): found += items.count
+            case .handsFull:
+                XCTAssertEqual(m.hand.count, Mine.maxCarry)
+                if Mine.stash(&m) == 0 { m.hand = [] }
+            default: break
+            }
+            if m.depth < 3 && m.digs > 20 { _ = Mine.descend(&m) }
+        }
+        XCTAssertGreaterThan(found, 20)
+        XCTAssertGreaterThan(fights, 5)
+        XCTAssertLessThanOrEqual(m.hand.count, Mine.maxCarry)
+        XCTAssertTrue(m.hasChest)
+    }
+
+    func testMilestoneBossAndSpecials() {
+        var m = miner()
+        m.depth = 9
+        let boss = Mine.descend(&m)
+        XCTAssertEqual(boss?.name, "The Foreman's Ghost")
+        XCTAssertTrue(m.inCombat)
+        // The Stone Golem shrugs off the first hit.
+        m.enemy = Mine.enemies.first { $0.name == "Stone Golem" }
+        var dice = SeededDice(seed: 2)
+        let t = Mine.act(&m, .attack, dice: &dice)
+        XCTAssertTrue(t.log.contains { $0.contains("shrugs off") })
+        XCTAssertEqual(m.enemy?.hp, m.enemy?.maxHp)
+        // The Vein Horror heals from its hits.
+        m.enemy = Mine.enemies.first { $0.name == "Vein Horror" }
+        m.enemy!.hp = 10
+        m.hp = 1000; m.maxHp = 1000
+        m.enemy!.atk = 20...20
+        _ = Mine.act(&m, .defend, dice: &dice)
+        XCTAssertGreaterThan(m.enemy!.hp, 10)
+    }
+
+    func testDefeatLosesHandKeepsChest() {
+        var m = miner()
+        var dice = SeededDice(seed: 3)
+        m.depth = 3
+        m.hasChest = true
+        m.chest = [Mine.healthPotion]
+        m.hand = [Mine.healthPotion]
+        m.enemy = Mine.enemies.first { $0.name == "Cave Troll" }
+        m.enemy!.atk = 9999...9999
+        let t = Mine.act(&m, .defend, dice: &dice)
+        XCTAssertTrue(t.playerDied)
+        XCTAssertTrue(m.hand.isEmpty)
+        let h = Mine.surface(m, defeated: true)
+        XCTAssertEqual(h.potions.count, 1)
+    }
+
+    func testSurfaceHaulAndParts() {
+        var m = miner()
+        let gold = Mine.tables[0].1[0], part = Mine.tables[0].1[1], coin = Mine.tables[0].1[3]
+        m.hand = [gold, gold, part, coin]
+        m.chest = [Mine.tables[2].1[0]]
+        let h = Mine.surface(m, defeated: false)
+        XCTAssertEqual(h.gold, 30)
+        XCTAssertEqual(h.coins, 1)
+        XCTAssertEqual(h.diamonds, 2)
+        XCTAssertEqual(h.parts["barrel"], 1)
+        let store = MemoryStore()
+        Mine.storeParts(h, store: store)
+        XCTAssertEqual(store.getItem("dd_gun_parts"), #"{"barrel":1}"#)
+    }
+
+    func testFightToTheEnd() {
+        var dice = SeededDice(seed: 9)
+        for seed in 0..<30 {
+            var m = miner("Paladin", level: 5)
+            m.enemy = Mine.enemies[seed % Mine.enemies.count]
+            var turns = 0
+            while m.inCombat && turns < 200 {
+                let t = Mine.act(&m, turns % 4 == 3 ? .heavy : .attack, dice: &dice)
+                if t.playerDied || t.enemyDied { break }
+                turns += 1
+            }
+            XCTAssertLessThan(turns, 200)
+        }
+    }
+}

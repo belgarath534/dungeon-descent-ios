@@ -56,7 +56,7 @@ struct MainMenuView: View {
         Entry(id: "challenges", text: "🔥 Challenges", label: "Challenges — The Gauntlet and Daily Dungeon"),
         Entry(id: "blacksmith", text: "⚒ Blacksmith", label: "Blacksmith — upgrade and buy weapons using your global gold", action: .go(.blacksmith)),
         Entry(id: "mine", text: "⛏ The Mine", label: "The Mine — dig for diamonds, gun parts, and rare loot",
-              color: Color(hex: 0xc8a832), border: Color(hex: 0x8b6914)),
+              color: Color(hex: 0xc8a832), border: Color(hex: 0x8b6914), action: .go(.mine)),
         Entry(id: "bossrush", text: "👑 Boss Rush", label: "Boss Rush, fight all nine bosses back to back", action: .go(.bossrush)),
         Entry(id: "tournament", text: "🏆 Tournament", label: "Tournament, compete against other players for the highest score", action: .go(.tournament)),
         Entry(id: "chronicles", text: "📚 Chronicles", label: "The Chronicles, lore and history of the dungeons", action: .go(.chronicles)),
