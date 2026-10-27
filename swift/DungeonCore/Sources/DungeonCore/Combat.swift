@@ -22,6 +22,12 @@ public struct TurnResult: Equatable, Sendable {
     /// A cowardly enemy ran away, dropping this much gold.
     public var enemyFled = false
     public var goldGained = 0
+    /// The enemy this turn killed (the target), and any ambusher that fell to
+    /// reflected damage on its own turn.
+    public var defeated: Enemy? = nil
+    public var alsoDefeated: [Enemy] = []
+    /// The target fell but the rest of the ambush fights on.
+    public var ambushContinues = false
     public var log: [String] = []
     public var announcement: String? = nil
 }
@@ -40,6 +46,7 @@ public enum Combat {
     @discardableResult
     public static func begin(_ run: inout Run, against enemy: Enemy) -> [String] {
         run.enemy = enemy
+        run.foes = []
         run.inCombat = true
         run.defending = false
         run.fight = FightEffects()
@@ -182,6 +189,7 @@ public enum Combat {
                     r.fled = true
                     run.inCombat = false
                     run.enemy = nil
+                    run.foes = []
                     let msg = guaranteed ? "💨 Swift as a ghost — you vanish before they can react."
                                          : "You slip into the shadows. The enemy's howl fades behind you."
                     r.log.append(msg)
@@ -303,7 +311,7 @@ public enum Combat {
                 r.announcement = lines.joined(separator: " ")
                 return r
             }
-            return killed(&run, r)
+            return afterKill(&run, killed(&run, r), dice: &dice, options: options)
         }
         if let msg = checkBossPhase(&run) {
             r.bossPhaseMessage = msg
@@ -315,7 +323,7 @@ public enum Combat {
             r.announcement = r.log.last
             return r
         }
-        if let g = EnemyAbilities.cowardFlees(&run, dice: &dice, log: &r.log) {
+        if run.foes.isEmpty, let g = EnemyAbilities.cowardFlees(&run, dice: &dice, log: &r.log) {
             r.enemyFled = true
             r.goldGained = g
             run.kills += 1
@@ -325,14 +333,14 @@ public enum Combat {
             return r
         }
 
-        let taken = enemyTurn(&run, dice: &dice, options: options, log: &r.log)
+        let taken = enemiesTurn(&run, &r, dice: &dice, options: options)
         if let dead = run.enemy, dead.isDead {
             if let lines = ShadowWorld.refusesDeath(&run) {
                 r.log += lines
                 r.announcement = lines.joined(separator: " ")
                 return r
             }
-            return killed(&run, r)
+            return afterKill(&run, killed(&run, r), dice: &dice, options: options)
         }
         r.enemyDamage = taken
         tickEffects(&run, log: &r.log)
@@ -359,9 +367,108 @@ public enum Combat {
         return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
     }
 
+    // MARK: Ambushes (MULTI-ENEMY COMBAT SYSTEM)
+
+    /// spawnAmbush: two enemies from floor 3, three from floor 7, from the
+    /// floor's pool. (The Shadow World raises echoes instead; see below.)
+    public static func ambushers(for run: Run, dice: inout some Dice) -> [Enemy] {
+        if run.dungeon == ShadowWorld.name && run.shadowKilled.count >= 2 {
+            let count = min(run.shadowKilled.count, run.floor >= 7 ? 3 : 2)
+            var pool = run.shadowKilled
+            var out: [Enemy] = []
+            while out.count < count && !pool.isEmpty {
+                var e = pool.remove(at: dice.roll(0...(pool.count - 1)))
+                e.name = "Echo of " + e.name
+                e.maxHp = max(1, jsRound(Double(e.maxHp) * 0.75))
+                e.hp = e.maxHp
+                e.turnsTaken = 0
+                e.hitsTaken = 0
+                e.mechanics["corruptOnHit"] = .number(1)
+                out.append(e)
+            }
+            return out
+        }
+        let count = run.floor >= 7 ? 3 : 2
+        let tables = Bestiary.enemies(for: run.dungeon, difficulty: run.difficulty)
+        let pool = tables.pool(forFloor: run.floor)
+        guard pool.count >= 1 else { return [] }
+        // Ambushers come at their base strength (no floor or level scaling),
+        // as in the web version; there are two or three of them.
+        return (0..<count).map { _ in Enemy.spawn(pool[dice.roll(0...(pool.count - 1))], floor: 1, playerLevel: 1) }
+    }
+
+    /// startMultiCombat: the first enemy is your target; the rest wait their turn.
+    @discardableResult
+    public static func beginAmbush(_ run: inout Run, _ enemies: [Enemy]) -> [String] {
+        guard let first = enemies.first else { return [] }
+        var log = begin(&run, against: first)
+        run.foes = Array(enemies.dropFirst())
+        log.insert("⚡ AMBUSH! \(enemies.count) enemies attack at once: " + enemies.map(\.name).joined(separator: ", ") + "!", at: 0)
+        return log
+    }
+
+    /// Points your next action at another enemy of the ambush.
+    public static func retarget(_ run: inout Run, to index: Int) {
+        guard run.foes.indices.contains(index), let current = run.enemy else { return }
+        run.enemy = run.foes[index]
+        run.foes[index] = current
+    }
+
+    /// Every enemy still standing takes its turn: your target, then the rest.
+    /// An ambusher that dies on its own turn (thorns, reflection) falls.
+    static func enemiesTurn(_ run: inout Run, _ r: inout TurnResult, dice: inout some Dice, options: Options) -> Int {
+        var total = enemyTurn(&run, dice: &dice, options: options, log: &r.log)
+        var i = 0
+        while i < run.foes.count && !run.isDead {
+            let target = run.enemy
+            run.enemy = run.foes[i]
+            total += enemyTurn(&run, dice: &dice, options: options, log: &r.log)
+            let foe = run.enemy
+            run.enemy = target
+            if let foe, !foe.isDead {
+                run.foes[i] = foe
+                i += 1
+            } else {
+                run.foes.remove(at: i)
+                if let foe {
+                    run.kills += 1
+                    r.alsoDefeated.append(foe)
+                    r.log.append("☠ \(foe.name) falls!")
+                }
+            }
+        }
+        return total
+    }
+
+    /// After the target dies in an ambush, the next enemy steps up and the
+    /// rest take their turns.
+    static func afterKill(_ run: inout Run, _ result: TurnResult, dice: inout some Dice, options: Options) -> TurnResult {
+        var r = result
+        guard !run.foes.isEmpty, !run.isDead else { return r }
+        r.ambushContinues = true
+        run.enemy = run.foes.removeFirst()
+        run.inCombat = true
+        let taken = enemiesTurn(&run, &r, dice: &dice, options: options)
+        r.enemyDamage = taken
+        tickEffects(&run, log: &r.log)
+        let left = 1 + run.foes.count
+        r.announcement = "\(r.defeated?.name ?? "The enemy") defeated! \(left) \(left == 1 ? "enemy remains" : "enemies remain"). "
+            + (taken > 0 ? "You take \(taken) damage. " : "") + "Your HP: \(run.hp) of \(run.maxHp)."
+        if run.isDead {
+            r.playerDied = true
+            run.inCombat = false
+        }
+        return r
+    }
+
     static func killed(_ run: inout Run, _ result: TurnResult) -> TurnResult {
         var r = result
         r.enemyDied = true
+        r.defeated = run.enemy
+        if let e = run.enemy, run.dungeon == ShadowWorld.name, !e.isBoss, !e.name.hasPrefix("Echo of") {
+            run.shadowKilled.append(e)
+            if run.shadowKilled.count > 10 { run.shadowKilled.removeFirst() }
+        }
         run.inCombat = false
         run.kills += 1
         if run.fight.warlord {

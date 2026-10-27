@@ -248,6 +248,13 @@ final class RunModel: ObservableObject {
 
         switch Rooms.next(&r, dice: &d) {
         case .fight:
+            // 20% of fights from floor 3 are ambushes; every fight is on Ambush Day.
+            if r.floor >= 3 && (r.event == "ambushday" || d.chance(0.20)),
+               let line = startAmbush(&r, &d, label: label) {
+                spoken += " " + line
+                finish(r, d, phase: .fighting, spoken: spoken)
+                return
+            }
             let enemy = Combat.nextEnemy(for: r, dice: &d)
             Combat.begin(&r, against: enemy).forEach { add($0) }
             let ability = Self.sentence(enemy.desc ?? "A powerful foe.")
@@ -458,6 +465,7 @@ final class RunModel: ObservableObject {
         if (result.enemyDamage ?? 0) > 0 { Sound.sfx("sfx-hurt") }
 
         var spoken = result.log.first ?? ""
+        spoken += rewardFallen(result.alsoDefeated, &r, &d)
         if result.bossPhaseMessage != nil {
             spoken = result.log.joined(separator: " ")
             Feedback.hit(heavy: true)
@@ -478,9 +486,9 @@ final class RunModel: ObservableObject {
             enemyFled(result, spoken: spoken)
             return
         }
-        if result.enemyDied, let e = r.enemy {
+        if result.enemyDied, let e = result.defeated ?? r.enemy {
             run = r; dice = d
-            enemyDefeated(e, spoken: spoken)
+            enemyDefeated(e, spoken: spoken, result: result)
             return
         }
         if result.playerDied {
@@ -494,7 +502,43 @@ final class RunModel: ObservableObject {
         finish(r, d, phase: .fighting, spoken: spoken)
     }
 
-    private func enemyDefeated(_ e: Enemy, spoken: String) {
+    /// Gold, XP and the bestiary for ambushers that fell on their own turn.
+    private func rewardFallen(_ fallen: [Enemy], _ r: inout Run, _ d: inout SystemDice) -> String {
+        var said = ""
+        for e in fallen {
+            let reward = Progression.rewardKill(&r, e, dice: &d, wallet: game.wallet)
+            add(reward.message)
+            said += " " + reward.message
+            achievements.record(.enemyKilled(e, run: r))
+            _ = game.recordBestiaryKill(e.name)
+            if reward.levelsGained > 0 { levelUp = r.level; achievements.record(.levelReached(r.level)) }
+        }
+        return said
+    }
+
+    /// The ambush: two or three enemies at once (startMultiCombat).
+    private func startAmbush(_ r: inout Run, _ d: inout SystemDice, label: String) -> String? {
+        let foes = Combat.ambushers(for: r, dice: &d)
+        guard foes.count >= 2 else { return nil }
+        let lines = Combat.beginAmbush(&r, foes)
+        add(label)
+        lines.forEach { add($0) }
+        Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
+        Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
+        let names = foes.map { "\($0.name), \($0.hp) HP" }.joined(separator: ". ")
+        return "Ambush! \(foes.count) enemies. \(names). Your attacks hit your target; switch targets with the target buttons."
+    }
+
+    /// Switch which ambusher your attacks hit.
+    func target(_ index: Int) {
+        guard phase == .fighting, run.foes.indices.contains(index) else { return }
+        var r = run
+        Combat.retarget(&r, to: index)
+        run = r
+        if let e = r.enemy { Feedback.announce("Targeting \(e.name), \(e.hp) HP.") }
+    }
+
+    private func enemyDefeated(_ e: Enemy, spoken: String, result: TurnResult? = nil) {
         var r = run
         var d = dice
         let reward = Progression.rewardKill(&r, e, dice: &d, wallet: game.wallet)
@@ -558,6 +602,24 @@ final class RunModel: ObservableObject {
         }
         r.floorStats.kills += 1
         Feedback.success()
+        // An ambush fights on: the core already brought the next enemy up and
+        // let the rest strike.
+        if let res = result, res.ambushContinues {
+            if res.playerDied {
+                run = r; dice = d
+                playerDied(killedBy: r.enemy?.name ?? "the ambush", spoken: said)
+                return
+            }
+            finish(r, d, phase: .fighting, spoken: said + " " + (res.announcement ?? ""))
+            return
+        }
+        // Killed outside a turn (a thrown item) with ambushers left: the next one steps up.
+        if !r.foes.isEmpty {
+            r.enemy = r.foes.removeFirst()
+            r.inCombat = true
+            finish(r, d, phase: .fighting, spoken: said + " \(r.enemy?.name ?? "The next enemy") steps up.")
+            return
+        }
         r.enemy = nil
         r.inCombat = false
         if e.mechanics["guardian"] == .bool(true) {
@@ -765,7 +827,7 @@ final class RunModel: ObservableObject {
 
     /// Shown in combat when a Soul Trap is in the bag and the enemy isn't a boss.
     var canSoulTrap: Bool {
-        phase == .fighting && run.enemy?.isBoss == false && run.inventory.contains { $0.type == "soul-trap" }
+        phase == .fighting && run.enemy?.isBoss == false && run.foes.isEmpty && run.inventory.contains { $0.type == "soul-trap" }
     }
 
     /// doFight('soul-trap'): capture the enemy as a minion; the fight ends.
@@ -933,6 +995,7 @@ final class RunModel: ObservableObject {
         else { Sound.sfx("sfx-confirm") }
         if (result.enemyDamage ?? 0) > 0 { Sound.sfx("sfx-hurt") }
         var spoken = result.log.joined(separator: " ") + questLine
+        spoken += rewardFallen(result.alsoDefeated, &r, &d)
         if result.fled {
             finish(r, d, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring, spoken: spoken)
             playMusic()
@@ -943,9 +1006,9 @@ final class RunModel: ObservableObject {
             enemyFled(result, spoken: spoken)
             return
         }
-        if result.enemyDied, let e = r.enemy {
+        if result.enemyDied, let e = result.defeated ?? r.enemy {
             run = r; dice = d
-            enemyDefeated(e, spoken: spoken)
+            enemyDefeated(e, spoken: spoken, result: result)
             return
         }
         if result.playerDied {

@@ -103,7 +103,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Elites | ELITE_ENEMIES | ✅ 15% from floor 4, every dungeon and Nightmare |
 | Special rooms (treasure, sanctuary, cursed, hidden, merchant) | SPECIAL_ROOMS | ✅ |
 | Dungeon events (shrine, chest, Julio, wounded adventurer, Abyssal events …) | DUNGEON_EVENTS | ✅ 9 of 16 (the Shadow World ones and The Witness not yet) |
-| Multi-enemy combat | MULTI-ENEMY COMBAT SYSTEM | ⬜ |
+| Multi-enemy combat | MULTI-ENEMY COMBAT SYSTEM, startMultiCombat, spawnAmbush, spawnShadowAmbush | ✅ ambushes: 20% of fights from floor 3 (every fight on Ambush Day), two enemies or three from floor 7, each with a Target button; every enemy still standing strikes after your action, and each kill pays out as it falls. In The Shadow World, once you've killed two enemies, ambushes raise their echoes (75% HP, each hit adds corruption) |
 | Gun crafting | GUN DEFINITIONS | ⬜ |
 | Boss Rush | BOSS RUSH ENGINE | ✅ with the personal leaderboard |
 | Daily Raid | RAID ENGINE | ✅ Normal and Hard, raid tiers, once a day. Skills without a raid rule now hit for normal damage (the web version charged SP and did nothing) |
@@ -123,7 +123,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | The Graveyard, Help, Credits, What's New | screen-graveyard, screen-help, screen-credits, screen-whatsnew | ✅ text from index.html through tools/extract-static-screens.py |
 | Quests & Achievements screen | screen-quests | ✅ main and daily quest, achievements with Load More; Daily Challenge not yet |
 | Web look: main menu, Your Champions, Death Log, Forge Your Legend | screen-menu, screen-charlist, screen-deathlog, screen-creation | ✅ same order, text, VoiceOver labels and sliders; creation cards come from index.html through tools/extract-creation.py |
-| The Shadow World dungeon | SHADOW_ENEMIES, addShadowCorruption, applyShadowEnemyMechanics, THE SHAPESHIFTER | ✅ dungeon 9, unlocked by finishing The Abyssal Deep: its 14 enemies and 3 elites with their moves (Mimic, Drifter, Null Fragment, Smear, Null Knight, Reflection, Sorrow Hound, Lurker, Void Weaver, Twice Dead, Shadow Archon, The Unborn, The Remnant; Hollow Echo, Null Sovereign, The Shapeless), Shadow Corruption and the Purge button, The Echo then the four-phase Shapeshifter, its floors, rooms, music and loot (Shadow Blade, Null Shield, Void Cloth, Shadow Cloak, Null Potion, Mirror Fragment, Echo Bone). Not yet: the Stalker Floor, the Shadow events (Security Room, Mirror, Offering, Two Doors), echo ambushes (they need multi-enemy fights), the Shapeshifter's Mask and the Echo Staff (spells) |
+| The Shadow World dungeon | SHADOW_ENEMIES, addShadowCorruption, applyShadowEnemyMechanics, THE SHAPESHIFTER | ✅ dungeon 9, unlocked by finishing The Abyssal Deep: its 14 enemies and 3 elites with their moves (Mimic, Drifter, Null Fragment, Smear, Null Knight, Reflection, Sorrow Hound, Lurker, Void Weaver, Twice Dead, Shadow Archon, The Unborn, The Remnant; Hollow Echo, Null Sovereign, The Shapeless), Shadow Corruption and the Purge button, The Echo then the four-phase Shapeshifter, its floors, rooms, music and loot (Shadow Blade, Null Shield, Void Cloth, Shadow Cloak, Null Potion, Mirror Fragment, Echo Bone). Not yet: the Stalker Floor, the Shadow events (Security Room, Mirror, Offering, Two Doors), the Shapeshifter's Mask and the Echo Staff (spells) |
 | Spirits in play | STARTER_SPIRITS, RARE_SPIRITS, ELITE_SPIRITS, openPauseSpirits, awardRareSpirit | ✅ all 24 spirits fight, guard and loot beside you; rare ones wake at level 5. The spirit row under the top bar, switching in Pause → Spirits (with the Market Sprite's 50 gold fee), elite spirits from 30% of elite kills and each dungeon's rare spirit on victory. Not yet: custom spirits from the Spirit Forge, trap detection (traps aren't in yet), the Spirit Bestiary |
 | Corruption, hunter, guide in play | corruption, hunterTurn, companion | ⬜ |
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
@@ -268,3 +268,8 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **The Lurker hid and struck on the same turn.** Its description says it hides on the
   first turn and lands a guaranteed critical on the second; Swift does that.
 - **Continue Journey** from The Abyssal Deep now leads into The Shadow World.
+- **Ambushes ran a separate, thinner fight.** The web version's ambush code had its own
+  attack and enemy-turn rules: no armor rarity effects, no enemy abilities or statuses,
+  enemies ignoring your armor's level, a 12% crit and a 25% heavy miss instead of the
+  normal ones. Swift runs ambushes through the normal fight, so every ability, subclass,
+  spirit, armor effect and enemy move works in them too.

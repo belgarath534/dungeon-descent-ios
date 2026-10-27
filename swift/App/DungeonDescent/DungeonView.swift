@@ -319,7 +319,7 @@ struct DungeonView: View {
     private var combatSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             if let e = run.enemy {
-                Text("⚔ \(e.name)").font(Theme.decorative(14.4)).foregroundStyle(Theme.bloodBright)
+                Text(run.foes.isEmpty ? "⚔ \(e.name)" : "⚔ Ambush! Target: \(e.name)").font(Theme.decorative(14.4)).foregroundStyle(Theme.bloodBright)
                     .accessibilityAddTraits(.isHeader)
                 HStack(spacing: 14) {
                     Text(e.icon).font(.system(size: 29)).accessibilityHidden(true)
@@ -337,6 +337,28 @@ struct DungeonView: View {
                 }
                 .padding(.vertical, 10).padding(.horizontal, 14)
                 .background(Theme.blood.opacity(0.08)).overlay(Rectangle().stroke(Theme.blood.opacity(0.2)))
+            }
+            // #dg-multi-enemies: the rest of an ambush, each with a Target button.
+            if !run.foes.isEmpty {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("ALSO ATTACKING").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Theme.textDim)
+                    ForEach(Array(run.foes.enumerated()), id: \.offset) { i, f in
+                        HStack(spacing: 10) {
+                            Text("\(f.icon) \(f.name)").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xff8844))
+                            Spacer()
+                            Text("\(f.hp)/\(f.maxHp) HP").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
+                            Button("🎯 Target") { model.target(i) }
+                                .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xff8844))
+                                .padding(.vertical, 5).padding(.horizontal, 10)
+                                .background(Color(hex: 0x1a0800)).overlay(Rectangle().stroke(Color(hex: 0xff6622)))
+                                .accessibilityLabel("Target \(f.name) with \(f.hp) HP")
+                        }
+                        .padding(.vertical, 6).padding(.horizontal, 10)
+                        .background(Color(hex: 0x0a0500)).overlay(Rectangle().stroke(Color(hex: 0x331100)))
+                    }
+                }
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Other enemies in the ambush")
             }
             VStack(alignment: .leading, spacing: 4) {
                 Text("Your Health").font(Theme.cinzel(9.9)).tracking(2).textCase(.uppercase).foregroundStyle(Theme.textDim)

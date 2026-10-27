@@ -2198,3 +2198,74 @@ final class ShadowWorldTests: XCTestCase {
         XCTAssertTrue(second.log.contains { $0.contains("Critical") })
     }
 }
+
+final class AmbushTests: XCTestCase {
+    func hero(_ dungeon: String = "Crypt of Malachar") -> Run {
+        var r = Run(character: PlayerCharacter(name: "A", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: dungeon, difficulty: .wanderer))
+        r.spirit = nil
+        r.floor = 7
+        return r
+    }
+
+    func testEveryoneAttacksAndNextStepsUp() {
+        var r = hero()
+        var dice = SeededDice(seed: 21)
+        let foes = Combat.ambushers(for: r, dice: &dice)
+        XCTAssertEqual(foes.count, 3)
+        Combat.beginAmbush(&r, foes)
+        XCTAssertEqual(r.foes.count, 2)
+        r.maxHp = 100_000
+        r.hp = 100_000
+        // Defending: all three enemies take a turn.
+        let t = Combat.takeTurn(&r, .defend, dice: &dice)
+        XCTAssertEqual(r.foes.map(\.turnsTaken), [1, 1])
+        XCTAssertGreaterThan(t.enemyDamage ?? 0, 0)
+        // Killing the target brings the next one up; the fight goes on.
+        r.enemy!.hp = 1
+        r.atkBonus = 1000
+        let k = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertTrue(k.enemyDied)
+        XCTAssertTrue(k.ambushContinues)
+        XCTAssertNotNil(k.defeated)
+        XCTAssertTrue(r.inCombat)
+        XCTAssertEqual(r.foes.count, 1)
+        XCTAssertEqual(r.kills, 1)
+        // The last two.
+        r.enemy!.hp = 1
+        _ = Combat.takeTurn(&r, .attack, dice: &dice)
+        r.enemy!.hp = 1
+        let last = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertTrue(last.enemyDied)
+        XCTAssertFalse(last.ambushContinues)
+        XCTAssertFalse(r.inCombat)
+        XCTAssertEqual(r.kills, 3)
+    }
+
+    func testRetargetAndFleeClearsAmbush() {
+        var r = hero()
+        var dice = SeededDice(seed: 4)
+        Combat.beginAmbush(&r, Combat.ambushers(for: r, dice: &dice))
+        let second = r.foes[0]
+        Combat.retarget(&r, to: 0)
+        XCTAssertEqual(r.enemy, second)
+        r.swiftTurns = 1
+        XCTAssertTrue(Combat.takeTurn(&r, .flee, dice: &dice).fled)
+        XCTAssertTrue(r.foes.isEmpty)
+    }
+
+    func testShadowEchoes() {
+        var r = hero("The Shadow World")
+        var dice = SeededDice(seed: 8)
+        XCTAssertFalse(Combat.ambushers(for: r, dice: &dice).first?.name.hasPrefix("Echo of") ?? false)
+        for name in ["The Mimic", "The Drifter"] {
+            var e = Enemy.spawn(Bestiary.enemies(for: "The Shadow World").t1.first { $0.name == name }!, floor: 1, playerLevel: 1)
+            e.hp = 0
+            Combat.begin(&r, against: e)
+            _ = Combat.killed(&r, TurnResult())
+        }
+        let echoes = Combat.ambushers(for: r, dice: &dice)
+        XCTAssertEqual(echoes.count, 2)
+        XCTAssertTrue(echoes.allSatisfy { $0.name.hasPrefix("Echo of") && $0.number("corruptOnHit") == 1 && $0.hp > 0 })
+    }
+}

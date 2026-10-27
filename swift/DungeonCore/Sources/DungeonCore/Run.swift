@@ -56,6 +56,10 @@ public struct Run: Codable, Sendable {
     public var spirit: String? = nil
     /// Shadow Corruption stacks (The Shadow World).
     public var shadowCorruption = 0
+    /// The rest of an ambush: enemies fighting alongside `enemy`, your target.
+    public var foes: [Enemy] = []
+    /// Shadow World enemies killed this run, for echo ambushes (newest last).
+    public var shadowKilled: [Enemy] = []
     /// The seasonal or weekly event running (getActiveEvent), set when the
     /// run starts and on each new floor.
     public var event: String? = nil
