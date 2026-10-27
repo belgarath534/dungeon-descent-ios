@@ -131,9 +131,14 @@ final class MineModel: ObservableObject {
         resolve(t, sound: "sfx-crit")
     }
 
-    func gun() {
-        Sound.sfx("sfx-select")
-        Feedback.announce("Guns aren't in the Swift version yet. Coming soon. The gun parts you dig up are saved for them.")
+    var equippedGun: Gun? { Guns.equipped(game.store) }
+
+    func shoot(_ g: Gun) {
+        guard var m = run, m.inCombat else { return }
+        let t = Mine.shoot(&m, g, dice: &dice)
+        run = m
+        if t.enemyDied { GunBelt.shared.killed() }
+        resolve(t, sound: "sfx-attack")
     }
 
     private func resolve(_ t: Mine.Turn, sound: String) {
@@ -408,7 +413,12 @@ private struct MineScreens: View {
                         .accessibilityLabel("Heavy strike, high damage but enemy hits back harder")
                     Button("🛡 Defend") { model.act(.defend) }.buttonStyle(WebButtonStyle(kind: .ghost))
                         .accessibilityLabel("Defend, reduce incoming damage this turn")
-                    Button("🔫 Gun") { model.gun() }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Shoot with equipped gun")
+                    if let g = model.equippedGun {
+                        GunButton(gun: g) { model.shoot(g) }
+                    } else {
+                        Button("🔫 Gun") { Feedback.announce("No gun equipped. Craft one at Home or buy one from the Blacksmith.") }
+                            .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Shoot with equipped gun")
+                    }
                     Button("🧪 Potion") { model.act(.potion) }.buttonStyle(WebButtonStyle(kind: .ghost))
                         .accessibilityLabel("Use a health potion from your hand. \(m.hand.filter { $0.type == "mine-potion" }.count) in hand")
                     Button("✨ Skill") {

@@ -54,6 +54,7 @@ struct HomeOverlay: View {
                     case "home": homeTab
                     case "spirits": spiritsTab
                     case "minions": minionsTab
+                    case "gunshop": GunWorkshop(mode: .craft, store: game.store, wallet: game.wallet)
                     default: comingSoon("The " + (tabs.first { $0.id == tab }?.label.replacingOccurrences(of: " tab", with: "") ?? ""))
                     }
                 }

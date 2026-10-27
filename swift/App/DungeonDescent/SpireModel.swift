@@ -85,9 +85,21 @@ final class SpireModel: ObservableObject {
         step(a, spoken: true)
     }
 
-    private func step(_ a: Spire.Action, spoken: Bool) {
+    /// spireGunAction: a shot takes your turn's attack.
+    func shoot(_ g: Gun) {
+        if autoMode {
+            autoMode = false
+            stopTimer()
+            add(["Auto Mode paused — you took manual control."])
+        }
+        let dmg = Guns.damage(g, atkBonus: 0, dice: &dice)
+        step(.attack, spoken: true, gun: (g.name, dmg))
+        if run?.cleared == true { GunBelt.shared.killed() }
+    }
+
+    private func step(_ a: Spire.Action, spoken: Bool, gun: (name: String, damage: Int)? = nil) {
         guard var r = run else { return }
-        let lines = Spire.turn(&r, a, store: game.store, wallet: game.wallet, dice: &dice)
+        let lines = Spire.turn(&r, a, store: game.store, wallet: game.wallet, dice: &dice, gun: gun)
         run = r
         add(lines)
         if spoken || !AppSettings.combatAnnouncements { Feedback.announce(lines.joined(separator: " ") + status(r)) }

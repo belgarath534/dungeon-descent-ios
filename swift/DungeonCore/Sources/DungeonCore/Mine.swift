@@ -354,6 +354,15 @@ public enum Mine {
         return afterAction(&m, t, dice: &dice)
     }
 
+    /// mineCombatAction('gun'): a shot from your equipped gun, then the enemy answers.
+    public static func shoot(_ m: inout MineRun, _ g: Gun, dice: inout some Dice) -> Turn {
+        var t = Turn()
+        guard m.enemy != nil else { t.acted = false; return t }
+        let d = hit(&m, Guns.damage(g, atkBonus: 0, dice: &dice), log: &t.log)
+        if d > 0 { t.log.append("🔫 \(g.name) — \(d) damage to \(m.enemy?.name ?? "the enemy")!") }
+        return afterAction(&m, t, dice: &dice)
+    }
+
     /// mineUseSkill: heals, shields, weakens, boosts or strikes by tier.
     public static func useSkill(_ m: inout MineRun, _ effect: String, dice: inout some Dice) -> Turn {
         var t = Turn()

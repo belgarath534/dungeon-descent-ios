@@ -280,11 +280,7 @@ struct BlacksmithView: View {
     }
 
     private var gunsTab: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("🔫 Gun Shop").font(Theme.cinzel(12)).foregroundStyle(Theme.gold)
-            Text("💎 Diamonds: \(model.game.wallet.diamonds)").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x88ddff))
-            Text("Guns aren't in the Swift version yet. Coming soon.").font(Theme.crimson(14)).foregroundStyle(Theme.textSecondary)
-        }
+        GunWorkshop(mode: .buy, store: model.game.store, wallet: model.game.wallet)
     }
 
     private var guide: some View {

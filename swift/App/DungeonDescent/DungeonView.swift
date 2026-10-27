@@ -421,6 +421,9 @@ struct DungeonView: View {
                     .accessibilityLabel("Defend, reduces incoming damage")
                 Button("🧪 Potion") { drinkPotion() }.buttonStyle(DungeonButtonStyle(kind: .combat))
                     .accessibilityLabel("Use a health potion")
+                if let g = model.gun {
+                    GunButton(gun: g) { model.shoot(g) }
+                }
                 if model.canCast {
                     Button(run.spellCooldown > 0 ? "✨ Spells (\(run.spellCooldown))" : "✨ Spells") {
                         if run.spellCooldown > 0 {

@@ -237,7 +237,7 @@ public enum Spire {
 
     /// spireDoPlayerTurn: your hit, the enemy's answer, and the auto-potion at 40% HP.
     public static func turn(_ run: inout SpireRun, _ action: Action, store: GameStore, wallet: Wallet,
-                            dice: inout some Dice) -> [String] {
+                            dice: inout some Dice, gun: (name: String, damage: Int)? = nil) -> [String] {
         guard var e = run.enemy, !run.cleared, !run.dead else { return [] }
         var lines: [String] = []
         var dmg = max(1, dice.roll((run.atk - 2)...(run.atk + 8)))
@@ -247,9 +247,12 @@ public enum Spire {
         case .defend: dmg = jsRound(Double(dmg) * 0.4)
         case .attack: break
         }
+        // spireGunAction: a shot takes the turn's attack.
+        if let gun { dmg = gun.damage }
         if dmg > 0 {
             e.hp = max(0, e.hp - dmg)
-            lines.append(action == .heavy ? "Heavy strike — \(dmg) damage!" : action == .defend ? "Defend and counter — \(dmg)." : "Attack — \(dmg) damage!")
+            lines.append(gun.map { "🔫 \($0.name) fires! \(dmg) damage!" }
+                         ?? (action == .heavy ? "Heavy strike — \(dmg) damage!" : action == .defend ? "Defend and counter — \(dmg)." : "Attack — \(dmg) damage!"))
         }
         run.enemy = e
         if e.hp <= 0 { return lines + defeated(&run, store: store, wallet: wallet, dice: &dice) }

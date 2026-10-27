@@ -792,6 +792,11 @@ final class RunModel: ObservableObject {
             add("🎁 Found: \(drop.icon) \(drop.name) Level \(drop.level ?? 1)! Check inventory.")
             dropLine = " Item found. \(drop.name) Level \(drop.level ?? 1). Open inventory to equip it."
         }
+        if let part = Guns.drop(store: game.store, dice: &d) {
+            add("\(part.icon) \(e.name) drops a \(part.name)!")
+            dropLine += " \(e.name) dropped a \(part.name). Gun crafting part collected."
+        }
+        GunBelt.shared.killed()
         if let scroll = Spells.drop(&r, dice: &d) {
             let rarity = { if case .string(let x)? = scroll.extra["rarity"] { return x }; return "common" }()
             add("📜 \(scroll.name) dropped! [\(rarity.uppercased())]")
@@ -1270,6 +1275,20 @@ final class RunModel: ObservableObject {
         }
         if result.enemyDamage != nil, let a = result.announcement { spoken += " " + a }
         finish(r, d, phase: .fighting, spoken: spoken)
+    }
+
+    // MARK: Guns
+
+    var gun: Gun? { phase == .fighting ? Guns.equipped(game.store) : nil }
+
+    /// gunAction's shot: your turn's attack; the enemy answers.
+    func shoot(_ g: Gun) {
+        guard phase == .fighting else { return }
+        var r = run
+        var d = dice
+        let result = Guns.shoot(&r, g, dice: &d, options: .init(classTraits: AppSettings.classTraits))
+        achievements.trackGlobal("totalDmgDealt", Double(result.playerDamage))
+        spellDone(result, r, d)
     }
 
     // MARK: Spells

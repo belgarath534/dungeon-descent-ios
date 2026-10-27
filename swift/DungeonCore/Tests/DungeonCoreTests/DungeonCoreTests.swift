@@ -2619,3 +2619,58 @@ final class MineTests: XCTestCase {
         }
     }
 }
+
+final class GunTests: XCTestCase {
+    func testCraftBuyEquip() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        XCTAssertEqual(Guns.all.count, 13)
+        XCTAssertTrue(Guns.craft("musket", store: store).hasPrefix("Not enough parts"))
+        for p in ["barrel", "stock", "trigger"] { Guns.addPart(p, store: store) }
+        XCTAssertTrue(Guns.craft("musket", store: store).hasPrefix("You crafted"))
+        XCTAssertEqual(Guns.partCounts(store)["barrel"], 0)
+        XCTAssertEqual(Guns.owned(store), ["musket"])
+        XCTAssertTrue(Guns.buy("crossbow", wallet: w, store: store).hasPrefix("Not enough diamonds"))
+        w.addDiamonds(20)
+        XCTAssertTrue(Guns.buy("crossbow", wallet: w, store: store).hasPrefix("You bought"))
+        XCTAssertEqual(w.diamonds, 8)
+        Guns.equip("crossbow", store: store)
+        XCTAssertEqual(Guns.equipped(store)?.name, "Crossbow")
+        Guns.equip("ak47", store: store)
+        XCTAssertNil(Guns.equipped(store), "can't equip a gun you don't own")
+    }
+
+    func testChargeShootReload() {
+        var s = GunState()
+        let g = Guns.gun("doublebarrel")!
+        let t0 = Date(timeIntervalSince1970: 1000)
+        XCTAssertEqual(s.pull(g, now: t0), .charged)
+        XCTAssertEqual(s.pull(g, now: t0), .fire)
+        XCTAssertEqual(s.pull(g, now: t0), .fire)
+        XCTAssertEqual(s.pull(g, now: t0), .reloading(16))
+        XCTAssertEqual(s.pull(g, now: t0.addingTimeInterval(10)), .reloading(6))
+        XCTAssertEqual(s.pull(g, now: t0.addingTimeInterval(16)), .charged)
+    }
+
+    func testShotsInFights() {
+        var dice = SeededDice(seed: 3)
+        var r = Run(character: PlayerCharacter(name: "G", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.spirit = nil
+        Combat.begin(&r, against: Enemy(name: "Dummy", icon: "🎯", hp: 1000, maxHp: 1000, atk: 1...1, gold: 1...1))
+        let t = Guns.shoot(&r, Guns.gun("sniper")!, dice: &dice)
+        XCTAssertTrue((70...100).contains(t.playerDamage))
+        XCTAssertNotNil(t.enemyDamage, "the enemy answers a shot")
+
+        var ch = PlayerCharacter(name: "M", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = 1
+        var m = Mine.start(ch)
+        m.enemy = Mine.enemies[0]
+        let mt = Mine.shoot(&m, Guns.gun("sniper")!, dice: &dice)
+        XCTAssertTrue(mt.enemyDied)
+
+        var drops = 0
+        let store = MemoryStore()
+        for _ in 0..<1000 { if Guns.drop(store: store, dice: &dice) != nil { drops += 1 } }
+        XCTAssertTrue((50...110).contains(drops))
+    }
+}

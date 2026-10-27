@@ -167,6 +167,9 @@ private struct SpireScreens: View {
                             .accessibilityLabel("Defend and counterattack")
                         Button("🧪 Potion (\(r.potions))") { model.potion() }.buttonStyle(WebButtonStyle(kind: .ghost))
                             .accessibilityLabel("Use health potion, \(r.potions) left")
+                        if let g = Guns.equipped(model.game.store) {
+                            GunButton(gun: g) { model.shoot(g) }
+                        }
                     }
                 }
                 VStack(alignment: .leading, spacing: 4) {
