@@ -191,7 +191,7 @@ final class RunModel: ObservableObject {
             move3D(c)
             return
         }
-        movePrefix = "Moving \(dir)... "
+        movePrefix = "Moving \(dir). "
         enterRoom()
     }
 
@@ -1767,12 +1767,16 @@ final class RunModel: ObservableObject {
     // MARK: Helpers
 
     private func finish(_ r: Run, _ d: SystemDice, phase newPhase: Phase, spoken: String) {
+        // When the screen changes (a fight starts, a floor ends …) the button
+        // you pressed disappears and VoiceOver moves to a new one, which cut
+        // this announcement off after its first words. Wait for that move.
+        let screenChanges = newPhase != phase
         run = r
         dice = d
         phase = newPhase
         persist()
         setEvent(spoken, tone: newPhase == .fighting ? "danger" : newPhase == .floorCleared || newPhase == .shopping ? "good" : "")
-        Feedback.announce(movePrefix + spoken)
+        Feedback.announce(movePrefix + spoken, after: screenChanges ? 0.6 : 0)
         movePrefix = ""
     }
 

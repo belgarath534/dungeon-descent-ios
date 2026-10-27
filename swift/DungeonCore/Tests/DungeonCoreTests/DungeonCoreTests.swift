@@ -2763,3 +2763,45 @@ final class VoidReaperTests: XCTestCase {
         XCTAssertEqual(cursed.hp, jsRound(Double(plain.hp) * 1.5))
     }
 }
+
+final class SiegeTests: XCTestCase {
+    func testFortressUpgradesAndSave() {
+        let store = MemoryStore()
+        var f = Siege.load(store)
+        XCTAssertEqual(f.maxDurability, 50)
+        XCTAssertFalse(Siege.buy("reinforce", &f, gold: 100, minions: []).ok)
+        XCTAssertTrue(Siege.buy("reinforce", &f, gold: 1000, minions: []).ok)
+        XCTAssertEqual(f.maxDurability, 60)
+        let m1 = Minion(id: "a", name: "Rat", icon: "🐀", atk: 6, tier: "common", capturedOn: 0)
+        let m2 = Minion(id: "b", name: "Bat", icon: "🦇", atk: 7, tier: "common", capturedOn: 0)
+        f.wavePoints = 1000
+        XCTAssertTrue(Siege.buy("station", &f, gold: 1000, minions: [m1, m2]).message.hasPrefix("Rat"))
+        XCTAssertTrue(Siege.buy("station", &f, gold: 1000, minions: [m1, m2]).message.hasPrefix("Bat"), "the next minion, not the same one")
+        XCTAssertFalse(Siege.offered(f, minions: [m1, m2]).contains { $0.id == "station" })
+        Siege.save(f, store: store)
+        let back = Siege.load(store)
+        XCTAssertEqual(back.level, 2)
+        XCTAssertEqual(back.stationed.count, 2)
+    }
+
+    func testBattlesEnd() {
+        var dice = SeededDice(seed: 8)
+        var won = 0
+        for (i, cls) in ["Warrior", "Paladin", "Wizard", "Berserker"].enumerated() {
+            var ch = PlayerCharacter(name: "S\(i)", cls: cls, race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+            ch.persistLevel = 25
+            var b = Siege.start(ch, fortress: Siege.Fortress())
+            XCTAssertEqual(b.maxHp, jsRound(Double(GameData.classInfo(cls).maxHp) * 1.5))
+            var turns = 0
+            while !b.won && b.lost == nil && turns < 500 {
+                turns += 1
+                if b.hp < b.maxHp / 2 && b.potions > 0 { _ = Siege.potion(&b); continue }
+                _ = Siege.act(&b, .attack, dice: &dice)
+            }
+            XCTAssertLessThan(turns, 500)
+            if b.won { won += 1 }
+            XCTAssertGreaterThanOrEqual(Siege.finish(b).durability, 10)
+        }
+        XCTAssertGreaterThan(won, 0)
+    }
+}

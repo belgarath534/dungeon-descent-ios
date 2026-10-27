@@ -65,7 +65,7 @@ struct MainMenuView: View {
         Entry(id: "creator", text: "⚔ Enemy Creator", label: "Community Enemy Creator, build an enemy and set it loose in the dungeon"),
         Entry(id: "chat", text: "💬 Global Chat", label: "Global Chat, talk to other players", action: .go(.chat)),
         Entry(id: "bounty", text: "📋 Bounty Board", label: "The Bounty Board — register for bounties and earn rewards"),
-        Entry(id: "siege", text: "🏰 The Siege", label: "The Siege — defend your fortress against waves of enemies"),
+        Entry(id: "siege", text: "🏰 The Siege", label: "The Siege — defend your fortress against waves of enemies", action: .go(.siege)),
         Entry(id: "whatsnew", text: "⭐ What's New", label: "What's New, see the full patch notes for every version", action: .go(.whatsnew)),
         Entry(id: "help", text: "❓ Help", label: "Help, full game manual and guide", action: .go(.help)),
         Entry(id: "records", text: "🏛️ Hall of Records", label: "Hall of Records, view your lifetime stats and claim milestone awards", action: .go(.records)),

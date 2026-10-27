@@ -223,10 +223,16 @@ final class GameModel: ObservableObject {
 @MainActor
 enum Feedback {
     /// Queues a VoiceOver announcement so it doesn't cut off the button's own sound.
-    static func announce(_ text: String) {
+    static func announce(_ text: String, after delay: Double = 0) {
         guard UIAccessibility.isVoiceOverRunning, !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         let s = NSAttributedString(string: text, attributes: [.accessibilitySpeechQueueAnnouncement: true])
-        UIAccessibility.post(notification: .announcement, argument: s)
+        guard delay > 0 else {
+            UIAccessibility.post(notification: .announcement, argument: s)
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            UIAccessibility.post(notification: .announcement, argument: s)
+        }
     }
 
     static func hit(heavy: Bool = false) {
