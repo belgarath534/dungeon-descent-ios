@@ -13,6 +13,7 @@ struct MainMenuView: View {
     @State private var familiar = ""
     @State private var quitting = false
     @State private var toast: String?
+    @ObservedObject private var reaper = VoidReaperLive.shared
 
     enum Action {
         case go(Router.Screen)
@@ -126,6 +127,16 @@ struct MainMenuView: View {
             trophies = game.achievements.trophies
             familiar = game.familiarBadge
             if game.shouldOfferWebImport { webImport.check(game, quietIfEmpty: true) }
+            reaper.onReward = { [weak game] gold, coins in
+                guard let game else { return }
+                game.wallet.addGold(gold)
+                game.addMysteryCoins(coins)
+                game.achievements.increment("voidReaperDefeated")
+                _ = game.achievements.check()
+                Sound.sfx("sfx-victory")
+                Feedback.announce("The Void Reaper has fallen! You struck it this cycle: \(gold) gold and \(coins) Mystery Coins are yours.")
+            }
+            reaper.start(store: game.store)
         }
         .webImportAlerts(webImport, game: game)
     }
@@ -206,6 +217,16 @@ struct MainMenuView: View {
                 .foregroundStyle(Theme.ash)
                 .multilineTextAlignment(.center)
                 .padding(.top, 8)
+            // #vr-menu-banner and #vr-menu-btn
+            if let b = reaper.banner {
+                Text(b).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xa0a0ff))
+                    .multilineTextAlignment(.center).padding(.top, 8).frame(maxWidth: 340)
+                if reaper.awake {
+                    Button("🌑 Face The Void Reaper") { router.goTo(.voidreaper) }
+                        .buttonStyle(MenuButtonStyle(color: Color(hex: 0xa0a0ff), border: Color(hex: 0x4433aa)))
+                        .frame(maxWidth: 320).padding(.top, 4)
+                }
+            }
             // #menu-event-banner
             let lines = Events.bannerLines()
             if !lines.isEmpty {

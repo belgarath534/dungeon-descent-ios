@@ -76,7 +76,16 @@ public enum Combat {
             let lo = jsRound(Double(e.atk.lowerBound) * m), hi = jsRound(Double(e.atk.upperBound) * m)
             e.atk = lo...max(lo, hi)
         }
+        if run.worldCurse { cursed(&e) }
         return e
+    }
+
+    /// The Void Curse (a Void Reaper left standing): 50% more HP and attack.
+    static func cursed(_ e: inout Enemy) {
+        e.hp = jsRound(Double(e.hp) * 1.5)
+        e.maxHp = e.hp
+        let lo = jsRound(Double(e.atk.lowerBound) * 1.5), hi = jsRound(Double(e.atk.upperBound) * 1.5)
+        e.atk = lo...max(lo, hi)
     }
 
     /// Floor 10's Elite Guardian before the boss (startEliteGauntlet): a tier 3
@@ -105,7 +114,9 @@ public enum Combat {
             if !echoes.isEmpty { pool = echoes }
         }
         let t = pool[dice.roll(0...(pool.count - 1))]
-        return Enemy.spawnBoss(t, playerLevel: run.level, playerMaxAtk: run.atk.upperBound, ngPlusCount: ngCount(run))
+        var b = Enemy.spawnBoss(t, playerLevel: run.level, playerMaxAtk: run.atk.upperBound, ngPlusCount: ngCount(run))
+        if run.worldCurse { cursed(&b) }
+        return b
     }
 
     /// Your attack roll for this turn: class range plus every bonus.

@@ -2720,3 +2720,46 @@ final class VoidModeTests: XCTestCase {
         XCTAssertEqual(seen.count, VoidMode.Prize.allCases.count)
     }
 }
+
+final class VoidReaperTests: XCTestCase {
+    func testCycleAndFight() {
+        var s = VoidReaper.State()
+        let now = 1_000_000_000_000.0
+        s.countdownStart = now - 86_400_000
+        s.targetWakeDate = now + 86_400_000
+        XCTAssertEqual(s.pct(now: now), 50)
+        XCTAssertEqual(s.daysLeft(now: now), 1)
+        XCTAssertEqual(VoidReaper.transition(s, now: now), .none)
+        XCTAssertEqual(VoidReaper.transition(s, now: now + 86_400_001), .wake)
+        s.awake = true
+        s.awakenedAt = now
+        XCTAssertTrue(s.isAwake(now: now + 3_600_000))
+        XCTAssertEqual(s.hoursLeft(now: now + 3_600_000), 23)
+        XCTAssertEqual(VoidReaper.transition(s, now: now + 25 * 3_600_000), .expire)
+        s.currentHp = 20_000
+        XCTAssertEqual(s.phase, 2)
+        s.defeated = true
+        XCTAssertEqual(VoidReaper.transition(s, now: now), .restart)
+        let parsed = VoidReaper.State(["currentHp": NSNumber(value: 1234), "awake": true, "lastKiller": "Leo"])
+        XCTAssertEqual(parsed.currentHp, 1234)
+        XCTAssertEqual(parsed.totalHp, VoidReaper.globalHp)
+
+        var f = VoidReaper.Fight(PlayerCharacter(name: "V", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var dice = SeededDice(seed: 2)
+        let full = f.hp
+        let hit = VoidReaper.counter(&f, .defend, phase: 1, dice: &dice)
+        XCTAssertLessThanOrEqual(hit, 12)
+        XCTAssertEqual(f.hp, full - hit)
+        XCTAssertNotNil(VoidReaper.heal(&f, phase: 3, dice: &dice))
+        XCTAssertEqual(f.potions, 2)
+    }
+
+    func testWorldCurseMakesEnemiesStronger() {
+        var r = Run(character: PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var d1 = SeededDice(seed: 5), d2 = SeededDice(seed: 5)
+        let plain = Combat.nextEnemy(for: r, dice: &d1)
+        r.worldCurse = true
+        let cursed = Combat.nextEnemy(for: r, dice: &d2)
+        XCTAssertEqual(cursed.hp, jsRound(Double(plain.hp) * 1.5))
+    }
+}

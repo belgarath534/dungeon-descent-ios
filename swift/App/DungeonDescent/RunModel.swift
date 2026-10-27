@@ -78,6 +78,7 @@ final class RunModel: ObservableObject {
         r.minion = Home.activeMinion(game.store)
         r.skillLevels = Home.skillLevels(game.store)
         r.learnedSpells = Spells.learned(game.characters[index])
+        r.worldCurse = VoidReaperLive.shared.cursed
         Home.resetSleep(store: game.store)
         if case .string(let dream)? = game.characters[index].extra["dream"] {
             if let note = Home.applyDream(dream, to: &r) { r.startNotes.append("💤 " + note) }
@@ -1605,6 +1606,7 @@ final class RunModel: ObservableObject {
         }
         if let line = Subclasses.onFloor(&r, dice: &d) { add(line) }
         if let line = Blacksmith.onFloor(&r) { add(line) }
+        r.worldCurse = VoidReaperLive.shared.cursed
         if r.voidCurse {
             r.voidCurse = false
             add("⚗️ The Void Curse lifts on the new floor.")
