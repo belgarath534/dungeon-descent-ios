@@ -54,6 +54,8 @@ public struct Run: Codable, Sendable {
     public var beast = 0
     /// The spirit companion's id.
     public var spirit: String? = nil
+    /// Shadow Corruption stacks (The Shadow World).
+    public var shadowCorruption = 0
     /// The seasonal or weekly event running (getActiveEvent), set when the
     /// run starts and on each new floor.
     public var event: String? = nil
@@ -176,7 +178,7 @@ public struct Run: Codable, Sendable {
     }
 
     /// Total defense, before the +4 for defending.
-    public var totalDef: Int { def + defBonus + armorDef + tempDef + fight.def + (fight.buffTurns > 0 ? fight.buffDef : 0) }
+    public var totalDef: Int { def + defBonus + armorDef + tempDef + fight.def + (fight.buffTurns > 0 ? fight.buffDef : 0) + ShadowWorld.armorDefense(self) }
 
     public var hasFleeRing: Bool { inventory.contains { $0.effect == "flee" } }
 
@@ -336,6 +338,9 @@ public struct FightEffects: Codable, Sendable {
     public var paradoxUsed = false
     /// Medusa's Serpent Guard is still up this fight.
     public var medusaGuard = false
+    /// The Sorrow Hound's fear: your attacks do 20% less for this many turns.
+    public var fearTurns = 0
+    public var nullShieldUsed = false
 
     public init() {}
 }

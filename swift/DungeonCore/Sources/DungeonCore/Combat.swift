@@ -47,6 +47,7 @@ public enum Combat {
         if enemy.isBoss { run.bossPhase = 1 }
         var log: [String] = []
         Spirits.combatStart(&run, log: &log)
+        ShadowWorld.combatStart(&run, log: &log)
         return log
     }
 
@@ -89,7 +90,12 @@ public enum Combat {
 
     /// Picks and scales the boss for the run's dungeon.
     public static func nextBoss(for run: Run, dice: inout some Dice) -> Enemy {
-        let pool = Bestiary.enemies(for: run.dungeon, difficulty: run.difficulty).bosses
+        var pool = Bestiary.enemies(for: run.dungeon, difficulty: run.difficulty).bosses
+        // The Shadow World's floor 10 is The Echo; The Shapeshifter comes after it.
+        if run.dungeon == ShadowWorld.name {
+            let echoes = pool.filter { $0.mechanics["isEcho"] == .bool(true) }
+            if !echoes.isEmpty { pool = echoes }
+        }
         let t = pool[dice.roll(0...(pool.count - 1))]
         return Enemy.spawnBoss(t, playerLevel: run.level, playerMaxAtk: run.atk.upperBound, ngPlusCount: ngCount(run))
     }
@@ -129,6 +135,7 @@ public enum Combat {
         }
         if run.has("cu-night-blessing") && CoinShop.isNightNow() { baseAtk += 5 }
         baseAtk = Subclasses.attackBonus(&run, baseAtk, dice: &dice, log: &r.log)
+        baseAtk = ShadowWorld.attackRoll(&run, baseAtk, log: &r.log)
 
         if run.frozen {
             run.frozen = false
@@ -199,6 +206,7 @@ public enum Combat {
             r.log.append("⚡ Thunderfist stuns \(e.name)! They skip their next attack.")
         }
         r.playerDamage = EnemyAbilities.onPlayerHit(&run, r.playerDamage, basic: true, dice: &dice, log: &r.log)
+        r.playerDamage = ShadowWorld.onHit(&run, r.playerDamage, basic: true, heavy: action == .heavy, log: &r.log)
         dealDamage(&run, r.playerDamage, log: &r.log)
         if action == .attack || action == .heavy {
             afterGearHit(&run, r.playerDamage, dice: &dice, log: &r.log)
@@ -290,6 +298,11 @@ public enum Combat {
         var r = result
         guard let e = run.enemy else { return r }
         if e.isDead {
+            if let lines = ShadowWorld.refusesDeath(&run) {
+                r.log += lines
+                r.announcement = lines.joined(separator: " ")
+                return r
+            }
             return killed(&run, r)
         }
         if let msg = checkBossPhase(&run) {
@@ -314,6 +327,11 @@ public enum Combat {
 
         let taken = enemyTurn(&run, dice: &dice, options: options, log: &r.log)
         if let dead = run.enemy, dead.isDead {
+            if let lines = ShadowWorld.refusesDeath(&run) {
+                r.log += lines
+                r.announcement = lines.joined(separator: " ")
+                return r
+            }
             return killed(&run, r)
         }
         r.enemyDamage = taken
@@ -365,7 +383,8 @@ public enum Combat {
     /// final phase at 33% hits 35% harder. The boss skips its counter on the
     /// turn it changes phase (checkBossPhase).
     static func checkBossPhase(_ run: inout Run) -> String? {
-        guard var e = run.enemy, e.isBoss, !e.isDead else { return nil }
+        if let m = ShadowWorld.shapeshifterPhase(&run) { return m }
+        guard var e = run.enemy, e.isBoss, !e.isDead, !e.flag("isShapeshifter") else { return nil }
         func scale(_ m: Double) {
             let lo = jsRound(Double(e.atk.lowerBound) * m), hi = jsRound(Double(e.atk.upperBound) * m)
             e.atk = lo...max(lo, hi)
@@ -445,12 +464,14 @@ public enum Combat {
         }
         let move = EnemyAbilities.beforeAttack(&run, dice: &dice, log: &log)
         if move.skipAttack { return 0 }
+        let shadow = ShadowWorld.beforeAttack(&run, log: &log)
+        if shadow.skip || run.hp <= 0 { return 0 }
         if run.armorEffect == "sturdy" && dice.chance(0.05) {
             log.append("🛡️ Sturdy armor fully blocks the attack!")
             return 0
         }
         var raw = dice.roll(e.currentAtk) + EnemyAbilities.secondStrike(e, dice: &dice, log: &log)
-        raw = jsRound(Double(raw) * move.multiplier) + move.extra
+        raw = jsRound(Double(raw) * move.multiplier * shadow.multiplier) + move.extra
         if run.fight.softenHits > 0 {
             run.fight.softenHits -= 1
             raw = jsRound(Double(raw) * run.fight.soften)
@@ -490,7 +511,7 @@ public enum Combat {
         if let ev = Events.bonuses(run.event), ev.takesMore > 0 { taken = jsRound(Double(taken) * (1 + ev.takesMore)) }
         let hpBefore = run.hp
         taken = Subclasses.incoming(&run, taken, dice: &dice, log: &log)
-        if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) { return 0 }
+        if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) || ShadowWorld.armorAvoids(&run, dice: &dice, log: &log) { return 0 }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)
             run.fight.shield -= absorbed
@@ -541,6 +562,7 @@ public enum Combat {
             if back > 0 { log.append("\(back) damage is reflected back at \(hurt.name)!") }
         }
         EnemyAbilities.afterAttack(&run, taken: taken, dice: &dice, log: &log)
+        ShadowWorld.afterAttack(&run, log: &log)
         if var c = run.enemy, c.cursedTurns > 0 {
             c.cursedTurns -= 1
             if c.cursedTurns == 0 { log.append("The curse on \(c.name) fades.") }

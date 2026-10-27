@@ -256,6 +256,7 @@ public final class CharacterRoster {
             switch e.element {
             case "The Infernal Descent": return infernalUnlocked
             case "The Abyssal Deep": return isUnlocked(e.element) || abyssalUnlocked
+            case "The Shadow World": return isUnlocked(e.element) || ShadowWorld.unlocked(store)
             default: return e.offset == 0 || isUnlocked(e.element)
             }
         }.map(\.element)

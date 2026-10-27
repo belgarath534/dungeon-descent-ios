@@ -157,8 +157,11 @@ extension Enemy {
         hp = max(hp, jsRound(Double(playerMaxAtk * 3) * lvl))
         let lo = jsRound(Double(t.atk.lowerBound) * lvl)
         let hi = jsRound(Double(t.atk.upperBound) * lvl)
-        return Enemy(name: t.name, icon: t.icon, hp: hp, maxHp: hp, atk: lo...max(lo, hi), gold: t.gold,
-                     isBoss: true, phase1Hp: jsRound(Double(hp) * 0.66), phase2Hp: jsRound(Double(hp) * 0.33),
-                     phaseMsg2: t.phaseMsg2, phaseMsg3: t.phaseMsg3)
+        var e = Enemy(name: t.name, icon: t.icon, hp: hp, maxHp: hp, atk: lo...max(lo, hi), gold: t.gold,
+                      isBoss: true, phase1Hp: jsRound(Double(hp) * 0.66), phase2Hp: jsRound(Double(hp) * 0.33),
+                      phaseMsg2: t.phaseMsg2, phaseMsg3: t.phaseMsg3)
+        // The Shadow World's boss chain.
+        for k in ["isEcho", "isShapeshifter", "phaseMsg4"] { e.mechanics[k] = t.mechanics[k] }
+        return e
     }
 }

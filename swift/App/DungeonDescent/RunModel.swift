@@ -406,6 +406,19 @@ final class RunModel: ObservableObject {
 
     // MARK: Fighting
 
+    /// The Shadow World's Purge: 4 SP clears all corruption. A free action.
+    var canPurge: Bool { phase == .fighting && run.dungeon == ShadowWorld.name }
+
+    func purge() {
+        var r = run
+        let msg = ShadowWorld.purge(&r)
+        run = r
+        add(msg)
+        persist()
+        if msg.hasPrefix("✨") { Sound.sfx("sfx-unlock") }
+        Feedback.announce(msg.hasPrefix("✨") ? "Purge. Corruption cleared. \(ShadowWorld.purgeCost) SP spent." : msg)
+    }
+
     /// Bomb Thrower's once-per-floor bomb.
     var canBomb: Bool { phase == .fighting && Subclasses.canBomb(run) }
 

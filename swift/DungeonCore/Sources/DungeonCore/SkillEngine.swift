@@ -282,6 +282,7 @@ public enum Skills {
 
         r.log.append(msg)
         r.playerDamage = EnemyAbilities.onPlayerHit(&run, dmg, basic: false, dice: &dice, log: &r.log)
+        r.playerDamage = ShadowWorld.onHit(&run, r.playerDamage, basic: false, heavy: false, log: &r.log)
         Combat.dealDamage(&run, r.playerDamage, log: &r.log)
         // A stun that lands this turn also stops this turn's counter-attack.
         if let en = run.enemy, en.stunTurns > 0, !skipEnemy {

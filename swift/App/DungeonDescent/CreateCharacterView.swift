@@ -366,8 +366,7 @@ struct CreateCharacterView: View {
     private var unlocked: [String] { game.unlockedDungeons() }
 
     private func isLocked(_ c: CreationData.Card) -> Bool {
-        if c.key == "The Shadow World" { return true }
-        return !unlocked.contains(c.key)
+        !unlocked.contains(c.key)
     }
 
     @ViewBuilder
@@ -393,6 +392,7 @@ struct CreateCharacterView: View {
         switch c.key {
         case "The Infernal Descent": return "The Infernal, unlocked, dungeon of pure darkness, 10 floors. Press to select."
         case "The Abyssal Deep": return "The Abyssal Deep. Unlocked. The Leviathan awaits."
+        case "The Shadow World": return "The Shadow World. Unlocked. The Shapeshifter awaits."
         default: return "\(c.key), unlocked, 10 floors. Press to select."
         }
     }
@@ -417,8 +417,8 @@ struct CreateCharacterView: View {
                 Feedback.announce("The Abyssal Deep is sealed. Complete The Infernal Descent first to unlock it.")
                 showToast("🌊 Complete The Infernal Descent to unlock The Abyssal Deep.")
             case "The Shadow World":
-                Feedback.announce("The Shadow World is sealed. It has waited 3000 years. It isn't in the Swift version yet.")
-                showToast("🌑 The Shadow World isn't in the Swift version yet.")
+                Feedback.announce("The Shadow World is sealed. It has waited 3000 years. Complete The Abyssal Deep first to break the seal.")
+                showToast("🌑 Complete The Abyssal Deep to unlock The Shadow World.")
             default: break
             }
             return

@@ -123,7 +123,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | The Graveyard, Help, Credits, What's New | screen-graveyard, screen-help, screen-credits, screen-whatsnew | ✅ text from index.html through tools/extract-static-screens.py |
 | Quests & Achievements screen | screen-quests | ✅ main and daily quest, achievements with Load More; Daily Challenge not yet |
 | Web look: main menu, Your Champions, Death Log, Forge Your Legend | screen-menu, screen-charlist, screen-deathlog, screen-creation | ✅ same order, text, VoiceOver labels and sliders; creation cards come from index.html through tools/extract-creation.py |
-| The Shadow World dungeon | SHADOW_ENEMIES | ⬜ |
+| The Shadow World dungeon | SHADOW_ENEMIES, addShadowCorruption, applyShadowEnemyMechanics, THE SHAPESHIFTER | ✅ dungeon 9, unlocked by finishing The Abyssal Deep: its 14 enemies and 3 elites with their moves (Mimic, Drifter, Null Fragment, Smear, Null Knight, Reflection, Sorrow Hound, Lurker, Void Weaver, Twice Dead, Shadow Archon, The Unborn, The Remnant; Hollow Echo, Null Sovereign, The Shapeless), Shadow Corruption and the Purge button, The Echo then the four-phase Shapeshifter, its floors, rooms, music and loot (Shadow Blade, Null Shield, Void Cloth, Shadow Cloak, Null Potion, Mirror Fragment, Echo Bone). Not yet: the Stalker Floor, the Shadow events (Security Room, Mirror, Offering, Two Doors), echo ambushes (they need multi-enemy fights), the Shapeshifter's Mask and the Echo Staff (spells) |
 | Spirits in play | STARTER_SPIRITS, RARE_SPIRITS, ELITE_SPIRITS, openPauseSpirits, awardRareSpirit | ✅ all 24 spirits fight, guard and loot beside you; rare ones wake at level 5. The spirit row under the top bar, switching in Pause → Spirits (with the Market Sprite's 50 gold fee), elite spirits from 30% of elite kills and each dungeon's rare spirit on victory. Not yet: custom spirits from the Spirit Forge, trap detection (traps aren't in yet), the Spirit Bestiary |
 | Corruption, hunter, guide in play | corruption, hunterTurn, companion | ⬜ |
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
@@ -258,3 +258,13 @@ Where an item's description and the web code disagree, Swift follows the descrip
   paid 1000. Swift pays 1000 gold and 25 Mystery Coins and says so.
 - **Gear changed at the Blacksmith mid-climb didn't count** until the next climb. Swift
   updates your attack and defense when you leave the Blacksmith.
+- **Shadow World floor names were one floor off.** Its list has no empty first entry like
+  the other dungeons', so floor 1 showed floor 2's name and "The Place That Wasn't" never
+  appeared. Swift lines them up.
+- **Three Shadow World enemies' moves never happened in a fight.** The Shadow Archon's
+  command (+15% damage), The Unborn's "weapons deal half damage" and the Shadow Pup's
+  pair were only used by the Shapeshifter's Mask. Swift applies them (the second Shadow
+  Pup takes the first one's place, since fights are one-on-one).
+- **The Lurker hid and struck on the same turn.** Its description says it hides on the
+  first turn and lands a guaranteed critical on the second; Swift does that.
+- **Continue Journey** from The Abyssal Deep now leads into The Shadow World.

@@ -6620,6 +6620,763 @@
     "The Deep Chamber",
     "The Final Dark"
    ]
+  },
+  "The Shadow World": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "The Mimic",
+      "icon": "📦",
+      "hp": 28,
+      "atk": [
+       6,
+       11
+      ],
+      "gold": [
+       3,
+       6
+      ],
+      "desc": "Looks like a chest until engaged. Surprise attack first turn deals double damage.",
+      "mimicSurprise": true
+     },
+     {
+      "name": "Shadow Pup",
+      "icon": "🐾",
+      "hp": 18,
+      "atk": [
+       5,
+       9
+      ],
+      "gold": [
+       2,
+       4
+      ],
+      "desc": "Weak alone. Always spawns with a second Shadow Pup.",
+      "spawnsPair": true
+     },
+     {
+      "name": "The Drifter",
+      "icon": "🌫️",
+      "hp": 22,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       2,
+       5
+      ],
+      "desc": "Phases between shadow and reality. Dodges every other hit.",
+      "dodgeEvery": 2
+     },
+     {
+      "name": "Null Fragment",
+      "icon": "⬛",
+      "hp": 16,
+      "atk": [
+       4,
+       8
+      ],
+      "gold": [
+       1,
+       4
+      ],
+      "desc": "A piece of something that was erased. Adds 1 corruption stack on every hit.",
+      "corruptOnHit": 1
+     },
+     {
+      "name": "The Smear",
+      "icon": "🖤",
+      "hp": 20,
+      "atk": [
+       4,
+       9
+      ],
+      "gold": [
+       2,
+       4
+      ],
+      "desc": "Leaves corruption wherever it goes. Adds 1 corruption stack on every hit.",
+      "corruptOnHit": 1
+     }
+    ],
+    "t2": [
+     {
+      "name": "Null Knight",
+      "icon": "🗡️",
+      "hp": 42,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       5,
+       9
+      ],
+      "desc": "Corrupted armor with nothing inside. Immune to the first hit every combat.",
+      "immuneFirstHit": true
+     },
+     {
+      "name": "The Reflection",
+      "icon": "🪞",
+      "hp": 38,
+      "atk": [
+       8,
+       15
+      ],
+      "gold": [
+       4,
+       8
+      ],
+      "desc": "Mirrors your last action. If you attacked, it attacks. If you defended, it heals 15 HP.",
+      "reflection": true
+     },
+     {
+      "name": "Sorrow Hound",
+      "icon": "🐕",
+      "hp": 36,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       4,
+       8
+      ],
+      "desc": "Howls first turn applying fear — your damage is reduced 20% for 3 turns.",
+      "fearHowl": true
+     },
+     {
+      "name": "The Lurker",
+      "icon": "👁️",
+      "hp": 34,
+      "atk": [
+       7,
+       13
+      ],
+      "gold": [
+       4,
+       8
+      ],
+      "desc": "Hides first turn. Guaranteed critical second turn.",
+      "lurkerHide": true
+     },
+     {
+      "name": "Void Weaver",
+      "icon": "🕸️",
+      "hp": 44,
+      "atk": [
+       9,
+       16
+      ],
+      "gold": [
+       5,
+       10
+      ],
+      "desc": "Weaves a corruption web — passive 8 damage per turn until destroyed with a Heavy Strike.",
+      "corruptWeb": true
+     }
+    ],
+    "t3": [
+     {
+      "name": "The Twice Dead",
+      "icon": "💀",
+      "hp": 70,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       9,
+       16
+      ],
+      "desc": "Refuses to stay dead. Returns at 50% HP after the first kill. Must be defeated twice.",
+      "twiceDead": true
+     },
+     {
+      "name": "Shadow Archon",
+      "icon": "👑",
+      "hp": 65,
+      "atk": [
+       11,
+       19
+      ],
+      "gold": [
+       8,
+       15
+      ],
+      "desc": "Commands the shadows. All enemies deal 15% more damage while it lives.",
+      "shadowCommand": true
+     },
+     {
+      "name": "The Unborn",
+      "icon": "🌑",
+      "hp": 60,
+      "atk": [
+       12,
+       21
+      ],
+      "gold": [
+       9,
+       16
+      ],
+      "desc": "Never existed in the physical world. Weapons deal half damage. Only spells damage it fully.",
+      "spiritOnly": true
+     },
+     {
+      "name": "The Remnant",
+      "icon": "🔮",
+      "hp": 55,
+      "atk": [
+       13,
+       22
+      ],
+      "gold": [
+       9,
+       17
+      ],
+      "desc": "What remains after violent death. Gains +4 ATK every turn it survives. Burst it down fast.",
+      "grows": true
+     }
+    ],
+    "bosses": [
+     {
+      "name": "The Echo",
+      "icon": "🔄",
+      "hp": 120,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       18,
+       28
+      ],
+      "isBoss": true,
+      "desc": "A shadow copy of an enemy you already killed this run. Same mechanics. Same hunger. Returns from the dark wearing a familiar face.",
+      "phaseMsg2": "The Echo shifts — it remembers everything you did to it.",
+      "isEcho": true
+     },
+     {
+      "name": "The Shapeshifter",
+      "icon": "🌑",
+      "hp": 500,
+      "atk": [
+       18,
+       28
+      ],
+      "gold": [
+       80,
+       120
+      ],
+      "isBoss": true,
+      "desc": "It has waited 3000 years for someone worth copying. Now it wears your face. Uses your skills. Knows your every move.",
+      "phaseMsg2": "The Shapeshifter copies your equipped weapon — attacks now deal your weapon damage!",
+      "phaseMsg3": "Phase 3 — The Shapeshifter matches your current HP. It will not let you outlast it.",
+      "phaseMsg4": "Final Form — The Shapeshifter uses ALL your skills. Fight yourself.",
+      "isShapeshifter": true
+     }
+    ],
+    "elites": [
+     {
+      "name": "The Hollow Echo",
+      "icon": "🔄",
+      "hp": 120,
+      "atk": [
+       16,
+       25
+      ],
+      "gold": [
+       22,
+       38
+      ],
+      "isElite": true,
+      "eliteAbility": "Returns once at full HP after first kill."
+     },
+     {
+      "name": "Null Sovereign",
+      "icon": "⬛",
+      "hp": 110,
+      "atk": [
+       15,
+       24
+      ],
+      "gold": [
+       20,
+       35
+      ],
+      "isElite": true,
+      "eliteAbility": "Adds 2 corruption stacks on every hit."
+     },
+     {
+      "name": "The Shapeless",
+      "icon": "🌫️",
+      "hp": 105,
+      "atk": [
+       14,
+       23
+      ],
+      "gold": [
+       18,
+       32
+      ],
+      "isElite": true,
+      "eliteAbility": "Copies your equipped weapon damage on every attack."
+     }
+    ]
+   },
+   "loot": [
+    {
+     "name": "Shadow Blade",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atk": 18,
+     "desc": "Deals bonus damage equal to 10% of the enemy's missing HP. Punishes the weakened."
+    },
+    {
+     "name": "The Null Shield",
+     "icon": "🛡️",
+     "type": "armor",
+     "def": 14,
+     "desc": "Absorbs the first hit of every combat completely. Then it is just armor."
+    },
+    {
+     "name": "Void Cloth",
+     "icon": "🌑",
+     "type": "armor",
+     "def": 10,
+     "desc": "Gets stronger as shadow corruption builds. Turns the dungeon's curse into defense."
+    },
+    {
+     "name": "Echo Staff",
+     "icon": "🔮",
+     "type": "weapon",
+     "atk": 15,
+     "desc": "Spells cast twice — second cast deals 50% damage. Everything echoes here."
+    },
+    {
+     "name": "Shapeshifter's Mask",
+     "icon": "🎭",
+     "type": "consumable",
+     "shadowItem": "shapeshifterMask",
+     "desc": "Copy one enemy ability per dungeon. Use it once. Make it yours."
+    },
+    {
+     "name": "Shadow Cloak",
+     "icon": "🌫️",
+     "type": "armor",
+     "def": 12,
+     "desc": "25% chance to phase through an attack entirely. You learned from the Drifter."
+    },
+    {
+     "name": "The Erased Blade",
+     "icon": "⬛",
+     "type": "weapon",
+     "atk": 20,
+     "desc": "Deals true damage — ignores all enemy defense. As if the enemy never had any."
+    },
+    {
+     "name": "Null Potion",
+     "icon": "🌑",
+     "type": "potion",
+     "heal": 55,
+     "desc": "Made from compressed shadow. Restores 55 HP and removes all corruption stacks."
+    },
+    {
+     "name": "Mirror Fragment",
+     "icon": "🪞",
+     "type": "consumable",
+     "shadowItem": "mirrorFragment",
+     "desc": "A shard of the Mirror event. Use it to instantly purge all corruption stacks. One use."
+    },
+    {
+     "name": "Echo Bone",
+     "icon": "🦴",
+     "type": "relic",
+     "shadowItem": "echoBone",
+     "desc": "Carved from an Echo. Deals +25% damage to any Echo or Shapeshifter variant. The hunter becomes the hunted."
+    },
+    {
+     "name": "Offering Cloth",
+     "icon": "🩶",
+     "type": "relic",
+     "shadowItem": "offeringCloth",
+     "desc": "The wrapping from The Offering. The shadow now guarantees its gifts are real. Offering events always give loot or gold."
+    },
+    {
+     "name": "Door Key",
+     "icon": "🗝️",
+     "type": "relic",
+     "shadowItem": "doorKey",
+     "desc": "Found beyond a door that should not open. The Two Doors event always reveals the good path."
+    },
+    {
+     "name": "Shadow Elixir",
+     "icon": "🌑",
+     "type": "elixir",
+     "healPct": 0.65,
+     "isShadowItem": true,
+     "desc": "Restores 65% of max HP. Brewed from the dark between worlds. Glows faintly wrong."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Soul Trap",
+     "icon": "🪤",
+     "type": "soul-trap",
+     "cost": 60,
+     "desc": "Captures the current enemy as a permanent minion. Use during combat."
+    },
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "cost": 12,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 80,
+     "cost": 22,
+     "desc": "Restores 80 HP. Stronger brew."
+    },
+    {
+     "name": "Spirit Tonic",
+     "icon": "🔵",
+     "type": "sp-potion",
+     "sp": 15,
+     "cost": 14,
+     "desc": "Restores 15 SP immediately."
+    },
+    {
+     "name": "Greater Tonic",
+     "icon": "💙",
+     "type": "sp-potion",
+     "sp": 30,
+     "cost": 24,
+     "desc": "Restores 30 SP. Concentrated essence."
+    },
+    {
+     "name": "Iron Flask",
+     "icon": "🛡️",
+     "type": "def-potion",
+     "def": 3,
+     "turns": 3,
+     "cost": 16,
+     "desc": "Grants +3 defense for 3 turns."
+    },
+    {
+     "name": "Berserker Draught",
+     "icon": "⚔️",
+     "type": "atk-potion",
+     "atk": 4,
+     "turns": 3,
+     "cost": 18,
+     "desc": "Grants +4 attack for 3 turns."
+    },
+    {
+     "name": "Lucky Potion",
+     "icon": "🍀",
+     "type": "luck-potion",
+     "cost": 20,
+     "desc": "Next 3 enemy kills drop double gold."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🔥",
+     "type": "fire-potion",
+     "cost": 25,
+     "desc": "Deals 40% of target max HP as fire damage. Ignores defense."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "cost": 18,
+     "desc": "Halves enemy attack for 3 turns."
+    },
+    {
+     "name": "Swift Potion",
+     "icon": "💨",
+     "type": "swift-potion",
+     "cost": 22,
+     "desc": "Guarantees flee for 2 turns. Perfect escape."
+    },
+    {
+     "name": "Cursed Vial",
+     "icon": "🌀",
+     "type": "cursed",
+     "cost": 3,
+     "desc": "Unpredictable effects. Cheap for a reason."
+    },
+    {
+     "name": "Mirror Flask",
+     "icon": "🪞",
+     "type": "mirror-flask",
+     "cost": 30,
+     "desc": "Reflects the next enemy attack back at them."
+    },
+    {
+     "name": "Phantom Potion",
+     "icon": "👻",
+     "type": "phantom-potion",
+     "cost": 35,
+     "desc": "Become untargetable for 2 turns. Enemy attacks pass through you."
+    },
+    {
+     "name": "Gravity Tonic",
+     "icon": "🌀",
+     "type": "gravity-tonic",
+     "cost": 28,
+     "desc": "Crushes enemy ATK to 1 for 3 turns."
+    },
+    {
+     "name": "Leech Brew",
+     "icon": "🩸",
+     "type": "leech-brew",
+     "cost": 32,
+     "desc": "Heals 30% of every hit you deal for 4 turns."
+    },
+    {
+     "name": "Rage Tonic",
+     "icon": "💢",
+     "type": "rage-tonic",
+     "cost": 38,
+     "desc": "Triple ATK but double incoming damage for 3 turns."
+    },
+    {
+     "name": "Fog Flask",
+     "icon": "🌫️",
+     "type": "fog-flask",
+     "cost": 25,
+     "desc": "Enemy has 70% chance to miss for 3 turns."
+    },
+    {
+     "name": "Time Potion",
+     "icon": "⌛",
+     "type": "time-potion",
+     "cost": 45,
+     "desc": "2 free attacks this turn. Enemy cannot respond."
+    },
+    {
+     "name": "Corruption Flask",
+     "icon": "💜",
+     "type": "corruption-flask",
+     "cost": 33,
+     "desc": "Deals 20 corruption damage to enemy each turn for 4 turns."
+    },
+    {
+     "name": "Warding Bell",
+     "icon": "🔔",
+     "type": "warding-bell",
+     "cost": 20,
+     "desc": "Rings out the next time you search a room with a trap, letting you step around it. One use."
+    },
+    {
+     "name": "Phoenix Feather",
+     "icon": "🪶",
+     "type": "phoenix-feather",
+     "cost": 150,
+     "desc": "If you would die while carrying this, it ignites instead — you are reborn at 30% HP. Consumed automatically. One use."
+    },
+    {
+     "name": "Elixir of Life",
+     "icon": "✨",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Gravebound Elixir",
+     "icon": "💀",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Tidal Elixir",
+     "icon": "🌊",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Bloodstone",
+     "icon": "🔴",
+     "type": "gem",
+     "gold": 20,
+     "cost": 0,
+     "desc": "Worth 20 gold. Sell it at the Blacksmith."
+    },
+    {
+     "id": "shop-iron-sword",
+     "name": "Iron Sword",
+     "icon": "⚔️",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      5,
+      10
+     ],
+     "cost": 45,
+     "isEquippable": true,
+     "desc": "A reliable sword."
+    },
+    {
+     "id": "shop-shadow-dagger",
+     "name": "Shadow Dagger",
+     "icon": "🔪",
+     "type": "weapon",
+     "weaponType": "dagger",
+     "level": 1,
+     "atkBase": [
+      5,
+      9
+     ],
+     "cost": 55,
+     "isEquippable": true,
+     "desc": "Fast and precise."
+    },
+    {
+     "id": "shop-oak-staff",
+     "name": "Oak Staff",
+     "icon": "🪄",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      4,
+      8
+     ],
+     "cost": 50,
+     "isEquippable": true,
+     "desc": "Channels arcane energy."
+    },
+    {
+     "id": "shop-battle-axe",
+     "name": "Battle Axe",
+     "icon": "🪓",
+     "type": "weapon",
+     "weaponType": "axe",
+     "level": 1,
+     "atkBase": [
+      7,
+      13
+     ],
+     "cost": 70,
+     "isEquippable": true,
+     "desc": "Heavy but devastating."
+    },
+    {
+     "id": "shop-leather-vest",
+     "name": "Leather Vest",
+     "icon": "🦺",
+     "type": "armor",
+     "armorType": "light",
+     "level": 1,
+     "defBase": 3,
+     "cost": 40,
+     "isEquippable": true,
+     "desc": "+3 defense."
+    },
+    {
+     "id": "shop-chain-mail",
+     "name": "Chain Mail",
+     "icon": "⛓️",
+     "type": "armor",
+     "armorType": "medium",
+     "level": 1,
+     "defBase": 5,
+     "cost": 65,
+     "isEquippable": true,
+     "desc": "+5 defense."
+    },
+    {
+     "id": "rune-strength",
+     "name": "Rune of Strength",
+     "icon": "🔴",
+     "type": "rune",
+     "cost": 30,
+     "desc": "+6 attack for the rest of this run."
+    },
+    {
+     "id": "rune-protection",
+     "name": "Rune of Protection",
+     "icon": "🔵",
+     "type": "rune",
+     "cost": 28,
+     "desc": "+5 defense for the rest of this run."
+    },
+    {
+     "id": "rune-vitality",
+     "name": "Rune of Vitality",
+     "icon": "🟣",
+     "type": "rune",
+     "cost": 32,
+     "desc": "+20 max HP this run."
+    },
+    {
+     "id": "scroll-smite",
+     "name": "Scroll of Smite",
+     "icon": "⚡",
+     "type": "scroll",
+     "cost": 35,
+     "desc": "80 unblockable damage to current enemy."
+    },
+    {
+     "id": "scroll-mending",
+     "name": "Scroll of Mending",
+     "icon": "✨",
+     "type": "scroll",
+     "cost": 30,
+     "desc": "Heals 50% max HP outside combat."
+    },
+    {
+     "id": "scroll-reveal",
+     "name": "Scroll of Reveal",
+     "icon": "📜",
+     "type": "scroll",
+     "cost": 22,
+     "desc": "Reveals the next 3 room types."
+    }
+   ],
+   "rooms": [
+    "The air here feels like it is breathing you instead of the other way around.",
+    "Your shadow is moving independently. It has been for three steps now.",
+    "Something is watching from a direction that does not exist.",
+    "The walls are made of compressed darkness. They are warm.",
+    "You hear your own voice from somewhere ahead. You said nothing.",
+    "A corridor stretches behind you that was not there when you entered.",
+    "The floor shows your footprints going the wrong direction.",
+    "Something in here remembers you from a time you have not lived yet.",
+    "The silence here has weight. It presses against your chest.",
+    "You see yourself standing at the far end of the room. It waves.",
+    "The room shifts slightly every time you look away.",
+    "Whatever died here left its shape in the air. You walk through it.",
+    "Your heartbeat echoes twice. The second one is not yours.",
+    "The darkness between the torches moves with purpose.",
+    "Time feels wrong here. You cannot tell if you have been walking for seconds or hours."
+   ],
+   "floors": [
+    "",
+    "The Place That Wasn't",
+    "Where Light Forgot",
+    "The 3000th Year",
+    "Hall of Erased Things",
+    "The Corridor of What Remains",
+    "Chamber of the Twice Dead",
+    "The Mirror Room",
+    "Where You End",
+    "The Shapeshifter's Approach",
+    "The Final Reflection"
+   ]
   }
  },
  "nightmareEnemies": {

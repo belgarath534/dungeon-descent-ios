@@ -37,6 +37,9 @@ function grab(name) {
 // Floor names are a list starting with an empty entry, or (Sunken, Hollow)
 // an object keyed by floor number; both become the list form.
 function floorList(v) {
+  // The Shadow World's list has no leading empty entry, so the web version
+  // read it one floor off; Swift lines it up like the others.
+  if (Array.isArray(v) && v[0] !== '') return [''].concat(v);
   if (!v || Array.isArray(v)) return v;
   const list = [''];
   Object.keys(v).map(Number).sort((a, b) => a - b).forEach(k => { list[k] = v[k]; });
@@ -78,6 +81,7 @@ const dungeons = {
   'The Whispering Forest': 'WHISPER_',
   'The Infernal Descent':  'INFERNAL_',
   'The Abyssal Deep':      'ABYSSAL_',
+  'The Shadow World':      'SHADOW_',
 };
 
 // Starting skill per class, from initSkillPool().

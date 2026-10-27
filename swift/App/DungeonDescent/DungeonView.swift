@@ -345,6 +345,12 @@ struct DungeonView: View {
                     track: .black.opacity(0.3), height: 6)
                 Text("HP: \(run.hp) / \(run.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.blood)
                     .accessibilityLabel("Your health: \(run.hp) of \(run.maxHp)")
+                // #dg-shadow-corruption
+                if run.dungeon == ShadowWorld.name && run.shadowCorruption > 0 {
+                    let n = run.shadowCorruption
+                    Text("🌑 Corruption: \(n)\(n >= 3 ? " — HALF DAMAGE" : "")").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaa66ff))
+                        .accessibilityLabel("Shadow corruption \(n) stack\(n != 1 ? "s" : "")\(n >= 3 ? ". Your attacks deal half damage." : ".")")
+                }
             }
             combatLog
             FlowRow(spacing: 8) {
@@ -356,6 +362,10 @@ struct DungeonView: View {
                     .accessibilityLabel("Defend, reduces incoming damage")
                 Button("🧪 Potion") { drinkPotion() }.buttonStyle(DungeonButtonStyle(kind: .combat))
                     .accessibilityLabel("Use a health potion")
+                if model.canPurge {
+                    Button("✨ Purge (\(ShadowWorld.purgeCost) SP)") { model.purge() }.buttonStyle(DungeonButtonStyle(kind: .skill))
+                        .accessibilityLabel("Purge shadow corruption for \(ShadowWorld.purgeCost) SP. \(run.shadowCorruption) stacks.")
+                }
                 if model.canBomb {
                     Button("💣 Bomb") { model.throwBomb() }.buttonStyle(DungeonButtonStyle(kind: .combat))
                         .accessibilityLabel("Throw your bomb for 60 damage. Once per floor.")

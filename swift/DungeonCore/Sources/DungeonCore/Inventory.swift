@@ -23,13 +23,26 @@ public enum Inventory {
         let item = run.inventory[index]
         var out = Outcome(message: "")
 
+        // Mirror Fragment (Shadow World): purges every corruption stack.
+        if item.extra["shadowItem"] == .string("mirrorFragment") {
+            guard run.shadowCorruption > 0 else { return Outcome(message: "You have no corruption to purge.", used: false) }
+            run.shadowCorruption = 0
+            run.inventory.remove(at: index)
+            return Outcome(message: "🪞 The Mirror Fragment shatters. All corruption purged.")
+        }
+
         switch item.type {
         case "potion":
-            guard run.hp < run.maxHp else { return Outcome(message: "Your health is already full.", used: false) }
+            let cleanses = item.name == "Null Potion" && run.shadowCorruption > 0
+            guard run.hp < run.maxHp || cleanses else { return Outcome(message: "Your health is already full.", used: false) }
             var heal = jsRound(Double(item.heal ?? 40) * run.potionMult)
             if run.cls == "Alchemist" { heal = jsRound(Double(heal) * 1.35) }
             run.hp = min(run.maxHp, run.hp + heal)
             out.message = "You drink \(item.name), restoring \(heal) HP. HP: \(run.hp) of \(run.maxHp)."
+            if cleanses {
+                run.shadowCorruption = 0
+                out.message += " All corruption removed."
+            }
         case "elixir", "heal":
             guard run.hp < run.maxHp else {
                 return Outcome(message: "Your health is already full. Save the elixir for when you need it.", used: false)

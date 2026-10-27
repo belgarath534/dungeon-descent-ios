@@ -1072,7 +1072,7 @@ final class RunModeTests: XCTestCase {
         XCTAssertEqual(r.level, 6)
         XCTAssertEqual(r.xp, 120)
         var last = hero()
-        last.dungeon = "The Abyssal Deep"
+        last.dungeon = "The Shadow World"
         XCTAssertFalse(last.continueJourney(level: 1, xp: 0))
     }
 
@@ -2103,5 +2103,98 @@ final class SpireTests: XCTestCase {
         _ = Spire.turn(&r, .defend, store: store, wallet: w, dice: &dice)
         XCTAssertTrue(r.dead)
         XCTAssertEqual(Spire.bestFloor(store), 7)
+    }
+}
+
+final class ShadowWorldTests: XCTestCase {
+    func shadowRun() -> Run {
+        var r = Run(character: PlayerCharacter(name: "Sh", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "The Shadow World", difficulty: .wanderer))
+        r.spirit = nil
+        return r
+    }
+    func template(_ name: String) -> EnemyTemplate {
+        let t = Bestiary.enemies(for: "The Shadow World")
+        return (t.t1 + t.t2 + t.t3 + t.elites + t.bosses).first { $0.name == name }!
+    }
+
+    func testUnlockAndData() {
+        let store = MemoryStore()
+        XCTAssertFalse(ShadowWorld.unlocked(store))
+        store.setItem("dd_cleared_dungeons", "[\"The Abyssal Deep\"]")
+        XCTAssertTrue(ShadowWorld.unlocked(store))
+        XCTAssertEqual(Rooms.floorName(1, dungeon: "The Shadow World"), "The Place That Wasn't")
+        XCTAssertEqual(Bestiary.enemies(for: "The Shadow World").t1.count, 5)
+    }
+
+    func testCorruptionHalvesDamageAndPurgeClears() {
+        var r = shadowRun()
+        var e = Enemy.spawn(template("Null Fragment"), floor: 1, playerLevel: 1)
+        e.hp = 10_000
+        e.maxHp = 10_000
+        Combat.begin(&r, against: e)
+        var dice = SeededDice(seed: 5)
+        for _ in 0..<4 { r.hp = r.maxHp; _ = Combat.takeTurn(&r, .defend, dice: &dice) }
+        XCTAssertGreaterThanOrEqual(r.shadowCorruption, 3)
+        XCTAssertEqual(ShadowWorld.damageMultiplier(r), 0.5)
+        r.sp = 10
+        XCTAssertTrue(ShadowWorld.purge(&r).hasPrefix("✨"))
+        XCTAssertEqual(r.shadowCorruption, 0)
+        XCTAssertEqual(r.sp, 6)
+    }
+
+    func testTwiceDeadAndEchoBecomesShapeshifter() {
+        var r = shadowRun()
+        var e = Enemy.spawn(template("The Twice Dead"), floor: 7, playerLevel: 1)
+        e.hp = 1
+        Combat.begin(&r, against: e)
+        r.atkBonus = 500
+        var dice = SeededDice(seed: 9)
+        let t1 = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertFalse(t1.enemyDied)
+        XCTAssertGreaterThan(r.enemy!.hp, 0)
+        r.enemy!.hp = 1
+        XCTAssertTrue(Combat.takeTurn(&r, .attack, dice: &dice).enemyDied)
+
+        r.floor = 10
+        let boss = Combat.nextBoss(for: r, dice: &dice)
+        XCTAssertEqual(boss.name, "The Echo")
+        Combat.begin(&r, against: boss)
+        r.enemy!.hp = 1
+        let t2 = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertFalse(t2.enemyDied)
+        XCTAssertEqual(r.enemy?.name, "The Shapeshifter")
+        XCTAssertTrue(r.inCombat)
+    }
+
+    func testShapeshifterPhases() {
+        var r = shadowRun()
+        var dice = SeededDice(seed: 2)
+        let s = Enemy.spawnBoss(template("The Shapeshifter"), playerLevel: 1, playerMaxAtk: r.atk.upperBound)
+        Combat.begin(&r, against: s)
+        r.enemy!.hp = jsRound(Double(r.enemy!.maxHp) * 0.7)
+        XCTAssertNotNil(ShadowWorld.shapeshifterPhase(&r))
+        XCTAssertEqual(r.bossPhase, 2)
+        r.enemy!.hp = jsRound(Double(r.enemy!.maxHp) * 0.4)
+        XCTAssertNotNil(ShadowWorld.shapeshifterPhase(&r))
+        XCTAssertEqual(r.enemy!.maxHp, r.hp)
+        r.enemy!.hp = 1
+        XCTAssertTrue(ShadowWorld.shapeshifterPhase(&r)!.contains("FINAL FORM"))
+        XCTAssertEqual(r.enemy!.number("corruptOnHit"), 2)
+        _ = dice
+    }
+
+    func testLurkerHidesThenCrits() {
+        var r = shadowRun()
+        var e = Enemy.spawn(template("The Lurker"), floor: 4, playerLevel: 1)
+        e.hp = 10_000
+        e.maxHp = 10_000
+        Combat.begin(&r, against: e)
+        var dice = SeededDice(seed: 3)
+        let first = Combat.takeTurn(&r, .defend, dice: &dice)
+        XCTAssertEqual(first.enemyDamage, 0)
+        XCTAssertTrue(first.log.contains { $0.contains("hides") })
+        let second = Combat.takeTurn(&r, .defend, dice: &dice)
+        XCTAssertTrue(second.log.contains { $0.contains("Critical") })
     }
 }
