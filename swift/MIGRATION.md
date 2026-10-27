@@ -117,9 +117,9 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
-| Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Not yet: Voice, Echo-locate, Arcane Shop, Spell Book, chat |
+| Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Echo-Location (3D Mode). Not yet: Voice, Arcane Shop, Spell Book, chat |
 | Death: graveyard entry, gear kept, Classic level reset | showDefeat | ✅ |
-| Settings in the web version's look | settings-screen, settings-panel-* | ✅ categories; Audio, Accessibility (verbose rooms, combat announcements, repair unlocks), Gameplay (class traits), General (version, web save import), Account. Language, Chat, Notifications, Beta, Developer Tools not yet |
+| Settings in the web version's look | settings-screen, settings-panel-* | ✅ categories; Audio, Accessibility (verbose rooms, combat announcements, repair unlocks), Gameplay (class traits), General (version, web save import), Account. Beta Features (3D Mode) and 3D Settings. Language, Notifications, Developer Tools not yet |
 | The Graveyard, Help, Credits, What's New | screen-graveyard, screen-help, screen-credits, screen-whatsnew | ✅ text from index.html through tools/extract-static-screens.py |
 | Quests & Achievements screen | screen-quests | ✅ main and daily quest, achievements with Load More; Daily Challenge not yet |
 | Web look: main menu, Your Champions, Death Log, Forge Your Legend | screen-menu, screen-charlist, screen-deathlog, screen-creation | ✅ same order, text, VoiceOver labels and sliders; creation cards come from index.html through tools/extract-creation.py |
@@ -139,7 +139,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Translations (Portuguese etc.) | translation tables | ⬜ |
 | Music, ambience, sound effects | playTrack, playAmbient, sfx | ✅ same files (www/audio, bundled as-is), same track per dungeon and floor, volume settings |
 | Music player, custom tracks, narrator | MUSIC PLAYER … | ⬜ |
-| 3D Mode | Three.js | ⬜ |
+| 3D Mode | generate3DRoomGraph, moveRoom3D, play3DExitCues, echoLocate, init3DView, ROOM3D_THEMES, get3DSettings | ✅ Settings → Beta Features → 3D Mode (dd_beta_features, same key as the web version) and 3D Settings (Shadows, Torch Flicker, FPS Counter, Minimap; dd_3d_settings). Each floor is a connected grid of rooms with real walls and doors: walls stop you, a new room is the normal room, a cleared room is just a room, Wander grows the map. Sound is real 3D audio (AVAudioEngine with HRTF, best with headphones) instead of left/right panning: you face north like the compass, each open door blips from where it is, a wall thuds from that wall, your footsteps go the way you walk, the enemy's cry comes from the room you walked into, each dungeon has its own room echo, and a falling tone plays as you descend. Echo-Location (button, or VoiceOver's two-finger double tap) answers from every direction, longer down long corridors, and hints at what the next new room holds. The view is RealityKit: every room built in its dungeon's colors and torchlight, the camera gliding room to room, drag to look around, and a minimap for sighted play. In The Shadow World with 3D Mode on, the Stalker Floor is a 7×7 room: the Darkness Swallower starts in a far corner, you hear exactly where it is in 3D, and it keeps coming every 8 seconds even if you stand still; after each escape it starts again from the far side. Free walking with on-screen sticks and Hide and Seek's 3D view aren't ported |
 
 ## Things to keep in mind
 
@@ -276,3 +276,12 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **Walking into the Darkness Swallower didn't catch you.** It moved after you did, so
   stepping onto its square let it step off you again. Swift counts it as caught.
 - **The Stalker Floor's 150 gold** went to the run but not to your global gold.
+- **3D Mode could strand you on a floor.** If every room on the map had been visited
+  while the floor was still short of its room count (a room that didn't count, like the
+  one where the Darkness Swallower found you), there was nowhere new to walk. Swift grows
+  the map whenever it has fewer new rooms than the floor still needs, and a room the
+  Stalker Floor took over stays new.
+- **3D Mode's door blips were only panned left and right.** North and south were told
+  apart by pitch alone. Swift places every sound in real 3D, keeping the pitch difference.
+- **Leaving the merchant in 3D Mode** jumped you into the next room without walking.
+  Swift leaves you standing where you are, with the room's doors read out.

@@ -10,8 +10,24 @@ public struct StalkerFloor: Codable, Sendable, Equatable {
     public var px = 2, py = 2
     public var ex: Int, ey: Int
     public var escapes = 0
+    /// 3D Mode's bigger room (7×7): it starts far off in a corner and you
+    /// hear it come. Nil is the web version's 5×5.
+    public var grid: Int? = nil
 
-    public init(dice: inout some Dice) {
+    public var side: Int { grid ?? Self.size }
+    var mid: Int { side / 2 }
+
+    public init(dice: inout some Dice, threeD: Bool = false) {
+        if threeD {
+            grid = 7
+            px = 3
+            py = 3
+            let corners = [(0, 0), (6, 0), (0, 6), (6, 6)]
+            let e = corners[dice.roll(0...3)]
+            ex = e.0
+            ey = e.1
+            return
+        }
         let edges = [(0, 0), (4, 0), (0, 4), (4, 4), (2, 0), (2, 4), (0, 2), (4, 2)]
         let e = edges[dice.roll(0...(edges.count - 1))]
         ex = e.0
@@ -39,25 +55,42 @@ public struct StalkerFloor: Codable, Sendable, Equatable {
     public mutating func move(_ dir: String) -> Outcome {
         switch dir {
         case "north": py = max(0, py - 1)
-        case "south": py = min(Self.size - 1, py + 1)
+        case "south": py = min(side - 1, py + 1)
         case "west": px = max(0, px - 1)
-        case "east": px = min(Self.size - 1, px + 1)
+        case "east": px = min(side - 1, px + 1)
         default: break
         }
         // Walking into it is being caught. (The web version still moved it
         // first, stepping it off you.)
         if distance == 0 { return .caught }
-        let dx = px - ex, dy = py - ey
-        if abs(dx) >= abs(dy) { ex += dx > 0 ? 1 : -1 } else { ey += dy > 0 ? 1 : -1 }
+        closeIn()
         if distance == 0 { return .caught }
-        if px == 0 || px == Self.size - 1 || py == 0 || py == Self.size - 1 {
+        if px == 0 || px == side - 1 || py == 0 || py == side - 1 {
             escapes += 1
             if escapes >= Self.escapesNeeded { return .escaped }
-            px = 2
-            py = 2
+            // In 3D it loses you and starts again from the far side of the room.
+            if grid != nil {
+                ex = px < mid ? side - 1 : 0
+                ey = py < mid ? side - 1 : 0
+            }
+            px = mid
+            py = mid
             return .escapedOnce
         }
         return .moved
+    }
+
+    private mutating func closeIn() {
+        let dx = px - ex, dy = py - ey
+        if abs(dx) >= abs(dy) { ex += dx > 0 ? 1 : -1 } else { ey += dy > 0 ? 1 : -1 }
+    }
+
+    /// 3D Mode: standing still doesn't stop it. Every few seconds it takes
+    /// a step on its own. Returns true when that step reaches you.
+    public mutating func creep() -> Bool {
+        guard distance > 0 else { return true }
+        closeIn()
+        return distance == 0
     }
 
     /// What the status line reads.

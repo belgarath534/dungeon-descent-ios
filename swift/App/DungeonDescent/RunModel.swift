@@ -49,7 +49,10 @@ final class RunModel: ObservableObject {
             run = saved
             phase = saved.inCombat ? .fighting
                 : saved.pendingEvent != nil ? .event
-                : saved.roomsOnFloor >= saved.floorRoomsNeeded && saved.roomsOnFloor > 0 ? .floorCleared : .exploring
+                // A boss floor is never "cleared" outside a fight: past the
+                // Elite Guardian, the boss is still to come.
+                : saved.roomsOnFloor >= saved.floorRoomsNeeded && saved.roomsOnFloor > 0
+                    && !(saved.floor >= 10 && saved.difficulty != .endless) ? .floorCleared : .exploring
             roomTitle = Rooms.floorName(saved.floor, dungeon: saved.dungeon)
             add("Run resumed on floor \(saved.floor). HP \(saved.hp) of \(saved.maxHp).")
             playMusic()
@@ -86,6 +89,7 @@ final class RunModel: ObservableObject {
         Skills.start(&r, dice: &d)
         if r.floor >= 10 && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
         Encounters.planFloor(&r, dice: &d)
+        if ThreeDMode.isOn(game.store) { r.roomGraph = RoomGraph(roomsNeeded: r.floorRoomsNeeded, dice: &d) }
         r.hpAtFloorStart = r.hp
         r.startedAt = Date().timeIntervalSince1970
         // Level carried over by Continue Journey applies to this run only.
@@ -106,6 +110,11 @@ final class RunModel: ObservableObject {
         add("✦ Daily quest: \(game.dailyQuests.summary)")
         persist()
         playMusic()
+        if let g = r.roomGraph {
+            SpatialAudio.shared.setRoom(dungeon: r.dungeon)
+            add("🧊 3D Mode. \(g.exitsText)")
+            SpatialAudio.shared.exitCues(g.here, after: 3)
+        }
     }
 
     /// Set when a Hardcore death deleted the character; the screen should close.
@@ -150,7 +159,12 @@ final class RunModel: ObservableObject {
         let r = run
         if let s = r.stalker {
             Sound.track("shadow-stalker")
-            Sound.startLoop("monster-growl.mp3", volume: s.growlVolume, pan: s.pan)
+            if s.grid != nil {
+                SpatialAudio.shared.stalkerStart(s)
+                startCreeping()
+            } else {
+                Sound.startLoop("monster-growl.mp3", volume: s.growlVolume, pan: s.pan)
+            }
             return
         }
         if let e = r.enemy, r.inCombat {
@@ -171,13 +185,100 @@ final class RunModel: ObservableObject {
     /// The compass buttons. Outside 3D Mode any direction leads to the next room.
     func move(_ dir: String) {
         guard phase == .exploring else { return }
+        if threeD, let c = Compass(rawValue: dir) {
+            move3D(c)
+            return
+        }
         movePrefix = "Moving \(dir)... "
         enterRoom()
     }
 
+    // MARK: 3D Mode
+
+    var threeD: Bool { ThreeDMode.isOn(game.store) }
+
+    /// moveRoom3D: walls stop you; a door into a new room is enterRoom();
+    /// a room you've cleared is just a room.
+    private func move3D(_ d: Compass) {
+        var r = run
+        var dc = dice
+        // Turned on mid-run: build this floor's rooms now.
+        if r.roomGraph == nil {
+            r.roomGraph = RoomGraph(roomsNeeded: max(1, r.floorRoomsNeeded - r.roomsOnFloor), dice: &dc)
+            SpatialAudio.shared.setRoom(dungeon: r.dungeon)
+        }
+        var g = r.roomGraph!
+        let step = g.move(d)
+        if case .entered(let first) = step {
+            g.ensureRooms(left: r.floorRoomsNeeded - r.roomsOnFloor - (first ? 1 : 0), dice: &dc)
+        }
+        r.roomGraph = g
+        run = r
+        dice = dc
+        switch step {
+        case .wall:
+            SpatialAudio.shared.wallBump(d)
+            Feedback.warning()
+            persist()
+            Feedback.announce("There is a wall to the \(d.rawValue). \(g.exitsText)")
+            SpatialAudio.shared.exitCues(g.here)
+        case .entered(let first):
+            SpatialAudio.shared.footsteps(d)
+            if first {
+                movePrefix = "Moving \(d.rawValue). \(g.exitsText) "
+                enterRoom()
+            } else {
+                persist()
+                roomText = "You are back in a room you already cleared."
+                Feedback.announce("Moving \(d.rawValue). You are back in a room you already cleared. \(g.exitsText)")
+            }
+            if run.stalker == nil && !run.inCombat { SpatialAudio.shared.exitCues(g.here) }
+        }
+    }
+
+    /// Where you are and which ways are open.
+    var exitsText: String? { threeD ? run.roomGraph?.exitsText : nil }
+
+    private var echoCooldown = Date.distantPast
+
+    /// echoLocate: a sonar pulse. Each direction answers by sound, then it's said.
+    func echoLocate() {
+        guard threeD else {
+            Feedback.announce("Echo-location needs 3D Mode turned on in Settings, Beta Features.")
+            return
+        }
+        guard phase == .exploring, run.stalker == nil else {
+            Feedback.announce("Echo-location only works while exploring, not during combat.")
+            return
+        }
+        guard Date() >= echoCooldown else { return }
+        echoCooldown = Date().addingTimeInterval(1.4)
+        if run.roomGraph == nil { move3DSetup() }
+        guard let g = run.roomGraph else { return }
+        let e = g.echo(ahead: RoomGraph.ahead(run))
+        SpatialAudio.shared.echo(e)
+        Feedback.tap()
+        // Let the pulse play out before VoiceOver talks over it.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) { Feedback.announce(e.summary) }
+    }
+
+    private func move3DSetup() {
+        var r = run
+        var dc = dice
+        r.roomGraph = RoomGraph(roomsNeeded: max(1, r.floorRoomsNeeded - r.roomsOnFloor), dice: &dc)
+        run = r
+        dice = dc
+        SpatialAudio.shared.setRoom(dungeon: r.dungeon)
+    }
+
+    /// An enemy's cry: from the doorway you came through in 3D Mode.
+    private func enemyCue(_ id: String) {
+        if threeD, let g = run.roomGraph { SpatialAudio.shared.enemy(id, from: g.lastMove) } else { Sound.sfx(id) }
+    }
+
     func enterRoom() {
         guard phase == .exploring, run.stalker == nil else { return }
-        Sound.sfx("sfx-footstep")
+        if !threeD { Sound.sfx("sfx-footstep") }
         var r = run
         var d = dice
         // The Shadow World: the Darkness Swallower finds you before the room does.
@@ -215,7 +316,7 @@ final class RunModel: ObservableObject {
             let msg = "⚡ ELITE GUARDIAN — \(g.name) stands between you and the final chamber. It is significantly stronger than its kin."
             add(msg)
             roomText = msg
-            Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
+            enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
             Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
             spoken += " Elite Guardian encountered on floor 10. \(g.name) blocks the path to the boss. HP: \(g.hp). Defeat it to face the final boss."
             spoken += thirdEye(r)
@@ -227,7 +328,7 @@ final class RunModel: ObservableObject {
             let boss = Combat.nextBoss(for: r, dice: &d)
             Combat.begin(&r, against: boss).forEach { add($0) }
             add("\(boss.icon) \(boss.name) rises before you. \(boss.hp) HP.")
-            Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: true))
+            enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: true))
             Sound.track(Soundtrack.bossTrack(dungeon: r.dungeon))
             spoken += " \(boss.name) rises before you. \(boss.hp) HP." + thirdEye(r)
             finish(r, d, phase: .fighting, spoken: spoken)
@@ -242,7 +343,7 @@ final class RunModel: ObservableObject {
             let said = "\(label) \(special.name). \(special.desc) \(out.message)"
             if let enemy = out.enemy {
                 Combat.begin(&r, against: enemy).forEach { add($0) }
-                Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
+                enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
                 Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
                 finish(r, d, phase: .fighting, spoken: said + " \(enemy.hp) HP." + thirdEye(r))
             } else if out.openShop {
@@ -272,7 +373,7 @@ final class RunModel: ObservableObject {
                 ? "\(label) ★ ELITE: \(enemy.icon) \(enemy.name) — \(ability) \(enemy.hp) HP."
                 : "\(label) \(enemy.icon) A \(enemy.name) attacks! \(enemy.hp) HP."
             add(line)
-            Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
+            enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
             Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
             spoken += enemy.isElite
                 ? " Elite enemy! \(enemy.name). \(ability) \(enemy.hp) HP."
@@ -330,7 +431,7 @@ final class RunModel: ObservableObject {
         }
         if let enemy = out.enemy {
             Combat.begin(&r, against: enemy).forEach { add($0) }
-            Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
+            enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
             Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
             finish(r, d, phase: .fighting, spoken: out.message + " \(enemy.name), \(enemy.hp) HP." + thirdEye(r))
             return
@@ -426,15 +527,72 @@ final class RunModel: ObservableObject {
     // MARK: The Stalker Floor
 
     private func startStalker(_ r: inout Run, _ d: inout SystemDice) {
-        let s = StalkerFloor(dice: &d)
+        let s = StalkerFloor(dice: &d, threeD: threeD)
         r.stalker = s
+        // The room it took you in doesn't count; it's still new.
+        r.roomGraph?.unvisitHere()
         add("🌑 Something stirs in the darkness. The Darkness Swallower is in this room with you.")
         Sound.stopMusic()
         Sound.ambient(nil)
         Sound.track("shadow-stalker")
+        if s.grid != nil {
+            SpatialAudio.shared.stalkerStart(s)
+            finish(r, d, phase: .exploring,
+                   spoken: "Something stirs in the darkness. The music shifts. The Darkness Swallower is in this room with you — far off, in the \(s.direction == "ahead" || s.direction == "behind" ? s.direction : "corner to your \(s.direction)"). It is \(s.distance) steps away, and it is coming. It moves when you move, and it keeps coming even if you stand still. Reach the edge of the room \(StalkerFloor.escapesNeeded) times to escape. Use headphones: you will hear exactly where it is.")
+            startCreeping()
+            return
+        }
         Sound.startLoop("monster-growl.mp3", volume: s.growlVolume, pan: s.pan)
         finish(r, d, phase: .exploring,
                spoken: "Something stirs in the darkness. The music shifts. Move carefully — the Darkness Swallower is somewhere in this room with you. It is \(s.distance) step\(s.distance != 1 ? "s" : "") away, to the \(s.direction). Reach the edge of the room \(StalkerFloor.escapesNeeded) times to escape. Use headphones: its growl tells you where it is.")
+    }
+
+    // 3D Mode: the Darkness Swallower doesn't wait for you.
+    private var creepTimer: Timer?
+    static let creepSeconds = 8.0
+
+    private func startCreeping() {
+        creepTimer?.invalidate()
+        creepTimer = Timer.scheduledTimer(withTimeInterval: Self.creepSeconds, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.creep() }
+        }
+    }
+
+    private func stopCreeping() {
+        creepTimer?.invalidate()
+        creepTimer = nil
+    }
+
+    private func creep() {
+        guard var s = run.stalker, s.grid != nil else { stopCreeping(); return }
+        guard phase == .exploring else { return }
+        var r = run
+        let reached = s.creep()
+        r.stalker = s
+        if reached {
+            stalkerCaught(&r)
+            return
+        }
+        run = r
+        SpatialAudio.shared.stalkerStep(s)
+        persist()
+        if s.distance == 1 {
+            Feedback.warning()
+            Feedback.announce("It is right next to you. You can turn and fight it.")
+        } else if s.distance <= 3 {
+            Feedback.announce("It's closer. \(s.distance) steps, \(s.direction).")
+        }
+    }
+
+    private func stalkerCaught(_ r: inout Run) {
+        stopCreeping()
+        Sound.stopLoop()
+        if r.stalker?.grid != nil { SpatialAudio.shared.caught() } else { Sound.placed("jump-scare-v3.mp3", volume: 1, pan: 0) }
+        Feedback.warning()
+        let dmg = StalkerFloor.caught(&r)
+        add("💀 THE DARKNESS SWALLOWER CATCHES YOU! \(dmg) shadow damage!")
+        finish(r, dice, phase: .exploring, spoken: "Caught! The Darkness Swallower strikes. \(dmg) damage. You barely survive." + (exitsText.map { " " + $0 } ?? ""))
+        playMusic()
     }
 
     /// stalkerMove
@@ -445,25 +603,26 @@ final class RunModel: ObservableObject {
         let out = s.move(dir)
         r.stalker = s
         Sound.sfx("sfx-stairs")
-        Sound.placed("monster-footstep.mp3", volume: s.stepVolume, pan: s.pan)
-        Sound.moveLoop(volume: s.growlVolume, pan: s.pan)
+        if s.grid != nil {
+            SpatialAudio.shared.stalkerStep(s)
+        } else {
+            Sound.placed("monster-footstep.mp3", volume: s.stepVolume, pan: s.pan)
+            Sound.moveLoop(volume: s.growlVolume, pan: s.pan)
+        }
         switch out {
         case .caught:
-            Sound.stopLoop()
-            Sound.placed("jump-scare-v3.mp3", volume: 1, pan: 0)
-            Feedback.warning()
-            let dmg = StalkerFloor.caught(&r)
-            add("💀 THE DARKNESS SWALLOWER CATCHES YOU! \(dmg) shadow damage!")
-            finish(r, d, phase: .exploring, spoken: "Caught! The Darkness Swallower strikes. \(dmg) damage. You barely survive.")
-            playMusic()
+            dice = d
+            stalkerCaught(&r)
         case .escaped:
+            stopCreeping()
+            SpatialAudio.shared.stopStalker()
             Sound.stopLoop()
             let item = StalkerFloor.escaped(&r, wallet: game.wallet, dice: &d)
             add("✨ You escaped the Darkness Swallower! Rare loot awarded.")
             if let item { add("📦 Found: \(item.name)!") }
             Sound.sfx("sfx-victory")
             Feedback.success()
-            finish(r, d, phase: .exploring, spoken: "You escaped! The Darkness Swallower retreats into the shadows. 150 gold" + (item.map { " and \($0.name)" } ?? "") + " for your survival.")
+            finish(r, d, phase: .exploring, spoken: "You escaped! The Darkness Swallower retreats into the shadows. 150 gold" + (item.map { " and \($0.name)" } ?? "") + " for your survival." + (exitsText.map { " " + $0 } ?? ""))
             playMusic()
         case .escapedOnce:
             let left = StalkerFloor.escapesNeeded - s.escapes
@@ -484,6 +643,8 @@ final class RunModel: ObservableObject {
     func stalkerFight() {
         guard let s = run.stalker, s.distance <= 1 else { return }
         var r = run
+        stopCreeping()
+        SpatialAudio.shared.stopStalker()
         Sound.stopLoop()
         let e = StalkerFloor.fight(&r)
         Combat.begin(&r, against: e).forEach { add($0) }
@@ -602,7 +763,7 @@ final class RunModel: ObservableObject {
         let lines = Combat.beginAmbush(&r, foes)
         add(label)
         lines.forEach { add($0) }
-        Sound.sfx(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
+        enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
         Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
         let names = foes.map { "\($0.name), \($0.hp) HP" }.joined(separator: ". ")
         return "Ambush! \(foes.count) enemies. \(names). Your attacks hit your target; switch targets with the target buttons."
@@ -703,8 +864,10 @@ final class RunModel: ObservableObject {
         r.inCombat = false
         if e.mechanics["guardian"] == .bool(true) {
             r.guardianDone = true
+            // 3D Mode: the final chamber is a room of its own beyond this one.
+            r.roomGraph?.ensureRooms(left: 1, dice: &d)
             said += " The Elite Guardian falls. The final chamber is open."
-            finish(r, d, phase: .exploring, spoken: said)
+            finish(r, d, phase: .exploring, spoken: said + (exitsText.map { " " + $0 } ?? ""))
             playMusic()
             return
         }
@@ -718,7 +881,7 @@ final class RunModel: ObservableObject {
             finish(r, d, phase: .floorCleared, spoken: said + " " + floorCompleteLine(r))
             playMusic()
         } else {
-            finish(r, d, phase: .exploring, spoken: said)
+            finish(r, d, phase: .exploring, spoken: said + (exitsText.map { " " + $0 } ?? ""))
             playMusic()
         }
     }
@@ -1251,6 +1414,8 @@ final class RunModel: ObservableObject {
         r.hpAtFloorStart = r.hp
         r.floorStats = FloorStats(goldStart: r.gold)
         Encounters.planFloor(&r, dice: &d)
+        r.roomGraph = threeD ? RoomGraph(roomsNeeded: r.floorRoomsNeeded, dice: &d) : nil
+        if threeD { SpatialAudio.shared.descent() }
         let floor = r.floor
         game.updateCharacter(characterIndex) { $0.floor = max($0.floor, floor) }
         shop = Inventory.shopStock(for: r, dice: &d)
@@ -1269,8 +1434,13 @@ final class RunModel: ObservableObject {
     func wander() {
         guard phase == .floorCleared, canWander else { return }
         var r = run
+        var d = dice
         r.floorRoomsNeeded += 3
         r.floorStats = FloorStats(goldStart: r.gold)
+        if threeD {
+            if r.roomGraph == nil { r.roomGraph = RoomGraph(roomsNeeded: 3, dice: &d) } else { r.roomGraph?.extend(3, dice: &d) }
+            dice = d
+        }
         add("🗺 You wander further. The floor opens up with more rooms to explore.")
         finish(r, dice, phase: .exploring, spoken: "Wandering floor \(r.floor). 3 more rooms added. Explore carefully.")
     }
@@ -1322,6 +1492,13 @@ final class RunModel: ObservableObject {
             return
         }
         phase = .exploring
+        // 3D Mode: you're standing in the floor's first room; walk on yourself.
+        if threeD, let g = run.roomGraph {
+            persist()
+            Feedback.announce("You leave the merchant. \(roomTitle). \(g.exitsText)")
+            SpatialAudio.shared.exitCues(g.here)
+            return
+        }
         movePrefix = "You leave the merchant. Continuing your descent. "
         enterRoom()
     }

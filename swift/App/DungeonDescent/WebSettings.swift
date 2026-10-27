@@ -22,6 +22,8 @@ struct WebSettingsView: View {
     @AppStorage("swift_ambient_volume") private var ambientVolume = 0.35
     @AppStorage("swift_verbose_rooms") private var verboseRooms = true
     @AppStorage("swift_combat_announcements") private var combatAnnouncements = true
+    @State private var threeD = false
+    @State private var td = ThreeDMode.Settings()
 
     struct Category {
         let id: String
@@ -47,10 +49,13 @@ struct WebSettingsView: View {
                  label: "Notification settings — choose what the game notifies you about"),
         Category(id: "beta", icon: "🧪", name: "Beta Features", desc: "Experimental features — test before they go live",
                  label: "Beta Features — experimental features you can test", tag: "BETA"),
+        Category(id: "3dmode", icon: "🧊", name: "3D Settings", desc: "Graphics and performance options for 3D Mode",
+                 label: "3D Settings — adjust graphics and performance for 3D Mode"),
     ]
 
     static let panelNames = ["audio": "Audio", "language": "Language", "accessibility": "Accessibility", "gameplay": "Gameplay",
-                             "account": "Account", "chat": "Chat", "dev": "Developer Tools", "general": "General"]
+                             "account": "Account", "chat": "Chat", "dev": "Developer Tools", "general": "General",
+                             "beta": "Beta Features", "3dmode": "3D"]
 
     var body: some View {
         ZStack {
@@ -68,6 +73,10 @@ struct WebSettingsView: View {
         .foregroundStyle(Theme.textPrimary)
         .accessibilityAddTraits(.isModal)
         .webImportAlerts(webImport, game: game)
+        .onAppear {
+            threeD = ThreeDMode.isOn(game.store)
+            td = ThreeDMode.settings(game.store)
+        }
     }
 
     private func back(_ label: String, action: @escaping () -> Void) -> some View {
@@ -87,7 +96,8 @@ struct WebSettingsView: View {
             Text("Choose a category to customize your experience.").font(Theme.crimson(13.1, italic: true))
                 .foregroundStyle(Theme.textSecondary).padding(.bottom, 24)
             VStack(spacing: 10) {
-                ForEach(Self.categories, id: \.id) { c in
+                // 3D Settings only shows while 3D Mode is on.
+                ForEach(Self.categories.filter { $0.id != "3dmode" || threeD }, id: \.id) { c in
                     Button { open(c.id) } label: {
                         HStack(spacing: 16) {
                             Text(c.icon).font(.system(size: 24)).accessibilityHidden(true)
@@ -116,7 +126,7 @@ struct WebSettingsView: View {
     }
 
     private func open(_ id: String) {
-        guard ["audio", "accessibility", "gameplay", "general", "account", "chat"].contains(id) else {
+        guard ["audio", "accessibility", "gameplay", "general", "account", "chat", "beta", "3dmode"].contains(id) else {
             Sound.sfx("sfx-select")
             let name = Self.categories.first { $0.id == id }?.name ?? id
             Feedback.announce("\(name) settings aren't in the Swift version yet. Coming soon.")
@@ -141,6 +151,8 @@ struct WebSettingsView: View {
         case "gameplay": gameplay
         case "account": AccountPanel()
         case "chat": ChatSettingsPanel(store: game.store)
+        case "beta": beta
+        case "3dmode": settings3D
         default: general
         }
     }
@@ -292,6 +304,61 @@ struct WebSettingsView: View {
             }
             .accessibilityLabel("Run modifiers. Coming soon.")
         }
+    }
+
+    // MARK: Beta Features and 3D Settings
+
+    private var beta: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            title("🧪 Beta Features")
+            Text("These features are experimental and still being tested. Turn them on to try them out. They may change or be removed in future updates.")
+                .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textDim)
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .top, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("🧊 3D Mode").font(Theme.cinzel(13)).foregroundStyle(Theme.ashLight)
+                        Text("Explore the dungeon in a real 3D rendered view with full spatial audio — walls and doors are real, every door calls to you from where it is, and Echo-Location sounds out the room. Use headphones. Available in every dungeon, each with its own look and lighting.")
+                            .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityHidden(true)
+                    Button(threeD ? "ON" : "OFF") {
+                        threeD.toggle()
+                        ThreeDMode.setOn(threeD, store: game.store)
+                        Sound.sfx("sfx-confirm")
+                        Feedback.announce("3D Mode \(threeD ? "enabled. Every dungeon will load in 3D next time you enter it, and the run you're on switches over on your next step. Moving north, south, east or west now walks through real doors. Bump a wall and you'll hear it. Use the Echo-Location button, or a two-finger double tap, to hear the room." : "disabled. Normal dungeon navigation.")")
+                    }
+                    .buttonStyle(ToggleButtonStyle(on: threeD))
+                    .accessibilityLabel("3D Mode, currently \(threeD ? "on" : "off")")
+                    .accessibilityHint("Real walls and doors with 3D sound. Use headphones.")
+                }
+                Text(threeD ? "3D Mode active — every dungeon will load in 3D next time you enter it." : "Disabled — normal dungeon navigation.")
+                    .font(Theme.cinzel(9.6)).italic().foregroundStyle(threeD ? Color(hex: 0x44aa44) : Color(hex: 0x555555))
+                    .accessibilityHidden(true)
+            }
+            .padding(14).background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
+            VStack(alignment: .leading, spacing: 4) {
+                Text("🔮 More beta features coming soon").font(Theme.cinzel(11)).foregroundStyle(Theme.textDim)
+                Text("New experimental features will appear here as they are developed.")
+                    .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
+            }
+            .accessibilityElement(children: .combine)
+        }
+    }
+
+    private var settings3D: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            title("🧊 3D Settings")
+            Text("Graphics and performance options for 3D Mode. Lower settings run smoother on older phones; higher settings look better on newer ones.")
+                .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textDim).padding(.bottom, 8)
+            option("Shadows", "Real-time shadows. Looks better, costs more performance — off by default.", isOn: $td.shadows, label: "Shadows")
+            option("Torch Flicker", "Animated flickering torchlight. A small, mostly-free effect.", isOn: $td.torchFlicker, label: "Torch flicker")
+            option("FPS Counter", "Shows live rendering statistics, useful for judging whether other settings here are helping.",
+                   isOn: $td.fpsCounter, label: "FPS counter")
+            option("Minimap", "A small top-down map of rooms you've explored. Only shown for sighted play — never while VoiceOver is on.",
+                   isOn: $td.minimap, label: "Minimap")
+        }
+        .onChange(of: td) { ThreeDMode.save($0, store: game.store) }
     }
 
     private var general: some View {

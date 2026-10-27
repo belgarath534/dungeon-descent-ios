@@ -62,6 +62,8 @@ public struct Run: Codable, Sendable {
     public var shadowKilled: [Enemy] = []
     /// The Stalker Floor in progress, if the Darkness Swallower found you.
     public var stalker: StalkerFloor? = nil
+    /// 3D Mode: the floor's rooms, walls and doors (nil when 3D Mode is off).
+    public var roomGraph: RoomGraph? = nil
     /// The seasonal or weekly event running (getActiveEvent), set when the
     /// run starts and on each new floor.
     public var event: String? = nil

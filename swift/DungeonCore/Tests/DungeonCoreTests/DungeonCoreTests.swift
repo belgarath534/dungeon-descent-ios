@@ -2308,3 +2308,101 @@ final class StalkerTests: XCTestCase {
         XCTAssertNil(r.stalker)
     }
 }
+
+final class Room3DTests: XCTestCase {
+    /// Every room reachable from the start, doors matching on both sides.
+    private func connected(_ g: RoomGraph) -> Bool {
+        var seen: Set<String> = ["0,0"]
+        var queue = [(0, 0)]
+        while let (x, y) = queue.popLast() {
+            guard let c = g.cell(x, y) else { return false }
+            for d in c.doors {
+                guard let n = g.cell(x + d.dx, y + d.dy), n.has(d.opposite) else { return false }
+                if seen.insert("\(n.gx),\(n.gy)").inserted { queue.append((n.gx, n.gy)) }
+            }
+        }
+        return seen.count == g.cells.count
+    }
+
+    func testGraphsAreConnectedAndSized() {
+        for seed in 1...200 {
+            var dice = SeededDice(seed: UInt64(seed))
+            let need = 5 + seed % 10
+            var g = RoomGraph(roomsNeeded: need, dice: &dice)
+            XCTAssertEqual(g.cells.count, need + 1)
+            XCTAssertEqual(g.unvisited, need)
+            XCTAssertTrue(connected(g))
+            g.extend(3, dice: &dice)
+            XCTAssertEqual(g.cells.count, need + 4)
+            XCTAssertTrue(connected(g))
+        }
+    }
+
+    func testWallsDoorsAndRevisits() {
+        var dice = SeededDice(seed: 7)
+        var g = RoomGraph(roomsNeeded: 6, dice: &dice)
+        let wall = Compass.allCases.first { !g.here.has($0) }!
+        XCTAssertEqual(g.move(wall), .wall)
+        XCTAssertEqual(g.gx, 0)
+        let door = g.here.doors[0]
+        XCTAssertEqual(g.move(door), .entered(firstVisit: true))
+        XCTAssertEqual(g.lastMove, door)
+        XCTAssertEqual(g.move(door.opposite), .entered(firstVisit: false))
+        XCTAssertEqual(g.unvisited, 5)
+        XCTAssertTrue(g.exitsText.hasPrefix("A door") || g.exitsText.hasPrefix("Doors"))
+    }
+
+    func testNeverRunsOutOfRooms() {
+        var dice = SeededDice(seed: 2)
+        var g = RoomGraph(roomsNeeded: 2, dice: &dice)
+        let d = g.here.doors[0]
+        _ = g.move(d)
+        g.unvisitHere()
+        XCTAssertEqual(g.unvisited, 2)
+        g.ensureRooms(left: 4, dice: &dice)
+        XCTAssertEqual(g.unvisited, 4)
+    }
+
+    func testEchoReadsDoorsAndWhatsAhead() {
+        var dice = SeededDice(seed: 4)
+        let g = RoomGraph(roomsNeeded: 8, dice: &dice)
+        let e = g.echo(ahead: .danger)
+        XCTAssertEqual(e.open.count + e.walls.count, 4)
+        XCTAssertEqual(e.open.count, g.here.doors.count)
+        XCTAssertTrue(e.open.allSatisfy { $0.ahead == .danger && $0.depth >= 1 })
+        XCTAssertTrue(e.summary.contains("Something dangerous stirs beyond the"))
+        var r = Run(character: PlayerCharacter(name: "E", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.roomPlan = ["", "treasure"]
+        r.roomsOnFloor = 1
+        XCTAssertEqual(RoomGraph.ahead(r), .good)
+        r.roomsOnFloor = 5
+        XCTAssertNil(RoomGraph.ahead(r))
+    }
+
+    func testBetaSwitchAndSettings() {
+        let store = MemoryStore()
+        XCTAssertFalse(ThreeDMode.isOn(store))
+        ThreeDMode.setOn(true, store: store)
+        XCTAssertTrue(ThreeDMode.isOn(store))
+        store.setItem("dd_3d_settings", #"{"shadows":true}"#)
+        let s = ThreeDMode.settings(store)
+        XCTAssertTrue(s.shadows)
+        XCTAssertTrue(s.minimap)
+    }
+
+    func testStalkerStartsFarIn3D() {
+        var dice = SeededDice(seed: 5)
+        var s = StalkerFloor(dice: &dice, threeD: true)
+        XCTAssertEqual(s.side, 7)
+        XCTAssertEqual(s.distance, 6)
+        XCTAssertFalse(s.creep())
+        XCTAssertEqual(s.distance, 5)
+        // Escaping sends it back to the far side.
+        s.ex = 0; s.ey = 0; s.px = 5; s.py = 3
+        XCTAssertEqual(s.move("east"), .escapedOnce)
+        XCTAssertEqual(s.px, 3)
+        XCTAssertEqual(s.ex, 0)
+        XCTAssertEqual(s.ey, 0)
+    }
+}

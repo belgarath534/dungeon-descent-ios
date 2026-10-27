@@ -232,6 +232,11 @@ enum Feedback {
         UIImpactFeedbackGenerator(style: heavy ? .heavy : .medium).impactOccurred()
     }
 
+    static func tap() {
+        guard AppSettings.haptics else { return }
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+    }
+
     static func success() {
         guard AppSettings.haptics else { return }
         UINotificationFeedbackGenerator().notificationOccurred(.success)

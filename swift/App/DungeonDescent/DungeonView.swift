@@ -55,6 +55,10 @@ struct DungeonView: View {
             overlays
         }
         .foregroundStyle(Theme.textPrimary)
+        // 3D Mode: VoiceOver's two-finger double tap is Echo-Location.
+        .accessibilityAction(.magicTap) {
+            if model.threeD && model.phase == .exploring && run.stalker == nil { model.echoLocate() }
+        }
     }
 
     // MARK: Overlays
@@ -495,10 +499,29 @@ struct DungeonView: View {
 
     // MARK: Navigation (.dg-nav)
 
+    /// 3D Mode: the rendered room (sighted play), the minimap, and which
+    /// ways are open.
+    @ViewBuilder
+    private var view3D: some View {
+        if model.threeD, let g = run.roomGraph {
+            let settings = ThreeDMode.settings(game.store)
+            Dungeon3DView(graph: g, dungeon: run.dungeon, settings: settings)
+                .frame(height: 240)
+                .overlay(alignment: .topTrailing) {
+                    if settings.minimap && !UIAccessibility.isVoiceOverRunning { Minimap3D(graph: g).padding(6) }
+                }
+                .overlay(Rectangle().stroke(Theme.borderDim))
+                .accessibilityHidden(true)
+            Text("🧊 " + g.exitsText).font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textSecondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
     private var navSection: some View {
         VStack(spacing: 10) {
             Text("Navigate the Crypt").font(Theme.cinzel(9.6)).tracking(3.4).textCase(.uppercase).foregroundStyle(Theme.textDim)
                 .frame(maxWidth: .infinity, alignment: .leading)
+            view3D
             Grid(horizontalSpacing: 6, verticalSpacing: 6) {
                 GridRow {
                     Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
@@ -521,6 +544,12 @@ struct DungeonView: View {
             .frame(maxWidth: 260)
             .accessibilityElement(children: .contain)
             .accessibilityLabel("Directions")
+            if model.threeD {
+                Button("📡 Echo-Location") { model.echoLocate() }
+                    .buttonStyle(DungeonButtonStyle(kind: .compassAccent))
+                    .accessibilityLabel("Echo-location")
+                    .accessibilityHint("Sends out a sonar pulse. Each direction answers: a long tone down open doorways, a sharp click off walls. Also works with a two-finger double tap.")
+            }
             FlowRow(spacing: 8) {
                 act("🎒 Inventory", "Toggle inventory") { toggleInventory() }
                 act("📊 Stats", "View character stats") { showStats = true; Feedback.announce(statsSpoken) }
