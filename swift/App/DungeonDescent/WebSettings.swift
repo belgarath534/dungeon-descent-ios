@@ -380,6 +380,7 @@ struct WebSettingsView: View {
                 .buttonStyle(WebButtonStyle(kind: .ghost))
                 .disabled(webImport.checking)
             }
+            RewardCodeBox()
             VStack(alignment: .leading, spacing: 8) {
                 Text("Export Save Code").font(Theme.cinzel(11.2)).tracking(2).foregroundStyle(Theme.goldDim)
                 Text("Generate a code containing all your save data. Copy it to back up or transfer to another device.")

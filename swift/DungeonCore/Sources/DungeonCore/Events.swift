@@ -257,7 +257,7 @@ public enum Events {
         return v
     }
 
-    static func saveNextRun(_ v: NextRun, _ store: GameStore) {
+    public static func saveNextRun(_ v: NextRun, _ store: GameStore) {
         if let d = try? JSONEncoder().encode(v), let s = String(data: d, encoding: .utf8) { store.setItem("dd_event_next_run", s) }
     }
 

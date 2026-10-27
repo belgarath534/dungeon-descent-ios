@@ -2674,3 +2674,49 @@ final class GunTests: XCTestCase {
         XCTAssertTrue((50...110).contains(drops))
     }
 }
+
+final class VoidModeTests: XCTestCase {
+    func testWavesCooldownsAndWin() {
+        var dice = SeededDice(seed: 11)
+        var wins = 0, losses = 0
+        for _ in 0..<40 {
+            var v = VoidMode()
+            var turns = 0
+            while !v.won && !v.lost && turns < 500 {
+                turns += 1
+                if v.waveCleared { _ = v.nextWave(); continue }
+                let a: VoidMode.Action = v.hp < 250 && v.drainCooldown == 0 ? .drain
+                    : v.shieldCooldown == 0 && v.hp < 350 ? .shield
+                    : v.blastCooldown == 0 ? .blast : .strike
+                let s = v.act(a, dice: &dice)
+                XCTAssertTrue(s.acted)
+            }
+            XCTAssertLessThan(turns, 500)
+            if v.won { wins += 1 } else { losses += 1 }
+        }
+        XCTAssertGreaterThan(wins, 0)
+
+        var v = VoidMode()
+        _ = v.act(.blast, dice: &dice)
+        XCTAssertFalse(v.act(.blast, dice: &dice).acted, "blast is on cooldown")
+    }
+
+    func testCodes() {
+        let store = MemoryStore()
+        var dice = SeededDice(seed: 1)
+        let code = VoidMode.newCode(store: store, dice: &dice)
+        XCTAssertNotNil(VoidMode.prize(for: code))
+        let r = RewardCodes.redeem(code, store: store)
+        XCTAssertTrue(r.ok)
+        XCTAssertFalse(RewardCodes.redeem(code, store: store).ok)
+        XCTAssertFalse(RewardCodes.redeem("NOPE", store: store).ok)
+        let b = RewardCodes.redeem("ddbd26", store: store)
+        XCTAssertEqual(b.gold, 1000)
+        XCTAssertTrue(b.sword)
+        XCTAssertEqual(Blacksmith.discount(store).pct, 0.15)
+        // Every prize is reachable and the 2x XP one sets up the next run.
+        var seen = Set<VoidMode.Prize>()
+        for _ in 0..<300 { if let p = VoidMode.prize(for: VoidMode.newCode(store: store, dice: &dice)) { seen.insert(p) } }
+        XCTAssertEqual(seen.count, VoidMode.Prize.allCases.count)
+    }
+}

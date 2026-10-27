@@ -47,7 +47,7 @@ struct MainMenuView: View {
         Entry(id: "coinshop", text: "🪙 Coin Shop", label: "Mystery Coin Shop, spend your Mystery Coins on permanent upgrades", action: .go(.coinshop)),
         Entry(id: "afk", text: "⬇ Endless Descent", label: "Endless Descent, AFK mode", action: .go(.afk)),
         Entry(id: "spire", text: "🗼 The Spire", label: "The Spire, climb 1800 floors to face The Time Eater", action: .go(.spire)),
-        Entry(id: "void", text: "🌑 Void Mode", label: "Void Mode, become the Void Commander and survive five waves of heroes"),
+        Entry(id: "void", text: "🌑 Void Mode", label: "Void Mode, become the Void Commander and survive five waves of heroes", action: .go(.voidmode)),
         Entry(id: "command", text: "⌨️ Command Center", label: "Command Center — type or speak commands to control the game"),
         Entry(id: "spellbook", text: "📖 Spell Book", label: "Spell Book — view your learned spells", color: purple, border: purpleBorder, action: .go(.spellbook)),
         Entry(id: "arcane", text: "✨ Arcane Shop", label: "Arcane Shop — buy spell scrolls and the spell book", color: purple, border: purpleBorder, action: .go(.arcane)),
