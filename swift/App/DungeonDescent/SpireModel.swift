@@ -31,6 +31,9 @@ final class SpireModel: ObservableObject {
 
     var characterLevel: Int { character?.persistLevel ?? 1 }
 
+    /// The Time Eater has its own fight music; every other floor plays the Spire's.
+    var spireTrack: String { run?.enemy?.name == "The Time Eater" && run?.cleared == false ? "time-eater" : "spire" }
+
     func toggleAuto() {
         if !autoMode && characterLevel < 5 {
             message = "Auto Mode unlocks at Level 5. Current level: \(characterLevel)."
@@ -61,7 +64,7 @@ final class SpireModel: ObservableObject {
         run = r
         stage = .climbing
         add(lines)
-        Sound.track("spire")
+        Sound.track(spireTrack)
         Feedback.announce("Entering The Spire. \(ch.name). Floor \(r.floor). HP: \(r.hp). "
             + (autoMode ? "Auto Mode active." : "Manual Mode. Defeat the enemy then press Next Floor.") + " " + lines.joined(separator: " "))
         afterStep()
@@ -110,6 +113,7 @@ final class SpireModel: ObservableObject {
         let lines = Spire.next(&r, store: game.store, wallet: game.wallet, dice: &dice)
         run = r
         add(lines)
+        Sound.track(spireTrack)
         Feedback.announce(lines.joined(separator: " "))
         afterStep()
     }
@@ -207,7 +211,7 @@ final class SpireModel: ObservableObject {
             Spire.refreshGear(&r, ch, store: game.store, wallet: game.wallet)
             run = r
         }
-        Sound.track("spire")
+        Sound.track(spireTrack)
         if autoMode { scheduleAuto() }
         Feedback.announce("Back in The Spire.")
     }

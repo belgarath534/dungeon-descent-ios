@@ -46,6 +46,9 @@ function floorList(v) {
 // Audio tables call _audioUrl('file.mp3'); here that just returns the file name.
 // eslint-disable-next-line no-unused-vars
 function _audioUrl(f) { return f; }
+// The bundled-file branch of TRACK_FILES ('time-eater') checks window.Capacitor.
+// eslint-disable-next-line no-unused-vars
+const window = { Capacitor: true }, _AUDIO_LOCAL = '';
 
 // Keeps only plain data: functions (e.g. RUNE_DEFS.apply) are dropped.
 function plain(v) { return JSON.parse(JSON.stringify(v)); }

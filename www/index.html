@@ -6418,6 +6418,7 @@ var DDStore = (function() {
       <div class="credits-role" style="margin-top:8px;line-height:2.1;"><a href="https://freesound.org/people/OGsoundFX/" target="_blank" rel="noopener" style="color:var(--gold-dim);">OGsoundFX</a>, <a href="https://freesound.org/people/Imjeax/" target="_blank" rel="noopener" style="color:var(--gold-dim);">Imjeax</a>, <a href="https://freesound.org/people/Audionautics/" target="_blank" rel="noopener" style="color:var(--gold-dim);">Audionautics</a>, <a href="https://freesound.org/people/newlocknew/" target="_blank" rel="noopener" style="color:var(--gold-dim);">newlocknew</a>, and <a href="https://freesound.org/people/Hybrid_V/" target="_blank" rel="noopener" style="color:var(--gold-dim);">Hybrid_V</a>.</div>
       <div class="credits-role" style="margin-top:14px;">Hide and Seek's music courtesy of Freesound.org contributors, licensed under Creative Commons Attribution:</div>
       <div class="credits-role" style="margin-top:8px;line-height:2.1;"><a href="https://freesound.org/people/Gustavo_Alivera/" target="_blank" rel="noopener" style="color:var(--gold-dim);">Gustavo_Alivera</a> and <a href="https://freesound.org/people/joshuaempyre/" target="_blank" rel="noopener" style="color:var(--gold-dim);">joshuaempyre</a>.</div>
+      <div class="credits-role" style="margin-top:14px;">The Time Eater's music, "Blackmoor Colossus", by <a href="http://www.matthewpablo.com" target="_blank" rel="noopener" style="color:var(--gold-dim);">Matthew Pablo</a>, licensed under Creative Commons Attribution 3.0, via <a href="https://opengameart.org/content/colossal-boss-battle-theme" target="_blank" rel="noopener" style="color:var(--gold-dim);">OpenGameArt</a>.</div>
     </div>
 
     <div class="credits-dddi" aria-label="Department of Dungeon Descent Incorporated certification">
@@ -9015,6 +9016,9 @@ var TRACK_FILES = {
   'blacksmith':      _audioUrl('music-blacksmith.mp3'),
   'graveyard':       _audioUrl('music-graveyard.mp3'),
   'spire':           _audioUrl('music-spire.mp3'),
+  // The Time Eater's own fight music. It ships next to the game (not on the
+  // audio bucket), so the web build loads it from its own audio/ folder.
+  'time-eater':      (window.Capacitor ? _AUDIO_LOCAL : 'audio/') + 'music-time-eater.mp3',
   'home':            _audioUrl('music-home.mp3'),       // upload music-home.mp3 to use
   'menu-birthday':   _audioUrl('music-birthday.mp3'),   // upload music-birthday.mp3 to use
   'credits':         _audioUrl('music-credits.mp3'),
@@ -51580,6 +51584,7 @@ var MUSIC_CATALOGUE = [
   { key:'hideseek-explore',label:'Something Waits — Hide and Seek',           dungeon:'Hide and Seek' },
   { key:'hideseek-chase',  label:'It Found You — Hide and Seek Chase',        dungeon:'Hide and Seek' },
   { key:'home',            label:'Hearthstone — Home Theme',                  dungeon:'Special' },
+  { key:'time-eater',      label:'Blackmoor Colossus — The Time Eater',       dungeon:'The Spire' },
   { key:'credits',         label:'A Game by Leo — Credits Theme',             dungeon:'Special' },
 ];
 
@@ -62457,6 +62462,7 @@ function spireSpawnEnemy() {
       atk: [Math.round(boss.atk[0] * floorMult), Math.round(boss.atk[1] * floorMult)],
     };
     spireLog('━━━━━━━━━━━━━━━━━━━━━━━━━━━━', '#333');
+    if (boss.floor === 1800) playTrack('time-eater');
     spireLog('⚡ BOSS FLOOR — ' + boss.icon + ' ' + boss.name, '#ffaa44');
     spireLog(boss.msg, '#888');
     spireLog('Boss HP: ' + SPIRE._currentEnemy.hp + ' | Your HP: ' + SPIRE.hp + '/' + SPIRE.maxHp, '#666');

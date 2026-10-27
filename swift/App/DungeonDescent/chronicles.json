@@ -1866,6 +1866,11 @@
    "dungeon": "Special"
   },
   {
+   "key": "time-eater",
+   "label": "Blackmoor Colossus — The Time Eater",
+   "dungeon": "The Spire"
+  },
+  {
    "key": "credits",
    "label": "A Game by Leo — Credits Theme",
    "dungeon": "Special"
