@@ -148,6 +148,11 @@ final class RunModel: ObservableObject {
     /// Exploration, battle or boss music for where the run is, plus the dungeon's ambience.
     func playMusic() {
         let r = run
+        if let s = r.stalker {
+            Sound.track("shadow-stalker")
+            Sound.startLoop("monster-growl.mp3", volume: s.growlVolume, pan: s.pan)
+            return
+        }
         if let e = r.enemy, r.inCombat {
             Sound.track(e.isBoss ? Soundtrack.bossTrack(dungeon: r.dungeon) : Soundtrack.battleTrack(dungeon: r.dungeon))
         } else {
@@ -171,10 +176,15 @@ final class RunModel: ObservableObject {
     }
 
     func enterRoom() {
-        guard phase == .exploring else { return }
+        guard phase == .exploring, run.stalker == nil else { return }
         Sound.sfx("sfx-footstep")
         var r = run
         var d = dice
+        // The Shadow World: the Darkness Swallower finds you before the room does.
+        if StalkerFloor.shouldStart(r, dice: &d) {
+            startStalker(&r, &d)
+            return
+        }
         r.roomsOnFloor += 1
         r.totalRooms += 1
         r.searched = false
@@ -412,6 +422,75 @@ final class RunModel: ObservableObject {
     }
 
     // MARK: Fighting
+
+    // MARK: The Stalker Floor
+
+    private func startStalker(_ r: inout Run, _ d: inout SystemDice) {
+        let s = StalkerFloor(dice: &d)
+        r.stalker = s
+        add("🌑 Something stirs in the darkness. The Darkness Swallower is in this room with you.")
+        Sound.stopMusic()
+        Sound.ambient(nil)
+        Sound.track("shadow-stalker")
+        Sound.startLoop("monster-growl.mp3", volume: s.growlVolume, pan: s.pan)
+        finish(r, d, phase: .exploring,
+               spoken: "Something stirs in the darkness. The music shifts. Move carefully — the Darkness Swallower is somewhere in this room with you. It is \(s.distance) step\(s.distance != 1 ? "s" : "") away, to the \(s.direction). Reach the edge of the room \(StalkerFloor.escapesNeeded) times to escape. Use headphones: its growl tells you where it is.")
+    }
+
+    /// stalkerMove
+    func stalkerMove(_ dir: String) {
+        guard var s = run.stalker else { return }
+        var r = run
+        var d = dice
+        let out = s.move(dir)
+        r.stalker = s
+        Sound.sfx("sfx-stairs")
+        Sound.placed("monster-footstep.mp3", volume: s.stepVolume, pan: s.pan)
+        Sound.moveLoop(volume: s.growlVolume, pan: s.pan)
+        switch out {
+        case .caught:
+            Sound.stopLoop()
+            Sound.placed("jump-scare-v3.mp3", volume: 1, pan: 0)
+            Feedback.warning()
+            let dmg = StalkerFloor.caught(&r)
+            add("💀 THE DARKNESS SWALLOWER CATCHES YOU! \(dmg) shadow damage!")
+            finish(r, d, phase: .exploring, spoken: "Caught! The Darkness Swallower strikes. \(dmg) damage. You barely survive.")
+            playMusic()
+        case .escaped:
+            Sound.stopLoop()
+            let item = StalkerFloor.escaped(&r, wallet: game.wallet, dice: &d)
+            add("✨ You escaped the Darkness Swallower! Rare loot awarded.")
+            if let item { add("📦 Found: \(item.name)!") }
+            Sound.sfx("sfx-victory")
+            Feedback.success()
+            finish(r, d, phase: .exploring, spoken: "You escaped! The Darkness Swallower retreats into the shadows. 150 gold" + (item.map { " and \($0.name)" } ?? "") + " for your survival.")
+            playMusic()
+        case .escapedOnce:
+            let left = StalkerFloor.escapesNeeded - s.escapes
+            add("You slip away — temporarily. \(left) more escape\(left != 1 ? "s" : "") needed.")
+            finish(r, d, phase: .exploring, spoken: "You escape — for now. \(left) more needed. It is \(s.distance) steps away, to the \(s.direction).")
+        case .moved:
+            let line = s.report(dir)
+            add(line)
+            if s.distance == 1 { Feedback.warning() }
+            let said = s.distance == 1 ? "It is right next to you. One step away. The darkness breathes. You can turn and fight it."
+                : s.distance == 2 ? "It is 2 steps away, to the \(s.direction). Listen for the direction."
+                : "You move \(dir). It is \(s.distance) steps away, to the \(s.direction)."
+            finish(r, d, phase: .exploring, spoken: said)
+        }
+    }
+
+    /// stalkerChooseFight
+    func stalkerFight() {
+        guard let s = run.stalker, s.distance <= 1 else { return }
+        var r = run
+        Sound.stopLoop()
+        let e = StalkerFloor.fight(&r)
+        Combat.begin(&r, against: e).forEach { add($0) }
+        add("⚔ You turn to face the Darkness Swallower!")
+        Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
+        finish(r, dice, phase: .fighting, spoken: "You face the Darkness Swallower. \(e.hp) HP. It hits hard and adds 2 corruption per hit. Use Purge.")
+    }
 
     /// The Shadow World's Purge: 4 SP clears all corruption. A free action.
     var canPurge: Bool { phase == .fighting && run.dungeon == ShadowWorld.name }

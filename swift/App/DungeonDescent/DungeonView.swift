@@ -43,7 +43,7 @@ struct DungeonView: View {
                     roomTracker
                     if fighting, let e = run.enemy, e.isBoss { bossPhaseBar(e) }
                     roomSection
-                    if fighting { combatSection } else { navSection }
+                    if fighting { combatSection } else if let s = run.stalker { stalkerSection(s) } else { navSection }
                     if showInventory { inventorySection }
                 }
                 .padding(.horizontal, 14)
@@ -182,6 +182,34 @@ struct DungeonView: View {
                 .frame(maxWidth: .infinity).padding(.vertical, 5)
                 .overlay(Rectangle().stroke(Theme.goldDim))
         }
+    }
+
+    /// #stalker-overlay: the Stalker Floor's moves and status.
+    private func stalkerSection(_ s: StalkerFloor) -> some View {
+        VStack(spacing: 10) {
+            Text("🌑 The Darkness Swallower").font(Theme.decorative(14.4)).foregroundStyle(Color(hex: 0xcc88ff))
+                .accessibilityAddTraits(.isHeader)
+            Text(s.status).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc88ff)).multilineTextAlignment(.center)
+                .accessibilityLabel("Darkness Swallower \(s.distance) steps away to the \(s.direction). Escapes: \(s.escapes) of \(StalkerFloor.escapesNeeded).")
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                ForEach([("north", "↑ North"), ("south", "↓ South"), ("west", "← West"), ("east", "→ East")], id: \.0) { d in
+                    Button(d.1) { model.stalkerMove(d.0) }
+                        .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xcc88ff))
+                        .frame(maxWidth: .infinity).padding(10)
+                        .background(Color(hex: 0x0a0008)).overlay(Rectangle().stroke(Color(hex: 0x9966cc)))
+                        .accessibilityLabel("Move \(d.0)")
+                }
+            }
+            if s.distance <= 1 {
+                Button("⚔ Turn and Fight") { model.stalkerFight() }
+                    .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xff8888))
+                    .frame(maxWidth: .infinity).padding(10)
+                    .background(Color(hex: 0x1a0022)).overlay(Rectangle().stroke(Color(hex: 0xff4444)))
+                    .accessibilityLabel("Turn and fight the Darkness Swallower")
+            }
+        }
+        .padding(16)
+        .background(Color(hex: 0x050005)).overlay(Rectangle().stroke(Color(hex: 0x9966cc)))
     }
 
     /// .dg-spirit-row: your spirit companion.

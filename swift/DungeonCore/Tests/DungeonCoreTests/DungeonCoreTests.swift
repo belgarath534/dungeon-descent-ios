@@ -2269,3 +2269,42 @@ final class AmbushTests: XCTestCase {
         XCTAssertTrue(echoes.allSatisfy { $0.name.hasPrefix("Echo of") && $0.number("corruptOnHit") == 1 && $0.hp > 0 })
     }
 }
+
+final class StalkerTests: XCTestCase {
+    func testChaseEscapeAndCatch() {
+        var dice = SeededDice(seed: 3)
+        var s = StalkerFloor(dice: &dice)
+        s.ex = 4; s.ey = 4
+        // Walking north to the edge: it follows but you get out.
+        XCTAssertEqual(s.move("north"), .moved)
+        XCTAssertEqual(s.move("north"), .escapedOnce)
+        XCTAssertEqual(s.escapes, 1)
+        XCTAssertEqual(s.px, 2)
+        // Walk into it to be caught.
+        s.ex = 2; s.ey = 1
+        XCTAssertEqual(s.move("north"), .caught)
+        XCTAssertLessThan(StalkerFloor(dice: &dice).pan, 1)
+    }
+
+    func testRewardsAndFight() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        var r = Run(character: PlayerCharacter(name: "St", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "The Shadow World", difficulty: .wanderer))
+        var dice = SeededDice(seed: 1)
+        r.stalker = StalkerFloor(dice: &dice)
+        let gold = w.gold
+        let item = StalkerFloor.escaped(&r, wallet: w, dice: &dice)
+        XCTAssertNil(r.stalker)
+        XCTAssertEqual(w.gold, gold + 150)
+        XCTAssertTrue(item!.isWeapon || item!.isArmor)
+        r.stalker = StalkerFloor(dice: &dice)
+        let hp = r.hp
+        let dmg = StalkerFloor.caught(&r)
+        XCTAssertEqual(r.hp, max(1, hp - dmg))
+        r.stalker = StalkerFloor(dice: &dice)
+        let e = StalkerFloor.fight(&r)
+        XCTAssertEqual(e.number("corruptOnHit"), 2)
+        XCTAssertNil(r.stalker)
+    }
+}

@@ -60,6 +60,8 @@ public struct Run: Codable, Sendable {
     public var foes: [Enemy] = []
     /// Shadow World enemies killed this run, for echo ambushes (newest last).
     public var shadowKilled: [Enemy] = []
+    /// The Stalker Floor in progress, if the Darkness Swallower found you.
+    public var stalker: StalkerFloor? = nil
     /// The seasonal or weekly event running (getActiveEvent), set when the
     /// run starts and on each new floor.
     public var event: String? = nil
