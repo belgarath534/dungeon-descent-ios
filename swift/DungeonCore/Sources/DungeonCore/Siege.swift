@@ -49,6 +49,7 @@ public enum Siege {
         public var stationed: [Minion] = []
         public var maxDurability: Int { 40 + level * 10 }
         public var minionAtk: Int { stationed.reduce(0) { $0 + max(1, $1.atk) } }
+        public init() {}
     }
 
     public static func load(_ store: GameStore) -> Fortress {
