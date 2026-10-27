@@ -33,6 +33,7 @@ final class Router: ObservableObject {
         case credits
         case events
         case blacksmith
+        case spire
         case seasonalshop
         case whatsnew
         case quit
@@ -93,6 +94,7 @@ struct RootView: View {
             case .credits: CreditsView()
             case .events: EventsView()
             case .blacksmith: MenuBlacksmithScreen()
+            case .spire: SpireView()
             case .seasonalshop: SeasonalShopView()
             case .whatsnew: WhatsNewView()
             case .quit: QuitScreen()

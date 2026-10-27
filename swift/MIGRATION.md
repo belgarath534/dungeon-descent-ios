@@ -132,6 +132,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Seasonal events | getActiveEvent, getEventBonuses, renderEventsScreen, openSeasonalShop | ✅ all 16 seasonal and weekly events on their dates, their XP, gold and enemy strength, Blood Moon's harder hits both ways, 20% of enemies replaced by the event's own (56 of them, in events.json), seasonal currency from 30% of kills, the menu banner and currency, the Events screen and the six seasonal shops. Not yet: the event enemies' special moves (the Leprechaun stealing gold, the Cupid's Love Potion …), the Easter Bunny room, Friday the 13th's Black Box, the July 4th Fireworks Corner, the Cinco de Mayo weapon, Ambush Day ambushes, birthday music, and shop items that need systems not ported yet (titles, run modifiers, combat items) |
 | Subclasses | SUBCLASSES, showSubclassChoice, chooseSubclass | ✅ the level 5 choice for every class that has one (Berserker and Druid don't, in the web version either), its stat points, its passive and the name in the top bar. The seven spell passives (Firelord, Stormcaller, Void Born, Dark Arts, Time Lord, Pure Magic, Spell Weaver) give their stats and wait for spells. Ancient Blood's fire immunity has nothing to block yet |
 | Blacksmith | openBlacksmith, openMenuBlacksmith, upgradeEquipped, reforgeWeapon, degradeWeapon | ✅ from the dungeon (run gold) and the main menu (global gold): upgrade weapon and armor to level 10 (Enchanters pay first, Blacksmiths get 10% off, seasonal discounts apply), buy the 11 weapons and 7 armors (the Worn Blade free once), sell, equip and unequip, reforge and raise rarity, the Rarity Effects guide, weapon durability and repairs. Soul Drinker, Thunderfist, The Last Blade, Thornmail, Ghost Shroud and the staff's +10 SP work in combat. The Guns tab says coming soon |
+| The Spire | THE SPIRE, startSpire, spireDoPlayerTurn, spireRestFloor, spireVictory | ✅ the setup screen with your best floor and champion, Auto Mode (Level 5, every 4 seconds), the climb from your best floor with Attack, Heavy, Defend, potions and the auto-potion, the 9 bosses, rest floors, milestones, diamond and Mystery Coin drops, the Blacksmith mid-climb, death to The Graveyard and the Obituary, and The Time Eater's rewards. The gun button and gun parts wait for the guns; the Spire Bestiary tab isn't in yet |
 | Home system | HOME SYSTEM, MINION SYSTEM, HOME_DREAMS | ✅ buy the home (500g), bed (75g) and sleep every 5 rooms with a dream, the gold safe, skill upgrades to level 5, the Minions tab, and the Soul Trap combat button. Minions strike after you every round. Spirits, Forge, Alchemy, Vendor and Guns tabs say coming soon; Skill Orbs (upgrades passed on when a character dies) and the July 4th Fireworks Corner are not in yet |
 | Global chat, presence, leaderboards | GLOBAL CHAT SYSTEM … | ⬜ |
 | Account login, cloud save | DD Cloud | ✅ see "Account and cloud save" |
@@ -246,3 +247,14 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **The menu Blacksmith used your last run's profession.** From the main menu it said
   there was no Blacksmith discount but still charged the last run's discounted price.
   Swift gives no profession discount on the menu, matching what it says.
+- **Only The Time Eater ever appeared in The Spire.** Every tenth floor was a rest
+  floor, and every boss floor (10, 50, 100 … 1000) is a multiple of ten, so the rest
+  floor always won. The same rule meant milestone gold and the every-ten-floors diamond
+  and Mystery Coin drops never happened. Swift puts bosses on their floors, makes the
+  other tenth floors rest floors, and pays each tenth floor's rewards once.
+- **Spire kills paid twice.** Each kill's gold was added to your global gold two times.
+- **The Time Eater's 25 Mystery Coins went nowhere.** They were put on the character,
+  where the Coin Shop never looks. The victory screen also said +500 gold while the game
+  paid 1000. Swift pays 1000 gold and 25 Mystery Coins and says so.
+- **Gear changed at the Blacksmith mid-climb didn't count** until the next climb. Swift
+  updates your attack and defense when you leave the Blacksmith.

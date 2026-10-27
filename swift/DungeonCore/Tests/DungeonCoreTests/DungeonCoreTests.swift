@@ -2025,3 +2025,83 @@ final class BlacksmithTests: XCTestCase {
         XCTAssertEqual(Blacksmith.onFloor(&r), "💔 The Last Blade degrades to level 9.")
     }
 }
+
+final class SpireTests: XCTestCase {
+    func climber() -> PlayerCharacter {
+        PlayerCharacter(name: "S", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+    }
+
+    func testBossesAppearAndRestFloorsBetween() {
+        XCTAssertTrue(Spire.boss(on: 10))
+        XCTAssertFalse(Spire.isRest(10))
+        XCTAssertTrue(Spire.isRest(20))
+        XCTAssertFalse(Spire.isRest(1800))
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        var r = Spire.start(climber(), store: store, wallet: w)
+        XCTAssertEqual(r.floor, 1)
+        XCTAssertEqual(r.maxHp, 120 + 150)
+        r.floor = 10
+        var dice = SeededDice(seed: 1)
+        _ = Spire.enter(&r, store: store, wallet: w, dice: &dice)
+        XCTAssertEqual(r.enemy?.name, "The Gate Warden")
+        XCTAssertTrue(r.enemy!.isBoss)
+    }
+
+    func testClimbSavesBestAndPaysOnce() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        var r = Spire.start(climber(), store: store, wallet: w)
+        r.atk = 10_000
+        var dice = SeededDice(seed: 4)
+        _ = Spire.enter(&r, store: store, wallet: w, dice: &dice)
+        let before = w.gold
+        _ = Spire.turn(&r, .attack, store: store, wallet: w, dice: &dice)
+        XCTAssertTrue(r.cleared)
+        XCTAssertEqual(w.gold - before, 4) // 3 + floor 1 × 0.5, once
+        for _ in 0..<19 {
+            _ = Spire.next(&r, store: store, wallet: w, dice: &dice)
+            if !r.cleared { _ = Spire.turn(&r, .attack, store: store, wallet: w, dice: &dice) }
+        }
+        XCTAssertEqual(r.floor, 20)
+        XCTAssertTrue(r.cleared) // rest floor
+        XCTAssertEqual(Spire.bestFloor(store), 20)
+        // Coming back onto the rest floor heals again but pays no drops twice.
+        let diamonds = w.diamonds
+        var again = Spire.start(climber(), store: store, wallet: w)
+        XCTAssertEqual(again.floor, 20)
+        for _ in 0..<20 { _ = Spire.enter(&again, store: store, wallet: w, dice: &dice) }
+        XCTAssertEqual(w.diamonds, diamonds)
+    }
+
+    func testTimeEaterVictory() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        var r = Spire.start(climber(), store: store, wallet: w)
+        r.floor = 1800
+        r.atk = 100_000
+        var dice = SeededDice(seed: 2)
+        _ = Spire.enter(&r, store: store, wallet: w, dice: &dice)
+        XCTAssertEqual(r.enemy?.name, "The Time Eater")
+        _ = Spire.turn(&r, .attack, store: store, wallet: w, dice: &dice)
+        XCTAssertTrue(r.won)
+        XCTAssertGreaterThanOrEqual(CoinShop.coins(store), 25)
+        XCTAssertEqual(Blacksmith.discount(store).pct, 0.25)
+    }
+
+    func testDeathSaves() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        var r = Spire.start(climber(), store: store, wallet: w)
+        r.floor = 7
+        r.hp = 1
+        r.potions = 0
+        r.def = -1000
+        var dice = SeededDice(seed: 3)
+        _ = Spire.enter(&r, store: store, wallet: w, dice: &dice)
+        r.enemy?.hp = 1_000_000
+        _ = Spire.turn(&r, .defend, store: store, wallet: w, dice: &dice)
+        XCTAssertTrue(r.dead)
+        XCTAssertEqual(Spire.bestFloor(store), 7)
+    }
+}

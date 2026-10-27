@@ -38,7 +38,7 @@ final class BlacksmithModel: ObservableObject {
             Sound.sfx(sound)
             commit(forge, sp)
             forge.stashed = []
-            game.achievements.check()
+            _ = game.achievements.check()
         }
         Feedback.announce(r.message)
     }
