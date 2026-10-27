@@ -42,7 +42,9 @@ final class AudioEngine {
         Bundle.main.url(forResource: file, withExtension: nil, subdirectory: "audio")
     }
 
-    func playTrack(_ name: String) {
+    func playTrack(_ requested: String) {
+        // "menu" means the menu music of the day (holiday versions included).
+        let name = requested == "menu" ? Soundtrack.menuTrack() : requested
         guard AppSettings.musicOn else { musicName = name; return }
         if name == musicName, music?.isPlaying == true { return }
         musicName = name

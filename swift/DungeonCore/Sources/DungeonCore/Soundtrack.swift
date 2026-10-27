@@ -16,6 +16,17 @@ public enum Soundtrack {
     /// File name in the audio folder for a music track name ("floor1" → "music-floor1.mp3").
     public static func file(forTrack name: String) -> String? { tables.tracks[name] }
 
+    /// getMenuTrack: the menu plays the holiday's music on Halloween, Friday
+    /// the 13th, Christmas and the game's birthday.
+    public static func menuTrack(event: String? = Events.active()) -> String {
+        switch event {
+        case "halloween", "friday13": return "menu-halloween"
+        case "christmas": return "menu-christmas"
+        case "birthday": return "menu-birthday"
+        default: return "menu"
+        }
+    }
+
     public static func file(forAmbient key: String) -> String? { tables.ambient[key] }
 
     private static let prefixes: [String: String] = [

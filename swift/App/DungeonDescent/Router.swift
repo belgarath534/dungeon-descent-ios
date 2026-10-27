@@ -50,9 +50,28 @@ final class Router: ObservableObject {
     func goTo(_ s: Screen) {
         if case .dungeon = s { runID += 1 }
         screen = s
+        Self.playMusic(for: s)
         // A new page: VoiceOver starts again from its top.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             UIAccessibility.post(notification: .screenChanged, argument: nil)
+        }
+    }
+}
+
+extension Router {
+    /// goTo's "music per screen": each screen with its own track starts it.
+    /// Screens not listed keep whatever is playing (modes start their own).
+    static func playMusic(for s: Screen) {
+        switch s {
+        case .menu, .charlist, .creation: Sound.track("menu")
+        case .bestiary: Sound.track("bestiary")
+        case .help: Sound.track("help")
+        case .chat: Sound.track("home")
+        case .codex: Sound.track("codex")
+        case .chronicles: Sound.track("chronicles")
+        case .spire: Sound.track("spire")
+        case .graveyard: Sound.track("graveyard")
+        default: break
         }
     }
 }

@@ -189,6 +189,11 @@ struct MainMenuView: View {
                 .padding(.vertical, 4)
                 .accessibilityLabel("Your familiar — press to view its bond level")
                 .accessibilityValue(familiar)
+            // Your wealth, near the top so it's never out of reach.
+            Text("💰 \(game.gold)   💎 \(game.diamonds)   🪙 \(game.mysteryCoins)")
+                .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xffdd44))
+                .padding(.vertical, 4)
+                .accessibilityLabel("Your gold, \(game.gold). Diamonds, \(game.diamonds). Mystery Coins, \(game.mysteryCoins).")
             // #seasonal-currency-display
             if let cur = Events.current()?.currency {
                 let n = Events.currency(cur.key, store: game.store)
@@ -261,10 +266,12 @@ struct MainMenuView: View {
                 .foregroundStyle(Theme.textDim)
                 .padding(.top, 28)
                 .accessibilityLabel("Version \(version.replacingOccurrences(of: ".", with: " point ")), Release")
-            Text("💰 \(game.gold)")
-                .accessibilityLabel("Your global gold, \(game.gold)")
-            Text("💎 \(game.diamonds)")
-                .accessibilityLabel("Your diamonds, \(game.diamonds)")
+            VStack(spacing: 6) {
+                Text("💰 \(game.gold)")
+                Text("💎 \(game.diamonds)")
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Your global gold, \(game.gold). Your diamonds, \(game.diamonds).")
         }
         .font(Theme.crimson())
         .foregroundStyle(Theme.textPrimary)

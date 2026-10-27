@@ -12,6 +12,7 @@ struct AccountPanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
+            ICloudBackupSection().padding(.bottom, 20)
             VStack(alignment: .leading, spacing: 6) {
                 Text("⚠ ALPHA FEATURE").font(Theme.cinzel(10.4)).tracking(3).foregroundStyle(Color(hex: 0x6666ff))
                 (Text("This account system is in Alpha. An account is ")

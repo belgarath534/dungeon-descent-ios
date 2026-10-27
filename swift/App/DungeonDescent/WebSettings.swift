@@ -40,7 +40,7 @@ struct WebSettingsView: View {
         Category(id: "language", icon: "🌍", name: "Language", desc: "Game language and translation", label: "Language settings"),
         Category(id: "gameplay", icon: "🎮", name: "Gameplay", desc: "Run modifiers, menu items, game features",
                  label: "Gameplay settings — run modifiers and menu customization"),
-        Category(id: "account", icon: "☁", name: "Account", desc: "Cloud saves · Alpha", label: "Account settings, alpha feature", tag: "ALPHA"),
+        Category(id: "account", icon: "☁", name: "Account", desc: "iCloud backup, cloud saves · Alpha", label: "Account and iCloud backup settings, alpha feature", tag: "ALPHA"),
         Category(id: "general", icon: "⚙️", name: "General", desc: "Game info, save data, export and import",
                  label: "General settings, game info, save data, export and import"),
         Category(id: "dev", icon: "🔧", name: "Developer Tools", desc: "Testing and debug options", label: "Developer Tools, password protected"),

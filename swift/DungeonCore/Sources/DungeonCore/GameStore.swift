@@ -82,6 +82,12 @@ public final class FileStore: GameStore {
         scheduleWrite()
     }
 
+    /// Every key and value, for a full backup.
+    public func snapshot() -> [String: String] {
+        lock.lock(); defer { lock.unlock() }
+        return values
+    }
+
     /// Writes any pending changes immediately.
     public func flushNow() {
         queue.sync { write() }

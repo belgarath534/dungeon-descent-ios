@@ -47,6 +47,8 @@ final class GameModel: ObservableObject {
 
     /// Writes the save to disk right away (when the app leaves the foreground).
     func saveNow() { fileStore.flushNow() }
+    /// The whole save, for the iCloud backup.
+    func snapshot() -> [String: String] { fileStore.snapshot() }
 
     /// Achievement unlocked: a sound by tier, a spoken line and Game Center.
     static func announce(_ list: [Achievement]) {
@@ -126,8 +128,8 @@ final class GameModel: ObservableObject {
 
     /// Replaces this app's save with the web version's. Swift's own runs in
     /// progress are dropped, since they belong to the characters being replaced.
-    func importWebSave(_ data: [String: String]) {
-        store.setItems(data.filter { $0.key.hasPrefix("dd_") && !$0.key.hasPrefix("dd_swift_") })
+    func importWebSave(_ data: [String: String], keepSwiftRuns: Bool = false) {
+        store.setItems(data.filter { $0.key.hasPrefix("dd_") && (keepSwiftRuns || !$0.key.hasPrefix("dd_swift_")) })
         roster = CharacterRoster(store: store)
         UserDefaults.standard.set(true, forKey: "swift_web_import_done")
         achievements.reload()

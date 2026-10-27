@@ -32,6 +32,7 @@ struct DungeonDescentApp: App {
             if phase != .active {
                 game.saveNow()
                 CloudAccount.shared.autoSync()
+                ICloudBackup.shared.autoBackup(game: game)
             }
         }
     }
