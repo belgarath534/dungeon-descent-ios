@@ -18,6 +18,9 @@ struct DungeonView: View {
     @State private var paused = false
     @State private var showSettings = false
     @State private var showSpirits = false
+    /// The Arcane Shop or Spell Book (true) during the run, and the cast panel.
+    @State private var spellScreen: Bool?
+    @State private var casting = false
     @State private var choosingPath = false
     @State private var invTab = "all"
     @State private var invSearch = ""
@@ -88,6 +91,8 @@ struct DungeonView: View {
             }
         }
         if model.gambling { GambleOverlay(model: model) }
+        if let book = spellScreen { RunSpellsOverlay(model: model, showingBook: book) { spellScreen = nil } }
+        if casting { CastSpellOverlay(model: model) { casting = false } }
         if model.showingHome { HomeOverlay(model: model) }
         if let b = model.blacksmith { BlacksmithView(model: b) { model.closeBlacksmith() } }
         if showSpirits { SpiritsOverlay(model: model) { showSpirits = false } }
@@ -416,6 +421,18 @@ struct DungeonView: View {
                     .accessibilityLabel("Defend, reduces incoming damage")
                 Button("🧪 Potion") { drinkPotion() }.buttonStyle(DungeonButtonStyle(kind: .combat))
                     .accessibilityLabel("Use a health potion")
+                if model.canCast {
+                    Button(run.spellCooldown > 0 ? "✨ Spells (\(run.spellCooldown))" : "✨ Spells") {
+                        if run.spellCooldown > 0 {
+                            Feedback.announce("Spells on cooldown. \(run.spellCooldown) turns remaining.")
+                        } else {
+                            Sound.sfx("sfx-select")
+                            casting = true
+                        }
+                    }
+                    .buttonStyle(DungeonButtonStyle(kind: .skill))
+                    .accessibilityLabel(run.spellCooldown > 0 ? "Spells, on cooldown, \(run.spellCooldown) turns" : "Cast a spell from your spell book")
+                }
                 if model.canPurge {
                     Button("✨ Purge (\(ShadowWorld.purgeCost) SP)") { model.purge() }.buttonStyle(DungeonButtonStyle(kind: .skill))
                         .accessibilityLabel("Purge shadow corruption for \(ShadowWorld.purgeCost) SP. \(run.shadowCorruption) stacks.")
@@ -558,8 +575,8 @@ struct DungeonView: View {
                 act("📜 Run Log", "Open run log, see everything that happened this run") { showRunLog = true }
                 act("💾 Save", "Save your progress right now") { model.manualSave() }
                 act("⚒ Blacksmith", "Open blacksmith — upgrade your equipped weapon or armor") { model.openBlacksmith() }
-                act("✨ Arcane Shop", "Open Arcane Shop — buy spell scrolls") { notYet("The Arcane Shop") }
-                act("📖 Spell Book", "Open Spell Book — view your learned spells") { notYet("The Spell Book") }
+                act("✨ Arcane Shop", "Open Arcane Shop — buy spell scrolls") { Sound.sfx("sfx-select"); spellScreen = false }
+                act("📖 Spell Book", "Open Spell Book — view your learned spells") { Sound.sfx("sfx-select"); spellScreen = true }
                 Button("🚪 Flee Dungeon") { askFlee() }
                     .buttonStyle(DungeonButtonStyle(kind: .red))
                     .accessibilityLabel("Flee the dungeon and return to character select")

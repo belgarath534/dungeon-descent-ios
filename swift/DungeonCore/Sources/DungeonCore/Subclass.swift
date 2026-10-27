@@ -159,9 +159,8 @@ public enum Subclasses {
         ],
     ]
 
-    /// Passives that work through spells (Arcane Shop scrolls), which the
-    /// Swift version doesn't have yet. Their stat bonuses still apply.
-    public static let waitingOnSpells: Set<String> = ["firelord", "stormcaller", "void-born", "dark-arts", "time-lord", "pure-magic", "spell-weaver"]
+    /// Passives that work through spells (see Spells.swift).
+    public static let spellPassives: Set<String> = ["firelord", "stormcaller", "void-born", "dark-arts", "time-lord", "pure-magic", "spell-weaver"]
 
     static let beasts = [("🐺", "wolf"), ("🐻", "bear"), ("🦅", "hawk"), ("🐗", "boar"), ("🐆", "panther")]
 
@@ -204,7 +203,6 @@ public enum Subclasses {
         default: break
         }
         var log = [sub.chosenLine]
-        if waitingOnSpells.contains(sub.id) { log.append("Spells aren't in the Swift version yet, so this passive waits for them. Coming soon.") }
         log.append("\(sub.icon) Subclass chosen: \(sub.name). \(sub.passive)")
         return log
     }

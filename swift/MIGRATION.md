@@ -117,7 +117,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
-| Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Echo-Location (3D Mode). Not yet: Voice, Arcane Shop, Spell Book, chat |
+| Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Echo-Location (3D Mode). Arcane Shop, Spell Book and Spells. Not yet: Voice, chat |
 | Death: graveyard entry, gear kept, Classic level reset | showDefeat | ✅ |
 | Settings in the web version's look | settings-screen, settings-panel-* | ✅ categories; Audio, Accessibility (verbose rooms, combat announcements, repair unlocks), Gameplay (class traits), General (version, web save import), Account. Beta Features (3D Mode) and 3D Settings. Language, Notifications, Developer Tools not yet |
 | The Graveyard, Help, Credits, What's New | screen-graveyard, screen-help, screen-credits, screen-whatsnew | ✅ text from index.html through tools/extract-static-screens.py |
@@ -130,13 +130,14 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Quests, bounties, inbox | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
 | Spirits, companion, corruption, Hunter, Void, Medusa arc | … | ⬜ |
 | Seasonal events | getActiveEvent, getEventBonuses, renderEventsScreen, openSeasonalShop | ✅ all 16 seasonal and weekly events on their dates, their XP, gold and enemy strength, Blood Moon's harder hits both ways, 20% of enemies replaced by the event's own (56 of them, in events.json), seasonal currency from 30% of kills, the menu banner and currency, the Events screen and the six seasonal shops. Not yet: the event enemies' special moves (the Leprechaun stealing gold, the Cupid's Love Potion …), the Easter Bunny room, Friday the 13th's Black Box, the July 4th Fireworks Corner, the Cinco de Mayo weapon, Ambush Day ambushes, birthday music, and shop items that need systems not ported yet (titles, run modifiers, combat items) |
-| Subclasses | SUBCLASSES, showSubclassChoice, chooseSubclass | ✅ the level 5 choice for every class that has one (Berserker and Druid don't, in the web version either), its stat points, its passive and the name in the top bar. The seven spell passives (Firelord, Stormcaller, Void Born, Dark Arts, Time Lord, Pure Magic, Spell Weaver) give their stats and wait for spells. Ancient Blood's fire immunity has nothing to block yet |
+| Subclasses | SUBCLASSES, showSubclassChoice, chooseSubclass | ✅ the level 5 choice for every class that has one (Berserker and Druid don't, in the web version either), its stat points, its passive and the name in the top bar. The spell passives work with spells (see Spells). Ancient Blood's fire immunity has nothing to block yet |
 | Blacksmith | openBlacksmith, openMenuBlacksmith, upgradeEquipped, reforgeWeapon, degradeWeapon | ✅ from the dungeon (run gold) and the main menu (global gold): upgrade weapon and armor to level 10 (Enchanters pay first, Blacksmiths get 10% off, seasonal discounts apply), buy the 11 weapons and 7 armors (the Worn Blade free once), sell, equip and unequip, reforge and raise rarity, the Rarity Effects guide, weapon durability and repairs. Soul Drinker, Thunderfist, The Last Blade, Thornmail, Ghost Shroud and the staff's +10 SP work in combat. The Guns tab says coming soon |
 | The Spire | THE SPIRE, startSpire, spireDoPlayerTurn, spireRestFloor, spireVictory | ✅ the setup screen with your best floor and champion, Auto Mode (Level 5, every 4 seconds), the climb from your best floor with Attack, Heavy, Defend, potions and the auto-potion, the 9 bosses, rest floors, milestones, diamond and Mystery Coin drops, the Blacksmith mid-climb, death to The Graveyard and the Obituary, and The Time Eater's rewards. The gun button and gun parts wait for the guns; the Spire Bestiary tab isn't in yet |
 | Home system | HOME SYSTEM, MINION SYSTEM, HOME_DREAMS | ✅ buy the home (500g), bed (75g) and sleep every 5 rooms with a dream, the gold safe, skill upgrades to level 5, the Minions tab, and the Soul Trap combat button. Minions strike after you every round. Spirits, Forge, Alchemy, Vendor and Guns tabs say coming soon; Skill Orbs (upgrades passed on when a character dies) and the July 4th Fireworks Corner are not in yet |
 | Global chat, presence, leaderboards | GLOBAL CHAT SYSTEM … | ⬜ |
 | Account login, cloud save | DD Cloud | ✅ see "Account and cloud save" |
 | Translations (Portuguese etc.) | translation tables | ⬜ |
+| Spells | ARCANE_SHOP_ITEMS, openArcaneShop, openSpellBook, castSpell, applySpellEffect, checkSpellScrollDrop, spell SUBCLASSES | ✅ the Arcane Shop and Spell Book from the main menu (pick a character, saved gold) and from the dungeon (run gold), the Spell Book item, learning by class (Arcanist 95%, magic classes 75%, half-magic 45%), all 48 scrolls, the ✨ Spells button in combat (a free action with a 3- or 6-turn cooldown), one-use scrolls from the bag, scroll drops from 5% of kills (10% for Arcanists and Wizards), and the spell subclasses: Firelord, Stormcaller, Void Born, Phase Walker, Dark Arts, Night Shroud, Time Lord, Earthbound, Pure Magic and Spell Weaver |
 | Music, ambience, sound effects | playTrack, playAmbient, sfx | ✅ same files (www/audio, bundled as-is), same track per dungeon and floor, volume settings |
 | Music player, custom tracks, narrator | MUSIC PLAYER … | ⬜ |
 | 3D Mode | generate3DRoomGraph, moveRoom3D, play3DExitCues, echoLocate, init3DView, ROOM3D_THEMES, get3DSettings | ✅ Settings → Beta Features → 3D Mode (dd_beta_features, same key as the web version) and 3D Settings (Shadows, Torch Flicker, FPS Counter, Minimap; dd_3d_settings). Each floor is a connected grid of rooms with real walls and doors: walls stop you, a new room is the normal room, a cleared room is just a room, Wander grows the map. Sound is real 3D audio (AVAudioEngine with HRTF, best with headphones) instead of left/right panning: you face north like the compass, each open door blips from where it is, a wall thuds from that wall, your footsteps go the way you walk, the enemy's cry comes from the room you walked into, each dungeon has its own room echo, and a falling tone plays as you descend. Echo-Location (button, or VoiceOver's two-finger double tap) answers from every direction, longer down long corridors, and hints at what the next new room holds. The view is RealityKit: every room built in its dungeon's colors and torchlight, the camera gliding room to room, drag to look around, and a minimap for sighted play. In The Shadow World with 3D Mode on, the Stalker Floor is a 7×7 room: the Darkness Swallower starts in a far corner, you hear exactly where it is in 3D, and it keeps coming every 8 seconds even if you stand still; after each escape it starts again from the far side. Free walking with on-screen sticks and Hide and Seek's 3D view aren't ported |
@@ -285,3 +286,24 @@ Where an item's description and the web code disagree, Swift follows the descrip
   apart by pitch alone. Swift places every sound in real 3D, keeping the pitch difference.
 - **Leaving the merchant in 3D Mode** jumped you into the next room without walking.
   Swift leaves you standing where you are, with the room's doors read out.
+
+- **Most spells did nothing after their message.** Frost Lance's freeze, Blood Shield,
+  Phantom Step, Void Anchor, Chain Curse, Soul Drain, Time Stop's free turns, The
+  Forgotten, Blood Oath, Soul Bound's control, Nightmare Weave, Curse of Echoes, Void
+  Mirror, Time Fracture, The Hunger, Soul Leash, Soul Echo, Extraction and Lose Reality's
+  reward only set a flag nothing read. Swift makes each one do what it says. (Void Mirror
+  makes the enemy's blows heal you for 2 turns; Shattered Reality weakens its next hit and
+  lays it open, since Swift enemies have no defense to swap; Dungeon Echo's answer makes
+  the enemy take 30% more for 3 turns.)
+- **None of the spell subclass passives worked.** Firelord, Stormcaller, Void Born, Dark
+  Arts, Time Lord, Pure Magic, Spell Weaver (and Phase Walker's and Night Shroud's spell
+  parts, and Earthbound's Earthshake) only set flags. Swift applies them.
+- **A scroll bought without a Spell Book could never be used.** It went into the bag as a
+  "spell-scroll" item that nothing knew how to read. In Swift you read it in combat for one
+  cast, or, as a magic class with a Spell Book, outside combat to try to learn it.
+- **Buying the Spell Book from the main menu broke.** The book was only ever set on the
+  current run, so from the menu the purchase failed, and in a run it was forgotten when the
+  run ended. Swift keeps the Spell Book on the character, the same field the web version saves.
+- **The Final Boss's failure took your skills away for the whole run.** Swift strips your
+  buffs, as the scroll says.
+- **Shadow Blast was listed twice in the Arcane Shop.**

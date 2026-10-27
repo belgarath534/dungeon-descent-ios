@@ -62,6 +62,19 @@ public struct Run: Codable, Sendable {
     public var shadowKilled: [Enemy] = []
     /// The Stalker Floor in progress, if the Darkness Swallower found you.
     public var stalker: StalkerFloor? = nil
+    /// Spells known by the character (copied in at run start) and their cooldown.
+    public var learnedSpells: [String] = []
+    public var spellCooldown = 0
+    public var spellsThisCooldown = 0
+    /// Run-long spell results: Extraction's Void Curse (until the next floor),
+    /// Legend of Echoes' shield, The Abyss Stares Back on you, The Hunger.
+    public var voidCurse = false
+    public var legendShield = false
+    public var abyssCursed = false
+    public var hungerKills = 0
+    public var hungerDrain = 0
+    /// Firelord: the next enemy walks into burning ground.
+    public var burningGround = false
     /// 3D Mode: the floor's rooms, walls and doors (nil when 3D Mode is off).
     public var roomGraph: RoomGraph? = nil
     /// The seasonal or weekly event running (getActiveEvent), set when the
@@ -349,6 +362,29 @@ public struct FightEffects: Codable, Sendable {
     /// The Sorrow Hound's fear: your attacks do 20% less for this many turns.
     public var fearTurns = 0
     public var nullShieldUsed = false
+    // Spells (applySpellEffect)
+    public var darkCurse = 0
+    public var playerBurn = 0
+    public var playerBurnTurns = 0
+    /// A missed Fireball comes back on the enemy's next turn.
+    public var fireballReturn = 0
+    /// Turns the enemy strikes itself (Soul Bound, Extraction); 99 for the fight.
+    public var controlled = 0
+    public var gravePact = 0
+    public var gravePactHp = 0
+    public var soulDrain = 0
+    /// Your last attack's damage, for Time Echo.
+    public var lastAttack = 0
+    /// Void Anchor: no items for this many turns.
+    public var noItems = 0
+    public var phantom = 0
+    public var bloodOath = 0
+    public var soulLeash = false
+    public var curseEchoes = 0
+    public var voidMirror = 0
+    public var forgotten = 0
+    /// Lose Reality's deadline (seconds since 1970), 0 when not running.
+    public var loseRealityUntil = 0.0
 
     public init() {}
 }

@@ -55,6 +55,7 @@ public enum Combat {
         var log: [String] = []
         Spirits.combatStart(&run, log: &log)
         ShadowWorld.combatStart(&run, log: &log)
+        Spells.combatStart(&run, log: &log)
         return log
     }
 
@@ -130,6 +131,15 @@ public enum Combat {
                                 options: Options = Options()) -> TurnResult {
         guard run.inCombat, run.enemy != nil else { return TurnResult() }
         var r = TurnResult()
+        Spells.tick(&run, log: &r.log)
+        if Spells.realityLost(run, now: Date()) {
+            run.hp = 0
+            run.inCombat = false
+            r.log.append("🌀 Time is up. You cease to exist.")
+            r.playerDied = true
+            r.announcement = r.log.last
+            return r
+        }
 
         var baseAtk = attackRoll(run, dice: &dice)
         run.defending = false
@@ -166,7 +176,7 @@ public enum Combat {
                 r.log.append(r.crit ? "CRITICAL HIT! You strike for \(r.playerDamage) damage!"
                                     : "You attack for \(r.playerDamage) damage.")
             case .heavy:
-                if run.weaponEffect != "weighted" && run.subclass != "hawkeye" && dice.chance(0.30) {
+                if run.weaponEffect != "weighted" && run.subclass != "hawkeye" && run.fight.bloodOath == 0 && dice.chance(0.30) {
                     r.missed = true
                     r.log.append("Your heavy strike misses! The enemy sidesteps.")
                 } else {
@@ -200,6 +210,10 @@ public enum Combat {
             }
         }
 
+        if (action == .attack || action == .heavy) && r.playerDamage > 0 {
+            r.playerDamage = Spells.shapeAttack(&run, r.playerDamage, heavy: action == .heavy, log: &r.log)
+            if r.playerDamage > 0 { run.fight.lastAttack = r.playerDamage }
+        }
         // Weapon wear (degradeWeapon): worn-out blades hit softer.
         if (action == .attack || action == .heavy) && r.playerDamage > 0 {
             let m = Blacksmith.damageMultiplier(run)
@@ -482,6 +496,7 @@ public enum Combat {
             r.log.append("🩸 Soul Drinker feeds — you heal 5 HP!")
         }
         if let e = run.enemy { Subclasses.onKill(&run, e, log: &r.log) }
+        if let e = run.enemy { var d = SystemDice(); Spells.onKill(&run, e, dice: &d, log: &r.log) }
         r.announcement = "\(run.enemy?.name ?? "The enemy") defeated."
         return r
     }
@@ -538,6 +553,9 @@ public enum Combat {
         }
         run.enemy = e
 
+        if Spells.beforeEnemy(&run, log: &log) { return 0 }
+        guard let after = run.enemy, !after.isDead else { return 0 }
+        e = after
         if e.stunTurns > 0 {
             e.stunTurns -= 1
             run.enemy = e
@@ -618,6 +636,7 @@ public enum Combat {
         if let ev = Events.bonuses(run.event), ev.takesMore > 0 { taken = jsRound(Double(taken) * (1 + ev.takesMore)) }
         let hpBefore = run.hp
         taken = Subclasses.incoming(&run, taken, dice: &dice, log: &log)
+        taken = Spells.incoming(&run, taken, log: &log)
         if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) || ShadowWorld.armorAvoids(&run, dice: &dice, log: &log) { return 0 }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)
@@ -631,6 +650,10 @@ public enum Combat {
             log.append("\(e.name) attacks for \(taken) damage.")
         }
         run.hp = max(0, run.hp - taken)
+        if run.hp <= 0 && run.fight.gravePact > 0 {
+            run.hp = 1
+            log.append("⚰️ The Grave Pact holds. You cannot die.")
+        }
         if run.hp <= 0 && run.fight.unstoppableTurns > 0 {
             run.hp = 1
             log.append("Unstoppable! Death refused.")
@@ -693,6 +716,7 @@ public enum Combat {
             log.append("Your cursed weapon drains 3 HP.")
         }
         if run.subclass == "death-knight-sub" { run.poisonTurns = 0 }
+        if run.inCombat { Spells.tickFight(&run, log: &log) }
         Subclasses.turnHeal(&run, log: &log)
         if run.poisonTurns > 0 && run.hp > 0 {
             run.poisonTurns -= 1

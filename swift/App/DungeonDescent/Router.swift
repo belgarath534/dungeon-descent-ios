@@ -34,6 +34,8 @@ final class Router: ObservableObject {
         case events
         case blacksmith
         case spire
+        case arcane
+        case spellbook
         case seasonalshop
         case whatsnew
         case quit
@@ -95,6 +97,8 @@ struct RootView: View {
             case .events: EventsView()
             case .blacksmith: MenuBlacksmithScreen()
             case .spire: SpireView()
+            case .arcane: MenuSpellsScreen(showingBook: false)
+            case .spellbook: MenuSpellsScreen(showingBook: true)
             case .seasonalshop: SeasonalShopView()
             case .whatsnew: WhatsNewView()
             case .quit: QuitScreen()

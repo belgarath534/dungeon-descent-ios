@@ -2406,3 +2406,119 @@ final class Room3DTests: XCTestCase {
         XCTAssertEqual(s.ey, 0)
     }
 }
+
+final class SpellTests: XCTestCase {
+    func fight(_ cls: String = "Wizard", spells: [String] = [], hp: Int = 10_000) -> Run {
+        var r = Run(character: PlayerCharacter(name: "Sp", cls: cls, race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.spirit = nil
+        r.learnedSpells = spells
+        Combat.begin(&r, against: Enemy(name: "Dummy", icon: "🎯", hp: hp, maxHp: hp, atk: 10...10, gold: 1...1))
+        return r
+    }
+
+    func testShopAndLearning() {
+        XCTAssertEqual(Spells.scrolls.count, 48)
+        XCTAssertEqual(Set(Spells.scrolls.compactMap(\.spellId)).count, 48)
+        var ch = PlayerCharacter(name: "W", cls: "Wizard", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var dice = SeededDice(seed: 1)
+        let book = Spells.shop[0]
+        XCTAssertEqual(Spells.buy(book, character: &ch, gold: 50, subclass: nil, dice: &dice).0, .tooPoor)
+        XCTAssertEqual(Spells.buy(book, character: &ch, gold: 500, subclass: nil, dice: &dice).0, .book)
+        XCTAssertTrue(Spells.hasBook(ch))
+        // Spell Weaver never fails to learn.
+        let frost = Spells.entry("frost-lance")!
+        XCTAssertEqual(Spells.buy(frost, character: &ch, gold: 500, subclass: "spell-weaver", dice: &dice).0, .learned)
+        XCTAssertEqual(Spells.learned(ch), ["frost-lance"])
+        XCTAssertEqual(Spells.buy(frost, character: &ch, gold: 500, subclass: nil, dice: &dice).0, .alreadyKnown)
+        // A warrior carries the scroll instead.
+        var w = PlayerCharacter(name: "X", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        let (res, item) = Spells.buy(frost, character: &w, gold: 500, subclass: nil, dice: &dice)
+        XCTAssertEqual(res, .scroll)
+        XCTAssertEqual(item?.type, "spell-scroll")
+    }
+
+    func testFrostLanceFreezesAndCooldown() {
+        var r = fight(spells: ["frost-lance"])
+        var dice = SeededDice(seed: 2)
+        let res = Spells.cast(&r, "frost-lance", dice: &dice)
+        XCTAssertTrue(res.acted)
+        XCTAssertGreaterThan(res.playerDamage, 0)
+        XCTAssertNil(res.enemyDamage, "casting is a free action")
+        XCTAssertEqual(r.spellCooldown, 3)
+        XCTAssertFalse(Spells.cast(&r, "frost-lance", dice: &dice).acted)
+        let hp = r.hp
+        _ = Combat.takeTurn(&r, .defend, dice: &dice)
+        XCTAssertEqual(r.hp, hp, "the frozen enemy skips its attack")
+        XCTAssertEqual(r.spellCooldown, 2)
+    }
+
+    func testShieldsAndPacts() {
+        var dice = SeededDice(seed: 3)
+        var r = fight(spells: ["blood-shield", "grave-pact", "phantom-step"])
+        _ = Spells.cast(&r, "blood-shield", dice: &dice)
+        let hp = r.hp
+        _ = Combat.takeTurn(&r, .defend, dice: &dice)
+        XCTAssertEqual(r.hp, hp)
+
+        r = fight(spells: ["grave-pact"])
+        r.enemy!.atk = 500...500
+        _ = Spells.cast(&r, "grave-pact", dice: &dice)
+        XCTAssertEqual(r.hp, 1)
+        let before = r.fight.gravePactHp
+        for _ in 0..<3 { _ = Combat.takeTurn(&r, .defend, dice: &dice) }
+        XCTAssertGreaterThanOrEqual(r.hp, before, "HP comes back when the pact ends")
+
+        r = fight(spells: ["phantom-step"])
+        _ = Spells.cast(&r, "phantom-step", dice: &dice)
+        let full = r.hp
+        let t = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertEqual(t.playerDamage, 0, "can't attack while intangible")
+        XCTAssertEqual(r.hp, full, "the hit passes through")
+    }
+
+    func testTimeLordAndShadowStepAndRefusals() {
+        var dice = SeededDice(seed: 4)
+        var r = fight("TimeMage", spells: ["time-stop"])
+        r.subclass = "time-lord"
+        _ = Spells.cast(&r, "time-stop", dice: &dice)
+        XCTAssertEqual(r.enemy?.stunTurns, 3)
+        XCTAssertGreaterThan(r.hp, 0)
+
+        r = fight(spells: ["shadow-step"])
+        XCTAssertTrue(Spells.cast(&r, "shadow-step", dice: &dice).fled)
+        XCTAssertFalse(r.inCombat)
+
+        r = fight(spells: ["the-last-word", "the-sacrifice"])
+        XCTAssertFalse(Spells.cast(&r, "the-last-word", dice: &dice).acted)
+        XCTAssertEqual(r.spellCooldown, 0, "a refused spell costs no cooldown")
+        let kill = Spells.cast(&r, "the-sacrifice", dice: &dice)
+        XCTAssertTrue(kill.enemyDied)
+    }
+
+    func testScrollsDropsAndSubclasses() {
+        var dice = SeededDice(seed: 5)
+        var r = fight("Warrior")
+        r.inventory.append(Spells.scrollItem(Spells.entry("soulfire")!))
+        let i = r.inventory.count - 1
+        let res = Spells.read(&r, at: i, dice: &dice)
+        XCTAssertTrue(res.acted)
+        XCTAssertFalse(r.inventory.contains { $0.type == "spell-scroll" })
+        XCTAssertEqual(r.spellCooldown, 0, "scrolls don't start the cooldown")
+
+        r.subclass = "void-born"
+        XCTAssertNotNil(Spells.startingScrolls(&r, dice: &dice))
+        XCTAssertEqual(r.inventory.filter { $0.type == "spell-scroll" }.count, 3)
+
+        var w = fight("Arcanist", spells: ["soulfire", "void-bolt"])
+        w.subclass = "spell-weaver"
+        _ = Spells.cast(&w, "soulfire", dice: &dice)
+        XCTAssertEqual(w.spellCooldown, 0, "Spell Weaver casts twice before the cooldown")
+        _ = Spells.cast(&w, "void-bolt", dice: &dice)
+        XCTAssertEqual(w.spellCooldown, 3)
+
+        var drops = 0
+        for _ in 0..<400 { if Spells.drop(&r, dice: &dice) != nil { drops += 1 } }
+        XCTAssertTrue((5...40).contains(drops))
+    }
+}

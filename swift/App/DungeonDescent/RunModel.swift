@@ -77,6 +77,7 @@ final class RunModel: ObservableObject {
         // and last night's dream buff applies once.
         r.minion = Home.activeMinion(game.store)
         r.skillLevels = Home.skillLevels(game.store)
+        r.learnedSpells = Spells.learned(game.characters[index])
         Home.resetSleep(store: game.store)
         if case .string(let dream)? = game.characters[index].extra["dream"] {
             if let note = Home.applyDream(dream, to: &r) { r.startNotes.append("💤 " + note) }
@@ -678,6 +679,9 @@ final class RunModel: ObservableObject {
         let lines = Subclasses.choose(&r, id)
         guard !lines.isEmpty else { return }
         lines.forEach { add($0) }
+        var d = dice
+        if let line = Spells.startingScrolls(&r, dice: &d) { add(line) }
+        dice = d
         journal("Chose the \(sub.name) subclass.", in: &r)
         run = r
         persist()
@@ -787,6 +791,12 @@ final class RunModel: ObservableObject {
         if let drop = Inventory.equipmentDrop(&r, dice: &d) {
             add("🎁 Found: \(drop.icon) \(drop.name) Level \(drop.level ?? 1)! Check inventory.")
             dropLine = " Item found. \(drop.name) Level \(drop.level ?? 1). Open inventory to equip it."
+        }
+        if let scroll = Spells.drop(&r, dice: &d) {
+            let rarity = { if case .string(let x)? = scroll.extra["rarity"] { return x }; return "common" }()
+            add("📜 \(scroll.name) dropped! [\(rarity.uppercased())]")
+            dropLine += " Spell scroll dropped! \(scroll.name). \(rarity) rarity. Check your inventory."
+            Sound.sfx("sfx-loot")
         }
         Sound.sfx("sfx-enemy-die")
         achievements.record(.enemyKilled(e, run: r))
@@ -1262,6 +1272,170 @@ final class RunModel: ObservableObject {
         finish(r, d, phase: .fighting, spoken: spoken)
     }
 
+    // MARK: Spells
+
+    var canCast: Bool { phase == .fighting && !run.learnedSpells.isEmpty }
+
+    /// castSpell from the Spell Book: a free action with a cooldown.
+    func castSpell(_ id: String) {
+        guard phase == .fighting else { return }
+        var r = run
+        var d = dice
+        let result = Spells.cast(&r, id, dice: &d, wallet: game.wallet, options: .init(classTraits: AppSettings.classTraits))
+        spellDone(result, r, d)
+    }
+
+    /// A spell scroll from the bag: one cast, no cooldown. Outside a fight a
+    /// magic class with a Spell Book tries to learn it instead.
+    func readScroll(at index: Int) {
+        guard run.inventory.indices.contains(index) else { return }
+        if !run.inCombat {
+            learnScroll(at: index)
+            return
+        }
+        var r = run
+        var d = dice
+        let result = Spells.read(&r, at: index, dice: &d, wallet: game.wallet, options: .init(classTraits: AppSettings.classTraits))
+        spellDone(result, r, d)
+    }
+
+    private func learnScroll(at index: Int) {
+        let item = run.inventory[index]
+        guard case .string(let id)? = item.extra["spellId"], let entry = Spells.entry(id) else { return }
+        let ch = game.characters[characterIndex]
+        guard Spells.hasBook(ch), Spells.isMagic(ch.cls) || run.subclass == "pure-magic" else {
+            Feedback.announce("\(item.name). Read it in combat to cast it once." + (Spells.isMagic(ch.cls) ? " With a Spell Book you could learn it." : ""))
+            return
+        }
+        var r = run
+        var d = dice
+        r.inventory.remove(at: index)
+        var copy = ch
+        // A scroll in hand costs nothing more to try.
+        let (res, _) = Spells.buy(entry, character: &copy, gold: entry.cost, subclass: r.subclass, dice: &d)
+        let msg: String
+        switch res {
+        case .learned:
+            game.updateCharacter(characterIndex) { Spells.setLearned(Spells.learned(copy), on: &$0) }
+            r.learnedSpells = Spells.learned(copy)
+            msg = "✨ \(entry.name) learned permanently! It is now in your spell book."
+            Sound.sfx("sfx-unlock")
+        case .alreadyKnown:
+            r.inventory.insert(item, at: index)
+            msg = "You already know \(entry.name). Read it in combat to cast it once."
+        default:
+            msg = "📜 Failed to learn \(entry.name). The scroll dissolved."
+            Sound.sfx("sfx-select")
+        }
+        add(msg)
+        run = r
+        dice = d
+        persist()
+        Feedback.announce(msg)
+    }
+
+    private func spellDone(_ result: TurnResult, _ r0: Run, _ d0: SystemDice) {
+        var r = r0, d = d0
+        guard result.acted else {
+            Feedback.announce(result.announcement ?? "You can't cast that now.")
+            return
+        }
+        result.log.forEach { add($0) }
+        track(&r, result)
+        Sound.sfx(result.playerDamage > 0 ? "sfx-crit" : "sfx-unlock")
+        if result.playerDamage > 0 { Feedback.hit(heavy: true) }
+        var spoken = result.announcement ?? result.log.joined(separator: " ")
+        if r.spellCooldown > 0 { spoken += " Spells ready again in \(r.spellCooldown) turns." }
+        spoken += rewardFallen(result.alsoDefeated, &r, &d)
+        if r.fight.loseRealityUntil > 0 { startRealityClock() }
+        if result.fled {
+            finish(r, d, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring, spoken: spoken)
+            playMusic()
+            return
+        }
+        if result.enemyDied, let e = result.defeated ?? r.enemy {
+            run = r; dice = d
+            enemyDefeated(e, spoken: spoken, result: result)
+            return
+        }
+        if result.playerDied || r.isDead {
+            run = r; dice = d
+            playerDied(killedBy: "a spell gone wrong", spoken: spoken)
+            return
+        }
+        if let b = result.bossPhaseMessage, !spoken.contains(b) { spoken += " " + b }
+        finish(r, d, phase: .fighting, spoken: spoken)
+    }
+
+    /// Lose Reality: a minute-by-minute warning, and the end when time's up.
+    private var realityTimer: Timer?
+
+    private func startRealityClock() {
+        guard realityTimer == nil else { return }
+        realityTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.realityTick() }
+        }
+    }
+
+    private func realityTick() {
+        let until = run.fight.loseRealityUntil
+        guard until > 0, run.inCombat else {
+            realityTimer?.invalidate()
+            realityTimer = nil
+            return
+        }
+        let left = Int(((until - Date().timeIntervalSince1970) / 60).rounded(.up))
+        if left > 0 {
+            add("🌀 Reality slipping. \(left) minute\(left == 1 ? "" : "s") remaining.")
+            Feedback.announce("Reality slipping. \(left) minute\(left == 1 ? "" : "s") remaining.")
+            return
+        }
+        realityTimer?.invalidate()
+        realityTimer = nil
+        var r = run
+        r.hp = 0
+        r.inCombat = false
+        add("🌀 You ceased to exist.")
+        run = r
+        playerDied(killedBy: "Lose Reality", spoken: "Time is up. You ceased to exist.")
+    }
+
+    /// The Arcane Shop during a run: run gold (and your saved gold with it).
+    func buySpell(_ entry: SpellEntry) -> String {
+        var r = run
+        var d = dice
+        var ch = game.characters[characterIndex]
+        let (res, item) = Spells.buy(entry, character: &ch, gold: r.gold, subclass: r.subclass, dice: &d)
+        let msg: String
+        switch res {
+        case .tooPoor: msg = "Not enough gold. Need \(entry.cost) gold."
+        case .alreadyHaveBook: msg = "You already have a Spell Book."
+        case .alreadyKnown: msg = "You already know \(entry.name)."
+        case .book: msg = "📖 Spell Book acquired. Magic classes can now learn spells permanently."
+        case .learned: msg = "✨ \(entry.name) learned permanently! It is now in your spell book."
+        case .failedToLearn: msg = "📜 Failed to learn \(entry.name). The scroll dissolved."
+        case .scroll: msg = "\(entry.name) added to inventory. One time use in combat."
+        }
+        if ![.tooPoor, .alreadyHaveBook, .alreadyKnown].contains(res) {
+            r.gold -= entry.cost
+            _ = game.wallet.spendGold(entry.cost)
+            if let item { r.inventory.append(item) }
+            r.learnedSpells = Spells.learned(ch)
+            let saved = ch
+            game.updateCharacter(characterIndex) { $0.extra["spellBook"] = saved.extra["spellBook"]; $0.extra["learnedSpells"] = saved.extra["learnedSpells"] }
+            Sound.sfx("sfx-purchase")
+            add(msg)
+        } else {
+            Sound.sfx("sfx-select")
+        }
+        run = r
+        dice = d
+        persist()
+        return msg
+    }
+
+    var character: PlayerCharacter { game.characters[characterIndex] }
+
     func pickSkill(_ effect: String) {
         var r = run
         guard let s = Skills.pick(&r, effect) else { return }
@@ -1279,6 +1453,14 @@ final class RunModel: ObservableObject {
 
     func useItem(at index: Int) {
         guard phase != .victory && phase != .defeat else { return }
+        if run.inCombat && run.fight.noItems > 0 {
+            Feedback.announce("The Void Anchor holds you too. No items for \(run.fight.noItems) more turn\(run.fight.noItems == 1 ? "" : "s").")
+            return
+        }
+        if run.inventory.indices.contains(index) && run.inventory[index].type == "spell-scroll" {
+            readScroll(at: index)
+            return
+        }
         if run.inventory.indices.contains(index) && run.inventory[index].type == "gamblers-spirit" {
             startGamble(at: index)
             return
@@ -1404,6 +1586,10 @@ final class RunModel: ObservableObject {
         }
         if let line = Subclasses.onFloor(&r, dice: &d) { add(line) }
         if let line = Blacksmith.onFloor(&r) { add(line) }
+        if r.voidCurse {
+            r.voidCurse = false
+            add("⚗️ The Void Curse lifts on the new floor.")
+        }
         r.event = Events.active()
         if r.xpBoostFloors > 0 {
             r.xpBoostFloors -= 1
