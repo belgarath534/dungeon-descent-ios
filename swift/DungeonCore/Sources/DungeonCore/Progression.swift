@@ -123,6 +123,7 @@ public enum Progression {
         // Event gold bonuses: the web version listed them but never paid them.
         if let ev = Events.bonuses(run.event), ev.goldMult != 1 { g = jsRound(Double(g) * ev.goldMult) }
         g = Challenges.gold(g, run) * Corruption.goldMult(run)
+        if let w = run.weather, w.goldMult != 1 { g = jsRound(Double(g) * w.goldMult) }
         if run.weaponEffect == "soulbound" { run.sp = min(run.maxSp, run.sp + 5) }
         var luckNote = ""
         if run.luckKills > 0 {

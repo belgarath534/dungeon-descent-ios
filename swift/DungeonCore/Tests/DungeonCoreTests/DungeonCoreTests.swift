@@ -3269,3 +3269,29 @@ final class SpecialEncounterTests: XCTestCase {
         XCTAssertTrue(Home.minions(store).contains { $0.name == "The Witness" })
     }
 }
+
+final class WeatherTests: XCTestCase {
+    func testWeatherEffects() {
+        var r = Run(character: PlayerCharacter(name: "W", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        let max = r.maxHp
+        r.weather = Weather.byDungeon["Crypt of Malachar"]!.first { $0.id == "hallowed-ground" }
+        r.maxHp += 25
+        XCTAssertEqual(r.maxHp, max + 25)
+        r.hp = 1
+        r.inventory = [Item(name: "Health Potion", icon: "🧪", type: "potion", desc: "", heal: 40)]
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.hp, 1 + 56, "Hallowed Ground: potions heal 40% more")
+        var sd = SeededDice(seed: 2)
+        Skills.start(&r, dice: &sd)
+        r.weather = Weather.byDungeon["The Abyssal Deep"]!.first { $0.id == "strong-current" }
+        let s = Skills.unlocked(r).first { $0.spCost >= 4 }!
+        let withCurrent = Skills.cost(s, r)
+        r.weather = nil
+        XCTAssertEqual(Skills.cost(s, r), withCurrent + 2, "the Abyssal Deep's conditions work (they didn't on the web)")
+        var dice = SeededDice(seed: 8)
+        for d in GameData.dungeons {
+            XCTAssertFalse(Weather.roll(for: d, dice: &dice).name.isEmpty)
+        }
+    }
+}

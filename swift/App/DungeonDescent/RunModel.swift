@@ -134,6 +134,7 @@ final class RunModel: ObservableObject {
         CoinShop.apply(CoinShop.owned(game.store), to: &r, dice: &cd, wallet: game.wallet)
         game.achievements.trackGlobal("runsStarted")
         var d = SystemDice()
+        Weather.start(&r, dice: &d)
         Skills.start(&r, dice: &d)
         if r.floor >= Challenges.bossFloor(r) && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
         Encounters.planFloor(&r, dice: &d)
@@ -159,6 +160,10 @@ final class RunModel: ObservableObject {
         startForest()
         if WhisperingForest.here(r) { add("🌲 The forest's corruption creeps in while you explore. Music Boxes and potions push it back.") }
         if let c = Corruption.status(r) { add(c) }
+        if let w = r.weather {
+            add(w.announcement)
+            Feedback.announce(w.announcement, after: 4)
+        }
         let hello = guideSays(.dungeonStart, r)
         if !hello.isEmpty { Feedback.announce(hello, after: 2.5) }
         if r.hunter != nil {
@@ -373,6 +378,14 @@ final class RunModel: ObservableObject {
             _ = achievements.check()
             add(line)
             Sound.sfx("sfx-unlock")
+            spoken += " " + line
+        }
+
+        // Tonight's conditions can cost HP every room.
+        if let w = r.weather, w.roomHpLoss > 0 {
+            r.hp = max(1, r.hp - w.roomHpLoss)
+            let line = "🌡️ \(w.name) — minus \(w.roomHpLoss) HP from the conditions."
+            add(line)
             spoken += " " + line
         }
 
@@ -1497,6 +1510,10 @@ final class RunModel: ObservableObject {
         let reward = Progression.rewardKill(&r, e, dice: &d, wallet: game.wallet)
         add(reward.message)
         var dropLine = ""
+        if let w = r.weather, w.hpPerKill > 0, r.hp < r.maxHp {
+            r.hp = min(r.maxHp, r.hp + w.hpPerKill)
+            add("\(w.icon) \(w.name) — plus \(w.hpPerKill) HP from the kill.")
+        }
         if let line = HollowEvents.onKill(e, &r) {
             add(line)
             dropLine += " " + line
@@ -2004,6 +2021,7 @@ final class RunModel: ObservableObject {
         let next = Challenges.gauntlet[stage]
         r.gauntletStage = stage
         r.dungeon = next
+        r.weather = Weather.roll(for: next, dice: &d)
         r.floor = 1
         r.roomsOnFloor = 0
         r.floorRoomsNeeded = Rooms.roomsNeeded(floor: 1, difficulty: r.difficulty, dice: &d)

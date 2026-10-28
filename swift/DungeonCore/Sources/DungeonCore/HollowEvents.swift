@@ -11,7 +11,7 @@ public enum HollowEvents {
     /// Child just by being there (Divine Presence).
     public static func encounter(_ run: inout Run, classTraits: Bool, dice: inout some Dice) -> (event: String?, line: String?) {
         guard run.dungeon == hollow else { return (nil, nil) }
-        if run.floor >= 3 && dice.chance(0.10) {
+        if run.floor >= 3 && dice.chance(run.weather?.silentNight == true ? 0.20 : 0.10) {
             if run.cls == "Paladin" && classTraits && !run.weepingChildSoothed {
                 run.weepingChildSoothed = true
                 return (nil, "🛡 Divine Presence. The Weeping Child is soothed by your holy aura.")

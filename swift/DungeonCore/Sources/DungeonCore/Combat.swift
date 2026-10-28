@@ -111,6 +111,13 @@ public enum Combat {
             let lo = jsRound(Double(e.atk.lowerBound) * m), hi = jsRound(Double(e.atk.upperBound) * m)
             e.atk = lo...max(lo, hi)
         }
+        // The Hollow's Full Moon: 20% stronger.
+        if let m = run.weather?.enemyMult, m != 1 {
+            e.hp = jsRound(Double(e.hp) * m)
+            e.maxHp = e.hp
+            let lo = jsRound(Double(e.atk.lowerBound) * m), hi = jsRound(Double(e.atk.upperBound) * m)
+            e.atk = lo...max(lo, hi)
+        }
         if run.worldCurse { cursed(&e) }
         Challenges.shape(&e, run)
         return e
@@ -160,6 +167,7 @@ public enum Combat {
     /// Your attack roll for this turn: class range plus every bonus.
     static func attackRoll(_ run: Run, dice: inout some Dice) -> Int {
         var a = dice.roll(run.atk) + run.totalAtkBonus
+        if let w = run.weather, w.playerAtkMult != 1 { a = jsRound(Double(a) * w.playerAtkMult) }
         // Blood Moon and the Liberty Shop's Sparkler.
         if let ev = Events.bonuses(run.event), ev.atkBoost > 0 { a = jsRound(Double(a) * (1 + ev.atkBoost)) }
         if run.sparkler { a = jsRound(Double(a) * 1.30) }
@@ -657,6 +665,7 @@ public enum Combat {
             raw = jsRound(Double(raw) * run.fight.soften)
         }
         raw = jsRound(Double(raw) * run.difficulty.enemyDamageMultiplier)
+        if let w = run.weather { raw = jsRound(Double(raw) * w.enemyAtkMult * w.damageTaken) }
         if run.undeadRes && Bestiary.undeadNames.contains(e.name) {
             raw = jsRound(Double(raw) * 0.65)
         }
@@ -665,6 +674,8 @@ public enum Combat {
         let blocked = min(defVal, maxBlock)
         var taken = max(1, raw - blocked)
         if run.has("cu-ember-ward") { taken = max(1, taken - 2) }
+        // Ancient Curse: one more, whatever your defense.
+        if run.weather?.cursedArmor == true { taken += 1 }
         if options.classTraits {
             switch run.cls {
             case "Paladin": taken = max(1, jsRound(Double(taken) * 0.85))

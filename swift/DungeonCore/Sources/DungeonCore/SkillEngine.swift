@@ -68,6 +68,7 @@ public enum Skills {
         if run.race == "Gnome" { c -= 2 }
         if run.has("cu-soul-surge") { c -= 1 }
         c -= Subclasses.skillCostCut(run)
+        c -= run.weather?.spDiscount ?? 0
         if run.halfCostSkills { c /= 2 }
         return max(0, c)
     }

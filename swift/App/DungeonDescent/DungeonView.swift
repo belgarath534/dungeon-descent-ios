@@ -44,6 +44,12 @@ struct DungeonView: View {
                     dailyQuest
                     xpRow
                     roomTracker
+                    if let w = run.weather {
+                        Text("\(w.icon) \(w.name)" + (w.quiet ? "" : " — \(w.effect)"))
+                            .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: w.quiet ? 0x888888 : 0xe0c080))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .accessibilityLabel("Conditions: \(w.name)." + (w.quiet ? "" : " \(w.effect)"))
+                    }
                     if let h = run.hunter { hunterBar(h.dist) }
                     if let c = run.corruption, c > 0 { corruptionBar(c) }
                     if WhisperingForest.here(run) { forestBar(run.forestCorruption) }

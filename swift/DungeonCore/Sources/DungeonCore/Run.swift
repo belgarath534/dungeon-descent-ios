@@ -142,6 +142,8 @@ public struct Run: Codable, Sendable {
     public var npcMet = false
     /// The floor where Friday the 13th's Black Box last appeared.
     public var blackBoxFloor = 0
+    /// Tonight's conditions in this dungeon.
+    public var weather: Weather? = nil
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false
