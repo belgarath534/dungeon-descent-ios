@@ -55,6 +55,7 @@ final class RunModel: ObservableObject {
                     && !(saved.floor >= Challenges.bossFloor(saved) && saved.difficulty != .endless) ? .floorCleared : .exploring
             roomTitle = Rooms.floorName(saved.floor, dungeon: saved.dungeon)
             add("Run resumed on floor \(saved.floor). HP \(saved.hp) of \(saved.maxHp).")
+            if let e = saved.enemy, Medusa.isMedusa(e), e.isDead { medusaChoice = true }
             if let dir = ShadowEvents.securityDirection(saved.pendingEvent) {
                 DispatchQueue.main.async { [weak self] in self?.startSecurityRoom(dir) }
             }
@@ -361,6 +362,16 @@ final class RunModel: ObservableObject {
         let label = "Room \(r.roomsOnFloor) of \(r.floorRoomsNeeded)."
         // Verbose Room Descriptions (Accessibility settings) reads the room text.
         var spoken = AppSettings.verboseRooms ? "\(label) \(roomText)" : label
+        // The Medusa arc: while she's with you, her father may be in this room.
+        if Medusa.walksWithYou(r) && d.chance(Medusa.fatherChance(game.store)) {
+            let line = Medusa.reunion(&r, store: game.store)
+            game.wallet.addGold(50)
+            achievements.increment("medusaReunion")
+            _ = achievements.check()
+            add(line)
+            Sound.sfx("sfx-unlock")
+            spoken += " " + line
+        }
 
         if r.poisonTurns > 0 {
             var lines: [String] = []
@@ -827,6 +838,50 @@ final class RunModel: ObservableObject {
         return said
     }
 
+    // MARK: The Medusa arc
+
+    /// showMedusaChoice: she's beaten; raise the shield or lower it.
+    @Published private(set) var medusaChoice = false
+    private var medusaResolved = false
+
+    /// medusaRaiseShield: she turns to stone, and it's a normal kill.
+    func medusaRaise() {
+        guard medusaChoice, let e = run.enemy else { return }
+        medusaChoice = false
+        medusaResolved = true
+        add("You raise the shield. The gaze reflects. Medusa turns to stone.")
+        enemyDefeated(e, spoken: "You raise the shield. The gaze reflects. Medusa turns to stone.")
+    }
+
+    /// medusaLowerShield: mercy. She walks with you until her father is found.
+    func medusaLower() {
+        guard medusaChoice else { return }
+        medusaChoice = false
+        var r = run
+        let line = Medusa.spare(&r)
+        add(line)
+        var said = line
+        if !earnedSpirits.contains("medusa-spirit") {
+            earnSpirit("medusa-spirit")
+            Sound.sfx("sfx-unlock")
+            add("✦ Medusa spirit unlocked permanently. She guards those who showed her mercy.")
+            said += " Medusa spirit unlocked permanently. She guards those who showed her mercy."
+        }
+        achievements.increment("medusaMercy")
+        _ = achievements.check()
+        finish(r, dice, phase: r.roomsOnFloor >= r.floorRoomsNeeded && r.roomsOnFloor > 0 ? .floorCleared : .exploring,
+               spoken: said + (exitsText.map { " " + $0 } ?? ""))
+        playMusic()
+    }
+
+    /// She Still Looks: the run ends with Medusa still searching for her father.
+    private func medusaStillLooking(_ r: Run) {
+        guard Medusa.walksWithYou(r) else { return }
+        achievements.increment("medusaStillLooks")
+        _ = achievements.check()
+        add("🐍 Medusa never found her father. She still looks for him.")
+    }
+
     // MARK: The Whispering Forest
 
     private var forestTimer: Timer?
@@ -1173,6 +1228,14 @@ final class RunModel: ObservableObject {
     }
 
     private func enemyDefeated(_ e: Enemy, spoken: String, result: TurnResult? = nil) {
+        // Medusa falls: raise the shield or lower it.
+        if Medusa.isMedusa(e) && !medusaResolved {
+            medusaChoice = true
+            persist()
+            Feedback.announce(spoken + " Medusa is defeated. You have a choice. Raise the shield and end it. Or lower the shield and wait. What do you do?", after: 0.6)
+            return
+        }
+        medusaResolved = false
         if Hunter.isHunter(e) {
             hunterSlain(spoken)
             return
@@ -1589,6 +1652,7 @@ final class RunModel: ObservableObject {
     /// All lives gone (showDefeat), or the character itself in Hardcore.
     private func runOver(_ r: Run, killedBy: String, spoken: String) {
         stopHeartbeat()
+        medusaStillLooking(r)
         if r.hardcore {
             run = r
             phase = .defeat
@@ -1618,6 +1682,7 @@ final class RunModel: ObservableObject {
     }
 
     private func victory(_ spoken: String) {
+        medusaStillLooking(run)
         if let stage = run.gauntletStage, stage + 1 < Challenges.gauntlet.count {
             gauntletNext(stage + 1, spoken)
             return

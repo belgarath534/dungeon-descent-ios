@@ -132,6 +132,8 @@ public struct Run: Codable, Sendable {
     public var shadowNotes = false
     /// The Whispering Forest's corruption meter, 0–100.
     public var forestCorruption = 0
+    /// The Medusa arc this run.
+    public var medusa = Medusa.Arc()
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false
@@ -323,6 +325,8 @@ public struct FloorStats: Codable, Sendable, Equatable {
 
 /// Skill effects that last only for the current fight (reset when a new one starts).
 public struct FightEffects: Codable, Sendable {
+    /// Medusa's first gaze: defense down for this many turns.
+    public var gazeTurns = 0
     /// Damage absorbed before HP (Mana Shield, Bone Shield …).
     public var shield = 0
     /// Enemy attacks dodged completely.

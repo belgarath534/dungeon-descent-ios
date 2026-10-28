@@ -53,6 +53,14 @@ public enum Combat {
         run.fight.huntersMarkReady = run.has("cu-hunters-mark")
         if enemy.isBoss { run.bossPhase = 1 }
         var log: [String] = []
+        if Medusa.isMedusa(enemy) {
+            run.medusa.met = true
+            log.append("A rare figure steps from the shadows of the Hollow. Medusa. Her eyes are closed. For now. Her gaze can petrify you.")
+        }
+        if Medusa.walksWithYou(run) {
+            run.fight.medusaGuard = true
+            log.append("🐍 Medusa stands beside you. Serpent Guard — she will absorb one attack this fight.")
+        }
         Spirits.combatStart(&run, log: &log)
         ShadowWorld.combatStart(&run, log: &log)
         Spells.combatStart(&run, log: &log)
@@ -65,6 +73,11 @@ public enum Combat {
         // 15% elite chance from floor 4 (enterRoom)
         let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(0.15)
         let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
+        if !elite, var special = Medusa.encounter(for: run, dice: &dice) {
+            if run.worldCurse { cursed(&special) }
+            Challenges.shape(&special, run)
+            return special
+        }
         if !elite, var shade = WhisperingForest.shade(for: run, dice: &dice) {
             if run.worldCurse { cursed(&shade) }
             Challenges.shape(&shade, run)
@@ -735,6 +748,7 @@ public enum Combat {
 
     /// Counts down timed effects once per turn and applies regeneration and poison.
     public static func tickEffects(_ run: inout Run, log: inout [String]) {
+        Medusa.tick(&run, log: &log)
         if run.tempAtkTurns > 0 {
             run.tempAtkTurns -= 1
             if run.tempAtkTurns == 0 { run.tempAtk = 0; log.append("Your attack boost fades.") }

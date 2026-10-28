@@ -153,6 +153,12 @@ public enum Spirits {
 
     /// Medusa's Serpent Guard and the Void Moth's wings, against a hit.
     static func guards(_ run: inout Run, dice: inout some Dice, log: inout [String]) -> Bool {
+        // Medusa walking with you this run (the Medusa arc) guards like her spirit.
+        if Medusa.walksWithYou(run) && run.fight.medusaGuard {
+            run.fight.medusaGuard = false
+            log.append("🐍 Medusa intercepts the attack! Serpent Guard blocks the hit.")
+            return true
+        }
         guard let sp = awake(run) else { return false }
         if sp.id == "medusa-spirit" && run.fight.medusaGuard {
             run.fight.medusaGuard = false

@@ -3089,3 +3089,36 @@ final class ForestTests: XCTestCase {
         XCTAssertEqual(elsewhere.forestCorruption, 0)
     }
 }
+
+final class MedusaTests: XCTestCase {
+    func testGazeSpareAndReunion() {
+        var r = Run(character: PlayerCharacter(name: "M", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                               dungeon: "The Hollow", difficulty: .wanderer))
+        r.floor = 5
+        var e = Enemy(name: "Medusa", icon: "🐍", hp: 85, maxHp: 85, atk: 10...18, gold: 20...35)
+        e.mechanics["medusa"] = .bool(true)
+        _ = Combat.begin(&r, against: e)
+        XCTAssertTrue(r.medusa.met)
+        var dice = LoadedDice(chances: [true, true, true])
+        var log: [String] = []
+        let def = r.totalDef
+        XCTAssertTrue(Medusa.gaze(&r, dice: &dice, log: &log))
+        XCTAssertEqual(r.totalDef, def - 3)
+        Medusa.tick(&r, log: &log); Medusa.tick(&r, log: &log)
+        XCTAssertEqual(r.totalDef, def, "petrification fades after 2 turns")
+        XCTAssertTrue(Medusa.gaze(&r, dice: &dice, log: &log))
+        XCTAssertTrue(r.frozen)
+        XCTAssertTrue(Medusa.gaze(&r, dice: &dice, log: &log))
+        XCTAssertEqual(r.hp, 0, "turned to stone")
+
+        _ = Medusa.spare(&r)
+        XCTAssertTrue(Medusa.walksWithYou(r))
+        _ = Combat.begin(&r, against: Enemy(name: "Rat", icon: "🐀", hp: 5, maxHp: 5, atk: 1...2, gold: 1...1))
+        XCTAssertTrue(r.fight.medusaGuard)
+        let store = MemoryStore()
+        XCTAssertEqual(Medusa.fatherChance(store), 0.60)
+        _ = Medusa.reunion(&r, store: store)
+        XCTAssertFalse(Medusa.walksWithYou(r))
+        XCTAssertEqual(Medusa.fatherChance(store), 0.57, accuracy: 0.0001)
+    }
+}

@@ -123,6 +123,7 @@ struct DungeonView: View {
         if showRunLog { runLogOverlay }
         if choosingPath { ngPlusChoice }
         if model.hunterChoice { hunterOverlay }
+        if model.medusaChoice { medusaOverlay }
         if showSettings { WebSettingsView { showSettings = false } }
     }
 
@@ -913,6 +914,23 @@ struct DungeonView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Forest corruption: \(c) percent.")
+    }
+
+    /// #ov-medusa-choice
+    private var medusaOverlay: some View {
+        WebOverlay {
+            Text("🐍").font(.system(size: 24)).accessibilityHidden(true)
+            Text("MEDUSA IS DEFEATED").font(Theme.cinzel(9.6)).tracking(4).foregroundStyle(Color(hex: 0x555555))
+            OverlayText(text: "She kneels. Her eyes are still closed. You have a choice.")
+            VStack(spacing: 12) {
+                Button("🛡 Raise the Shield") { model.medusaRaise() }
+                    .buttonStyle(WebButtonStyle(kind: .red))
+                    .accessibilityLabel("Raise the shield — reflect her gaze, end the fight")
+                Button("🤝 Lower the Shield") { model.medusaLower() }
+                    .buttonStyle(WebButtonStyle(kind: .gold))
+                    .accessibilityLabel("Lower the shield — show mercy, she joins you")
+            }
+        }
     }
 
     /// showHunterChoice
