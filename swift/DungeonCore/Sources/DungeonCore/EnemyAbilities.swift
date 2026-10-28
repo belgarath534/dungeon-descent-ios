@@ -40,6 +40,7 @@ enum EnemyAbilities {
             log.append("👻 \(e.name) phases through your attack. It is not entirely here.")
             return 0
         }
+        Chimera.reflect(&run, d, log: &log)
         if basic, let resist = e.number("physResist") {
             d = jsRound(Double(d) * (1 - resist))
         }
@@ -79,6 +80,7 @@ enum EnemyAbilities {
             log.append("\(e.name) gathers itself. Its attacks grow stronger!")
         }
         run.enemy = e
+        Chimera.beforeAttack(&run, log: &log)
         // The Music Box plays instead of attacking.
         if HollowEvents.melody(&run, dice: &dice, log: &log) {
             m.skipAttack = true

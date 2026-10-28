@@ -455,6 +455,18 @@ final class RunModel: ObservableObject {
                        spoken: spoken + " \(ev.title). \(ev.text) " + ev.choices.joined(separator: " or ") + ".")
                 return
             }
+            // The Chimera: three parts, each its own target.
+            if let parts = Chimera.spawn(r, store: game.store, dice: &d) {
+                let name = Chimera.name(parts)
+                Combat.beginAmbush(&r, parts).forEach { add($0) }
+                enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: true))
+                Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
+                let list = parts.map { "\($0.name), \($0.hp) HP, \($0.desc ?? "")" }.joined(separator: " ")
+                add("\(label) \(name) appears!")
+                finish(r, d, phase: .fighting,
+                       spoken: spoken + " \(name) appears! Three parts, each attacks on its own. \(list) Choose a part to target with the target buttons.")
+                return
+            }
             // 20% of fights from floor 3 are ambushes; every fight is on Ambush Day.
             if r.floor >= 3 && (r.event == "ambushday" || d.chance(0.20)),
                let line = startAmbush(&r, &d, label: label) {
@@ -1509,6 +1521,21 @@ final class RunModel: ObservableObject {
         }
         r.enemy = nil
         r.inCombat = false
+        if Chimera.isPart(e) {
+            let corrupted = e.flag("corrupted")
+            let levels = r.level
+            let (g, xp) = Chimera.victory(&r, corrupted: corrupted, dice: &d)
+            game.wallet.addGold(g)
+            _ = Progression.gainXP(&r, xp)
+            achievements.increment("chimeraKills")
+            _ = game.recordBestiaryKill(corrupted ? "The Corrupted Chimera" : "The Chimera")
+            _ = achievements.check()
+            Sound.sfx("sfx-victory")
+            let line = "🐉 \(corrupted ? "The Corrupted Chimera" : "The Chimera") collapses. All parts destroyed. +\(g) gold and \(xp) XP."
+            add(line)
+            said += " " + line
+            if r.level > levels { levelUp = r.level; if r.skillChoices.isEmpty { Skills.offer(&r, dice: &d) } }
+        }
         // killing an enemy = one turn passed: the hunter comes closer.
         if r.hunter != nil {
             run = r

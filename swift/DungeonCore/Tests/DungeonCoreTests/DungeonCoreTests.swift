@@ -3208,3 +3208,26 @@ final class HollowEventTests: XCTestCase {
         XCTAssertFalse(TimeDescender.victory(&r, store: store, dice: &d4).armor, "Chrono Armor only once")
     }
 }
+
+final class ChimeraTests: XCTestCase {
+    func testParts() {
+        let store = MemoryStore()
+        var r = Run(character: PlayerCharacter(name: "C", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                               dungeon: "The Whispering Forest", difficulty: .wanderer))
+        r.floor = 9
+        var dice = SeededDice(seed: 3)
+        let parts = Chimera.spawn(r, store: store, dice: &dice)!
+        XCTAssertEqual(Chimera.name(parts), "The Corrupted Chimera", "always on the forest's floor 9, the first time")
+        var no = LoadedDice(chances: [false])
+        XCTAssertNil(Chimera.spawn(r, store: store, dice: &no), "only the first visit is certain")
+        _ = Combat.beginAmbush(&r, parts)
+        XCTAssertEqual(r.foes.count, 2)
+        var log: [String] = []
+        Chimera.beforeAttack(&r, log: &log)
+        XCTAssertEqual(r.forestCorruption, 15, "the Maw corrupts")
+        r.enemy = parts[1]
+        let hp = r.hp
+        Chimera.reflect(&r, 40, log: &log)
+        XCTAssertEqual(r.hp, hp - 10, "the Thornbound reflects a quarter")
+    }
+}
