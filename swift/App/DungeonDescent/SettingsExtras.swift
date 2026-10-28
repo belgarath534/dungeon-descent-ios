@@ -142,7 +142,8 @@ struct NotificationsPanel: View {
             Text("🔔 Notifications").font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
             Text("Choose what the game can notify you about. You can change these anytime.")
                 .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textDim)
-            ForEach(GameNotifications.prefs, id: \.key) { p in
+            ForEach(GameNotifications.prefs.indices, id: \.self) { i in
+                let p = GameNotifications.prefs[i]
                 if p.key == "xpweekend" {
                     Text("WEEKLY EVENTS").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim).padding(.top, 6)
                 }
@@ -296,7 +297,8 @@ struct HideMenuPanel: View {
             Text("🙈 Hide Menu Items").font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
             Text("Your progress and data are never deleted. Items can be re-enabled here at any time.")
                 .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textDim)
-            ForEach(MenuPrefs.items, id: \.id) { item in
+            ForEach(MenuPrefs.items.indices, id: \.self) { i in
+                let item = MenuPrefs.items[i]
                 let on = !hidden.contains(item.entry)
                 HStack {
                     Text("\(item.icon) \(item.label)").font(Theme.cinzel(12.5)).foregroundStyle(Theme.ashLight).accessibilityHidden(true)
@@ -340,25 +342,26 @@ struct AchievementSoundPicker: View {
             Text("🏆 Achievement Sound").font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)
             Text("Choose the sound that plays when you unlock an achievement. Preview each one before picking.")
                 .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
-            ForEach(AchievementSound.options, id: \.0) { id, name, desc in
+            ForEach(AchievementSound.options.indices, id: \.self) { i in
+                let opt = AchievementSound.options[i]
                 HStack {
-                    Button("▶ Preview") { Sound.sfx(id); Feedback.announce("Previewing \(name).") }
+                    Button("▶ Preview") { Sound.sfx(opt.0); Feedback.announce("Previewing \(opt.1).") }
                         .buttonStyle(ToggleButtonStyle(on: false))
-                        .accessibilityLabel("Preview \(name)")
+                        .accessibilityLabel("Preview \(opt.1)")
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(name).font(Theme.cinzel(11.5)).foregroundStyle(Theme.ashLight)
-                        Text(desc).font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
+                        Text(opt.1).font(Theme.cinzel(11.5)).foregroundStyle(Theme.ashLight)
+                        Text(opt.2).font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
                     }
                     .accessibilityHidden(true)
                     Spacer()
-                    Button(current == id ? "✅ Selected" : "Select") {
-                        AchievementSound.set(id, store: game.store)
-                        current = id
-                        Sound.sfx(id)
-                        Feedback.announce("\(name) selected as achievement sound.")
+                    Button(current == opt.0 ? "✅ Selected" : "Select") {
+                        AchievementSound.set(opt.0, store: game.store)
+                        current = opt.0
+                        Sound.sfx(opt.0)
+                        Feedback.announce("\(opt.1) selected as achievement sound.")
                     }
-                    .buttonStyle(ToggleButtonStyle(on: current == id))
-                    .accessibilityLabel(current == id ? "\(name), selected" : "Select \(name) as achievement sound")
+                    .buttonStyle(ToggleButtonStyle(on: current == opt.0))
+                    .accessibilityLabel(current == opt.0 ? "\(opt.1), selected" : "Select \(opt.1) as achievement sound")
                 }
             }
         }
