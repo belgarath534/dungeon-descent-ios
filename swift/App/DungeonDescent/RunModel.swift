@@ -414,6 +414,16 @@ final class RunModel: ObservableObject {
             return
         }
 
+        // A wandering NPC (once a run) or Friday the 13th's Black Box.
+        if !isBossFloor, let id = SpecialEncounters.npc(&r, dice: &d) ?? SpecialEncounters.blackBox(&r, dice: &d),
+           let ev = Encounters.event(id) {
+            r.pendingEvent = id
+            add("\(label) \(ev.title) — \(ev.text)")
+            if id == "black-box" { Sound.sfx("sfx-trap") }
+            finish(r, d, phase: .event, spoken: spoken + " \(ev.title). \(ev.text) " + ev.choices.joined(separator: " or ") + ".")
+            return
+        }
+
         if let special = Encounters.plannedRoom(r) {
             roomTitle = "\(special.icon) \(special.name)"
             roomText = special.desc
@@ -453,6 +463,13 @@ final class RunModel: ObservableObject {
                 add("\(label) \(ev.title) — \(ev.text)")
                 finish(r, d, phase: .event,
                        spoken: spoken + " \(ev.title). \(ev.text) " + ev.choices.joined(separator: " or ") + ".")
+                return
+            }
+            // Easter: the Easter Bunny.
+            if let id = SpecialEncounters.easterBunny(r, earned: earnedSpirits, dice: &d), let ev = Encounters.event(id) {
+                r.pendingEvent = id
+                add("\(label) \(ev.title) — \(ev.text)")
+                finish(r, d, phase: .event, spoken: spoken + " \(ev.title). \(ev.text) " + ev.choices.joined(separator: " or ") + ".")
                 return
             }
             // The Chimera: three parts, each its own target.
@@ -526,7 +543,22 @@ final class RunModel: ObservableObject {
         let levelBefore = r.level
         if r.pendingEvent == "julio" && choice == 0 { achievements.record(.julioMet) }
         let out = Encounters.choose(choice, &r, dice: &d, wallet: game.wallet)
+        if out.retry {
+            // A requirement wasn't met: nothing happened, choose again.
+            Feedback.warning()
+            Feedback.announce(out.message)
+            return
+        }
         add(out.message)
+        if let sp = out.spirit, !earnedSpirits.contains(sp) {
+            earnSpirit(sp)
+            Sound.sfx("sfx-unlock")
+        }
+        var fragLine = ""
+        if out.voidFragment {
+            fragLine = " " + voidFragment()
+            add(fragLine)
+        }
         if let stat = out.stat {
             achievements.increment(stat)
             _ = achievements.check()
@@ -557,7 +589,7 @@ final class RunModel: ObservableObject {
         }
         if out.item != nil || out.gold > 0 { Sound.sfx("sfx-loot") }
         let q = questFound(&r, item: out.item, gold: out.gold)
-        finishQuietRoom(r, d, spoken: out.message + q)
+        finishQuietRoom(r, d, spoken: out.message + fragLine + q)
     }
 
     private var achievements: AchievementBook { game.achievements }
@@ -818,6 +850,10 @@ final class RunModel: ObservableObject {
         let options = Combat.Options(classTraits: AppSettings.classTraits)
         let result = bomb ? Combat.throwBomb(&r, dice: &d, options: options) : Combat.takeTurn(&r, action, dice: &d, options: options)
         guard result.acted else { return }
+        if r.fight.stolenGold > 0 {
+            _ = game.wallet.spendGold(min(game.wallet.gold, r.fight.stolenGold))
+            r.fight.stolenGold = 0
+        }
         track(&r, result)
         result.log.forEach { add($0) }
         if result.crit { Feedback.hit(heavy: true) } else if result.playerDamage > 0 { Feedback.hit() }
@@ -881,6 +917,38 @@ final class RunModel: ObservableObject {
             said += bountyKill(e, r)
         }
         return said
+    }
+
+    // MARK: The Witness, Void Fragments
+
+    /// checkWitnessAfterKill: the shark was a test, and you passed.
+    private func witnessChooses(_ spoken: String) {
+        var r = run
+        r.enemy = nil
+        r.inCombat = false
+        r.kills += 1
+        var said = SpecialEncounters.witnessText
+        add("🦈 " + said)
+        if SpecialEncounters.witnessJoins(store: game.store) {
+            said += " The Witness joins you as a permanent minion!"
+            add("🦈 The Witness joins you as a permanent minion!")
+        }
+        achievements.award("ach-witness")
+        Sound.sfx("sfx-unlock")
+        finish(r, dice, phase: r.roomsOnFloor >= r.floorRoomsNeeded && r.roomsOnFloor > 0 ? .floorCleared : .exploring,
+               spoken: spoken + " " + said + (exitsText.map { " " + $0 } ?? ""))
+        playMusic()
+    }
+
+    /// addVoidFragment: a piece of the Lost Child's story (25 in all).
+    private func voidFragment() -> String {
+        let n = jsParseInt(game.store.getItem("dd_void_fragments")) ?? 0
+        guard n < 25 else { return "👁 You already have all 25 Void Fragments. Her story is complete in the Chronicles." }
+        game.store.setItem("dd_void_fragments", String(n + 1))
+        game.globalInventory.add(Item(name: "Void Fragment \(n + 1) of 25", icon: "👁", type: "material", desc: "A piece of her story."))
+        _ = achievements.check()
+        Sound.sfx("sfx-unlock")
+        return "👁 Void Fragment \(n + 1) of 25. A new chapter has been added to the Void Chronicles in your library."
     }
 
     // MARK: The Time Descender
@@ -1414,6 +1482,10 @@ final class RunModel: ObservableObject {
         medusaResolved = false
         if TimeDescender.isDescender(e) {
             if TimeDescender.isClock(e) { clockVictory(spoken) } else { startClock(spoken) }
+            return
+        }
+        if SpecialEncounters.isWitness(e) {
+            witnessChooses(spoken)
             return
         }
         if Hunter.isHunter(e) {

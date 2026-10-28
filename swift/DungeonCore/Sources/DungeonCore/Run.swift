@@ -138,6 +138,10 @@ public struct Run: Codable, Sendable {
     public var weepingChildSoothed = false
     /// The Time Descender appears once a run at most.
     public var timeDescenderMet = false
+    /// One wandering NPC a run.
+    public var npcMet = false
+    /// The floor where Friday the 13th's Black Box last appeared.
+    public var blackBoxFloor = 0
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false
@@ -331,6 +335,8 @@ public struct FloorStats: Codable, Sendable, Equatable {
 public struct FightEffects: Codable, Sendable {
     /// Medusa's first gaze: defense down for this many turns.
     public var gazeTurns = 0
+    /// Gold the Unlucky One took this fight (taken from your wallet too).
+    public var stolenGold = 0
     /// Damage absorbed before HP (Mana Shield, Bone Shield …).
     public var shield = 0
     /// Enemy attacks dodged completely.

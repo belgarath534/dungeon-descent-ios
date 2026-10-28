@@ -65,6 +65,12 @@ public enum Encounters {
         public var stat: String? = nil
         /// A music track to play over the moment.
         public var music: String? = nil
+        /// Nothing happened yet (a requirement wasn't met): the choice stays open.
+        public var retry = false
+        /// A spirit to keep for good.
+        public var spirit: String? = nil
+        /// A Void Fragment for the Void Chronicles.
+        public var voidFragment = false
     }
 
     public static func enterSpecial(_ room: SpecialRoom, _ run: inout Run, dice: inout some Dice,
@@ -150,6 +156,9 @@ public enum Encounters {
         Event(id: "abyssal-shrine", title: "Bioluminescent Shrine",
               text: "A glowing altar rises from the ocean floor. Ancient. The light it produces is alive.",
               choices: ["Pray at the shrine", "Ignore it"], weight: 2, dungeons: ["The Abyssal Deep"]),
+        Event(id: "abyssal-witness", title: "The Witness",
+              text: "A shark drifts from the dark. Large. Calm. It circles you slowly. It does not attack immediately. It watches. It has been watching for a long time.",
+              choices: ["Fight the shark"], weight: 1, dungeons: ["The Abyssal Deep"]),
         Event(id: "julio", title: "A Familiar Stranger",
               text: "A figure sits in the corner of the room. He does not look up. His name tag reads: JULIO. You have no idea who this is or how he got here.",
               choices: ["Talk to Julio", "Offer Julio gold", "Leave quietly"], weight: 1, dungeons: nil),
@@ -196,6 +205,7 @@ public enum Encounters {
                          choices: Compass.allCases.map { "Escape \($0.rawValue)" }, weight: 0, dungeons: nil)
         }
         if let e = HollowEvents.event(id) { return e }
+        if let e = SpecialEncounters.event(id) { return e }
         return events.first { $0.id == id }
     }
 
@@ -226,6 +236,9 @@ public enum Encounters {
         run.pendingEvent = nil
         func gold(_ g: Int) { run.gold += g; wallet.addGold(g) }
 
+        if id.hasPrefix("npc-") || ["black-box", "easter-bunny", "easter-bunny-owned", "abyssal-witness"].contains(id) {
+            return SpecialEncounters.choose(id, choice, &run, dice: &dice, wallet: wallet)
+        }
         if id.hasPrefix("weeping-") { return HollowEvents.choose(id, choice, &run, dice: &dice, wallet: wallet) }
         if id.hasPrefix("shadow-") { return ShadowEvents.choose(id, choice, &run, dice: &dice, wallet: wallet) }
 

@@ -214,7 +214,9 @@ public enum Combat {
             switch action {
             case .attack:
                 // Rolled first, like `Math.random() < p || markedKill` in the web version.
-                let rolledCrit = dice.chance(0.10 + run.critBonus + (run.weaponEffect == "keen" ? 0.05 : 0))
+                // The Unlucky One: your luck is zero.
+                let unlucky = run.enemy?.flag("unlucky") == true
+                let rolledCrit = dice.chance(0.10 + run.critBonus + (run.weaponEffect == "keen" ? 0.05 : 0)) && !unlucky
                 let firstStrike = Subclasses.firstStrikeCrit(&run)
                 r.crit = rolledCrit || run.markedKill || firstStrike
                 if run.markedKill {

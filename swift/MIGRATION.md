@@ -98,7 +98,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Lives, death, revive | handleDeath | ✅ lives, 40% revive, Phoenix Feather, resurrection skills, gear saves, hardcore, death log |
 | XP, levels, level points | gainXP, LP_STATS | ✅ |
 | Kill gold | enemyDead | 🟡 base gold, Goblin, Grave Robber, luck |
-| Rooms, search, floors, shop | enterRoom, searchRoom, openShop | 🟡 all but special room events and NPC encounters |
+| Rooms, search, floors, shop | enterRoom, searchRoom, openShop | ✅ |
 | Saving a run in progress | midRunSave | ✅ (Swift's own format) |
 | Import web saves into the Swift app | DDStore (IndexedDB) | ✅ offered on first launch and in Settings (WebSaveImporter) |
 | Elites | ELITE_ENEMIES | ✅ 15% from floor 4, every dungeon and Nightmare |
@@ -133,6 +133,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | The Weeping Child, the Weeping Mother, The Music Box | triggerWeepingChild, sootheChild, triggerWeepingMother, motherOption, startMusicBoxCombat, musicBoxMelody | ✅ The Hollow: the Weeping Child (floor 3+, 10% of fights): pick it up (50%), hum a lullaby (55%), or play the Music Box (75%), or it fights you. A Paladin with class traits soothes it on sight. The Weeping Mother (floor 5+, 7%): lead her to the child you soothed (gold and +5 max HP), do a chore (HP), or fight her. The Music Box enemy plays a three-note melody instead of attacking and leaves the Music Box item when beaten. The achievements count |
 | The Time Descender, The Clock | rollTimeDescender, triggerTimeDescender, timeDescenderPhaseTwo, timeDescenderClockHit, timeDescenderVictory | ✅ floor 6+, 15% of fights, once a run, any dungeon. Beat it and The Clock begins: it strikes three times, 5 seconds apart, while your actions wait; then you get one strike (a heavy strike can miss) or brace. 80–140 gold, 120 XP, and the first win ever leaves Chrono Armor, which stops the clock for good |
 | The Chimera | CHIMERA SYSTEM (CHIMERA_VARIANTS, spawnChimera, chimeraAttack, chimeraEnemyTurn, chimeraVictory) | ✅ 17% of fights from floor 5 (and always on your first visit to the Whispering Forest's floor 9): three parts that each attack and that you target one at a time. The Chimera: Lion Head, Goat Body (regrows 8 HP a turn), Serpent Tail (8 poison a turn). The Corrupted Chimera: the Maw (+15% forest corruption a turn), the Thornbound (reflects a quarter of your damage), the Hollow Shell. The whole beast pays gold and 120 XP when its last part falls. The web version's Hollow Shell was meant to summon help if ignored but never did; in Swift it's simply a third part |
+| Wandering NPCs, The Witness, the Easter Bunny, the Black Box | NPC_ENCOUNTERS, tryNPCEncounter, resolveNPCChoice, abyssal-witness, triggerTheWitness, checkWitnessAfterKill, triggerEasterBunny, easterBunnyChoice, Friday the 13th's Black Box | ✅ once a run on floors 2–9, a Wounded Warrior, Lost Merchant, Mysterious Stranger or the Lost Child (who gives a Void Fragment for the Void Chronicles). The Abyssal Deep's Witness: beat the shark and it joins you as a permanent minion (and its achievement). Easter: the Easter Bunny in 15% of fights (fight it, adopt it as your spirit, or let it go). Friday the 13th: a Black Box in 20% of rooms from floor 2, once a floor; open it and The Unlucky One fights you with your crits at zero and steals gold |
 | Your guide | GUIDE PERSONALITY SYSTEM (GUIDE_DIALOGUE), COMPANION SYSTEM (companionSay, companionOn…), toggleGuideFromPause | ✅ the companion you named (Mira by default) speaks in your chosen personality (encouraging, sarcastic, mysterious, calm) when a run starts, at level ups, when you drop to a quarter of your health, when a boss rises, when the hunter is 3 rooms away, when you lose a life and when you win. Each line is said right after what happened and kept in the run log. The pause menu switches the guide and Hunter Mode on or off for the character. Not yet: the achievement lines and the speech-bubble picture |
 | Shake to Attack | initShakeToAttack, toggleShakeAttack (dd_shake) | ✅ Settings → Audio → Shake to Attack. In a fight, a shake attacks and a hard shake uses your first skill you can afford, 0.8 seconds apart, at the web version's thresholds. Uses the iPhone's motion sensor directly, so there's no permission prompt |
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
@@ -428,3 +429,12 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **Chrono Armor froze the fight.** With the armor, phase 2 skipped the clock but never
   opened the strike window, so no attack could land and the fight couldn't end. Swift lets
   you strike freely.
+- **One wandering NPC per app launch, not per run.** The "once a run" flag was never
+  reset, so after the first NPC you'd never meet another until you restarted the game.
+- **The Lost Child gave two Void Fragments at once.** Her reward and a second, separate
+  call both added one. Swift gives one.
+- **The Wanderers Rune couldn't be used.** It was a rune with no effect, so using it did
+  nothing. In Swift it's a keepsake you can sell.
+- **Beating The Unlucky One ended the whole dungeon.** It was marked as a boss, and killing a
+  boss means victory, so a Black Box on floor 2 could win the run on the spot. In Swift it's
+  a tough elite.

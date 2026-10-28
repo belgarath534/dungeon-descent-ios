@@ -841,7 +841,7 @@ final class EncounterTests: XCTestCase {
             if let e = Encounters.rollEvent(newRun("The Abyssal Deep"), dice: &dice) { abyss.insert(e.id) }
         }
         XCTAssertEqual(crypt, ["julio", "shrine", "chest", "wounded", "inscription"])
-        XCTAssertEqual(abyss, ["abyssal-singing", "abyssal-crack", "abyssal-ship", "abyssal-shrine"])
+        XCTAssertEqual(abyss, ["abyssal-singing", "abyssal-crack", "abyssal-ship", "abyssal-shrine", "abyssal-witness"])
     }
 
     func testEveryEventChoiceResolves() {
@@ -3229,5 +3229,43 @@ final class ChimeraTests: XCTestCase {
         let hp = r.hp
         Chimera.reflect(&r, 40, log: &log)
         XCTAssertEqual(r.hp, hp - 10, "the Thornbound reflects a quarter")
+    }
+}
+
+final class SpecialEncounterTests: XCTestCase {
+    func testNPCsBoxBunnyWitness() {
+        let store = MemoryStore()
+        let w = Wallet(store: store) { _ in }
+        var r = Run(character: PlayerCharacter(name: "N", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.floor = 3
+        var dice = LoadedDice(chances: [true])
+        XCTAssertNotNil(SpecialEncounters.npc(&r, dice: &dice))
+        dice = LoadedDice(chances: [true])
+        XCTAssertNil(SpecialEncounters.npc(&r, dice: &dice), "one a run")
+
+        r.pendingEvent = "npc-wounded-warrior"
+        r.inventory = []
+        XCTAssertTrue(Encounters.choose(0, &r, dice: &dice, wallet: w).retry, "no potion: choose again")
+
+        r.event = "friday13"
+        dice = LoadedDice(chances: [true])
+        XCTAssertEqual(SpecialEncounters.blackBox(&r, dice: &dice), "black-box")
+        dice = LoadedDice(chances: [true])
+        XCTAssertNil(SpecialEncounters.blackBox(&r, dice: &dice), "once a floor")
+        r.pendingEvent = "black-box"
+        let box = Encounters.choose(0, &r, dice: &dice, wallet: w)
+        XCTAssertEqual(box.enemy?.name, "The Unlucky One")
+        XCTAssertFalse(box.enemy!.isBoss, "beating it mustn't end the run as a victory")
+
+        r.event = "easter"
+        dice = LoadedDice(chances: [true])
+        XCTAssertEqual(SpecialEncounters.easterBunny(r, earned: ["easter-bunny"], dice: &dice), "easter-bunny-owned")
+        r.pendingEvent = "easter-bunny"
+        XCTAssertEqual(Encounters.choose(1, &r, dice: &dice, wallet: w).spirit, "easter-bunny")
+
+        XCTAssertTrue(SpecialEncounters.witnessJoins(store: store))
+        XCTAssertFalse(SpecialEncounters.witnessJoins(store: store), "only once")
+        XCTAssertTrue(Home.minions(store).contains { $0.name == "The Witness" })
     }
 }

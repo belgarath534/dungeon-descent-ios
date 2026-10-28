@@ -121,6 +121,7 @@ enum EnemyAbilities {
 
     /// After the enemy's hit lands.
     static func afterAttack(_ run: inout Run, taken: Int, dice: inout some Dice, log: inout [String]) {
+        SpecialEncounters.steal(&run, dice: &dice, log: &log)
         guard var e = run.enemy else { return }
         defer { run.enemy = e }
         if let p = e.number("lifesteal"), taken > 0 {
