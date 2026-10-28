@@ -135,6 +135,7 @@ final class RunModel: ObservableObject {
         game.achievements.trackGlobal("runsStarted")
         var d = SystemDice()
         Weather.start(&r, dice: &d)
+        _ = RunModifiers.start(&r, store: game.store, wallet: game.wallet, dice: &d)
         Skills.start(&r, dice: &d)
         if r.floor >= Challenges.bossFloor(r) && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
         Encounters.planFloor(&r, dice: &d)
@@ -163,6 +164,11 @@ final class RunModel: ObservableObject {
         if let w = r.weather {
             add(w.announcement)
             Feedback.announce(w.announcement, after: 4)
+        }
+        if let m = RunModifiers.modifier(r.modifier) {
+            let line = "🎲 Run modifier: \(m.icon) \(m.name). \(m.desc)"
+            add(line)
+            Feedback.announce("Run modifier. \(m.name). \(m.desc) You can turn run modifiers off in Settings, Gameplay.", after: 4.5)
         }
         let hello = guideSays(.dungeonStart, r)
         if !hello.isEmpty { Feedback.announce(hello, after: 2.5) }
@@ -854,6 +860,10 @@ final class RunModel: ObservableObject {
 
     func act(_ action: PlayerAction, bomb: Bool = false) {
         guard phase == .fighting else { return }
+        if action == .defend && RunModifiers.noDefend(run) {
+            Feedback.announce("Cannot defend in Berserk Mode.")
+            return
+        }
         if let e = run.enemy, TimeDescender.isClock(e) {
             clockHit(action)
             return
@@ -1988,6 +1998,10 @@ final class RunModel: ObservableObject {
             add("✦ Rare Spirit Unlocked: \(sp.icon) \(sp.name)! Saved forever.")
             Feedback.announce("Rare Spirit unlocked: \(sp.name)! Saved to your character forever. Requires level 5 to use.")
         }
+        if let prize = RunModifiers.bossPrize(&run, dice: &d) {
+            add("💀 Death March reward: \(prize.icon) \(prize.name)! Check your inventory.")
+            Feedback.announce("Death March reward: a legendary \(prize.name).", after: 1.5)
+        }
         if let prize = Corruption.bossPrize(&run, dice: &d) {
             add("☠ Corruption Run reward: \(prize.icon) \(prize.name)! Check your inventory.")
             Feedback.announce("Corruption Run reward: a legendary \(prize.name).", after: 1)
@@ -2024,7 +2038,7 @@ final class RunModel: ObservableObject {
         r.weather = Weather.roll(for: next, dice: &d)
         r.floor = 1
         r.roomsOnFloor = 0
-        r.floorRoomsNeeded = Rooms.roomsNeeded(floor: 1, difficulty: r.difficulty, dice: &d)
+        r.floorRoomsNeeded = RunModifiers.rooms(Rooms.roomsNeeded(floor: 1, difficulty: r.difficulty, dice: &d), r)
         r.upcomingRooms = []
         r.guardianDone = false
         r.enemy = nil
@@ -2426,7 +2440,7 @@ final class RunModel: ObservableObject {
         var d = dice
         r.floor += 1
         r.roomsOnFloor = 0
-        r.floorRoomsNeeded = Rooms.roomsNeeded(floor: r.floor, difficulty: r.difficulty, bossFloor: Challenges.bossFloor(r), dice: &d)
+        r.floorRoomsNeeded = RunModifiers.rooms(Rooms.roomsNeeded(floor: r.floor, difficulty: r.difficulty, bossFloor: Challenges.bossFloor(r), dice: &d), r)
         r.upcomingRooms = []
         r.gearSavedThisFloor = false
         r.guardianDone = false
@@ -2524,7 +2538,9 @@ final class RunModel: ObservableObject {
         finish(r, dice, phase: .exploring, spoken: "Wandering floor \(r.floor). 3 more rooms added. Explore carefully.")
     }
 
-    func price(_ entry: Inventory.ShopItem) -> Int { Spirits.shopPrice(Inventory.price(entry.item, hour: hour), run) }
+    func price(_ entry: Inventory.ShopItem) -> Int {
+        Spirits.shopPrice(RunModifiers.potionCost(entry.item, Inventory.price(entry.item, hour: hour), run), run)
+    }
 
     func buy(_ id: Int) {
         guard phase == .shopping, let i = shop.firstIndex(where: { $0.id == id }) else { return }

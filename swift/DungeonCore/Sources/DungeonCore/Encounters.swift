@@ -212,7 +212,8 @@ public enum Encounters {
     /// A quiet room has a 10% chance of an event (rollDungeonEvent). General events
     /// don't happen in the Abyssal Deep, which has its own.
     public static func rollEvent(_ run: Run, dice: inout some Dice) -> Event? {
-        guard dice.chance(0.10) else { return nil }
+        // The Watching: no event rooms.
+        guard !RunModifiers.noEvents(run), dice.chance(0.10) else { return nil }
         var pool: [Event] = []
         for e in events {
             if let d = e.dungeons, !d.contains(run.dungeon) { continue }

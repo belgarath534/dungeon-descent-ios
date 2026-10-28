@@ -3,8 +3,7 @@ import UIKit
 import DungeonCore
 
 /// The web version's #settings-screen: a list of categories, each opening
-/// its own panel. Audio, Accessibility, Gameplay and General work; the rest
-/// say they're coming.
+/// its own panel. Language and Developer Tools still say they're coming.
 @MainActor
 struct WebSettingsView: View {
     @EnvironmentObject var game: GameModel
@@ -24,6 +23,7 @@ struct WebSettingsView: View {
     @AppStorage("swift_verbose_rooms") private var verboseRooms = true
     @AppStorage("swift_combat_announcements") private var combatAnnouncements = true
     @State private var threeD = false
+    @State private var runModifiers = true
     @State private var td = ThreeDMode.Settings()
 
     struct Category {
@@ -52,11 +52,18 @@ struct WebSettingsView: View {
                  label: "Beta Features — experimental features you can test", tag: "BETA"),
         Category(id: "3dmode", icon: "🧊", name: "3D Settings", desc: "Graphics and performance options for 3D Mode",
                  label: "3D Settings — adjust graphics and performance for 3D Mode"),
+        Category(id: "redeem", icon: "🎁", name: "Redeem Code", desc: "Enter a promo code, birthday code, or secret code",
+                 label: "Redeem Code — enter promo or birthday codes"),
+        Category(id: "support", icon: "🆘", name: "Support", desc: "Get help, report a bug, or contact us",
+                 label: "Support — get help, report a bug, or contact us"),
+        Category(id: "feedback", icon: "💬", name: "Send Feedback", desc: "Report a bug or suggest a feature",
+                 label: "Send Feedback — report a bug or suggest a feature without leaving the app"),
     ]
 
     static let panelNames = ["audio": "Audio", "language": "Language", "accessibility": "Accessibility", "gameplay": "Gameplay",
                              "account": "Account", "chat": "Chat", "dev": "Developer Tools", "general": "General",
-                             "beta": "Beta Features", "3dmode": "3D"]
+                             "beta": "Beta Features", "3dmode": "3D", "notifications": "Notification", "redeem": "Redeem Code",
+                             "feedback": "Send Feedback", "hidemenu": "Hide Menu Items"]
 
     var body: some View {
         ZStack {
@@ -127,7 +134,12 @@ struct WebSettingsView: View {
     }
 
     private func open(_ id: String) {
-        guard ["audio", "accessibility", "gameplay", "general", "account", "chat", "beta", "3dmode"].contains(id) else {
+        if id == "support", let u = URL(string: "https://dungen-descent.org/support") {
+            UIApplication.shared.open(u)
+            return
+        }
+        guard ["audio", "accessibility", "gameplay", "general", "account", "chat", "beta", "3dmode",
+               "notifications", "redeem", "feedback", "hidemenu"].contains(id) else {
             Sound.sfx("sfx-select")
             let name = Self.categories.first { $0.id == id }?.name ?? id
             Feedback.announce("\(name) settings aren't in the Swift version yet. Coming soon.")
@@ -154,6 +166,10 @@ struct WebSettingsView: View {
         case "chat": ChatSettingsPanel(store: game.store)
         case "beta": beta
         case "3dmode": settings3D
+        case "notifications": NotificationsPanel()
+        case "redeem": RedeemPanel()
+        case "feedback": FeedbackPanel()
+        case "hidemenu": HideMenuPanel()
         default: general
         }
     }
@@ -288,17 +304,35 @@ struct WebSettingsView: View {
             title("🎮 Gameplay")
             option("⚔️ Class Traits", "Unique passive abilities per class. Toggle off for a classic experience.",
                    isOn: $classTraits, label: "Class traits")
-            Button {
-                notYet("Run modifiers")
-            } label: {
-                HStack {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text("🎲 Run Modifiers").font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)
+                    Text("Each run gets a random modifier like Burning Dungeon or Death March. High risk, high reward. Turn off for a classic experience.")
+                        .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
+                }
+                .accessibilityHidden(true)
+                Spacer()
+                Button(runModifiers ? "On" : "Off") {
+                    runModifiers.toggle()
+                    RunModifiers.setEnabled(runModifiers, store: game.store)
+                    Feedback.announce("Run modifiers \(runModifiers ? "enabled" : "disabled").")
+                }
+                .buttonStyle(ToggleButtonStyle(on: runModifiers))
+                .accessibilityLabel("Run modifiers currently \(runModifiers ? "on" : "off"). Each run gets a random modifier.")
+            }
+            .padding(.vertical, 12)
+            .onAppear { runModifiers = RunModifiers.enabled(game.store) }
+            Button { open("hidemenu") } label: {
+                HStack {
+                    Text("🙈 Hide Menu Items").font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)
                     Spacer()
-                    Text("Coming soon").font(Theme.cinzel(10)).foregroundStyle(Theme.textDim)
+                    Text("›").foregroundStyle(Theme.textDim)
                 }
                 .padding(.vertical, 12)
             }
-            .accessibilityLabel("Run modifiers. Coming soon.")
+            .buttonStyle(.plain)
+            .accessibilityLabel("Hide menu items — choose which main menu buttons to show or hide")
+            AchievementSoundPicker()
         }
     }
 
@@ -377,13 +411,7 @@ struct WebSettingsView: View {
                 .disabled(webImport.checking)
             }
             RewardCodeBox()
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Export Save Code").font(Theme.cinzel(11.2)).tracking(2).foregroundStyle(Theme.goldDim)
-                Text("Generate a code containing all your save data. Copy it to back up or transfer to another device.")
-                    .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textDim)
-                Button("📋 Copy Code") { notYet("Save codes") }.buttonStyle(WebButtonStyle(kind: .ghost))
-                    .accessibilityLabel("Export save code")
-            }
+            SaveCodeBox()
             HStack(spacing: 16) {
                 Link("Privacy Policy", destination: URL(string: "https://dungen-descent.org/privacy")!)
                 Link("Terms of Service", destination: URL(string: "https://dungen-descent.org/terms")!)

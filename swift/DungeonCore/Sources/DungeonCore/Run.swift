@@ -144,6 +144,8 @@ public struct Run: Codable, Sendable {
     public var blackBoxFloor = 0
     /// Tonight's conditions in this dungeon.
     public var weather: Weather? = nil
+    /// This run's Run Modifier, if one rolled.
+    public var modifier: String? = nil
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false
@@ -339,6 +341,8 @@ public struct FightEffects: Codable, Sendable {
     public var gazeTurns = 0
     /// Gold the Unlucky One took this fight (taken from your wallet too).
     public var stolenGold = 0
+    /// Phantom Run: this fight's first strike still to come.
+    public var phantomCrit = false
     /// Damage absorbed before HP (Mana Shield, Bone Shield …).
     public var shield = 0
     /// Enemy attacks dodged completely.

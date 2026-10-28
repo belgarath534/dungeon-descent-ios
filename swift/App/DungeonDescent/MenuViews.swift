@@ -81,6 +81,9 @@ struct MainMenuView: View {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
 
+    /// Settings → Gameplay → Hide Menu Items.
+    private var hiddenEntries: Set<String> { MenuPrefs.hidden(game.store) }
+
     var body: some View {
         ZStack {
             WebBackground()
@@ -221,7 +224,7 @@ struct MainMenuView: View {
             if let b = reaper.banner {
                 Text(b).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xa0a0ff))
                     .multilineTextAlignment(.center).padding(.top, 8).frame(maxWidth: 340)
-                if reaper.awake {
+                if reaper.awake && !hiddenEntries.contains("voidreaper") {
                     Button("🌑 Face The Void Reaper") { router.goTo(.voidreaper) }
                         .buttonStyle(MenuButtonStyle(color: Color(hex: 0xa0a0ff), border: Color(hex: 0x4433aa)))
                         .frame(maxWidth: 320).padding(.top, 4)
@@ -254,7 +257,7 @@ struct MainMenuView: View {
             .buttonStyle(MenuButtonStyle(primary: true))
             .accessibilityLabel("Play, choose or create your character")
 
-            ForEach(Self.entries) { e in
+            ForEach(Self.entries.filter { !hiddenEntries.contains($0.id) }) { e in
                 if e.separatorBefore { MenuSeparator() }
                 Button {
                     run(e)

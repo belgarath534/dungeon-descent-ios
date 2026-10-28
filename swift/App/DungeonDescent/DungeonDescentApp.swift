@@ -21,6 +21,8 @@ struct DungeonDescentApp: App {
                     CloudAccount.shared.start(game: game)
                     // An Endless Descent run left going picks up where it is.
                     if AFKModel.isRunning(game.store) { router.goTo(.afk) }
+                    // Reminders stay current (the comeback one moves 48 hours out).
+                    Task { _ = await GameNotifications.apply(game.store, ask: false) }
                 }
                 // Tapping the Live Activity opens its run.
                 .onOpenURL { url in

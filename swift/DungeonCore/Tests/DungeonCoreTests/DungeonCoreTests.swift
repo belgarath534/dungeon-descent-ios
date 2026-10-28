@@ -3295,3 +3295,36 @@ final class WeatherTests: XCTestCase {
         }
     }
 }
+
+final class RunModifierTests: XCTestCase {
+    func testModifiers() {
+        let store = MemoryStore()
+        let w = Wallet(store: store) { _ in }
+        var r = Run(character: PlayerCharacter(name: "R", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        RunModifiers.setEnabled(false, store: store)
+        var dice = SeededDice(seed: 1)
+        XCTAssertNil(RunModifiers.start(&r, store: store, wallet: w, dice: &dice))
+        RunModifiers.setEnabled(true, store: store)
+        r.modifier = "blessed"
+        r.modifier = nil
+        var d2 = LoadedDice(rolls: [7])
+        let m = RunModifiers.start(&r, store: store, wallet: w, dice: &d2)
+        XCTAssertEqual(m?.id, "blessed")
+        XCTAssertEqual(r.inventory.filter { $0.name == "Health Potion" }.count, 4)
+        r.modifier = "frozen"
+        XCTAssertEqual(RunModifiers.rooms(8, r), 7)
+        XCTAssertEqual(RunModifiers.rooms(4, r), 4)
+        XCTAssertEqual(RunModifiers.rooms(1, r), 1, "the boss floor keeps its one room")
+        r.modifier = "goldcurse"
+        XCTAssertEqual(RunModifiers.potionCost(Item(name: "P", icon: "", type: "potion", desc: ""), 30, r), 60)
+        r.modifier = "watching"
+        var d3 = LoadedDice(chances: [true])
+        XCTAssertNil(Encounters.rollEvent(r, dice: &d3), "The Watching: no event rooms")
+        r.modifier = "phantom"
+        _ = Combat.begin(&r, against: Enemy(name: "Rat", icon: "🐀", hp: 50, maxHp: 50, atk: 1...2, gold: 1...1))
+        var d4 = LoadedDice(chances: [false])
+        let turn = Combat.takeTurn(&r, .attack, dice: &d4)
+        XCTAssertTrue(turn.crit, "Phantom Run: the first strike crits")
+    }
+}

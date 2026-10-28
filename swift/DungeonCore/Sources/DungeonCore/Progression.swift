@@ -124,6 +124,8 @@ public enum Progression {
         if let ev = Events.bonuses(run.event), ev.goldMult != 1 { g = jsRound(Double(g) * ev.goldMult) }
         g = Challenges.gold(g, run) * Corruption.goldMult(run)
         if let w = run.weather, w.goldMult != 1 { g = jsRound(Double(g) * w.goldMult) }
+        let mg = RunModifiers.goldMult(run)
+        if mg != 1 { g = jsRound(Double(g) * mg) }
         if run.weaponEffect == "soulbound" { run.sp = min(run.maxSp, run.sp + 5) }
         var luckNote = ""
         if run.luckKills > 0 {
@@ -135,6 +137,7 @@ public enum Progression {
         wallet.addGold(g)
         var xp = Progression.xp(for: tier(of: enemy.name, in: run.dungeon, difficulty: run.difficulty))
         if Challenges.has(run, "double-xp") { xp *= 2 }
+        xp *= RunModifiers.xpMult(run)
         let levels = gainXP(&run, xp)
         return KillReward(gold: g, xp: xp, levelsGained: levels,
                           message: "\(enemy.name) is defeated! You gain \(g) gold and \(xp) XP.\(luckNote)")

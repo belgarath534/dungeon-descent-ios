@@ -58,7 +58,7 @@ final class GameModel: ObservableObject {
                                     "ach-ngplus3", "ach-all-stories", "ach-trilogy", "ach-kills-1000", "ach-abyssal-boss"]
         func rank(_ a: Achievement) -> Int { special.contains(a.id) ? 3 : a.gold >= 300 ? 2 : a.gold >= 200 ? 1 : 0 }
         guard let best = list.max(by: { rank($0) < rank($1) }) else { return }
-        Sound.sfx(["sfx-unlock", "sfx-ach-silver", "sfx-ach-gold", "sfx-ach-special"][rank(best)])
+        Sound.sfx([AchievementSound.current, "sfx-ach-silver", "sfx-ach-gold", "sfx-ach-special"][rank(best)])
         Feedback.success()
         for a in list {
             Feedback.announce("Achievement unlocked: \(a.name). \(a.desc) Plus \(a.gold) gold and \(a.trophies) troph\(a.trophies == 1 ? "y" : "ies").")

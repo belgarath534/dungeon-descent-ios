@@ -51,6 +51,7 @@ public enum Combat {
         run.defending = false
         run.fight = FightEffects()
         run.fight.huntersMarkReady = run.has("cu-hunters-mark")
+        run.fight.phantomCrit = RunModifiers.firstStrikeCrit(run)
         if enemy.isBoss { run.bossPhase = 1 }
         var log: [String] = []
         if TimeDescender.isDescender(enemy) && !TimeDescender.isClock(enemy) {
@@ -168,6 +169,8 @@ public enum Combat {
     static func attackRoll(_ run: Run, dice: inout some Dice) -> Int {
         var a = dice.roll(run.atk) + run.totalAtkBonus
         if let w = run.weather, w.playerAtkMult != 1 { a = jsRound(Double(a) * w.playerAtkMult) }
+        let am = RunModifiers.attackMult(run)
+        if am != 1 { a = jsRound(Double(a) * am) }
         // Blood Moon and the Liberty Shop's Sparkler.
         if let ev = Events.bonuses(run.event), ev.atkBoost > 0 { a = jsRound(Double(a) * (1 + ev.atkBoost)) }
         if run.sparkler { a = jsRound(Double(a) * 1.30) }
@@ -226,7 +229,9 @@ public enum Combat {
                 let unlucky = run.enemy?.flag("unlucky") == true
                 let rolledCrit = dice.chance(0.10 + run.critBonus + (run.weaponEffect == "keen" ? 0.05 : 0)) && !unlucky
                 let firstStrike = Subclasses.firstStrikeCrit(&run)
-                r.crit = rolledCrit || run.markedKill || firstStrike
+                let phantom = run.fight.phantomCrit
+                run.fight.phantomCrit = false
+                r.crit = rolledCrit || run.markedKill || firstStrike || phantom
                 if run.markedKill {
                     run.markedKill = false
                     r.log.append("Marked Kill activates — guaranteed critical!")
@@ -666,6 +671,8 @@ public enum Combat {
         }
         raw = jsRound(Double(raw) * run.difficulty.enemyDamageMultiplier)
         if let w = run.weather { raw = jsRound(Double(raw) * w.enemyAtkMult * w.damageTaken) }
+        let rm = RunModifiers.enemyMult(run)
+        if rm != 1 { raw = jsRound(Double(raw) * rm) }
         if run.undeadRes && Bestiary.undeadNames.contains(e.name) {
             raw = jsRound(Double(raw) * 0.65)
         }
@@ -676,6 +683,8 @@ public enum Combat {
         if run.has("cu-ember-ward") { taken = max(1, taken - 2) }
         // Ancient Curse: one more, whatever your defense.
         if run.weather?.cursedArmor == true { taken += 1 }
+        // Burning Dungeon: every hit burns.
+        taken += RunModifiers.fire(run)
         if options.classTraits {
             switch run.cls {
             case "Paladin": taken = max(1, jsRound(Double(taken) * 0.85))
