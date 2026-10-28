@@ -2805,3 +2805,47 @@ final class SiegeTests: XCTestCase {
         XCTAssertGreaterThan(won, 0)
     }
 }
+
+final class ChallengeTests: XCTestCase {
+    private func date(_ y: Int, _ m: Int, _ d: Int) -> Date {
+        Calendar.current.date(from: DateComponents(year: y, month: m, day: d, hour: 12))!
+    }
+
+    func testDailyMatchesWeb() {
+        // Worked out with the web version's own formula.
+        let a = Challenges.daily(date(2026, 10, 28))
+        XCTAssertEqual(a.dungeon, "The Hollow")
+        XCTAssertEqual(a.mods.map(\.id), ["triple-gold", "double-hp"])
+        XCTAssertEqual(a.key, "dd_daily_20261028")
+        let b = Challenges.daily(date(2026, 12, 25))
+        XCTAssertEqual(b.dungeon, "The Ashbound Wastes")
+        XCTAssertEqual(b.mods.map(\.id), ["double-hp", "no-shop"])
+    }
+
+    func testEveryGauntletDungeonExists() {
+        for d in Challenges.gauntlet { XCTAssertTrue(GameData.dungeons.contains(d), d) }
+    }
+
+    func testModifiers() {
+        let ch = PlayerCharacter(name: "T", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var run = Run(character: ch)
+        var dice = SeededDice(seed: 7)
+        XCTAssertEqual(Challenges.bossFloor(run), 10)
+        let plain = Combat.nextBoss(for: run, dice: &dice)
+        run.dailyMods = ["double-hp", "early-boss"]
+        XCTAssertEqual(Challenges.bossFloor(run), 7)
+        XCTAssertEqual(Rooms.roomsNeeded(floor: 7, difficulty: .wanderer, bossFloor: 7, dice: &dice), 1)
+        dice = SeededDice(seed: 7)
+        let tough = Combat.nextBoss(for: run, dice: &dice)
+        XCTAssertEqual(tough.maxHp, plain.maxHp * 2)
+        XCTAssertEqual(tough.phase1Hp, plain.phase1Hp * 2)
+        run.dailyMods = ["triple-gold", "lucky"]
+        XCTAssertEqual(Challenges.gold(10, run), 45)
+        run.dailyMods = ["no-potions"]
+        run.hp = 1
+        run.inventory = [Item(name: "Health Potion", icon: "🧪", type: "potion", desc: "")]
+        XCTAssertFalse(Inventory.use(&run, at: 0).used)
+        XCTAssertEqual(Challenges.time(247), "4m 07s")
+    }
+}

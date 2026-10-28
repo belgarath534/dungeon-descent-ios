@@ -65,7 +65,10 @@ public enum Combat {
         // 15% elite chance from floor 4 (enterRoom)
         let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(0.15)
         let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
-        if !elite, let seasonal = Events.seasonalEnemy(run, dice: &dice) { return seasonal }
+        if !elite, var seasonal = Events.seasonalEnemy(run, dice: &dice) {
+            Challenges.shape(&seasonal, run)
+            return seasonal
+        }
         let t = pool[dice.roll(0...(pool.count - 1))]
         var e = Enemy.spawn(t, floor: run.floor, playerLevel: run.level,
                             ngPlusCount: ngCount(run), endless: run.difficulty == .endless)
@@ -77,6 +80,7 @@ public enum Combat {
             e.atk = lo...max(lo, hi)
         }
         if run.worldCurse { cursed(&e) }
+        Challenges.shape(&e, run)
         return e
     }
 
@@ -102,6 +106,7 @@ public enum Combat {
         var e = Enemy(name: t.name, icon: t.icon, hp: hp, maxHp: hp, atk: lo...max(lo, hi), gold: t.gold)
         e.isElite = true
         e.mechanics["guardian"] = .bool(true)
+        Challenges.shape(&e, run)
         return e
     }
 
@@ -116,6 +121,7 @@ public enum Combat {
         let t = pool[dice.roll(0...(pool.count - 1))]
         var b = Enemy.spawnBoss(t, playerLevel: run.level, playerMaxAtk: run.atk.upperBound, ngPlusCount: ngCount(run))
         if run.worldCurse { cursed(&b) }
+        Challenges.shape(&b, run)
         return b
     }
 

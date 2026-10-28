@@ -21,8 +21,8 @@ public enum Rooms {
     }
 
     /// How many rooms a new floor has (advanceFloor): floor 10 is just the boss.
-    public static func roomsNeeded(floor: Int, difficulty: GameData.Difficulty, dice: inout some Dice) -> Int {
-        if floor == 10 && difficulty != .endless { return 1 }
+    public static func roomsNeeded(floor: Int, difficulty: GameData.Difficulty, bossFloor: Int = 10, dice: inout some Dice) -> Int {
+        if floor == bossFloor && difficulty != .endless { return 1 }
         if floor <= 3 { return 5 + dice.roll(0...3) }
         if floor <= 6 { return 7 + dice.roll(0...4) }
         return 9 + dice.roll(0...6)

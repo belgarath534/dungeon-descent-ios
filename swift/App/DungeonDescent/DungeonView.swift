@@ -268,7 +268,7 @@ struct DungeonView: View {
 
     private var roomTracker: some View {
         let left = max(0, run.floorRoomsNeeded - run.roomsOnFloor)
-        let bossFloor = run.floor == 10 && run.difficulty != .endless
+        let bossFloor = run.floor == Challenges.bossFloor(run) && run.difficulty != .endless
         let right = bossFloor ? "⚠ Boss Floor" : left <= 2 ? "Next floor soon" : "\(left) rooms on this floor"
         let color = bossFloor ? Color(hex: 0xcc4444) : left <= 2 ? Color(hex: 0xcc9944) : Color(hex: 0x555555)
         return HStack {

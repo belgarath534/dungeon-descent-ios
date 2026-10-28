@@ -77,6 +77,13 @@ public struct Run: Codable, Sendable {
     public var hungerDrain = 0
     /// Firelord: the next enemy walks into burning ground.
     public var burningGround = false
+    /// Challenges: the Daily Dungeon's modifiers, its save key and start
+    /// time, and the Gauntlet stage (0-based) with the dungeon to return to.
+    public var dailyMods: [String] = []
+    public var dailyKey: String? = nil
+    public var dailyStart = 0.0
+    public var gauntletStage: Int? = nil
+    public var gauntletHome: String? = nil
     /// 3D Mode: the floor's rooms, walls and doors (nil when 3D Mode is off).
     public var roomGraph: RoomGraph? = nil
     /// The seasonal or weekly event running (getActiveEvent), set when the

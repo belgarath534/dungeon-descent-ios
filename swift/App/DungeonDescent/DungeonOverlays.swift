@@ -479,7 +479,7 @@ struct RunSummaryView: View {
                                 .buttonStyle(WebButtonStyle(kind: .gold))
                                 .accessibilityLabel("Play again with this character")
                         }
-                        if victory {
+                        if victory && !model.isChallenge {
                             Button("⬆ Continue...") { choosingPath = true }
                                 .buttonStyle(WebButtonStyle(kind: .gold))
                                 .accessibilityLabel("Continue Journey to next dungeon or New Game Plus")

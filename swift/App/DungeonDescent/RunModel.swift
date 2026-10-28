@@ -52,7 +52,7 @@ final class RunModel: ObservableObject {
                 // A boss floor is never "cleared" outside a fight: past the
                 // Elite Guardian, the boss is still to come.
                 : saved.roomsOnFloor >= saved.floorRoomsNeeded && saved.roomsOnFloor > 0
-                    && !(saved.floor >= 10 && saved.difficulty != .endless) ? .floorCleared : .exploring
+                    && !(saved.floor >= Challenges.bossFloor(saved) && saved.difficulty != .endless) ? .floorCleared : .exploring
             roomTitle = Rooms.floorName(saved.floor, dungeon: saved.dungeon)
             add("Run resumed on floor \(saved.floor). HP \(saved.hp) of \(saved.maxHp).")
             playMusic()
@@ -64,8 +64,40 @@ final class RunModel: ObservableObject {
 
     /// A fresh run for the character: start bonuses, saved items and gear,
     /// starting skill and the first floor's plan (initDungeon).
+    /// A Challenge to start instead of a normal run (set by the Challenges screen).
+    enum Challenge { case gauntlet, daily }
+    static var pendingChallenge: Challenge? = nil
+
     private static func newRun(_ game: GameModel, _ index: Int) -> Run {
         var r = Run(character: game.characters[index], gold: game.wallet.gold)
+        // Challenges run in their own dungeon without moving the character
+        // there, so nothing has to be put back afterwards.
+        // Endless has no boss, so a Challenge could never end: it runs on Wanderer.
+        if pendingChallenge != nil && r.difficulty == .endless {
+            r.difficulty = .wanderer
+            r.lives = GameData.Difficulty.wanderer.lives
+            r.maxLives = r.lives
+        }
+        if pendingChallenge != nil && r.floor != 1 {
+            r.floor = 1
+            var cd = SystemDice()
+            r.floorRoomsNeeded = Rooms.roomsNeeded(floor: 1, difficulty: r.difficulty, dice: &cd)
+        }
+        switch pendingChallenge {
+        case .gauntlet:
+            r.dungeon = Challenges.gauntlet[0]
+            r.gauntletStage = 0
+            r.lives = 1
+            r.maxLives = 1
+        case .daily:
+            let daily = Challenges.daily()
+            r.dungeon = daily.dungeon
+            r.dailyMods = daily.mods.map(\.id)
+            r.dailyKey = daily.key
+            r.dailyStart = Date().timeIntervalSince1970
+        case nil: break
+        }
+        pendingChallenge = nil
         // Saved items first: loading them replaces the bag, so everything
         // else that adds items (seasonal shop, Coin Shop) goes in after.
         game.globalInventory.load(into: &r)
@@ -89,7 +121,7 @@ final class RunModel: ObservableObject {
         game.achievements.trackGlobal("runsStarted")
         var d = SystemDice()
         Skills.start(&r, dice: &d)
-        if r.floor >= 10 && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
+        if r.floor >= Challenges.bossFloor(r) && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
         Encounters.planFloor(&r, dice: &d)
         if ThreeDMode.isOn(game.store) { r.roomGraph = RoomGraph(roomsNeeded: r.floorRoomsNeeded, dice: &d) }
         r.hpAtFloorStart = r.hp
@@ -177,7 +209,8 @@ final class RunModel: ObservableObject {
         Sound.ambient(Soundtrack.ambientKey(dungeon: r.dungeon, difficulty: r.difficulty))
     }
 
-    var isBossFloor: Bool { run.floor >= 10 && run.difficulty != .endless }
+    var isBossFloor: Bool { run.floor >= Challenges.bossFloor(run) && run.difficulty != .endless }
+    var isChallenge: Bool { run.gauntletStage != nil || run.dailyKey != nil }
     var bossRoomNext: Bool { isBossFloor && run.roomsOnFloor == run.floorRoomsNeeded - 1 }
     var canWander: Bool { run.floor < 9 }
     var hour: Int { Calendar.current.component(.hour, from: Date()) }
@@ -1206,6 +1239,10 @@ final class RunModel: ObservableObject {
     }
 
     private func victory(_ spoken: String) {
+        if let stage = run.gauntletStage, stage + 1 < Challenges.gauntlet.count {
+            gauntletNext(stage + 1, spoken)
+            return
+        }
         phase = .victory
         achievements.record(.runWon(run, diedThisRun: run.diedThisRun,
                                     seconds: Date().timeIntervalSince1970 - run.startedAt))
@@ -1222,12 +1259,74 @@ final class RunModel: ObservableObject {
         game.globalInventory.keep(from: run)
         game.checkLegends(run)
         game.recordFirstClear(run)
-        game.updateCharacter(characterIndex) { $0.completed = true; $0.floor = 10 }
+        if !isChallenge { game.updateCharacter(characterIndex) { $0.completed = true; $0.floor = 10 } }
         game.clearRun(for: characterIndex)
+        if let line = challengeDone() {
+            add(line)
+            Feedback.announce(spoken + " " + line + " Return to the menu when you're ready.")
+            return
+        }
         let next = game.unlockedDungeons().last ?? ""
         let unlock = next != run.dungeon && !next.isEmpty ? " \(next) is unlocked." : ""
         Feedback.announce(spoken + " Victory! You have conquered \(run.dungeon).\(unlock)"
             + (canContinueJourney ? " Continue your journey, start New Game Plus, or return." : " Start New Game Plus, or return."))
+    }
+
+    // MARK: Challenges
+
+    /// The Gauntlet: the next dungeon at once, same character, HP as it is.
+    private func gauntletNext(_ stage: Int, _ spoken: String) {
+        var r = run
+        var d = dice
+        achievements.record(.runWon(r, diedThisRun: r.diedThisRun, seconds: Date().timeIntervalSince1970 - r.startedAt))
+        game.recordFirstClear(r)
+        Sound.sfx("sfx-victory")
+        let next = Challenges.gauntlet[stage]
+        r.gauntletStage = stage
+        r.dungeon = next
+        r.floor = 1
+        r.roomsOnFloor = 0
+        r.floorRoomsNeeded = Rooms.roomsNeeded(floor: 1, difficulty: r.difficulty, dice: &d)
+        r.upcomingRooms = []
+        r.guardianDone = false
+        r.enemy = nil
+        r.foes = []
+        r.inCombat = false
+        r.hpAtFloorStart = r.hp
+        r.floorStats = FloorStats(goldStart: r.gold)
+        Encounters.planFloor(&r, dice: &d)
+        r.roomGraph = threeD ? RoomGraph(roomsNeeded: r.floorRoomsNeeded, dice: &d) : nil
+        run = r
+        dice = d
+        shop = []
+        phase = .exploring
+        roomTitle = Rooms.floorName(1, dungeon: next)
+        roomText = ""
+        let left = Challenges.gauntlet.count - stage
+        add("⚔ Dungeon \(stage) of \(Challenges.gauntlet.count) cleared! Entering \(next). HP carries over.")
+        persist()
+        playMusic()
+        if let g = r.roomGraph { SpatialAudio.shared.setRoom(dungeon: next); add("🧊 3D Mode. \(g.exitsText)") }
+        Feedback.announce(spoken + " Dungeon \(stage) cleared! Entering \(next). \(left) \(left == 1 ? "dungeon remains" : "dungeons remain"). HP \(r.hp) of \(r.maxHp) carries over.", after: 0.6)
+    }
+
+    /// The end of a Challenge: the Gauntlet's crown or the Daily Dungeon's time.
+    private func challengeDone() -> String? {
+        if run.gauntletStage != nil {
+            achievements.trackGlobal("gauntletClears")
+            achievements.award("gauntlet_champion")
+            game.store.setItem("dd_gauntlet_best", String(Int(Date().timeIntervalSince1970 * 1000)))
+            return "THE GAUNTLET IS COMPLETE! All \(Challenges.gauntlet.count) dungeons cleared. You are the Gauntlet Champion."
+        }
+        if let key = run.dailyKey {
+            let time = Challenges.time(Date().timeIntervalSince1970 - run.dailyStart)
+            guard game.store.getItem(key) == nil else { return "Daily Dungeon cleared again in \(time). Your first time today stands." }
+            game.store.setItem(key, time)
+            achievements.trackGlobal("dailyDungeonClears")
+            achievements.award("ach-daily-dungeon")
+            return "Daily Dungeon complete! Time: \(time). Come back tomorrow for a new challenge."
+        }
+        return nil
     }
 
     // MARK: Skills
@@ -1581,7 +1680,7 @@ final class RunModel: ObservableObject {
         var d = dice
         r.floor += 1
         r.roomsOnFloor = 0
-        r.floorRoomsNeeded = Rooms.roomsNeeded(floor: r.floor, difficulty: r.difficulty, dice: &d)
+        r.floorRoomsNeeded = Rooms.roomsNeeded(floor: r.floor, difficulty: r.difficulty, bossFloor: Challenges.bossFloor(r), dice: &d)
         r.upcomingRooms = []
         r.gearSavedThisFloor = false
         r.guardianDone = false
@@ -1634,8 +1733,24 @@ final class RunModel: ObservableObject {
         let questLine = milestone + questDone(&r, game.dailyQuests.reachedFloor(floor, usedPotion: r.usedPotion))
         Sound.sfx("sfx-stairs")
         Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
+        // Daily Dungeon's Stripped: no merchant on the stairs.
+        if Challenges.has(r, "no-shop") {
+            shop = []
+            run = r
+            dice = d
+            phase = .exploring
+            if threeD, let g = r.roomGraph {
+                persist()
+                Feedback.announce("Floor \(floor) of \(Challenges.bossFloor(r)). No merchant today. \(roomTitle). \(g.exitsText)" + questLine, after: 0.6)
+                SpatialAudio.shared.exitCues(g.here)
+                return
+            }
+            movePrefix = "Floor \(floor) of \(Challenges.bossFloor(r)). No merchant today. " + questLine + " "
+            enterRoom()
+            return
+        }
         finish(r, d, phase: .shopping,
-               spoken: "Floor \(floor) of 10. You reach the stairs. A merchant waits in the passage. Shop open. The Wandering Merchant. You have \(r.gold) gold. \(shop.count) items available." + questLine)
+               spoken: "Floor \(floor) of \(Challenges.bossFloor(r)). You reach the stairs. A merchant waits in the passage. Shop open. The Wandering Merchant. You have \(r.gold) gold. \(shop.count) items available." + questLine)
     }
 
     func wander() {

@@ -31,6 +31,11 @@ public enum Inventory {
             return Outcome(message: "🪞 The Mirror Fragment shatters. All corruption purged.")
         }
 
+        // Daily Dungeon's Dry Run: no potions or elixirs at all.
+        if Challenges.has(run, "no-potions") && (item.type.contains("potion") || item.type == "elixir" || item.type == "heal") {
+            return Outcome(message: "Daily modifier Dry Run: potions cannot be used in this run.", used: false)
+        }
+
         switch item.type {
         case "potion":
             let cleanses = item.name == "Null Potion" && run.shadowCorruption > 0
