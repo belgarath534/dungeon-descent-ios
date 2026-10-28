@@ -87,6 +87,8 @@ public struct Run: Codable, Sendable {
     public var hunter: Hunter.State? = nil
     /// Corruption Mode: the character's corruption (nil when it's off).
     public var corruption: Int? = nil
+    /// Your guide's personality while the guide is on (nil when it's silenced).
+    public var guide: String? = nil
     /// 3D Mode: the floor's rooms, walls and doors (nil when 3D Mode is off).
     public var roomGraph: RoomGraph? = nil
     /// The seasonal or weekly event running (getActiveEvent), set when the
@@ -250,6 +252,7 @@ public struct Run: Codable, Sendable {
         hardcore = ch.hardcoreMode
         if ch.hunterMode { hunter = Hunter.State() }
         if ch.corruptionMode { corruption = min(100, max(0, ch.corruption)) }
+        if ch.guideEnabled { guide = ch.guidePersonality }
         ngPlus = ch.ngPlusActive
         if case .number(let n)? = ch.extra["ngPlusCount"] { ngPlusCount = Int(n) }
         // Continue Journey carries level and XP into the next dungeon.

@@ -952,6 +952,12 @@ struct DungeonView: View {
                 Button("⚙ Settings") { paused = false; showSettings = true }.buttonStyle(WebButtonStyle(kind: .ghost))
                 Button("✨ Spirits") { paused = false; showSpirits = true }.buttonStyle(WebButtonStyle(kind: .ghost))
                     .accessibilityLabel("Your spirits — switch your spirit companion")
+                Button("💬 Guide: \(run.guide == nil ? "OFF" : "ON")") { model.toggleGuide() }
+                    .buttonStyle(WebButtonStyle(kind: .ghost))
+                    .accessibilityLabel("Guide, \(model.guideName): \(run.guide == nil ? "off" : "on"). Double tap to turn \(run.guide == nil ? "on" : "off").")
+                Button("🏹 Hunter: \(run.hunter == nil ? "OFF" : "ON")") { model.toggleHunter() }
+                    .buttonStyle(WebButtonStyle(kind: .ghost))
+                    .accessibilityLabel("Hunter Mode: \(run.hunter == nil ? "off" : "on"). Double tap to turn \(run.hunter == nil ? "on" : "off").")
                 Button("📜 Quests") { paused = false; model.fleeDungeon(); router.goTo(.quests) }.buttonStyle(WebButtonStyle(kind: .ghost))
                 Button("🏠 Main Menu") {
                     paused = false

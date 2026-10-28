@@ -149,6 +149,8 @@ final class RunModel: ObservableObject {
         if let m = r.minion { add("👾 \(m.name) fights beside you.") }
         _ = bounty(.runStarted)
         if let c = Corruption.status(r) { add(c) }
+        let hello = guideSays(.dungeonStart, r)
+        if !hello.isEmpty { Feedback.announce(hello, after: 2.5) }
         if r.hunter != nil {
             add("🏹 Hunter Mode active. Something has entered the dungeon behind you. It is 10 rooms away. Keep moving.")
         }
@@ -387,7 +389,7 @@ final class RunModel: ObservableObject {
             add("\(boss.icon) \(boss.name) rises before you. \(boss.hp) HP.")
             enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: true))
             Sound.track(Soundtrack.bossTrack(dungeon: r.dungeon))
-            spoken += " \(boss.name) rises before you. \(boss.hp) HP." + thirdEye(r)
+            spoken += " \(boss.name) rises before you. \(boss.hp) HP." + thirdEye(r) + guideSays(.bossEncounter, r)
             finish(r, d, phase: .fighting, spoken: spoken)
             return
         }
@@ -849,6 +851,7 @@ final class RunModel: ObservableObject {
             add(line)
             hunterLine = line
             hunterAsk = dist <= 2
+            if dist == 3 { hunterLine += guideSays(.hunterClose, r) }
             hunterSounds(dist)
             return true
         }
@@ -983,6 +986,51 @@ final class RunModel: ObservableObject {
         playMusic()
     }
 
+    // MARK: Your guide
+
+    var guideName: String { Guide.name(game.store) }
+
+    /// A line from your guide, logged and returned to be said with the moment.
+    private func guideSays(_ m: Guide.Moment, _ r: Run) -> String {
+        guard let p = r.guide else { return "" }
+        var d = SystemDice()
+        guard let line = Guide.line(m, personality: p, level: r.level, dice: &d) else { return "" }
+        add("💬 \(guideName): \(line)")
+        return " \(guideName) says — \(line)"
+    }
+
+    /// The pause menu's Guide switch (toggleGuideFromPause), kept on the character.
+    func toggleGuide() {
+        var r = run
+        let on = r.guide == nil
+        r.guide = on ? game.characters[characterIndex].guidePersonality : nil
+        run = r
+        game.updateCharacter(characterIndex) { $0.guideEnabled = on }
+        persist()
+        Feedback.announce("Guide " + (on ? "enabled. \(guideName) will speak again." : "disabled. \(guideName) is silent."))
+    }
+
+    /// The pause menu's Hunter switch (toggleHunterMode).
+    func toggleHunter() {
+        var r = run
+        let on = r.hunter == nil
+        if on {
+            r.hunter = Hunter.State()
+            add("🏹 Hunter Mode enabled. Something stirs in the dark. It is 10 rooms behind you.")
+        } else {
+            r.hunter = nil
+            stopHeartbeat()
+            hunterChoice = false
+            add("🏹 Hunter Mode disabled. The dungeon is silent again.")
+        }
+        run = r
+        game.updateCharacter(characterIndex) { $0.hunterMode = on }
+        persist()
+        playMusic()
+        Feedback.announce(on ? "Hunter Mode enabled. Something stirs in the dark. It is 10 rooms behind you."
+                             : "Hunter Mode disabled. The dungeon is silent again.")
+    }
+
     // MARK: Corruption Mode
 
     /// A life lost darkens the character's soul (saved on the character).
@@ -1097,6 +1145,7 @@ final class RunModel: ObservableObject {
             add("Level up! You are now level \(r.level). You have \(r.levelPoints) level points to spend.")
             Sound.sfx("sfx-levelup")
             said += " Level up! You are now level \(r.level). You have \(r.levelPoints) Level Points. Spend them to increase your stats. Unspent points carry over."
+            said += guideSays(.levelUp, r)
             if r.skillChoices.isEmpty { Skills.offer(&r, dice: &d) }
             levelUp = r.level
         }
@@ -1396,8 +1445,8 @@ final class RunModel: ObservableObject {
             journal("Fell to \(killedBy) on floor \(r.floor).", in: &r)
         }
         var spoken = spoken
-        if outcome == .runOver { spoken += corruptionLifeLost(&r) }
-        if case .revived = outcome { spoken += corruptionLifeLost(&r) }
+        if outcome == .runOver { spoken += corruptionLifeLost(&r) + guideSays(.death, r) }
+        if case .revived = outcome { spoken += corruptionLifeLost(&r) + guideSays(.death, r) }
         if outcome == .runOver && r.bargainStrike > 0 {
             // Death's Bargain (Coin Shop): the final strike lands before the end.
             let name = r.enemy?.name ?? "the enemy"
@@ -1515,7 +1564,7 @@ final class RunModel: ObservableObject {
         }
         let next = game.unlockedDungeons().last ?? ""
         let unlock = next != run.dungeon && !next.isEmpty ? " \(next) is unlocked." : ""
-        Feedback.announce(spoken + " Victory! You have conquered \(run.dungeon).\(unlock)"
+        Feedback.announce(spoken + " Victory! You have conquered \(run.dungeon).\(unlock)" + guideSays(.victory, run)
             + (canContinueJourney ? " Continue your journey, start New Game Plus, or return." : " Start New Game Plus, or return."))
     }
 
@@ -2140,6 +2189,8 @@ final class RunModel: ObservableObject {
         // you pressed disappears and VoiceOver moves to a new one, which cut
         // this announcement off after its first words. Wait for that move.
         let screenChanges = newPhase != phase
+        // Dropping to a quarter of your health: the guide speaks up.
+        let lowHp = r.hp > 0 && r.hp * 4 <= r.maxHp && run.hp * 4 > run.maxHp ? guideSays(.lowHp, r) : ""
         run = r
         dice = d
         phase = newPhase
@@ -2153,7 +2204,7 @@ final class RunModel: ObservableObject {
                 whisper = " " + w
             }
         }
-        Feedback.announce(movePrefix + spoken + whisper + takeHunterLine(), after: screenChanges ? 0.6 : 0)
+        Feedback.announce(movePrefix + spoken + whisper + lowHp + takeHunterLine(), after: screenChanges ? 0.6 : 0)
         movePrefix = ""
         if newPhase == .exploring || newPhase == .floorCleared { hunterAfterRoom() }
     }

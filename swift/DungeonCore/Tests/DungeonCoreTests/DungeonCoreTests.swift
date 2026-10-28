@@ -3000,3 +3000,19 @@ final class CorruptionTests: XCTestCase {
         for _ in 0..<200 { XCTAssertNil(Corruption.hunter(for: low, dice: &dice)) }
     }
 }
+
+final class GuideTests: XCTestCase {
+    func testEveryPersonalityHasEveryMoment() {
+        var dice = SeededDice(seed: 5)
+        let moments: [Guide.Moment] = [.dungeonStart, .levelUp, .lowHp, .bossEncounter, .victory, .death, .achievement, .hunterClose]
+        for p in Guide.personalities {
+            for m in moments {
+                let l = Guide.line(m, personality: p, level: 7, dice: &dice)
+                XCTAssertNotNil(l, "\(p) \(m)")
+                XCTAssertFalse(l!.contains("{lvl}"))
+            }
+        }
+        XCTAssertEqual(Guide.name(MemoryStore()), "Mira")
+        XCTAssertEqual(Guide.name(MemoryStore(["dd_companion_name": "Rook"])), "Rook")
+    }
+}
