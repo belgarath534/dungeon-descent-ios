@@ -14421,6 +14421,7 @@
  "audio": {
   "tracks": {
    "menu": "music-menu.mp3",
+   "hunter-theme": "hunter-music.mp3",
    "menu-halloween": "music-halloween.mp3",
    "menu-christmas": "music-christmas.mp3",
    "floor1": "music-floor1.mp3",

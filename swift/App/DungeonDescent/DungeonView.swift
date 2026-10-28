@@ -44,6 +44,7 @@ struct DungeonView: View {
                     dailyQuest
                     xpRow
                     roomTracker
+                    if let h = run.hunter { hunterBar(h.dist) }
                     if let b = model.bountyBanner {
                         Text(b).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x44ff88))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -110,6 +111,7 @@ struct DungeonView: View {
         }
         if showRunLog { runLogOverlay }
         if choosingPath { ngPlusChoice }
+        if model.hunterChoice { hunterOverlay }
         if showSettings { WebSettingsView { showSettings = false } }
     }
 
@@ -869,6 +871,36 @@ struct DungeonView: View {
         Feedback.announce("Flee dungeon? Press Flee to escape or Keep Fighting to continue. Your progress to floor \(run.floor) will be saved.")
     }
 
+    /// #dg-hunter-row: how far behind the hunter is.
+    private func hunterBar(_ dist: Int) -> some View {
+        let color = Color(hex: dist >= 6 ? 0xcc4400 : dist >= 3 ? 0xff6600 : 0xff0000)
+        return VStack(alignment: .leading, spacing: 4) {
+            Text("🏹 Hunter: \(dist) room\(dist == 1 ? "" : "s") away").font(Theme.cinzel(10.4)).foregroundStyle(color)
+            Bar(value: Double(dist) / 10, colors: [color, color], track: color.opacity(0.15), height: 4)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Hunter: \(dist) room\(dist == 1 ? "" : "s") away.")
+    }
+
+    /// showHunterChoice
+    private var hunterOverlay: some View {
+        WebOverlay(danger: true) {
+            Text("🏹").font(.system(size: 32)).accessibilityHidden(true)
+            OverlayTitle(text: "THE HUNTER IS HERE", red: true)
+            OverlayText(text: "\(run.hunter?.dist == 1 ? "One room" : "Two rooms") away. It has found you. You cannot outrun it forever. Choose now.")
+            VStack(spacing: 12) {
+                Button("⚔ FIGHT — Stand your ground. Face it.") { model.hunterFight() }
+                    .buttonStyle(WebButtonStyle(kind: .red))
+                    .accessibilityLabel("Fight the hunter")
+                Button("🏃 RUN — Sprint away. Buy one more turn.") { model.hunterRun() }
+                    .buttonStyle(WebButtonStyle(kind: .ghost))
+                    .accessibilityLabel("Run from the hunter. It will be one room behind you.")
+            }
+            Text("Running resets distance to 1. It will catch you next time.")
+                .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444))
+        }
+    }
+
     private var fleeOverlay: some View {
         WebOverlay(danger: true) {
             OverlayTitle(text: "Flee the Dungeon?", red: true)
@@ -890,7 +922,7 @@ struct DungeonView: View {
     private func openPause() {
         if fighting { Feedback.announce("Cannot pause during combat. Finish the fight first."); return }
         paused = true
-        Feedback.announce("Game paused. \(run.name). Floor \(run.floor). Options: Resume, Save, Settings, Quests, Main Menu.")
+        Feedback.announce("Game paused. \(run.name). Floor \(run.floor).\(run.hunter.map { " Hunter is \($0.dist) rooms away." } ?? "") Options: Resume, Save, Settings, Quests, Main Menu.")
     }
 
     private var pauseOverlay: some View {

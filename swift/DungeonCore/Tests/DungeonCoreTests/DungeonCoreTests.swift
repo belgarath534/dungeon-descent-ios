@@ -2898,3 +2898,58 @@ final class BountyTests: XCTestCase {
         XCTAssertEqual(Bounties.dayKey(d), "Thu Oct 08 2026")
     }
 }
+
+final class HunterTests: XCTestCase {
+    private func hunted() -> Run {
+        var ch = PlayerCharacter(name: "H", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.hunterMode = true
+        return Run(character: ch)
+    }
+
+    func testClosesInAndAsks() {
+        var r = hunted()
+        XCTAssertEqual(r.hunter?.dist, 10)
+        for _ in 0..<7 { _ = Hunter.advance(&r) }
+        XCTAssertEqual(Hunter.advance(&r), .choose(2, Hunter.line(2)))
+        r.inCombat = true
+        XCTAssertEqual(Hunter.advance(&r), .closer(1, Hunter.line(1)), "no choice mid-fight")
+        XCTAssertEqual(Hunter.advance(&r), .caught)
+    }
+
+    func testFloorsAndPhaseTwo() {
+        var r = hunted()
+        r.hunter?.dist = 4
+        r.floor = 2
+        XCTAssertTrue(Hunter.newFloor(&r)!.contains("faster"))
+        XCTAssertEqual(r.hunter?.dist, 7)
+        XCTAssertEqual(r.hunter?.phase, 2)
+        r.hunter?.turns = 0
+        _ = Hunter.advance(&r); _ = Hunter.advance(&r); _ = Hunter.advance(&r)
+        XCTAssertEqual(r.hunter?.dist, 3, "an extra step every third turn")
+        r.hunter?.dist = 9
+        _ = Hunter.newFloor(&r)
+        XCTAssertEqual(r.hunter?.dist, 10)
+    }
+
+    func testCaughtAndSlain() {
+        var r = hunted()
+        let lives = r.lives
+        XCTAssertTrue(Hunter.caught(&r))
+        XCTAssertEqual(r.lives, lives - 1)
+        XCTAssertEqual(r.hunter?.dist, 8)
+        r.lives = 1
+        XCTAssertFalse(Hunter.caught(&r))
+        XCTAssertEqual(r.lives, 0)
+        var s = hunted()
+        s.level = 3
+        let e = Hunter.enemy(level: 3)
+        XCTAssertEqual(e.hp, 120)
+        XCTAssertTrue(e.isBoss && Hunter.isHunter(e))
+        let got = Hunter.slain(&s)
+        XCTAssertEqual(got.xp, 290)
+        XCTAssertEqual(got.gold, 145)
+        XCTAssertNil(s.hunter)
+        XCTAssertEqual(s.inventory.last?.name, "Hunter's Trophy")
+    }
+}

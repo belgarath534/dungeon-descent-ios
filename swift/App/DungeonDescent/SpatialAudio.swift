@@ -304,4 +304,32 @@ final class SpatialAudio {
         stopStalker()
         sound("jump-scare-v3.mp3", at: Self.point(.north, 0.3))
     }
+
+    // MARK: The Hunter
+
+    /// It's following your trail: a room is about 2 meters of sound, so far
+    /// off it's faint behind you and at one room it's at your back.
+    static func hunterPoint(_ dist: Int, from d: Compass) -> AVAudio3DPoint {
+        point(d, Float(max(1, dist)) * 2)
+    }
+
+    /// hunterProximitySound: a low pulse, higher and louder as it closes in,
+    /// doubled at two rooms or less.
+    func hunterPulse(_ dist: Int, from d: Compass) {
+        let freq: Double = dist >= 6 ? 60 : dist >= 4 ? 80 : dist >= 2 ? 110 : 140
+        let vol: Float = dist >= 6 ? 0.3 : dist >= 4 ? 0.5 : dist >= 2 ? 0.75 : 1
+        let p = Self.hunterPoint(dist, from: d)
+        play(tone(.sine, freq, seconds: 0.3, peak: 0.6), at: p, volume: vol)
+        if dist <= 2 { play(tone(.sine, freq * 1.1, seconds: 0.3, peak: 0.6), at: p, volume: vol, delay: 0.4) }
+    }
+
+    /// One beat of the heartbeat (yours, racing), pulled toward where it's coming from.
+    func heartbeat(_ dist: Int, from d: Compass) {
+        sound("hunter-heartbeat.mp3", at: Self.point(d, 0.4), volume: dist <= 2 ? 1 : 0.75)
+    }
+
+    /// It caught you (or turned to fight): the scream right behind you.
+    func hunterScare(close: Bool) {
+        sound("hunter-jumpscare.mp3", at: Self.point(.south, close ? 0.3 : 1.5))
+    }
 }

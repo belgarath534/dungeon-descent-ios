@@ -56,6 +56,11 @@ final class RunModel: ObservableObject {
             roomTitle = Rooms.floorName(saved.floor, dungeon: saved.dungeon)
             add("Run resumed on floor \(saved.floor). HP \(saved.hp) of \(saved.maxHp).")
             bountyBanner = Bounties.banner(game.store)
+            if let h = saved.hunter {
+                add(Hunter.line(h.dist))
+                startHeartbeat(h.dist)
+                hunterChoice = h.dist <= 2 && phase != .fighting
+            }
             playMusic()
             return
         }
@@ -143,6 +148,9 @@ final class RunModel: ObservableObject {
         r.startNotes.forEach { add($0) }
         if let m = r.minion { add("👾 \(m.name) fights beside you.") }
         _ = bounty(.runStarted)
+        if r.hunter != nil {
+            add("🏹 Hunter Mode active. Something has entered the dungeon behind you. It is 10 rooms away. Keep moving.")
+        }
         if let b = bountyBanner { add(b) }
         add("✦ Daily quest: \(game.dailyQuests.summary)")
         persist()
@@ -204,6 +212,11 @@ final class RunModel: ObservableObject {
             }
             return
         }
+        if let h = r.hunter, h.dist <= 3, !r.inCombat {
+            Sound.track("hunter-theme")
+            Sound.ambient(Soundtrack.ambientKey(dungeon: r.dungeon, difficulty: r.difficulty))
+            return
+        }
         if let e = r.enemy, r.inCombat {
             Sound.track(e.isBoss ? Soundtrack.bossTrack(dungeon: r.dungeon) : Soundtrack.battleTrack(dungeon: r.dungeon))
         } else {
@@ -227,8 +240,10 @@ final class RunModel: ObservableObject {
             move3D(c)
             return
         }
+        guard hunterMoves() else { return }
         movePrefix = "Moving \(dir). "
         enterRoom()
+        hunterAfterRoom()
     }
 
     // MARK: 3D Mode
@@ -262,14 +277,17 @@ final class RunModel: ObservableObject {
             SpatialAudio.shared.exitCues(g.here)
         case .entered(let first):
             SpatialAudio.shared.footsteps(d)
+            lastMove = d
+            guard hunterMoves() else { return }
             if first {
                 movePrefix = "Moving \(d.rawValue). \(g.exitsText) "
                 enterRoom()
             } else {
                 persist()
                 roomText = "You are back in a room you already cleared."
-                Feedback.announce("Moving \(d.rawValue). You are back in a room you already cleared. \(g.exitsText)")
+                Feedback.announce("Moving \(d.rawValue). You are back in a room you already cleared. \(g.exitsText)" + takeHunterLine())
             }
+            hunterAfterRoom()
             if run.stalker == nil && !run.inCombat { SpatialAudio.shared.exitCues(g.here) }
         }
     }
@@ -798,6 +816,172 @@ final class RunModel: ObservableObject {
         return said
     }
 
+    // MARK: Hunter Mode
+
+    /// Fight or run: the hunter is two rooms away or less.
+    @Published private(set) var hunterChoice = false
+    /// The hunter's latest line, spoken after the room you walked into.
+    private var hunterLine = ""
+    /// It just came within two rooms: ask once the room has played out.
+    private var hunterAsk = false
+    /// Which way you last walked in 3D Mode: the hunter follows from behind.
+    private var lastMove: Compass?
+    private var heartbeatTimer: Timer?
+
+    private func takeHunterLine() -> String {
+        defer { hunterLine = "" }
+        return hunterLine.isEmpty ? "" : " " + hunterLine
+    }
+
+    /// hunterTurn after a move or a won fight. False when it caught you
+    /// (which has already been handled).
+    private func hunterMoves(prefix: String = "") -> Bool {
+        var r = run
+        hunterAsk = false
+        guard let step = Hunter.advance(&r) else { return true }
+        run = r
+        switch step {
+        case .caught:
+            hunterCaught(prefix)
+            return false
+        case .closer(let dist, let line), .choose(let dist, let line):
+            add(line)
+            hunterLine = line
+            hunterAsk = dist <= 2
+            hunterSounds(dist)
+            return true
+        }
+    }
+
+    /// After the room: two rooms away and not in a fight means choose.
+    private func hunterAfterRoom() {
+        guard hunterAsk, !hunterChoice, let h = run.hunter, h.dist <= 2, phase != .fighting, phase != .defeat, phase != .victory, run.stalker == nil else { return }
+        if !hunterLine.isEmpty { Feedback.announce(takeHunterLine(), after: 0.8) }
+        hunterAsk = false
+        hunterChoice = true
+        Feedback.announce("The hunter is almost here. Choose: Fight the hunter, or Run and sprint away.", after: 1.0)
+    }
+
+    /// Where it's coming from: the door you came through in 3D Mode, otherwise behind you.
+    private var hunterFrom: Compass { lastMove?.opposite ?? .south }
+
+    private func hunterSounds(_ dist: Int) {
+        SpatialAudio.shared.hunterPulse(dist, from: hunterFrom)
+        if dist <= 2 { Feedback.warning() } else { Feedback.tap() }
+        startHeartbeat(dist)
+        if dist <= 3 && phase != .fighting { Sound.track("hunter-theme") }
+    }
+
+    /// The heartbeat from 5 rooms, faster the closer it is.
+    private func startHeartbeat(_ dist: Int) {
+        heartbeatTimer?.invalidate()
+        heartbeatTimer = nil
+        guard let gap = Hunter.heartbeat(dist) else { return }
+        SpatialAudio.shared.heartbeat(dist, from: hunterFrom)
+        heartbeatTimer = Timer.scheduledTimer(withTimeInterval: gap, repeats: true) { [weak self] t in
+            Task { @MainActor in
+                guard let self, let h = self.run.hunter, self.phase != .defeat, self.phase != .victory else { t.invalidate(); return }
+                SpatialAudio.shared.heartbeat(h.dist, from: self.hunterFrom)
+            }
+        }
+    }
+
+    private func stopHeartbeat() {
+        heartbeatTimer?.invalidate()
+        heartbeatTimer = nil
+    }
+
+    /// hunterFight: stand your ground. The Hunter is a boss; there's no fleeing.
+    func hunterFight() {
+        guard hunterChoice else { return }
+        hunterChoice = false
+        stopHeartbeat()
+        var r = run
+        let e = Hunter.enemy(level: r.level)
+        r.hunter = nil
+        Combat.begin(&r, against: e).forEach { add($0) }
+        let msg = "🏹 THE HUNTER attacks! HP: \(e.hp). ATK: \(e.atk.lowerBound)-\(e.atk.upperBound). This is the fight of your life."
+        add(msg)
+        setEvent(msg, tone: "danger")
+        SpatialAudio.shared.hunterScare(close: false)
+        hunterLine = ""
+        finish(r, dice, phase: .fighting, spoken: msg)
+        playMusic()
+    }
+
+    /// hunterRun: sprint into the next room with it one room behind you.
+    func hunterRun() {
+        guard hunterChoice else { return }
+        hunterChoice = false
+        var r = run
+        let msg = Hunter.sprint(&r)
+        run = r
+        add(msg)
+        hunterSounds(1)
+        if phase == .exploring && !threeD {
+            movePrefix = msg + " "
+            enterRoom()
+        } else {
+            persist()
+            Feedback.announce(msg + (exitsText.map { " " + $0 } ?? ""))
+        }
+    }
+
+    /// hunterCatch: a life lost and it circles back, or the end.
+    private func hunterCaught(_ prefix: String) {
+        var r = run
+        stopHeartbeat()
+        hunterChoice = false
+        hunterLine = ""
+        SpatialAudio.shared.hunterScare(close: true)
+        Sound.sfx("sfx-death")
+        Feedback.warning()
+        let msg = "🏹 The hunter reaches you. There is nowhere left to run. You have been defeated."
+        add(msg)
+        achievements.record(.died)
+        let said = (prefix.isEmpty ? "" : prefix + " ") + msg
+        guard Hunter.caught(&r) else {
+            runOver(r, killedBy: "The Hunter", spoken: said + " Defeated. The hunter claims you. All lives lost.")
+            return
+        }
+        let back = "🏹 The hunter circles back. It is 8 rooms away. Do not waste this chance. Lives remaining: \(r.lives)."
+        add(back)
+        finish(r, dice, phase: r.roomsOnFloor >= r.floorRoomsNeeded && r.roomsOnFloor > 0 ? .floorCleared : .exploring,
+               spoken: said + " " + back + (exitsText.map { " " + $0 } ?? ""))
+        hunterSounds(8)
+        playMusic()
+    }
+
+    /// hunterSlain: Hunter Mode is over for this run.
+    private func hunterSlain(_ spoken: String) {
+        var r = run
+        stopHeartbeat()
+        let (xp, gold) = Hunter.slain(&r)
+        r.enemy = nil
+        r.inCombat = false
+        r.gold += gold
+        game.wallet.addGold(gold)
+        r.kills += 1
+        let levels = Progression.gainXP(&r, xp)
+        achievements.record(.enemyKilled(Hunter.enemy(level: r.level), run: r))
+        Sound.sfx("sfx-victory")
+        Feedback.success()
+        var msg = "🏹 THE HUNTER IS DEAD. You stood your ground and won. The dungeon is yours. Hunter Mode deactivated. Hunter's Trophy, \(gold) gold and \(xp) XP."
+        add(msg)
+        setEvent(msg, tone: "good")
+        if levels > 0 {
+            var d = dice
+            if r.skillChoices.isEmpty { Skills.offer(&r, dice: &d) }
+            dice = d
+            levelUp = r.level
+            achievements.record(.levelReached(r.level))
+            msg += " Level up! You are now level \(r.level)."
+        }
+        finish(r, dice, phase: r.roomsOnFloor >= r.floorRoomsNeeded && r.roomsOnFloor > 0 ? .floorCleared : .exploring,
+               spoken: spoken + " " + msg + (exitsText.map { " " + $0 } ?? ""))
+        playMusic()
+    }
+
     // MARK: Bounties
 
     /// The active bounty while it's running, for the dungeon banner.
@@ -842,6 +1026,10 @@ final class RunModel: ObservableObject {
     }
 
     private func enemyDefeated(_ e: Enemy, spoken: String, result: TurnResult? = nil) {
+        if Hunter.isHunter(e) {
+            hunterSlain(spoken)
+            return
+        }
         var r = run
         var d = dice
         let reward = Progression.rewardKill(&r, e, dice: &d, wallet: game.wallet)
@@ -937,6 +1125,13 @@ final class RunModel: ObservableObject {
         }
         r.enemy = nil
         r.inCombat = false
+        // killing an enemy = one turn passed: the hunter comes closer.
+        if r.hunter != nil {
+            run = r
+            dice = d
+            guard hunterMoves(prefix: said) else { return }
+            r = run
+        }
         if e.mechanics["guardian"] == .bool(true) {
             r.guardianDone = true
             // 3D Mode: the final chamber is a room of its own beyond this one.
@@ -1236,7 +1431,15 @@ final class RunModel: ObservableObject {
             finish(r, dice, phase: r.roomsOnFloor >= r.floorRoomsNeeded ? .floorCleared : .exploring,
                    spoken: spoken + " " + msg)
             playMusic()
-        case .runOver where r.hardcore:
+        case .runOver:
+            runOver(r, killedBy: killedBy, spoken: spoken)
+        }
+    }
+
+    /// All lives gone (showDefeat), or the character itself in Hardcore.
+    private func runOver(_ r: Run, killedBy: String, spoken: String) {
+        stopHeartbeat()
+        if r.hardcore {
             run = r
             phase = .defeat
             game.deleteCharacter(at: characterIndex)
@@ -1244,24 +1447,24 @@ final class RunModel: ObservableObject {
             let msg = "💀 HARDCORE — \(r.name) has fallen. This character is gone forever. There are no second chances in Hardcore Mode."
             add(msg)
             Feedback.announce(spoken + " " + msg)
-        case .runOver:
-            run = r
-            phase = .defeat
-            add("Defeated. All lives lost. \(r.name) fell on floor \(r.floor).")
-            let floor = r.floor
-            game.updateCharacter(characterIndex) {
-                $0.logDeath(floor: floor, killedBy: killedBy, run: r)
-                $0.floor = 1
-                // Classic runs start over at level 1; Legacy keeps the level
-                // but its dungeon tier goes back to 1 (showDefeat).
-                if $0.runMode == "legacy" { $0.dungeonTier = 1 } else { $0.persistLevel = 1 }
-            }
-            game.recordDeath(r, killedBy: killedBy)
-            game.clearRun(for: characterIndex)
-            killer = killedBy
-            showingDeathCinematic = true
-            Feedback.announce(spoken + " " + deathCinematicSpoken)
+            return
         }
+        run = r
+        phase = .defeat
+        add("Defeated. All lives lost. \(r.name) fell on floor \(r.floor).")
+        let floor = r.floor
+        game.updateCharacter(characterIndex) {
+            $0.logDeath(floor: floor, killedBy: killedBy, run: r)
+            $0.floor = 1
+            // Classic runs start over at level 1; Legacy keeps the level
+            // but its dungeon tier goes back to 1 (showDefeat).
+            if $0.runMode == "legacy" { $0.dungeonTier = 1 } else { $0.persistLevel = 1 }
+        }
+        game.recordDeath(r, killedBy: killedBy)
+        game.clearRun(for: characterIndex)
+        killer = killedBy
+        showingDeathCinematic = true
+        Feedback.announce(spoken + " " + deathCinematicSpoken)
     }
 
     private func victory(_ spoken: String) {
@@ -1731,6 +1934,12 @@ final class RunModel: ObservableObject {
         }
         if let line = Subclasses.onFloor(&r, dice: &d) { add(line) }
         if let line = Blacksmith.onFloor(&r) { add(line) }
+        var hunterFloor = ""
+        if let line = Hunter.newFloor(&r) {
+            add(line)
+            hunterFloor = " " + line
+            hunterSounds(r.hunter?.dist ?? 10)
+        }
         r.worldCurse = VoidReaperLive.shared.cursed
         if r.voidCurse {
             r.voidCurse = false
@@ -1757,7 +1966,7 @@ final class RunModel: ObservableObject {
         achievements.setGlobalMax("bestFloor", Double(floor))
         journal("Descended to floor \(r.floor). Kills so far: \(r.kills). HP: \(r.hp)/\(r.maxHp).", in: &r)
         let questLine = milestone + questDone(&r, game.dailyQuests.reachedFloor(floor, usedPotion: r.usedPotion))
-            + bounty(.floor(floor, dungeon: r.dungeon, diedThisRun: r.diedThisRun))
+            + bounty(.floor(floor, dungeon: r.dungeon, diedThisRun: r.diedThisRun)) + hunterFloor
         Sound.sfx("sfx-stairs")
         Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
         // Daily Dungeon's Stripped: no merchant on the stairs.
@@ -1918,8 +2127,9 @@ final class RunModel: ObservableObject {
         phase = newPhase
         persist()
         setEvent(spoken, tone: newPhase == .fighting ? "danger" : newPhase == .floorCleared || newPhase == .shopping ? "good" : "")
-        Feedback.announce(movePrefix + spoken, after: screenChanges ? 0.6 : 0)
+        Feedback.announce(movePrefix + spoken + takeHunterLine(), after: screenChanges ? 0.6 : 0)
         movePrefix = ""
+        if newPhase == .exploring || newPhase == .floorCleared { hunterAfterRoom() }
     }
 
     func setEvent(_ text: String, tone: String = "") {

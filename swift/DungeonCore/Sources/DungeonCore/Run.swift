@@ -78,12 +78,13 @@ public struct Run: Codable, Sendable {
     /// Firelord: the next enemy walks into burning ground.
     public var burningGround = false
     /// Challenges: the Daily Dungeon's modifiers, its save key and start
-    /// time, and the Gauntlet stage (0-based) with the dungeon to return to.
+    /// time, and the Gauntlet stage (0-based).
     public var dailyMods: [String] = []
     public var dailyKey: String? = nil
     public var dailyStart = 0.0
     public var gauntletStage: Int? = nil
-    public var gauntletHome: String? = nil
+    /// Hunter Mode: the hunter on your trail (nil when it's off or dead).
+    public var hunter: Hunter.State? = nil
     /// 3D Mode: the floor's rooms, walls and doors (nil when 3D Mode is off).
     public var roomGraph: RoomGraph? = nil
     /// The seasonal or weekly event running (getActiveEvent), set when the
@@ -245,6 +246,7 @@ public struct Run: Codable, Sendable {
         }
         self.gold = max(0, gold)
         hardcore = ch.hardcoreMode
+        if ch.hunterMode { hunter = Hunter.State() }
         ngPlus = ch.ngPlusActive
         if case .number(let n)? = ch.extra["ngPlusCount"] { ngPlusCount = Int(n) }
         // Continue Journey carries level and XP into the next dungeon.
