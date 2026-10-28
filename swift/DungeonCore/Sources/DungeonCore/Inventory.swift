@@ -31,6 +31,16 @@ public enum Inventory {
             return Outcome(message: "🪞 The Mirror Fragment shatters. All corruption purged.")
         }
 
+        // The Whispering Forest's Music Box: its melody clears the corruption.
+        if WhisperingForest.isMusicBox(item) {
+            guard WhisperingForest.here(run) else {
+                return Outcome(message: "The Music Box only works in the Whispering Forest.", used: false)
+            }
+            run.forestCorruption = 0
+            run.inventory.remove(at: index)
+            return Outcome(message: "🎵 You open the Music Box. The melody plays. The corruption inside you fades to nothing.")
+        }
+
         // Daily Dungeon's Dry Run: no potions or elixirs at all.
         if Challenges.has(run, "no-potions") && (item.type.contains("potion") || item.type == "elixir" || item.type == "heal") {
             return Outcome(message: "Daily modifier Dry Run: potions cannot be used in this run.", used: false)
@@ -47,6 +57,10 @@ public enum Inventory {
             if cleanses {
                 run.shadowCorruption = 0
                 out.message += " All corruption removed."
+            }
+            if WhisperingForest.here(run) && run.forestCorruption > 0 {
+                run.forestCorruption = max(0, run.forestCorruption - WhisperingForest.potionCleanse)
+                out.message += " The forest's corruption recedes to \(run.forestCorruption) percent."
             }
         case "elixir", "heal":
             guard run.hp < run.maxHp else {

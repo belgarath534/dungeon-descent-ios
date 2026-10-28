@@ -3064,3 +3064,28 @@ final class ShadowEventTests: XCTestCase {
         XCTAssertTrue(r.shadowNotes)
     }
 }
+
+final class ForestTests: XCTestCase {
+    func testMeterBoxAndPotions() {
+        var r = Run(character: PlayerCharacter(name: "F", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                               dungeon: "The Whispering Forest", difficulty: .wanderer))
+        XCTAssertEqual(WhisperingForest.corrupt(&r, 50).first, "🌲 Warning. Corruption at 50 percent.")
+        r.floor = 3
+        XCTAssertNotNil(WhisperingForest.onFloor(&r))
+        r.inventory.append(Item(name: "Health Potion", icon: "🧪", type: "potion", desc: "", heal: 40))
+        r.hp = 5
+        _ = Inventory.use(&r, at: r.inventory.count - 1)
+        XCTAssertEqual(r.forestCorruption, 40)
+        let box = r.inventory.firstIndex { WhisperingForest.isMusicBox($0) }!
+        XCTAssertTrue(Inventory.use(&r, at: box).used)
+        XCTAssertEqual(r.forestCorruption, 0)
+        r.forestCorruption = 95
+        _ = WhisperingForest.corrupt(&r, 10)
+        XCTAssertEqual(r.hp, 0, "the forest takes a life")
+        XCTAssertEqual(r.forestCorruption, 0, "and lets go, so a revive isn't killed again")
+        var elsewhere = Run(character: PlayerCharacter(name: "G", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        XCTAssertTrue(WhisperingForest.corrupt(&elsewhere, 50).isEmpty)
+        XCTAssertEqual(elsewhere.forestCorruption, 0)
+    }
+}

@@ -59,6 +59,7 @@ final class RunModel: ObservableObject {
                 DispatchQueue.main.async { [weak self] in self?.startSecurityRoom(dir) }
             }
             bountyBanner = Bounties.banner(game.store)
+            startForest()
             if let h = saved.hunter {
                 add(Hunter.line(h.dist))
                 startHeartbeat(h.dist)
@@ -151,6 +152,8 @@ final class RunModel: ObservableObject {
         r.startNotes.forEach { add($0) }
         if let m = r.minion { add("👾 \(m.name) fights beside you.") }
         _ = bounty(.runStarted)
+        startForest()
+        if WhisperingForest.here(r) { add("🌲 The forest's corruption creeps in while you explore. Music Boxes and potions push it back.") }
         if let c = Corruption.status(r) { add(c) }
         let hello = guideSays(.dungeonStart, r)
         if !hello.isEmpty { Feedback.announce(hello, after: 2.5) }
@@ -822,6 +825,43 @@ final class RunModel: ObservableObject {
             said += bountyKill(e, r)
         }
         return said
+    }
+
+    // MARK: The Whispering Forest
+
+    private var forestTimer: Timer?
+
+    /// startCorruptionSystem: 1% every 8 seconds spent exploring the forest.
+    /// It waits while a fight, an event, the shop or a choice is open.
+    private func startForest() {
+        forestTimer?.invalidate()
+        forestTimer = nil
+        guard WhisperingForest.here(run) else { return }
+        forestTimer = Timer.scheduledTimer(withTimeInterval: WhisperingForest.tickSeconds, repeats: true) { [weak self] t in
+            Task { @MainActor in
+                guard let self, self.phase != .victory, self.phase != .defeat else { t.invalidate(); return }
+                self.forestTick()
+            }
+        }
+    }
+
+    private func forestTick() {
+        guard phase == .exploring, levelUp == nil, !hunterChoice, run.stalker == nil, run.skillChoices.isEmpty,
+              !Subclasses.pending(run), blacksmith == nil, !showingHome else { return }
+        var r = run
+        let lines = WhisperingForest.corrupt(&r, 1)
+        lines.forEach { add($0) }
+        if r.hp <= 0 {
+            run = r
+            playerDied(killedBy: "the forest's corruption", spoken: lines.joined(separator: " "))
+            return
+        }
+        run = r
+        persist()
+        if !lines.isEmpty {
+            Sound.sfx(r.forestCorruption >= 75 ? "sfx-sanity-critical" : "sfx-sanity-warning")
+            Feedback.announce(lines.joined(separator: " "))
+        }
     }
 
     // MARK: The Security Room
@@ -1939,6 +1979,10 @@ final class RunModel: ObservableObject {
             achievements.trackGlobal("totalPotions")
         }
         if out.used, let item, item.type == "elixir" || item.type == "heal" { achievements.record(.elixirUsed) }
+        if out.used, let item, WhisperingForest.isMusicBox(item) {
+            Sound.track("music-box")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in self?.playMusic() }
+        }
         if out.used, let item {
             Sound.sfx(item.isWeapon || item.isArmor ? "sfx-confirm"
                       : ["potion", "elixir", "heal", "sp-potion", "atk-potion", "def-potion", "luck-potion", "swift-potion"].contains(item.type) ? "sfx-potion"
@@ -2049,6 +2093,10 @@ final class RunModel: ObservableObject {
         if let line = Subclasses.onFloor(&r, dice: &d) { add(line) }
         if let line = Blacksmith.onFloor(&r) { add(line) }
         var hunterFloor = ""
+        if let line = WhisperingForest.onFloor(&r) {
+            add(line)
+            hunterFloor += " " + line
+        }
         if let line = Hunter.newFloor(&r) {
             add(line)
             hunterFloor = " " + line

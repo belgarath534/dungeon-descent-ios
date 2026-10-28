@@ -130,6 +130,8 @@ public struct Run: Codable, Sendable {
     public var luckKills = 0
     /// The Handwriting (Shadow World): your next attack is a critical hit.
     public var shadowNotes = false
+    /// The Whispering Forest's corruption meter, 0–100.
+    public var forestCorruption = 0
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false

@@ -46,6 +46,7 @@ struct DungeonView: View {
                     roomTracker
                     if let h = run.hunter { hunterBar(h.dist) }
                     if let c = run.corruption, c > 0 { corruptionBar(c) }
+                    if WhisperingForest.here(run) { forestBar(run.forestCorruption) }
                     if let b = model.bountyBanner {
                         Text(b).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x44ff88))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -901,6 +902,17 @@ struct DungeonView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Corruption: \(c) percent.")
+    }
+
+    /// #corruption-bar-wrap: the Whispering Forest's meter.
+    private func forestBar(_ c: Int) -> some View {
+        let color = Color(hex: c < 50 ? 0x2d8a2d : c < 75 ? 0xa07000 : 0x8a0000)
+        return VStack(alignment: .leading, spacing: 4) {
+            Text("🌲 Forest Corruption: \(c)%").font(Theme.cinzel(10.4)).foregroundStyle(color)
+            Bar(value: Double(c) / 100, colors: [color, color.opacity(0.7)], track: color.opacity(0.15), height: 4)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Forest corruption: \(c) percent.")
     }
 
     /// showHunterChoice

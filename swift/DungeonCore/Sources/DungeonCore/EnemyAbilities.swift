@@ -79,6 +79,10 @@ enum EnemyAbilities {
             log.append("\(e.name) gathers itself. Its attacks grow stronger!")
         }
         run.enemy = e
+        if WhisperingForest.shadeTriple(&run, dice: &dice, log: &log) {
+            m.multiplier = 2
+            return m
+        }
         guard let s = GameContent.shared.enemySpecials[e.name], dice.chance(s.chance) else { return m }
         log.append("⚡ " + s.msg)
         switch s.effect {

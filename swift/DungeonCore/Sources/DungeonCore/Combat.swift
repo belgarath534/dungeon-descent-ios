@@ -65,6 +65,11 @@ public enum Combat {
         // 15% elite chance from floor 4 (enterRoom)
         let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(0.15)
         let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
+        if !elite, var shade = WhisperingForest.shade(for: run, dice: &dice) {
+            if run.worldCurse { cursed(&shade) }
+            Challenges.shape(&shade, run)
+            return shade
+        }
         if !elite, var stalker = Corruption.hunter(for: run, dice: &dice) {
             if run.worldCurse { cursed(&stalker) }
             Challenges.shape(&stalker, run)
@@ -719,6 +724,7 @@ public enum Combat {
         }
         EnemyAbilities.afterAttack(&run, taken: taken, dice: &dice, log: &log)
         ShadowWorld.afterAttack(&run, log: &log)
+        WhisperingForest.afterAttack(&run, log: &log)
         if var c = run.enemy, c.cursedTurns > 0 {
             c.cursedTurns -= 1
             if c.cursedTurns == 0 { log.append("The curse on \(c.name) fades.") }
