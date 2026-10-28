@@ -3016,3 +3016,51 @@ final class GuideTests: XCTestCase {
         XCTAssertEqual(Guide.name(MemoryStore(["dd_companion_name": "Rook"])), "Rook")
     }
 }
+
+final class ShadowEventTests: XCTestCase {
+    private func shadowRun() -> Run {
+        var r = Run(character: PlayerCharacter(name: "S", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                               dungeon: "The Shadow World", difficulty: .wanderer))
+        r.floor = 4
+        return r
+    }
+
+    func testSecurityRoom() {
+        let w = Wallet(store: MemoryStore()) { _ in }
+        var dice = SeededDice(seed: 2)
+        var r = shadowRun()
+        r.pendingEvent = "shadow-security-east"
+        XCTAssertEqual(Encounters.event("shadow-security-east")?.choices.count, 4)
+        let west = Compass.allCases.firstIndex(of: .west)!
+        let ok = Encounters.choose(west, &r, dice: &dice, wallet: w)
+        XCTAssertTrue(ok.message.contains("escaped"))
+        XCTAssertEqual(ok.gold, 50)
+        r.pendingEvent = "shadow-security-east"
+        let hp = r.hp
+        let late = Encounters.choose(-1, &r, dice: &dice, wallet: w)
+        XCTAssertTrue(late.message.contains("Time ran out"))
+        XCTAssertEqual(r.hp, hp - jsRound(Double(r.maxHp) * 0.3))
+        XCTAssertEqual(r.shadowCorruption, 1)
+    }
+
+    func testCorruptionAndRelics() {
+        let w = Wallet(store: MemoryStore()) { _ in }
+        var dice = SeededDice(seed: 9)
+        var r = shadowRun()
+        r.hp = 10
+        r.pendingEvent = "shadow-mirror"
+        _ = Encounters.choose(0, &r, dice: &dice, wallet: w)
+        XCTAssertEqual(r.hp, r.maxHp)
+        XCTAssertEqual(r.shadowCorruption, 2, "the Mirror's price is Shadow Corruption")
+        let key = GameContent.shared.dungeon("The Shadow World").loot.first { $0.name == "Door Key" }!
+        r.inventory.append(key)
+        for _ in 0..<20 {
+            r.pendingEvent = "shadow-two-doors-1"
+            let out = Encounters.choose(1, &r, dice: &dice, wallet: w)
+            XCTAssertTrue(out.message.contains("chest"), out.message)
+        }
+        r.pendingEvent = "shadow-handwriting"
+        _ = Encounters.choose(0, &r, dice: &dice, wallet: w)
+        XCTAssertTrue(r.shadowNotes)
+    }
+}

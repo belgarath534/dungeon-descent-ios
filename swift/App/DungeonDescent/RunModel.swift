@@ -55,6 +55,9 @@ final class RunModel: ObservableObject {
                     && !(saved.floor >= Challenges.bossFloor(saved) && saved.difficulty != .endless) ? .floorCleared : .exploring
             roomTitle = Rooms.floorName(saved.floor, dungeon: saved.dungeon)
             add("Run resumed on floor \(saved.floor). HP \(saved.hp) of \(saved.maxHp).")
+            if let dir = ShadowEvents.securityDirection(saved.pendingEvent) {
+                DispatchQueue.main.async { [weak self] in self?.startSecurityRoom(dir) }
+            }
             bountyBanner = Bounties.banner(game.store)
             if let h = saved.hunter {
                 add(Hunter.line(h.dist))
@@ -453,6 +456,7 @@ final class RunModel: ObservableObject {
                 add("\(label) \(ev.title) — \(ev.text)")
                 finish(r, d, phase: .event,
                        spoken: spoken + " Special event: \(ev.title). \(ev.text) " + ev.choices.joined(separator: " or ") + ".")
+                if let dir = ShadowEvents.securityDirection(ev.id) { startSecurityRoom(dir) }
             } else {
                 add("\(label) \(roomText)")
                 finishQuietRoom(r, d, spoken: spoken)
@@ -470,6 +474,7 @@ final class RunModel: ObservableObject {
 
     func chooseEvent(_ choice: Int) {
         guard phase == .event else { return }
+        stopSecurityRoom()
         var r = run
         var d = dice
         let levelBefore = r.level
@@ -817,6 +822,33 @@ final class RunModel: ObservableObject {
             said += bountyKill(e, r)
         }
         return said
+    }
+
+    // MARK: The Security Room
+
+    private var securityTimer: Timer?
+
+    /// The growl from the Darkness Swallower's camera, in 3D, and the clock.
+    /// It waits for the room's announcement before counting down.
+    private func startSecurityRoom(_ dir: Compass) {
+        stopSecurityRoom()
+        var left = ShadowEvents.securitySeconds + 8
+        SpatialAudio.shared.sound("monster-growl.mp3", at: SpatialAudio.point(dir, 3), delay: 0.5)
+        securityTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] t in
+            Task { @MainActor in
+                guard let self, self.phase == .event, ShadowEvents.securityDirection(self.run.pendingEvent) == dir else { t.invalidate(); return }
+                left -= 1
+                if Int(left) % 4 == 0 { SpatialAudio.shared.sound("monster-growl.mp3", at: SpatialAudio.point(dir, 3)) }
+                if left == 10 { Feedback.announce("10 seconds remaining.") }
+                if left == 5 { Feedback.announce("5 seconds. Hurry.") }
+                if left <= 0 { self.chooseEvent(-1) }
+            }
+        }
+    }
+
+    private func stopSecurityRoom() {
+        securityTimer?.invalidate()
+        securityTimer = nil
     }
 
     // MARK: Hunter Mode

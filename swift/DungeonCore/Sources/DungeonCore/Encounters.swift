@@ -158,12 +158,41 @@ public enum Encounters {
         Event(id: "wounded", title: "Wounded Adventurer",
               text: "A figure slumps against the wall. Still breathing. Their eyes find yours and they hold up one hand — not attacking. Asking.",
               choices: ["Give them a potion", "Keep moving"], weight: 2, dungeons: nil),
+        Event(id: "shadow-mirror", title: "The Mirror",
+              text: "A mirror stands in the corridor. It should not be here. It shows you — but the version in the mirror is at full health. It looks at you with something like pity. It offers you a deal.",
+              choices: ["Accept the deal", "Ignore it", "Shatter it"], weight: 3, dungeons: [ShadowWorld.name]),
+        Event(id: "shadow-voice", title: "The Voice",
+              text: "You hear your own voice coming from the next room. It says something you have not said yet. It sounds frightened. You recognize the words — you will say them eventually. The question is when.",
+              choices: ["Follow the voice", "Ignore it and move on"], weight: 3, dungeons: [ShadowWorld.name]),
+        Event(id: "shadow-handwriting", title: "The Handwriting",
+              text: "Notes on the wall. Your handwriting. You have no memory of writing them. They describe the next enemy in precise detail — its weaknesses, its patterns, how it moves. You do not know how you knew this.",
+              choices: ["Read the notes carefully", "Ignore them"], weight: 3, dungeons: [ShadowWorld.name]),
+        Event(id: "shadow-offering", title: "The Offering",
+              text: "Something left on the floor. It was not there a moment ago. It is wrapped in shadow cloth. It is addressed to you — your name, your class, your current floor. Whatever left it knows exactly who you are.",
+              choices: ["Take it", "Leave it"], weight: 3, dungeons: [ShadowWorld.name]),
+        Event(id: "shadow-security-room", title: "The Security Room", text: "", choices: [], weight: 2, dungeons: [ShadowWorld.name]),
+        Event(id: "shadow-two-doors", title: "The Two Doors", text: "", choices: [], weight: 2, dungeons: [ShadowWorld.name]),
         Event(id: "inscription", title: "Ancient Inscription",
               text: "Words carved into the wall in a language older than this kingdom. You can read three of them. They say something about what is below.",
               choices: ["Study the inscription", "Move on"], weight: 2, dungeons: nil),
     ]
 
-    public static func event(_ id: String) -> Event? { events.first { $0.id == id } }
+    /// An event by id. The Two Doors and the Security Room carry their roll in
+    /// the id ("shadow-two-doors-2", "shadow-security-east").
+    public static func event(_ id: String) -> Event? {
+        if id.hasPrefix("shadow-two-doors-"), let n = Int(id.dropFirst("shadow-two-doors-".count)), ShadowEvents.doors.indices.contains(n) {
+            let d = ShadowEvents.doors[n]
+            return Event(id: id, title: "The Two Doors",
+                         text: "The corridor ends in two doors. There is no going back. You must choose one. The dungeon does not offer alternatives. Door one: \(d.0) Door two: \(d.1)",
+                         choices: ["Door One: \(d.0)", "Door Two: \(d.1)"], weight: 0, dungeons: nil)
+        }
+        if id.hasPrefix("shadow-security-"), let dir = Compass(rawValue: String(id.dropFirst("shadow-security-".count))) {
+            return Event(id: id, title: "The Security Room",
+                         text: "Four camera feeds — North, South, East, West. The Darkness Swallower is on one feed. Listen for the growl: it comes from its camera. Then escape the opposite direction. You have \(Int(ShadowEvents.securitySeconds)) seconds. The growl is coming from the \(dir.rawValue).",
+                         choices: Compass.allCases.map { "Escape \($0.rawValue)" }, weight: 0, dungeons: nil)
+        }
+        return events.first { $0.id == id }
+    }
 
     /// A quiet room has a 10% chance of an event (rollDungeonEvent). General events
     /// don't happen in the Abyssal Deep, which has its own.
@@ -172,11 +201,14 @@ public enum Encounters {
         var pool: [Event] = []
         for e in events {
             if let d = e.dungeons, !d.contains(run.dungeon) { continue }
-            if e.dungeons == nil && run.dungeon == "The Abyssal Deep" { continue }
+            if e.dungeons == nil && (run.dungeon == "The Abyssal Deep" || run.dungeon == ShadowWorld.name) { continue }
             pool += Array(repeating: e, count: e.weight)
         }
         guard !pool.isEmpty else { return nil }
-        return pool[dice.roll(0...(pool.count - 1))]
+        let e = pool[dice.roll(0...(pool.count - 1))]
+        if e.id == "shadow-two-doors" { return event("shadow-two-doors-\(dice.roll(0...(ShadowEvents.doors.count - 1)))") }
+        if e.id == "shadow-security-room" { return event("shadow-security-\(Compass.allCases[dice.roll(0...3)].rawValue)") }
+        return e
     }
 
     static let potion = Item(name: "Health Potion", icon: "🧪", type: "potion", desc: "Restores 40 HP.", heal: 40)
@@ -188,6 +220,8 @@ public enum Encounters {
         guard let id = run.pendingEvent else { return Outcome(message: "") }
         run.pendingEvent = nil
         func gold(_ g: Int) { run.gold += g; wallet.addGold(g) }
+
+        if id.hasPrefix("shadow-") { return ShadowEvents.choose(id, choice, &run, dice: &dice, wallet: wallet) }
 
         switch (id, choice) {
         case ("abyssal-singing", 0):

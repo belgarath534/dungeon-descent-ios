@@ -171,6 +171,10 @@ public enum Combat {
             baseAtk = jsRound(Double(baseAtk) * 1.5)
             run.fight.huntersMarkReady = false
             r.log.append("🏹 Hunter's Mark — critical first strike!")
+        } else if run.shadowNotes {
+            baseAtk = jsRound(Double(baseAtk) * 1.5)
+            run.shadowNotes = false
+            r.log.append("📝 Your notes were right. Critical hit!")
         }
         if run.has("cu-night-blessing") && CoinShop.isNightNow() { baseAtk += 5 }
         baseAtk = Subclasses.attackBonus(&run, baseAtk, dice: &dice, log: &r.log)

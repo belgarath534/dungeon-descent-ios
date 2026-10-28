@@ -128,6 +128,8 @@ public struct Run: Codable, Sendable {
     public var runeSpeed = false
     public var runeFortune = false
     public var luckKills = 0
+    /// The Handwriting (Shadow World): your next attack is a critical hit.
+    public var shadowNotes = false
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false
