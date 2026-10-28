@@ -45,6 +45,7 @@ struct DungeonView: View {
                     xpRow
                     roomTracker
                     if let h = run.hunter { hunterBar(h.dist) }
+                    if let c = run.corruption, c > 0 { corruptionBar(c) }
                     if let b = model.bountyBanner {
                         Text(b).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x44ff88))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -880,6 +881,17 @@ struct DungeonView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Hunter: \(dist) room\(dist == 1 ? "" : "s") away.")
+    }
+
+    /// #dg-corruption-row
+    private func corruptionBar(_ c: Int) -> some View {
+        let color = Color(hex: 0x7a207a)
+        return VStack(alignment: .leading, spacing: 4) {
+            Text("☠ Corruption: \(c)%").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xb060b0))
+            Bar(value: Double(c) / 100, colors: [color, Color(hex: 0xb040b0)], track: color.opacity(0.15), height: 4)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Corruption: \(c) percent.")
     }
 
     /// showHunterChoice

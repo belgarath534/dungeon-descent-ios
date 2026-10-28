@@ -65,6 +65,11 @@ public enum Combat {
         // 15% elite chance from floor 4 (enterRoom)
         let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(0.15)
         let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
+        if !elite, var stalker = Corruption.hunter(for: run, dice: &dice) {
+            if run.worldCurse { cursed(&stalker) }
+            Challenges.shape(&stalker, run)
+            return stalker
+        }
         if !elite, var seasonal = Events.seasonalEnemy(run, dice: &dice) {
             Challenges.shape(&seasonal, run)
             return seasonal
@@ -759,7 +764,7 @@ public enum Combat {
     }
 
     /// New Game+ count as the web version reads it (`ngPlusCount || 1`), or nil outside NG+.
-    private static func ngCount(_ run: Run) -> Int? {
+    static func ngCount(_ run: Run) -> Int? {
         guard run.ngPlus else { return nil }
         let n = run.ngPlusCount ?? 1
         return n == 0 ? 1 : n

@@ -240,8 +240,13 @@ public enum Inventory {
     /// floors, with a rolled rarity. It goes in the bag.
     public static func equipmentDrop(_ run: inout Run, dice: inout some Dice) -> Item? {
         guard dice.chance(0.15 + (run.has("cu-bloodhound") ? 0.05 : 0)) else { return nil }
-        let level = max(1, 1 + run.floor / 3)
-        let tier = Rarity.roll(dice: &dice)
+        let item = equipment(level: max(1, 1 + run.floor / 3), tier: Rarity.roll(dice: &dice), dice: &dice)
+        run.inventory.append(item)
+        return item
+    }
+
+    /// A random weapon or armor of a level and rarity.
+    static func equipment(level: Int, tier: Rarity.Tier, dice: inout some Dice) -> Item {
         var item: Item
         if dice.chance(0.5) {
             let t = weaponTypes[dice.roll(0...(weaponTypes.count - 1))]
@@ -253,7 +258,6 @@ public enum Inventory {
                         icon: t.icon, type: "armor", desc: t.desc, defBase: t.def, level: level, armorType: t.id, isEquippable: true)
         }
         if tier.id != "common" { item = Rarity.apply(tier, to: item, dice: &dice) }
-        run.inventory.append(item)
         return item
     }
 

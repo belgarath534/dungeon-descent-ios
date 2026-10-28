@@ -2953,3 +2953,50 @@ final class HunterTests: XCTestCase {
         XCTAssertEqual(s.inventory.last?.name, "Hunter's Trophy")
     }
 }
+
+final class CorruptionTests: XCTestCase {
+    private func corrupted(_ c: Int) -> Run {
+        var ch = PlayerCharacter(name: "C", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.corruptionMode = true
+        ch.corruption = c
+        return Run(character: ch)
+    }
+
+    func testLivesLostAndThresholds() {
+        var r = corrupted(22)
+        r.floor = 5
+        let got = Corruption.lifeLost(&r)
+        XCTAssertEqual(got?.total, 29)
+        XCTAssertTrue(got!.lines.contains { $0.contains("whisper") })
+        r.corruption = 98
+        r.floor = 9
+        XCTAssertEqual(Corruption.lifeLost(&r)?.total, 100)
+        var off = Run(character: PlayerCharacter(name: "N", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                                 dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        XCTAssertNil(Corruption.lifeLost(&off), "only with Corruption Mode on")
+    }
+
+    func testEffects() {
+        var dice = SeededDice(seed: 11)
+        var r = corrupted(100)
+        r.floor = 5
+        var hunters = 0, backfires = 0
+        for _ in 0..<400 {
+            if Corruption.hunter(for: r, dice: &dice) != nil { hunters += 1 }
+            var t = r
+            if Corruption.backfire(&t, skill: "Shield Bash", dice: &dice) != nil {
+                backfires += 1
+                XCTAssertEqual(t.hp, r.hp - jsRound(Double(r.maxHp) * 0.1))
+            }
+        }
+        XCTAssertTrue((20...70).contains(hunters), "\(hunters)")
+        XCTAssertTrue((30...100).contains(backfires), "\(backfires)")
+        XCTAssertEqual(Corruption.goldMult(r), 2)
+        let prize = Corruption.bossPrize(&r, dice: &dice)
+        XCTAssertNotNil(prize)
+        XCTAssertTrue(prize!.name.contains("Legendary") || prize!.extra["rarity"] == .string("legendary") || prize!.desc.contains("Legendary"), prize!.name)
+        let low = corrupted(40)
+        for _ in 0..<200 { XCTAssertNil(Corruption.hunter(for: low, dice: &dice)) }
+    }
+}

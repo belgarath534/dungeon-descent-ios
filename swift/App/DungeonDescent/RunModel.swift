@@ -148,6 +148,7 @@ final class RunModel: ObservableObject {
         r.startNotes.forEach { add($0) }
         if let m = r.minion { add("👾 \(m.name) fights beside you.") }
         _ = bounty(.runStarted)
+        if let c = Corruption.status(r) { add(c) }
         if r.hunter != nil {
             add("🏹 Hunter Mode active. Something has entered the dungeon behind you. It is 10 rooms away. Keep moving.")
         }
@@ -939,7 +940,7 @@ final class RunModel: ObservableObject {
         let msg = "🏹 The hunter reaches you. There is nowhere left to run. You have been defeated."
         add(msg)
         achievements.record(.died)
-        let said = (prefix.isEmpty ? "" : prefix + " ") + msg
+        let said = (prefix.isEmpty ? "" : prefix + " ") + msg + corruptionLifeLost(&r)
         guard Hunter.caught(&r) else {
             runOver(r, killedBy: "The Hunter", spoken: said + " Defeated. The hunter claims you. All lives lost.")
             return
@@ -980,6 +981,17 @@ final class RunModel: ObservableObject {
         finish(r, dice, phase: r.roomsOnFloor >= r.floorRoomsNeeded && r.roomsOnFloor > 0 ? .floorCleared : .exploring,
                spoken: spoken + " " + msg + (exitsText.map { " " + $0 } ?? ""))
         playMusic()
+    }
+
+    // MARK: Corruption Mode
+
+    /// A life lost darkens the character's soul (saved on the character).
+    private func corruptionLifeLost(_ r: inout Run) -> String {
+        guard let (total, lines) = Corruption.lifeLost(&r) else { return "" }
+        game.updateCharacter(characterIndex) { $0.corruption = total }
+        lines.forEach { add($0) }
+        if total >= 50 { Sound.sfx("sfx-sanity-critical") } else { Sound.sfx("sfx-sanity-warning") }
+        return " " + lines.joined(separator: " ")
     }
 
     // MARK: Bounties
@@ -1384,6 +1396,8 @@ final class RunModel: ObservableObject {
             journal("Fell to \(killedBy) on floor \(r.floor).", in: &r)
         }
         var spoken = spoken
+        if outcome == .runOver { spoken += corruptionLifeLost(&r) }
+        if case .revived = outcome { spoken += corruptionLifeLost(&r) }
         if outcome == .runOver && r.bargainStrike > 0 {
             // Death's Bargain (Coin Shop): the final strike lands before the end.
             let name = r.enemy?.name ?? "the enemy"
@@ -1483,6 +1497,10 @@ final class RunModel: ObservableObject {
             earnSpirit(sp.id)
             add("✦ Rare Spirit Unlocked: \(sp.icon) \(sp.name)! Saved forever.")
             Feedback.announce("Rare Spirit unlocked: \(sp.name)! Saved to your character forever. Requires level 5 to use.")
+        }
+        if let prize = Corruption.bossPrize(&run, dice: &d) {
+            add("☠ Corruption Run reward: \(prize.icon) \(prize.name)! Check your inventory.")
+            Feedback.announce("Corruption Run reward: a legendary \(prize.name).", after: 1)
         }
         dice = d
         game.globalInventory.keep(from: run)
@@ -2127,7 +2145,15 @@ final class RunModel: ObservableObject {
         phase = newPhase
         persist()
         setEvent(spoken, tone: newPhase == .fighting ? "danger" : newPhase == .floorCleared || newPhase == .shopping ? "good" : "")
-        Feedback.announce(movePrefix + spoken + takeHunterLine(), after: screenChanges ? 0.6 : 0)
+        var whisper = ""
+        if !movePrefix.isEmpty && newPhase == .exploring {
+            var wd = SystemDice()
+            if let w = Corruption.whisper(r, dice: &wd) {
+                add("👁 " + w)
+                whisper = " " + w
+            }
+        }
+        Feedback.announce(movePrefix + spoken + whisper + takeHunterLine(), after: screenChanges ? 0.6 : 0)
         movePrefix = ""
         if newPhase == .exploring || newPhase == .floorCleared { hunterAfterRoom() }
     }

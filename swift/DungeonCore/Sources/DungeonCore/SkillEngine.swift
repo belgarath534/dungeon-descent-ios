@@ -106,6 +106,10 @@ public enum Skills {
         if spec.oncePerRun { run.usedOncePerRun.append(effect) }
         if !run.skillsUsed.contains(effect) { run.skillsUsed.append(effect) }
         run.defending = false
+        if let line = Corruption.backfire(&run, skill: skill.name, dice: &dice) {
+            r.log.append(line)
+            return Combat.finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
+        }
 
         // Spell Echo repeats the last skill for free.
         if spec.special == "spell-echo" {
