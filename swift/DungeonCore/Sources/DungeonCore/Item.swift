@@ -44,7 +44,12 @@ public struct Item: Equatable, Sendable {
 
     /// Attack range a weapon gives (getWeaponAtk): +2.5 per level above 1.
     public var weaponAttack: ClosedRange<Int> {
-        let base = atkBase ?? [5, 8]
+        // Forged weapons from the web version kept their range in atkRange.
+        var range: [Int]?
+        if case .array(let a)? = extra["atkRange"] {
+            range = a.compactMap { if case .number(let n) = $0 { return Int(n) }; return nil }
+        }
+        let base = atkBase ?? range ?? [5, 8]
         let bonus = jsRound(Double((level ?? 1) - 1) * 2.5)
         let lo = (base.first ?? 5) + bonus
         let hi = (base.count > 1 ? base[1] : lo) + bonus
@@ -139,6 +144,7 @@ public enum ItemTables {
     static let supportedTypes: Set<String> = [
         "potion", "elixir", "heal", "atk-potion", "def-potion", "luck-potion", "fire-potion",
         "curse-potion", "swift-potion", "phoenix-feather", "weapon", "armor", "rune", "scroll", "ring", "gem", "sp-potion",
+        "mirror-flask", "phantom-potion", "gravity-tonic", "leech-brew", "rage-tonic", "fog-flask", "time-potion", "corruption-flask",
     ]
     static let supportedIds: [String: Set<String>] = [
         "rune": ["rune-strength", "rune-protection", "rune-speed", "rune-fortune", "rune-vitality"],

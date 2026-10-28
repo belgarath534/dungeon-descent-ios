@@ -14,6 +14,10 @@ struct HomeOverlay: View {
     @State private var safeMsg = ""
     @State private var skillMsg = ""
     @State private var minionMsg = ""
+    @State private var forgeMsg = ""
+    @State private var brewMsg = ""
+    @State private var shopMsg = ""
+    @State private var vendorMsg = ""
     /// Bumped after every change so the saved home is read again.
     @State private var refresh = 0
 
@@ -54,6 +58,9 @@ struct HomeOverlay: View {
                     case "home": homeTab
                     case "spirits": spiritsTab
                     case "minions": minionsTab
+                    case "forge": forgeTab
+                    case "alchemy": alchemyTab
+                    case "elixirs": vendorTab
                     case "gunshop": GunWorkshop(mode: .craft, store: game.store, wallet: game.wallet)
                     default: comingSoon("The " + (tabs.first { $0.id == tab }?.label.replacingOccurrences(of: " tab", with: "") ?? ""))
                     }
@@ -236,6 +243,213 @@ struct HomeOverlay: View {
             message(minionMsg, Color(hex: 0x44ff88))
             section("🪤 HOW TO CAPTURE") {
                 note("Find a Soul Trap in chests or buy one from the shop. Use it during combat to capture the current enemy. Captured enemies become permanent minions. You can keep up to \(Home.maxMinions).")
+            }
+        }
+    }
+
+    // MARK: Forge tab
+
+    private var forgeTab: some View {
+        let stash = WeaponForge.stash(game.store)
+        return VStack(alignment: .leading, spacing: 14) {
+            note("Kill enemies to collect materials. Combine them into weapons with random special effects. Keep a weapon and it goes to your inventory and your stash.")
+            section("📦 MATERIALS") {
+                let have = WeaponForge.materials.filter { (stash[$0.id] ?? 0) > 0 }
+                if have.isEmpty {
+                    Text("None yet. Kill enemies to find materials.").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x444444))
+                } else {
+                    FlowRow(spacing: 10) {
+                        ForEach(have.indices, id: \.self) { i in
+                            Text("\(have[i].icon) \(have[i].name) x\(stash[have[i].id] ?? 0)")
+                                .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xaaaaaa))
+                        }
+                    }
+                }
+            }
+            if let w = model.forged { forgeResult(w, scraps: stash["iron-scrap"] ?? 0) }
+            section("⚒️ RECIPES") {
+                ForEach(WeaponForge.recipes.indices, id: \.self) { i in
+                    let r = WeaponForge.recipes[i]
+                    let can = WeaponForge.canCraft(r, stash) && model.forged == nil
+                    HStack(spacing: 8) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("\(r.icon) \(r.name) — ATK \(r.atk.lowerBound)-\(r.atk.upperBound)")
+                                .font(Theme.cinzel(11.2)).foregroundStyle(can ? Color(hex: 0x44ff88) : Color(hex: 0x888888))
+                            Text(WeaponForge.needs(r)).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                        }
+                        .accessibilityHidden(true)
+                        Spacer()
+                        Button(can ? "Craft" : "Need mats") { forgeMsg = model.forgeCraft(r.id); refreshed() }
+                            .font(Theme.cinzel(9.9)).foregroundStyle(can ? Color(hex: 0x44ff88) : Color(hex: 0x444444))
+                            .padding(.vertical, 6).padding(.horizontal, 12)
+                            .background(can ? Color(hex: 0x0a1a0a) : Color(hex: 0x0a0a0a))
+                            .overlay(Rectangle().stroke(can ? Color(hex: 0x44aa44) : Color(hex: 0x333333)))
+                            .disabled(!can)
+                            .accessibilityLabel("Craft \(r.name). Attack \(r.atk.lowerBound) to \(r.atk.upperBound). Needs \(WeaponForge.needs(r))."
+                                                + (model.forged != nil ? " Keep the weapon on the anvil first." : can ? "" : " Not enough materials."))
+                    }
+                    .padding(.vertical, 10).padding(.horizontal, 12)
+                    .background(can ? Color(hex: 0x0a1a0a) : Color(hex: 0x080808))
+                    .overlay(Rectangle().stroke(can ? Color(hex: 0x44aa44) : Color(hex: 0x222222)))
+                }
+            }
+            message(forgeMsg, Color(hex: 0x44ff88))
+            Text("Forged so far: \(WeaponForge.count(game.store))").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+        }
+    }
+
+    private func forgeResult(_ w: Item, scraps: Int) -> some View {
+        let fx = w.forgeEffect.flatMap(WeaponForge.effect)
+        let atk = w.weaponAttack
+        return VStack(alignment: .leading, spacing: 8) {
+            Text("\(w.icon) \(w.name)").font(Theme.cinzel(12)).bold().foregroundStyle(Color(hex: 0xffdd44))
+                .accessibilityAddTraits(.isHeader)
+            Text("ATK: \(atk.lowerBound) – \(atk.upperBound)").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xaaaaaa))
+            if let fx {
+                (Text("✨ Effect: ") + Text(fx.name).bold().foregroundColor(Color(hex: 0xaa88ff)) + Text(" — \(fx.desc)"))
+                    .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x888888))
+            }
+            HStack(spacing: 8) {
+                Button("✓ Keep") { forgeMsg = model.forgeKeep(); refreshed() }
+                    .buttonStyle(WebButtonStyle(kind: .gold))
+                    .accessibilityLabel("Keep \(w.name)")
+                Button("🎲 Reroll Effect (2 Iron Scrap)") { forgeMsg = model.forgeReroll(); refreshed() }
+                    .buttonStyle(WebButtonStyle(kind: .ghost))
+                    .accessibilityLabel("Reroll the special effect for 2 Iron Scraps. You have \(scraps).")
+            }
+        }
+        .padding(12).frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(hex: 0x0a0a00)).overlay(Rectangle().stroke(Color(hex: 0x665500)))
+        .accessibilityElement(children: .contain)
+    }
+
+    // MARK: Alchemy tab
+
+    private var alchemyTab: some View {
+        let stock = Alchemy.stock(game.store)
+        let alch = model.run.cls == "Alchemist"
+        return VStack(alignment: .leading, spacing: 14) {
+            note(alch ? "⚗️ Alchemist detected. Full recipe access. Your potions are stronger than normal."
+                      : "Craft potions from ingredients. As a non-Alchemist your results are weaker and some recipes are locked.")
+            section("🌿 YOUR INGREDIENTS") {
+                let have = Alchemy.ingredients.filter { (stock[$0.id] ?? 0) > 0 }
+                Text(have.isEmpty ? "None yet. Buy from the shop or find them in dungeons."
+                                  : have.map { "\($0.icon) \($0.name) ×\(stock[$0.id] ?? 0)" }.joined(separator: "  ·  "))
+                    .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaaaaaa)).fixedSize(horizontal: false, vertical: true)
+            }
+            if !brewMsg.isEmpty {
+                Text(brewMsg).font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xcc88ff))
+                    .padding(10).frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(hex: 0x0a000a)).overlay(Rectangle().stroke(Color(hex: 0x663399)))
+            }
+            section("⚗️ RECIPES") {
+                ForEach(Alchemy.recipes(alchemist: alch).indices, id: \.self) { i in
+                    let r = Alchemy.recipes(alchemist: alch)[i]
+                    let can = Alchemy.canCraft(r, stock)
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 8) {
+                            Text(r.icon).font(.system(size: 18)).accessibilityHidden(true)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(r.name + (r.alchemistOnly ? " [ALCHEMIST ONLY]" : ""))
+                                    .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xcc88ff))
+                                Text(r.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                            }
+                        }
+                        .accessibilityHidden(true)
+                        FlowRow(spacing: 8) {
+                            ForEach(r.ingredients.indices, id: \.self) { j in
+                                let x = r.ingredients[j]
+                                let ok = (stock[x.id] ?? 0) >= x.count
+                                Text("\(Alchemy.ingredient(x.id)?.icon ?? "") \(Alchemy.ingredient(x.id)?.name ?? x.id) ×\(x.count)")
+                                    .font(Theme.cinzel(9.6)).foregroundStyle(ok ? Color(hex: 0x44ff88) : Color(hex: 0xff4444))
+                            }
+                        }
+                        .accessibilityHidden(true)
+                        Button("Craft") { brewMsg = model.brew(r.id); refreshed() }
+                            .font(Theme.cinzel(9.9)).foregroundStyle(can ? Color(hex: 0xcc88ff) : Color(hex: 0x444444))
+                            .frame(maxWidth: .infinity).padding(6)
+                            .background(can ? Color(hex: 0x1a001a) : Color(hex: 0x080808))
+                            .overlay(Rectangle().stroke(can ? Color(hex: 0xcc88ff) : Color(hex: 0x333333)))
+                            .disabled(!can)
+                            .accessibilityLabel("Craft \(r.name)\(r.alchemistOnly ? ", Alchemist only" : ""). \(r.desc) Needs \(Alchemy.needs(r, stock)).")
+                    }
+                    .padding(10)
+                    .background(Color(hex: 0x0a000a)).overlay(Rectangle().stroke(r.alchemistOnly ? Color(hex: 0x9944ff) : Color(hex: 0x2a002a)))
+                }
+            }
+            section("🛒 INGREDIENT SHOP") {
+                Text("Your gold: \(game.wallet.gold)g").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffdd44))
+                ForEach(Alchemy.ingredients.indices, id: \.self) { i in
+                    let ing = Alchemy.ingredients[i]
+                    HStack(spacing: 8) {
+                        Text(ing.icon).font(.system(size: 17)).accessibilityHidden(true)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("\(ing.name) ×\(stock[ing.id] ?? 0)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xcc88ff))
+                            Text(ing.desc).font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x555555))
+                        }
+                        .accessibilityHidden(true)
+                        Spacer()
+                        Button("\(ing.cost)g") { shopMsg = model.buyIngredient(ing.id); refreshed() }
+                            .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xcc88ff))
+                            .padding(.vertical, 4).padding(.horizontal, 10)
+                            .background(Color(hex: 0x1a001a)).overlay(Rectangle().stroke(Color(hex: 0xcc88ff)))
+                            .accessibilityLabel("Buy \(ing.name) for \(ing.cost) gold. You have \(stock[ing.id] ?? 0). \(ing.desc)")
+                    }
+                    .padding(6).background(Color(hex: 0x0a000a)).overlay(Rectangle().stroke(Color(hex: 0x2a002a)))
+                }
+                message(shopMsg, Color(hex: 0xcc88ff))
+            }
+        }
+    }
+
+    // MARK: Elixir Vendor tab
+
+    private var vendorTab: some View {
+        let daily = ElixirVendor.daily()
+        let bought = ElixirVendor.boughtToday(game.store)
+        let spares = ElixirVendor.spares(model.run)
+        return VStack(alignment: .leading, spacing: 14) {
+            note("The vendor buys spare elixirs and sells one special elixir a day.")
+            section("🌟 TODAY'S ELIXIR") {
+                HStack(spacing: 8) {
+                    Text(daily.icon).font(.system(size: 22)).accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(daily.name).font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xffcc66))
+                        Text(daily.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                    }
+                }
+                .padding(8).frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(hex: 0x0a000a)).overlay(Rectangle().stroke(Color(hex: 0x443300)))
+                .accessibilityElement(children: .combine)
+                Button(bought ? "✓ Bought Today" : "🛒 Buy — \(ElixirVendor.buyPrice)g") { vendorMsg = model.buyDailyElixir(); refreshed() }
+                    .font(Theme.cinzel(9.9)).foregroundStyle(bought ? Color(hex: 0x444444) : Color(hex: 0xffcc66))
+                    .frame(maxWidth: .infinity).padding(8)
+                    .background(bought ? Color(hex: 0x080808) : Color(hex: 0x1a1000))
+                    .overlay(Rectangle().stroke(bought ? Color(hex: 0x333333) : Color(hex: 0xffcc66)))
+                    .disabled(bought)
+                    .accessibilityLabel(bought ? "Already bought today's elixir. Come back tomorrow."
+                                               : "Buy today's elixir, \(daily.name), for \(ElixirVendor.buyPrice) gold")
+                message(vendorMsg, Color(hex: 0xffcc66))
+            }
+            section("💰 SELL ELIXIRS — \(ElixirVendor.sellPrice)g EACH") {
+                if spares.isEmpty {
+                    Text("No spare elixirs to sell. Find them on dungeon floors.").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x444444))
+                }
+                ForEach(spares.indices, id: \.self) { i in
+                    let e = spares[i]
+                    HStack(spacing: 8) {
+                        Text(e.icon).font(.system(size: 17)).accessibilityHidden(true)
+                        Text("\(e.name) ×\(e.count)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffcc66))
+                            .accessibilityHidden(true)
+                        Spacer()
+                        Button("Sell") { model.sellElixir(e.name); refreshed() }
+                            .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xffcc66))
+                            .padding(.vertical, 4).padding(.horizontal, 10)
+                            .background(Color(hex: 0x1a1000)).overlay(Rectangle().stroke(Color(hex: 0xffcc66)))
+                            .accessibilityLabel("Sell \(e.name) for \(ElixirVendor.sellPrice) gold. You have \(e.count).")
+                    }
+                    .padding(6).background(Color(hex: 0x0a000a)).overlay(Rectangle().stroke(Color(hex: 0x2a002a)))
+                }
             }
         }
     }

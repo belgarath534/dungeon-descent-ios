@@ -672,7 +672,7 @@ struct DungeonView: View {
         if i.isWeapon { return "weapons" }
         if i.isArmor { return "armor" }
         if ["potion", "elixir", "sp-potion", "luck-potion", "fire-potion", "curse-potion", "swift-potion", "def-potion",
-            "atk-potion", "cursed", "heal"].contains(i.type) { return "potions" }
+            "atk-potion", "cursed", "heal"].contains(i.type) || Alchemy.tacticalTypes.contains(i.type) { return "potions" }
         if i.type == "material" { return "materials" }
         if ["relic", "mask"].contains(i.type) { return "equipment" }
         return "special"

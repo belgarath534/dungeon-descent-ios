@@ -3327,4 +3327,125 @@ final class RunModifierTests: XCTestCase {
         let turn = Combat.takeTurn(&r, .attack, dice: &d4)
         XCTAssertTrue(turn.crit, "Phantom Run: the first strike crits")
     }
+
+    // MARK: Weapon Forge, Alchemy, Elixir Vendor
+
+    private func crafter(_ cls: String = "Sentinel") -> Run {
+        Run(character: PlayerCharacter(name: "F", cls: cls, race: "Human", prof: "Mercenary",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+    }
+
+    func testForgeCraftsARealWeaponWithAWorkingEffect() {
+        let store = MemoryStore()
+        WeaponForge.add("iron-scrap", 5, store: store)
+        var dice = LoadedDice(rolls: [0])  // Burning
+        let w = WeaponForge.craft("iron-blade", store: store, dice: &dice)
+        XCTAssertNotNil(w)
+        XCTAssertEqual(WeaponForge.stash(store)["iron-scrap"], 2)
+        XCTAssertEqual(w?.weaponAttack, 8...14, "the recipe's attack, not the web's 5-8 fallback")
+        XCTAssertEqual(w?.forgeEffect, "burn")
+        var d2 = LoadedDice(rolls: [1])
+        let rr = WeaponForge.reroll(w!, store: store, dice: &d2)
+        XCTAssertEqual(rr?.forgeEffect, "lifesteal")
+        XCTAssertEqual(WeaponForge.stash(store)["iron-scrap"], nil)
+        XCTAssertNil(WeaponForge.reroll(rr!, store: store, dice: &d2), "no scraps left")
+        let kept = WeaponForge.keep(rr!, store: store)
+        XCTAssertEqual(kept.name, "Iron Blade")
+        WeaponForge.add("iron-scrap", 3, store: store)
+        var d3 = LoadedDice(rolls: [0])
+        let second = WeaponForge.keep(WeaponForge.craft("iron-blade", store: store, dice: &d3)!, store: store)
+        XCTAssertEqual(second.name, "Iron Blade (Burning)", "a second blade isn't lost to the stash's one-per-name rule")
+        XCTAssertEqual(WeaponForge.count(store), 2)
+
+        // Burning in a fight: the hit sets the enemy alight.
+        var r = crafter()
+        r.equippedWeapon = w
+        _ = Combat.begin(&r, against: Enemy(name: "Rat", icon: "🐀", hp: 500, maxHp: 500, atk: 1...1, gold: 1...1))
+        var fight = LoadedDice(chances: [false, true])
+        let t = Combat.takeTurn(&r, .attack, dice: &fight)
+        XCTAssertTrue(t.log.contains { $0.contains("burning") }, t.log.joined(separator: "\n"))
+    }
+
+    func testForgeDropsRespectTheFloor() {
+        let store = MemoryStore()
+        var dice = LoadedDice(rolls: [8], chances: [true])
+        let m = WeaponForge.drop(floor: 1, store: store, dice: &dice)
+        XCTAssertEqual(m?.rarity, "common")
+        var d2 = LoadedDice(rolls: [8], chances: [true])
+        XCTAssertEqual(WeaponForge.drop(floor: 8, store: store, dice: &d2)?.id, "dragon-scale")
+    }
+
+    func testAlchemyBrewsAndTheBrewsWork() {
+        let store = MemoryStore()
+        let w = Wallet(store: store) { _ in }
+        w.addGold(100)
+        XCTAssertEqual(Alchemy.buy("blood-vial", store: store, wallet: w), "Bought Blood Vial.")
+        Alchemy.add("ember-shard", store: store)
+        var dice = LoadedDice(chances: [false])
+        let b = Alchemy.craft("bloodfire", alchemist: false, store: store, dice: &dice)
+        XCTAssertEqual(b?.potion.name, "Bloodfire Potion")
+        XCTAssertEqual(Alchemy.stock(store), [:])
+        XCTAssertNil(Alchemy.craft("elixir-of-life", alchemist: false, store: store, dice: &dice))
+
+        var r = crafter()
+        r.inventory = [b!.potion]
+        r.hp = r.maxHp
+        let used = Inventory.use(&r, at: 0)
+        XCTAssertTrue(used.used, "an effect potion is worth drinking at full health")
+        XCTAssertTrue(r.brews.burnNext)
+        _ = Combat.begin(&r, against: Enemy(name: "Rat", icon: "🐀", hp: 50, maxHp: 50, atk: 1...1, gold: 1...1))
+        XCTAssertEqual(r.enemy?.dotTurns, 3, "Bloodfire burns the next enemy")
+        XCTAssertFalse(r.brews.burnNext)
+
+        // Mirror Flask: the next hit goes back, and you take none of it.
+        r.inventory = [Item(name: "Mirror Flask", icon: "🪞", type: "mirror-flask", desc: "")]
+        XCTAssertTrue(Inventory.use(&r, at: 0).used)
+        let hp = r.hp
+        var d2 = LoadedDice()
+        _ = Combat.takeTurn(&r, .defend, dice: &d2)
+        XCTAssertEqual(r.hp, hp)
+        XCTAssertFalse(r.brews.mirror)
+
+        // Time Potion: the enemy loses its next turns.
+        r.inventory = [Item(name: "Time Potion", icon: "⌛", type: "time-potion", desc: "")]
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.brews.timeStop, 2)
+        let t = Combat.takeTurn(&r, .defend, dice: &d2)
+        XCTAssertTrue(t.log.contains { $0.contains("Time stands still") })
+        XCTAssertEqual(r.brews.timeStop, 1)
+
+        // Outside a fight the tactical potions stay in the bag.
+        var calm = crafter()
+        calm.inventory = [Item(name: "Fog Flask", icon: "🌫️", type: "fog-flask", desc: "")]
+        XCTAssertFalse(Inventory.use(&calm, at: 0).used)
+        XCTAssertEqual(calm.inventory.count, 1)
+    }
+
+    func testAlchemistBrewsAreStrongerAndCarryTheirNumbers() {
+        let store = MemoryStore()
+        Alchemy.add("void-herb", store: store)
+        Alchemy.add("moon-petal", store: store)
+        var dice = LoadedDice()
+        let p = Alchemy.craft("phantom-potion-r", alchemist: true, store: store, dice: &dice)!.potion
+        var r = crafter("Alchemist")
+        _ = Combat.begin(&r, against: Enemy(name: "Rat", icon: "🐀", hp: 50, maxHp: 50, atk: 1...1, gold: 1...1))
+        r.inventory = [p]
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.brews.phantomTurns, 3, "the web always gave 2, whoever brewed it")
+    }
+
+    func testElixirVendor() {
+        let store = MemoryStore()
+        let w = Wallet(store: store) { _ in }
+        w.addGold(60)
+        var r = crafter()
+        let day = Date(timeIntervalSince1970: 1_790_000_000)
+        XCTAssertTrue(ElixirVendor.buy(&r, store: store, wallet: w, date: day).hasPrefix("Bought"))
+        XCTAssertEqual(w.gold, 5)
+        XCTAssertTrue(ElixirVendor.buy(&r, store: store, wallet: w, date: day).hasPrefix("Already"))
+        XCTAssertEqual(ElixirVendor.spares(r).first?.count, 1)
+        XCTAssertNotNil(ElixirVendor.sell(r.inventory[0].name, &r, wallet: w))
+        XCTAssertEqual(w.gold, 30)
+        XCTAssertTrue(ElixirVendor.spares(r).isEmpty)
+    }
 }

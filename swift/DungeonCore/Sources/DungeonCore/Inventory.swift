@@ -53,7 +53,17 @@ public enum Inventory {
         switch item.type {
         case "potion":
             let cleanses = item.name == "Null Potion" && run.shadowCorruption > 0
-            guard run.hp < run.maxHp || cleanses else { return Outcome(message: "Your health is already full.", used: false) }
+            guard run.hp < run.maxHp || cleanses || Alchemy.hasEffect(item) else { return Outcome(message: "Your health is already full.", used: false) }
+            if Alchemy.effect(item) == "life-steal" && !run.inCombat {
+                return Outcome(message: "No enemy to drain. Use this in combat.", used: false)
+            }
+            if let fx = Alchemy.applyEffect(item, &run) {
+                let heal = (item.heal ?? 0) >= 9999 ? 0 : jsRound(Double(item.heal ?? 0) * run.potionMult)
+                if heal > 0 { run.hp = min(run.maxHp, run.hp + heal) }
+                out.message = "You drink \(item.name)." + (heal > 0 ? " Restored \(heal) HP." : "") + " " + fx + " HP: \(run.hp) of \(run.maxHp)."
+                out.enemyDied = run.inCombat && run.enemy?.isDead == true
+                break
+            }
             var heal = jsRound(Double(item.heal ?? 40) * run.potionMult)
             if run.cls == "Alchemist" { heal = jsRound(Double(heal) * 1.35) }
             if let b = run.weather?.potionBoost, b > 0 { heal = jsRound(Double(heal) * (1 + b)) }
@@ -149,6 +159,10 @@ public enum Inventory {
             return Outcome(message: "The Phoenix Feather works on its own. It ignites if you would die.", used: false)
         case "ring":
             return Outcome(message: "\(item.name) works while you carry it.", used: false)
+        case _ where Alchemy.tacticalTypes.contains(item.type):
+            let o = Alchemy.useTactical(item, &run) ?? Outcome(message: "Use this in combat.", used: false)
+            guard o.used else { return o }
+            out = o
         default:
             return Outcome(message: "\(item.name) can't be used in the Swift version yet.", used: false)
         }

@@ -140,6 +140,10 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Settings: Redeem Code, Support, Send Feedback | settings-panel-redeem, settings-panel-feedback, sendFeedback | ✅ Redeem Code has its own panel; Support opens the support page; Send Feedback goes straight to the developer through the same form as the web version |
 | Settings: Hide Menu Items, Achievement Sound | renderMenuToggles (dd_menu_prefs), setAchSound (dd_ach_sound) | ✅ show or hide 17 main menu buttons; pick the sound for ordinary achievements with previews |
 | Settings: Save codes | exportSaveCode, importSaveCode | ✅ export copies a DD-v96 code (the web version's format) with the whole save; import takes DD-v96 and DD2 codes from either version |
+| Weapon Forge | FORGE_MATERIALS, FORGE_SPECIAL_EFFECTS, FORGE_RECIPES, tryDropMaterial, forgeCraft, forgeReroll, forgeKeep (dd_forge_stash, dd_forge_count) | ✅ Home → Forge: materials drop from 15% of kills (commons only before floor 5, rares from floor 8), the 8 recipes, a random special effect, rerolling it for 2 Iron Scrap, and keeping the weapon (into this run's pack and the stash, counted for The Forger achievements). Every effect works in combat |
+| Alchemy | ALCHEMY_INGREDIENTS, ALCHEMY_RECIPES, craftAlchemyPotion, applyPotionEffect, alchemyDropOnKill (dd_alchemy_ingredients, dd_alchemy_stored) | ✅ Home → Alchemy: the ingredient shop, ingredients from 10% of kills (matched to the enemy), the 22 recipes with the Alchemist's stronger brews and two Alchemist-only ones, the non-Alchemist's 20% unstable brew, and every potion effect. Potions brewed by the web version outside a run are picked up when the next run starts |
+| Tactical potions | mirror-flask, phantom-potion, gravity-tonic, leech-brew, rage-tonic, fog-flask, time-potion, corruption-flask | ✅ all eight work in combat, from the shops or the Alchemy table, and sort under Potions |
+| Elixir Vendor | VENDOR_ELIXIRS, renderElixirVendor, sellVendorElixir, buyVendorDailyElixir (dd_elixir_vendor_last_buy) | ✅ Home → Vendor: one of ten elixirs a day for 55 gold, and spare elixirs sold for 25 |
 | Your guide | GUIDE PERSONALITY SYSTEM (GUIDE_DIALOGUE), COMPANION SYSTEM (companionSay, companionOn…), toggleGuideFromPause | ✅ the companion you named (Mira by default) speaks in your chosen personality (encouraging, sarcastic, mysterious, calm) when a run starts, at level ups, when you drop to a quarter of your health, when a boss rises, when the hunter is 3 rooms away, when you lose a life and when you win. Each line is said right after what happened and kept in the run log. The pause menu switches the guide and Hunter Mode on or off for the character. Not yet: the achievement lines and the speech-bubble picture |
 | Shake to Attack | initShakeToAttack, toggleShakeAttack (dd_shake) | ✅ Settings → Audio → Shake to Attack. In a fight, a shake attacks and a hard shake uses your first skill you can afford, 0.8 seconds apart, at the web version's thresholds. Uses the iPhone's motion sensor directly, so there's no permission prompt |
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
@@ -151,7 +155,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Subclasses | SUBCLASSES, showSubclassChoice, chooseSubclass | ✅ the level 5 choice for every class that has one (Berserker and Druid don't, in the web version either), its stat points, its passive and the name in the top bar. The spell passives work with spells (see Spells). Ancient Blood's fire immunity has nothing to block yet |
 | Blacksmith | openBlacksmith, openMenuBlacksmith, upgradeEquipped, reforgeWeapon, degradeWeapon | ✅ from the dungeon (run gold) and the main menu (global gold): upgrade weapon and armor to level 10 (Enchanters pay first, Blacksmiths get 10% off, seasonal discounts apply), buy the 11 weapons and 7 armors (the Worn Blade free once), sell, equip and unequip, reforge and raise rarity, the Rarity Effects guide, weapon durability and repairs. Soul Drinker, Thunderfist, The Last Blade, Thornmail, Ghost Shroud and the staff's +10 SP work in combat. The Guns tab says coming soon |
 | The Spire | THE SPIRE, startSpire, spireDoPlayerTurn, spireRestFloor, spireVictory | ✅ the setup screen with your best floor and champion, Auto Mode (Level 5, every 4 seconds), the climb from your best floor with Attack, Heavy, Defend, potions and the auto-potion, the 9 bosses, rest floors, milestones, diamond and Mystery Coin drops, the Blacksmith mid-climb, death to The Graveyard and the Obituary, and The Time Eater's rewards. Your equipped gun fires from the 🔫 button; gun parts from Spire floors aren't in yet; the Spire Bestiary tab isn't in yet |
-| Home system | HOME SYSTEM, MINION SYSTEM, HOME_DREAMS | ✅ buy the home (500g), bed (75g) and sleep every 5 rooms with a dream, the gold safe, skill upgrades to level 5, the Minions tab, and the Soul Trap combat button. Minions strike after you every round. Spirits, Forge, Alchemy, Vendor and Guns tabs say coming soon; Skill Orbs (upgrades passed on when a character dies) and the July 4th Fireworks Corner are not in yet |
+| Home system | HOME SYSTEM, MINION SYSTEM, HOME_DREAMS | ✅ buy the home (500g), bed (75g) and sleep every 5 rooms with a dream, the gold safe, skill upgrades to level 5, the Minions tab, and the Soul Trap combat button. Minions strike after you every round. The Forge, Alchemy and Vendor tabs have their own rows below; the Spirits tab says coming soon; Skill Orbs (upgrades passed on when a character dies) and the July 4th Fireworks Corner are not in yet |
 | Global chat, presence, leaderboards | GLOBAL CHAT SYSTEM … | ⬜ |
 | Account login, cloud save | DD Cloud | ✅ see "Account and cloud save" |
 | Translations (Portuguese etc.) | translation tables | ⬜ |
@@ -464,3 +468,21 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **The Void Reaper warning wasn't about the Void Reaper.** It fired 14 hours after you
   opened the app, whether the Reaper was awake or not. Swift schedules it for two hours
   before the awake Reaper's window closes.
+- **Forged weapons hit like a starter sword.** The forge saved a weapon's attack as
+  `atkRange`, but attacks read `atkBase`, so every forged weapon hit for the default 5–8.
+  Swift uses the recipe's range (and reads `atkRange` on weapons forged by the web version).
+- **Forge effects did nothing.** Burning, Life Steal, Keen Edge, Venomous, Lucky, Arcane,
+  Shattering, Swift, Thorned and Executioner were written on the weapon and never used in a
+  fight. In Swift they all work. Enemies have no defense here, so Shattering cracks their
+  guard instead: each hit landed adds 2 damage, up to 10.
+- **A second forged weapon of the same name could disappear.** The stash keeps one weapon
+  per name when a run loads it. Swift names the second one for its effect, such as
+  "Iron Blade (Burning)".
+- **Three alchemy potions did nothing.** Bloodfire's burn and Glacier Tonic's stun were
+  set and never read, and the Time Potion's free attacks were never given. In Swift the
+  next enemy burns or is stunned, and the Time Potion takes the enemy's next turns away.
+- **Alchemist brews lost their bonus.** An Alchemist's Phantom Potion, Gravity Tonic, Leech
+  Brew, Rage Tonic, Fog Flask, Time Potion and Corruption Flask were brewed stronger, but
+  using one always gave the shop version's numbers. Swift uses what was brewed.
+- **Effect potions couldn't be drunk at full health.** Berserker Brew, Shadow Cloak and the
+  others were refused with "Your health is already full" even though they don't heal.

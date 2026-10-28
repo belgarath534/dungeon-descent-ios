@@ -66,6 +66,7 @@ public enum Combat {
             run.fight.medusaGuard = true
             log.append("🐍 Medusa stands beside you. Serpent Guard — she will absorb one attack this fight.")
         }
+        Alchemy.combatStart(&run, log: &log)
         Spirits.combatStart(&run, log: &log)
         ShadowWorld.combatStart(&run, log: &log)
         Spells.combatStart(&run, log: &log)
@@ -217,6 +218,7 @@ public enum Combat {
         if run.has("cu-night-blessing") && CoinShop.isNightNow() { baseAtk += 5 }
         baseAtk = Subclasses.attackBonus(&run, baseAtk, dice: &dice, log: &r.log)
         baseAtk = ShadowWorld.attackRoll(&run, baseAtk, log: &r.log)
+        if action == .attack || action == .heavy { baseAtk = Alchemy.rage(&run, baseAtk, log: &r.log) }
 
         if run.frozen {
             run.frozen = false
@@ -227,7 +229,7 @@ public enum Combat {
                 // Rolled first, like `Math.random() < p || markedKill` in the web version.
                 // The Unlucky One: your luck is zero.
                 let unlucky = run.enemy?.flag("unlucky") == true
-                let rolledCrit = dice.chance(0.10 + run.critBonus + (run.weaponEffect == "keen" ? 0.05 : 0)) && !unlucky
+                let rolledCrit = dice.chance(0.10 + run.critBonus + (run.weaponEffect == "keen" ? 0.05 : 0) + WeaponForge.critBonus(run)) && !unlucky
                 let firstStrike = Subclasses.firstStrikeCrit(&run)
                 let phantom = run.fight.phantomCrit
                 run.fight.phantomCrit = false
@@ -298,7 +300,9 @@ public enum Combat {
         r.playerDamage = EnemyAbilities.onPlayerHit(&run, r.playerDamage, basic: true, dice: &dice, log: &r.log)
         r.playerDamage = ShadowWorld.onHit(&run, r.playerDamage, basic: true, heavy: action == .heavy, log: &r.log)
         dealDamage(&run, r.playerDamage, log: &r.log)
+        Alchemy.corrupt(&run, log: &r.log)
         if action == .attack || action == .heavy {
+            Alchemy.leech(&run, r.playerDamage, log: &r.log)
             afterGearHit(&run, r.playerDamage, dice: &dice, log: &r.log)
             Subclasses.onHit(&run, r.playerDamage, dice: &dice, log: &r.log)
         }
@@ -325,11 +329,12 @@ public enum Combat {
         default: break
         }
         if run.armorEffect == "aegis" { d *= 0.80 }
-        return jsRound(d)
+        return WeaponForge.damage(run, jsRound(d), log: &log)
     }
 
     /// Effects that follow a landed hit: second strikes, stuns and healing.
     static func afterGearHit(_ run: inout Run, _ dmg: Int, dice: inout some Dice, log: inout [String]) {
+        WeaponForge.afterHit(&run, dmg, dice: &dice, log: &log)
         guard dmg > 0, var e = run.enemy, !e.isDead else { return }
         switch run.weaponEffect {
         case "serrated" where dice.chance(0.15):
@@ -415,6 +420,11 @@ public enum Combat {
             return r
         }
 
+        if Alchemy.timeStopped(&run, log: &r.log) {
+            tickEffects(&run, log: &r.log)
+            r.announcement = r.log.last
+            return r
+        }
         let taken = enemiesTurn(&run, &r, dice: &dice, options: options)
         if let dead = run.enemy, dead.isDead {
             if let lines = ShadowWorld.refusesDeath(&run) {
@@ -635,6 +645,7 @@ public enum Combat {
             log.append("You avoid \(e.name)'s attack completely!")
             return 0
         }
+        if Alchemy.avoids(&run, e, dice: &dice, log: &log) { return 0 }
         if run.fight.enemyMiss > 0 {
             let p = run.fight.enemyMiss
             run.fight.enemyMiss = 0
@@ -665,6 +676,7 @@ public enum Combat {
         }
         var raw = dice.roll(e.currentAtk) + EnemyAbilities.secondStrike(e, dice: &dice, log: &log)
         raw = jsRound(Double(raw) * move.multiplier * shadow.multiplier) + move.extra
+        if Alchemy.gravity(&run, log: &log) { raw = 1 }
         if run.fight.softenHits > 0 {
             run.fight.softenHits -= 1
             raw = jsRound(Double(raw) * run.fight.soften)
@@ -710,6 +722,7 @@ public enum Combat {
         // Blood Moon: you take 25% more (the web version never applied it).
         if let ev = Events.bonuses(run.event), ev.takesMore > 0 { taken = jsRound(Double(taken) * (1 + ev.takesMore)) }
         let hpBefore = run.hp
+        taken = Alchemy.incoming(&run, taken, log: &log)
         taken = Subclasses.incoming(&run, taken, dice: &dice, log: &log)
         taken = Spells.incoming(&run, taken, log: &log)
         if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) || ShadowWorld.armorAvoids(&run, dice: &dice, log: &log) { return 0 }
@@ -753,10 +766,11 @@ public enum Combat {
         }
         let thorned = run.armorEffect == "thorned"
         let vengeful = run.armorEffect == "vengeful" && taken > 0 && dice.chance(0.20)
-        if taken > 0 && (run.fight.thornsTurns > 0 || run.fight.retaliate > 0 || thorned || vengeful), var hurt = run.enemy {
+        if taken > 0 && (run.fight.thornsTurns > 0 || run.fight.retaliate > 0 || thorned || vengeful || WeaponForge.thorns(run, taken: taken) > 0), var hurt = run.enemy {
             var back = run.fight.retaliate
             if run.fight.thornsTurns > 0 { back += jsRound(Double(taken) * run.fight.thorns) }
             if thorned { back += jsRound(Double(taken) * 0.15) }
+            back += WeaponForge.thorns(run, taken: taken)
             if vengeful {
                 let counter = attackRoll(run, dice: &dice)
                 back += counter

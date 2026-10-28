@@ -126,6 +126,7 @@ public enum Progression {
         if let w = run.weather, w.goldMult != 1 { g = jsRound(Double(g) * w.goldMult) }
         let mg = RunModifiers.goldMult(run)
         if mg != 1 { g = jsRound(Double(g) * mg) }
+        g += WeaponForge.gold(run)
         if run.weaponEffect == "soulbound" { run.sp = min(run.maxSp, run.sp + 5) }
         var luckNote = ""
         if run.luckKills > 0 {

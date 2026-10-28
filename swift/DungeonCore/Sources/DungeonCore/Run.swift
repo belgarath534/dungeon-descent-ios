@@ -146,6 +146,8 @@ public struct Run: Codable, Sendable {
     public var weather: Weather? = nil
     /// This run's Run Modifier, if one rolled.
     public var modifier: String? = nil
+    /// Alchemy potion effects (Bloodfire, Shadow Cloak, Rage Tonic …).
+    public var brews = Alchemy.Brews()
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false

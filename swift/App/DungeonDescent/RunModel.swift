@@ -119,6 +119,8 @@ final class RunModel: ObservableObject {
         r.applyMilestoneBuffs(game.milestoneEffects)
         r.event = Events.active()
         r.startNotes += Events.applyNextRun(&r, store: game.store)
+        let brewed = Alchemy.collect(into: &r, store: game.store)
+        if brewed > 0 { r.startNotes.append("🧪 \(brewed) crafted potion\(brewed == 1 ? "" : "s") from your Alchemy Table added to inventory.") }
         // Home: the active minion fights beside you, the bed is ready again,
         // and last night's dream buff applies once.
         r.minion = Home.activeMinion(game.store)
@@ -938,6 +940,21 @@ final class RunModel: ObservableObject {
             _ = game.recordBestiaryKill(e.name)
             if reward.levelsGained > 0 { levelUp = r.level; achievements.record(.levelReached(r.level)) }
             said += bountyKill(e, r)
+            said += craftingDrops(e, r.floor, &d)
+        }
+        return said
+    }
+
+    /// Forge materials (15%) and alchemy ingredients (10%) from a kill.
+    private func craftingDrops(_ e: Enemy, _ floor: Int, _ d: inout SystemDice) -> String {
+        var said = ""
+        if let m = WeaponForge.drop(floor: floor, store: game.store, dice: &d) {
+            add("📦 Material dropped: \(m.icon) \(m.name)!")
+            said += " Forge material: \(m.name)."
+        }
+        if let i = Alchemy.drop(e, store: game.store, dice: &d) {
+            add("🧪 Found: \(i.icon) \(i.name) (Alchemy ingredient)")
+            said += " Alchemy ingredient: \(i.name)."
         }
         return said
     }
@@ -1538,6 +1555,7 @@ final class RunModel: ObservableObject {
             dropLine += " \(e.name) dropped a \(part.name). Gun crafting part collected."
         }
         GunBelt.shared.killed()
+        dropLine += craftingDrops(e, r.floor, &d)
         if let scroll = Spells.drop(&r, dice: &d) {
             let rarity = { if case .string(let x)? = scroll.extra["rarity"] { return x }; return "common" }()
             add("📜 \(scroll.name) dropped! [\(rarity.uppercased())]")
@@ -1751,6 +1769,97 @@ final class RunModel: ObservableObject {
     }
 
     /// Home spends and stores your global gold; the run's gold mirrors it.
+    // MARK: Forge, Alchemy and the Elixir Vendor (Home tabs)
+
+    /// The weapon on the anvil, waiting to be kept or rerolled.
+    @Published var forged: Item?
+
+    func forgeCraft(_ id: String) -> String {
+        var d = dice
+        guard let w = WeaponForge.craft(id, store: game.store, dice: &d) else { return "Not enough materials." }
+        dice = d
+        forged = w
+        Sound.sfx("sfx-confirm")
+        let range = w.weaponAttack
+        let fx = w.forgeEffect.flatMap(WeaponForge.effect)
+        let said = "Crafted \(w.name)! ATK \(range.lowerBound) to \(range.upperBound). " + (fx.map { "Special effect: \($0.name). \($0.desc)" } ?? "No special effect.")
+        Feedback.announce(said)
+        return ""
+    }
+
+    func forgeReroll() -> String {
+        guard let w = forged else { return "" }
+        var d = dice
+        guard let out = WeaponForge.reroll(w, store: game.store, dice: &d) else {
+            Feedback.announce("Not enough Iron Scraps to reroll. Need 2.")
+            return "Need 2 Iron Scraps to reroll."
+        }
+        dice = d
+        forged = out
+        if let fx = out.forgeEffect.flatMap(WeaponForge.effect) { Feedback.announce("Rerolled! New effect: \(fx.name). \(fx.desc)") }
+        return ""
+    }
+
+    func forgeKeep() -> String {
+        guard let w = forged else { return "" }
+        let kept = WeaponForge.keep(w, store: game.store)
+        // Into this run's pack too, so it can be equipped now.
+        run.inventory.append(kept)
+        forged = nil
+        _ = achievements.check()
+        persist()
+        Sound.sfx("sfx-loot")
+        Feedback.announce("\(kept.name) added to your inventory and your stash. Equip it from your inventory.")
+        return "\(kept.name) added to your inventory!"
+    }
+
+    func buyIngredient(_ id: String) -> String {
+        let msg = Alchemy.buy(id, store: game.store, wallet: game.wallet)
+        syncGold()
+        if msg.hasPrefix("Bought") { Sound.sfx("sfx-select") }
+        Feedback.announce(msg)
+        return msg
+    }
+
+    func brew(_ id: String) -> String {
+        var d = dice
+        let alch = run.cls == "Alchemist"
+        guard let b = Alchemy.craft(id, alchemist: alch, store: game.store, dice: &d) else {
+            Feedback.announce("Not enough ingredients.")
+            return "Not enough ingredients."
+        }
+        dice = d
+        run.inventory.append(b.potion)
+        persist()
+        Sound.sfx("sfx-confirm")
+        let p = b.potion
+        if b.mishap {
+            Feedback.announce("Unstable brew! You got a \(p.name) instead.")
+            return "Something went wrong with the brew... You got: \(p.icon) \(p.name). \(p.desc)"
+        }
+        Feedback.announce("Crafted \(p.name)!" + (alch ? " Alchemist bonus applied." : ""))
+        return "Crafted: \(p.icon) \(p.name). \(p.desc)" + (alch ? " (Alchemist bonus applied!)" : "")
+    }
+
+    func sellElixir(_ name: String) {
+        var r = run
+        guard let msg = ElixirVendor.sell(name, &r, wallet: game.wallet) else { return }
+        run = r
+        syncGold()
+        Sound.sfx("sfx-select")
+        Feedback.announce(msg)
+    }
+
+    func buyDailyElixir() -> String {
+        var r = run
+        let msg = ElixirVendor.buy(&r, store: game.store, wallet: game.wallet)
+        run = r
+        syncGold()
+        if msg.hasPrefix("Bought") { Sound.sfx("sfx-confirm") }
+        Feedback.announce(msg)
+        return msg
+    }
+
     private func syncGold() {
         run.gold = game.wallet.gold
         persist()
@@ -2358,7 +2467,8 @@ final class RunModel: ObservableObject {
         }
         if out.used, let item {
             Sound.sfx(item.isWeapon || item.isArmor ? "sfx-confirm"
-                      : ["potion", "elixir", "heal", "sp-potion", "atk-potion", "def-potion", "luck-potion", "swift-potion"].contains(item.type) ? "sfx-potion"
+                      : ["potion", "elixir", "heal", "sp-potion", "atk-potion", "def-potion", "luck-potion", "swift-potion"].contains(item.type)
+                        || Alchemy.tacticalTypes.contains(item.type) ? "sfx-potion"
                       : "sfx-unlock")
         }
         var msg = out.message
