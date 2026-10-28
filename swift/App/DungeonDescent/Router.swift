@@ -40,6 +40,7 @@ final class Router: ObservableObject {
         case voidreaper
         case siege
         case challenges
+        case bounty
         case spellbook
         case seasonalshop
         case whatsnew
@@ -127,6 +128,7 @@ struct RootView: View {
             case .voidreaper: VoidReaperView()
             case .siege: SiegeView()
             case .challenges: ChallengesView()
+            case .bounty: BountyBoardView()
             case .spellbook: MenuSpellsScreen(showingBook: true)
             case .seasonalshop: SeasonalShopView()
             case .whatsnew: WhatsNewView()

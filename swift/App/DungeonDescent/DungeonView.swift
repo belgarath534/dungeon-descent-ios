@@ -44,6 +44,13 @@ struct DungeonView: View {
                     dailyQuest
                     xpRow
                     roomTracker
+                    if let b = model.bountyBanner {
+                        Text(b).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x44ff88))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 10).padding(.vertical, 6)
+                            .background(Color(hex: 0x0a1a0a)).overlay(Rectangle().stroke(Color(hex: 0x44aa44)))
+                            .accessibilityLabel("Active bounty. " + String(b.dropFirst(2)))
+                    }
                     if fighting, let e = run.enemy, e.isBoss { bossPhaseBar(e) }
                     roomSection
                     if fighting { combatSection } else if let s = run.stalker { stalkerSection(s) } else { navSection }

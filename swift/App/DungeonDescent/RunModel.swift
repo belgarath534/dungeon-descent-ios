@@ -55,6 +55,7 @@ final class RunModel: ObservableObject {
                     && !(saved.floor >= Challenges.bossFloor(saved) && saved.difficulty != .endless) ? .floorCleared : .exploring
             roomTitle = Rooms.floorName(saved.floor, dungeon: saved.dungeon)
             add("Run resumed on floor \(saved.floor). HP \(saved.hp) of \(saved.maxHp).")
+            bountyBanner = Bounties.banner(game.store)
             playMusic()
             return
         }
@@ -141,6 +142,8 @@ final class RunModel: ObservableObject {
         if let s = Skills.unlocked(r).first { add("✨ Starting skill: \(s.name). \(s.desc)") }
         r.startNotes.forEach { add($0) }
         if let m = r.minion { add("👾 \(m.name) fights beside you.") }
+        _ = bounty(.runStarted)
+        if let b = bountyBanner { add(b) }
         add("✦ Daily quest: \(game.dailyQuests.summary)")
         persist()
         playMusic()
@@ -790,8 +793,30 @@ final class RunModel: ObservableObject {
             achievements.record(.enemyKilled(e, run: r))
             _ = game.recordBestiaryKill(e.name)
             if reward.levelsGained > 0 { levelUp = r.level; achievements.record(.levelReached(r.level)) }
+            said += bountyKill(e, r)
         }
         return said
+    }
+
+    // MARK: Bounties
+
+    /// The active bounty while it's running, for the dungeon banner.
+    @Published private(set) var bountyBanner: String? = nil
+
+    /// Counts a kill toward the active bounty; pays it out when done.
+    private func bountyKill(_ e: Enemy, _ r: Run) -> String {
+        bounty(.kill(name: e.name, elite: e.isElite, boss: e.isBoss, dungeon: r.dungeon))
+    }
+
+    private func bounty(_ ev: Bounties.Event) -> String {
+        let done = Bounties.record(ev, store: game.store)
+        defer { bountyBanner = Bounties.banner(game.store) }
+        guard let b = done else { return "" }
+        Bounties.complete(b, store: game.store, wallet: game.wallet)
+        _ = achievements.check()
+        add("📋 Bounty Complete! \(b.title). +\(b.gold) gold, +\(b.trophies) trophies.")
+        Sound.sfx("sfx-purchase")
+        return " Bounty complete! \(b.title) finished. You earned \(b.gold) gold and \(b.trophies) \(b.trophies == 1 ? "trophy" : "trophies")."
     }
 
     /// The ambush: two or three enemies at once (startMultiCombat).
@@ -847,6 +872,7 @@ final class RunModel: ObservableObject {
             Feedback.announce(milestone)
         }
         if reward.levelsGained > 0 { achievements.record(.levelReached(r.level)) }
+        dropLine += bountyKill(e, r)
         var said = spoken + " " + reward.message + dropLine
         HighScore.add("enemy_kills", 10, store: game.store)
         if e.isElite { HighScore.add("elite_kills", 150, store: game.store) }
@@ -1731,6 +1757,7 @@ final class RunModel: ObservableObject {
         achievements.setGlobalMax("bestFloor", Double(floor))
         journal("Descended to floor \(r.floor). Kills so far: \(r.kills). HP: \(r.hp)/\(r.maxHp).", in: &r)
         let questLine = milestone + questDone(&r, game.dailyQuests.reachedFloor(floor, usedPotion: r.usedPotion))
+            + bounty(.floor(floor, dungeon: r.dungeon, diedThisRun: r.diedThisRun))
         Sound.sfx("sfx-stairs")
         Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
         // Daily Dungeon's Stripped: no merchant on the stairs.

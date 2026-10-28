@@ -128,7 +128,8 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Spirits in play | STARTER_SPIRITS, RARE_SPIRITS, ELITE_SPIRITS, openPauseSpirits, awardRareSpirit | ✅ all 24 spirits fight, guard and loot beside you; rare ones wake at level 5. The spirit row under the top bar, switching in Pause → Spirits (with the Market Sprite's 50 gold fee), elite spirits from 30% of elite kills and each dungeon's rare spirit on victory. Not yet: custom spirits from the Spirit Forge, trap detection (traps aren't in yet), the Spirit Bestiary |
 | Corruption, hunter, guide in play | corruption, hunterTurn, companion | ⬜ |
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
-| Quests, bounties, inbox | QUEST SYSTEM, BOUNTY BOARD … | ⬜ |
+| Quests, inbox | QUEST SYSTEM … | ⬜ |
+| Bounty Board | BOUNTY BOARD SYSTEM (BOUNTY_TEMPLATES, renderBountyBoard, registerBounty, refreshBounties, updateBountyProgress, completeBounty, the dungeon banner) | ✅ all 35 bounties, three a day with 5 refreshes, one active at a time, progress from kills, elites, bosses and floors, gold and trophies when done, the banner in the dungeon. Saved in dd_bounty_data in the web version's shape. The Hunting Grounds button says it's coming soon |
 | Spirits, companion, corruption, Hunter, Medusa arc | … | 🟡 spirits, Void Mode and the Void Reaper done |
 | Seasonal events | getActiveEvent, getEventBonuses, renderEventsScreen, openSeasonalShop | ✅ all 16 seasonal and weekly events on their dates, their XP, gold and enemy strength, Blood Moon's harder hits both ways, 20% of enemies replaced by the event's own (56 of them, in events.json), seasonal currency from 30% of kills, the menu banner and currency, the Events screen and the six seasonal shops. Not yet: the event enemies' special moves (the Leprechaun stealing gold, the Cupid's Love Potion …), the Easter Bunny room, Friday the 13th's Black Box, the July 4th Fireworks Corner, the Cinco de Mayo weapon, Ambush Day ambushes, birthday music, and shop items that need systems not ported yet (titles, run modifiers, combat items) |
 | Subclasses | SUBCLASSES, showSubclassChoice, chooseSubclass | ✅ the level 5 choice for every class that has one (Berserker and Druid don't, in the web version either), its stat points, its passive and the name in the top bar. The spell passives work with spells (see Spells). Ancient Blood's fire immunity has nothing to block yet |
@@ -375,3 +376,9 @@ Where an item's description and the web code disagree, Swift follows the descrip
   was a normal run. Swift saves it with the run.
 - **Endless characters could never finish a Challenge.** Endless has no boss, so the
   dungeon never ended. Challenges run on Wanderer for Endless characters.
+- **Bounties said "in The Crypt" but counted kills anywhere.** A Wailing Wraith bounty
+  for The Crypt went up in any dungeon. Swift only counts the dungeon the bounty names.
+- **"In a single run" bounties added up across every run forever.** Swift starts the
+  count again when a run starts.
+- **"Reach floor 8 without dying" didn't care if you died.** Swift only pays it when you
+  haven't lost a life on the run.

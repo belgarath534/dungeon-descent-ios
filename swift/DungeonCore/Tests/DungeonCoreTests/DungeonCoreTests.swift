@@ -2849,3 +2849,52 @@ final class ChallengeTests: XCTestCase {
         XCTAssertEqual(Challenges.time(247), "4m 07s")
     }
 }
+
+final class BountyTests: XCTestCase {
+    func testBoardFlow() {
+        let store = MemoryStore()
+        let wallet = Wallet(store: store) { _ in }
+        var dice = SeededDice(seed: 3)
+        let now = Date()
+        let today = Bounties.today(store, now: now, dice: &dice)
+        XCTAssertEqual(today.count, 3)
+        XCTAssertEqual(Set(today.map(\.id)).count, 3)
+        XCTAssertEqual(Bounties.today(store, now: now, dice: &dice), today, "same three all day")
+        XCTAssertTrue(Bounties.refresh(store, now: now, dice: &dice))
+        XCTAssertEqual(Bounties.refreshesLeft(store, now: now), 4)
+
+        XCTAssertNotNil(Bounties.register("kill-crypt-wraiths", store: store))
+        XCTAssertNil(Bounties.register("kills-10-any", store: store), "one at a time")
+        // Wrong dungeon, wrong enemy: nothing.
+        XCTAssertNil(Bounties.record(.kill(name: "Wailing Wraith", elite: false, boss: false, dungeon: "The Hollow"), store: store))
+        XCTAssertNil(Bounties.record(.kill(name: "Hollow Shade", elite: false, boss: false, dungeon: "Crypt of Malachar"), store: store))
+        XCTAssertEqual(Bounties.progress(store), 0)
+        for _ in 0..<2 { XCTAssertNil(Bounties.record(.kill(name: "Wailing Wraith", elite: false, boss: false, dungeon: "Crypt of Malachar"), store: store)) }
+        let done = Bounties.record(.kill(name: "Elite Wailing Wraith", elite: true, boss: false, dungeon: "Crypt of Malachar"), store: store)
+        XCTAssertEqual(done?.id, "kill-crypt-wraiths")
+        let gold = wallet.gold
+        Bounties.complete(done!, store: store, wallet: wallet)
+        XCTAssertEqual(wallet.gold, gold + 200)
+        XCTAssertEqual(store.getItem("dd_trophies"), "1")
+        XCTAssertNil(Bounties.active(store))
+        XCTAssertEqual(Bounties.banner(store), nil)
+    }
+
+    func testSingleRunAndNoDeaths() {
+        let store = MemoryStore()
+        _ = Bounties.register("kills-10-any", store: store)
+        for _ in 0..<6 { _ = Bounties.record(.kill(name: "Rat", elite: false, boss: false, dungeon: "The Hollow"), store: store) }
+        XCTAssertEqual(Bounties.progress(store), 6)
+        _ = Bounties.record(.runStarted, store: store)
+        XCTAssertEqual(Bounties.progress(store), 0, "a single run")
+        Bounties.abandon(store)
+        _ = Bounties.register("floor-5-any", store: store)
+        XCTAssertNil(Bounties.record(.floor(5, dungeon: "The Hollow", diedThisRun: true), store: store))
+        XCTAssertEqual(Bounties.record(.floor(5, dungeon: "The Hollow", diedThisRun: false), store: store)?.id, "floor-5-any")
+    }
+
+    func testDayKeyLooksLikeTheWeb() {
+        let d = Calendar.current.date(from: DateComponents(year: 2026, month: 10, day: 8, hour: 12))!
+        XCTAssertEqual(Bounties.dayKey(d), "Thu Oct 08 2026")
+    }
+}
