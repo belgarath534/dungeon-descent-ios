@@ -413,6 +413,3 @@ Where an item's description and the web code disagree, Swift follows the descrip
   and resuming cleared it. Swift saves it with the run.
 - **"She Still Looks" could never be earned.** Nothing ever counted it. In Swift it's
   earned when a run ends with Medusa still searching for her father.
-- **Sparing Medusa often didn't give her spirit.** The unlock only happened if the
-  character already had an earned-spirits list, which new characters don't. Swift
-  always gives it on the first mercy.
