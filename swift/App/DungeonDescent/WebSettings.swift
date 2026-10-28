@@ -14,6 +14,7 @@ struct WebSettingsView: View {
 
     @AppStorage("swift_haptics") private var haptics = true
     @AppStorage("swift_class_traits") private var classTraits = true
+    @AppStorage("swift_shake") private var shakeAttack = false
     @AppStorage("swift_music_on") private var musicOn = true
     @AppStorage("swift_sfx_on") private var sfxOn = true
     @AppStorage("swift_ambient_on") private var ambientOn = true
@@ -175,13 +176,8 @@ struct WebSettingsView: View {
             divider
             toggleRow("Vibration", isOn: $haptics, label: "Vibration toggle")
             divider
-            HStack {
-                Text("Shake to Attack").font(Theme.cinzel(11.2)).tracking(3.4).textCase(.uppercase).foregroundStyle(Theme.goldDim)
-                Spacer()
-                Button("Off") { notYet("Shake to Attack") }.buttonStyle(ToggleButtonStyle(on: false))
-                    .accessibilityLabel("Shake to attack toggle")
-            }
-            .padding(.bottom, 18)
+            toggleRow("Shake to Attack", isOn: $shakeAttack, label: "Shake to attack toggle. In a fight, shake to attack; shake hard to use a skill.")
+                .padding(.bottom, 18)
             VStack(alignment: .leading, spacing: 8) {
                 Text("🎵 CUSTOM TRACK").font(Theme.cinzel(11.2)).tracking(2).foregroundStyle(Color(hex: 0xaa88dd))
                 Text("Play your own music instead of the game soundtrack. Use a file for testing or a URL to save it permanently.")

@@ -71,6 +71,15 @@ struct DungeonView: View {
         .accessibilityAction(.magicTap) {
             if model.threeD && model.phase == .exploring && run.stalker == nil { model.echoLocate() }
         }
+        .onAppear {
+            let m = model
+            ShakeDetector.shared.onShake = { [weak m] hard in m?.shakeAttack(hard: hard) }
+            ShakeDetector.shared.start()
+        }
+        .onDisappear {
+            ShakeDetector.shared.stop()
+            ShakeDetector.shared.onShake = nil
+        }
     }
 
     // MARK: Overlays

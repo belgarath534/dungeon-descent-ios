@@ -986,6 +986,21 @@ final class RunModel: ObservableObject {
         playMusic()
     }
 
+    // MARK: Shake to Attack
+
+    /// A shake attacks; a hard shake uses the first skill you can afford.
+    func shakeAttack(hard: Bool) {
+        guard phase == .fighting, levelUp == nil, !hunterChoice else { return }
+        Feedback.hit()
+        if hard, let s = skills.first(where: { skillCost($0) <= run.sp }) {
+            add("📳 Shake attack! Unleashing \(s.name)!")
+            Feedback.announce("Shake attack! Unleashing \(s.name)!")
+            useSkill(s.effect)
+        } else {
+            act(.attack)
+        }
+    }
+
     // MARK: Your guide
 
     var guideName: String { Guide.name(game.store) }

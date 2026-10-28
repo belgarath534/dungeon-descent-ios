@@ -266,6 +266,7 @@ enum AppSettings {
     }
     static var haptics: Bool { flag("swift_haptics") }
     static var classTraits: Bool { flag("swift_class_traits") }
+    static var shakeAttack: Bool { flag("swift_shake", false) }
     // Same defaults as the web version's audio settings.
     static var musicOn: Bool { flag("swift_music_on") }
     static var effectsOn: Bool { flag("swift_sfx_on") }
