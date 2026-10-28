@@ -41,6 +41,7 @@ final class Router: ObservableObject {
         case siege
         case challenges
         case bounty
+        case hunting
         case spellbook
         case seasonalshop
         case whatsnew
@@ -129,6 +130,7 @@ struct RootView: View {
             case .siege: SiegeView()
             case .challenges: ChallengesView()
             case .bounty: BountyBoardView()
+            case .hunting: HuntingGroundsView()
             case .spellbook: MenuSpellsScreen(showingBook: true)
             case .seasonalshop: SeasonalShopView()
             case .whatsnew: WhatsNewView()

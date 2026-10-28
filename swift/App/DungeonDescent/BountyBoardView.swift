@@ -37,9 +37,7 @@ struct BountyBoardView: View {
                 Text("Completing a bounty rewards gold and trophies. Only one active bounty at a time.")
                     .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x333333)).multilineTextAlignment(.center).frame(maxWidth: .infinity)
                 Divider().background(Color(hex: 0x1a1a1a))
-                Button("🌲 Enter The Hunting Grounds") {
-                    Feedback.announce("The Hunting Grounds isn't in the Swift version yet. Coming soon.")
-                }
+                Button("🌲 Enter The Hunting Grounds") { router.goTo(.hunting) }
                 .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
                 .accessibilityLabel("Enter the Hunting Grounds — send your character on an AFK forest hunt")
             }

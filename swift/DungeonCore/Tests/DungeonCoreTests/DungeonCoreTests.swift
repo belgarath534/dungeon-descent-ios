@@ -3122,3 +3122,30 @@ final class MedusaTests: XCTestCase {
         XCTAssertEqual(Medusa.fatherChance(store), 0.57, accuracy: 0.0001)
     }
 }
+
+final class HuntTests: XCTestCase {
+    func testRanksAndHunt() {
+        let store = MemoryStore()
+        XCTAssertEqual(Hunt.rank(store).name, "Scout")
+        XCTAssertNil(Hunt.addXP(60, store: store))
+        XCTAssertEqual(Hunt.addXP(60, store: store)?.name, "Tracker")
+        XCTAssertEqual(Hunt.xp(store), 120)
+        XCTAssertEqual(Hunt.next(after: Hunt.rank(store)).xpNeeded, 250)
+
+        let ch = PlayerCharacter(name: "H", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var h = Hunt.Hunter(ch)
+        XCTAssertEqual(h.maxHp, GameData.classInfo("Sentinel").maxHp, "the character's own class stats")
+        var dice = SeededDice(seed: 4)
+        var gold = 0, kills = 0, finds = 0
+        for _ in 0..<60 where !h.dead {
+            let m = Hunt.tick(&h, rank: Hunt.ranks[3], dice: &dice)
+            gold += m.gold
+            if m.killed != nil { kills += 1 }
+            if m.item != nil { finds += 1 }
+        }
+        XCTAssertEqual(gold, h.gold)
+        XCTAssertEqual(kills, h.kills)
+        XCTAssertGreaterThan(kills, 0)
+    }
+}

@@ -134,7 +134,8 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Shake to Attack | initShakeToAttack, toggleShakeAttack (dd_shake) | ✅ Settings → Audio → Shake to Attack. In a fight, a shake attacks and a hard shake uses your first skill you can afford, 0.8 seconds apart, at the web version's thresholds. Uses the iPhone's motion sensor directly, so there's no permission prompt |
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
 | Quests, inbox | QUEST SYSTEM … | ⬜ |
-| Bounty Board | BOUNTY BOARD SYSTEM (BOUNTY_TEMPLATES, renderBountyBoard, registerBounty, refreshBounties, updateBountyProgress, completeBounty, the dungeon banner) | ✅ all 35 bounties, three a day with 5 refreshes, one active at a time, progress from kills, elites, bosses and floors, gold and trophies when done, the banner in the dungeon. Saved in dd_bounty_data in the web version's shape. The Hunting Grounds button says it's coming soon |
+| Bounty Board | BOUNTY BOARD SYSTEM (BOUNTY_TEMPLATES, renderBountyBoard, registerBounty, refreshBounties, updateBountyProgress, completeBounty, the dungeon banner) | ✅ all 35 bounties, three a day with 5 refreshes, one active at a time, progress from kills, elites, bosses and floors, gold and trophies when done, the banner in the dungeon. Saved in dd_bounty_data in the web version's shape. |
+| The Hunting Grounds, Bounty Rank | THE HUNTING GROUNDS (BOUNTY_RANKS, addBountyXP, startHunt, huntTick, stopHunt, brianSay) | ✅ from the Bounty Board: pick a hunter and send them into the forest. Every 25–45 seconds a fight (more enemies as your rank rises), a find (rares from rank 5) or a rest, with the forest's ambience. Gold, saved items, Bounty Rank XP in dd_bounty_rank (10 ranks), and kills count toward "any dungeon" bounties. Brian narrates through the game's narration service when you're signed in; otherwise VoiceOver reads his lines. The hunt keeps going while you look around the app |
 | Spirits, companion, corruption, Hunter, Medusa arc | … | ✅ see their own rows |
 | Seasonal events | getActiveEvent, getEventBonuses, renderEventsScreen, openSeasonalShop | ✅ all 16 seasonal and weekly events on their dates, their XP, gold and enemy strength, Blood Moon's harder hits both ways, 20% of enemies replaced by the event's own (56 of them, in events.json), seasonal currency from 30% of kills, the menu banner and currency, the Events screen and the six seasonal shops. Not yet: the event enemies' special moves (the Leprechaun stealing gold, the Cupid's Love Potion …), the Easter Bunny room, Friday the 13th's Black Box, the July 4th Fireworks Corner, the Cinco de Mayo weapon, Ambush Day ambushes, birthday music, and shop items that need systems not ported yet (titles, run modifiers, combat items) |
 | Subclasses | SUBCLASSES, showSubclassChoice, chooseSubclass | ✅ the level 5 choice for every class that has one (Berserker and Druid don't, in the web version either), its stat points, its passive and the name in the top bar. The spell passives work with spells (see Spells). Ancient Blood's fire immunity has nothing to block yet |
@@ -413,3 +414,9 @@ Where an item's description and the web code disagree, Swift follows the descrip
   and resuming cleared it. Swift saves it with the run.
 - **"She Still Looks" could never be earned.** Nothing ever counted it. In Swift it's
   earned when a run ends with Medusa still searching for her father.
+- **Every hunter was the same.** The hunt read HP, attack and defense fields that
+  characters don't have, so everyone hunted with 100 HP and 8–14 attack. Swift uses the
+  character's class stats.
+- **Critical hunt strikes did nothing.** Kills could be "CRITICAL!" but paid the same, and
+  rank 7's "Critical hunt strikes unlocked" changed nothing. From rank 7 a critical kill
+  now pays double rank XP.
