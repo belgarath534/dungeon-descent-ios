@@ -3149,3 +3149,62 @@ final class HuntTests: XCTestCase {
         XCTAssertGreaterThan(kills, 0)
     }
 }
+
+final class HollowEventTests: XCTestCase {
+    private func hollow() -> Run {
+        var r = Run(character: PlayerCharacter(name: "W", cls: "Sentinel", race: "Human", prof: "Mercenary",
+                                               dungeon: "The Hollow", difficulty: .wanderer))
+        r.floor = 6
+        return r
+    }
+
+    func testWeepingChildAndMother() {
+        let w = Wallet(store: MemoryStore()) { _ in }
+        var r = hollow()
+        var dice = LoadedDice(rolls: [20], chances: [true])
+        r.pendingEvent = "weeping-child"
+        let calm = Encounters.choose(1, &r, dice: &dice, wallet: w)
+        XCTAssertEqual(calm.stat, "wepingChildSoothed")
+        XCTAssertTrue(r.weepingChildSoothed)
+        XCTAssertEqual(Encounters.event("weeping-mother-child")?.choices.first, "👶 Lead Her to the Child")
+        r.pendingEvent = "weeping-mother-child"
+        let max = r.maxHp
+        dice = LoadedDice(rolls: [35])
+        let reunion = Encounters.choose(0, &r, dice: &dice, wallet: w)
+        XCTAssertEqual(reunion.stat, "motherReunion")
+        XCTAssertEqual(r.maxHp, max + 5)
+        r.pendingEvent = "weeping-mother"
+        XCTAssertEqual(Encounters.choose(1, &r, dice: &dice, wallet: w).enemy?.name, "The Weeping Mother")
+        var box = Enemy(name: "The Music Box", icon: "🎵", hp: 0, maxHp: 38, atk: 7...12, gold: 8...14)
+        box.mechanics["isMusicBox"] = .bool(true)
+        XCTAssertNotNil(HollowEvents.onKill(box, &r))
+        XCTAssertTrue(r.inventory.contains(where: HollowEvents.isBoxItem))
+        r.pendingEvent = "weeping-child-box"
+        dice = LoadedDice(rolls: [25], chances: [true])
+        let played = Encounters.choose(2, &r, dice: &dice, wallet: w)
+        XCTAssertEqual(played.music, "music-box")
+        XCTAssertFalse(r.inventory.contains(where: HollowEvents.isBoxItem), "the box is used up")
+    }
+
+    func testTimeDescender() {
+        var r = hollow()
+        var dice = LoadedDice(chances: [true])
+        let td = TimeDescender.encounter(for: r, dice: &dice)!
+        _ = Combat.begin(&r, against: td)
+        XCTAssertTrue(r.timeDescenderMet)
+        dice = LoadedDice(chances: [true])
+        XCTAssertNil(TimeDescender.encounter(for: r, dice: &dice), "once a run")
+        r.enemy = TimeDescender.clock
+        r.defending = true
+        var d2 = LoadedDice(rolls: [28])
+        XCTAssertEqual(TimeDescender.tick(&r, dice: &d2), 14, "bracing halves the tick")
+        var d3 = LoadedDice(rolls: [30], chances: [false])
+        _ = TimeDescender.strike(&r, heavy: true, defend: false, dice: &d3)
+        XCTAssertLessThan(r.enemy!.hp, 79)
+        let store = MemoryStore()
+        var d4 = SeededDice(seed: 1)
+        XCTAssertTrue(TimeDescender.victory(&r, store: store, dice: &d4).armor)
+        XCTAssertTrue(TimeDescender.hasChronoArmor(r))
+        XCTAssertFalse(TimeDescender.victory(&r, store: store, dice: &d4).armor, "Chrono Armor only once")
+    }
+}

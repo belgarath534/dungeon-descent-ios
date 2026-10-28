@@ -53,6 +53,10 @@ public enum Combat {
         run.fight.huntersMarkReady = run.has("cu-hunters-mark")
         if enemy.isBoss { run.bossPhase = 1 }
         var log: [String] = []
+        if TimeDescender.isDescender(enemy) && !TimeDescender.isClock(enemy) {
+            run.timeDescenderMet = true
+            log.append("⏳ Time fractures. The Time Descender emerges, unbound by the dungeon's usual rules.")
+        }
         if Medusa.isMedusa(enemy) {
             run.medusa.met = true
             log.append("A rare figure steps from the shadows of the Hollow. Medusa. Her eyes are closed. For now. Her gaze can petrify you.")
@@ -73,6 +77,11 @@ public enum Combat {
         // 15% elite chance from floor 4 (enterRoom)
         let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(0.15)
         let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
+        if !elite, var td = TimeDescender.encounter(for: run, dice: &dice) {
+            if run.worldCurse { cursed(&td) }
+            Challenges.shape(&td, run)
+            return td
+        }
         if !elite, var special = Medusa.encounter(for: run, dice: &dice) {
             if run.worldCurse { cursed(&special) }
             Challenges.shape(&special, run)

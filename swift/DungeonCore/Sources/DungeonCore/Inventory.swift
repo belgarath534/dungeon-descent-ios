@@ -41,6 +41,10 @@ public enum Inventory {
             return Outcome(message: "🎵 You open the Music Box. The melody plays. The corruption inside you fades to nothing.")
         }
 
+        if HollowEvents.isBoxItem(item) {
+            return Outcome(message: "The Music Box is for the Weeping Child. It will be offered when you meet her.", used: false)
+        }
+
         // Daily Dungeon's Dry Run: no potions or elixirs at all.
         if Challenges.has(run, "no-potions") && (item.type.contains("potion") || item.type == "elixir" || item.type == "heal") {
             return Outcome(message: "Daily modifier Dry Run: potions cannot be used in this run.", used: false)

@@ -56,6 +56,9 @@ final class RunModel: ObservableObject {
             roomTitle = Rooms.floorName(saved.floor, dungeon: saved.dungeon)
             add("Run resumed on floor \(saved.floor). HP \(saved.hp) of \(saved.maxHp).")
             if let e = saved.enemy, Medusa.isMedusa(e), e.isDead { medusaChoice = true }
+            if let e = saved.enemy, TimeDescender.isClock(e), saved.inCombat {
+                if TimeDescender.hasChronoArmor(saved) { clockWindow = true } else { clockCycle(after: 3) }
+            }
             if let dir = ShadowEvents.securityDirection(saved.pendingEvent) {
                 DispatchQueue.main.async { [weak self] in self?.startSecurityRoom(dir) }
             }
@@ -435,6 +438,23 @@ final class RunModel: ObservableObject {
 
         switch Rooms.next(&r, dice: &d) {
         case .fight:
+            // The Hollow: the Weeping Child or the Weeping Mother instead of a fight.
+            let hollow = HollowEvents.encounter(&r, classTraits: AppSettings.classTraits, dice: &d)
+            if let line = hollow.line {
+                add("\(label) \(line)")
+                achievements.increment("wepingChildSoothed")
+                _ = achievements.check()
+                Sound.sfx("sfx-unlock")
+                finishQuietRoom(r, d, spoken: spoken + " " + line)
+                return
+            }
+            if let id = hollow.event, let ev = Encounters.event(id) {
+                r.pendingEvent = id
+                add("\(label) \(ev.title) — \(ev.text)")
+                finish(r, d, phase: .event,
+                       spoken: spoken + " \(ev.title). \(ev.text) " + ev.choices.joined(separator: " or ") + ".")
+                return
+            }
             // 20% of fights from floor 3 are ambushes; every fight is on Ambush Day.
             if r.floor >= 3 && (r.event == "ambushday" || d.chance(0.20)),
                let line = startAmbush(&r, &d, label: label) {
@@ -495,6 +515,15 @@ final class RunModel: ObservableObject {
         if r.pendingEvent == "julio" && choice == 0 { achievements.record(.julioMet) }
         let out = Encounters.choose(choice, &r, dice: &d, wallet: game.wallet)
         add(out.message)
+        if let stat = out.stat {
+            achievements.increment(stat)
+            _ = achievements.check()
+            Sound.sfx("sfx-unlock")
+        }
+        if let track = out.music {
+            Sound.track(track)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in self?.playMusic() }
+        }
         if r.level > levelBefore {
             Sound.sfx("sfx-levelup")
             add("Level up! You are now level \(r.level). You have \(r.levelPoints) level points to spend.")
@@ -768,6 +797,10 @@ final class RunModel: ObservableObject {
 
     func act(_ action: PlayerAction, bomb: Bool = false) {
         guard phase == .fighting else { return }
+        if let e = run.enemy, TimeDescender.isClock(e) {
+            clockHit(action)
+            return
+        }
         var r = run
         var d = dice
         let options = Combat.Options(classTraits: AppSettings.classTraits)
@@ -836,6 +869,137 @@ final class RunModel: ObservableObject {
             said += bountyKill(e, r)
         }
         return said
+    }
+
+    // MARK: The Time Descender
+
+    /// The Clock is striking: your buttons wait for the pause.
+    @Published private(set) var clockTicking = false
+    private var clockWindow = false
+    private var clockTimer: Timer?
+
+    /// timeDescenderPhaseTwo: the Descender falls and The Clock begins.
+    private func startClock(_ spoken: String) {
+        var r = run
+        r.enemy = TimeDescender.clock
+        r.inCombat = true
+        r.defending = false
+        run = r
+        phase = .fighting
+        add("⚡ Switching to Phase 2. The Clock.")
+        persist()
+        if TimeDescender.hasChronoArmor(r) {
+            // (The web version locked every button here and never unlocked them.)
+            clockWindow = true
+            add("✨ Chrono Armor resonates. The clock's power is nullified.")
+            Feedback.announce(spoken + " Switching to Phase 2. The Clock. Your Chrono Armor negates the clock. Strike freely.", after: 0.6)
+            return
+        }
+        Feedback.announce(spoken + " Switching to Phase 2. The Clock. It strikes 3 times, 5 seconds apart. You cannot act until it pauses. Then strike once.", after: 0.6)
+        clockCycle(after: 4)
+    }
+
+    /// Three ticks, 5 seconds apart, then the window.
+    private func clockCycle(after delay: Double) {
+        clockTimer?.invalidate()
+        clockWindow = false
+        clockTicking = true
+        var ticks = 0
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let self, self.phase == .fighting else { return }
+            Sound.track("time-descender")
+            self.add("⏰ The clock begins.")
+            Feedback.announce("The clock begins.")
+            self.clockTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] t in
+                Task { @MainActor in
+                    guard let self, self.phase == .fighting, let e = self.run.enemy, TimeDescender.isClock(e) else { t.invalidate(); return }
+                    if ticks >= 3 {
+                        t.invalidate()
+                        self.clockTicking = false
+                        self.clockWindow = true
+                        self.playMusic()
+                        self.add("⏱ The clock pauses. Attack now.")
+                        Feedback.announce("The clock pauses. Your turn. Attack precisely. Heavy strike may miss.")
+                        return
+                    }
+                    ticks += 1
+                    var r = self.run
+                    var d = self.dice
+                    let hit = TimeDescender.tick(&r, dice: &d)
+                    self.run = r
+                    self.dice = d
+                    let line = "⏰ Tick \(ticks) of 3. The clock strikes for \(hit). HP: \(r.hp) of \(r.maxHp)."
+                    self.add(line)
+                    Sound.sfx("sfx-hurt")
+                    Feedback.hit(heavy: true)
+                    if r.isDead {
+                        t.invalidate()
+                        self.clockTicking = false
+                        self.playerDied(killedBy: "The Clock", spoken: line)
+                        return
+                    }
+                    self.persist()
+                    Feedback.announce(line)
+                }
+            }
+        }
+    }
+
+    private func clockHit(_ action: PlayerAction) {
+        guard clockWindow else {
+            Feedback.announce(clockTicking ? "The clock is striking. Wait for it to pause." : "Wait for the clock.")
+            return
+        }
+        if action == .flee {
+            Feedback.announce("You cannot flee from The Clock.")
+            return
+        }
+        var r = run
+        var d = dice
+        let line = TimeDescender.strike(&r, heavy: action == .heavy, defend: action == .defend, dice: &d)
+        run = r
+        dice = d
+        add(line)
+        Sound.sfx(line.hasPrefix("Miss") ? "sfx-heavy-miss" : action == .defend ? "sfx-select" : "sfx-attack")
+        if let e = r.enemy, e.isDead {
+            clockVictory(line)
+            return
+        }
+        persist()
+        if TimeDescender.hasChronoArmor(r) {
+            Feedback.announce(line)
+            return
+        }
+        Feedback.announce(line + " The clock endures. Another cycle begins.")
+        clockCycle(after: 2)
+    }
+
+    /// timeDescenderVictory
+    private func clockVictory(_ spoken: String) {
+        clockTimer?.invalidate()
+        clockTicking = false
+        clockWindow = false
+        var r = run
+        var d = dice
+        let levelBefore = r.level
+        let (gold, armor) = TimeDescender.victory(&r, store: game.store, dice: &d)
+        game.wallet.addGold(gold)
+        r.kills += 1
+        achievements.increment("timeDescenderDefeated")
+        achievements.trackGlobal("totalKills")
+        _ = achievements.check()
+        Sound.sfx("sfx-victory")
+        var msg = "⏳ The Time Descender crumbles. Time flows normally again. +\(gold) gold, +120 XP."
+        if armor { msg += " ✨ LEGENDARY DROP: Chrono Armor! The clock will never bind you again." }
+        add(msg)
+        if r.level > levelBefore {
+            levelUp = r.level
+            if r.skillChoices.isEmpty { Skills.offer(&r, dice: &d) }
+            msg += " Level up! You are now level \(r.level)."
+        }
+        finish(r, d, phase: r.roomsOnFloor >= r.floorRoomsNeeded && r.roomsOnFloor > 0 ? .floorCleared : .exploring,
+               spoken: spoken + " " + msg + (exitsText.map { " " + $0 } ?? ""))
+        playMusic()
     }
 
     // MARK: The Medusa arc
@@ -1236,6 +1400,10 @@ final class RunModel: ObservableObject {
             return
         }
         medusaResolved = false
+        if TimeDescender.isDescender(e) {
+            if TimeDescender.isClock(e) { clockVictory(spoken) } else { startClock(spoken) }
+            return
+        }
         if Hunter.isHunter(e) {
             hunterSlain(spoken)
             return
@@ -1245,6 +1413,11 @@ final class RunModel: ObservableObject {
         let reward = Progression.rewardKill(&r, e, dice: &d, wallet: game.wallet)
         add(reward.message)
         var dropLine = ""
+        if let line = HollowEvents.onKill(e, &r) {
+            add(line)
+            dropLine += " " + line
+            achievements.increment("musicBoxDefeated")
+        }
         if let drop = Inventory.equipmentDrop(&r, dice: &d) {
             add("🎁 Found: \(drop.icon) \(drop.name) Level \(drop.level ?? 1)! Check inventory.")
             dropLine = " Item found. \(drop.name) Level \(drop.level ?? 1). Open inventory to equip it."
@@ -1784,6 +1957,10 @@ final class RunModel: ObservableObject {
 
     func useSkill(_ effect: String) {
         guard phase == .fighting else { return }
+        if let e = run.enemy, TimeDescender.isClock(e) {
+            Feedback.announce("Only Attack, Heavy Strike and Defend work against The Clock.")
+            return
+        }
         var r = run
         var d = dice
         let newSkill = !r.skillsUsed.contains(effect)

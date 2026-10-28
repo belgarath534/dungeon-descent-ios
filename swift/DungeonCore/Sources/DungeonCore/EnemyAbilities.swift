@@ -79,6 +79,11 @@ enum EnemyAbilities {
             log.append("\(e.name) gathers itself. Its attacks grow stronger!")
         }
         run.enemy = e
+        // The Music Box plays instead of attacking.
+        if HollowEvents.melody(&run, dice: &dice, log: &log) {
+            m.skipAttack = true
+            return m
+        }
         // Medusa's gaze comes instead of her attack.
         if Medusa.gaze(&run, dice: &dice, log: &log) {
             m.skipAttack = true

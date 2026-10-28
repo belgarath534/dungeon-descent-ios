@@ -134,6 +134,10 @@ public struct Run: Codable, Sendable {
     public var forestCorruption = 0
     /// The Medusa arc this run.
     public var medusa = Medusa.Arc()
+    /// The Weeping Child was soothed this run (the Weeping Mother remembers).
+    public var weepingChildSoothed = false
+    /// The Time Descender appears once a run at most.
+    public var timeDescenderMet = false
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false

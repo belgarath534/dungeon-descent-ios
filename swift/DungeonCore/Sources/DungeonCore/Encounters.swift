@@ -61,6 +61,10 @@ public enum Encounters {
         public var item: Item? = nil
         public var gold = 0
         public var playerDied = false
+        /// An achievement stat to count (dd_ach_stats).
+        public var stat: String? = nil
+        /// A music track to play over the moment.
+        public var music: String? = nil
     }
 
     public static func enterSpecial(_ room: SpecialRoom, _ run: inout Run, dice: inout some Dice,
@@ -191,6 +195,7 @@ public enum Encounters {
                          text: "Four camera feeds — North, South, East, West. The Darkness Swallower is on one feed. Listen for the growl: it comes from its camera. Then escape the opposite direction. You have \(Int(ShadowEvents.securitySeconds)) seconds. The growl is coming from the \(dir.rawValue).",
                          choices: Compass.allCases.map { "Escape \($0.rawValue)" }, weight: 0, dungeons: nil)
         }
+        if let e = HollowEvents.event(id) { return e }
         return events.first { $0.id == id }
     }
 
@@ -221,6 +226,7 @@ public enum Encounters {
         run.pendingEvent = nil
         func gold(_ g: Int) { run.gold += g; wallet.addGold(g) }
 
+        if id.hasPrefix("weeping-") { return HollowEvents.choose(id, choice, &run, dice: &dice, wallet: wallet) }
         if id.hasPrefix("shadow-") { return ShadowEvents.choose(id, choice, &run, dice: &dice, wallet: wallet) }
 
         switch (id, choice) {
