@@ -3564,3 +3564,48 @@ final class RaceTests: XCTestCase {
         }
     }
 }
+
+final class DailyDescentTests: XCTestCase {
+    var cal: Calendar { var c = Calendar(identifier: .gregorian); c.timeZone = TimeZone(identifier: "UTC")!; return c }
+    func day(_ y: Int, _ m: Int, _ d: Int, hour: Int = 12) -> Date {
+        cal.date(from: DateComponents(year: y, month: m, day: d, hour: hour))!
+    }
+
+    func testThirtyDayCycleAndBonusGold() {
+        XCTAssertEqual(DailyDescent.cycle.count, 30)
+        XCTAssertEqual(DailyDescent.reward(forDay: 1).gold, 25)
+        XCTAssertEqual(DailyDescent.reward(forDay: 30).gold, 700)
+        XCTAssertEqual(DailyDescent.reward(forDay: 31).gold, 75)
+        XCTAssertEqual(DailyDescent.reward(forDay: 61).gold, 125)
+        XCTAssertEqual(DailyDescent.reward(forDay: 3).parts, ["💰 55g", "✨ 5 Soul Fragments"])
+    }
+
+    func testClaimStreakAndRewards() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        XCTAssertEqual(DailyDescent.claim(store: store, wallet: w, now: day(2026, 10, 1), calendar: cal)?.day, 1)
+        XCTAssertNil(DailyDescent.claim(store: store, wallet: w, now: day(2026, 10, 1, hour: 23), calendar: cal))
+        XCTAssertTrue(DailyDescent.status(store, now: day(2026, 10, 1), calendar: cal).claimed)
+        XCTAssertEqual(DailyDescent.claim(store: store, wallet: w, now: day(2026, 10, 2, hour: 0), calendar: cal)?.day, 2)
+        XCTAssertEqual(w.gold, 65)
+        XCTAssertEqual(GlobalInventory(store: store).items.map(\.name), ["Health Potion"])
+        _ = DailyDescent.claim(store: store, wallet: w, now: day(2026, 10, 3), calendar: cal)
+        XCTAssertEqual(store.getItem("dd_soul_fragments"), "5")
+        _ = DailyDescent.claim(store: store, wallet: w, now: day(2026, 10, 4), calendar: cal)
+        _ = DailyDescent.claim(store: store, wallet: w, now: day(2026, 10, 5), calendar: cal)
+        XCTAssertEqual(CoinShop.coins(store), 1)
+        let st = DailyDescent.state(store)
+        XCTAssertEqual(st.streak, 5)
+        XCTAssertEqual(st.lastClaim, "2026-10-5")
+        XCTAssertEqual(st.totalDays, 5)
+    }
+
+    func testMissingADayStartsOver() {
+        let store = MemoryStore(["dd_daily_descent": #"{"streak":12,"lastClaim":"2026-9-28","totalDays":40}"#])
+        let w = Wallet(store: store)
+        XCTAssertEqual(DailyDescent.status(store, now: day(2026, 9, 29), calendar: cal).next.day, 13)
+        XCTAssertEqual(DailyDescent.status(store, now: day(2026, 9, 30), calendar: cal).next.day, 1)
+        XCTAssertEqual(DailyDescent.claim(store: store, wallet: w, now: day(2026, 9, 30), calendar: cal)?.day, 1)
+        XCTAssertEqual(DailyDescent.state(store).totalDays, 41)
+    }
+}

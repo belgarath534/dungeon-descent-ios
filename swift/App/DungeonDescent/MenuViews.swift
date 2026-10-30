@@ -13,6 +13,8 @@ struct MainMenuView: View {
     @State private var familiar = ""
     @State private var quitting = false
     @State private var toast: String?
+    @State private var daily: DailyDescent.Status?
+    @State private var dailyOpen = false
     @ObservedObject private var reaper = VoidReaperLive.shared
 
     enum Action {
@@ -123,12 +125,14 @@ struct MainMenuView: View {
                 .transition(.opacity)
             }
             if quitting { quitOverlay }
+            if dailyOpen, let d = daily { dailyOverlay(d.next) }
         }
         .onAppear {
             Sound.track("menu")
             Sound.ambient(nil)
             trophies = game.achievements.trophies
             familiar = game.familiarBadge
+            daily = DailyDescent.status(game.store)
             if game.shouldOfferWebImport { webImport.check(game, quietIfEmpty: true) }
             reaper.onReward = { [weak game] gold, coins in
                 guard let game else { return }
@@ -178,6 +182,9 @@ struct MainMenuView: View {
             }
             .accessibilityLabel("Join the Dungeon Descent Discord server")
             .padding(.bottom, 14)
+
+            // #menu-streak-badge
+            if let d = daily { dailyBadge(d) }
 
             Button("🏆 \(trophies)") { router.goTo(.quests) }
                 .font(Theme.cinzel(12.8, weight: .bold))
@@ -314,6 +321,80 @@ struct MainMenuView: View {
                     .accessibilityLabel("No stay and continue")
             }
         }
+    }
+
+    /// Daily Descent: tap to see today's reward, or hear when the next one is.
+    private func dailyBadge(_ d: DailyDescent.Status) -> some View {
+        Button {
+            if d.claimed {
+                Feedback.announce("You already claimed today's reward. Come back tomorrow for Day \(d.streak + 1).")
+            } else {
+                dailyOpen = true
+                Feedback.announce("Daily Descent. Day \(d.next.day) streak. Today's reward: \(d.next.name). Press Claim Reward to collect.", after: 0.4)
+            }
+        } label: {
+            Text(d.claimed ? "🔥 Day \(d.streak) Streak ✓ Claimed" : "🔥 Day \(d.next.day) — Tap to Claim!")
+                .font(Theme.cinzel(11.5))
+                .foregroundStyle(Color(hex: d.claimed ? 0x668844 : 0xcc8844))
+                .padding(.vertical, 6).padding(.horizontal, 16)
+                .background(Color(red: 10 / 255, green: 5 / 255, blue: 0))
+                .overlay(Rectangle().stroke(Color(hex: d.claimed ? 0x334422 : 0x443300)))
+        }
+        .padding(.vertical, 4)
+        .accessibilityLabel(d.claimed ? "Daily Descent. Day \(d.streak) streak. Already claimed today. Come back tomorrow."
+                                      : "Daily Descent. Day \(d.next.day) reward ready. Tap to claim.")
+    }
+
+    /// #ov-daily-descent
+    private func dailyOverlay(_ r: DailyDescent.Reward) -> some View {
+        WebOverlay {
+            Text("DAILY DESCENT").font(Theme.cinzel(10.4)).tracking(4).foregroundStyle(Color(hex: 0x888888))
+                .accessibilityHidden(true)
+            OverlayTitle(text: "Today's Offering")
+            Text("🔥 Day \(r.day) Streak").font(Theme.cinzel(12.8)).foregroundStyle(Color(hex: 0xcc8844))
+            Text(r.icon).font(.system(size: 48)).accessibilityHidden(true)
+            Text(r.name).font(Theme.decorative(16)).foregroundStyle(Color(hex: 0xe0c080))
+            OverlayText(text: r.desc)
+            HStack(spacing: 10) {
+                ForEach(r.parts, id: \.self) { part in
+                    Text(part).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xe0c080))
+                        .padding(.vertical, 8).padding(.horizontal, 12)
+                        .background(Color(hex: 0x1a1000))
+                        .overlay(Rectangle().stroke(Color(hex: 0x443300)))
+                }
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Rewards: " + r.parts.map { String($0.split(separator: " ", maxSplits: 1).last ?? "") }.joined(separator: ", "))
+            Button("⚔ Claim Reward") { claimDaily() }
+                .buttonStyle(WebButtonStyle(kind: .gold))
+                .accessibilityLabel("Claim your daily reward")
+            // Where today sits in this week of the cycle; a crown on day 30.
+            let pos = (r.day - 1) % 7 + 1
+            HStack(spacing: 6) {
+                ForEach(1...7, id: \.self) { i in
+                    Text(i == pos && (r.day - 1) % 30 == 29 ? "👑" : "\(i)")
+                        .font(Theme.cinzel(9.6))
+                        .foregroundStyle(i <= pos ? Theme.gold : Color(hex: 0x444444))
+                        .frame(width: 28, height: 28)
+                        .background(Circle().fill(i <= pos ? Theme.gold.opacity(0.2) : Color(hex: 0x0a0a0a)))
+                        .overlay(Circle().stroke(i <= pos ? Theme.gold : Color(hex: 0x333333)))
+                        .shadow(color: i == pos ? Theme.gold.opacity(0.6) : .clear, radius: 4)
+                }
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Weekly streak progress: day \(pos) of 7")
+        }
+    }
+
+    private func claimDaily() {
+        guard let r = DailyDescent.claim(store: game.store, wallet: game.wallet) else {
+            dailyOpen = false
+            return
+        }
+        Sound.sfx("sfx-unlock")
+        dailyOpen = false
+        daily = DailyDescent.status(game.store)
+        Feedback.announce("Claimed! \(r.gold) gold added. \(r.bonus != nil ? "Bonus reward also added. " : "")Come back tomorrow to continue your streak.")
     }
 
     private func run(_ e: Entry) {
