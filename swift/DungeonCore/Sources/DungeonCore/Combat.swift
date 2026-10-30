@@ -106,6 +106,10 @@ public enum Combat {
             Challenges.shape(&nm, run)
             return nm
         }
+        if !elite, var ce = CommunityEnemies.spawn(for: run, dice: &dice) {
+            Legacy.shape(&ce, run)
+            return ce
+        }
         if !elite, var seasonal = Events.seasonalEnemy(run, dice: &dice) {
             Challenges.shape(&seasonal, run)
             return seasonal

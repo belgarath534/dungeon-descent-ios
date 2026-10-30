@@ -4296,3 +4296,35 @@ final class CommandCenterTests: XCTestCase {
         XCTAssertFalse(cc.creating)
     }
 }
+
+final class CommunityEnemyTests: XCTestCase {
+    func testRollsChecksAndFight() {
+        var d = LoadedDice(rolls: [600, 55, 18])
+        let s = CommunityEnemies.roll(.boss, dice: &d)
+        XCTAssertEqual(s.hp, 600)
+        XCTAssertEqual(CommunityEnemies.problem(name: "Hellhound", desc: "Bites.", creator: "Leo"), nil)
+        XCTAssertNotNil(CommunityEnemies.problem(name: "Damn Thing", desc: "Bites.", creator: "Leo"))
+        XCTAssertEqual(CommunityEnemies.problem(name: "X", desc: "Bites.", creator: "Leo"), "Enemy name is too short.")
+        let e = CommunityEnemies.fight(.init(id: "abc", name: "The Watcher", desc: "Watches.", type: "rare", dungeon: "all",
+                                             music: "boss", creator: "Leo", icon: "💀", hp: 100, atk: 20, def: 3))
+        XCTAssertEqual(e.atk, 16...24)
+        XCTAssertEqual(e.gold, 25...25)
+        XCTAssertEqual(CommunityEnemies.id(e), "abc")
+        XCTAssertEqual(CommunityEnemies.announcement(e), "A creature stirs — The Watcher, unleashed by Leo.")
+        XCTAssertEqual(CommunityEnemies.music(e), "boss")
+    }
+
+    func testSpawnFollowsDungeon() {
+        CommunityEnemies.pool = [.init(id: "1", name: "Frosty", desc: "", type: "common", dungeon: "Frosthold Abyss", music: nil,
+                                       creator: "A", icon: "👤", hp: 30, atk: 5, def: 0)]
+        defer { CommunityEnemies.pool = [] }
+        let r = Run(character: PlayerCharacter(name: "c", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var d = LoadedDice(rolls: [0], chances: [true])
+        XCTAssertNil(CommunityEnemies.spawn(for: r, dice: &d))
+        var r2 = r
+        r2.dungeon = "Frosthold Abyss"
+        var d2 = LoadedDice(rolls: [0], chances: [true])
+        XCTAssertEqual(CommunityEnemies.spawn(for: r2, dice: &d2)?.name, "Frosty")
+    }
+}

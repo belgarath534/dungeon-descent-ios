@@ -49,6 +49,7 @@ final class Router: ObservableObject {
         /// The secret Shadow Realm (Redeem Code → SHADOW).
         case shadowRealm
         case commandCenter
+        case enemyCreator
     }
 
     @Published private(set) var screen: Screen = .menu
@@ -133,6 +134,7 @@ struct RootView: View {
             case .voidmode: VoidModeView()
             case .shadowRealm: ShadowRealmView()
             case .commandCenter: CommandCenterView()
+            case .enemyCreator: EnemyCreatorView()
             case .voidreaper: VoidReaperView()
             case .siege: SiegeView()
             case .challenges: ChallengesView()

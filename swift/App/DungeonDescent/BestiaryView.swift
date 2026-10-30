@@ -57,8 +57,7 @@ struct BestiaryView: View {
             if tab == "spirits" {
                 SpiritBestiary(characters: game.characters)
             } else if tab != "enemies" {
-                Text("Community enemies aren't in the Swift version yet. Coming soon.")
-                    .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
+                CommunityBestiary()
             } else {
                 Text("A record of the creatures you have faced in the dark.").font(Theme.crimson(14.4, italic: true))
                     .foregroundStyle(Theme.textSecondary)

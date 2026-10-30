@@ -84,7 +84,7 @@ final class GlobalChat: ObservableObject {
 
     var blockedCount: Int { list("dd_blocked_players").count }
 
-    private func hide(_ id: String) {
+    func hide(_ id: String) {
         var l = list("dd_hidden_content")
         if !l.contains(id) { l.append(id); setList("dd_hidden_content", Array(l.suffix(500))) }
     }
@@ -166,9 +166,15 @@ final class GlobalChat: ObservableObject {
     func report(_ m: Message, reason: String) async {
         hide(m.id)
         refilter()
+        await Self.sendReport(kind: "message", id: m.id, author: m.username, content: String(m.message.prefix(300)),
+                              reason: reason, reporter: username)
+    }
+
+    /// ugcReport's message to the developer, read out when it's sent (or not).
+    static func sendReport(kind: String, id: String, author: String, content: String, reason: String, reporter: String?) async {
         let payload: [String: String] = [
-            "type": "Content report: message",
-            "message": "REPORTED MESSAGE\nAuthor: \(m.username)\nContent: \(m.message.prefix(300))\nID: \(m.id)\nReason: \(reason.isEmpty ? "not given" : reason)\nReported by: \(username ?? "no chat username")\nTime: \(ISO8601DateFormatter().string(from: Date()))",
+            "type": "Content report: \(kind)",
+            "message": "REPORTED \(kind.uppercased())\nAuthor: \(author)\nContent: \(content)\nID: \(id)\nReason: \(reason.isEmpty ? "not given" : reason)\nReported by: \(reporter ?? "no chat username")\nTime: \(ISO8601DateFormatter().string(from: Date()))",
             "email": CloudAccount.shared.user?.email ?? "no-reply@dungen-descent.org",
             "platform": "ios-swift",
             "gameVersion": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown",

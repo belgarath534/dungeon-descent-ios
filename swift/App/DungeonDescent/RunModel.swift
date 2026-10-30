@@ -67,6 +67,7 @@ final class RunModel: ObservableObject {
             }
             bountyBanner = Bounties.banner(game.store)
             startForest()
+            loadCommunity()
             if let h = saved.hunter {
                 add(Hunter.line(h.dist))
                 startHeartbeat(h.dist)
@@ -76,7 +77,14 @@ final class RunModel: ObservableObject {
             return
         }
         run = Self.newRun(game, characterIndex)
+        loadCommunity()
         begin()
+    }
+
+    /// loadCommunityEnemies: the shared pool, refreshed every five minutes.
+    private func loadCommunity() {
+        let store = game.store
+        Task { await CommunityEnemyStore.shared.load(store) }
     }
 
     /// A fresh run for the character: start bonuses, saved items and gear,
@@ -542,6 +550,16 @@ final class RunModel: ObservableObject {
             }
             Combat.begin(&r, against: enemy).forEach { add($0) }
             let ability = Self.sentence(enemy.desc ?? "A powerful foe.")
+            if let stirs = CommunityEnemies.announcement(enemy) {
+                // A player-made enemy, with its creator's name and theme.
+                add("\(label) \(enemy.icon) \(stirs) \(enemy.hp) HP.")
+                setEvent(stirs, tone: "danger")
+                Sound.track(CommunityEnemies.music(enemy) ?? Soundtrack.battleTrack(dungeon: r.dungeon))
+                spoken += " \(stirs) \(enemy.hp) HP."
+                spoken += thirdEye(r)
+                finish(r, d, phase: .fighting, spoken: spoken)
+                return
+            }
             let line = enemy.isElite
                 ? "\(label) ★ ELITE: \(enemy.icon) \(enemy.name) — \(ability) \(enemy.hp) HP."
                 : "\(label) \(enemy.icon) A \(enemy.name) attacks! \(enemy.hp) HP."
@@ -1554,6 +1572,7 @@ final class RunModel: ObservableObject {
     /// Counts a kill toward the active bounty; pays it out when done.
     private func bountyKill(_ e: Enemy, _ r: Run) -> String {
         bounty(.kill(name: e.name, elite: e.isElite, boss: e.isBoss, dungeon: r.dungeon))
+        if let cid = CommunityEnemies.id(e) { CommunityEnemyStore.shared.killed(cid) }
     }
 
     private func bounty(_ ev: Bounties.Event) -> String {
