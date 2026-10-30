@@ -233,7 +233,6 @@ struct SiegeView: View {
         }
         battle = nil
         result = b
-        Sound.track("menu")
     }
 
     private func resultView(_ b: Siege.Battle) -> some View {

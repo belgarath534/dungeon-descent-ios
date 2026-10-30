@@ -56,8 +56,10 @@ public enum Soundtrack {
         prefixes[dungeon].map { "\($0)-battle" } ?? "battle"
     }
 
-    public static func bossTrack(dungeon: String) -> String {
-        exploreTrack(dungeon: dungeon, floor: 10)
+    /// The boss music; the Abyssal Deep's boss changes music with each phase (checkBossPhase).
+    public static func bossTrack(dungeon: String, phase: Int = 1) -> String {
+        if dungeon == "The Abyssal Deep" && phase >= 2 { return "abyssal-boss-p\(min(phase, 4))" }
+        return exploreTrack(dungeon: dungeon, floor: 10)
     }
 
     public static func ambientKey(dungeon: String, difficulty: GameData.Difficulty) -> String {

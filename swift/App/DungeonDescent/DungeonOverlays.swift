@@ -407,6 +407,7 @@ struct DeathCinematic: View {
     private func finish() {
         guard model.showingDeathCinematic else { return }
         withAnimation { model.showingDeathCinematic = false }
+        model.summaryMusic(victory: false)
         Feedback.announce("Run ended. Return to menu when ready.")
     }
 }

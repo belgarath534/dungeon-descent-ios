@@ -252,7 +252,9 @@ final class RunModel: ObservableObject {
             return
         }
         if let e = r.enemy, r.inCombat {
-            Sound.track(e.isBoss ? Soundtrack.bossTrack(dungeon: r.dungeon) : Soundtrack.battleTrack(dungeon: r.dungeon))
+            // The Hunter fights to the plain battle music (hunterFight).
+            Sound.track(e.name == "The Hunter" ? "battle"
+                        : e.isBoss ? Soundtrack.bossTrack(dungeon: r.dungeon, phase: r.bossPhase) : Soundtrack.battleTrack(dungeon: r.dungeon))
         } else {
             Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: r.floor))
         }
@@ -917,6 +919,8 @@ final class RunModel: ObservableObject {
         if result.bossPhaseMessage != nil {
             spoken = result.log.joined(separator: " ")
             Feedback.hit(heavy: true)
+            run = r
+            playMusic()
         }
         var questLine = ""
         if result.crit { questLine += quest(&r, "crits"); achievements.trackGlobal("totalCrits") }
@@ -2106,6 +2110,7 @@ final class RunModel: ObservableObject {
         game.recordDeath(r, killedBy: killedBy)
         game.clearRun(for: characterIndex)
         killer = killedBy
+        Sound.ambient(nil)
         showingDeathCinematic = true
         Feedback.announce(spoken + " " + deathCinematicSpoken)
     }
@@ -2121,6 +2126,7 @@ final class RunModel: ObservableObject {
                                     seconds: Date().timeIntervalSince1970 - run.startedAt))
         Sound.sfx("sfx-victory")
         Sound.ambient(nil)
+        summaryMusic(victory: true)
         add("Victory! You have conquered \(run.dungeon).")
         var d = dice
         if let sp = Spirits.victoryReward(run, earned: earnedSpirits, dice: &d) {
@@ -2157,6 +2163,18 @@ final class RunModel: ObservableObject {
         let unlock = next != run.dungeon && !next.isEmpty ? " \(next) is unlocked." : ""
         Feedback.announce(spoken + " Victory! You have conquered \(run.dungeon).\(unlock)" + guideSays(.victory, run)
             + (canContinueJourney ? " Continue your journey, start New Game Plus, or return." : " Start New Game Plus, or return."))
+    }
+
+    /// buildRunSummary: a clean cut from the fight, 1.2 seconds of silence,
+    /// then the victory music or the menu's.
+    func summaryMusic(victory: Bool) {
+        Sound.ambient(nil)
+        Sound.stopMusic()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak self] in
+            // Not if you've already left the summary.
+            guard let self, self.phase == .victory || self.phase == .defeat else { return }
+            Sound.track(victory ? "raid-victory" : "menu")
+        }
     }
 
     // MARK: Developer Tools
@@ -2426,6 +2444,7 @@ final class RunModel: ObservableObject {
             return
         }
         if let b = result.bossPhaseMessage, !spoken.contains(b) { spoken += " " + b }
+        if result.bossPhaseMessage != nil { run = r; playMusic() }
         finish(r, d, phase: .fighting, spoken: spoken)
     }
 

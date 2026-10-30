@@ -3844,3 +3844,13 @@ final class DevToolsTests: XCTestCase {
         }
     }
 }
+
+final class BossMusicTests: XCTestCase {
+    func testBossMusicByPhase() {
+        XCTAssertEqual(Soundtrack.bossTrack(dungeon: "The Abyssal Deep"), "abyssal-boss")
+        XCTAssertEqual(Soundtrack.bossTrack(dungeon: "The Abyssal Deep", phase: 2), "abyssal-boss-p2")
+        XCTAssertEqual(Soundtrack.bossTrack(dungeon: "The Abyssal Deep", phase: 3), "abyssal-boss-p3")
+        XCTAssertEqual(Soundtrack.bossTrack(dungeon: "Crypt of Malachar", phase: 3), "boss")
+        for t in ["abyssal-boss-p2", "abyssal-boss-p3", "raid-victory", "battle"] { XCTAssertNotNil(Soundtrack.file(forTrack: t), t) }
+    }
+}

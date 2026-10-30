@@ -77,6 +77,8 @@ extension Router {
         case .chronicles: Sound.track("chronicles")
         case .spire: Sound.track("spire")
         case .graveyard: Sound.track("graveyard")
+        // The death log is silent, like the run summary.
+        case .deathlog: Sound.stopMusic()
         default: break
         }
     }
