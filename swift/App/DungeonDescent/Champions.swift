@@ -17,6 +17,7 @@ struct CharacterListView: View {
     @State private var exportFor: Int?
     @State private var importing = false
     @State private var importText = ""
+    @State private var newDungeon: DungeonUnlockNews.Info?
 
     /// ov-confirm, reused by Play for New Game+ and resuming.
     struct Dialog {
@@ -100,6 +101,18 @@ struct CharacterListView: View {
             if let i = pendingDelete { deleteOverlay(i) }
             if exporting { exportOverlay }
             if importing { importOverlay }
+            if let n = newDungeon {
+                WebOverlay {
+                    Text(n.icon).font(.system(size: 48)).accessibilityHidden(true)
+                    Text("NEW DUNGEON UNLOCKED").font(Theme.cinzel(11)).tracking(3).foregroundStyle(Theme.goldDim)
+                    OverlayTitle(text: n.dungeon)
+                    OverlayText(text: n.desc)
+                    Text(n.details).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
+                    Button("⚔ Descend") { newDungeon = nil }
+                        .buttonStyle(WebButtonStyle(kind: .gold))
+                        .accessibilityLabel("Descend into the new dungeon")
+                }
+            }
             if let i = statsFor, game.characters.indices.contains(i) {
                 // viewCharStats: the saved run if there is one, else a fresh look at the character.
                 let ch = game.characters[i]
@@ -109,6 +122,14 @@ struct CharacterListView: View {
         .onAppear {
             let n = game.characters.count
             Feedback.announce("Character list updated. \(n) character\(n != 1 ? "s" : "") available.")
+            // checkDungeonUnlockPopups: one new dungeon at a time.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                guard let news = DungeonUnlockNews.next(unlocked: game.unlockedDungeons(), store: game.store) else { return }
+                newDungeon = news
+                Sound.sfx("sfx-unlock")
+                Feedback.success()
+                Feedback.announce("New dungeon unlocked! \(news.dungeon). \(news.desc) \(news.details)")
+            }
         }
     }
 

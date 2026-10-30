@@ -470,7 +470,7 @@ final class RunModel: ObservableObject {
                 Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
                 finish(r, d, phase: .fighting, spoken: said + " \(enemy.hp) HP." + thirdEye(r))
             } else if out.openShop {
-                shop = Inventory.shopStock(for: r, dice: &d)
+                shop = withMusicPlayer(Inventory.shopStock(for: r, dice: &d), r)
                 finish(r, d, phase: .shopping, spoken: said + " You have \(r.gold) gold.")
             } else {
                 if out.item != nil || out.gold > 0 { Sound.sfx("sfx-loot"); Feedback.success() }
@@ -886,7 +886,7 @@ final class RunModel: ObservableObject {
     }
 
     func act(_ action: PlayerAction, bomb: Bool = false) {
-        guard phase == .fighting else { return }
+        guard phase == .fighting, riddle == nil else { return }
         if action == .defend && RunModifiers.noDefend(run) {
             Feedback.announce("Cannot defend in Berserk Mode.")
             return
@@ -958,7 +958,9 @@ final class RunModel: ObservableObject {
         if let a = result.announcement, result.bossPhaseMessage == nil { spoken += " " + a }
         // Combat Announcements off: an ordinary exchange isn't read out.
         if !AppSettings.combatAnnouncements && result.bossPhaseMessage == nil { spoken = questLine }
+        let riddle = action == .attack || action == .heavy ? BossRiddles.roll(&r, dice: &d) : nil
         finish(r, d, phase: .fighting, spoken: spoken)
+        if let riddle { ask(riddle) }
     }
 
     /// Gold, XP and the bestiary for ambushers that fell on their own turn.
@@ -2186,6 +2188,65 @@ final class RunModel: ObservableObject {
         }
     }
 
+    // MARK: Music Player item
+
+    @Published var musicPlayerOpen = false
+
+    /// openShop: a Music Player for 50 gold until you've owned one.
+    private func withMusicPlayer(_ stock: [Inventory.ShopItem], _ r: Run) -> [Inventory.ShopItem] {
+        let owned = game.store.getItem("dd_mp_owned") == "1" || r.inventory.contains { $0.type == "music-player" }
+            || game.globalInventory.items.contains { $0.type == "music-player" }
+        guard !owned else { return stock }
+        let mp = Item(name: "Music Player", icon: "🎵", type: "music-player",
+                      desc: "Opens the music player from your inventory mid-dungeon. Never fight in silence again.", cost: 50)
+        return stock + [Inventory.ShopItem(id: stock.count, item: mp)]
+    }
+
+    func closeMusicPlayer() {
+        musicPlayerOpen = false
+        Feedback.announce("Music Player closed. Returning to dungeon.")
+    }
+
+    // MARK: Boss riddles
+
+    @Published private(set) var riddle: BossRiddles.Riddle?
+    @Published private(set) var riddleSeconds = 0
+    private var riddleTimer: Timer?
+
+    private func ask(_ q: BossRiddles.Riddle) {
+        riddle = q
+        riddleSeconds = BossRiddles.seconds
+        add("❓ The boss pauses. It speaks: \(q.question)")
+        Feedback.announce(BossRiddles.spoken(q), after: 1.2)
+        riddleTimer?.invalidate()
+        riddleTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                guard let self, self.riddle != nil else { return }
+                self.riddleSeconds -= 1
+                if self.riddleSeconds == 10 { Feedback.announce("10 seconds remaining.") }
+                if self.riddleSeconds == 5 { Feedback.announce("5. 4. 3. 2. 1.") }
+                if self.riddleSeconds <= 0 { self.answerRiddle(nil) }
+            }
+        }
+    }
+
+    /// answerBossRiddle: nil when time runs out.
+    func answerRiddle(_ choice: Int?) {
+        guard let q = riddle else { return }
+        riddleTimer?.invalidate()
+        riddle = nil
+        var r = run
+        let out = BossRiddles.answer(&r, q, choice: choice)
+        run = r
+        persist()
+        add(out.message)
+        achievements.increment(out.right ? "riddlesCorrect" : "riddlesWrong")
+        _ = achievements.check()
+        Sound.sfx(out.right ? "sfx-unlock" : "sfx-hurt")
+        Feedback.announce(out.right ? "Correct answer. The boss falls silent. You recover \(BossRiddles.heal) HP."
+                                    : "Wrong answer. The boss is enraged. Its attack has increased by 25 percent.")
+    }
+
     // MARK: Familiar
 
     /// Familiar recognitions happen once a run.
@@ -2556,6 +2617,12 @@ final class RunModel: ObservableObject {
 
     func useItem(at index: Int) {
         guard phase != .victory && phase != .defeat else { return }
+        // useMusicPlayerItem: the music player, over the dungeon. It's kept.
+        if run.inventory.indices.contains(index), run.inventory[index].type == "music-player" {
+            musicPlayerOpen = true
+            Feedback.announce("Music Player open. Select a track to play. Tap Back to Dungeon to return to your run.", after: 0.3)
+            return
+        }
         if run.inCombat && run.fight.noItems > 0 {
             Feedback.announce("The Void Anchor holds you too. No items for \(run.fight.noItems) more turn\(run.fight.noItems == 1 ? "" : "s").")
             return
@@ -2724,7 +2791,7 @@ final class RunModel: ObservableObject {
         if threeD { SpatialAudio.shared.descent() }
         let floor = r.floor
         game.updateCharacter(characterIndex) { $0.floor = max($0.floor, floor) }
-        shop = Inventory.shopStock(for: r, dice: &d)
+        shop = withMusicPlayer(Inventory.shopStock(for: r, dice: &d), r)
         roomTitle = Rooms.floorName(floor, dungeon: r.dungeon)
         add("You descend to floor \(floor): \(roomTitle).")
         achievements.record(.floorReached(floor))
@@ -2783,6 +2850,12 @@ final class RunModel: ObservableObject {
         if out.used {
             Feedback.success()
             Sound.sfx("sfx-purchase")
+            if entry.item.type == "music-player" {
+                var kept = entry.item
+                kept.cost = nil
+                game.globalInventory.add(kept)
+                game.store.setItem("dd_mp_owned", "1")
+            }
             // The Market Sprite's discount is spent once it's used.
             if r.spirit == "market-sprite" { game.updateCharacter(characterIndex) { $0.extra["marketSpriteUsed"] = .bool(true) } }
         }
@@ -2799,7 +2872,7 @@ final class RunModel: ObservableObject {
         var r = run
         var d = dice
         r.gold -= Inventory.refreshCost
-        shop = Inventory.shopStock(for: r, dice: &d)
+        shop = withMusicPlayer(Inventory.shopStock(for: r, dice: &d), r)
         run = r
         dice = d
         persist()

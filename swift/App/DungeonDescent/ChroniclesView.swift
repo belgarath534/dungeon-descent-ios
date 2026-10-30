@@ -37,11 +37,7 @@ struct ChroniclesView: View {
     @State private var tab = "lore"
     @State private var reading: (story: ChroniclesData.Story, isVoid: Bool)?
     @State private var journalChar = 0
-    @State private var mpKey: String?
-    @State private var mpPlaying = false
-    @State private var mpShuffle = false
     @State private var narration: AVPlayer?
-    @AppStorage("swift_music_volume") private var musicVolume = 0.7
 
     private let data = ChroniclesData.shared
     private static let audioBase = "https://pub-a22a05b8dcb64f86b6bbb814578b93e4.r2.dev/"
@@ -61,7 +57,7 @@ struct ChroniclesView: View {
                 switch tab {
                 case "library": library
                 case "journal": journal
-                case "music": music
+                case "music": MusicPlayerPanel()
                 default: lore
                 }
             }
@@ -353,9 +349,18 @@ struct ChroniclesView: View {
         }
     }
 
-    // MARK: Music
+}
 
-    private var music: some View {
+/// The music player (MUSIC_CATALOGUE, mpPlay, mpStop): every track in the game,
+/// by dungeon. In the Chronicles, and from the Music Player item in a run.
+struct MusicPlayerPanel: View {
+    @State private var mpKey: String?
+    @State private var mpPlaying = false
+    @State private var mpShuffle = false
+    @AppStorage("swift_music_volume") private var musicVolume = 0.7
+    private let data = ChroniclesData.shared
+
+    var body: some View {
         let groups = data.music.reduce(into: [(String, [ChroniclesData.Track])]()) { acc, t in
             if let i = acc.firstIndex(where: { $0.0 == t.dungeon }) { acc[i].1.append(t) } else { acc.append((t.dungeon, [t])) }
         }

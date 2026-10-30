@@ -3944,7 +3944,7 @@ final class SeasonalItemTests: XCTestCase {
 
     func testShopPutsThemInTheNextRun() {
         XCTAssertFalse(Events.comingSoon("liberty-cannon"))
-        XCTAssertTrue(Events.comingSoon("liberty-title"), "titles wait for the title picker")
+        XCTAssertFalse(Events.comingSoon("liberty-title"))
         XCTAssertEqual(SeasonalItems.all.count, 10)
     }
 
@@ -3982,5 +3982,54 @@ final class SeasonalItemTests: XCTestCase {
         XCTAssertEqual(r.tempAtk, 8)
         _ = Inventory.use(&r, at: 0)
         XCTAssertTrue(r.markedKill)
+    }
+}
+
+final class BatchFiveTests: XCTestCase {
+    func testTitles() {
+        let store = MemoryStore(["dd_mystery_coins": "12"])
+        XCTAssertEqual(Titles.current(store), "Wanderer")
+        XCTAssertTrue(Titles.select("Undying", store: store), "free")
+        XCTAssertFalse(Titles.select("Ancient", store: store), "not bought")
+        XCTAssertTrue(Titles.buy("Ancient", store: store))
+        XCTAssertEqual(CoinShop.coins(store), 2)
+        XCTAssertEqual(Titles.current(store), "Ancient")
+        XCTAssertFalse(Titles.buy("Ember", store: store), "can't afford")
+        XCTAssertEqual(Titles.grantSeasonal("val-title", store: store), "Beloved")
+        XCTAssertTrue(Titles.listed(store).contains { $0.tag == "Beloved" })
+        XCTAssertTrue(Titles.select("Beloved", store: store))
+    }
+
+    func testRiddles() {
+        var r = Run(character: PlayerCharacter(name: "R", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var boss = Enemy(name: "Boss", icon: "", hp: 100, maxHp: 100, atk: 10...20, gold: 1...1)
+        boss.isBoss = true
+        Combat.begin(&r, against: boss)
+        var d = SeededDice(seed: 2)
+        var q: BossRiddles.Riddle?
+        for _ in 0..<60 where q == nil { q = BossRiddles.roll(&r, dice: &d) }
+        let riddle = try! XCTUnwrap(q)
+        XCTAssertNil(BossRiddles.roll(&r, dice: &d), "once a fight")
+        XCTAssertEqual(riddle.answers.count, 3)
+        r.hp = 10
+        XCTAssertTrue(BossRiddles.answer(&r, riddle, choice: riddle.correct).right)
+        XCTAssertEqual(r.hp, 69)
+        XCTAssertFalse(BossRiddles.answer(&r, riddle, choice: nil).right)
+        XCTAssertEqual(r.enemy?.atk, 13...25)
+    }
+
+    func testDungeonNewsOnce() {
+        let store = MemoryStore()
+        XCTAssertNil(DungeonUnlockNews.next(unlocked: ["Crypt of Malachar"], store: store))
+        XCTAssertEqual(DungeonUnlockNews.next(unlocked: ["Crypt of Malachar", "The Hollow"], store: store)?.dungeon, "The Hollow")
+        XCTAssertNil(DungeonUnlockNews.next(unlocked: ["Crypt of Malachar", "The Hollow"], store: store))
+    }
+
+    func testLaterBirthdayCodes() {
+        let store = MemoryStore()
+        let y2030 = Calendar.current.date(from: DateComponents(year: 2030, month: 3, day: 23))!
+        XCTAssertTrue(RewardCodes.redeem("DDBD30", store: store, now: y2030).ok)
+        XCTAssertFalse(RewardCodes.redeem("DDBD31", store: store, now: y2030).ok)
     }
 }

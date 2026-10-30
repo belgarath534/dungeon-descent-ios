@@ -121,6 +121,20 @@ final class GameModel: ObservableObject {
         refresh()
     }
 
+    /// confirmResetGame: every dd_ key and every setting, gone. (The web save
+    /// isn't offered again, so it can't bring the old progress back.)
+    func resetEverything() {
+        for key in fileStore.snapshot().keys where key.hasPrefix("dd_") { store.removeItem(key) }
+        let defaults = UserDefaults.standard
+        for key in defaults.dictionaryRepresentation().keys where key.hasPrefix("swift_") && key != "swift_web_import_done" {
+            defaults.removeObject(forKey: key)
+        }
+        roster = CharacterRoster(store: store)
+        achievements.reload()
+        refresh()
+        saveNow()
+    }
+
     /// True until the player has imported or skipped the web save once.
     var shouldOfferWebImport: Bool {
         !UserDefaults.standard.bool(forKey: "swift_web_import_done")

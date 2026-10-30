@@ -356,6 +356,8 @@ public struct FloorStats: Codable, Sendable, Equatable {
 
 /// Skill effects that last only for the current fight (reset when a new one starts).
 public struct FightEffects: Codable, Sendable {
+    /// The boss already asked its riddle this fight.
+    public var riddleAsked = false
     /// Ranger's Opening Shot and Assassin's First Blood, still to come this fight.
     public var openingShot = false
     public var firstBlood = false

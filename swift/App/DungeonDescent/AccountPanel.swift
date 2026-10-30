@@ -5,10 +5,12 @@ import DungeonCore
 @MainActor
 struct AccountPanel: View {
     @ObservedObject var cloud = CloudAccount.shared
+    @EnvironmentObject var game: GameModel
     @State private var email = ""
     @State private var password = ""
     @State private var confirmDelete = false
     @State private var username = ""
+    @State private var pickingTitle = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -43,6 +45,13 @@ struct AccountPanel: View {
                 .accessibilityHidden(cloud.message.isEmpty)
         }
         .disabled(cloud.busy)
+        .fullScreenCover(isPresented: $pickingTitle) {
+            ZStack {
+                Theme.bgVoid.ignoresSafeArea()
+                TitlePicker(name: cloud.displayName) { pickingTitle = false }
+            }
+            .environmentObject(game)
+        }
         .alert("Choose a save", isPresented: $cloud.choosingSave) {
             Button("Use the cloud save") { Task { await cloud.keepCloudSave() } }
             Button("Keep this device's save") { Task { await cloud.keepDeviceSave() } }
@@ -125,6 +134,10 @@ struct AccountPanel: View {
             button("🏷 Set Username", bg: 0x1a1400, border: 0xffdd44, fg: 0xffdd44, label: "Set username") {
                 await cloud.setUsername(username)
             }
+            button("🏷 Change Title", bg: 0x1a1400, border: 0xffdd44, fg: 0xffdd44, label: "Change your title") {
+                pickingTitle = true
+                Feedback.announce("Choose your title. First 10 titles are free. Others cost Mystery Coins.", after: 0.3)
+            }
             button("☁ Sync Save to Cloud", bg: 0x0a1a0a, border: 0x336633, fg: 0xaaffaa, label: "Sync save to cloud now") {
                 await cloud.sync(silent: false)
             }
@@ -147,5 +160,72 @@ struct AccountPanel: View {
                 }
             }
         }
+    }
+}
+
+/// #ov-title-picker
+struct TitlePicker: View {
+    @EnvironmentObject var game: GameModel
+    let name: String
+    let close: () -> Void
+    @State private var version = 0
+
+    var body: some View {
+        let _ = version
+        let store = game.store
+        let current = Titles.current(store)
+        let coins = CoinShop.coins(store)
+        WebOverlay {
+            HStack {
+                Text("Choose Your Title").font(Theme.decorative(15)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
+                Spacer()
+                Button("← Back", action: close).buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Close")
+            }
+            Text("Currently: \(name) the \(current)").font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)
+            Text("🪙 \(coins) Mystery Coins available").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xffdd44))
+            ScrollView {
+                VStack(spacing: 4) {
+                    ForEach(Titles.listed(store), id: \.tag) { t in row(t.tag, t.cost, current: current, coins: coins) }
+                }
+            }
+            .frame(maxHeight: 380)
+        }
+    }
+
+    private func row(_ tag: String, _ cost: Int, current: String, coins: Int) -> some View {
+        let owned = Titles.isOwned(tag, game.store)
+        let isCurrent = tag == current
+        return HStack {
+            Text("\(name) the \(tag)\(isCurrent ? " ✓" : "")").font(Theme.cinzel(12)).foregroundStyle(isCurrent ? Theme.gold : Color(hex: 0xaaaaaa))
+            Spacer()
+            if isCurrent {
+                Text("Active").font(Theme.cinzel(10.4)).foregroundStyle(Theme.gold)
+            } else if owned {
+                Button("Select") { pick(tag) }.buttonStyle(SmallGhostStyle(color: Color(hex: 0xaaffaa)))
+                    .accessibilityLabel("Select title \(name) the \(tag)")
+            } else if coins >= cost {
+                Button("🪙 \(cost)") { buy(tag, cost) }.buttonStyle(SmallGhostStyle(color: Color(hex: 0xffdd44)))
+                    .accessibilityLabel("Buy title \(tag) for \(cost) mystery coins")
+            } else {
+                Text("🪙 \(cost)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x444444))
+                    .accessibilityLabel("\(tag) costs \(cost) mystery coins, not enough coins")
+            }
+        }
+        .padding(.vertical, 8).padding(.horizontal, 12)
+        .background(isCurrent ? Theme.gold.opacity(0.1) : Color(hex: 0x0a0a0a))
+        .overlay(Rectangle().stroke(isCurrent ? Theme.gold : Color(hex: 0x1a1a1a)))
+    }
+
+    private func pick(_ tag: String) {
+        Titles.select(tag, store: game.store)
+        version += 1
+        Feedback.announce("Title changed to \(name) the \(tag).")
+    }
+
+    private func buy(_ tag: String, _ cost: Int) {
+        guard Titles.buy(tag, store: game.store) else { Feedback.announce("Not enough Mystery Coins."); return }
+        version += 1
+        Sound.sfx("sfx-unlock")
+        Feedback.announce("Title unlocked: \(tag). \(CoinShop.coins(game.store)) coins remaining. Title changed to \(name) the \(tag).")
     }
 }

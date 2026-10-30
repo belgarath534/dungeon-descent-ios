@@ -132,6 +132,16 @@ struct DungeonView: View {
         if model.hunterChoice { hunterOverlay }
         if model.medusaChoice { medusaOverlay }
         if showSettings { WebSettingsView(run: model) { showSettings = false } }
+        if let q = model.riddle { BossRiddleOverlay(model: model, riddle: q) }
+        if model.musicPlayerOpen {
+            // #ov-music-player
+            WebScreen {
+                Button("✕ Back to Dungeon") { model.closeMusicPlayer() }.buttonStyle(BackButtonStyle())
+                    .accessibilityLabel("Close music player and return to dungeon")
+                Text("🎵 Music Player").font(Theme.decorative(20)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
+                MusicPlayerPanel()
+            }
+        }
         if chatOpen {
             GlobalChatView(store: game.store) { chatOpen = false; model.playMusic() }
         }

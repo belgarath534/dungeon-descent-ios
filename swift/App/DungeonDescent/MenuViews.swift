@@ -16,6 +16,8 @@ struct MainMenuView: View {
     @State private var daily: DailyDescent.Status?
     @State private var dailyOpen = false
     @State private var familiarOpen = false
+    @State private var trophiesOpen = false
+    @State private var birthdayOpen = false
     @ObservedObject private var reaper = VoidReaperLive.shared
 
     enum Action {
@@ -127,6 +129,8 @@ struct MainMenuView: View {
             }
             if quitting { quitOverlay }
             if dailyOpen, let d = daily { dailyOverlay(d.next) }
+            if trophiesOpen { TrophyOverlay { trophiesOpen = false } }
+            if birthdayOpen { BirthdayOverlay { birthdayOpen = false } }
             if familiarOpen {
                 FamiliarOverlay { familiarOpen = false; familiar = game.familiarBadge }
             }
@@ -189,8 +193,21 @@ struct MainMenuView: View {
 
             // #menu-streak-badge
             if let d = daily { dailyBadge(d) }
+            // #menu-birthday-badge: March 23, the game's birthday.
+            if Events.active() == "birthday" {
+                Button("🎂 Happy Birthday, Dungeon Descent!") {
+                    birthdayOpen = true
+                    Feedback.announce("Birthday screen. Dungeon Descent. Born March 23 2025. Built by Leo Productions. Tap Claim Birthday Reward.", after: 0.3)
+                }
+                .font(Theme.decorative(11.5)).foregroundStyle(Color(hex: 0xffd700))
+                .padding(.vertical, 8).padding(.horizontal, 16)
+                .background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Color(hex: 0x887700)))
+                .shadow(color: Color(hex: 0xffd700).opacity(0.4), radius: 6)
+                .padding(.vertical, 4)
+                .accessibilityLabel("Happy Birthday Dungeon Descent! Tap to celebrate")
+            }
 
-            Button("🏆 \(trophies)") { router.goTo(.quests) }
+            Button("🏆 \(trophies)") { openTrophies() }
                 .font(Theme.cinzel(12.8, weight: .bold))
                 .tracking(1.3)
                 .foregroundStyle(Color(hex: 0xffdd44))
@@ -325,6 +342,12 @@ struct MainMenuView: View {
                     .accessibilityLabel("No stay and continue")
             }
         }
+    }
+
+    /// openTrophyOverlay
+    private func openTrophies() {
+        trophiesOpen = true
+        Feedback.announce("Trophies. You have \(game.achievements.trophies) trophies. \(game.achievements.unlockedIDs.count) achievements unlocked.", after: 0.3)
     }
 
     private func openFamiliar() {
@@ -598,5 +621,108 @@ struct FamiliarOverlay: View {
             .background(Color(hex: 0x080808)).overlay(Rectangle().stroke(Color(hex: 0x222222))).opacity(0.5)
             .accessibilityElement(children: .combine)
         }
+    }
+}
+
+/// #ov-trophies: your trophies and every achievement you've unlocked.
+struct TrophyOverlay: View {
+    @EnvironmentObject var game: GameModel
+    let close: () -> Void
+
+    var body: some View {
+        let ids = game.achievements.unlockedIDs
+        let list = ids.compactMap { id in AchievementBook.all.first { $0.id == id } }
+        WebOverlay {
+            HStack {
+                Text("🏆 Your Trophies").font(Theme.decorative(16)).foregroundStyle(Color(hex: 0xffdd44)).accessibilityAddTraits(.isHeader)
+                Spacer()
+                Button("✕ Close", action: close).buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Close trophies")
+            }
+            Text("\(game.achievements.trophies)").font(Theme.decorative(40)).foregroundStyle(Color(hex: 0xffdd44))
+            Text("Total Trophies Earned").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
+            Text("UNLOCKED ACHIEVEMENTS").font(Theme.cinzel(9.9)).tracking(1.5).foregroundStyle(Color(hex: 0x888888))
+            ScrollView {
+                VStack(spacing: 6) {
+                    if list.isEmpty {
+                        Text("No achievements yet. Start playing!").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x444444)).padding(20)
+                    }
+                    ForEach(list) { a in
+                        HStack(spacing: 10) {
+                            Text(a.icon).font(.system(size: 20)).accessibilityHidden(true)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(a.name).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xcc9944))
+                                Text(a.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x777777))
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            Text("+\(a.trophies) 🏆").font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x887700))
+                        }
+                        .padding(.vertical, 8).padding(.horizontal, 12)
+                        .background(Color(hex: 0x080808)).overlay(Rectangle().stroke(Color(hex: 0x222222)))
+                        .accessibilityElement(children: .combine)
+                    }
+                }
+            }
+            .frame(maxHeight: 360)
+        }
+    }
+}
+
+/// #ov-birthday (openBirthdayScreen, claimBirthdayReward): 500 gold once a
+/// year and the year's code (DDBD26, DDBD27 …) for the full birthday package
+/// in Redeem Code. The web version only knew 2026; Swift counts the years.
+struct BirthdayOverlay: View {
+    @EnvironmentObject var game: GameModel
+    let close: () -> Void
+    @State private var showCode = false
+
+    private var year: Int { Calendar.current.component(.year, from: Date()) }
+    private var code: String { "DDBD\(year % 100)" }
+    private var ordinal: String {
+        let n = year - 2025
+        return ["", "ONE", "TWO", "THREE", "FOUR", "FIVE"].indices.contains(n) ? ["", "ONE", "TWO", "THREE", "FOUR", "FIVE"][n] : "\(n)"
+    }
+
+    var body: some View {
+        WebOverlay {
+            Text("🎂").font(.system(size: 52)).accessibilityHidden(true)
+            Text("YEAR \(ordinal)").font(Theme.cinzel(11)).tracking(4).foregroundStyle(Color(hex: 0xffd700))
+            OverlayTitle(text: "Dungeon Descent")
+            Text("Born March 23, 2025").font(Theme.cinzel(11.5)).foregroundStyle(Theme.textSecondary)
+            Text("Still Descending — March 23, \(String(year))").font(Theme.cinzel(11.5)).foregroundStyle(Theme.textSecondary)
+            Text("Built by Leo Productions").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
+            Button("🎁 Claim Birthday Reward") { claim() }
+                .buttonStyle(WebButtonStyle(kind: .gold))
+                .accessibilityLabel("Claim birthday reward — 500 gold plus unlock code")
+            Button("← Back to Menu") { Sound.track("menu"); close() }
+                .buttonStyle(WebButtonStyle(kind: .ghost))
+                .accessibilityLabel("Close birthday screen")
+            if showCode {
+                Text("YOUR BIRTHDAY CODE").font(Theme.cinzel(10)).tracking(2).foregroundStyle(Theme.goldDim)
+                Text(code).font(Theme.decorative(22)).foregroundStyle(Color(hex: 0xffd700)).textSelection(.enabled)
+                OverlayText(text: "Go to Settings → Redeem Code and paste this to unlock your full birthday rewards.")
+                Button("📋 Copy Code") {
+                    UIPasteboard.general.string = code
+                    Feedback.announce("Code copied. Go to Settings then Redeem Code and paste it.")
+                }
+                .buttonStyle(WebButtonStyle(kind: .ghost))
+                .accessibilityLabel("Copy birthday code to clipboard")
+            }
+        }
+        .onAppear { Sound.track("menu-birthday") }
+    }
+
+    private var spelled: String { code.map(String.init).joined(separator: " ") }
+
+    private func claim() {
+        let key = "dd_birthday_claimed_\(year)"
+        showCode = true
+        if game.store.getItem(key) != nil {
+            Feedback.announce("Already claimed. Here is your code again. \(spelled).")
+            return
+        }
+        game.wallet.addGold(500)
+        game.store.setItem(key, "true")
+        Sound.sfx("sfx-unlock")
+        Feedback.announce("Birthday reward claimed! 500 gold added. Your code is \(spelled). Go to Settings, Redeem Code, enter it for the full birthday package.")
     }
 }

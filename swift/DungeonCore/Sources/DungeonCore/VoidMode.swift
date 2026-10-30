@@ -240,6 +240,14 @@ public enum RewardCodes {
         return it
     }()
 
+    /// Codes for birthdays after 2028 (DDBD29 …), once that birthday has come.
+    static func laterBirthday(_ code: String, now: Date) -> (year: Int, gold: Int, discount: Double)? {
+        guard code.count == 6, code.hasPrefix("DDBD"), let yy = Int(code.suffix(2)), yy > 28 else { return nil }
+        let year = 2000 + yy
+        guard year <= Calendar.current.component(.year, from: now) else { return nil }
+        return (year, 1000, 0.15)
+    }
+
     public struct Outcome: Equatable, Sendable {
         public var ok: Bool
         public var message: String
@@ -254,7 +262,7 @@ public enum RewardCodes {
     public static func redeem(_ raw: String, store: GameStore, now: Date = Date()) -> Outcome {
         let code = raw.trimmingCharacters(in: .whitespaces).uppercased()
         guard !code.isEmpty else { return Outcome(ok: false, message: "No code entered.") }
-        if let b = birthday[code] {
+        if let b = birthday[code] ?? laterBirthday(code, now: now) {
             if store.getItem("dd_redeemed_" + code) != nil { return Outcome(ok: false, message: "Already redeemed on this device.") }
             store.setItem("dd_redeemed_" + code, "true")
             store.setItem("dd_blacksmith_discount", #"{"pct":\#(b.discount),"source":"Birthday \#(b.year)"}"#)

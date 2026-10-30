@@ -617,3 +617,23 @@ struct SpiritsOverlay: View {
         .onAppear { Feedback.announce("Your spirits. \(list.count) collected. Swipe through to activate one.") }
     }
 }
+
+/// #ov-boss-riddle
+struct BossRiddleOverlay: View {
+    @ObservedObject var model: RunModel
+    let riddle: BossRiddles.Riddle
+
+    var body: some View {
+        WebOverlay(danger: true) {
+            Text("❓ THE BOSS SPEAKS").font(Theme.cinzel(11)).tracking(3).foregroundStyle(Theme.bloodBright)
+            OverlayText(text: riddle.question)
+            ForEach(Array(riddle.answers.enumerated()), id: \.offset) { i, a in
+                Button(a) { model.answerRiddle(i) }
+                    .buttonStyle(WebButtonStyle(kind: .ghost))
+                    .accessibilityLabel("Answer \(i + 1): \(a)")
+            }
+            Text("\(model.riddleSeconds)").font(Theme.decorative(22)).foregroundStyle(Theme.gold)
+                .accessibilityLabel("\(model.riddleSeconds) seconds left")
+        }
+    }
+}

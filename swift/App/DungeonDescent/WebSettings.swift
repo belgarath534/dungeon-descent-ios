@@ -12,6 +12,7 @@ struct WebSettingsView: View {
     var run: RunModel? = nil
     let close: () -> Void
     @State private var panel: String?
+    @State private var confirmingReset = false
 
     @AppStorage("swift_haptics") private var haptics = true
     @AppStorage("swift_class_traits") private var classTraits = true
@@ -79,6 +80,7 @@ struct WebSettingsView: View {
                 .frame(maxWidth: 560)
                 .frame(maxWidth: .infinity)
             }
+            if confirmingReset { resetOverlay }
         }
         .foregroundStyle(Theme.textPrimary)
         .accessibilityAddTraits(.isModal)
@@ -416,11 +418,43 @@ struct WebSettingsView: View {
             }
             RewardCodeBox()
             SaveCodeBox()
+            // Not from the dungeon: the run in progress would outlive its character.
+            if run == nil {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Reset Game").font(Theme.cinzel(11.2)).tracking(2).foregroundStyle(Theme.goldDim)
+                Button("Reset Everything") {
+                    confirmingReset = true
+                    Feedback.announce("Reset all progress. Warning — this will delete everything permanently. Press Delete Everything to confirm or Cancel to go back.")
+                }
+                .buttonStyle(WebButtonStyle(kind: .red))
+                .accessibilityLabel("Reset game, delete all progress permanently")
+            }
+            }
             HStack(spacing: 16) {
                 Link("Privacy Policy", destination: URL(string: "https://dungen-descent.org/privacy")!)
                 Link("Terms of Service", destination: URL(string: "https://dungen-descent.org/terms")!)
             }
             .font(Theme.cinzel(11)).tint(Theme.gold)
+        }
+    }
+
+    /// #ov-reset-game
+    private var resetOverlay: some View {
+        WebOverlay(danger: true) {
+            OverlayTitle(text: "⚠ Reset All Progress", red: true)
+            OverlayText(text: "This will permanently delete everything: all characters and their histories, all achievements and stats, all bestiary entries, all Hall of Legends records, all Library story progress, all dungeon unlocks, all Mystery Coins and upgrades, Julio fragments and questline, and all settings and preferences.")
+            OverlayText(text: "This cannot be undone. The dungeon will not remember your name.")
+            HStack(spacing: 10) {
+                Button("Cancel") { confirmingReset = false }
+                    .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Cancel, keep all progress")
+                Button("Delete Everything") {
+                    confirmingReset = false
+                    game.resetEverything()
+                    Feedback.announce("All progress deleted. The dungeon does not remember your name.")
+                    close()
+                }
+                .buttonStyle(WebButtonStyle(kind: .red)).accessibilityLabel("Confirm reset, delete everything permanently")
+            }
         }
     }
 

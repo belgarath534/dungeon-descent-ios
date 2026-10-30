@@ -418,6 +418,7 @@ public enum Inventory {
         public let id: Int
         public var item: Item
         public var sold = false
+        public init(id: Int, item: Item, sold: Bool = false) { self.id = id; self.item = item; self.sold = sold }
     }
 
     /// Four random items from the dungeon's stock, like openShop().

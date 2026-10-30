@@ -440,3 +440,35 @@ public enum CharacterCode {
         return .success(ch)
     }
 }
+
+/// "New dungeon unlocked!" (DUNGEON_UNLOCK_INFO, checkDungeonUnlockPopups):
+/// each dungeon announces itself once, the first time Your Champions opens
+/// after it unlocks. Seen ones are kept in "dd_dungeon_popup_seen".
+public enum DungeonUnlockNews {
+    public struct Info: Equatable, Sendable {
+        public let dungeon, icon, desc, details: String
+    }
+
+    static let info: [String: (String, String, String)] = [
+        "The Ashbound Wastes": ("🔥", "A scorched wasteland of eternal flame. Fire creatures and ash storms await.", "Floors 1-10 · New enemies · Unique boss · Ashbound weather system"),
+        "Frosthold Abyss": ("❄️", "A frozen abyss where the cold never ends. Ice beasts patrol the dark.", "Floors 1-10 · New enemies · Unique boss · Frosthold weather system"),
+        "The Sunken Archives": ("📚", "A drowned library beneath the waves. Ancient knowledge — and ancient dangers.", "Floors 1-10 · New enemies · Unique boss · Sunken weather system"),
+        "The Hollow": ("🕯️", "A haunted manor where grief has taken form. Something watches from inside the walls.", "Floors 1-10 · Unique weather system · The Hollow Matron awaits"),
+        "The Whispering Forest": ("🌲", "An ancient forest that speaks. The trees remember everything — and they do not forgive.", "Floors 1-10 · New enemies · The Chimera boss · Forest ambient"),
+        "The Infernal Descent": ("🔥", "The deepest fire. A dungeon of pure void and flame only the strongest reach.", "Floors 1-10 · Unlocked with 100 trophies · Infernal enemies · Unique boss"),
+        "The Abyssal Deep": ("🌊", "The bottom of the ocean where no light reaches. Ancient creatures have waited for you.", "Floors 1-10 · Unlocked after The Infernal · Ocean enemies · The Leviathan awaits"),
+        // The web version had no entry for the newest dungeon; its dungeon card's text.
+        "The Shadow World": ("🌑", "It has existed for 3000 years beneath a cursed forest. It does not obey your rules. The Shapeshifter waits at the end — wearing your face, using your skills, knowing your every move.", "Floors 1-10 · Unlocked after The Abyssal Deep · Shadow Corruption · The Shapeshifter awaits"),
+    ]
+
+    /// The next dungeon to announce, marked as seen; nil when there's none.
+    public static func next(unlocked: [String], store: GameStore) -> Info? {
+        var seen: [String] = []
+        if let s = store.getItem("dd_dungeon_popup_seen"), let d = s.data(using: .utf8),
+           let v = try? JSONDecoder().decode([String].self, from: d) { seen = v }
+        guard let name = unlocked.first(where: { !seen.contains($0) && info[$0] != nil }), let i = info[name] else { return nil }
+        seen.append(name)
+        if let d = try? JSONEncoder().encode(seen), let s = String(data: d, encoding: .utf8) { store.setItem("dd_dungeon_popup_seen", s) }
+        return Info(dungeon: name, icon: i.0, desc: i.1, details: i.2)
+    }
+}

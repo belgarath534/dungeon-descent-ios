@@ -231,10 +231,8 @@ public enum Events {
 
     public static func shop(_ key: String) -> [ShopItem] { data?.shops[key] ?? [] }
 
-    /// Items whose effect the Swift version doesn't have yet.
-    public static func comingSoon(_ id: String) -> Bool {
-        ["liberty-title", "stpat-title", "val-title"].contains(id)
-    }
+    /// Items whose effect the Swift version doesn't have yet: none left.
+    public static func comingSoon(_ id: String) -> Bool { false }
 
     /// Pending boosts for the next run, saved by the seasonal shops.
     public struct NextRun: Codable, Sendable, Equatable {
@@ -322,6 +320,9 @@ public enum Events {
             }
             msg = "Liberty Eagle joins your cause. Find it in your Home under Minions."
         // The web version sold it and never applied it.
+        case let id where Titles.seasonal[id] != nil:
+            let tag = Titles.grantSeasonal(id, store: store) ?? ""
+            msg = "Title unlocked: the \(tag). Choose it in Settings → Account → Change Title."
         case let id where SeasonalItems.all[id] != nil:
             next.items.append(SeasonalItems.all[id]!)
             msg = "\(item.name) will be in your bag when your next run starts."

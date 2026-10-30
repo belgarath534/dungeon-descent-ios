@@ -158,3 +158,75 @@ extension RaidSave {
         return Int(n)
     }
 }
+
+/// Titles (TITLE_TAGS, TITLE_COSTS, openTitlePicker, selectTitle, buyTitle):
+/// "Leo the Undying" on the leaderboard. Ten are free, the rest cost Mystery
+/// Coins; three more come from the seasonal shops. Saved in "dd_title" and
+/// "dd_owned_titles" like the web version.
+public enum Titles {
+    public static let costs: [(tag: String, cost: Int)] = [
+        ("TheVoid", 0), ("Slayer", 0), ("Undying", 0), ("Cursed", 0), ("Shadow", 0),
+        ("Ironclad", 0), ("Ashen", 0), ("Hollow", 0), ("Forsaken", 0), ("Eternal", 0),
+        ("Crimson", 5), ("Frost", 5), ("Storm", 5), ("Silent", 5), ("Lost", 5),
+        ("Ancient", 10), ("Broken", 10), ("Risen", 10), ("Scarred", 10), ("Phantom", 10),
+        ("Ember", 15), ("Dusk", 15), ("Dawn", 15), ("Warden", 15), ("Exile", 15),
+        ("Relic", 20), ("Marked", 20), ("Wanderer", 20), ("Remnant", 20), ("Sovereign", 25),
+    ]
+    /// The seasonal shops' titles, owned once bought (the web version gave them
+    /// to whichever character was selected, which from the menu was none).
+    public static let seasonal: [String: String] = ["liberty-title": "Patriot", "stpat-title": "Lucky One", "val-title": "Beloved"]
+
+    public static func current(_ store: GameStore) -> String {
+        let t = store.getItem("dd_title") ?? ""
+        return t.isEmpty ? "Wanderer" : t
+    }
+
+    public static func owned(_ store: GameStore) -> [String] {
+        guard let s = store.getItem("dd_owned_titles"), let d = s.data(using: .utf8),
+              let v = try? JSONDecoder().decode([String].self, from: d) else { return ["Wanderer"] }
+        return v
+    }
+
+    public static func isOwned(_ tag: String, _ store: GameStore) -> Bool {
+        owned(store).contains(tag) || costs.first { $0.tag == tag }?.cost == 0
+    }
+
+    static func addOwned(_ tag: String, _ store: GameStore) {
+        var o = owned(store)
+        guard !o.contains(tag) else { return }
+        o.append(tag)
+        if let d = try? JSONEncoder().encode(o), let s = String(data: d, encoding: .utf8) { store.setItem("dd_owned_titles", s) }
+    }
+
+    /// Every title you can see in the picker: the thirty, then seasonal ones you own.
+    public static func listed(_ store: GameStore) -> [(tag: String, cost: Int)] {
+        costs + seasonal.values.sorted().filter { owned(store).contains($0) }.map { ($0, 0) }
+    }
+
+    @discardableResult
+    public static func select(_ tag: String, store: GameStore) -> Bool {
+        guard isOwned(tag, store) else { return false }
+        store.setItem("dd_title", tag)
+        return true
+    }
+
+    /// buyTitle: spends the coins, then wears it. False when you can't afford it.
+    @discardableResult
+    public static func buy(_ tag: String, store: GameStore) -> Bool {
+        guard let cost = costs.first(where: { $0.tag == tag })?.cost else { return false }
+        if !isOwned(tag, store) {
+            let have = CoinShop.coins(store)
+            guard have >= cost else { return false }
+            store.setItem("dd_mystery_coins", String(have - cost))
+            RaidSave(store: store).syncCoins(have - cost)
+            addOwned(tag, store)
+        }
+        return select(tag, store: store)
+    }
+
+    public static func grantSeasonal(_ shopItem: String, store: GameStore) -> String? {
+        guard let tag = seasonal[shopItem] else { return nil }
+        addOwned(tag, store)
+        return tag
+    }
+}
