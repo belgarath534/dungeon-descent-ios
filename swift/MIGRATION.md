@@ -119,6 +119,9 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
+| Skill Orbs | homeCreateSkillOrbs, useSkillOrb (dd_skill_orbs) | ✅ when a character's run ends in death, every Home skill upgrade above level 1 becomes a class-locked orb and the upgrades start over; Home → Skill Upgrade lists the orbs, and a character of the same class uses one to take that skill to the orb's level |
+| Shapeshifter's Mask | shadowItem shapeshifterMask | ✅ once a run, in a fight: copies the enemy's ability (12 of them) for the rest of the fight, or heals 30 HP |
+| First-run tips | DUNGEON_TIPS, showDungeonTip (dd_dungeon_tips_seen) | ✅ the ten tips, each once, as a banner that drains away and read out after the move's own news |
 | Pre-boss gauntlet | startPreBossGauntlet, spawnPreBossWave | ✅ after the Elite Guardian, 1 or 2 waves of the dungeon's toughest enemies (stronger on harder difficulties and NG+) before the boss chamber opens |
 | Boss death cinematic | showBossDeathCinematic | ✅ the boss's last lines on black before victory |
 | Drowned King's resurrection | enemy.resurrect | ✅ rises once at 1 HP |
@@ -547,3 +550,14 @@ Where an item's description and the web code disagree, Swift follows the descrip
   now roll one of six outcomes (heal 60, lose 30 HP, +25 SP, +6 attack, lose 2 defense and 15
   HP, or 40 gold). The Warding Bell senses the next trap when you search, like the Scholar and
   the Frost Sprite, with a radar ping.
+- **Skill Orbs never reached anyone.** Orbs were made on every lost life, wiping your Home
+  upgrades each time, and saved where no screen ever looked ("Check your global inventory"),
+  so they could never be used. Swift makes them when the run ends in death and lists them at
+  Home under Skill Upgrade, where a character of the same class can use them.
+- **The Shapeshifter's Mask kept its power forever, and the Void Web did nothing.** The copied
+  ability lasted past the fight (it says "this combat") and the web's Void Web was never
+  woven. Swift keeps each ability to its fight and the web deals 8 a turn. "Corruption on
+  hit" had no meaning outside the Whispering Forest; in Swift your next attack deals 10 more
+  damage for each corruption stack the copied enemy inflicts.
+- **Three first-run tips never showed.** The tips for your first fight, first boss and first
+  elite were written but never called. Swift shows them.

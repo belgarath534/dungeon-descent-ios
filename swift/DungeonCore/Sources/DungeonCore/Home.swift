@@ -173,6 +173,67 @@ public enum Home {
         return "\(name) upgraded to level \(level + 1)."
     }
 
+    // MARK: Skill Orbs
+
+    /// One upgraded skill kept from a fallen character (dd_skill_orbs).
+    public struct SkillOrb: Codable, Equatable, Sendable {
+        public var id: String
+        public var skillName: String
+        public var className: String
+        public var level: Int
+        public var fromChar: String
+        public var created: Double
+    }
+
+    public static func skillOrbs(_ store: GameStore) -> [SkillOrb] {
+        guard let s = store.getItem("dd_skill_orbs"), let d = s.data(using: .utf8),
+              let v = try? JSONDecoder().decode([SkillOrb].self, from: d) else { return [] }
+        return v
+    }
+
+    static func saveOrbs(_ o: [SkillOrb], _ store: GameStore) {
+        if let d = try? JSONEncoder().encode(o), let s = String(data: d, encoding: .utf8) { store.setItem("dd_skill_orbs", s) }
+    }
+
+    /// homeCreateSkillOrbs: when a character falls, every skill above level 1
+    /// becomes an orb and the Home's upgrades start again. Returns how many.
+    @discardableResult
+    public static func makeSkillOrbs(fromChar: String, store: GameStore, now: Double = Date().timeIntervalSince1970) -> Int {
+        let levels = skillLevels(store).filter { $0.value > 1 }
+        guard !levels.isEmpty else { return 0 }
+        var orbs = skillOrbs(store)
+        for (id, level) in levels.sorted(by: { $0.key < $1.key }) {
+            let parts = id.split(separator: "_").map(String.init)
+            orbs.append(SkillOrb(id: id, skillName: parts.dropFirst().joined(separator: " "), className: parts.first ?? "",
+                                 level: level, fromChar: fromChar, created: now * 1000))
+        }
+        saveOrbs(orbs, store)
+        var h = save(store)
+        h["skillLevels"] = .object([:])
+        h["upgradeCount"] = .number(0)
+        write(h, store)
+        return levels.count
+    }
+
+    /// useSkillOrb: only a character of the orb's class can take it. The skill
+    /// goes to the orb's level (never down).
+    public static func useSkillOrb(at index: Int, cls: String, store: GameStore) -> (used: Bool, message: String) {
+        var orbs = skillOrbs(store)
+        guard orbs.indices.contains(index) else { return (false, "That orb is gone.") }
+        let o = orbs[index]
+        guard o.className == cls else {
+            return (false, "This orb is for a \(o.className). Your character is a \(cls.isEmpty ? "nobody yet" : cls). You need to play the same class to use this orb.")
+        }
+        var h = save(store)
+        var levels = skillLevels(store)
+        levels[o.id] = max(levels[o.id] ?? 1, o.level)
+        h["skillLevels"] = .object(levels.mapValues { .number(Double($0)) })
+        write(h, store)
+        orbs.remove(at: index)
+        saveOrbs(orbs, store)
+        return (true, "Skill Orb used. \(o.skillName) upgraded to level \(o.level) from \(o.fromChar).")
+    }
+
     // MARK: Minions
 
     public static func minions(_ store: GameStore) -> [Minion] {

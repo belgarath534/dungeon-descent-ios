@@ -167,6 +167,8 @@ public struct Run: Codable, Sendable {
     /// The pre-boss gauntlet's waves, and how many are done.
     public var preBossWaves = 0
     public var preBossDone = 0
+    /// The Shapeshifter's Mask was used this run.
+    public var maskUsed = false
     public var devMedusa = false
     /// Today's Daily Challenge effect ("ironDay" …), if you registered for it.
     public var dailyChallenge: String? = nil
@@ -434,6 +436,12 @@ public struct FightEffects: Codable, Sendable {
     /// The Sorrow Hound's fear: your attacks do 20% less for this many turns.
     public var fearTurns = 0
     public var nullShieldUsed = false
+    /// The Shapeshifter's Mask: the ability copied this fight, and its state.
+    public var mask = ""
+    public var maskGrow = 0
+    public var maskToggle = false
+    public var maskFear = 0
+    public var maskCorrupt = 0
     // Spells (applySpellEffect)
     public var darkCurse = 0
     public var playerBurn = 0

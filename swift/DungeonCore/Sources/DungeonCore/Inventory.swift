@@ -30,6 +30,8 @@ public enum Inventory {
         let item = run.inventory[index]
         var out = Outcome(message: "")
 
+        if ShapeshifterMask.isMask(item) { return ShapeshifterMask.use(&run, at: index) }
+
         // Mirror Fragment (Shadow World): purges every corruption stack.
         if item.extra["shadowItem"] == .string("mirrorFragment") {
             guard run.shadowCorruption > 0 else { return Outcome(message: "You have no corruption to purge.", used: false) }
@@ -177,7 +179,7 @@ public enum Inventory {
         case "soul-trap":
             return Outcome(message: "Use the Soul Trap button during a fight to capture the enemy.", used: false)
         case "skill-orb":
-            return Outcome(message: "Skill Orbs come with a later update of the Swift version. It's kept safe in your bag.", used: false)
+            return Outcome(message: "Skill Orbs are used from your Home, under Skill Upgrade.", used: false)
         case "warding-bell":
             run.wardingBell += 1
             out.message = "🔔 Warding Bell attuned. It will ring out and warn you the next time you search a room with a trap."

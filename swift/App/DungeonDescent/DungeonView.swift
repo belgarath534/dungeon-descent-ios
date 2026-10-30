@@ -396,6 +396,7 @@ struct DungeonView: View {
             } else if !model.eventText.isEmpty {
                 eventBox(text: model.eventText, tone: model.eventTone) { EmptyView() }
             }
+            if let tip = model.tip { TipBanner(text: tip.text, seconds: tip.seconds) { model.dismissTip() } }
         }
         .padding(.vertical, 22).padding(.horizontal, 22)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -1197,5 +1198,36 @@ struct SmallGoldStyle: ButtonStyle {
             .foregroundStyle(Theme.bgVoid)
             .padding(.vertical, 3).padding(.horizontal, 10).frame(minHeight: 32)
             .background(configuration.isPressed ? Theme.goldBright : Theme.gold)
+    }
+}
+
+/// #dg-tut-banner: a first-run tip, with a bar that drains until it goes.
+struct TipBanner: View {
+    let text: String
+    let seconds: Double
+    let dismiss: () -> Void
+    @State private var left: CGFloat = 1
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .top, spacing: 8) {
+                Text(Language.t(text)).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xaadd44)).lineSpacing(4)
+                Spacer(minLength: 0)
+                Button("✕", action: dismiss).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x668833))
+                    .accessibilityLabel("Dismiss tip")
+            }
+            GeometryReader { g in
+                Rectangle().fill(Color(hex: 0x446600)).frame(width: g.size.width * left, height: 2)
+            }
+            .frame(height: 2)
+            .accessibilityHidden(true)
+        }
+        .padding(.vertical, 8).padding(.horizontal, 14)
+        .background(Color(hex: 0x0a0c00)).overlay(Rectangle().stroke(Color(hex: 0x446600)))
+        .id(text)
+        .onAppear {
+            left = 1
+            withAnimation(.linear(duration: seconds)) { left = 0 }
+        }
     }
 }

@@ -4145,3 +4145,66 @@ final class ItemAuditTests: XCTestCase {
         XCTAssertFalse(m!.isElite)
     }
 }
+
+final class SkillOrbTests: XCTestCase {
+    func testFallenCharacterLeavesOrbsForSameClass() {
+        let store = MemoryStore(["dd_global_gold": "1000"])
+        let w = Wallet(store: store)
+        _ = Home.upgradeSkill(cls: "Warrior", name: "Shield Bash", store: store, wallet: w, now: 0)
+        _ = Home.upgradeSkill(cls: "Warrior", name: "Shield Bash", store: store, wallet: w, now: 0)
+        XCTAssertEqual(Home.makeSkillOrbs(fromChar: "Brom", store: store), 1)
+        XCTAssertTrue(Home.skillLevels(store).isEmpty)
+        let orbs = Home.skillOrbs(store)
+        XCTAssertEqual(orbs.first?.skillName, "Shield Bash")
+        XCTAssertEqual(orbs.first?.className, "Warrior")
+        XCTAssertEqual(orbs.first?.level, 3)
+        XCTAssertFalse(Home.useSkillOrb(at: 0, cls: "Mage", store: store).used)
+        XCTAssertTrue(Home.useSkillOrb(at: 0, cls: "Warrior", store: store).used)
+        XCTAssertEqual(Home.skillLevels(store)["Warrior_Shield_Bash"], 3)
+        XCTAssertTrue(Home.skillOrbs(store).isEmpty)
+        XCTAssertEqual(Home.makeSkillOrbs(fromChar: "Brom", store: store), 1)
+    }
+}
+
+final class ShapeshifterMaskTests: XCTestCase {
+    func testMaskCopiesAbilityOncePerRun() {
+        var r = Run(character: PlayerCharacter(name: "M", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var mask = Item(name: "Shapeshifter's Mask", icon: "🎭", type: "consumable", desc: "")
+        mask.extra["shadowItem"] = .string("shapeshifterMask")
+        r.inventory = [mask, mask]
+        XCTAssertFalse(Inventory.use(&r, at: 0).used)
+        var e = Enemy(name: "Reflection", icon: "🪞", hp: 50, maxHp: 50, atk: 5...5, gold: 0...0)
+        e.mechanics["reflection"] = .bool(true)
+        r.enemy = e
+        r.inCombat = true
+        let out = Inventory.use(&r, at: 0)
+        XCTAssertTrue(out.used)
+        XCTAssertTrue(out.message.contains("reflection"))
+        XCTAssertFalse(Inventory.use(&r, at: 0).used)
+        var log: [String] = []
+        XCTAssertEqual(ShapeshifterMask.incoming(&r, 12, log: &log), 0)
+        XCTAssertEqual(r.enemy?.hp, 38)
+        XCTAssertEqual(ShapeshifterMask.incoming(&r, 12, log: &log), 12)
+    }
+
+    func testSecondLife() {
+        var r = Run(character: PlayerCharacter(name: "M", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.fight.mask = "twiceDead"
+        r.hp = 5
+        var log: [String] = []
+        XCTAssertEqual(ShapeshifterMask.incoming(&r, 20, log: &log), 0)
+        XCTAssertEqual(r.hp, r.maxHp / 2)
+    }
+}
+
+final class DungeonTipsTests: XCTestCase {
+    func testEachTipShowsOnce() {
+        let store = MemoryStore()
+        XCTAssertNotNil(DungeonTips.take("first-boss", store: store))
+        XCTAssertNil(DungeonTips.take("first-boss", store: store))
+        XCTAssertNil(DungeonTips.take("nope", store: store))
+        XCTAssertEqual(DungeonTips.seen(store), ["first-boss"])
+    }
+}

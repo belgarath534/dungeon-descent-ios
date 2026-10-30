@@ -228,6 +228,7 @@ public enum Combat {
         if run.has("cu-night-blessing") && CoinShop.isNightNow() { baseAtk += 5 }
         baseAtk = Subclasses.attackBonus(&run, baseAtk, dice: &dice, log: &r.log)
         baseAtk = ShadowWorld.attackRoll(&run, baseAtk, log: &r.log)
+        baseAtk = ShapeshifterMask.attackRoll(&run, baseAtk, log: &r.log)
         if action == .attack || action == .heavy { baseAtk = Alchemy.rage(&run, baseAtk, log: &r.log) }
 
         if run.frozen {
@@ -670,6 +671,8 @@ public enum Combat {
             log.append("Death and Decay saps \(e.name)'s strength.")
         }
         run.enemy = e
+        ShapeshifterMask.enemyTurn(&run, log: &log)
+        if run.enemy?.isDead == true { return 0 }
 
         if Spells.beforeEnemy(&run, log: &log) { return 0 }
         guard let after = run.enemy, !after.isDead else { return 0 }
@@ -770,6 +773,7 @@ public enum Combat {
         taken = Alchemy.incoming(&run, taken, log: &log)
         taken = Subclasses.incoming(&run, taken, dice: &dice, log: &log)
         taken = Spells.incoming(&run, taken, log: &log)
+        taken = ShapeshifterMask.incoming(&run, taken, log: &log)
         if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) || ShadowWorld.armorAvoids(&run, dice: &dice, log: &log) { return 0 }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)

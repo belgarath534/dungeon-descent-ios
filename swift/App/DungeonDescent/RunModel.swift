@@ -31,7 +31,10 @@ final class RunModel: ObservableObject {
     @Published private(set) var eventText = ""
     @Published private(set) var eventTone = ""
     /// Set on a level-up until the player leaves the Level Up panel.
-    @Published var levelUp: Int?
+    @Published var levelUp: Int? { didSet { if levelUp != nil && oldValue == nil { showTip("first-levelup") } } }
+    /// The first-run tip on show (showDungeonTip), and its length in seconds.
+    @Published var tip: (text: String, seconds: Double)?
+    private var tipTimer: DispatchWorkItem?
     /// The death cinematic shows before the run summary.
     @Published var showingDeathCinematic = false
     /// Floor stats as they were when the floor was finished.
@@ -1884,6 +1887,7 @@ final class RunModel: ObservableObject {
         showingHome = true
         Sound.track("home")
         Feedback.announce("Home. Your dwelling on the edge of the dungeon. Rest, store gold, and upgrade your skills here.")
+        showTip("first-home")
     }
 
     func closeHome() {
@@ -2047,6 +2051,16 @@ final class RunModel: ObservableObject {
         return "Withdrew \(amount)g. Safe remaining: \(safe - amount)g."
     }
 
+    func useSkillOrb(at index: Int) -> String {
+        let res = Home.useSkillOrb(at: index, cls: run.cls, store: game.store)
+        if res.used {
+            run.skillLevels = Home.skillLevels(game.store)
+            Sound.sfx("sfx-unlock")
+        }
+        Feedback.announce(res.message)
+        return res.message
+    }
+
     func upgradeSkill(_ name: String) -> String {
         let msg = Home.upgradeSkill(cls: run.cls, name: name, store: game.store, wallet: game.wallet)
         if msg.contains("upgraded") {
@@ -2185,6 +2199,10 @@ final class RunModel: ObservableObject {
     private func runOver(_ r: Run, killedBy: String, spoken: String) {
         stopHeartbeat()
         medusaStillLooking(r)
+        // homeCreateSkillOrbs: the fallen character's upgrades become Skill Orbs.
+        if Home.makeSkillOrbs(fromChar: r.name, store: game.store) > 0 {
+            add("✨ Skill Orbs created from \(r.name)'s upgraded skills. Use them at your Home with a new \(r.cls).")
+        }
         if r.hardcore {
             run = r
             phase = .defeat
@@ -2531,6 +2549,7 @@ final class RunModel: ObservableObject {
 
     func useSkill(_ effect: String) {
         guard phase == .fighting else { return }
+        defer { showTip("first-skill") }
         if let e = run.enemy, TimeDescender.isClock(e) {
             Feedback.announce("Only Attack, Heavy Strike and Defend work against The Clock.")
             return
@@ -3120,6 +3139,7 @@ final class RunModel: ObservableObject {
         let screenChanges = newPhase != phase
         // Dropping to a quarter of your health: the guide speaks up.
         let lowHp = r.hp > 0 && r.hp * 4 <= r.maxHp && run.hp * 4 > run.maxHp ? guideSays(.lowHp, r) : ""
+        let looted = r.inventory.count > run.inventory.count
         run = r
         dice = d
         phase = newPhase
@@ -3136,6 +3156,31 @@ final class RunModel: ObservableObject {
         Feedback.announce(movePrefix + spoken + whisper + lowHp + takeHunterLine(), after: screenChanges ? 0.6 : 0)
         movePrefix = ""
         if newPhase == .exploring || newPhase == .floorCleared { hunterAfterRoom() }
+        switch newPhase {
+        case .fighting:
+            showTip(r.enemy?.isBoss == true ? "first-boss" : r.enemy?.isElite == true ? "first-elite" : "first-combat")
+        case .shopping: showTip("first-shop")
+        default:
+            if r.totalRooms == 1 { showTip("first-room") }
+            else if r.floor == 2 && r.roomsOnFloor == 0 { showTip("first-floor2") }
+            else if looted { showTip("first-loot") }
+        }
+    }
+
+    /// showDungeonTip: once ever per tip, read out after the move's own news.
+    func showTip(_ id: String) {
+        guard let t = DungeonTips.take(id, store: game.store) else { return }
+        tipTimer?.cancel()
+        tip = t
+        Feedback.announce(t.text, after: 1.5)
+        let w = DispatchWorkItem { [weak self] in self?.tip = nil }
+        tipTimer = w
+        DispatchQueue.main.asyncAfter(deadline: .now() + t.seconds, execute: w)
+    }
+
+    func dismissTip() {
+        tipTimer?.cancel()
+        tip = nil
     }
 
     func setEvent(_ text: String, tone: String = "") {

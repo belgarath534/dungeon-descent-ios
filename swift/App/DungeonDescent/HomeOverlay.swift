@@ -183,6 +183,30 @@ struct HomeOverlay: View {
                     .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x555555)).frame(maxWidth: .infinity)
             }
             message(skillMsg, Color(hex: 0x44aaff))
+            let orbs = Home.skillOrbs(game.store)
+            if !orbs.isEmpty {
+                Text("✨ SKILL ORBS").font(Theme.cinzel(11.2)).foregroundStyle(Theme.gold).padding(.top, 6)
+                    .accessibilityAddTraits(.isHeader)
+                note("Upgraded skills left by fallen characters. Use one on a character of the same class.")
+                ForEach(Array(orbs.enumerated()), id: \.offset) { i, o in
+                    let mine = o.className == model.run.cls
+                    HStack(spacing: 8) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("✨ \(o.skillName) — Lv \(o.level)").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaaaaaa))
+                            Text("\(o.className) · from \(o.fromChar)").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                        }
+                        .accessibilityHidden(true)
+                        Spacer()
+                        Button("Use") { skillMsg = model.useSkillOrb(at: i); refreshed() }
+                            .font(Theme.cinzel(9.9))
+                            .foregroundStyle(mine ? Color(hex: 0xcc88ff) : Color(hex: 0x333333))
+                            .padding(.vertical, 6).padding(.horizontal, 10)
+                            .background(Color(hex: 0x050505)).overlay(Rectangle().stroke(mine ? Color(hex: 0xcc88ff) : Color(hex: 0x222222)))
+                            .accessibilityLabel("Skill Orb, \(o.skillName) level \(o.level), \(o.className), from \(o.fromChar). " + (mine ? "Use." : "Needs a \(o.className)."))
+                    }
+                    .padding(8).background(Color(hex: 0x050505)).overlay(Rectangle().stroke(Color(hex: 0x111111)))
+                }
+            }
         }
     }
 
