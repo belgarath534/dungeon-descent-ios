@@ -131,6 +131,7 @@ final class RunModel: ObservableObject {
         r.applyStartBonuses(wallet: game.wallet)
         r.startNotes += Legacy.start(&r, game.characters[index])
         r.startNotes += Professions.start(&r, prof: r.prof)
+        BossRelics.start(&r)
         r.startNotes += Races.start(&r, classTraits: AppSettings.classTraits, wallet: game.wallet)
         if let dc = DailyChallenge.start(&r, store: game.store, wallet: game.wallet) { r.startNotes.append(dc) }
         if let t = ClassTraits.start(&r, classTraits: AppSettings.classTraits) { r.startNotes.append(t) }
@@ -399,6 +400,7 @@ final class RunModel: ObservableObject {
         r.totalRooms += 1
         r.searched = false
         r.sp = min(r.maxSp, r.sp + 2)
+        if let heal = BossRelics.roomHeal(&r) { add(heal) }
         if let heal = Subclasses.onRoom(&r) { add(heal) }
         if let heal = ClassTraits.onRoom(&r) { add(heal) }
         roomTitle = Rooms.floorName(r.floor, dungeon: r.dungeon)
@@ -1696,6 +1698,12 @@ final class RunModel: ObservableObject {
         if e.isBoss {
             said += quest(&r, "boss")
             if r.dungeon == "The Hollow" { said += quest(&r, "hollow") }
+            // BOSS LOOT: the dungeon's own relic.
+            if let relic = BossRelics.drop(&r) {
+                add("🏆 \(relic.icon) Boss drops: \(relic.name)! \(relic.desc)")
+                said += " Boss relic acquired! \(relic.name). \(relic.desc)"
+                Sound.sfx("sfx-unlock")
+            }
         }
         if reward.levelsGained > 0 {
             add("Level up! You are now level \(r.level). You have \(r.levelPoints) level points to spend.")
@@ -2223,6 +2231,11 @@ final class RunModel: ObservableObject {
         achievements.record(.died)
         Sound.sfx(outcome == .runOver ? "sfx-gameover" : "sfx-death")
         switch outcome {
+        case .crown:
+            if r.enemy != nil { r.inCombat = true }
+            let msg = "Malachar's Crown Fragment shines — death is refused! You survive at 20% HP. The relic is spent for this run."
+            add("👑 " + msg)
+            finish(r, dice, phase: r.inCombat ? .fighting : .exploring, spoken: spoken + " " + msg)
         case .gearSaved:
             if r.enemy != nil { r.inCombat = true }
             let what = r.equippedWeapon?.rarityEffect == "undying" ? "Your Undying blade" : "Your Sanctuary armor"

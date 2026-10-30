@@ -236,6 +236,7 @@ public enum Combat {
         baseAtk = Subclasses.attackBonus(&run, baseAtk, dice: &dice, log: &r.log)
         baseAtk = ShadowWorld.attackRoll(&run, baseAtk, log: &r.log)
         baseAtk = ShapeshifterMask.attackRoll(&run, baseAtk, log: &r.log)
+        baseAtk = BossRelics.attackRoll(run, baseAtk)
         if action == .attack || action == .heavy { baseAtk = Alchemy.rage(&run, baseAtk, log: &r.log) }
 
         if run.frozen {
@@ -331,6 +332,7 @@ public enum Combat {
             Subclasses.onHit(&run, r.playerDamage, dice: &dice, log: &r.log)
         }
         if action == .attack { Spirits.attack(&run, base: baseAtk, dice: &dice, log: &r.log) }
+        if action == .attack || action == .heavy { BossRelics.afterAttack(&run, dice: &dice, log: &r.log) }
         minionAttack(&run, dice: &dice, log: &r.log)
         ClassTraits.allyAttack(&run, dice: &dice, log: &r.log)
         Subclasses.companionAttack(&run, dice: &dice, log: &r.log)
@@ -709,6 +711,7 @@ public enum Combat {
         }
         if Alchemy.avoids(&run, e, dice: &dice, log: &log) { return 0 }
         if Races.dodges(run, e, dice: &dice, log: &log) { return 0 }
+        if BossRelics.dodges(run, dice: &dice, log: &log) { return 0 }
         if ClassTraits.avoids(run, e, dice: &dice, log: &log) { return 0 }
         if run.fight.enemyMiss > 0 {
             let p = run.fight.enemyMiss
@@ -794,6 +797,7 @@ public enum Combat {
         taken = Spells.incoming(&run, taken, log: &log)
         taken = ShapeshifterMask.incoming(&run, taken, log: &log)
         taken = CustomSpirits.incoming(run, taken)
+        taken = BossRelics.incoming(run, taken)
         if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) || ShadowWorld.armorAvoids(&run, dice: &dice, log: &log) { return 0 }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)

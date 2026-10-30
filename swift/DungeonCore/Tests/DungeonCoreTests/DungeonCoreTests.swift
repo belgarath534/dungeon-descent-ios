@@ -4452,3 +4452,39 @@ final class CustomSpiritTests: XCTestCase {
         XCTAssertEqual(CustomSpirits.fragments(store), 2)
     }
 }
+
+final class BossRelicTests: XCTestCase {
+    func testDropStatsAndKeep() {
+        var r = Run(character: PlayerCharacter(name: "R", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "The Abyssal Deep", difficulty: .wanderer))
+        r.inventory = []
+        let hp = r.maxHp
+        XCTAssertEqual(BossRelics.drop(&r)?.name, "Leviathan Scale")
+        XCTAssertNil(BossRelics.drop(&r), "one of each")
+        XCTAssertEqual(r.maxHp, hp + 25)
+        XCTAssertEqual(BossRelics.incoming(r, 10), 7)
+        let store = MemoryStore()
+        GlobalInventory(store: store).keep(from: r)
+        XCTAssertTrue(GlobalInventory(store: store).items.contains { $0.name == "Leviathan Scale" })
+        var next = Run(character: PlayerCharacter(name: "R", cls: "Warrior", race: "Human", prof: "Thief",
+                                                  dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        GlobalInventory(store: store).load(into: &next)
+        let base = next.maxHp
+        BossRelics.start(&next)
+        XCTAssertEqual(next.maxHp, base + 25)
+    }
+
+    func testEmberHeartAndSylvanHeart() {
+        var r = Run(character: PlayerCharacter(name: "R", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.inventory = [BossRelics.table["The Ashbound Wastes"]!, BossRelics.table["The Whispering Forest"]!]
+        r.enemy = Enemy(name: "X", icon: "x", hp: 50, maxHp: 50, atk: 1...2, gold: 0...0)
+        var d = LoadedDice(rolls: [], chances: [false])
+        var log: [String] = []
+        BossRelics.afterAttack(&r, dice: &d, log: &log)
+        XCTAssertEqual(r.enemy?.hp, 47)
+        r.hp = r.maxHp - 10
+        XCTAssertNotNil(BossRelics.roomHeal(&r))
+        XCTAssertEqual(r.hp, r.maxHp - 7)
+    }
+}

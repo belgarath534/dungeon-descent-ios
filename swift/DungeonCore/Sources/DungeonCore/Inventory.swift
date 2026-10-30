@@ -551,7 +551,7 @@ public struct GlobalInventory {
         var inv = items
         if ["music-player", "enchanter", "soul-trap", "skill-orb"].contains(item.type),
            inv.contains(where: { $0.type == item.type }) { return }
-        if item.isWeapon || item.isArmor, inv.contains(where: { $0.type == item.type && $0.name == item.name }) { return }
+        if item.isWeapon || item.isArmor || BossRelics.isRelic(item), inv.contains(where: { $0.type == item.type && $0.name == item.name }) { return }
         inv.append(item)
         save(inv)
     }
@@ -559,7 +559,7 @@ public struct GlobalInventory {
     /// What a run keeps when the hero dies (showDefeat): gear and the
     /// enchanter, soul trap, music player and skill orb.
     public func keepOnDeath(from run: Run) {
-        for item in run.inventory where item.isWeapon || item.isArmor
+        for item in run.inventory where item.isWeapon || item.isArmor || BossRelics.isRelic(item)
             || ["enchanter", "soul-trap", "music-player", "skill-orb"].contains(item.type) {
             add(item)
         }
@@ -569,7 +569,7 @@ public struct GlobalInventory {
     public func keep(from run: Run) {
         var seen = Set<String>()
         let kept = run.inventory.filter { i in
-            if i.isWeapon || i.isArmor { return seen.insert(i.type + "::" + i.name).inserted }
+            if i.isWeapon || i.isArmor || BossRelics.isRelic(i) { return seen.insert(i.type + "::" + i.name).inserted }
             return Self.keepTypes.contains(i.type)
         }
         save(kept)

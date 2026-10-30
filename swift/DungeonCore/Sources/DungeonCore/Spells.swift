@@ -641,6 +641,12 @@ public enum Spells {
             return r
         }
         darkCurse()
+        // The Infernal Brand: fire spells hit 25% harder.
+        if fire.contains(id) && r.playerDamage > 0 && !e.isDead && BossRelics.fireAmp(run) > 0 {
+            let extra = max(1, jsRound(Double(r.playerDamage) * BossRelics.fireAmp(run)))
+            hit(extra)
+            log.append("🔱 The Infernal Brand flares — \(extra) more fire damage!")
+        }
         // The Echo Staff (Shadow World loot): every damaging spell echoes for half.
         if run.equippedWeapon?.name == "Echo Staff" && r.playerDamage > 0 && !e.isDead {
             let echo = max(1, r.playerDamage / 2)

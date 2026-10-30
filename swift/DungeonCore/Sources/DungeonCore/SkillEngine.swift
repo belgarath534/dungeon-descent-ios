@@ -74,6 +74,7 @@ public enum Skills {
         c -= Races.skillCostCut(run)
         c -= ClassTraits.skillCostCut(run)
         c -= Professions.skillCostCut(run)
+        c -= BossRelics.skillCostCut(run)
         if run.has("cu-soul-surge") { c -= 1 }
         c -= Subclasses.skillCostCut(run)
         c -= run.weather?.spDiscount ?? 0

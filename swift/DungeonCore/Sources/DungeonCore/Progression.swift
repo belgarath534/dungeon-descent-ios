@@ -157,6 +157,8 @@ public enum Progression {
         case resurrected
         /// An Undying weapon or Sanctuary armor refused death; you're at 1 HP.
         case gearSaved
+        /// Malachar's Crown Fragment: back at 20% HP.
+        case crown
         /// Came back at 40% HP with this many lives left.
         case revived(livesLeft: Int)
         /// Second Wind (Coin Shop): back at 1 HP with one life, once per run.
@@ -173,6 +175,8 @@ public enum Progression {
             run.hp = 1
             return .gearSaved
         }
+        var cd = SystemDice()
+        if BossRelics.crownSaves(&run, dice: &cd) { return .crown }
         if Inventory.usePhoenixFeather(&run) { return .phoenix }
         if run.resurrection {
             run.resurrection = false

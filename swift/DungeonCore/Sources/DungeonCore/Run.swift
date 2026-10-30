@@ -175,6 +175,8 @@ public struct Run: Codable, Sendable {
     public var wardenFloor = 0
     /// The floor a forged spirit's Floor Blessing last healed on.
     public var spiritHealFloor = 0
+    /// Malachar's Crown Fragment has refused death this run.
+    public var crownUsed = false
     public var devMedusa = false
     /// Today's Daily Challenge effect ("ironDay" …), if you registered for it.
     public var dailyChallenge: String? = nil
