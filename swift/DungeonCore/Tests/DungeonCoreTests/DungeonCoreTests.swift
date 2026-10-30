@@ -3854,3 +3854,80 @@ final class BossMusicTests: XCTestCase {
         for t in ["abyssal-boss-p2", "abyssal-boss-p3", "raid-victory", "battle"] { XCTAssertNotNil(Soundtrack.file(forTrack: t), t) }
     }
 }
+
+final class CharacterCodeTests: XCTestCase {
+    func testRoundTripAndWebCodes() throws {
+        var ch = PlayerCharacter(name: "Ana", cls: "Monk", race: "Elf", prof: "Thief", dungeon: "The Hollow", difficulty: .ironblood)
+        ch.floor = 7
+        ch.extra["journal"] = .array([.string("x")])
+        let code = try XCTUnwrap(CharacterCode.export(ch))
+        let back = try XCTUnwrap(CharacterCode.read(code))
+        XCTAssertEqual(back.name, "Ana")
+        XCTAssertEqual(back.dungeon, "The Hollow")
+        XCTAssertEqual(back.floor, 0, "imports start fresh")
+        XCTAssertEqual(back.extra["journal"], .array([.string("x")]))
+        // An old web code with only a name and class: the rest is filled in.
+        let web = Data(#"{"name":"Zé","cls":"Warrior"}"#.utf8).base64EncodedString()
+        let old = try XCTUnwrap(CharacterCode.read(web))
+        XCTAssertEqual(old.name, "Zé")
+        XCTAssertEqual(old.race, "Human")
+        XCTAssertEqual(old.prof, "Blacksmith")
+        XCTAssertNil(CharacterCode.read("not a code"))
+        let store = MemoryStore()
+        let roster = CharacterRoster(store: store)
+        for _ in 0..<5 { XCTAssertNotNil(try? CharacterCode.importCode(code, into: roster).get()) }
+        XCTAssertEqual(CharacterCode.importCode(code, into: roster), .failure(.full))
+    }
+}
+
+final class CursedModifierTests: XCTestCase {
+    func testCursedModifierForcesARunModifier() {
+        let store = MemoryStore(["dd_run_modifiers": "0"])
+        let w = Wallet(store: store)
+        var n = Events.NextRun()
+        n.cursedModifier = true
+        Events.saveNextRun(n, store)
+        var r = Run(character: PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var d = SeededDice(seed: 1)
+        XCTAssertNil(RunModifiers.start(&r, store: store, wallet: w, dice: &d), "modifiers are off")
+        _ = Events.applyNextRun(&r, store: store)
+        XCTAssertNotNil(RunModifiers.start(&r, store: store, wallet: w, dice: &d))
+        XCTAssertFalse(Events.comingSoon("cursed-run-mod"))
+        // An old save without the field still loads.
+        store.setItem("dd_event_next_run", #"{"bonusLives":1,"xpMult":1,"xpFloors":0,"spiritBoost":false,"sparkler":false,"luckKills":0,"items":[]}"#)
+        XCTAssertEqual(Events.nextRun(store).bonusLives, 1)
+    }
+}
+
+final class FamiliarTests: XCTestCase {
+    func testBondLevelsTitlesAndSpecies() {
+        let store = MemoryStore(["dd_familiar": #"{"speciesId":"raven","bond":0,"name":""}"#])
+        let book = AchievementBook(store: store, wallet: Wallet(store: store))
+        var f = Familiar.load(store)
+        XCTAssertEqual(f.startingSpeciesId, "raven", "older saves get their starting species")
+        XCTAssertEqual(f.displayName, "your Raven")
+        XCTAssertNil(Familiar.gainBond(29, store: store, achievements: book))
+        XCTAssertEqual(Familiar.gainBond(1, store: store, achievements: book), "your Raven grows closer to you. Bond level 2.")
+        XCTAssertEqual(book.stat("familiarBondLevel"), 2)
+        Familiar.gainBond(120, store: store, achievements: book)
+        f = Familiar.load(store)
+        XCTAssertEqual(f.level, 6)
+        XCTAssertEqual(f.title, "the Bonded")
+        XCTAssertEqual(f.menuBadge, "🐦‍⬛ ✦ Lv.6")
+        XCTAssertFalse(Familiar.choose("imp", store: store, achievements: book), "locked")
+        store.setItem("dd_trophies", "100")
+        XCTAssertTrue(Familiar.choose("imp", store: store, achievements: book))
+        Familiar.rename("  Pip  ", store: store)
+        XCTAssertEqual(Familiar.load(store).displayName, "Pip")
+        XCTAssertTrue(Familiar.choose("raven", store: store, achievements: book), "the starting species is always open")
+    }
+
+    func testNewPlayersGetOne() {
+        let store = MemoryStore()
+        var d = SeededDice(seed: 4)
+        let f = Familiar.load(store, dice: &d)
+        XCTAssertEqual(f.bond, 0)
+        XCTAssertEqual(Familiar.load(store).speciesId, f.speciesId, "saved")
+    }
+}

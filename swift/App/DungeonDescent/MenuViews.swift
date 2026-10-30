@@ -15,6 +15,7 @@ struct MainMenuView: View {
     @State private var toast: String?
     @State private var daily: DailyDescent.Status?
     @State private var dailyOpen = false
+    @State private var familiarOpen = false
     @ObservedObject private var reaper = VoidReaperLive.shared
 
     enum Action {
@@ -126,6 +127,9 @@ struct MainMenuView: View {
             }
             if quitting { quitOverlay }
             if dailyOpen, let d = daily { dailyOverlay(d.next) }
+            if familiarOpen {
+                FamiliarOverlay { familiarOpen = false; familiar = game.familiarBadge }
+            }
         }
         .onAppear {
             Sound.track("menu")
@@ -198,7 +202,7 @@ struct MainMenuView: View {
                 .padding(.vertical, 4)
                 .accessibilityLabel("Your trophies — press to view")
                 .accessibilityValue("\(trophies)")
-            Button(familiar) { notYet("Your familiar") }
+            Button(familiar) { openFamiliar() }
                 .font(Theme.cinzel(12.8, weight: .bold))
                 .tracking(1.3)
                 .foregroundStyle(Color(hex: 0xaaddff))
@@ -321,6 +325,12 @@ struct MainMenuView: View {
                     .accessibilityLabel("No stay and continue")
             }
         }
+    }
+
+    private func openFamiliar() {
+        let f = Familiar.load(game.store)
+        familiarOpen = true
+        Feedback.announce("\(f.displayName). Bond level \(f.level). \(f.intoLevel) of 30 toward the next level." + (f.title.isEmpty ? "" : " Title: \(f.title)."), after: 0.3)
     }
 
     /// Daily Descent: tap to see today's reward, or hear when the next one is.
@@ -499,5 +509,94 @@ extension View {
             } message: {
                 Text("There's no save from the web version of Dungeon Descent on this iPhone.")
             }
+    }
+}
+
+/// #ov-familiar: your familiar's bond, its name, and which one it is.
+struct FamiliarOverlay: View {
+    @EnvironmentObject var game: GameModel
+    let close: () -> Void
+    @State private var f: Familiar.State?
+    @State private var name = ""
+
+    var body: some View {
+        WebOverlay {
+            HStack {
+                Text("Your Familiar").font(Theme.decorative(16)).foregroundStyle(Color(hex: 0xaaddff)).accessibilityAddTraits(.isHeader)
+                Spacer()
+                Button("✕ Close", action: close).buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Close familiar")
+            }
+            if let f {
+                let glow: [Double] = [0, 6, 10, 16]
+                let stage = f.level >= 20 ? 3 : f.level >= 10 ? 2 : f.level >= 5 ? 1 : 0
+                Text(f.kind.icon + (f.badge.isEmpty ? "" : " " + f.badge)).font(.system(size: 52))
+                    .shadow(color: Color(hex: 0xffdd44).opacity(stage == 0 ? 0 : 0.9), radius: glow[stage])
+                    .accessibilityHidden(true)
+                Text(f.displayName.prefix(1).uppercased() + f.displayName.dropFirst()).font(Theme.cinzel(15)).foregroundStyle(Theme.ashLight)
+                Text("Bond Level \(f.level)" + (f.title.isEmpty ? "" : " — \(f.title)")).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xaaddff))
+                Bar(value: Double(f.intoLevel) / 30, colors: [Color(hex: 0x4488aa), Color(hex: 0xaaddff)], track: Color(hex: 0x0a1520), height: 6)
+                    .accessibilityLabel("Bond progress").accessibilityValue("\(f.intoLevel) of 30")
+                Text("Bond grows from fights won, rooms searched, and dungeons cleared.").font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
+                Text("NAME YOUR FAMILIAR").font(Theme.cinzel(9.9)).tracking(1.5).foregroundStyle(Color(hex: 0x888888))
+                HStack {
+                    TextField("", text: $name, prompt: Text("Give it a name...").foregroundColor(Theme.textDim))
+                        .font(Theme.cinzel(13)).foregroundStyle(Theme.textPrimary)
+                        .padding(8).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
+                        .onChange(of: name) { name = String($0.prefix(20)) }
+                        .accessibilityLabel("Familiar name")
+                    Button("Save") {
+                        Familiar.rename(name, store: game.store)
+                        reload()
+                        let n = name.trimmingCharacters(in: .whitespaces)
+                        Feedback.announce(n.isEmpty ? "Familiar name cleared." : "Familiar renamed to \(n).")
+                    }
+                    .buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Save familiar name")
+                }
+                Text("CHOOSE YOUR FAMILIAR").font(Theme.cinzel(9.9)).tracking(1.5).foregroundStyle(Color(hex: 0x888888))
+                ForEach(Familiar.species, id: \.id) { sp in species(sp, f) }
+            }
+        }
+        .onAppear(perform: reload)
+    }
+
+    private func reload() {
+        let s = Familiar.load(game.store)
+        f = s
+        name = s.name
+    }
+
+    @ViewBuilder
+    private func species(_ sp: Familiar.Species, _ f: Familiar.State) -> some View {
+        let active = sp.id == f.speciesId
+        if Familiar.isUnlocked(sp, f, achievements: game.achievements) {
+            Button {
+                Familiar.choose(sp.id, store: game.store, achievements: game.achievements)
+                reload()
+                Feedback.announce("\(Familiar.load(game.store).displayName) is now your familiar.")
+            } label: {
+                HStack(spacing: 10) {
+                    Text(sp.icon).font(.system(size: 20))
+                    Text(sp.label + (active ? " (active)" : "")).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xaaddff))
+                    Spacer()
+                }
+                .padding(.vertical, 8).padding(.horizontal, 12)
+                .background(Color(hex: active ? 0x0a1520 : 0x080808))
+                .overlay(Rectangle().stroke(Color(hex: active ? 0x4488aa : 0x222222)))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(active ? "\(sp.label), currently active" : "Choose \(sp.label) as your familiar")
+        } else {
+            HStack(spacing: 10) {
+                Text("🔒").font(.system(size: 20))
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(sp.label).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x666666))
+                    Text("Locked — " + sp.unlock).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                }
+                Spacer()
+            }
+            .padding(.vertical, 8).padding(.horizontal, 12)
+            .background(Color(hex: 0x080808)).overlay(Rectangle().stroke(Color(hex: 0x222222))).opacity(0.5)
+            .accessibilityElement(children: .combine)
+        }
     }
 }

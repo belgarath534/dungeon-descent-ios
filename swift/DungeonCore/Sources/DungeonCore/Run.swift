@@ -158,6 +158,8 @@ public struct Run: Codable, Sendable {
     public var raised: Enemy? = nil
     /// Developer Tools: the next fight is an ambush / Medusa.
     public var devAmbush = false
+    /// The Curse Shop's Cursed Modifier: this run gets a run modifier whatever the setting.
+    public var cursedModifier = false
     public var devMedusa = false
     /// Today's Daily Challenge effect ("ironDay" …), if you registered for it.
     public var dailyChallenge: String? = nil

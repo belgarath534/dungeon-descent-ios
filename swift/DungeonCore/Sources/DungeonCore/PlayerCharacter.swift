@@ -407,3 +407,36 @@ extension PlayerCharacter {
         return false
     }
 }
+
+/// Your Champions → Export / Import (exportCharacter, confirmImport): the
+/// whole character as base64 JSON, the same code the web version makes, so a
+/// code from either version imports into the other.
+public enum CharacterCode {
+    public static func export(_ ch: PlayerCharacter) -> String? {
+        (try? JSONEncoder().encode(ch))?.base64EncodedString()
+    }
+
+    public enum ImportError: Error, Equatable { case invalid, full }
+
+    /// Reads a code: fields older codes lack are filled in, and the character
+    /// starts fresh (floor 0, not completed, no run in progress).
+    public static func read(_ code: String) -> PlayerCharacter? {
+        let trimmed = code.filter { !$0.isWhitespace }
+        guard let data = Data(base64Encoded: trimmed),
+              var ch = try? JSONDecoder().decode(PlayerCharacter.self, from: data),
+              !ch.name.isEmpty, !ch.cls.isEmpty else { return nil }
+        if ch.race.isEmpty { ch.race = "Human" }
+        if ch.prof.isEmpty { ch.prof = "Blacksmith" }
+        ch.floor = 0
+        ch.completed = false
+        ch.extra["midRunSave"] = .null
+        return ch
+    }
+
+    @discardableResult
+    public static func importCode(_ code: String, into roster: CharacterRoster) -> Result<PlayerCharacter, ImportError> {
+        guard let ch = read(code) else { return .failure(.invalid) }
+        guard roster.add(ch) != nil else { return .failure(.full) }
+        return .success(ch)
+    }
+}

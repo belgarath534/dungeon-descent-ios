@@ -49,7 +49,7 @@ final class AudioEngine {
         if name == musicName, music?.isPlaying == true { return }
         musicName = name
         guard let file = Soundtrack.file(forTrack: name), let u = url(file),
-              let next = try? AVAudioPlayer(contentsOf: u) else { return }
+              let next = Self.player(u) else { return }
         fadeOut(music)
         next.numberOfLoops = -1
         next.volume = 0
@@ -68,7 +68,7 @@ final class AudioEngine {
         if key == ambientKey, ambient?.isPlaying == true { return }
         ambientKey = key
         guard let file = Soundtrack.file(forAmbient: key), let u = url(file),
-              let next = try? AVAudioPlayer(contentsOf: u) else { return }
+              let next = Self.player(u) else { return }
         fadeOut(ambient)
         next.numberOfLoops = -1
         next.volume = 0
@@ -84,7 +84,7 @@ final class AudioEngine {
             player = p
         } else {
             guard let u = url("\(id).mp3") ?? url("\(id).wav"),
-                  let p = try? AVAudioPlayer(contentsOf: u) else { return }
+                  let p = Self.player(u) else { return }
             p.prepareToPlay()
             effects[id] = p
             player = p
@@ -123,7 +123,7 @@ final class AudioEngine {
 
     func startLoop(_ file: String, volume: Double, pan: Double) {
         stopLoop()
-        guard AppSettings.effectsOn, let u = url(file), let p = try? AVAudioPlayer(contentsOf: u) else { return }
+        guard AppSettings.effectsOn, let u = url(file), let p = Self.player(u) else { return }
         p.numberOfLoops = -1
         loop = p
         moveLoop(volume: volume, pan: pan)
@@ -141,12 +141,22 @@ final class AudioEngine {
     }
 
     func placed(_ file: String, volume: Double, pan: Double) {
-        guard AppSettings.effectsOn, let u = url(file), let p = try? AVAudioPlayer(contentsOf: u) else { return }
+        guard AppSettings.effectsOn, let u = url(file), let p = Self.player(u) else { return }
         p.volume = Float(volume * AppSettings.effectsVolume)
         p.pan = Float(pan)
         oneShots.removeAll { !$0.isPlaying }
         oneShots.append(p)
         p.play()
+    }
+
+    /// Opens an audio file by what it really holds. Two of the web version's
+    /// ".mp3" files are WAV (the Blacksmith's and raid-victory); browsers sniff
+    /// the format, but iOS trusts the name and plays nothing.
+    static func player(_ url: URL) -> AVAudioPlayer? {
+        if let p = try? AVAudioPlayer(contentsOf: url) { return p }
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        let wav = data.prefix(4) == Data("RIFF".utf8)
+        return try? AVAudioPlayer(data: data, fileTypeHint: wav ? AVFileType.wav.rawValue : nil)
     }
 
     func stopMusic() {

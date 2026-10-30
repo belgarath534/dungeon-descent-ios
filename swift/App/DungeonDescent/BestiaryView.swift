@@ -54,9 +54,10 @@ struct BestiaryView: View {
             }
             .overlay(Rectangle().stroke(Theme.borderDim))
             .padding(.bottom, 14)
-            if tab != "enemies" {
-                Text(tab == "spirits" ? "Spirit entries aren't in the Swift version yet. Coming soon."
-                     : "Community enemies aren't in the Swift version yet. Coming soon.")
+            if tab == "spirits" {
+                SpiritBestiary(characters: game.characters)
+            } else if tab != "enemies" {
+                Text("Community enemies aren't in the Swift version yet. Coming soon.")
                     .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
             } else {
                 Text("A record of the creatures you have faced in the dark.").font(Theme.crimson(14.4, italic: true))
@@ -175,5 +176,74 @@ struct BestiaryView: View {
             .padding(.vertical, 2).padding(.horizontal, 7)
             .background(Theme.gold.opacity(0.08)).overlay(Rectangle().stroke(Theme.goldDim))
             .padding(10)
+    }
+}
+
+/// The Bestiary's Spirits tab (renderSpiritBestiary): every spirit, grouped by
+/// rarity, unlocked once any of your characters has earned it.
+struct SpiritBestiary: View {
+    let characters: [PlayerCharacter]
+
+    static let groups = [("starter", "Starter Spirits"), ("rare", "Rare Spirits — Dungeon Rewards"),
+                         ("elite", "Elite Spirits — Elite Enemy Drops")]
+    static let rareHints = ["bone-hound-prime": "Complete Crypt of Malachar", "inferno-hawk": "Complete Ashbound Wastes",
+                            "glacial-wolf": "Complete Frosthold Abyss", "crystal-serpent": "Complete Frosthold Abyss",
+                            "void-wraith": "Complete Nightmare Mode", "ash-phoenix": "Complete Ashbound Wastes",
+                            "shadow-stalker": "Complete Crypt of Malachar"]
+
+    private var earned: Set<String> {
+        var s = Set<String>()
+        for ch in characters {
+            if case .array(let a)? = ch.extra["earnedSpirits"] {
+                for v in a { if case .string(let id) = v { s.insert(id) } }
+            }
+        }
+        return s
+    }
+
+    var body: some View {
+        let got = earned
+        VStack(alignment: .leading, spacing: 10) {
+            ForEach(Self.groups, id: \.0) { rarity, label in
+                let list = Spirits.all.filter { $0.rarity == rarity }
+                if !list.isEmpty {
+                    Text(label).font(Theme.cinzel(10.9)).tracking(3).textCase(.uppercase).foregroundStyle(Theme.goldDim)
+                        .padding(.top, 8).padding(.bottom, 2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .overlay(alignment: .bottom) { Rectangle().fill(Theme.borderDim).frame(height: 1) }
+                        .accessibilityAddTraits(.isHeader)
+                    ForEach(list) { sp in card(sp, earned: rarity == "starter" || got.contains(sp.id)) }
+                }
+            }
+        }
+        .onAppear {
+            let total = Spirits.all.filter { $0.rarity != "starter" }.count
+            let n = Spirits.all.filter { $0.rarity != "starter" && got.contains($0.id) }.count
+            Feedback.announce("Spirit Bestiary. \(n) of \(total) non-starter spirits earned across all characters.", after: 0.3)
+        }
+    }
+
+    private func card(_ sp: Spirit, earned: Bool) -> some View {
+        let hint = earned ? "" : sp.rarity == "rare" ? (Self.rareHints[sp.id] ?? "Complete a dungeon to unlock")
+            : sp.rarity == "elite" ? "Defeat elite enemies for a chance to unlock" : ""
+        let color = sp.rarity == "elite" ? Color(hex: 0xcc88ff) : sp.rarity == "rare" ? Theme.gold : Theme.ash
+        return HStack(alignment: .top, spacing: 12) {
+            Text(earned ? sp.icon : "🔒").font(.system(size: 26)).accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(sp.name).font(Theme.cinzel(13)).foregroundStyle(earned ? Theme.ashLight : Theme.textDim)
+                Text(sp.rarity.uppercased() + (sp.rarity != "starter" ? " · LV \(sp.minLevel)+" : ""))
+                    .font(Theme.cinzel(9.6)).tracking(1.5).foregroundStyle(color)
+                Text(earned ? sp.desc : "???").font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textSecondary)
+                if earned { Text("✦ " + sp.ability).font(Theme.cinzel(10.9)).foregroundStyle(Theme.gold) }
+                if !hint.isEmpty { Text("🔒 " + hint).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim) }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(12)
+        .background(Theme.bgPanel)
+        .overlay(Rectangle().stroke(earned ? (sp.rarity == "elite" ? Color(hex: 0x6a3a8a) : Theme.goldDim) : Theme.borderDim))
+        .opacity(earned ? 1 : 0.6)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(sp.name). \(sp.rarity). " + (earned ? "\(sp.desc) Ability: \(sp.ability)" : "Locked. \(hint)"))
     }
 }

@@ -277,6 +277,7 @@ struct VoidReaperView: View {
         log = []
         stage = 1
         Feedback.announce("You face the Void Reaper. Global HP: \(s.currentHp.formatted()). Your HP: \(fight?.hp ?? 0). Each attack deals \(VoidReaper.playerDamage) to the shared boss. Bring it down together.")
+        Feedback.announce(Familiar.recognizesVoidReaper(game.store), after: 0.8)
     }
 
     // MARK: Fight

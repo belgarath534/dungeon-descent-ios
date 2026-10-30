@@ -387,6 +387,8 @@ final class RunModel: ObservableObject {
         roomTitle = Rooms.floorName(r.floor, dungeon: r.dungeon)
         roomText = Rooms.description(for: r, dice: &d)
         let label = "Room \(r.roomsOnFloor) of \(r.floorRoomsNeeded)."
+        // familiarSpeak: now and then, a line of its own, after the room's.
+        if let line = Familiar.speak(game.store, dice: &d) { Feedback.announce(line, after: 2.2) }
         // Verbose Room Descriptions (Accessibility settings) reads the room text.
         var spoken = AppSettings.verboseRooms ? "\(label) \(roomText)" : label
         // The Medusa arc: while she's with you, her father may be in this room.
@@ -559,6 +561,10 @@ final class RunModel: ObservableObject {
                 finish(r, d, phase: .event,
                        spoken: spoken + " Special event: \(ev.title). \(ev.text) " + ev.choices.joined(separator: " or ") + ".")
                 if let dir = ShadowEvents.securityDirection(ev.id) { startSecurityRoom(dir) }
+                if ev.id == "julio" && !familiarMetJulio {
+                    familiarMetJulio = true
+                    Feedback.announce(Familiar.recognizesJulio(game.store), after: 4.2)
+                }
             } else {
                 add("\(label) \(roomText)")
                 finishQuietRoom(r, d, spoken: spoken)
@@ -697,6 +703,7 @@ final class RunModel: ObservableObject {
         var r = run
         var d = dice
         Sound.sfx("sfx-search")
+        if !r.searched { familiarBond(1) }
         let find = Inventory.search(&r, dice: &d, wallet: game.wallet)
         add(find.message)
         if find.trap != nil && find.trap != "avoided" { Feedback.warning(); Sound.sfx("sfx-trap") }
@@ -1545,6 +1552,7 @@ final class RunModel: ObservableObject {
             return
         }
         medusaResolved = false
+        familiarBond(2)
         if TimeDescender.isDescender(e) {
             if TimeDescender.isClock(e) { clockVictory(spoken) } else { startClock(spoken) }
             return
@@ -2116,6 +2124,7 @@ final class RunModel: ObservableObject {
     }
 
     private func victory(_ spoken: String) {
+        familiarBond(15)
         medusaStillLooking(run)
         if let stage = run.gauntletStage, stage + 1 < Challenges.gauntlet.count {
             gauntletNext(stage + 1, spoken)
@@ -2175,6 +2184,19 @@ final class RunModel: ObservableObject {
             guard let self, self.phase == .victory || self.phase == .defeat else { return }
             Sound.track(victory ? "raid-victory" : "menu")
         }
+    }
+
+    // MARK: Familiar
+
+    /// Familiar recognitions happen once a run.
+    private var familiarMetJulio = false
+
+    /// gainFamiliarBond: a chime and a line when it reaches a new level.
+    private func familiarBond(_ n: Int) {
+        guard let line = Familiar.gainBond(n, store: game.store, achievements: achievements) else { return }
+        Sound.sfx("sfx-unlock")
+        Feedback.announce(line, after: 1.5)
+        _ = achievements.check()
     }
 
     // MARK: Developer Tools

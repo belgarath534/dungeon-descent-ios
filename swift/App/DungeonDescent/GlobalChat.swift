@@ -20,7 +20,7 @@ final class GlobalChat: ObservableObject {
     private var handle: DatabaseHandle?
     private var seen: Set<String> = []
     private var firstLoad = true
-    private let store: GameStore
+    let store: GameStore
 
     init(store: GameStore) { self.store = store }
 
@@ -210,14 +210,23 @@ struct GlobalChatView: View {
     @State private var reporting: GlobalChat.Message?
     @State private var reportReason = ""
     @State private var blocking: GlobalChat.Message?
+    /// Opened from the dungeon: back closes the chat instead of going to the menu.
+    var onClose: (() -> Void)? = nil
 
-    init(store: GameStore) {
+    init(store: GameStore, onClose: (() -> Void)? = nil) {
         _chat = StateObject(wrappedValue: GlobalChat(store: store))
+        self.onClose = onClose
     }
 
     var body: some View {
         WebScreen {
-            ScreenHeader(title: "💬 Global Chat")
+            if let onClose {
+                Button("← Back to Dungeon", action: onClose).buttonStyle(BackButtonStyle())
+                    .accessibilityLabel("Close chat and return to the dungeon")
+                Text("💬 Global Chat").font(Theme.decorative(20)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
+            } else {
+                ScreenHeader(title: "💬 Global Chat")
+            }
             Text("Talk to players around the world. By chatting you agree to the Terms of Service at dungen-descent.org/terms: no tolerance for objectionable content or abusive players. Every message has Report and Block buttons.")
                 .font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x888888)).multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity)
@@ -375,6 +384,7 @@ struct ChatSettingsPanel: View {
     @StateObject private var chat: GlobalChat
     @State private var name = ""
     @State private var status = ""
+    @State private var dungeonButton = false
 
     init(store: GameStore) {
         _chat = StateObject(wrappedValue: GlobalChat(store: store))
@@ -384,6 +394,16 @@ struct ChatSettingsPanel: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("💬 Chat").font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).padding(.bottom, 10)
                 .accessibilityAddTraits(.isHeader)
+            Toggle(isOn: Binding(get: { chat.store.getItem("dd_chat_dungeon") == "1" },
+                                 set: { chat.store.setItem("dd_chat_dungeon", $0 ? "1" : "0"); dungeonButton = $0 })) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Show Chat in Dungeon").font(Theme.cinzel(13)).foregroundStyle(Theme.ashLight)
+                    Text("Adds a chat button inside the dungeon screen").font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
+                }
+            }
+            .tint(Theme.gold)
+            .accessibilityLabel("Toggle dungeon chat button")
+            .padding(.bottom, 8)
             Text("CHAT USERNAME").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
             TextField(chat.username ?? "Your username", text: $name)
                 .font(Theme.cinzel(12)).foregroundStyle(.white)

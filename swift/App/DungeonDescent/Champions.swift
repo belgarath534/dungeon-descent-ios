@@ -12,6 +12,11 @@ struct CharacterListView: View {
     @State private var dialog: Dialog?
     @State private var pendingDelete: Int?
     @State private var statsFor: Int?
+    /// Export: choosing a character (nil index) or showing its code.
+    @State private var exporting = false
+    @State private var exportFor: Int?
+    @State private var importing = false
+    @State private var importText = ""
 
     /// ov-confirm, reused by Play for New Game+ and resuming.
     struct Dialog {
@@ -53,12 +58,12 @@ struct CharacterListView: View {
                 list
                 HStack(spacing: 8) {
                     if game.characters.count < 5 {
-                        Button("📥 Import") { notYet("Importing a character code") }
+                        Button("📥 Import") { importText = ""; importing = true; Feedback.announce("Import character. Paste your export code into the text area then press Import.", after: 0.3) }
                             .buttonStyle(WebButtonStyle(kind: .ghost))
                             .frame(maxWidth: .infinity)
                             .accessibilityLabel("Import a character from a code")
                     }
-                    Button("📤 Export") { notYet("Exporting a character code") }
+                    Button("📤 Export") { startExport() }
                         .buttonStyle(WebButtonStyle(kind: .ghost))
                         .frame(maxWidth: .infinity)
                         .accessibilityLabel("Export a character as a code")
@@ -93,6 +98,8 @@ struct CharacterListView: View {
             }
             if let d = dialog { confirmOverlay(d) }
             if let i = pendingDelete { deleteOverlay(i) }
+            if exporting { exportOverlay }
+            if importing { importOverlay }
             if let i = statsFor, game.characters.indices.contains(i) {
                 // viewCharStats: the saved run if there is one, else a fresh look at the character.
                 let ch = game.characters[i]
@@ -258,7 +265,7 @@ struct CharacterListView: View {
                         .accessibilityLabel("\(playLabel) \(ch.name) Level \(level) \(ch.cls)")
                     charButton("📊 Stats", Theme.textSecondary, Theme.borderDim) { statsFor = i }
                         .accessibilityLabel("View stats for \(ch.name)")
-                    charButton("📤 Export", Theme.textSecondary, Theme.borderDim) { notYet("Exporting a character code") }
+                    charButton("📤 Export", Theme.textSecondary, Theme.borderDim) { showExport(i) }
                         .accessibilityLabel("Export \(ch.name)")
                     charButton("🗑 Delete", Color(hex: 0xc06060), Color(hex: 0x6a2020)) { pendingDelete = i }
                         .accessibilityLabel("Delete \(ch.name)")
@@ -366,9 +373,76 @@ struct CharacterListView: View {
         }
     }
 
-    private func notYet(_ what: String) {
-        Sound.sfx("sfx-select")
-        Feedback.announce("\(what) isn't in the Swift version yet. Coming soon.")
+    // MARK: Export and import (exportCharacter, importCharacter)
+
+    private func startExport() {
+        guard !game.characters.isEmpty else { Feedback.announce("No characters to export."); return }
+        if game.characters.count == 1 { showExport(0); return }
+        exportFor = nil
+        exporting = true
+        let n = game.characters.count
+        Feedback.announce("Export character. \(n) characters available. Choose one.", after: 0.3)
+    }
+
+    private func showExport(_ i: Int) {
+        exportFor = i
+        exporting = true
+        Feedback.announce("Export code for \(game.characters[i].name). The code is shown. Copy it and use it on another device.", after: 0.3)
+    }
+
+    private var exportOverlay: some View {
+        WebOverlay {
+            Text("CHARACTER EXPORT CODE").font(Theme.cinzel(12.8)).tracking(3).foregroundStyle(Theme.goldDim)
+            if let i = exportFor, game.characters.indices.contains(i), let code = CharacterCode.export(game.characters[i]) {
+                OverlayTitle(text: game.characters[i].name)
+                Text(code).font(.system(size: 11, design: .monospaced)).foregroundStyle(Color(hex: 0xcccccc))
+                    .lineLimit(5).truncationMode(.middle).textSelection(.enabled)
+                    .padding(10).frame(maxWidth: .infinity).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
+                    .accessibilityLabel("Export code for \(game.characters[i].name)")
+                OverlayText(text: "Copy this code and paste it on another device to import this character.")
+                Button("📋 Copy Code") {
+                    UIPasteboard.general.string = code
+                    Feedback.announce("Code copied for \(game.characters[i].name).")
+                }
+                .buttonStyle(WebButtonStyle(kind: .gold))
+            } else {
+                ForEach(Array(game.characters.enumerated()), id: \.offset) { i, ch in
+                    Button("\(ch.name) — \(ch.race) \(ch.cls)") { showExport(i) }.buttonStyle(WebButtonStyle(kind: .ghost))
+                        .accessibilityLabel("Export \(ch.name)")
+                }
+            }
+            Button("Close") { exporting = false }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Close export overlay")
+        }
+    }
+
+    private var importOverlay: some View {
+        WebOverlay {
+            Text("IMPORT CHARACTER").font(Theme.cinzel(12.8)).tracking(3).foregroundStyle(Theme.goldDim)
+            OverlayText(text: "Paste the export code from another device below.")
+            TextField("", text: $importText, prompt: Text("Paste code here...").foregroundColor(Theme.textDim), axis: .vertical)
+                .lineLimit(3...6)
+                .font(.system(size: 11, design: .monospaced)).foregroundStyle(Color(hex: 0xcccccc))
+                .autocorrectionDisabled().textInputAutocapitalization(.never)
+                .padding(10).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
+                .accessibilityLabel("Paste your character import code here")
+            HStack(spacing: 10) {
+                Button("Import") { confirmImport() }.buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Confirm import")
+                Button("Cancel") { importing = false }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Cancel import")
+            }
+        }
+    }
+
+    private func confirmImport() {
+        let code = importText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !code.isEmpty else { Feedback.announce("No code entered. Please paste an export code."); return }
+        guard let ch = CharacterCode.read(code) else {
+            Feedback.announce("Invalid code. Could not import. Make sure you copied the full code.")
+            return
+        }
+        guard !game.isRosterFull, game.create(ch) else { Feedback.announce("Character slots full. Delete a character first."); return }
+        importing = false
+        Sound.sfx("sfx-unlock")
+        Feedback.announce("Character imported. \(ch.name) the \(ch.race) \(ch.cls) is ready to play.")
     }
 }
 

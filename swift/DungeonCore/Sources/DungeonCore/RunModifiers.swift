@@ -30,7 +30,8 @@ public enum RunModifiers {
 
     /// rollRunModifier + applyRunModifier. Blessed Run's gold goes to the wallet.
     public static func start(_ run: inout Run, store: GameStore, wallet: Wallet, dice: inout some Dice) -> Modifier? {
-        guard enabled(store) else { return nil }
+        // A Cursed Modifier from the Curse Shop applies even with modifiers turned off.
+        guard enabled(store) || run.cursedModifier else { return nil }
         let m = all[dice.roll(0...(all.count - 1))]
         run.modifier = m.id
         if m.id == "blessed" {

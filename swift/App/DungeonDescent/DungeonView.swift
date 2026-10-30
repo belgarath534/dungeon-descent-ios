@@ -17,6 +17,7 @@ struct DungeonView: View {
     @State private var askingFlee = false
     @State private var paused = false
     @State private var showSettings = false
+    @State private var chatOpen = false
     @State private var showSpirits = false
     /// The Arcane Shop or Spell Book (true) during the run, and the cast panel.
     @State private var spellScreen: Bool?
@@ -131,6 +132,9 @@ struct DungeonView: View {
         if model.hunterChoice { hunterOverlay }
         if model.medusaChoice { medusaOverlay }
         if showSettings { WebSettingsView(run: model) { showSettings = false } }
+        if chatOpen {
+            GlobalChatView(store: game.store) { chatOpen = false; model.playMusic() }
+        }
     }
 
     // MARK: Top bar (.dg-topbar)
@@ -139,7 +143,10 @@ struct DungeonView: View {
         HStack(alignment: .center, spacing: 10) {
             HStack(spacing: 6) {
                 smallButton("⏸", label: "Pause game") { openPause() }
-                smallButton("💬", label: "Open global chat") { notYet("Global chat") }
+                // dg-chat-btn: only with Settings → Chat → Show Chat in Dungeon.
+                if game.store.getItem("dd_chat_dungeon") == "1" {
+                    smallButton("💬", label: "Open global chat") { chatOpen = true; Sound.track("home") }
+                }
                 VStack(alignment: .leading, spacing: 1) {
                     Text(run.name).font(Theme.cinzel(13.6, weight: .semibold)).foregroundStyle(Theme.ashLight)
                     Text("\(run.race) \(run.cls)\(Subclasses.current(run).map { " · \($0.icon) \($0.name)" } ?? "") · \(run.dungeon == "The Ashbound Wastes" ? "Ashbound Wastes" : run.dungeon)")

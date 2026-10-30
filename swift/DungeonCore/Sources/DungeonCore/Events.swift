@@ -233,7 +233,7 @@ public enum Events {
 
     /// Items whose effect the Swift version doesn't have yet.
     public static func comingSoon(_ id: String) -> Bool {
-        ["cursed-run-mod", "liberty-firework", "liberty-cannon", "liberty-title", "stpat-title", "val-title",
+        ["liberty-firework", "liberty-cannon", "liberty-title", "stpat-title", "val-title",
          "val-love-potion", "stpat-stout", "stpat-charm", "stpat-rainbow", "val-rose", "val-cupid-arrow",
          "val-heart-shield", "liberty-potion"].contains(id)
     }
@@ -248,7 +248,22 @@ public enum Events {
         public var luckKills = 0
         /// Potions bought from a seasonal shop, put in the bag when the run starts.
         public var items: [Item] = []
+        /// The Curse Shop's Cursed Modifier: a run modifier on the next run.
+        public var cursedModifier = false
         public init() {}
+
+        // Saves from before a field existed still load.
+        public init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            bonusLives = try c.decodeIfPresent(Int.self, forKey: .bonusLives) ?? 0
+            xpMult = try c.decodeIfPresent(Double.self, forKey: .xpMult) ?? 1
+            xpFloors = try c.decodeIfPresent(Int.self, forKey: .xpFloors) ?? 0
+            spiritBoost = try c.decodeIfPresent(Bool.self, forKey: .spiritBoost) ?? false
+            sparkler = try c.decodeIfPresent(Bool.self, forKey: .sparkler) ?? false
+            luckKills = try c.decodeIfPresent(Int.self, forKey: .luckKills) ?? 0
+            items = try c.decodeIfPresent([Item].self, forKey: .items) ?? []
+            cursedModifier = try c.decodeIfPresent(Bool.self, forKey: .cursedModifier) ?? false
+        }
     }
 
     public static func nextRun(_ store: GameStore) -> NextRun {
@@ -308,6 +323,10 @@ public enum Events {
                 Home.saveMinions(list, store)
             }
             msg = "Liberty Eagle joins your cause. Find it in your Home under Minions."
+        // The web version sold it and never applied it.
+        case "cursed-run-mod":
+            next.cursedModifier = true
+            msg = "💀 A curse settles on your next run. A random run modifier will take hold."
         default: msg = "\(item.name) bought."
         }
         saveNextRun(next, store)
@@ -323,6 +342,7 @@ public enum Events {
         if n.xpFloors > 0 { run.xpBoostMult = n.xpMult; run.xpBoostFloors = n.xpFloors; log.append("🧪 \(n.xpMult == 3 ? "Triple" : "Double") XP for \(n.xpFloors) floors.") }
         if n.spiritBoost { run.spiritBoost = true; log.append("🌟 Elf Blessing: your spirit deals double damage this run.") }
         if n.sparkler { run.sparkler = true; log.append("✨ Sparkler: +30% attack this run.") }
+        if n.cursedModifier { run.cursedModifier = true; log.append("💀 Cursed Modifier: a run modifier takes hold of this run.") }
         if n.luckKills > 0 { run.luckKills += n.luckKills; log.append("🍀 Lucky Clover: double gold for \(n.luckKills) kills.") }
         if !n.items.isEmpty { run.inventory += n.items; log.append("🎁 From the seasonal shop: " + n.items.map(\.name).joined(separator: ", ") + ".") }
         store.removeItem("dd_event_next_run")
