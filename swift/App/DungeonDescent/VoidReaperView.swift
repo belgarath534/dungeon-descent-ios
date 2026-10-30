@@ -83,6 +83,30 @@ final class VoidReaperLive: ObservableObject {
         ])
     }
 
+    // MARK: Developer Tools
+
+    /// devAwakeVoidReaper: awake for everyone, at full HP.
+    func devAwaken() async -> String {
+        do {
+            _ = try await ref.updateChildValues(["awake": true, "awakenedAt": Self.now, "currentHp": VoidReaper.globalHp,
+                                             "totalHp": VoidReaper.globalHp, "defeated": false, "killCount": 0,
+                                             "lastKiller": NSNull()])
+            return "Dev: Void Reaper force-awakened. All players can now see it."
+        } catch {
+            return "Dev: the Void Reaper write failed. \(error.localizedDescription)"
+        }
+    }
+
+    /// devResetVoidReaper: a new countdown for everyone.
+    func devReset() async -> String {
+        do {
+            _ = try await ref.updateChildValues(VoidReaper.restartFields(now: Self.now, dice: &dice))
+            return "Dev: Void Reaper reset. New countdown started for all players."
+        } catch {
+            return "Dev: the Void Reaper write failed. \(error.localizedDescription)"
+        }
+    }
+
     /// The Void Curse is on: enemies everywhere are 50% stronger.
     var cursed: Bool { state?.cursed(now: Self.now) ?? false }
 

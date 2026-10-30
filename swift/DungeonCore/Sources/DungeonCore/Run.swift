@@ -156,6 +156,9 @@ public struct Run: Codable, Sendable {
     public var undyingResolve = false
     /// Necromancer: a killed enemy that fights for you in the next fight.
     public var raised: Enemy? = nil
+    /// Developer Tools: the next fight is an ambush / Medusa.
+    public var devAmbush = false
+    public var devMedusa = false
     /// Today's Daily Challenge effect ("ironDay" …), if you registered for it.
     public var dailyChallenge: String? = nil
     public var poisonTurns = 0

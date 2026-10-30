@@ -515,7 +515,9 @@ final class RunModel: ObservableObject {
                 return
             }
             // 20% of fights from floor 3 are ambushes; every fight is on Ambush Day.
-            if r.floor >= 3 && (r.event == "ambushday" || d.chance(0.20)),
+            let forced = r.devAmbush
+            r.devAmbush = false
+            if forced || (r.floor >= 3 && (r.event == "ambushday" || d.chance(0.20))),
                let line = startAmbush(&r, &d, label: label) {
                 spoken += " " + line
                 finish(r, d, phase: .fighting, spoken: spoken)
@@ -2155,6 +2157,57 @@ final class RunModel: ObservableObject {
         let unlock = next != run.dungeon && !next.isEmpty ? " \(next) is unlocked." : ""
         Feedback.announce(spoken + " Victory! You have conquered \(run.dungeon).\(unlock)" + guideSays(.victory, run)
             + (canContinueJourney ? " Continue your journey, start New Game Plus, or return." : " Start New Game Plus, or return."))
+    }
+
+    // MARK: Developer Tools
+
+    /// devGodMode
+    func devGodMode() {
+        var r = run
+        r.maxHp = 1_000_000
+        r.hp = 1_000_000
+        run = r
+        persist()
+        setEvent("🔧 Dev: God Mode — HP set to 1,000,000.", tone: "good")
+        Feedback.announce("God Mode active. HP set to 1 million.")
+    }
+
+    /// devJumpFloor10: the boss floor, the Elite Guardian first.
+    func devJumpFloor10() {
+        var r = run
+        r.inCombat = false
+        r.enemy = nil
+        r.foes = []
+        r.floor = Challenges.bossFloor(r)
+        r.roomsOnFloor = 0
+        r.floorRoomsNeeded = 1
+        r.guardianDone = false
+        r.upcomingRooms = []
+        run = r
+        phase = .exploring
+        persist()
+        setEvent("🔧 Dev: Floor \(r.floor). Move to start the boss sequence.", tone: "good")
+        Feedback.announce("Jumped to floor \(r.floor). Move to trigger the elite guardian then the boss.")
+    }
+
+    /// devForceAmbush / devForceMedusa: the next room is that fight.
+    func devForce(medusa: Bool) {
+        var r = run
+        if medusa {
+            r.medusa.met = false
+            r.devMedusa = true
+            r.floor = max(r.floor, 4)
+        } else {
+            r.devAmbush = true
+        }
+        r.upcomingRooms.insert(.fight, at: 0)
+        run = r
+        persist()
+        let msg = medusa ? (r.dungeon == Medusa.hollow ? "Medusa will spawn in the next room. Navigate to a new room."
+                                                         : "Medusa only lives in The Hollow. She'll spawn in the next fight there.")
+                         : "Ambush forced. Enter the next room to trigger it."
+        setEvent("🔧 Dev: " + msg, tone: "good")
+        Feedback.announce(msg)
     }
 
     // MARK: Challenges

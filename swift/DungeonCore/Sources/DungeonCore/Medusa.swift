@@ -12,14 +12,14 @@ public enum Medusa {
         public init() {}
     }
 
-    static let hollow = "The Hollow"
+    public static let hollow = "The Hollow"
 
     /// The Hollow's special fights, before a normal enemy (enterRoom):
     /// Medusa from floor 4 (10%, once a run), or Lord Phorcys from floor 6
     /// (8%) if she hasn't been met.
     static func encounter(for run: Run, dice: inout some Dice) -> Enemy? {
         guard run.dungeon == hollow else { return nil }
-        if !run.medusa.met && run.floor >= 4 && dice.chance(0.10) {
+        if !run.medusa.met && run.floor >= 4 && (run.devMedusa || dice.chance(0.10)) {
             let hp = 65 + run.floor * 4
             var e = Enemy(name: "Medusa", icon: "🐍", hp: hp, maxHp: hp, atk: 10...18, gold: 20...35)
             e.desc = "Her gaze can petrify you."

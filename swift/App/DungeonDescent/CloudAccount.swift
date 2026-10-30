@@ -501,6 +501,31 @@ final class CloudAccount: NSObject, ObservableObject {
         }
     }
 
+    /// devSendCoins: Mystery Coins into a player's inbox, found by their
+    /// email. Returns what to show and say.
+    func devSendCoins(email: String, coins: Int, message: String) async -> (ok: Bool, text: String) {
+        guard !email.isEmpty else { return (false, "Enter player email.") }
+        guard coins >= 1 else { return (false, "Enter coin amount.") }
+        guard let me = Auth.auth().currentUser else { return (false, "Sign in first (Settings → Account).") }
+        let gift: [String: Any] = ["from": "Leo — Developer", "message": message.isEmpty ? "A gift from the developer of Dungeon Descent." : message,
+                                   "coins": coins, "claimed": false, "createdAt": Self.now]
+        do {
+            let found = try await db.collection("users").whereField("email", isEqualTo: email).limit(to: 1).getDocuments()
+            if let doc = found.documents.first {
+                try await db.collection("users").document(doc.documentID).collection("inbox").addDocument(data: gift)
+                let x = doc.data()
+                let name = (x["username"] as? String) ?? Self.fallbackName(email: x["email"] as? String, uid: doc.documentID)
+                return (true, "✓ Sent \(coins) coins to \(name)!")
+            }
+            guard me.email == email else { return (false, "Player not found. They may need to sign in first.") }
+            try await db.collection("users").document(me.uid).collection("inbox").addDocument(data: gift)
+            try await db.collection("users").document(me.uid).setData(["email": email, "updatedAt": Self.now], merge: true)
+            return (true, "✓ Sent \(coins) coins to yourself!")
+        } catch {
+            return (false, "Could not send. \(error.localizedDescription)")
+        }
+    }
+
     // MARK: Tournament
 
     /// uploadTournamentScore: "tournament/{season}/scores/{uid}". The web

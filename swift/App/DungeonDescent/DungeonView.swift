@@ -130,7 +130,7 @@ struct DungeonView: View {
         if choosingPath { ngPlusChoice }
         if model.hunterChoice { hunterOverlay }
         if model.medusaChoice { medusaOverlay }
-        if showSettings { WebSettingsView { showSettings = false } }
+        if showSettings { WebSettingsView(run: model) { showSettings = false } }
     }
 
     // MARK: Top bar (.dg-topbar)

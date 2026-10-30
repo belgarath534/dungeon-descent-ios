@@ -3,11 +3,13 @@ import UIKit
 import DungeonCore
 
 /// The web version's #settings-screen: a list of categories, each opening
-/// its own panel. Language and Developer Tools still say they're coming.
+/// its own panel. Language still says it's coming.
 @MainActor
 struct WebSettingsView: View {
     @EnvironmentObject var game: GameModel
     @StateObject private var webImport = WebImportFlow()
+    /// The run in progress, when opened from the dungeon (for Developer Tools).
+    var run: RunModel? = nil
     let close: () -> Void
     @State private var panel: String?
 
@@ -105,7 +107,7 @@ struct WebSettingsView: View {
                 .foregroundStyle(Theme.textSecondary).padding(.bottom, 24)
             VStack(spacing: 10) {
                 // 3D Settings only shows while 3D Mode is on.
-                ForEach(Self.categories.filter { $0.id != "3dmode" || threeD }, id: \.id) { c in
+                ForEach(Self.categories.filter { ($0.id != "3dmode" || threeD) && ($0.id != "dev" || !DevToolsPanel.locked) }, id: \.id) { c in
                     Button { open(c.id) } label: {
                         HStack(spacing: 16) {
                             Text(c.icon).font(.system(size: 24)).accessibilityHidden(true)
@@ -139,7 +141,7 @@ struct WebSettingsView: View {
             return
         }
         guard ["audio", "accessibility", "gameplay", "general", "account", "chat", "beta", "3dmode",
-               "notifications", "redeem", "feedback", "hidemenu"].contains(id) else {
+               "notifications", "redeem", "feedback", "hidemenu", "dev"].contains(id) else {
             Sound.sfx("sfx-select")
             let name = Self.categories.first { $0.id == id }?.name ?? id
             Feedback.announce("\(name) settings aren't in the Swift version yet. Coming soon.")
@@ -170,6 +172,7 @@ struct WebSettingsView: View {
         case "redeem": RedeemPanel()
         case "feedback": FeedbackPanel()
         case "hidemenu": HideMenuPanel()
+        case "dev": DevToolsPanel(run: run) { panel = nil }
         default: general
         }
     }

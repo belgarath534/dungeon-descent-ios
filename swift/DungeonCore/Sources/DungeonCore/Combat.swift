@@ -60,6 +60,7 @@ public enum Combat {
         }
         if Medusa.isMedusa(enemy) {
             run.medusa.met = true
+            run.devMedusa = false
             log.append("A rare figure steps from the shadows of the Hollow. Medusa. Her eyes are closed. For now. Her gaze can petrify you.")
         }
         if Medusa.walksWithYou(run) {

@@ -3810,3 +3810,37 @@ final class ClassTraitTests: XCTestCase {
         XCTAssertTrue(ClassTraits.voidSure(newRun("VoidWalker"), "extraction"))
     }
 }
+
+final class DevToolsTests: XCTestCase {
+    func testPasswordAndChange() {
+        let store = MemoryStore()
+        XCTAssertEqual(DevTools.password(store), "67")
+        XCTAssertEqual(DevTools.changePassword("a", confirm: "a", store: store), "Password must be at least 2 characters.")
+        XCTAssertEqual(DevTools.changePassword("abc", confirm: "abd", store: store), "Passwords do not match.")
+        XCTAssertNil(DevTools.changePassword("abc", confirm: "abc", store: store))
+        XCTAssertEqual(DevTools.password(store), "abc")
+    }
+
+    func testUnlockAllAndReset() {
+        let store = MemoryStore()
+        let roster = CharacterRoster(store: store)
+        DevTools.unlockAll(store)
+        XCTAssertEqual(roster.unlockedDungeons(), GameData.dungeons)
+        DevTools.resetUnlocks(store)
+        store.removeItem("dd_infernal_unlocked")
+        store.removeItem("dd_abyssal_unlocked")
+        XCTAssertEqual(roster.unlockedDungeons(), [GameData.dungeons[0]])
+    }
+
+    func testGunsAndCodes() {
+        let store = MemoryStore()
+        DevTools.unlockAllGuns(store)
+        XCTAssertEqual(Guns.owned(store).count, Guns.all.count)
+        DevTools.giveAllGunParts(store)
+        XCTAssertTrue(Guns.parts.allSatisfy { Guns.partCounts(store)[$0.id] == 99 })
+        var d = SeededDice(seed: 9)
+        for p in VoidMode.Prize.allCases {
+            XCTAssertEqual(VoidMode.prize(for: DevTools.rewardCode(for: p, dice: &d)), p)
+        }
+    }
+}
