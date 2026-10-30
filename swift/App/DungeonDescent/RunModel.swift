@@ -1572,8 +1572,8 @@ final class RunModel: ObservableObject {
 
     /// Counts a kill toward the active bounty; pays it out when done.
     private func bountyKill(_ e: Enemy, _ r: Run) -> String {
-        bounty(.kill(name: e.name, elite: e.isElite, boss: e.isBoss, dungeon: r.dungeon))
         if let cid = CommunityEnemies.id(e) { CommunityEnemyStore.shared.killed(cid) }
+        return bounty(.kill(name: e.name, elite: e.isElite, boss: e.isBoss, dungeon: r.dungeon))
     }
 
     private func bounty(_ ev: Bounties.Event) -> String {
