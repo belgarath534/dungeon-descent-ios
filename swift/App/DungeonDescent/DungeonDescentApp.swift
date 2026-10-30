@@ -5,6 +5,8 @@ import GoogleSignIn
 struct DungeonDescentApp: App {
     @StateObject private var game = GameModel()
     @StateObject private var router = Router()
+    /// The game's language; changing it redraws every screen.
+    @State private var locale = Language.locale
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
@@ -16,6 +18,8 @@ struct DungeonDescentApp: App {
             RootView()
                 .environmentObject(game)
                 .environmentObject(router)
+                .environment(\.locale, locale)
+                .onReceive(Language.changed) { locale = Language.locale }
                 .onAppear {
                     GameCenter.signIn()
                     CloudAccount.shared.start(game: game)

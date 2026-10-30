@@ -9,6 +9,8 @@ options:
   deploymentTarget:
     iOS: "16.0"
   createIntermediateGroups: true
+  # English is the source; Localizable.xcstrings holds the Portuguese.
+  developmentLanguage: en
 # One version for the app and its Live Activity extension (the App Store
 # requires them to match); Codemagic bumps CURRENT_PROJECT_VERSION here.
 settings:
@@ -55,6 +57,9 @@ targets:
         CFBundleDisplayName: Dungeon Descent
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDevelopmentRegion: en
+        # Lets iPhone Settings → Dungeon Descent → Language offer Portuguese.
+        CFBundleLocalizations: [en, pt-BR]
         LSApplicationCategoryType: public.app-category.role-playing-games
         GCSupportsGameMode: true
         ITSAppUsesNonExemptEncryption: false

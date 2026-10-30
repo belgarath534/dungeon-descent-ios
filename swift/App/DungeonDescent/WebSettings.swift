@@ -3,7 +3,7 @@ import UIKit
 import DungeonCore
 
 /// The web version's #settings-screen: a list of categories, each opening
-/// its own panel. Language still says it's coming.
+/// its own panel.
 @MainActor
 struct WebSettingsView: View {
     @EnvironmentObject var game: GameModel
@@ -141,7 +141,7 @@ struct WebSettingsView: View {
             return
         }
         guard ["audio", "accessibility", "gameplay", "general", "account", "chat", "beta", "3dmode",
-               "notifications", "redeem", "feedback", "hidemenu", "dev"].contains(id) else {
+               "notifications", "redeem", "feedback", "hidemenu", "dev", "language"].contains(id) else {
             Sound.sfx("sfx-select")
             let name = Self.categories.first { $0.id == id }?.name ?? id
             Feedback.announce("\(name) settings aren't in the Swift version yet. Coming soon.")
@@ -173,6 +173,7 @@ struct WebSettingsView: View {
         case "feedback": FeedbackPanel()
         case "hidemenu": HideMenuPanel()
         case "dev": DevToolsPanel(run: run) { panel = nil }
+        case "language": LanguagePanel()
         default: general
         }
     }
