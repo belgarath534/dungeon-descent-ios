@@ -13,12 +13,19 @@ public enum Inventory {
         public var used = true
         public var enemyDied = false
         public var playerDied = false
+        /// Gold for the caller to add to the shared wallet.
+        public var gold = 0
     }
 
     // MARK: Using items
 
     /// Uses the item at `index`. Items never cost a combat turn, as in the web version.
     public static func use(_ run: inout Run, at index: Int) -> Outcome {
+        var d = SystemDice()
+        return use(&run, at: index, dice: &d)
+    }
+
+    public static func use(_ run: inout Run, at index: Int, dice: inout some Dice) -> Outcome {
         guard run.inventory.indices.contains(index) else { return Outcome(message: "That item is gone.", used: false) }
         let item = run.inventory[index]
         var out = Outcome(message: "")
@@ -162,8 +169,29 @@ public enum Inventory {
             return Outcome(message: "\(item.name) is worth \(item.gold ?? 0) gold. Sell it at the Blacksmith.", used: false)
         case "phoenix-feather":
             return Outcome(message: "The Phoenix Feather works on its own. It ignites if you would die.", used: false)
-        case "ring":
+        case "ring", "relic":
             return Outcome(message: "\(item.name) works while you carry it.", used: false)
+        case "enchanter":
+            let left = Blacksmith.charges(item)
+            return Outcome(message: "Enchanter. \(left) charge\(left == 1 ? "" : "s") remaining. Go to the Blacksmith and upgrade a weapon — the Enchanter will be used automatically instead of gold.", used: false)
+        case "soul-trap":
+            return Outcome(message: "Use the Soul Trap button during a fight to capture the enemy.", used: false)
+        case "skill-orb":
+            return Outcome(message: "Skill Orbs come with a later update of the Swift version. It's kept safe in your bag.", used: false)
+        case "warding-bell":
+            run.wardingBell += 1
+            out.message = "🔔 Warding Bell attuned. It will ring out and warn you the next time you search a room with a trap."
+        case "cursed":
+            // Cursed Vial / Cursed Heirloom: one of six things, good or bad.
+            switch dice.roll(0...5) {
+            case 0: run.hp = min(run.maxHp, run.hp + 60); out.message = "Massive heal! +60 HP. Lucky."
+            case 1: run.hp = max(1, run.hp - 30); out.message = "Burns! -30 HP. Unlucky."
+            case 2: run.sp = min(run.maxSp, run.sp + 25); out.message = "SP surge! +25 SP."
+            case 3: run.atkBonus += 6; out.message = "Rage! +6 attack permanently this run."
+            case 4: run.defBonus = max(0, run.defBonus - 2); run.hp = max(1, run.hp - 15); out.message = "Weakness! -2 defense, -15 HP."
+            default: run.gold += 40; out.gold = 40; out.message = "Gold appears from nowhere. +40 gold."
+            }
+            out.message = "\(item.name) consumed. " + out.message
         case _ where Alchemy.tacticalTypes.contains(item.type):
             let o = Alchemy.useTactical(item, &run) ?? Outcome(message: "Use this in combat.", used: false)
             guard o.used else { return o }
@@ -386,8 +414,16 @@ public enum Inventory {
             return Find(message: "Searching carefully, you find \(item.icon) \(item.name). \(item.desc)", item: item)
         }
         if dice.chance(0.20 / (1 - findChance)) {
+            // Trap sense: a Scholar, the Frost Sprite, or a Warding Bell's one ring.
             if run.prof == "Scholar" {
                 return Find(message: "Your scholarly instincts warn you. You step around the trap easily.", trap: "avoided")
+            }
+            if run.spirit == "frost-sprite" {
+                return Find(message: "❄️ Frost Sprite senses the trap! You step around it easily.", trap: "avoided")
+            }
+            if run.wardingBell > 0 {
+                run.wardingBell -= 1
+                return Find(message: "🔔 The Warding Bell rings sharply. You sense the trap and step around it.", trap: "avoided")
             }
             return triggerTrap(&run, dice: &dice)
         }
@@ -546,5 +582,42 @@ public struct GlobalInventory {
     private func put(_ key: String, _ item: Item?) {
         guard let item else { store.removeItem(key); return }
         if let d = try? JSONEncoder().encode(item), let s = String(data: d, encoding: .utf8) { store.setItem(key, s) }
+    }
+}
+
+/// Small drops from searches and kills: the Enchanter (tryDropEnchanter, 2.5%
+/// of both), a Spirit Orb (checkSpiritOrbDrop, 5% of searches: a spirit this
+/// character hasn't earned) and July 4th Fireworks (checkFireworkDrop, 15% of
+/// kills during the event).
+public enum Drops {
+    public static func enchanter() -> Item {
+        var it = Item(name: "Enchanter", icon: "✨", type: "enchanter", desc: "Rare crystal. Use at the Blacksmith for 3 free weapon upgrades.")
+        it.extra["charges"] = .number(3)
+        return it
+    }
+
+    /// Adds an Enchanter to the bag 2.5% of the time. Returns it for the caller
+    /// to keep in the saved items too.
+    public static func rollEnchanter(_ run: inout Run, dice: inout some Dice) -> Item? {
+        guard dice.chance(0.025) else { return nil }
+        let e = enchanter()
+        run.inventory.append(e)
+        return e
+    }
+
+    /// A spirit this character hasn't earned, 5% of searches.
+    public static func spiritOrb(earned: Set<String>, dice: inout some Dice) -> Spirit? {
+        guard dice.chance(0.05) else { return nil }
+        let left = Spirits.all.filter { !Spirits.starterIds.contains($0.id) && !earned.contains($0.id) }
+        guard !left.isEmpty else { return nil }
+        return left[dice.roll(0...(left.count - 1))]
+    }
+
+    public static func firework(_ run: inout Run, dice: inout some Dice) -> Bool {
+        guard run.event == "july4", dice.chance(0.15), let f = SeasonalItems.all["liberty-firework"] else { return false }
+        var it = f
+        it.name = "Firework"
+        run.inventory.append(it)
+        return true
     }
 }

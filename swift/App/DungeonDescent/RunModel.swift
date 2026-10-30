@@ -704,12 +704,15 @@ final class RunModel: ObservableObject {
         var r = run
         var d = dice
         Sound.sfx("sfx-search")
-        if !r.searched { familiarBond(1) }
+        let fresh = !r.searched
+        if fresh { familiarBond(1) }
         let find = Inventory.search(&r, dice: &d, wallet: game.wallet)
         add(find.message)
+        if find.trap == "avoided" { SpatialAudio.shared.radarPing(0.85) }
         if find.trap != nil && find.trap != "avoided" { Feedback.warning(); Sound.sfx("sfx-trap") }
         else if find.item != nil || find.gold > 0 { Feedback.success(); Sound.sfx("sfx-loot") }
-        let q = find.playerDied ? "" : questFound(&r, item: find.item, gold: find.gold)
+        var q = find.playerDied ? "" : questFound(&r, item: find.item, gold: find.gold)
+        if fresh && !find.playerDied { q += searchDrops(&r, &d) }
         run = r
         dice = d
         if find.playerDied {
@@ -718,6 +721,24 @@ final class RunModel: ObservableObject {
         }
         persist()
         Feedback.announce(find.message + q)
+    }
+
+    /// The rare finds of a search: an Enchanter and a Spirit Orb.
+    private func searchDrops(_ r: inout Run, _ d: inout SystemDice) -> String {
+        var said = ""
+        if let e = Drops.rollEnchanter(&r, dice: &d) {
+            game.globalInventory.add(e)
+            add("✨ Enchanter dropped! Use at the Blacksmith to upgrade for free.")
+            said += " Enchanter found! Rare crystal — grants 3 free weapon upgrades at the Blacksmith."
+            Sound.sfx("sfx-loot")
+        }
+        if let sp = Drops.spiritOrb(earned: earnedSpirits, dice: &d) {
+            earnSpirit(sp.id)
+            add("✨ Spirit Orb Found! You discovered \(sp.icon) \(sp.name). Activate it from the Pause Menu → Spirits.")
+            said += " Spirit Orb found! \(sp.name) has been added to your spirits. Open the pause menu to activate it."
+            Sound.sfx("sfx-unlock")
+        }
+        return said
     }
 
     // MARK: Fighting
@@ -976,14 +997,23 @@ final class RunModel: ObservableObject {
             _ = game.recordBestiaryKill(e.name)
             if reward.levelsGained > 0 { levelUp = r.level; achievements.record(.levelReached(r.level)) }
             said += bountyKill(e, r)
-            said += craftingDrops(e, r.floor, &d)
+            said += craftingDrops(e, r.floor, &r, &d)
         }
         return said
     }
 
     /// Forge materials (15%) and alchemy ingredients (10%) from a kill.
-    private func craftingDrops(_ e: Enemy, _ floor: Int, _ d: inout SystemDice) -> String {
+    private func craftingDrops(_ e: Enemy, _ floor: Int, _ r: inout Run, _ d: inout SystemDice) -> String {
         var said = ""
+        if let ench = Drops.rollEnchanter(&r, dice: &d) {
+            game.globalInventory.add(ench)
+            add("✨ Enchanter dropped! Use at the Blacksmith to upgrade for free.")
+            said += " Enchanter found!"
+        }
+        if Drops.firework(&r, dice: &d) {
+            add("🎆 A Firework dropped from the enemy!")
+            said += " Firework found. Use it in combat for massive damage."
+        }
         if let m = WeaponForge.drop(floor: floor, store: game.store, dice: &d) {
             add("📦 Material dropped: \(m.icon) \(m.name)!")
             said += " Forge material: \(m.name)."
@@ -1592,7 +1622,7 @@ final class RunModel: ObservableObject {
             dropLine += " \(e.name) dropped a \(part.name). Gun crafting part collected."
         }
         GunBelt.shared.killed()
-        dropLine += craftingDrops(e, r.floor, &d)
+        dropLine += craftingDrops(e, r.floor, &r, &d)
         if let scroll = Spells.drop(&r, dice: &d) {
             let rarity = { if case .string(let x)? = scroll.extra["rarity"] { return x }; return "common" }()
             add("📜 \(scroll.name) dropped! [\(rarity.uppercased())]")
@@ -1699,11 +1729,31 @@ final class RunModel: ObservableObject {
             guard hunterMoves(prefix: said) else { return }
             r = run
         }
+        // The Elite Guardian falls: the gauntlet's waves come next, then the chamber opens.
         if e.mechanics["guardian"] == .bool(true) {
+            r.preBossWaves = PreBossGauntlet.waves(dice: &d)
+            r.preBossDone = 0
+            let n = r.preBossWaves
+            said += " ⚔ The path to the final chamber is blocked. \(n) wave\(n > 1 ? "s" : "") of minions stand between you and the boss."
+            Sound.sfx("sfx-stairs")
+            nextPreBossWave(&r, &d, said)
+            return
+        }
+        if e.number("preBossWave") != nil {
+            r.preBossDone += 1
+            if r.preBossDone < r.preBossWaves {
+                let left = r.preBossWaves - r.preBossDone
+                nextPreBossWave(&r, &d, said + " ✅ Wave \(r.preBossDone) cleared! \(left) wave\(left > 1 ? "s" : "") remaining.")
+                return
+            }
+            said += " 💀 The minions are defeated. The final chamber opens. The boss awaits."
+            Sound.sfx("sfx-victory")
+        }
+        if e.mechanics["guardian"] == .bool(true) || e.number("preBossWave") != nil {
             r.guardianDone = true
             // 3D Mode: the final chamber is a room of its own beyond this one.
             r.roomGraph?.ensureRooms(left: 1, dice: &d)
-            said += " The Elite Guardian falls. The final chamber is open."
+            said += " The final chamber is open."
             finish(r, d, phase: .exploring, spoken: said + (exitsText.map { " " + $0 } ?? ""))
             playMusic()
             return
@@ -1711,7 +1761,7 @@ final class RunModel: ObservableObject {
         if e.isBoss {
             run = r
             dice = d
-            victory(said)
+            bossFall(e.name, then: said)
         } else if r.roomsOnFloor >= r.floorRoomsNeeded {
             add("Floor \(r.floor) complete.")
             floorDone(r)
@@ -1721,6 +1771,41 @@ final class RunModel: ObservableObject {
             finish(r, d, phase: .exploring, spoken: said + (exitsText.map { " " + $0 } ?? ""))
             playMusic()
         }
+    }
+
+    /// showBossDeathCinematic: five lines, 0.9 seconds apart, then the victory.
+    @Published private(set) var bossCinematic: [String] = []
+
+    private func bossFall(_ name: String, then spoken: String) {
+        let lines = ["\(name) staggers.", "Falls to one knee.", "The dungeon shakes.", "And then — silence.", "\(name) is defeated."]
+        bossCinematic = []
+        for (i, l) in lines.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.9 * Double(i)) { [weak self] in
+                self?.bossCinematic.append(l)
+                Feedback.announce(l)
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9 * Double(lines.count) + 0.9) { [weak self] in
+            guard let self else { return }
+            self.bossCinematic = []
+            self.victory(spoken)
+        }
+    }
+
+    /// spawnGauntletWave: the next wave's minion charges.
+    private func nextPreBossWave(_ r: inout Run, _ d: inout SystemDice, _ said: String) {
+        let wave = r.preBossDone + 1
+        guard let m = PreBossGauntlet.minion(for: r, wave: wave, of: r.preBossWaves, dice: &d) else {
+            r.guardianDone = true
+            finish(r, d, phase: .exploring, spoken: said)
+            return
+        }
+        Combat.begin(&r, against: m).forEach { add($0) }
+        let line = "⚔ Wave \(wave) of \(r.preBossWaves): \(m.name) charges forward! \(m.hp) HP."
+        add(line)
+        Sound.sfx("sfx-attack")
+        Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
+        finish(r, d, phase: .fighting, spoken: said + " " + line)
     }
 
     /// A coward ran off, dropping gold. The room counts as cleared.
@@ -2710,7 +2795,8 @@ final class RunModel: ObservableObject {
         let isReveal = r.inventory.indices.contains(index) && r.inventory[index].id == "scroll-reveal"
         let item = r.inventory.indices.contains(index) ? r.inventory[index] : nil
         let hpBefore = r.hp
-        let out = Inventory.use(&r, at: index)
+        let out = Inventory.use(&r, at: index, dice: &d)
+        if out.gold > 0 { game.wallet.addGold(out.gold) }
         if r.hp > hpBefore { r.floorStats.hpHealed += r.hp - hpBefore }
         if out.used, let item, ["potion", "elixir", "heal"].contains(item.type) {
             r.potionsUsed += 1

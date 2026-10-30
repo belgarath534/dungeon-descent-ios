@@ -4083,3 +4083,65 @@ final class ShadowRealmTests: XCTestCase {
         XCTAssertEqual(ShadowRealm.board(store).map(\.wave), [12, 7, 3])
     }
 }
+
+final class ItemAuditTests: XCTestCase {
+    func newRun(_ dungeon: String = "Crypt of Malachar") -> Run {
+        var r = Run(character: PlayerCharacter(name: "I", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: dungeon, difficulty: .wanderer))
+        r.spirit = nil
+        r.inventory = []
+        return r
+    }
+
+    func testCursedVialAndWardingBell() {
+        var r = newRun()
+        r.inventory = [Item(name: "Cursed Vial", icon: "🌀", type: "cursed", desc: "")]
+        var d = LoadedDice(rolls: [5])
+        let out = Inventory.use(&r, at: 0, dice: &d)
+        XCTAssertTrue(out.used)
+        XCTAssertEqual(out.gold, 40)
+        XCTAssertTrue(r.inventory.isEmpty)
+        r.inventory = [Item(name: "Warding Bell", icon: "🔔", type: "warding-bell", desc: "")]
+        XCTAssertTrue(Inventory.use(&r, at: 0).used)
+        XCTAssertEqual(r.wardingBell, 1)
+        // A trap is sensed and the bell is spent.
+        r.firstSearchDone = true
+        var trap = LoadedDice(rolls: [], chances: [false, true])
+        let f = Inventory.search(&r, dice: &trap, wallet: Wallet(store: MemoryStore()))
+        XCTAssertEqual(f.trap, "avoided")
+        XCTAssertEqual(r.wardingBell, 0)
+    }
+
+    func testEnchanterIsKeptAndExplained() {
+        var r = newRun()
+        r.inventory = [Drops.enchanter()]
+        let out = Inventory.use(&r, at: 0)
+        XCTAssertFalse(out.used)
+        XCTAssertTrue(out.message.contains("3 charges"))
+        var d = LoadedDice(chances: [true])
+        XCTAssertNotNil(Drops.rollEnchanter(&r, dice: &d))
+    }
+
+    func testDrownedKingRisesOnce() {
+        var r = newRun("The Abyssal Deep")
+        var king = Enemy(name: "The Drowned King", icon: "👑", hp: 5, maxHp: 90, atk: 1...1, gold: 1...1)
+        king.mechanics["resurrect"] = .bool(true)
+        Combat.begin(&r, against: king)
+        var d = LoadedDice(rolls: [99])
+        let t1 = Combat.takeTurn(&r, .attack, dice: &d)
+        XCTAssertFalse(t1.enemyDied)
+        XCTAssertEqual(r.enemy?.hp, 1)
+        var d2 = LoadedDice(rolls: [99])
+        XCTAssertTrue(Combat.takeTurn(&r, .attack, dice: &d2).enemyDied)
+    }
+
+    func testPreBossMinions() {
+        var r = newRun()
+        r.difficulty = .nightmare
+        var d = SeededDice(seed: 3)
+        let m = PreBossGauntlet.minion(for: r, wave: 1, of: 2, dice: &d)
+        XCTAssertNotNil(m)
+        XCTAssertEqual(m?.number("preBossWave"), 1)
+        XCTAssertFalse(m!.isElite)
+    }
+}

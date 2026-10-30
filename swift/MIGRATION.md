@@ -119,6 +119,10 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
 | Legacy run mode | Legacy Mode | ⬜ |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
+| Pre-boss gauntlet | startPreBossGauntlet, spawnPreBossWave | ✅ after the Elite Guardian, 1 or 2 waves of the dungeon's toughest enemies (stronger on harder difficulties and NG+) before the boss chamber opens |
+| Boss death cinematic | showBossDeathCinematic | ✅ the boss's last lines on black before victory |
+| Drowned King's resurrection | enemy.resurrect | ✅ rises once at 1 HP |
+| Item drops | ENCHANTER drop, spirit orb drop, July 4th firework | ✅ Enchanter 2.5% of searches and kills, Spirit Orb 5% of searches (a spirit you haven't earned), Mega Firework 15% of kills during the July 4th event |
 | Dungeon screen in the web version's look | screen-dungeon, ov-shop, ov-levelup, skill-choice-overlay, stats-overlay, death-cinematic, screen-runsummary | ✅ top bar, daily quest, XP/SP, room tracker, room and event box, compass, combat, inventory tabs and favorites, shop, level up then skill choice, floor complete, flee, pause, run log, death cinematic, run summary. Echo-Location (3D Mode). Arcane Shop, Spell Book and Spells. Not yet: Voice, chat |
 | Death: graveyard entry, gear kept, Classic level reset | showDefeat | ✅ |
 | Settings in the web version's look | settings-screen, settings-panel-* | ✅ categories; Audio, Accessibility (verbose rooms, combat announcements, repair unlocks), Gameplay (class traits), General (version, web save import), Account. Beta Features (3D Mode) and 3D Settings. Language |
@@ -518,7 +522,8 @@ Where an item's description and the web code disagree, Swift follows the descrip
   Rainbow Shield, Enchanted Rose, Cupid's Arrow and Heart Shield applied their buff the moment
   you bought them, which from the menu meant to no run at all; the Love Potion just ended the
   fight. In Swift all ten wait in your next run's bag and do what they say when used (the Love
-  Potion makes the enemy strike itself for 2 turns). - **The Curse Shop's Cursed Modifier did nothing.** It promised a run modifier on your next
+  Potion makes the enemy strike itself for 2 turns).
+- **The Curse Shop's Cursed Modifier did nothing.** It promised a run modifier on your next
   run; Swift gives one, even with run modifiers turned off.
 - **Two music files are WAV, not MP3** (music-blacksmith.mp3 and music-raid-victory.mp3).
   Browsers play them anyway; iOS played nothing. Swift opens each file by what it really holds.
@@ -534,3 +539,11 @@ Where an item's description and the web code disagree, Swift follows the descrip
   like the web version's; stat lines always apply.
 - **Effect potions couldn't be drunk at full health.** Berserker Brew, Shadow Cloak and the
   others were refused with "Your health is already full" even though they don't heal.
+- **The Enchanter was never in the shop.** It was listed with a price but never stocked, so
+  the only way to get one was luck the web version never rolled. Swift drops it from 2.5% of
+  searches and kills, and using it from the bag tells you which weapon or armor it will add
+  charges to at the Blacksmith (it stays in your bag).
+- **Cursed Vials, Cursed Heirlooms and the Warding Bell did nothing when used.** Cursed items
+  now roll one of six outcomes (heal 60, lose 30 HP, +25 SP, +6 attack, lose 2 defense and 15
+  HP, or 40 gold). The Warding Bell senses the next trap when you search, like the Scholar and
+  the Frost Sprite, with a radar ping.

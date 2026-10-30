@@ -47,3 +47,26 @@ public enum BossTimer {
         return "⚠ TIME'S UP — \(e.name) grows impatient. Attack +25%. \(name) joins the fight!"
     }
 }
+
+/// The pre-boss gauntlet (startPreBossGauntlet, spawnGauntletWave): after the
+/// floor 10 Elite Guardian, one or two waves of the dungeon's tier 2 enemies
+/// stand between you and the boss.
+public enum PreBossGauntlet {
+    public static func waves(dice: inout some Dice) -> Int { dice.chance(0.5) ? 1 : 2 }
+
+    public static func minion(for run: Run, wave: Int, of total: Int, dice: inout some Dice) -> Enemy? {
+        let pool = Bestiary.enemies(for: run.dungeon, difficulty: run.difficulty).t2
+        guard !pool.isEmpty else { return nil }
+        let t = pool[dice.roll(0...(pool.count - 1))]
+        let diff: Double = run.difficulty == .nightmare ? 1.4 : run.difficulty == .forsaken ? 1.2 : run.difficulty == .condemned ? 1.1 : 1
+        let ng = run.ngPlus ? 1.15 : 1
+        let hp = jsRound(Double(t.hp) * 1.2 * diff * ng)
+        let lo = jsRound(Double(t.atk.lowerBound) * 1.1 * ng), hi = jsRound(Double(t.atk.upperBound) * 1.1 * ng)
+        var e = Enemy(name: t.name, icon: t.icon, hp: hp, maxHp: hp, atk: lo...max(lo, hi), gold: t.gold)
+        e.mechanics = t.mechanics
+        e.mechanics["preBossWave"] = .number(Double(wave))
+        e.mechanics["isElite"] = nil
+        e.desc = t.desc
+        return e
+    }
+}

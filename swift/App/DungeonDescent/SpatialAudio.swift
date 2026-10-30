@@ -267,6 +267,14 @@ final class SpatialAudio {
         play(pcm(s), at: Self.point(.south, 0.01))
     }
 
+    /// playRadarPing: trap sense, a high sine blip (twice when strong) to one side.
+    func radarPing(_ intensity: Double) {
+        let side: Compass = Bool.random() ? .west : .east
+        let b = tone(.sine, 600 + intensity * 500, seconds: 0.35, peak: 0.35)
+        play(b, at: Self.point(side, 1.2))
+        if intensity > 0.5 { play(b, at: Self.point(side, 1.2), delay: 0.16) }
+    }
+
     // MARK: The Darkness Swallower
 
     /// Each square of the Stalker room is 1.5 meters: far off it's a faint

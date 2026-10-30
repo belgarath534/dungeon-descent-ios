@@ -415,6 +415,11 @@ public enum Combat {
                 r.announcement = lines.joined(separator: " ")
                 return r
             }
+            if let line = resurrects(&run) {
+                r.log.append(line)
+                r.announcement = line
+                return r
+            }
             return afterKill(&run, killed(&run, r), dice: &dice, options: options)
         }
         if let msg = checkBossPhase(&run) {
@@ -447,6 +452,11 @@ public enum Combat {
             if let lines = ShadowWorld.refusesDeath(&run) {
                 r.log += lines
                 r.announcement = lines.joined(separator: " ")
+                return r
+            }
+            if let line = resurrects(&run) {
+                r.log.append(line)
+                r.announcement = line
                 return r
             }
             return afterKill(&run, killed(&run, r), dice: &dice, options: options)
@@ -568,6 +578,15 @@ public enum Combat {
             run.inCombat = false
         }
         return r
+    }
+
+    /// checkAbyssalResurrect: the Drowned King rises once at 1 HP.
+    static func resurrects(_ run: inout Run) -> String? {
+        guard var e = run.enemy, e.isDead, e.flag("resurrect"), !e.flag("resurrected") else { return nil }
+        e.hp = 1
+        e.mechanics["resurrected"] = .bool(true)
+        run.enemy = e
+        return "👑 \(e.name) RESURRECTS at 1 HP! The undead do not yield easily!"
     }
 
     static func killed(_ run: inout Run, _ result: TurnResult) -> TurnResult {

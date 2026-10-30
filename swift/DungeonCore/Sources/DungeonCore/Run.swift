@@ -162,6 +162,11 @@ public struct Run: Codable, Sendable {
     public var cursedModifier = false
     /// The Freedom Potion's debuff immunity, turns left.
     public var freedomTurns = 0
+    /// Warding Bells attuned: each avoids one trap when you search.
+    public var wardingBell = 0
+    /// The pre-boss gauntlet's waves, and how many are done.
+    public var preBossWaves = 0
+    public var preBossDone = 0
     public var devMedusa = false
     /// Today's Daily Challenge effect ("ironDay" …), if you registered for it.
     public var dailyChallenge: String? = nil

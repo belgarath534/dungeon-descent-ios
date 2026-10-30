@@ -133,6 +133,22 @@ struct DungeonView: View {
         if model.medusaChoice { medusaOverlay }
         if showSettings { WebSettingsView(run: model) { showSettings = false } }
         if let q = model.riddle { BossRiddleOverlay(model: model, riddle: q) }
+        if !model.bossCinematic.isEmpty {
+            // #boss-death-cinematic
+            ZStack {
+                Color.black.ignoresSafeArea()
+                VStack(spacing: 16) {
+                    ForEach(Array(model.bossCinematic.enumerated()), id: \.offset) { i, l in
+                        Text(l).font(Theme.cinzel(i == 4 ? 19 : 14.4))
+                            .foregroundStyle(i == 4 ? Color(hex: 0xe0c080) : Color(hex: 0x666666))
+                            .transition(.opacity)
+                    }
+                }
+                .padding(30)
+                .animation(.easeIn(duration: 0.4), value: model.bossCinematic.count)
+            }
+            .accessibilityHidden(true)
+        }
         if model.musicPlayerOpen {
             // #ov-music-player
             WebScreen {
