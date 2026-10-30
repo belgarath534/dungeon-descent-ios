@@ -734,7 +734,8 @@ final class SkillTests: XCTestCase {
         XCTAssertEqual(r.hp, 65)
         XCTAssertEqual(r.lives, 1)
 
-        let g = newRun("Warrior", race: "Gnome")
+        var g = newRun("Warrior", race: "Gnome")
+        g.raceTraits = true
         XCTAssertEqual(Skills.cost(Skills.skill("shield-bash", cls: "Warrior")!, g), 6)
     }
 
@@ -3447,5 +3448,119 @@ final class RunModifierTests: XCTestCase {
         XCTAssertNotNil(ElixirVendor.sell(r.inventory[0].name, &r, wallet: w))
         XCTAssertEqual(w.gold, 30)
         XCTAssertTrue(ElixirVendor.spares(r).isEmpty)
+    }
+}
+
+final class RaceTests: XCTestCase {
+    func newRun(_ race: String, cls: String = "Warrior", dungeon: String = "Crypt of Malachar",
+                traits: Bool = true, wallet: Wallet = Wallet(store: MemoryStore())) -> Run {
+        var r = Run(character: PlayerCharacter(name: "R", cls: cls, race: race, prof: "Thief",
+                                               dungeon: dungeon, difficulty: .wanderer))
+        r.spirit = nil
+        _ = Races.start(&r, classTraits: traits, wallet: wallet)
+        return r
+    }
+
+    func testEveryRaceOnTheCardIsHandled() {
+        XCTAssertEqual(GameData.races.count, 15)
+    }
+
+    func testStatLines() {
+        let base = Run(character: PlayerCharacter(name: "R", cls: "Warrior", race: "Human", prof: "Thief",
+                                                  dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        let human = newRun("Human")
+        XCTAssertEqual(human.atkBonus, 1)
+        XCTAssertEqual(human.maxHp, base.maxHp + 5)
+        XCTAssertEqual(human.defBonus, 1)
+        XCTAssertEqual(human.maxSp, 23)
+        let elf = newRun("Elf")
+        XCTAssertEqual(elf.maxSp, 25)
+        XCTAssertEqual(elf.fleeBonus, 0.05, accuracy: 1e-9)
+        XCTAssertEqual(elf.critBonus, 0.03, accuracy: 1e-9)
+        let dwarf = newRun("Dwarf")
+        XCTAssertEqual(dwarf.atkBonus, 2)
+        XCTAssertEqual(dwarf.defBonus, 2)
+        let orc = newRun("Orc")
+        XCTAssertEqual(orc.atkBonus, 4)
+        XCTAssertEqual(orc.defBonus, -2)
+        XCTAssertEqual(newRun("Orc", cls: "Wizard").defBonus, 0, "never below zero defense")
+        XCTAssertEqual(newRun("Tiefling").luckBonus, 0.10, accuracy: 1e-9)
+        XCTAssertEqual(newRun("Shade").fleeBonus, 0.05, accuracy: 1e-9)
+        XCTAssertEqual(newRun("Golem").defBonus, 5)
+        XCTAssertEqual(newRun("Gnome").maxSp, 30)
+        XCTAssertEqual(newRun("Gnome", traits: false).maxSp, 20)
+        XCTAssertEqual(newRun("Gnome", traits: false).luckBonus, 0.10, accuracy: 1e-9)
+    }
+
+    func testGoblinStartsWith30Gold() {
+        let w = Wallet(store: MemoryStore())
+        XCTAssertEqual(newRun("Goblin", wallet: w).gold, 30)
+        XCTAssertEqual(w.gold, 30)
+    }
+
+    func testAbilitiesFollowClassTraits() {
+        let base = newRun("Human", traits: false).maxLives
+        XCTAssertEqual(newRun("Angel").maxLives, base + 1)
+        XCTAssertEqual(newRun("Angel", traits: false).maxLives, base)
+        let full = Run(character: PlayerCharacter(name: "R", cls: "Warrior", race: "Vampire", prof: "Thief",
+                                                  dungeon: "Crypt of Malachar", difficulty: .wanderer)).maxHp
+        XCTAssertEqual(newRun("Vampire").maxHp, jsRound(Double(full) * 0.8))
+        XCTAssertEqual(newRun("Vampire", traits: false).maxHp, full)
+        XCTAssertFalse(Races.immune(newRun("Golem", traits: false)))
+        XCTAssertTrue(Races.immune(newRun("Golem")))
+    }
+
+    func testMerfolkInTheSunkenArchives() {
+        let home = newRun("Merfolk", dungeon: "The Sunken Archives")
+        let away = newRun("Merfolk")
+        XCTAssertEqual(home.atkBonus, 3)
+        XCTAssertEqual(home.maxHp, jsRound(Double(away.maxHp) * 1.1))
+        XCTAssertEqual(Races.potionHeal(away, 40), 48)
+        XCTAssertEqual(Races.potionHeal(newRun("Human"), 40), 40)
+    }
+
+    func testDemonDragonbornAndHalfling() {
+        var log: [String] = []
+        var no = LoadedDice(chances: [false])
+        XCTAssertEqual(Races.attack(newRun("Demon"), 20, dice: &no, log: &log), 23)
+        XCTAssertEqual(Races.incoming(newRun("Demon"), 20), 23)
+        var yes = LoadedDice(chances: [true])
+        XCTAssertEqual(Races.attack(newRun("Dragonborn"), 20, dice: &yes, log: &log), 26)
+        let e = Enemy(name: "Dummy", icon: "", hp: 50, maxHp: 50, atk: 5...5, gold: 1...1)
+        var dodge = LoadedDice(chances: [true])
+        XCTAssertTrue(Races.dodges(newRun("Halfling"), e, dice: &dodge, log: &log))
+        var dodgeOff = LoadedDice(chances: [true])
+        XCTAssertFalse(Races.dodges(newRun("Halfling", traits: false), e, dice: &dodgeOff, log: &log))
+    }
+
+    func testVampireDrainAndAngelHeal() {
+        var v = newRun("Vampire")
+        v.hp = 10
+        XCTAssertFalse(Races.onKill(&v).isEmpty)
+        XCTAssertEqual(v.hp, 15)
+        var a = newRun("Angel")
+        a.hp = 10
+        Races.onLevelUp(&a, levels: 2)
+        XCTAssertEqual(a.hp, 40)
+    }
+
+    func testGnomeSkillsAndDwarfPrices() {
+        let g = newRun("Gnome")
+        XCTAssertEqual(Races.skillCostCut(g), 2)
+        XCTAssertEqual(Races.skillCostCut(newRun("Gnome", traits: false)), 0)
+        XCTAssertEqual(Races.shopPrice(100, newRun("Dwarf")), 90)
+        XCTAssertEqual(Races.shopPrice(100, newRun("Elf")), 100)
+    }
+
+    func testGolemShrugsOffFreezeAndPoisonTraps() {
+        var r = newRun("Golem")
+        for _ in 0..<200 {
+            r.hp = r.maxHp
+            var d = SystemDice()
+            _ = Inventory.triggerTrap(&r, dice: &d)
+            XCTAssertFalse(r.frozen)
+            if r.poisonTurns > 0 { XCTAssertEqual(r.poisonDamage, 6, "only burns get through") }
+            r.poisonTurns = 0
+        }
     }
 }

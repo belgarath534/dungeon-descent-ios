@@ -110,7 +110,7 @@ enum EnemyAbilities {
             run.fight.atk -= 2
             log.append("Your attack is weakened by 2 for this fight.")
         case "freeze-player":
-            if !run.debuffImmune && run.armorEffect != "juggernaut" { run.frozen = true; log.append("You are frozen! Your next action will fail.") }
+            if !run.debuffImmune && run.armorEffect != "juggernaut" && !Races.immune(run) { run.frozen = true; log.append("You are frozen! Your next action will fail.") }
         case "reduce-maxhp":
             run.maxHp = max(20, run.maxHp - 15)
             run.hp = min(run.hp, run.maxHp)
@@ -145,7 +145,7 @@ enum EnemyAbilities {
             run.poisonTurns = max(run.poisonTurns, Int(e.number("burnTurns") ?? 2))
             log.append("🔥 You are burning: \(Int(burn)) damage per turn.")
         }
-        if let p = e.number("poisonChance"), taken > 0, !run.debuffImmune, dice.chance(p) {
+        if let p = e.number("poisonChance"), taken > 0, !run.debuffImmune, !Races.immune(run), dice.chance(p) {
             run.poisonDamage = max(run.poisonDamage, 6)
             run.poisonTurns = max(run.poisonTurns, 3)
             log.append("☠️ You are poisoned.")

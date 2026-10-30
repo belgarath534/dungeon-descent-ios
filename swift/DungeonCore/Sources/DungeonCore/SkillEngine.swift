@@ -65,7 +65,7 @@ public enum Skills {
     public static func cost(_ s: Skill, _ run: Run) -> Int {
         if run.freeSkills > 0 || run.weaponEffect == "apocalypse" { return 0 }
         var c = s.spCost
-        if run.race == "Gnome" { c -= 2 }
+        c -= Races.skillCostCut(run)
         if run.has("cu-soul-surge") { c -= 1 }
         c -= Subclasses.skillCostCut(run)
         c -= run.weather?.spDiscount ?? 0

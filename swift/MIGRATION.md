@@ -72,7 +72,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Gold and diamonds | GLOBAL GOLD SYSTEM | ✅ |
 | Character list, 5 slots, save format | CHARACTER STORAGE | ✅ |
 | Dungeon unlocks | getUnlockedDungeons | ✅ |
-| Classes, races, professions, difficulties | CHARACTER CREATION | 🟡 Halfling, Goblin, Warden, Herbalist, Gravedigger, Pilgrim, Mercenary, Grave Robber done; other races not yet |
+| Classes, races, professions, difficulties | CHARACTER CREATION, initDungeon's race bonuses, getShopDiscount | 🟡 all 15 races (`Races.swift`): every race card's stat line and ability. Professions: Halfling, Goblin, Warden, Herbalist, Gravedigger, Pilgrim, Mercenary, Grave Robber done |
 | Run start stats | initDungeon | 🟡 equipment, coin upgrades and milestone buffs done; dream buffs and spirits not yet |
 | High Score | HIGH SCORE SYSTEM, renderHighScore, uploadToLeaderboard, renderLeaderboardTab, loadInbox | ✅ score (dd_score), ranks and the category breakdown, earned for kills, elites, bosses, achievements, Boss Rush and Endless milestones. Upload to the shared global leaderboard (top 20, the web version's "leaderboard" collection), the weekly champion's 3 Mystery Coins, and the developer inbox with coin claims. Web bug fixed: the inbox's message list had been deleted, so a non-empty inbox stayed on "Loading inbox..." forever |
 | Endless milestones | advanceFloor | ✅ every 25 floors a full heal and +5 max HP, every 10 floors a 30% heal |
@@ -484,5 +484,15 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **Alchemist brews lost their bonus.** An Alchemist's Phantom Potion, Gravity Tonic, Leech
   Brew, Rage Tonic, Fog Flask, Time Potion and Corruption Flask were brewed stronger, but
   using one always gave the shop version's numbers. Swift uses what was brewed.
+- **Half the races did nothing.** The stat lines on the race cards (Human's "+All Stats",
+  Elf's "+AGI +INT", Dwarf's "+STR +DEF", Orc's "+STR+STR -DEF", Tiefling, Shade, and the
+  Gnome's and Merfolk's stats) were never applied; Golem had no code at all (no +5 defense,
+  no immunity); Halfling's 15% dodge was set and never read; Vampires never lost the 20%
+  max HP; Goblins never got their starting gold; Angels never healed on level up. In Swift
+  each "+STAT" is one level point on that stat, "-STAT" takes one away (Orc defense never
+  goes below zero), and Human gets half a point of every stat. Goblins start each run with
+  30 gold, Angels heal 15 HP a level, Golems shrug off poison and freezing (burns still
+  get through), Halflings slip 15% of attacks. Abilities follow the Class Traits setting
+  like the web version's; stat lines always apply.
 - **Effect potions couldn't be drunk at full health.** Berserker Brew, Shadow Cloak and the
   others were refused with "Your health is already full" even though they don't heal.

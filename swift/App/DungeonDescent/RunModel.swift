@@ -116,6 +116,7 @@ final class RunModel: ObservableObject {
         // else that adds items (seasonal shop, Coin Shop) goes in after.
         game.globalInventory.load(into: &r)
         r.applyStartBonuses(wallet: game.wallet)
+        r.startNotes += Races.start(&r, classTraits: AppSettings.classTraits, wallet: game.wallet)
         r.applyMilestoneBuffs(game.milestoneEffects)
         r.event = Events.active()
         r.startNotes += Events.applyNextRun(&r, store: game.store)
@@ -2649,7 +2650,7 @@ final class RunModel: ObservableObject {
     }
 
     func price(_ entry: Inventory.ShopItem) -> Int {
-        Spirits.shopPrice(RunModifiers.potionCost(entry.item, Inventory.price(entry.item, hour: hour), run), run)
+        Races.shopPrice(Spirits.shopPrice(RunModifiers.potionCost(entry.item, Inventory.price(entry.item, hour: hour), run), run), run)
     }
 
     func buy(_ id: Int) {

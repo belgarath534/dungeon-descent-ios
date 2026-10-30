@@ -242,7 +242,7 @@ public enum Combat {
                 dmg = Subclasses.afterRoll(&run, dmg, log: &r.log)
                 dmg = empowered(&run, dmg, log: &r.log)
                 dmg = gearDamage(&run, dmg, log: &r.log)
-                r.playerDamage = scaleDamage(run, dmg)
+                r.playerDamage = Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log)
                 r.log.append(r.crit ? "CRITICAL HIT! You strike for \(r.playerDamage) damage!"
                                     : "You attack for \(r.playerDamage) damage.")
             case .heavy:
@@ -253,7 +253,7 @@ public enum Combat {
                     var dmg = empowered(&run, jsRound(Double(baseAtk) * 1.7), log: &r.log)
                     if let e = run.enemy, run.subclass == "crusader", Bestiary.undeadNames.contains(e.name) { dmg = jsRound(Double(dmg) * 1.5) }
                     dmg = gearDamage(&run, dmg, log: &r.log)
-                    r.playerDamage = scaleDamage(run, dmg)
+                    r.playerDamage = Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log)
                     r.log.append("Heavy strike lands for \(r.playerDamage) damage!")
                 }
             case .defend:
@@ -646,6 +646,7 @@ public enum Combat {
             return 0
         }
         if Alchemy.avoids(&run, e, dice: &dice, log: &log) { return 0 }
+        if Races.dodges(run, e, dice: &dice, log: &log) { return 0 }
         if run.fight.enemyMiss > 0 {
             let p = run.fight.enemyMiss
             run.fight.enemyMiss = 0
@@ -705,6 +706,7 @@ public enum Combat {
             default: break
             }
         }
+        taken = Races.incoming(run, taken)
         if run.fight.reduceTurns > 0 {
             run.fight.reduceTurns -= 1
             taken = max(1, jsRound(Double(taken) * (1 - run.fight.reduce)))

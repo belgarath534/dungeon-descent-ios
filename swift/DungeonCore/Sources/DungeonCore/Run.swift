@@ -148,6 +148,8 @@ public struct Run: Codable, Sendable {
     public var modifier: String? = nil
     /// Alchemy potion effects (Bloodfire, Shadow Cloak, Rage Tonic …).
     public var brews = Alchemy.Brews()
+    /// The race's ability is on (Races.start, with Class Traits on).
+    public var raceTraits = false
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false

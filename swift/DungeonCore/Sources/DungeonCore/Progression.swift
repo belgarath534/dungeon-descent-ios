@@ -53,6 +53,7 @@ public enum Progression {
             needed = xpNeeded(atLevel: run.level)
         }
         if gained > 0 { run.levelPoints += 3 }
+        Races.onLevelUp(&run, levels: gained)
         if gained > 0 && run.backstorySPBonus > 0 {
             run.maxSp += run.backstorySPBonus * gained
             run.sp = min(run.maxSp, run.sp + run.backstorySPBonus * gained)
@@ -139,9 +140,10 @@ public enum Progression {
         var xp = Progression.xp(for: tier(of: enemy.name, in: run.dungeon, difficulty: run.difficulty))
         if Challenges.has(run, "double-xp") { xp *= 2 }
         xp *= RunModifiers.xpMult(run)
+        let drain = Races.onKill(&run)
         let levels = gainXP(&run, xp)
         return KillReward(gold: g, xp: xp, levelsGained: levels,
-                          message: "\(enemy.name) is defeated! You gain \(g) gold and \(xp) XP.\(luckNote)")
+                          message: "\(enemy.name) is defeated! You gain \(g) gold and \(xp) XP.\(luckNote)\(drain)")
     }
 
     public enum DeathOutcome: Equatable, Sendable {

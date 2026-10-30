@@ -66,6 +66,7 @@ public enum Inventory {
             }
             var heal = jsRound(Double(item.heal ?? 40) * run.potionMult)
             if run.cls == "Alchemist" { heal = jsRound(Double(heal) * 1.35) }
+            heal = Races.potionHeal(run, heal)
             if let b = run.weather?.potionBoost, b > 0 { heal = jsRound(Double(heal) * (1 + b)) }
             run.hp = min(run.maxHp, run.hp + heal)
             out.message = "You drink \(item.name), restoring \(heal) HP. HP: \(run.hp) of \(run.maxHp)."
@@ -394,11 +395,12 @@ public enum Inventory {
         let trap = pool[dice.roll(0...(pool.count - 1))]
         run.hp = max(0, run.hp - trap.damage)
         switch trap.effect {
+        case "poison" where Races.immune(run): break
         case "poison", "burn":
             run.poisonTurns = trap.turns
             run.poisonDamage = trap.effect == "burn" ? 6 : 8
         case "sp": run.sp = max(0, run.sp - 8)
-        case "freeze": if run.armorEffect != "juggernaut" { run.frozen = true }
+        case "freeze": if run.armorEffect != "juggernaut" && !Races.immune(run) { run.frozen = true }
         case "pushback": if run.roomsOnFloor > 1 { run.roomsOnFloor -= 1 }
         default: break
         }
@@ -434,7 +436,7 @@ public enum Inventory {
     /// Buys a shop item with gold from the run and the shared wallet.
     public static func buy(_ run: inout Run, _ entry: inout ShopItem, wallet: Wallet, hour: Int) -> Outcome {
         guard !entry.sold else { return Outcome(message: "Already sold.", used: false) }
-        let cost = Spirits.shopPrice(RunModifiers.potionCost(entry.item, price(entry.item, hour: hour), run), run)
+        let cost = Races.shopPrice(Spirits.shopPrice(RunModifiers.potionCost(entry.item, price(entry.item, hour: hour), run), run), run)
         guard run.gold >= cost, wallet.spendGold(cost) else {
             return Outcome(message: "Not enough gold. You need \(cost) gold. You have \(run.gold).", used: false)
         }
