@@ -439,6 +439,8 @@ public struct FightEffects: Codable, Sendable {
     public var fearTurns = 0
     public var nullShieldUsed = false
     /// The Shapeshifter's Mask: the ability copied this fight, and its state.
+    /// Phase 4 of an Abyssal boss: the rhythm sequence comes next.
+    public var rhythmDue = false
     public var mask = ""
     public var maskGrow = 0
     public var maskToggle = false

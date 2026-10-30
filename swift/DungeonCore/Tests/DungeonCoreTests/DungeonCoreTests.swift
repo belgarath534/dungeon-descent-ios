@@ -4328,3 +4328,49 @@ final class CommunityEnemyTests: XCTestCase {
         XCTAssertEqual(CommunityEnemies.spawn(for: r2, dice: &d2)?.name, "Frosty")
     }
 }
+
+final class AbyssalPhaseTests: XCTestCase {
+    func testFourPhaseBossAndRhythm() {
+        var r = Run(character: PlayerCharacter(name: "A", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "The Abyssal Deep", difficulty: .wanderer))
+        var e = Enemy(name: "Abyssal Sovereign", icon: "🌊", hp: 1000, maxHp: 1000, atk: 10...20, gold: 0...0,
+                      isBoss: true, phase1Hp: 660, phase2Hp: 330)
+        e.mechanics["fourPhase"] = .bool(true)
+        e.mechanics["phaseMsg4"] = .string("It is everywhere.")
+        r.enemy = e
+        r.inCombat = true
+        r.bossPhase = 1
+        r.enemy?.hp = 600
+        XCTAssertNotNil(Combat.checkBossPhase(&r))
+        r.enemy?.hp = 300
+        XCTAssertTrue(Combat.checkBossPhase(&r)?.hasPrefix("⚡ PHASE 3") == true)
+        XCTAssertEqual(r.bossPhase, 3)
+        r.enemy?.hp = 200
+        XCTAssertNil(Combat.checkBossPhase(&r))
+        r.enemy?.hp = 150
+        XCTAssertEqual(Combat.checkBossPhase(&r), "💀 THE ABYSS AWAKENS — It is everywhere.")
+        XCTAssertEqual(r.bossPhase, 4)
+        XCTAssertTrue(r.fight.rhythmDue)
+        XCTAssertTrue(Rhythm.matches([0, 0.9, 1.6]))
+        XCTAssertFalse(Rhythm.matches([0, 0.2, 0.4]))
+        XCTAssertFalse(Rhythm.matches([0, 0.8]))
+        let before = r.totalDef
+        _ = Rhythm.resolve(&r, won: true)
+        XCTAssertFalse(r.fight.rhythmDue)
+        XCTAssertGreaterThan(r.totalDef, before)
+        let atk = r.enemy!.atk
+        _ = Rhythm.resolve(&r, won: false)
+        XCTAssertGreaterThan(r.enemy!.atk.upperBound, atk.upperBound)
+    }
+
+    func testThreePhaseBossUnchanged() {
+        var r = Run(character: PlayerCharacter(name: "A", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.enemy = Enemy(name: "B", icon: "b", hp: 1000, maxHp: 1000, atk: 10...20, gold: 0...0, isBoss: true, phase1Hp: 660, phase2Hp: 330)
+        r.bossPhase = 2
+        r.enemy?.hp = 100
+        XCTAssertTrue(Combat.checkBossPhase(&r)?.hasPrefix("⚡ FINAL PHASE") == true)
+        XCTAssertNil(Combat.checkBossPhase(&r))
+        XCTAssertFalse(r.fight.rhythmDue)
+    }
+}

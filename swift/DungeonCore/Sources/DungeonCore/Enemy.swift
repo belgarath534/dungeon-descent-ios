@@ -161,7 +161,7 @@ extension Enemy {
                       isBoss: true, phase1Hp: jsRound(Double(hp) * 0.66), phase2Hp: jsRound(Double(hp) * 0.33),
                       phaseMsg2: t.phaseMsg2, phaseMsg3: t.phaseMsg3)
         // The Shadow World's boss chain.
-        for k in ["isEcho", "isShapeshifter", "phaseMsg4"] { e.mechanics[k] = t.mechanics[k] }
+        for k in ["isEcho", "isShapeshifter", "phaseMsg4", "fourPhase"] { e.mechanics[k] = t.mechanics[k] }
         return e
     }
 }

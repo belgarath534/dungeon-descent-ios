@@ -275,6 +275,11 @@ final class SpatialAudio {
         if intensity > 0.5 { play(b, at: Self.point(side, 1.2), delay: 0.16) }
     }
 
+    /// The abyss's beat (playRhythmBeats): a low 160 Hz pulse, straight ahead.
+    func abyssBeat() {
+        play(tone(.sine, 160, seconds: 0.2, peak: 0.5), at: Self.point(.north, 1))
+    }
+
     // MARK: The Darkness Swallower
 
     /// Each square of the Stalker room is 1.5 meters: far off it's a faint

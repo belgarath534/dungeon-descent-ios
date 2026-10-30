@@ -133,6 +133,7 @@ struct DungeonView: View {
         if model.medusaChoice { medusaOverlay }
         if showSettings { WebSettingsView(run: model) { showSettings = false } }
         if let q = model.riddle { BossRiddleOverlay(model: model, riddle: q) }
+        if let stage = model.rhythm { RhythmOverlay(model: model, stage: stage) }
         if !model.bossCinematic.isEmpty {
             // #boss-death-cinematic
             ZStack {
@@ -344,9 +345,10 @@ struct DungeonView: View {
     }
 
     private func bossPhaseBar(_ e: Enemy) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        let phases = e.flag("fourPhase") || e.flag("isShapeshifter") ? 4 : 3
+        return VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text("Phase \(run.bossPhase) of 3").font(Theme.cinzel(10.4)).tracking(2).textCase(.uppercase)
+                Text("Phase \(run.bossPhase) of \(phases)").font(Theme.cinzel(10.4)).tracking(2).textCase(.uppercase)
                     .foregroundStyle(Theme.bloodBright)
                 Spacer()
                 // #boss-timer-wrap
@@ -356,7 +358,7 @@ struct DungeonView: View {
                 }
             }
             HStack(spacing: 6) {
-                ForEach(1...3, id: \.self) { i in
+                ForEach(1...phases, id: \.self) { i in
                     Rectangle().fill(i <= run.bossPhase ? Theme.bloodBright : Theme.bloodBright.opacity(0.2))
                         .frame(width: 24, height: 8)
                         .overlay(Rectangle().stroke(Theme.blood))
@@ -367,7 +369,7 @@ struct DungeonView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(hex: 0x1a0808)).overlay(Rectangle().stroke(Theme.bloodBright))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Boss phase \(run.bossPhase) of 3" + (model.bossTimerLeft.map { ". Boss timer: \($0 / 60) minutes \($0 % 60) seconds left" } ?? ""))
+        .accessibilityLabel("Boss phase \(run.bossPhase) of \(phases)" + (model.bossTimerLeft.map { ". Boss timer: \($0 / 60) minutes \($0 % 60) seconds left" } ?? ""))
     }
 
     // MARK: The room (.dg-room)
@@ -1229,5 +1231,62 @@ struct TipBanner: View {
             left = 1
             withAnimation(.linear(duration: seconds)) { left = 0 }
         }
+    }
+}
+
+/// #rhythm-game-overlay: "Answer the Call".
+struct RhythmOverlay: View {
+    @ObservedObject var model: RunModel
+    let stage: RunModel.RhythmStage
+
+    private var status: String {
+        switch stage {
+        case .listen, .beat: return "Listen to the beats..."
+        case .tap: return "Now tap — match the rhythm!"
+        case .won: return "✓ You answered. The abyss is not done with you yet."
+        case .lost: return "✗ You hesitated. The abyss does not forgive."
+        }
+    }
+
+    private func pip(_ i: Int) -> Color {
+        switch stage {
+        case .beat(let b): return b == i ? Color(hex: 0x4488ff) : Color(hex: 0x111111)
+        case .tap: return i <= model.rhythmTaps ? Color(hex: 0x44cc44) : Color(hex: 0x111111)
+        case .won: return Color(hex: 0xccaa00)
+        case .lost: return Color(hex: 0xcc0000)
+        case .listen: return Color(hex: 0x111111)
+        }
+    }
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.98).ignoresSafeArea()
+            VStack(spacing: 16) {
+                Text("THE ABYSS SPEAKS").font(Theme.cinzel(10.4)).tracking(4).foregroundStyle(Color(hex: 0x4444cc))
+                Text("Answer the Call").font(Theme.decorative(25)).foregroundStyle(Color(hex: 0x4488ff))
+                    .shadow(color: Color(hex: 0x4488ff).opacity(0.6), radius: 15)
+                    .accessibilityAddTraits(.isHeader)
+                Text("\"You have come far. Let us see if you deserve to leave.\"")
+                    .font(Theme.crimson(15, italic: true)).foregroundStyle(Color(hex: 0x8899bb)).multilineTextAlignment(.center)
+                Text(status).font(Theme.cinzel(14.4)).foregroundStyle(Color(hex: 0xaabbdd)).frame(minHeight: 28)
+                    .multilineTextAlignment(.center)
+                HStack(spacing: 12) {
+                    ForEach(1...3, id: \.self) { i in
+                        Circle().fill(pip(i)).frame(width: 28, height: 28).overlay(Circle().stroke(Color(hex: 0x334466), lineWidth: 2))
+                    }
+                }
+                .accessibilityHidden(true)
+                Button { model.rhythmTap() } label: {
+                    Text("🌊 TAP TO THE BEAT").font(Theme.decorative(16)).tracking(1.6).foregroundStyle(Color(hex: 0x88aaff))
+                        .frame(maxWidth: .infinity).padding(22)
+                        .background(Color(hex: 0x0a0a1a)).overlay(Rectangle().stroke(Color(hex: 0x4488ff), lineWidth: 2))
+                }
+                .accessibilityLabel("Tap to the beat")
+                .accessibilityHint("Double tap three times, matching the three beats.")
+                Text("VoiceOver: double tap to the beat").font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x334466))
+            }
+            .frame(maxWidth: 380).padding(28)
+        }
+        .accessibilityAddTraits(.isModal)
     }
 }

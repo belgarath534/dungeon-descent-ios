@@ -1,4 +1,5 @@
 import SwiftUI
+import QuartzCore
 import DungeonCore
 
 /// One dungeon run in progress. Saved after every action so it survives the
@@ -932,7 +933,7 @@ final class RunModel: ObservableObject {
     }
 
     func act(_ action: PlayerAction, bomb: Bool = false) {
-        guard phase == .fighting, riddle == nil else { return }
+        guard phase == .fighting, riddle == nil, rhythm == nil else { return }
         if action == .defend && RunModifiers.noDefend(run) {
             Feedback.announce("Cannot defend in Berserk Mode.")
             return
@@ -2444,6 +2445,77 @@ final class RunModel: ObservableObject {
         bossTimerLeft = nil
     }
 
+    // MARK: The abyss's rhythm (triggerRhythmGame)
+
+    enum RhythmStage: Equatable { case listen, beat(Int), tap, won, lost }
+    @Published private(set) var rhythm: RhythmStage?
+    @Published private(set) var rhythmTaps = 0
+    private var tapTimes: [Double] = []
+    private var rhythmTimeout: DispatchWorkItem?
+
+    private func startRhythm() {
+        achievements.increment("phase4Reached")
+        _ = achievements.check()
+        rhythm = .listen
+        rhythmTaps = 0
+        tapTimes = []
+        Sound.stopMusic()
+        Feedback.announce("The abyss speaks. Listen to the three beats. Then tap the button three times to match the same rhythm.", after: 1.2)
+        for i in 0..<Rhythm.beats {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4 + Double(i) * Rhythm.interval) { [weak self] in
+                guard let self, self.rhythm != nil else { return }
+                self.rhythm = .beat(i + 1)
+                SpatialAudio.shared.abyssBeat()
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4 + Double(Rhythm.beats) * Rhythm.interval + 0.4) { [weak self] in
+            guard let self, self.rhythm != nil else { return }
+            self.rhythm = .tap
+            Feedback.announce("Now tap the button three times matching the same rhythm.")
+            let w = DispatchWorkItem { [weak self] in if self?.rhythm == .tap { self?.endRhythm(won: false) } }
+            self.rhythmTimeout = w
+            DispatchQueue.main.asyncAfter(deadline: .now() + Rhythm.tapTime, execute: w)
+        }
+    }
+
+    /// rhythmTap
+    func rhythmTap() {
+        guard rhythm == .tap, tapTimes.count < Rhythm.beats else { return }
+        tapTimes.append(CACurrentMediaTime())
+        rhythmTaps = tapTimes.count
+        Feedback.tap()
+        if tapTimes.count == Rhythm.beats {
+            rhythmTimeout?.cancel()
+            let won = Rhythm.matches(tapTimes)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in self?.endRhythm(won: won) }
+        }
+    }
+
+    private func endRhythm(won: Bool) {
+        guard rhythm == .tap else { return }
+        rhythm = won ? .won : .lost
+        var r = run
+        let msg = Rhythm.resolve(&r, won: won)
+        run = r
+        persist()
+        if won {
+            achievements.increment("rhythmWon")
+            _ = achievements.check()
+            Sound.sfx("sfx-unlock")
+            Feedback.announce("You answered the call. Power surges through you. Plus 40 percent attack and plus 30 percent defense for 2 turns.")
+        } else {
+            Feedback.warning()
+            Feedback.announce("You hesitated. The abyss does not forgive. The Leviathan enrages. Its attacks grow 30 percent stronger.")
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let self else { return }
+            self.rhythm = nil
+            self.add(msg)
+            self.setEvent(msg, tone: won ? "good" : "danger")
+            self.playMusic()
+        }
+    }
+
     // MARK: Boss riddles
 
     @Published private(set) var riddle: BossRiddles.Riddle?
@@ -3220,6 +3292,7 @@ final class RunModel: ObservableObject {
         Feedback.announce(movePrefix + spoken + whisper + lowHp + takeHunterLine(), after: screenChanges ? 0.6 : 0)
         movePrefix = ""
         if newPhase == .exploring || newPhase == .floorCleared { hunterAfterRoom() }
+        if newPhase == .fighting && r.fight.rhythmDue && rhythm == nil { startRhythm() }
         switch newPhase {
         case .fighting:
             showTip(r.enemy?.isBoss == true ? "first-boss" : r.enemy?.isElite == true ? "first-elite" : "first-combat")

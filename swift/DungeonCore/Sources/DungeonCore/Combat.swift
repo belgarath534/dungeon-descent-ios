@@ -642,10 +642,22 @@ public enum Combat {
             run.bossPhase = 2
             scale(1.25)
             msg = "⚡ PHASE TRANSITION — " + (e.phaseMsg2 ?? "The boss enters phase 2 — it grows more powerful!")
+        } else if run.bossPhase == 2 && e.hp <= e.phase2Hp && e.flag("fourPhase") {
+            // The Abyssal Deep's four-phase bosses: phase 4 at 15%.
+            run.bossPhase = 3
+            scale(1.3)
+            msg = "⚡ PHASE 3 — " + (e.phaseMsg3 ?? "Phase 3 — the boss grows desperate!")
         } else if run.bossPhase == 2 && e.hp <= e.phase2Hp {
             run.bossPhase = 3
             scale(1.35)
             msg = "⚡ FINAL PHASE — " + (e.phaseMsg3 ?? "Final phase — the boss unleashes everything!")
+        } else if run.bossPhase == 3 && e.flag("fourPhase") && e.hp <= jsRound(Double(e.maxHp) * 0.15) {
+            run.bossPhase = 4
+            scale(1.5)
+            var m4 = "The abyss awakens. This is the final phase."
+            if case .string(let s)? = e.mechanics["phaseMsg4"] { m4 = s }
+            msg = "💀 THE ABYSS AWAKENS — " + m4
+            run.fight.rhythmDue = true
         }
         run.enemy = e
         return msg
