@@ -581,9 +581,7 @@ Where an item's description and the web code disagree, Swift follows the descrip
   "Hellhound", "Shellback" or "Assassin" could not be submitted. Swift checks whole words.
 - **Answering the abyss did nothing.** Winning the Leviathan's rhythm sequence promised +40%
   attack and +30% defense for 2 turns, but nothing ever read the bonus. Swift gives it.
-- **Three professions were missing half their bonus.** The Tinkerer's "skills cost 2 less SP"
-  worked, but the Warden's debuff immunity was set and never read. In Swift the Warden shrugs
-  off the first freeze, burn, poison or stun each floor. (Street Rat's Smoke Bomb and the
-  Tinkerer's potions needed the web version's start code, which Swift now has.)
+- **The Warden's debuff immunity did nothing.** It was set at the start of a run and never
+  read. In Swift the Warden shrugs off the first freeze, burn, poison or stun each floor.
 - **The Echo Staff only had a description.** "Spells cast twice — second cast deals 50%
   damage" was never coded. Swift echoes every damaging spell for half.
