@@ -7,7 +7,6 @@ import DungeonCore
 struct MainMenuView: View {
     /// The Command Center's claim daily: open the reward when the menu shows.
     static var openDailyOnAppear = false
-    @ObservedObject private var presence = Presence.shared
     @EnvironmentObject var game: GameModel
     @EnvironmentObject var router: Router
     @Environment(\.openURL) private var openURL
@@ -337,18 +336,11 @@ struct MainMenuView: View {
                 .foregroundStyle(Theme.textDim)
                 .padding(.top, 28)
                 .accessibilityLabel("Version \(version.replacingOccurrences(of: ".", with: " point ")), Release")
-            // #menu-online-count
-            if presence.online > 0 {
-                Text("⚔ \(presence.online) player\(presence.online == 1 ? "" : "s") online")
-                    .font(Theme.cinzel(8.8)).tracking(1).foregroundStyle(Color(hex: 0x444444))
-                    .accessibilityLabel("\(presence.online) players currently online")
-            }
-            VStack(spacing: 6) {
-                Text("💰 \(game.gold)")
-                Text("💎 \(game.diamonds)")
-            }
-            .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Your global gold, \(game.gold). Your diamonds, \(game.diamonds).")
+            OnlineCount()
+            Text("💰 \(game.gold)")
+                .accessibilityLabel("Your global gold, \(game.gold)")
+            Text("💎 \(game.diamonds)")
+                .accessibilityLabel("Your diamonds, \(game.diamonds)")
         }
         .font(Theme.crimson())
         .foregroundStyle(Theme.textPrimary)
@@ -749,5 +741,20 @@ struct BirthdayOverlay: View {
         game.store.setItem(key, "true")
         Sound.sfx("sfx-unlock")
         Feedback.announce("Birthday reward claimed! 500 gold added. Your code is \(spelled). Go to Settings, Redeem Code, enter it for the full birthday package.")
+    }
+}
+
+/// #menu-online-count. Its own view, so a player coming online redraws only
+/// this line, not the whole menu (which made VoiceOver jump back to the top).
+/// It stays in place even at 0 so nothing appears or disappears under focus.
+struct OnlineCount: View {
+    @ObservedObject private var presence = Presence.shared
+
+    var body: some View {
+        let n = presence.online
+        Text(n > 0 ? "⚔ \(n) player\(n == 1 ? "" : "s") online" : " ")
+            .font(Theme.cinzel(8.8)).tracking(1).foregroundStyle(Color(hex: 0x444444))
+            .accessibilityLabel("\(n) players currently online")
+            .accessibilityHidden(n == 0)
     }
 }

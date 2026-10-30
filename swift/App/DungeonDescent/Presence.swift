@@ -33,7 +33,7 @@ final class Presence: ObservableObject {
                 guard let v = child.value as? [String: Any], let t = (v["t"] as? NSNumber)?.doubleValue else { continue }
                 if now - t < 300_000 { count += 1 } else { child.ref.removeValue() }
             }
-            Task { @MainActor in self?.online = count }
+            Task { @MainActor in if self?.online != count { self?.online = count } }
         }
     }
 }
