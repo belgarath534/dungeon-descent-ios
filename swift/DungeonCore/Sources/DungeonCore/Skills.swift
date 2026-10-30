@@ -556,6 +556,6 @@ enum SkillTable {
     ]
 
     static func spec(cls: String, effect: String) -> SkillSpec {
-        specs["\(cls)/\(effect)"] ?? hit(1.0)
+        specs["\(cls)/\(effect)"] ?? (effect == "smoke-bomb" ? specs["Assassin/smoke-bomb"] : nil) ?? hit(1.0)
     }
 }

@@ -7,6 +7,7 @@ import DungeonCore
 struct MainMenuView: View {
     /// The Command Center's claim daily: open the reward when the menu shows.
     static var openDailyOnAppear = false
+    @ObservedObject private var presence = Presence.shared
     @EnvironmentObject var game: GameModel
     @EnvironmentObject var router: Router
     @Environment(\.openURL) private var openURL
@@ -148,6 +149,7 @@ struct MainMenuView: View {
             trophies = game.achievements.trophies
             familiar = game.familiarBadge
             daily = DailyDescent.status(game.store)
+            Presence.shared.start(game.store)
             if Self.openDailyOnAppear, let d = daily {
                 Self.openDailyOnAppear = false
                 if d.claimed {
@@ -334,6 +336,12 @@ struct MainMenuView: View {
                 .foregroundStyle(Theme.textDim)
                 .padding(.top, 28)
                 .accessibilityLabel("Version \(version.replacingOccurrences(of: ".", with: " point ")), Release")
+            // #menu-online-count
+            if presence.online > 0 {
+                Text("⚔ \(presence.online) player\(presence.online == 1 ? "" : "s") online")
+                    .font(Theme.cinzel(8.8)).tracking(1).foregroundStyle(Color(hex: 0x444444))
+                    .accessibilityLabel("\(presence.online) players currently online")
+            }
             VStack(spacing: 6) {
                 Text("💰 \(game.gold)")
                 Text("💎 \(game.diamonds)")

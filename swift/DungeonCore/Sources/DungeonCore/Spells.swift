@@ -641,6 +641,12 @@ public enum Spells {
             return r
         }
         darkCurse()
+        // The Echo Staff (Shadow World loot): every damaging spell echoes for half.
+        if run.equippedWeapon?.name == "Echo Staff" && r.playerDamage > 0 && !e.isDead {
+            let echo = max(1, r.playerDamage / 2)
+            hit(echo)
+            log.append("🔮 The Echo Staff repeats the spell — \(echo) more damage!")
+        }
         if fire.contains(id) && e.isDead && run.subclass == "firelord" {
             run.burningGround = true
             log.append("🔥 The ground burns where \(e.name) fell.")

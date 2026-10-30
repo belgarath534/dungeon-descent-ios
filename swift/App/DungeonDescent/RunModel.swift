@@ -129,6 +129,7 @@ final class RunModel: ObservableObject {
         game.globalInventory.load(into: &r)
         r.applyStartBonuses(wallet: game.wallet)
         r.startNotes += Legacy.start(&r, game.characters[index])
+        r.startNotes += Professions.start(&r, prof: r.prof)
         r.startNotes += Races.start(&r, classTraits: AppSettings.classTraits, wallet: game.wallet)
         if let dc = DailyChallenge.start(&r, store: game.store, wallet: game.wallet) { r.startNotes.append(dc) }
         if let t = ClassTraits.start(&r, classTraits: AppSettings.classTraits) { r.startNotes.append(t) }

@@ -110,7 +110,7 @@ enum EnemyAbilities {
             run.fight.atk -= 2
             log.append("Your attack is weakened by 2 for this fight.")
         case "freeze-player":
-            if !run.debuffImmune && run.armorEffect != "juggernaut" && !Races.immune(run) { run.frozen = true; log.append("You are frozen! Your next action will fail.") }
+            if !run.debuffImmune && run.armorEffect != "juggernaut" && !Races.immune(run) && !Professions.wardenBlocks(&run, log: &log) { run.frozen = true; log.append("You are frozen! Your next action will fail.") }
         case "reduce-maxhp":
             run.maxHp = max(20, run.maxHp - 15)
             run.hp = min(run.hp, run.maxHp)
@@ -140,17 +140,17 @@ enum EnemyAbilities {
             e.hp = min(e.maxHp, e.hp + d)
             log.append("\(e.name) drains \(d) HP and SP.")
         }
-        if let burn = e.number("burn"), taken > 0, !run.debuffImmune {
+        if let burn = e.number("burn"), taken > 0, !run.debuffImmune, !Professions.wardenBlocks(&run, log: &log) {
             run.poisonDamage = Int(burn)
             run.poisonTurns = max(run.poisonTurns, Int(e.number("burnTurns") ?? 2))
             log.append("🔥 You are burning: \(Int(burn)) damage per turn.")
         }
-        if let p = e.number("poisonChance"), taken > 0, !run.debuffImmune, !Races.immune(run), dice.chance(p) {
+        if let p = e.number("poisonChance"), taken > 0, !run.debuffImmune, !Races.immune(run), dice.chance(p), !Professions.wardenBlocks(&run, log: &log) {
             run.poisonDamage = max(run.poisonDamage, 6)
             run.poisonTurns = max(run.poisonTurns, 3)
             log.append("☠️ You are poisoned.")
         }
-        if let p = e.number("stunChance"), taken > 0, !run.debuffImmune, run.armorEffect != "juggernaut", dice.chance(p) {
+        if let p = e.number("stunChance"), taken > 0, !run.debuffImmune, run.armorEffect != "juggernaut", dice.chance(p), !Professions.wardenBlocks(&run, log: &log) {
             run.frozen = true
             log.append("You are stunned! Your next action will fail.")
         }

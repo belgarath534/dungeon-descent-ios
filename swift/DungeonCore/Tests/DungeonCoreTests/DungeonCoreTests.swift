@@ -2455,6 +2455,18 @@ final class SpellTests: XCTestCase {
         XCTAssertEqual(r.spellCooldown, 2)
     }
 
+    func testEchoStaffRepeatsSpells() {
+        var plain = fight(spells: ["frost-lance"])
+        var echo = plain
+        echo.equippedWeapon = Item(name: "Echo Staff", icon: "🔮", type: "weapon", desc: "")
+        var d1 = SeededDice(seed: 2), d2 = SeededDice(seed: 2)
+        let a = Spells.cast(&plain, "frost-lance", dice: &d1)
+        let b = Spells.cast(&echo, "frost-lance", dice: &d2)
+        XCTAssertFalse(a.log.contains { $0.contains("Echo Staff") })
+        XCTAssertTrue(b.log.contains { $0.contains("Echo Staff") })
+        XCTAssertGreaterThan(b.playerDamage, a.playerDamage)
+    }
+
     func testShieldsAndPacts() {
         var dice = SeededDice(seed: 3)
         var r = fight(spells: ["blood-shield", "grave-pact", "phantom-step"])
@@ -4372,5 +4384,38 @@ final class AbyssalPhaseTests: XCTestCase {
         XCTAssertTrue(Combat.checkBossPhase(&r)?.hasPrefix("⚡ FINAL PHASE") == true)
         XCTAssertNil(Combat.checkBossPhase(&r))
         XCTAssertFalse(r.fight.rhythmDue)
+    }
+}
+
+final class ProfessionTests: XCTestCase {
+    func run(_ prof: String) -> Run {
+        var r = Run(character: PlayerCharacter(name: "P", cls: "Warrior", race: "Human", prof: prof,
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.inventory = []
+        _ = Professions.start(&r, prof: prof)
+        var d = SeededDice(seed: 1)
+        Skills.start(&r, dice: &d)
+        return r
+    }
+
+    func testStreetRatKeepsSmokeBombAfterTheStartingSkill() {
+        let r = run("Street Rat")
+        XCTAssertEqual(r.unlockedSkills.count, 2)
+        XCTAssertTrue(r.unlockedSkills.contains("smoke-bomb"))
+        XCTAssertEqual(Skills.unlocked(r).count, 2)
+        XCTAssertFalse(r.skillPool.contains("smoke-bomb"))
+        XCTAssertEqual(r.fleeBonus, 0.20, accuracy: 0.001)
+    }
+
+    func testTinkererAndWarden() {
+        let t = run("Tinkerer")
+        XCTAssertEqual(t.inventory.filter { $0.name == "Health Potion" }.count, 2)
+        if let s = Skills.unlocked(t).first, s.spCost >= 2 { XCTAssertEqual(Skills.cost(s, t), s.spCost - 2) }
+        var w = run("Warden")
+        var log: [String] = []
+        XCTAssertTrue(Professions.wardenBlocks(&w, log: &log))
+        XCTAssertFalse(Professions.wardenBlocks(&w, log: &log))
+        w.floor += 1
+        XCTAssertTrue(Professions.wardenBlocks(&w, log: &log))
     }
 }

@@ -9,7 +9,9 @@ public enum Skills {
     }
 
     public static func skill(_ effect: String, cls: String) -> Skill? {
+        // Street Rat's Smoke Bomb works for any class.
         all(for: cls).first { $0.effect == effect }
+            ?? (effect == "smoke-bomb" ? all(for: "Assassin").first { $0.effect == effect } : nil)
     }
 
     /// The skills this run has unlocked, in the order they were learned.
@@ -20,6 +22,9 @@ public enum Skills {
     /// Sets up the run's skill pool and grants the starting skill. Classes the
     /// web version gives no (or a missing) starting skill get their first one.
     public static func start(_ run: inout Run, dice: inout some Dice) {
+        // Skills already known (Legacy Mode's saved ones, Street Rat's Smoke
+        // Bomb) are kept and left out of the pool.
+        let kept = run.unlockedSkills
         var pool = all(for: run.cls).map(\.effect)
         for i in stride(from: pool.count - 1, to: 0, by: -1) {
             pool.swapAt(i, dice.roll(0...i))
@@ -28,8 +33,9 @@ public enum Skills {
         let first = mapped.flatMap { m in pool.contains(m) ? m : nil } ?? all(for: run.cls).first?.effect
         if let s = first, let i = pool.firstIndex(of: s) {
             pool.remove(at: i)
-            run.unlockedSkills = [s]
+            run.unlockedSkills = [s] + kept.filter { $0 != s }
         }
+        pool.removeAll { kept.contains($0) }
         run.skillPool = pool
     }
 
@@ -67,6 +73,7 @@ public enum Skills {
         var c = s.spCost
         c -= Races.skillCostCut(run)
         c -= ClassTraits.skillCostCut(run)
+        c -= Professions.skillCostCut(run)
         if run.has("cu-soul-surge") { c -= 1 }
         c -= Subclasses.skillCostCut(run)
         c -= run.weather?.spDiscount ?? 0
