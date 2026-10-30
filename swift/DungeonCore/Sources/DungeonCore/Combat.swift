@@ -247,7 +247,7 @@ public enum Combat {
                 // Rolled first, like `Math.random() < p || markedKill` in the web version.
                 // The Unlucky One: your luck is zero.
                 let unlucky = run.enemy?.flag("unlucky") == true
-                let rolledCrit = dice.chance(0.10 + run.critBonus + (run.weaponEffect == "keen" ? 0.05 : 0) + WeaponForge.critBonus(run)) && !unlucky
+                let rolledCrit = dice.chance(0.10 + run.critBonus + CustomSpirits.crit(run) + (run.weaponEffect == "keen" ? 0.05 : 0) + WeaponForge.critBonus(run)) && !unlucky
                 let firstBlood = ClassTraits.firstBloodCrit(&run)
                 let firstStrike = Subclasses.firstStrikeCrit(&run) || firstBlood
                 let phantom = run.fight.phantomCrit
@@ -287,7 +287,7 @@ public enum Combat {
             case .flee:
                 let guaranteed = run.swiftTurns > 0 || run.runeSpeed
                 if run.swiftTurns > 0 { run.swiftTurns -= 1 }
-                let chance = guaranteed ? 1.0 : (run.hasFleeRing ? 0.75 : 0.45) + run.fleeBonus
+                let chance = guaranteed ? 1.0 : (run.hasFleeRing ? 0.75 : 0.45) + run.fleeBonus + CustomSpirits.flee(run)
                     + (run.armorEffect == "light-step" ? 0.10 : 0)
                 if dice.chance(chance) {
                     r.fled = true
@@ -793,6 +793,7 @@ public enum Combat {
         taken = Subclasses.incoming(&run, taken, dice: &dice, log: &log)
         taken = Spells.incoming(&run, taken, log: &log)
         taken = ShapeshifterMask.incoming(&run, taken, log: &log)
+        taken = CustomSpirits.incoming(run, taken)
         if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) || ShadowWorld.armorAvoids(&run, dice: &dice, log: &log) { return 0 }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)

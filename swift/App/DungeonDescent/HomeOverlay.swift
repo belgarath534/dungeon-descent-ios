@@ -14,6 +14,7 @@ struct HomeOverlay: View {
     @State private var safeMsg = ""
     @State private var skillMsg = ""
     @State private var fireworksMsg = ""
+    @State private var forging = false
     @State private var minionMsg = ""
     @State private var forgeMsg = ""
     @State private var brewMsg = ""
@@ -70,6 +71,7 @@ struct HomeOverlay: View {
             }
             if let d = model.dream { dreamModal(d) }
         }
+        .fullScreenCover(isPresented: $forging) { SpiritBuilderView { forging = false } }
     }
 
     private func refreshed() { refresh += 1 }
@@ -230,7 +232,11 @@ struct HomeOverlay: View {
     private var spiritsTab: some View {
         section("✨ SPIRIT FORGE") {
             note("Spirits are passive companions. They may assist you in battle, grant buffs, or whisper warnings. Create yours in the Spirit Forge.")
-            comingSoon("The Spirit Forge")
+            Button("✨ Open Spirit Forge") { forging = true }
+                .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaa44ff))
+                .frame(maxWidth: .infinity).padding(12)
+                .background(Color(hex: 0x080808)).overlay(Rectangle().stroke(Color(hex: 0xaa44ff)))
+                .accessibilityLabel("Open spirit forge")
         }
     }
 

@@ -84,6 +84,7 @@ final class RunModel: ObservableObject {
 
     /// loadCommunityEnemies: the shared pool, refreshed every five minutes.
     private func loadCommunity() {
+        CustomSpirits.reload(game.store)
         let store = game.store
         Task { await CommunityEnemyStore.shared.load(store) }
     }
@@ -1706,6 +1707,11 @@ final class RunModel: ObservableObject {
         let found = Spirits.kill(&r, dice: &d, log: &spiritLines)
         if found > 0 { game.wallet.addGold(found) }
         spiritLines.forEach { add($0) }
+        // A Soul Fragment (40%), toward a spirit of your own.
+        if let frag = CustomSpirits.killDrop(game.store, dice: &d) {
+            add(frag)
+            if CustomSpirits.fragments(game.store) == 1 || CustomSpirits.fragments(game.store) == CustomSpirits.cost { said += " " + frag }
+        }
         if let cur = Events.awardOnKill(r, store: game.store, dice: &d) {
             add("\(cur.icon) +1 \(cur.name)")
             said += " Plus one \(cur.name)."
@@ -3048,6 +3054,7 @@ final class RunModel: ObservableObject {
         var d = dice
         r.floor += 1
         r.roomsOnFloor = 0
+        if let song = CustomSpirits.newFloor(&r) { add(song) }
         r.floorRoomsNeeded = RunModifiers.rooms(Rooms.roomsNeeded(floor: r.floor, difficulty: r.difficulty, bossFloor: Challenges.bossFloor(r), dice: &d), r)
         r.upcomingRooms = []
         r.gearSavedThisFloor = false

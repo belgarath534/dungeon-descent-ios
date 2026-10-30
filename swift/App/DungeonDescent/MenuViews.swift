@@ -150,6 +150,7 @@ struct MainMenuView: View {
             familiar = game.familiarBadge
             daily = DailyDescent.status(game.store)
             Presence.shared.start(game.store)
+            CustomSpirits.reload(game.store)
             if Self.openDailyOnAppear, let d = daily {
                 Self.openDailyOnAppear = false
                 if d.claimed {

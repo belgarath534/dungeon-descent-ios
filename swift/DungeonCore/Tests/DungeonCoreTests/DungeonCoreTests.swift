@@ -4419,3 +4419,35 @@ final class ProfessionTests: XCTestCase {
         XCTAssertTrue(Professions.wardenBlocks(&w, log: &log))
     }
 }
+
+final class CustomSpiritTests: XCTestCase {
+    func testForgeAndUse() {
+        let store = MemoryStore(["dd_soul_fragments": "24"])
+        XCTAssertEqual(CustomSpirits.build(name: "Kai", icon: "🐺", ability: "heal-kill", store: store), "Not enough fragments.")
+        store.setItem("dd_soul_fragments", "26")
+        XCTAssertEqual(CustomSpirits.build(name: "  ", icon: "🐺", ability: "heal-kill", store: store), "Please enter a name.")
+        XCTAssertEqual(CustomSpirits.build(name: "Kai", icon: "🐺", ability: "nope", store: store), "Please choose an ability.")
+        XCTAssertNil(CustomSpirits.build(name: "Kai", icon: "🐺", ability: "crit-boost", store: store))
+        XCTAssertEqual(CustomSpirits.fragments(store), 1)
+        defer { CustomSpirits.loaded = [] }
+        let sp = CustomSpirits.loaded.first!
+        XCTAssertEqual(sp.name, "Kai")
+        XCTAssertTrue(Spirits.available(earned: []).contains { $0.id == sp.id })
+        var r = Run(character: PlayerCharacter(name: "c", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.spirit = sp.id
+        r.level = 4
+        XCTAssertEqual(CustomSpirits.crit(r), 0, "it sleeps until level 5 like other rare spirits")
+        r.level = 5
+        XCTAssertEqual(CustomSpirits.crit(r), 0.15, accuracy: 0.0001)
+    }
+
+    func testFragmentDrops() {
+        let store = MemoryStore()
+        var d = LoadedDice(rolls: [], chances: [true, false, true])
+        XCTAssertNotNil(CustomSpirits.killDrop(store, dice: &d))
+        XCTAssertNil(CustomSpirits.killDrop(store, dice: &d))
+        XCTAssertNil(CustomSpirits.killDrop(store, dice: &d))
+        XCTAssertEqual(CustomSpirits.fragments(store), 2)
+    }
+}

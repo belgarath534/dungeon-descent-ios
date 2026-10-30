@@ -8,6 +8,8 @@ public struct Spirit: Sendable, Identifiable {
     public let minLevel: Int
     /// Share of your attack roll it strikes for after your attack (0 = none).
     public let strike: Double
+    /// A spirit you forged: its ability (CustomSpirits.abilities).
+    public var customAbility: String? = nil
 }
 
 public enum Spirits {
@@ -71,7 +73,7 @@ public enum Spirits {
 
     public static let eliteIds = ["death-knight-spirit", "ash-titan-spirit", "frost-sovereign-spirit", "archivist-spirit", "void-champion-spirit"]
 
-    public static func spirit(_ id: String?) -> Spirit? { id.flatMap { i in all.first { $0.id == i } } }
+    public static func spirit(_ id: String?) -> Spirit? { id.flatMap { i in all.first { $0.id == i } ?? CustomSpirits.loaded.first { $0.id == i } } }
 
     public static func current(_ run: Run) -> Spirit? { spirit(run.spirit) }
 
@@ -83,7 +85,7 @@ public enum Spirits {
 
     /// The spirits a character can pick: every starter plus those earned.
     public static func available(earned: Set<String>) -> [Spirit] {
-        all.filter { starterIds.contains($0.id) || earned.contains($0.id) }
+        all.filter { starterIds.contains($0.id) || earned.contains($0.id) } + CustomSpirits.loaded
     }
 
     /// The seven spirits every character can pick from the start.
@@ -94,6 +96,11 @@ public enum Spirits {
     /// applySpiritOnCombatStart
     static func combatStart(_ run: inout Run, log: inout [String]) {
         guard let sp = awake(run), var e = run.enemy else { return }
+        if sp.customAbility != nil {
+            CustomSpirits.combatStart(&run, e: &e, log: &log)
+            run.enemy = e
+            return
+        }
         func weaken(_ m: Double) {
             let lo = jsRound(Double(e.atk.lowerBound) * m), hi = jsRound(Double(e.atk.upperBound) * m)
             e.atk = lo...max(lo, hi)
@@ -122,6 +129,11 @@ public enum Spirits {
 
     /// applySpiritOnAttack: after your attack, if the enemy is still up.
     static func attack(_ run: inout Run, base: Int, dice: inout some Dice, log: inout [String]) {
+        if let sp = awake(run), sp.customAbility != nil, var e = run.enemy, !e.isDead {
+            CustomSpirits.attack(&run, e: &e, base: base, dice: &dice, log: &log)
+            run.enemy = e
+            return
+        }
         guard let sp = current(run), sp.strike > 0, var e = run.enemy, !e.isDead else { return }
         guard run.level >= sp.minLevel else {
             log.append("\(sp.name) dormant — reach level \(sp.minLevel) to awaken.")
@@ -160,6 +172,7 @@ public enum Spirits {
             return true
         }
         guard let sp = awake(run) else { return false }
+        if CustomSpirits.blocks(run, dice: &dice, log: &log) { return true }
         if sp.id == "medusa-spirit" && run.fight.medusaGuard {
             run.fight.medusaGuard = false
             log.append("🐍 Medusa's Serpent Guard absorbs the attack!")
@@ -175,6 +188,7 @@ public enum Spirits {
     /// applySpiritOnKill. Returns gold the spirit found (for the wallet).
     public static func kill(_ run: inout Run, dice: inout some Dice, log: inout [String]) -> Int {
         guard let sp = awake(run) else { return 0 }
+        CustomSpirits.kill(&run, log: &log)
         switch sp.id {
         case "shadow-crow": run.gold += 3; log.append("Shadow Crow steals 3 gold!"); return 3
         case "the-lantern": run.gold += 5; log.append("The Lantern glows — +5 gold!"); return 5

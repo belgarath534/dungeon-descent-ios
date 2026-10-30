@@ -173,6 +173,8 @@ public struct Run: Codable, Sendable {
     public var legacyTier = 1
     /// The floor the Warden last shrugged off a debuff on.
     public var wardenFloor = 0
+    /// The floor a forged spirit's Floor Blessing last healed on.
+    public var spiritHealFloor = 0
     public var devMedusa = false
     /// Today's Daily Challenge effect ("ironDay" …), if you registered for it.
     public var dailyChallenge: String? = nil

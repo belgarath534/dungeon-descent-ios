@@ -129,6 +129,8 @@ public enum Progression {
         let mg = RunModifiers.goldMult(run)
         if mg != 1 { g = jsRound(Double(g) * mg) }
         g += WeaponForge.gold(run)
+        var spiritLog: [String] = []
+        g = CustomSpirits.gold(run, g, dice: &dice, log: &spiritLog)
         if run.weaponEffect == "soulbound" { run.sp = min(run.maxSp, run.sp + 5) }
         var luckNote = ""
         if run.luckKills > 0 {
@@ -141,6 +143,7 @@ public enum Progression {
         var xp = Progression.xp(for: tier(of: enemy.name, in: run.dungeon, difficulty: run.difficulty))
         if Challenges.has(run, "double-xp") { xp *= 2 }
         xp *= RunModifiers.xpMult(run)
+        xp = CustomSpirits.xp(run, xp)
         let drain = Races.onKill(&run) + ClassTraits.onKill(&run, enemy, dice: &dice)
         let levels = gainXP(&run, xp)
         return KillReward(gold: g, xp: xp, levelsGained: levels,

@@ -6,6 +6,7 @@ import DungeonCore
 struct BestiaryView: View {
     @EnvironmentObject var game: GameModel
     @State private var tab = "enemies"
+    @State private var building = false
     @State private var filter = "all"
     @State private var search = ""
     @State private var visible = 40
@@ -61,6 +62,9 @@ struct BestiaryView: View {
             } else {
                 Text("A record of the creatures you have faced in the dark.").font(Theme.crimson(14.4, italic: true))
                     .foregroundStyle(Theme.textSecondary)
+                Button("🔮 Spirit Builder — Craft Your Own Companion") { building = true }
+                    .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+                    .accessibilityLabel("Spirit Builder — craft your own spirit using Soul Fragments")
                 (Text("Enemies revealed: ") + Text("\(revealed)").foregroundColor(Theme.gold) + Text(" of ")
                  + Text("\(list.count)").foregroundColor(Theme.gold))
                     .font(Theme.cinzel(10.9)).tracking(1).foregroundStyle(Theme.textDim)
@@ -111,8 +115,10 @@ struct BestiaryView: View {
             }
         }
         .onAppear {
+            CustomSpirits.reload(game.store)
             Feedback.announce("Bestiary. \(revealed) of \(list.count) enemies revealed.")
         }
+        .fullScreenCover(isPresented: $building) { SpiritBuilderView { building = false } }
     }
 
     private func tabButton(_ id: String, _ label: String) -> some View {
@@ -184,7 +190,7 @@ struct SpiritBestiary: View {
     let characters: [PlayerCharacter]
 
     static let groups = [("starter", "Starter Spirits"), ("rare", "Rare Spirits — Dungeon Rewards"),
-                         ("elite", "Elite Spirits — Elite Enemy Drops")]
+                         ("elite", "Elite Spirits — Elite Enemy Drops"), ("custom", "Your Forged Spirits")]
     static let rareHints = ["bone-hound-prime": "Complete Crypt of Malachar", "inferno-hawk": "Complete Ashbound Wastes",
                             "glacial-wolf": "Complete Frosthold Abyss", "crystal-serpent": "Complete Frosthold Abyss",
                             "void-wraith": "Complete Nightmare Mode", "ash-phoenix": "Complete Ashbound Wastes",
@@ -204,14 +210,14 @@ struct SpiritBestiary: View {
         let got = earned
         VStack(alignment: .leading, spacing: 10) {
             ForEach(Self.groups, id: \.0) { rarity, label in
-                let list = Spirits.all.filter { $0.rarity == rarity }
+                let list = rarity == "custom" ? CustomSpirits.loaded : Spirits.all.filter { $0.rarity == rarity }
                 if !list.isEmpty {
                     Text(label).font(Theme.cinzel(10.9)).tracking(3).textCase(.uppercase).foregroundStyle(Theme.goldDim)
                         .padding(.top, 8).padding(.bottom, 2)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .overlay(alignment: .bottom) { Rectangle().fill(Theme.borderDim).frame(height: 1) }
                         .accessibilityAddTraits(.isHeader)
-                    ForEach(list) { sp in card(sp, earned: rarity == "starter" || got.contains(sp.id)) }
+                    ForEach(list) { sp in card(sp, earned: rarity == "starter" || rarity == "custom" || got.contains(sp.id)) }
                 }
             }
         }
