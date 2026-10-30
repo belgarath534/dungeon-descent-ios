@@ -1144,9 +1144,10 @@ final class DailyQuestTests: XCTestCase {
         XCTAssertNotNil(q.reachedFloor(8, usedPotion: true))
     }
 
-    func testUnsupportedQuestDaysMoveToTheNextOne() {
-        // Day 15 is the rare-spirit quest, which isn't ported yet
-        XCTAssertEqual(quests(on: "2026-01-15").quest.id, "dq-hollow")
+    func testEveryQuestDayIsItsOwnQuest() {
+        // Day 15 is the rare-spirit quest, and the Sunken Archives' follows it.
+        XCTAssertEqual(quests(on: "2026-01-15").quest.id, "dq-spirit")
+        XCTAssertEqual(quests(on: "2026-01-17").quest.id, "dq-sunken")
     }
 
     func testRewardPaysGoldAndPotion() {

@@ -174,7 +174,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Boss timer | startBossTimer, checkBossTimerThreshold, bossTimerEnrage | ✅ when a dungeon boss appears: 5 minutes (3 in The Hollow, one less in Insane) to bring it below half its HP, shown on the boss bar with the one-minute, 30 and 10 second warnings. Beat it for Beat The Clock; miss it and the boss's attack grows 25% and a minion joins. Web bug fixed: the minion was announced but never added; in Swift it fights, and falls with its boss |
 | The Shadow Realm | SR, getShadowEnemies, startShadowRealm, shadowAttack, shadowDie (dd_shadow_leaderboard) | ✅ Redeem Code → SHADOW: the intro, choosing a champion, endless waves (stronger every 5, the Shadow Sovereign every 10), Attack, Heavy, Defend, three potions, a little HP after each wave, Retreat, and the ten best runs. The Void Reaper music plays throughout. Its Inventory button isn't ported (in the web version it opened the dungeon's bag, which does nothing here) |
 | Daily quests | DAILY_QUESTS, updateDailyQuestProgress | ✅ 15 of 17 (the rare spirit and lore fragment days move to the next quest until those systems are ported); shown on the main menu and at run start |
-| Quests, inbox | QUEST SYSTEM … | ⬜ |
+| Quests | QUEST SYSTEM (DAILY_QUESTS, updateDailyQuestProgress, renderQuestsScreen) | ✅ the Main Quest and all 26 daily quests, one a day, with progress and rewards; Quests & Achievements has the Quests, Achievements and Challenge tabs |
 | Bounty Board | BOUNTY BOARD SYSTEM (BOUNTY_TEMPLATES, renderBountyBoard, registerBounty, refreshBounties, updateBountyProgress, completeBounty, the dungeon banner) | ✅ all 35 bounties, three a day with 5 refreshes, one active at a time, progress from kills, elites, bosses and floors, gold and trophies when done, the banner in the dungeon. Saved in dd_bounty_data in the web version's shape. |
 | The Hunting Grounds, Bounty Rank | THE HUNTING GROUNDS (BOUNTY_RANKS, addBountyXP, startHunt, huntTick, stopHunt, brianSay) | ✅ from the Bounty Board: pick a hunter and send them into the forest. Every 25–45 seconds a fight (more enemies as your rank rises), a find (rares from rank 5) or a rest, with the forest's ambience. Gold, saved items, Bounty Rank XP in dd_bounty_rank (10 ranks), and kills count toward "any dungeon" bounties. Brian narrates through the game's narration service when you're signed in; otherwise VoiceOver reads his lines. The hunt keeps going while you look around the app |
 | Spirits, companion, corruption, Hunter, Medusa arc | … | ✅ see their own rows |
@@ -591,3 +591,7 @@ Where an item's description and the web code disagree, Swift follows the descrip
   crit and every escape worked; Iron Veil, Wrath Brand and the rest were added again at
   every fight; Purifying Song cleaned corruption per kill instead of per floor; Fortune's
   Veil paid twice. Swift does what each one says.
+- **Two daily quests could never be finished.** "Find a lore fragment in the Sunken Archives"
+  was never counted, and "Complete a run with a rare spirit active" ignored elite spirits.
+  In Swift studying an Ancient Inscription in the Sunken Archives finds the fragment, and any
+  rare, elite or forged spirit counts.

@@ -30,10 +30,12 @@ public final class DailyQuests {
         self.calendar = calendar
     }
 
-    /// Quest types the Swift version can track. Spirits and lore fragments
-    /// aren't ported yet, so those days fall back to the next quest in the list.
+    /// Every quest type is tracked now. (In the web version the rare-spirit
+    /// quest counted only rare spirits, and the lore-fragment quest was never
+    /// counted at all; here elite and forged spirits count too, and studying an
+    /// Ancient Inscription in the Sunken Archives finds a fragment.)
     static let supported: Set<String> = ["kills", "floor", "loot", "gold", "nopotion", "crits", "boss",
-                                         "elite", "hollow", "skilluse", "survive", "nodmg"]
+                                         "elite", "hollow", "skilluse", "survive", "nodmg", "rarespirit", "fragment"]
 
     private var todayKey: String {
         let c = calendar.dateComponents([.year, .month, .day], from: now())

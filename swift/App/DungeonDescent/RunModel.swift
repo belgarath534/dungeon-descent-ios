@@ -615,7 +615,10 @@ final class RunModel: ObservableObject {
         var d = dice
         let levelBefore = r.level
         if r.pendingEvent == "julio" && choice == 0 { achievements.record(.julioMet) }
+        let studied = r.pendingEvent == "inscription" && choice == 0 && r.dungeon == "The Sunken Archives"
         let out = Encounters.choose(choice, &r, dice: &d, wallet: game.wallet)
+        // The Sunken Archives' inscriptions are its lore fragments (dq-sunken).
+        if studied && !out.retry { _ = quest(&r, "fragment") }
         if out.retry {
             // A requirement wasn't met: nothing happened, choose again.
             Feedback.warning()
@@ -2300,6 +2303,11 @@ final class RunModel: ObservableObject {
             return
         }
         phase = .victory
+        if let sp = Spirits.awake(run), sp.rarity != "starter" {
+            var r = run
+            _ = quest(&r, "rarespirit")
+            run = r
+        }
         achievements.record(.runWon(run, diedThisRun: run.diedThisRun,
                                     seconds: Date().timeIntervalSince1970 - run.startedAt))
         Sound.sfx("sfx-victory")
