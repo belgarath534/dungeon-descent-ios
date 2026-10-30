@@ -25,6 +25,7 @@ struct WebSettingsView: View {
     @AppStorage("swift_ambient_volume") private var ambientVolume = 0.35
     @AppStorage("swift_verbose_rooms") private var verboseRooms = true
     @AppStorage("swift_combat_announcements") private var combatAnnouncements = true
+    @State private var refreshCommandCenter = false
     @State private var threeD = false
     @State private var runModifiers = true
     @State private var td = ThreeDMode.Settings()
@@ -285,6 +286,11 @@ struct WebSettingsView: View {
                    label: "Verbose descriptions")
             option("Combat Announcements", "Announce every hit and miss in combat.", isOn: $combatAnnouncements,
                    label: "Combat announcements")
+            option("Command Center", "Show the Command Center button on the main menu. Lets you type or speak commands to control the game, schedule AFK runs, and create characters.",
+                   isOn: Binding(get: { game.store.getItem("dd_command_center") != "off" },
+                                 set: { game.store.setItem("dd_command_center", $0 ? "on" : "off"); refreshCommandCenter.toggle() }),
+                   label: "Command Center toggle")
+                .id(refreshCommandCenter)
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Repair Dungeon Unlocks").font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)

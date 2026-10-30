@@ -4255,3 +4255,44 @@ final class LegacyAndJuly4Tests: XCTestCase {
         XCTAssertNil(IndependenceTournament.start(level: 1, store: store, dice: &d2, now: july))
     }
 }
+
+final class CommandCenterTests: XCTestCase {
+    let acct = CommandCenter.Account(gold: 120, characters: 2, fragments: 3, coins: 4)
+
+    func testCommands() {
+        var cc = CommandCenter()
+        XCTAssertEqual(cc.run("gold", account: acct, scheduled: false).spoken, "You have 120 gold.")
+        if case .go(let d)? = cc.run("go hall of records", account: acct, scheduled: false).action { XCTAssertEqual(d, "hall of records") } else { XCTFail() }
+        XCTAssertNil(cc.run("go nowhere", account: acct, scheduled: false).action)
+        if case .redeem(let c)? = cc.run("redeem ddbd26", account: acct, scheduled: false).action { XCTAssertEqual(c, "DDBD26") } else { XCTFail() }
+        XCTAssertNil(cc.run("cancel schedule", account: acct, scheduled: false).action)
+        XCTAssertEqual(cc.run("blah", account: acct, scheduled: false).lines.last?.kind, .err)
+    }
+
+    func testParseTime() {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "UTC")!
+        let now = cal.date(from: DateComponents(year: 2026, month: 1, day: 1, hour: 22))!
+        XCTAssertEqual(CommandCenter.parseTime("12am", now: now, calendar: cal), cal.date(from: DateComponents(year: 2026, month: 1, day: 2, hour: 0)))
+        XCTAssertEqual(CommandCenter.parseTime("11:30pm", now: now, calendar: cal), cal.date(from: DateComponents(year: 2026, month: 1, day: 1, hour: 23, minute: 30)))
+        XCTAssertEqual(CommandCenter.parseTime("7:05", now: now, calendar: cal), cal.date(from: DateComponents(year: 2026, month: 1, day: 2, hour: 7, minute: 5)))
+        XCTAssertNil(CommandCenter.parseTime("noonish", now: now, calendar: cal))
+        XCTAssertNil(CommandCenter.parseTime("25:00", now: now, calendar: cal))
+    }
+
+    func testTerminalCreator() {
+        var cc = CommandCenter()
+        _ = cc.run("create character", account: acct, scheduled: false)
+        XCTAssertTrue(cc.creating)
+        XCTAssertEqual(cc.run("zzz", account: acct, scheduled: false).lines.last?.kind, .err)
+        for s in ["1", "elf", "3", "frost", "1", "Aria"] { _ = cc.run(s, account: acct, scheduled: false) }
+        let r = cc.run("no", account: acct, scheduled: false)
+        guard case .create(let ch, let afk)? = r.action else { return XCTFail() }
+        XCTAssertFalse(afk)
+        XCTAssertEqual(ch.name, "Aria")
+        XCTAssertEqual(ch.cls, GameData.classes[0].id)
+        XCTAssertEqual(ch.race, "Elf")
+        XCTAssertEqual(ch.dungeon, "Frosthold Abyss")
+        XCTAssertFalse(cc.creating)
+    }
+}

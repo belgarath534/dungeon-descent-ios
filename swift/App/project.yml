@@ -68,6 +68,9 @@ targets:
           - audio
         # Endless Descent's run on the Lock Screen and in the Dynamic Island.
         NSSupportsLiveActivities: true
+        # The Command Center's mic.
+        NSMicrophoneUsageDescription: Dungeon Descent listens for a spoken command when you tap the mic in the Command Center.
+        NSSpeechRecognitionUsageDescription: Dungeon Descent turns your spoken command into text in the Command Center.
         CFBundleURLTypes:
           - CFBundleURLName: com.dungeon.descent
             CFBundleURLSchemes:

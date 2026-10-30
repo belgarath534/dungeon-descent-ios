@@ -5,6 +5,8 @@ import DungeonCore
 /// order, same text and the same VoiceOver labels. Modes that aren't in the
 /// Swift version yet stay in the list and say so when chosen.
 struct MainMenuView: View {
+    /// The Command Center's claim daily: open the reward when the menu shows.
+    static var openDailyOnAppear = false
     @EnvironmentObject var game: GameModel
     @EnvironmentObject var router: Router
     @Environment(\.openURL) private var openURL
@@ -54,7 +56,7 @@ struct MainMenuView: View {
         Entry(id: "afk", text: "⬇ Endless Descent", label: "Endless Descent, AFK mode", action: .go(.afk)),
         Entry(id: "spire", text: "🗼 The Spire", label: "The Spire, climb 1800 floors to face The Time Eater", action: .go(.spire)),
         Entry(id: "void", text: "🌑 Void Mode", label: "Void Mode, become the Void Commander and survive five waves of heroes", action: .go(.voidmode)),
-        Entry(id: "command", text: "⌨️ Command Center", label: "Command Center — type or speak commands to control the game"),
+        Entry(id: "command", text: "⌨️ Command Center", label: "Command Center — type or speak commands to control the game", action: .go(.commandCenter)),
         Entry(id: "spellbook", text: "📖 Spell Book", label: "Spell Book — view your learned spells", color: purple, border: purpleBorder, action: .go(.spellbook)),
         Entry(id: "arcane", text: "✨ Arcane Shop", label: "Arcane Shop — buy spell scrolls and the spell book", color: purple, border: purpleBorder, action: .go(.arcane)),
         Entry(id: "graveyard", text: "⚰️ The Graveyard", label: "The Graveyard, memorial for your fallen and deleted characters", action: .go(.graveyard)),
@@ -87,7 +89,12 @@ struct MainMenuView: View {
     }
 
     /// Settings → Gameplay → Hide Menu Items.
-    private var hiddenEntries: Set<String> { MenuPrefs.hidden(game.store) }
+    private var hiddenEntries: Set<String> {
+        var h = MenuPrefs.hidden(game.store)
+        // toggleCommandCenter (Settings → Accessibility).
+        if game.store.getItem("dd_command_center") == "off" { h.insert("command") }
+        return h
+    }
 
     var body: some View {
         ZStack {
@@ -141,6 +148,15 @@ struct MainMenuView: View {
             trophies = game.achievements.trophies
             familiar = game.familiarBadge
             daily = DailyDescent.status(game.store)
+            if Self.openDailyOnAppear, let d = daily {
+                Self.openDailyOnAppear = false
+                if d.claimed {
+                    Feedback.announce("You already claimed today's reward. Come back tomorrow for Day \(d.streak + 1).", after: 0.4)
+                } else {
+                    dailyOpen = true
+                    Feedback.announce("Daily Descent. Day \(d.next.day) streak. Today's reward: \(d.next.name). Press Claim Reward to collect.", after: 0.4)
+                }
+            }
             if game.shouldOfferWebImport { webImport.check(game, quietIfEmpty: true) }
             reaper.onReward = { [weak game] gold, coins in
                 guard let game else { return }

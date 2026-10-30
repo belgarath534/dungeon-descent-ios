@@ -121,6 +121,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Independence Tournament | JULY4_TOURNAMENT, startJuly4Tournament, checkJuly4TournamentEnd (dd_july4_tourney) | ✅ during the Fourth of July event: a personal target, 25 points a kill, first place pays 500 gold and 5 trophies, once a year |
 | Fireworks Corner | openFireworksCorner | ✅ at Home on July 4th: 50 to 99 XP every 8 seconds, to your run |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
+| Command Center | openCommandCenter, executeCommand, ccHandleInput, startVoiceCommand, toggleCommandCenter (dd_command_center) | ✅ type or speak (iOS speech recognition) every web command: go to nine screens, start or schedule Endless Descent ("start afk at 11:30pm", while the app is open), cancel it, claim the Daily Descent, gold, stats, time, redeem codes (SHADOW too), play and stop music, help, and the six-step terminal character creator; quick-command buttons; Settings → Accessibility shows or hides it on the menu |
 | Skill Orbs | homeCreateSkillOrbs, useSkillOrb (dd_skill_orbs) | ✅ when a character's run ends in death, every Home skill upgrade above level 1 becomes a class-locked orb and the upgrades start over; Home → Skill Upgrade lists the orbs, and a character of the same class uses one to take that skill to the orb's level |
 | Shapeshifter's Mask | shadowItem shapeshifterMask | ✅ once a run, in a fight: copies the enemy's ability (12 of them) for the rest of the fight, or heals 30 HP |
 | First-run tips | DUNGEON_TIPS, showDungeonTip (dd_dungeon_tips_seen) | ✅ the ten tips, each once, as a banner that drains away and read out after the move's own news |
@@ -570,3 +571,7 @@ Where an item's description and the web code disagree, Swift follows the descrip
   but restarted after each win. Swift gives it once a year.
 - **Fireworks Corner XP went nowhere.** It was added to a character field nothing read; Swift
   gives it to your run.
+
+- **The terminal character creator offered a difficulty that doesn't exist.** Its list had
+  "Explorer" and was missing Ironblood and Insane; Swift lists the real ones. It also let a
+  sixth character be made past the limit.
