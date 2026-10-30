@@ -401,13 +401,7 @@ struct MusicPlayerPanel: View {
                     ForEach(groups[g].1, id: \.key) { t in trackRow(t) }
                 }
             }
-            VStack(alignment: .leading, spacing: 0) {
-                Text("MY TRACKS").font(Theme.cinzel(9.9)).tracking(2.5).foregroundStyle(Theme.goldDim)
-                    .padding(.bottom, 4).accessibilityAddTraits(.isHeader)
-                Rectangle().fill(Theme.borderDim).frame(height: 1).padding(.bottom, 8)
-                Text("Custom tracks aren't in the Swift version yet. Coming soon.")
-                    .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim).padding(.vertical, 8)
-            }
+            MyTracksSection()
         }
     }
 
@@ -455,6 +449,8 @@ struct MusicPlayerPanel: View {
             Feedback.announce("Track not uploaded yet. Add the audio file to play this track.")
             return
         }
+        // Stop everything first, custom track included (mpPlay).
+        if AudioEngine.shared.customLabel != nil { AudioEngine.shared.stopCustom() }
         Sound.track(k)
         mpPlaying = true
         Feedback.announce("Now playing: \(label)")

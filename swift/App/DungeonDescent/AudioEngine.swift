@@ -45,7 +45,8 @@ final class AudioEngine {
     func playTrack(_ requested: String) {
         // "menu" means the menu music of the day (holiday versions included).
         let name = requested == "menu" ? Soundtrack.menuTrack() : requested
-        guard AppSettings.musicOn else { musicName = name; return }
+        // A custom track plays instead of the game's music until it's stopped.
+        guard AppSettings.musicOn, customLabel == nil else { musicName = name; return }
         if name == musicName, music?.isPlaying == true { return }
         musicName = name
         guard let file = Soundtrack.file(forTrack: name), let u = url(file),
@@ -96,6 +97,7 @@ final class AudioEngine {
 
     /// Called when audio settings change: starts or stops music and ambience, and sets volumes.
     func applySettings() {
+        custom?.volume = Float(AppSettings.musicVolume)
         if AppSettings.musicOn {
             music?.volume = Float(AppSettings.musicVolume)
             if music?.isPlaying != true, let name = musicName {
@@ -163,6 +165,45 @@ final class AudioEngine {
         fadeOut(music)
         music = nil
         musicName = nil
+    }
+
+    // MARK: Custom tracks (playCustomTrack, stopCustomTrack)
+
+    private var custom: AVPlayer?
+    private var customLoop: NSObjectProtocol?
+    private(set) var customLabel: String?
+
+    /// Your own file or audio link, looping, in place of the game's music.
+    func playCustom(_ url: URL, label: String) {
+        stopCustomPlayer()
+        fadeOut(music)
+        music = nil
+        let item = AVPlayerItem(url: url)
+        let p = AVPlayer(playerItem: item)
+        p.volume = Float(AppSettings.musicVolume)
+        customLoop = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: item, queue: .main) { [weak p] _ in
+            p?.seek(to: .zero)
+            p?.play()
+        }
+        p.play()
+        custom = p
+        customLabel = label
+    }
+
+    /// Back to the game's music.
+    func stopCustom() {
+        stopCustomPlayer()
+        let name = musicName ?? "menu"
+        musicName = nil
+        playTrack(name)
+    }
+
+    private func stopCustomPlayer() {
+        custom?.pause()
+        custom = nil
+        customLabel = nil
+        if let o = customLoop { NotificationCenter.default.removeObserver(o) }
+        customLoop = nil
     }
 
     private func fadeOut(_ player: AVAudioPlayer?) {

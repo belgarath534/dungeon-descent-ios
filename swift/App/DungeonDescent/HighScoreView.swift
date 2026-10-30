@@ -1,9 +1,8 @@
 import SwiftUI
 import DungeonCore
 
-/// The web version's #screen-highscore. The score tab is all here; the
-/// global leaderboard and the developer inbox need the online service, which
-/// isn't in the Swift version yet.
+/// The web version's #screen-highscore: your score, the global top 20 (with
+/// upload and the weekly #1 reward) and the developer's inbox.
 @MainActor
 struct HighScoreView: View {
     @EnvironmentObject var game: GameModel
