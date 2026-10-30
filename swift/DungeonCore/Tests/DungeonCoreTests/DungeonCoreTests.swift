@@ -3931,3 +3931,56 @@ final class FamiliarTests: XCTestCase {
         XCTAssertEqual(Familiar.load(store).speciesId, f.speciesId, "saved")
     }
 }
+
+final class SeasonalItemTests: XCTestCase {
+    func newRun() -> Run {
+        var r = Run(character: PlayerCharacter(name: "S", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.spirit = nil
+        r.inventory = []
+        return r
+    }
+    var foe: Enemy { Enemy(name: "Dummy", icon: "", hp: 300, maxHp: 300, atk: 5...5, gold: 1...1) }
+
+    func testShopPutsThemInTheNextRun() {
+        XCTAssertFalse(Events.comingSoon("liberty-cannon"))
+        XCTAssertTrue(Events.comingSoon("liberty-title"), "titles wait for the title picker")
+        XCTAssertEqual(SeasonalItems.all.count, 10)
+    }
+
+    func testCombatItems() {
+        var r = newRun()
+        r.inventory = [SeasonalItems.all["liberty-cannon"]!]
+        XCTAssertFalse(Inventory.use(&r, at: 0).used, "combat only")
+        Combat.begin(&r, against: foe)
+        XCTAssertTrue(Inventory.use(&r, at: 0).enemyDied)
+        XCTAssertTrue(r.inventory.isEmpty)
+
+        Combat.begin(&r, against: foe)
+        r.inventory = [SeasonalItems.all["liberty-firework"]!, SeasonalItems.all["stpat-rainbow"]!, SeasonalItems.all["val-love-potion"]!]
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.enemy?.hp, 300 - 85)
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.fight.shield, 40)
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.fight.controlled, 2)
+    }
+
+    func testBuffsAndPotions() {
+        var r = newRun()
+        r.hp = 10
+        r.poisonTurns = 3
+        r.inventory = [SeasonalItems.all["liberty-potion"]!, SeasonalItems.all["val-rose"]!, SeasonalItems.all["val-cupid-arrow"]!]
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.hp, min(r.maxHp, 110))
+        XCTAssertEqual(r.poisonTurns, 0)
+        XCTAssertTrue(r.debuffImmune)
+        var log: [String] = []
+        for _ in 0..<3 { Combat.tickEffects(&r, log: &log) }
+        XCTAssertFalse(r.debuffImmune, "3 turns")
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertEqual(r.tempAtk, 8)
+        _ = Inventory.use(&r, at: 0)
+        XCTAssertTrue(r.markedKill)
+    }
+}

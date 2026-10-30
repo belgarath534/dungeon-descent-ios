@@ -504,6 +504,13 @@ Where an item's description and the web code disagree, Swift follows the descrip
   Wastes, Frosthold and the Whispering Forest.
 - **Two Daily Challenges were only words.** Speed Run promised enemies hitting 25% harder and
   Cursed Day promised no potions in combat; neither was ever checked. Swift does both.
+- **Most seasonal combat items did nothing.** The Patriot Cannon could never be used; the
+  Freedom Potion's debuff immunity was never given; the Irish Stout, Leprechaun's Charm,
+  Rainbow Shield, Enchanted Rose, Cupid's Arrow and Heart Shield applied their buff the moment
+  you bought them, which from the menu meant to no run at all; the Love Potion just ended the
+  fight. In Swift all ten wait in your next run's bag and do what they say when used (the Love
+  Potion makes the enemy strike itself for 2 turns). The three seasonal titles wait for the
+  title picker.
 - **The Curse Shop's Cursed Modifier did nothing.** It promised a run modifier on your next
   run; Swift gives one, even with run modifiers turned off.
 - **Two music files are WAV, not MP3** (music-blacksmith.mp3 and music-raid-victory.mp3).

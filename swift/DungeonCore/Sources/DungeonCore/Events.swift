@@ -233,9 +233,7 @@ public enum Events {
 
     /// Items whose effect the Swift version doesn't have yet.
     public static func comingSoon(_ id: String) -> Bool {
-        ["liberty-firework", "liberty-cannon", "liberty-title", "stpat-title", "val-title",
-         "val-love-potion", "stpat-stout", "stpat-charm", "stpat-rainbow", "val-rose", "val-cupid-arrow",
-         "val-heart-shield", "liberty-potion"].contains(id)
+        ["liberty-title", "stpat-title", "val-title"].contains(id)
     }
 
     /// Pending boosts for the next run, saved by the seasonal shops.
@@ -324,6 +322,9 @@ public enum Events {
             }
             msg = "Liberty Eagle joins your cause. Find it in your Home under Minions."
         // The web version sold it and never applied it.
+        case let id where SeasonalItems.all[id] != nil:
+            next.items.append(SeasonalItems.all[id]!)
+            msg = "\(item.name) will be in your bag when your next run starts."
         case "cursed-run-mod":
             next.cursedModifier = true
             msg = "💀 A curse settles on your next run. A random run modifier will take hold."

@@ -817,6 +817,10 @@ public enum Combat {
     /// Counts down timed effects once per turn and applies regeneration and poison.
     public static func tickEffects(_ run: inout Run, log: inout [String]) {
         Medusa.tick(&run, log: &log)
+        if run.freedomTurns > 0 {
+            run.freedomTurns -= 1
+            if run.freedomTurns == 0 { run.debuffImmune = false; log.append("The Freedom Potion's protection fades.") }
+        }
         if run.tempAtkTurns > 0 {
             run.tempAtkTurns -= 1
             if run.tempAtkTurns == 0 { run.tempAtk = 0; log.append("Your attack boost fades.") }

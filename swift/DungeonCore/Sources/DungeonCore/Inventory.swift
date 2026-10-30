@@ -53,6 +53,7 @@ public enum Inventory {
         if DailyChallenge.blocksPotions(run) && (item.type.contains("potion") || item.type == "elixir" || item.type == "heal") {
             return Outcome(message: "Cursed Day: potions cannot be used in combat.", used: false)
         }
+        if let seasonal = SeasonalItems.use(&run, at: index) { return seasonal }
 
         switch item.type {
         case "potion":
