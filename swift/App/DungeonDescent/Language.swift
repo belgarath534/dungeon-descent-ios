@@ -21,8 +21,14 @@ enum Language {
 
     static var locale: Locale { Locale(identifier: code) }
 
+    private static var cached: (code: String, bundle: Bundle)?
+
     private static var bundle: Bundle {
-        Bundle.main.path(forResource: code, ofType: "lproj").flatMap(Bundle.init(path:)) ?? .main
+        let c = code
+        if let b = cached, b.code == c { return b.bundle }
+        let b = Bundle.main.path(forResource: c, ofType: "lproj").flatMap(Bundle.init(path:)) ?? .main
+        cached = (c, b)
+        return b
     }
 
     /// The translation of a whole line, or the line itself.
@@ -65,5 +71,32 @@ struct LanguagePanel: View {
             Text("Most of the game is translated from the web version's Portuguese. Newer text stays in English until it's translated.")
                 .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
         }
+    }
+}
+
+// Text, buttons and VoiceOver labels made from a String (rather than a
+// literal, which SwiftUI already looks up) go through the translations too,
+// so menus, notes and headings built in code show in Portuguese.
+extension Text {
+    @_disfavoredOverload
+    init(_ content: String) { self.init(verbatim: Language.t(content)) }
+}
+
+extension Button where Label == Text {
+    @_disfavoredOverload
+    init(_ title: String, action: @escaping () -> Void) {
+        self.init(action: action) { Text(verbatim: Language.t(title)) }
+    }
+}
+
+extension View {
+    @_disfavoredOverload
+    func accessibilityLabel(_ label: String) -> ModifiedContent<Self, AccessibilityAttachmentModifier> {
+        accessibilityLabel(Text(verbatim: Language.t(label)))
+    }
+
+    @_disfavoredOverload
+    func accessibilityHint(_ hint: String) -> ModifiedContent<Self, AccessibilityAttachmentModifier> {
+        accessibilityHint(Text(verbatim: Language.t(hint)))
     }
 }

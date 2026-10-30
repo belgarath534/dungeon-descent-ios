@@ -1,6 +1,17 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "  ·  On hand: ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "  ·  Em mãos: "
+          }
+        }
+      }
+    },
     " Boss HP: ": {
       "extractionState": "manual",
       "localizations": {
@@ -217,6 +228,17 @@
           "stringUnit": {
             "state": "translated",
             "value": " golpeia você por "
+          }
+        }
+      }
+    },
+    " to play. The game always saves on this device no matter what. If you sign in, your save is also backed up to the cloud, and the same account works in the web version.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " para jogar. O jogo sempre salva neste aparelho, aconteça o que acontecer. Se você entrar, seu save também tem backup na nuvem, e a mesma conta funciona na versão web."
           }
         }
       }
@@ -613,6 +635,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "+10% de ouro obtido e itens melhores"
+          }
+        }
+      }
+    },
+    "+1000 Gold · +25 Mystery Coins": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+1000 de Ouro · +25 Moedas Misteriosas"
           }
         }
       }
@@ -2208,6 +2241,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "25% de chance de atordoar o inimigo ao acertar."
+          }
+        }
+      }
+    },
+    "25% off at the Blacksmith for 2 hours.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "25% de desconto no Ferreiro por 2 horas."
           }
         }
       }
@@ -5193,6 +5237,17 @@
         }
       }
     },
+    "ALSO ATTACKING": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TAMBÉM ATACANDO"
+          }
+        }
+      }
+    },
     "ATK boost expired.": {
       "extractionState": "manual",
       "localizations": {
@@ -5222,6 +5277,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "AVANÇANDO AUTOMATICAMENTE..."
+          }
+        }
+      }
+    },
+    "Abandon Bounty": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abandonar Recompensa"
           }
         }
       }
@@ -5908,6 +5974,17 @@
         }
       }
     },
+    "Active": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ativo"
+          }
+        }
+      }
+    },
     "Active July 1st through July 7th. All gold and XP drops are increased by 76 percent as a nod to 1776. Redcoat enemies invade all dungeons during the event. Enemies have a 15 percent chance to drop a Firework item — use it in combat for 80 plus level times 5 unblockable AoE damage. Every 3rd attack triggers the Sparkler buff dealing bonus fire damage equal to your level times 2.5. Eagle's Cry skill reduces enemy attack by 30 percent for 3 turns. The Fireworks Corner appears at Home — launch fireworks to earn bonus XP. The Independence Tournament sets a personal score target — reach it for first place gold and trophies. Type the number 4 in the Redeem Code box for a secret exclusive patriot minion only available during this event.": {
       "extractionState": "manual",
       "localizations": {
@@ -5915,6 +5992,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ativo de 1 a 7 de julho. Todo ouro e XP obtidos são aumentados em 76 por cento em homenagem a 1776. Inimigos Casaca Vermelha invadem todas as masmorras durante o evento. Inimigos têm 15 por cento de chance de soltar um item Fogo de Artifício — use em combate para causar 80 mais o nível vezes 5 de dano em área imbloqueável. Cada 3º ataque ativa o bônus Vela Luminosa causando dano de fogo bônus igual ao seu nível vezes 2,5. A habilidade Grito da Águia reduz o ataque do inimigo em 30 por cento por 3 turnos. O Canto dos Fogos aparece na Casa — solte fogos de artifício para ganhar XP bônus. O Torneio da Independência define uma meta de pontuação pessoal — alcance-a para ouro e troféus de primeiro lugar. Digite o número 4 na caixa de Resgatar Código para um servo patriota secreto exclusivo disponível apenas durante este evento."
+          }
+        }
+      }
+    },
+    "Active bounty. ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recompensa ativa. "
           }
         }
       }
@@ -6601,6 +6689,17 @@
         }
       }
     },
+    "All progress deleted. The dungeon does not remember your name.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todo o progresso foi apagado. A masmorra não se lembra do seu nome."
+          }
+        }
+      }
+    },
     "All progress deleted. The dungeon does not remember your name. Reloading now.": {
       "extractionState": "manual",
       "localizations": {
@@ -6905,6 +7004,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Emboscada!"
+          }
+        }
+      }
+    },
+    "Amount...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quantia..."
           }
         }
       }
@@ -8515,6 +8625,17 @@
         }
       }
     },
+    "Auto Mode enabled. The Spire will advance automatically every 4 seconds. You can still open the Blacksmith or return to the menu at any time.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo Automático ativado. A Torre avança sozinha a cada 4 segundos. Você ainda pode abrir o Ferreiro ou voltar ao menu a qualquer momento."
+          }
+        }
+      }
+    },
     "Auto Mode locked. Requires Level 5 character. Current level: ": {
       "extractionState": "manual",
       "localizations": {
@@ -8610,6 +8731,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Atributos Sorteados Automaticamente"
+          }
+        }
+      }
+    },
+    "Auto-rolled Stats (based on type)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atributos Sorteados (pelo tipo)"
           }
         }
       }
@@ -8713,6 +8845,17 @@
         }
       }
     },
+    "BLOCKED PLAYERS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JOGADORES BLOQUEADOS"
+          }
+        }
+      }
+    },
     "BOSS TIMER —": {
       "extractionState": "manual",
       "localizations": {
@@ -8735,6 +8878,17 @@
         }
       }
     },
+    "Back in The Spire.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "De volta à Torre."
+          }
+        }
+      }
+    },
     "Back to Endless Descent": {
       "extractionState": "manual",
       "localizations": {
@@ -8742,6 +8896,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voltar para a Descida Sem Fim"
+          }
+        }
+      }
+    },
+    "Back to Hide and Seek menu": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltar ao menu do Esconde-Esconde"
           }
         }
       }
@@ -8907,6 +9072,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Voltar à seleção de espírito"
+          }
+        }
+      }
+    },
+    "Back to the dungeon": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltar para a masmorra"
+          }
+        }
+      }
+    },
+    "Back up to iCloud now": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fazer backup no iCloud agora"
+          }
+        }
+      }
+    },
+    "Backs your whole save up to your own iCloud account automatically — no sign-in needed, separate from the account system. Off by default.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faz backup de todo o seu save na sua própria conta do iCloud automaticamente — sem precisar entrar, separado do sistema de contas. Desligado por padrão."
           }
         }
       }
@@ -9384,6 +9582,17 @@
         }
       }
     },
+    "Begin Hide and Seek alone": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Começar o Esconde-Esconde sozinho"
+          }
+        }
+      }
+    },
     "Begin Void Mode, face five waves of heroes": {
       "extractionState": "manual",
       "localizations": {
@@ -9791,6 +10000,17 @@
         }
       }
     },
+    "Blacksmith. ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferreiro. "
+          }
+        }
+      }
+    },
     "Blend with surroundings — enemy has 40% miss chance next turn.": {
       "extractionState": "manual",
       "localizations": {
@@ -9941,6 +10161,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bibliotecário Inchado"
+          }
+        }
+      }
+    },
+    "Block": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloquear"
           }
         }
       }
@@ -10128,6 +10359,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Raio de sombra — 1,5x de dano, 25% de chance de amaldiçoar o inimigo."
+          }
+        }
+      }
+    },
+    "Bond grows from fights won, rooms searched, and dungeons cleared.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O vínculo cresce com lutas vencidas, salas vasculhadas e masmorras concluídas."
+          }
+        }
+      }
+    },
+    "Bond progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progresso do vínculo"
           }
         }
       }
@@ -10759,6 +11012,17 @@
         }
       }
     },
+    "Brian narrates your hunt. Your hunter keeps fighting while you look around the game.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brian narra sua caçada. Seu caçador continua lutando enquanto você explora o jogo."
+          }
+        }
+      }
+    },
     "Brine Golem": {
       "extractionState": "manual",
       "localizations": {
@@ -11188,6 +11452,17 @@
         }
       }
     },
+    "Bug reports, feature ideas, or anything else — this goes straight to the developer. Mention what dungeon and floor you were on if it's a bug.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relatos de bugs, ideias de recursos ou qualquer outra coisa — isto vai direto para o desenvolvedor. Diga em qual masmorra e andar você estava se for um bug."
+          }
+        }
+      }
+    },
     "Build an enemy. Set it loose. Let the dungeon remember your name.": {
       "extractionState": "manual",
       "localizations": {
@@ -11540,6 +11815,28 @@
         }
       }
     },
+    "CHARACTER EXPORT CODE": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CÓDIGO DE EXPORTAÇÃO DO PERSONAGEM"
+          }
+        }
+      }
+    },
+    "CHAT USERNAME": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NOME DE USUÁRIO DO CHAT"
+          }
+        }
+      }
+    },
     "CHOOSE YOUR CHAMPION": {
       "extractionState": "manual",
       "localizations": {
@@ -11547,6 +11844,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ESCOLHA SEU CAMPEÃO"
+          }
+        }
+      }
+    },
+    "CHOOSE YOUR FAMILIAR": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ESCOLHA SEU FAMILIAR"
           }
         }
       }
@@ -11815,6 +12123,17 @@
         }
       }
     },
+    "Cancel Registration": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar Inscrição"
+          }
+        }
+      }
+    },
     "Cancel and return to character list": {
       "extractionState": "manual",
       "localizations": {
@@ -12042,6 +12361,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Não pode fugir. O dano aumenta conforme o HP cai."
+          }
+        }
+      }
+    },
+    "Cannot gamble during combat.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não é possível apostar durante o combate."
           }
         }
       }
@@ -12277,6 +12607,17 @@
         }
       }
     },
+    "Caught. It found you. Try again, or return to the menu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pego. Ele encontrou você. Tente de novo ou volte ao menu."
+          }
+        }
+      }
+    },
     "Cause enemy to bleed — 8 damage per turn for 3 turns.": {
       "extractionState": "manual",
       "localizations": {
@@ -12372,6 +12713,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Desafios — O Gauntlet e a Masmorra Diária"
+          }
+        }
+      }
+    },
+    "Challenges. Only the strongest survive. The Gauntlet tab is selected.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desafios. Só os mais fortes sobrevivem. A aba O Desafio está selecionada."
           }
         }
       }
@@ -12658,6 +13010,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Perseguidor Carbonizado"
+          }
+        }
+      }
+    },
+    "Character": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Personagem"
           }
         }
       }
@@ -13025,6 +13388,17 @@
         }
       }
     },
+    "Chat messages and community enemies are seen by all players. By continuing you agree to the Dungeon Descent Terms of Service at dungen-descent.org/terms. There is no tolerance for objectionable content or abusive players. Content that breaks the rules is removed. You can report or block anyone. Do you agree?": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensagens do chat e inimigos da comunidade são vistos por todos os jogadores. Ao continuar você aceita os Termos de Serviço do Dungeon Descent em dungen-descent.org/terms. Não há tolerância para conteúdo ofensivo ou jogadores abusivos. Conteúdo que quebra as regras é removido. Você pode denunciar ou bloquear qualquer um. Você aceita?"
+          }
+        }
+      }
+    },
     "Chat settings — global chat username and preferences": {
       "extractionState": "manual",
       "localizations": {
@@ -13098,6 +13472,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Verifique o"
+          }
+        }
+      }
+    },
+    "Checking iCloud for a saved backup. Please wait.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Procurando um backup salvo no iCloud. Aguarde."
           }
         }
       }
@@ -13318,6 +13703,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Escolher uma habilidade"
+          }
+        }
+      }
+    },
+    "Choose a skill. ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha uma habilidade. "
           }
         }
       }
@@ -14026,6 +14422,17 @@
         }
       }
     },
+    "Close chat and return to the dungeon": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fechar o chat e voltar para a masmorra"
+          }
+        }
+      }
+    },
     "Close code panel": {
       "extractionState": "manual",
       "localizations": {
@@ -14092,6 +14499,17 @@
         }
       }
     },
+    "Close familiar": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fechar familiar"
+          }
+        }
+      }
+    },
     "Close home and return to dungeon": {
       "extractionState": "manual",
       "localizations": {
@@ -14147,6 +14565,17 @@
         }
       }
     },
+    "Close rarity guide": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fechar o guia de raridade"
+          }
+        }
+      }
+    },
     "Close run log": {
       "extractionState": "manual",
       "localizations": {
@@ -14187,6 +14616,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fechar construtor de espírito"
+          }
+        }
+      }
+    },
+    "Close spirits": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fechar espíritos"
           }
         }
       }
@@ -14264,6 +14704,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Linha de encerramento"
+          }
+        }
+      }
+    },
+    "Closing line: ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frase final: "
           }
         }
       }
@@ -14616,6 +15067,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Anúncios de Combate"
+          }
+        }
+      }
+    },
+    "Combat Stats": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atributos de Combate"
           }
         }
       }
@@ -15720,6 +16182,17 @@
         }
       }
     },
+    "Copies your characters, gold, items and progress from the web version of Dungeon Descent on this iPhone. It replaces what's in the Swift version.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copia seus personagens, ouro, itens e progresso da versão web do Dungeon Descent neste iPhone. Substitui o que está na versão Swift."
+          }
+        }
+      }
+    },
     "Copies your last attack and uses it against you.": {
       "extractionState": "manual",
       "localizations": {
@@ -15760,6 +16233,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Copie uma habilidade de inimigo por masmorra. Use uma vez. Torne-a sua."
+          }
+        }
+      }
+    },
+    "Copy reward code": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar o código de recompensa"
           }
         }
       }
@@ -16160,6 +16644,17 @@
         }
       }
     },
+    "Craft": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criar"
+          }
+        }
+      }
+    },
     "Craft a quick healing brew — restore 25 HP.": {
       "extractionState": "manual",
       "localizations": {
@@ -16255,6 +16750,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Criar Novo Personagem"
+          }
+        }
+      }
+    },
+    "Create a character first to enter The Spire.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crie um personagem primeiro para entrar na Torre."
+          }
+        }
+      }
+    },
+    "Create a character first to enter the raid.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crie um personagem primeiro para entrar na incursão."
+          }
+        }
+      }
+    },
+    "Create a character first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crie um personagem primeiro."
+          }
+        }
+      }
+    },
+    "Create a new Hide and Seek room and get a code to share": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criar uma nova sala de Esconde-Esconde e receber um código para compartilhar"
           }
         }
       }
@@ -17256,6 +17795,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Faixa personalizada interrompida. Música do jogo retomada."
+          }
+        }
+      }
+    },
+    "Custom tracks aren't in the Swift version yet. Coming soon.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faixas personalizadas ainda não estão na versão Swift. Em breve."
           }
         }
       }
@@ -19174,6 +19724,17 @@
         }
       }
     },
+    "Descend to floor 10 and defeat the dungeon boss. Applies to each dungeon run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desça até o andar 10 e derrote o chefe da masmorra. Vale para cada partida na masmorra."
+          }
+        }
+      }
+    },
     "Descend with chosen backstory": {
       "extractionState": "manual",
       "localizations": {
@@ -19335,6 +19896,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dev: todas as masmorras desbloqueadas incluindo A Descida Infernal."
+          }
+        }
+      }
+    },
+    "Dev: all dungeons unlocked, including The Infernal Descent.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dev: todas as masmorras desbloqueadas, incluindo A Descida Infernal."
           }
         }
       }
@@ -19533,6 +20105,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Diamantes:"
+          }
+        }
+      }
+    },
+    "Did not catch that.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não entendi."
           }
         }
       }
@@ -20021,6 +20604,17 @@
         }
       }
     },
+    "Double tap three times, matching the three beats.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque duas vezes, três vezes, acompanhando as três batidas."
+          }
+        }
+      }
+    },
     "Doubles gold drops for the next 3 floors.": {
       "extractionState": "manual",
       "localizations": {
@@ -20281,6 +20875,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beba o elixir de batalha — dano triplicado, mas receba 10 de dano neste turno."
+          }
+        }
+      }
+    },
+    "Drop": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Largar"
           }
         }
       }
@@ -20802,6 +21407,17 @@
         }
       }
     },
+    "EQUIPPED": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EQUIPADO"
+          }
+        }
+      }
+    },
     "Each class has 15 unique skills. You unlock skills by leveling up — after each level up you choose one of three offered skills to permanently add to your skill bar for that run. Skills cost SP (Skill Points) to use. You start with 20 SP and regenerate 2 per room. Some skills are common, rare, or legendary — legendary skills are powerful but expensive.": {
       "extractionState": "manual",
       "localizations": {
@@ -20864,6 +21480,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cada nota causa dano. Defender reduz isso em 50%."
+          }
+        }
+      }
+    },
+    "Each run gets a random modifier like Burning Dungeon or Death March. High risk, high reward. Turn off for a classic experience.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada partida recebe um modificador aleatório como Masmorra em Chamas ou Marcha da Morte. Alto risco, alta recompensa. Desligue para uma experiência clássica."
           }
         }
       }
@@ -21007,6 +21634,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ganhe 5000 de ouro no total."
+          }
+        }
+      }
+    },
+    "Earn diamonds by defeating dungeon bosses or digging in the Mine, or craft guns at Home from gun parts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ganhe diamantes derrotando chefes de masmorra ou cavando na Mina, ou crie armas de fogo em Casa com peças de arma."
           }
         }
       }
@@ -21205,6 +21843,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ecoe a última habilidade usada — lance-a novamente de graça."
+          }
+        }
+      }
+    },
+    "Echo-location": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ecolocalização"
+          }
+        }
+      }
+    },
+    "Echo-location needs 3D Mode turned on in Settings, Beta Features.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A ecolocalização precisa do Modo 3D ligado em Configurações, Recursos Beta."
+          }
+        }
+      }
+    },
+    "Echo-location only works while exploring, not during combat.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A ecolocalização só funciona explorando, não durante o combate."
           }
         }
       }
@@ -21726,6 +22397,17 @@
         }
       }
     },
+    "Empty satchel.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bolsa vazia."
+          }
+        }
+      }
+    },
     "Empty shell. Barely alive. Barely dead.": {
       "extractionState": "manual",
       "localizations": {
@@ -22089,6 +22771,17 @@
         }
       }
     },
+    "Enemies revealed: ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inimigos revelados: "
+          }
+        }
+      }
+    },
     "Enemies this wave": {
       "extractionState": "manual",
       "localizations": {
@@ -22151,6 +22844,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Criador de Inimigos"
+          }
+        }
+      }
+    },
+    "Enemy Creator. Build an enemy. Set it loose. Let the dungeon remember your name.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criador de Inimigos. Construa um inimigo. Solte-o. Deixe a masmorra lembrar do seu nome."
           }
         }
       }
@@ -22441,6 +23145,28 @@
         }
       }
     },
+    "Enter 4 character room code to join friends": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite o código de 4 caracteres da sala para entrar com os amigos"
+          }
+        }
+      }
+    },
+    "Enter 4 character room code to join opponent": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite o código de 4 caracteres da sala para entrar contra o oponente"
+          }
+        }
+      }
+    },
     "Enter 4 digit room code to join opponent": {
       "extractionState": "manual",
       "localizations": {
@@ -22569,6 +23295,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Entre no andar 10 com pelo menos 2 poções e HP completo. Use sua habilidade mais forte imediatamente na fase 1 — o chefe está mais fraco aqui. Quando a fase 2 ativar, defenda naquele turno para absorver o pico de dano. Na fase 3 vá com tudo — use todas as habilidades que você tem. Se seu espírito tem uma habilidade de combate, use em cada recarga. A tela de pré-visualização do chefe te diz o HP do chefe — planeje sua rotação de habilidades antes de pressionar Enfrentar."
+          }
+        }
+      }
+    },
+    "Enter her name...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite o nome dela..."
           }
         }
       }
@@ -22738,6 +23475,17 @@
         }
       }
     },
+    "Enter your name, brave soul...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite seu nome, alma corajosa..."
+          }
+        }
+      }
+    },
     "Entering": {
       "extractionState": "manual",
       "localizations": {
@@ -22789,6 +23537,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Canção épica de guerra — seu ataque é dobrado por 2 turnos."
+          }
+        }
+      }
+    },
+    "Equip": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Equipar"
           }
         }
       }
@@ -23442,6 +24201,17 @@
         }
       }
     },
+    "Every special effect a weapon or armor piece can roll, by tier. Reforging rerolls both the tier and, at Uncommon or above, a random effect from that tier.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todo efeito especial que uma arma ou armadura pode receber, por nível. Reforjar sorteia de novo o nível e, de Incomum para cima, um efeito aleatório desse nível."
+          }
+        }
+      }
+    },
     "Every story. Every secret. The dungeon has no more to hide from you.": {
       "extractionState": "manual",
       "localizations": {
@@ -23515,6 +24285,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Todos os outros partiram. Ela ficou. Era responsável pelo acervo. O acervo ainda está aqui."
+          }
+        }
+      }
+    },
+    "Everyone is unblocked, and hidden messages and enemies are shown again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos foram desbloqueados, e as mensagens e inimigos ocultos aparecem de novo."
           }
         }
       }
@@ -23717,6 +24498,17 @@
         }
       }
     },
+    "Explore the dungeon in a real 3D rendered view with full spatial audio — walls and doors are real, every door calls to you from where it is, and Echo-Location sounds out the room. Use headphones. Available in every dungeon, each with its own look and lighting.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explore a masmorra em uma visão 3D de verdade com áudio espacial completo — as paredes e portas são reais, cada porta chama você de onde está, e a Ecolocalização revela a sala pelo som. Use fones de ouvido. Disponível em todas as masmorras, cada uma com seu visual e sua iluminação."
+          }
+        }
+      }
+    },
     "Export ": {
       "extractionState": "manual",
       "localizations": {
@@ -23794,6 +24586,17 @@
         }
       }
     },
+    "Export save code and copy it": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exportar o código do save e copiá-lo"
+          }
+        }
+      }
+    },
     "Extra Potion": {
       "extractionState": "manual",
       "localizations": {
@@ -23860,6 +24663,17 @@
         }
       }
     },
+    "FIRST COMPLETIONS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PRIMEIRAS CONCLUSÕES"
+          }
+        }
+      }
+    },
     "FLOOR": {
       "extractionState": "manual",
       "localizations": {
@@ -23867,6 +24681,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "ANDAR"
+          }
+        }
+      }
+    },
+    "FPS Counter": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contador de FPS"
           }
         }
       }
@@ -23981,6 +24806,17 @@
         }
       }
     },
+    "Failed to load community enemies. Check your connection.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falha ao carregar os inimigos da comunidade. Verifique sua conexão."
+          }
+        }
+      }
+    },
     "Failed to send message. Check your connection.": {
       "extractionState": "manual",
       "localizations": {
@@ -24076,6 +24912,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caído para o Ceifador do Vazio"
+          }
+        }
+      }
+    },
+    "Familiar name": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome do familiar"
           }
         }
       }
@@ -24208,6 +25055,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "De 13 a 15 de fevereiro. A masmorra fica romântica e perigosa. 7 inimigos exclusivos incluindo O Cupido, que sempre solta uma Poção do Amor quando derrotado. Use a Poção do Amor em qualquer inimigo que não seja chefe para encantá-lo a lutar por você durante 2 turnos — depois ele se volta contra você. O chefe final, O Destruidor de Corações, pode te encantar e forçar você a pular um turno."
+          }
+        }
+      }
+    },
+    "Feedback message": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensagem de feedback"
           }
         }
       }
@@ -24956,6 +25814,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cinco ondas derrotadas. Todos os heróis destruídos. As masmorras vão lembrar disso."
+          }
+        }
+      }
+    },
+    "Five waves of heroes are coming to defeat you. They carry torches and hope. They will find neither. As the Void Commander you have 500 HP and four abilities. Survive all five waves and your legend will be encoded into a shareable reward code — and every one of your characters goes up 3 levels.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cinco ondas de heróis estão vindo para derrotar você. Eles trazem tochas e esperança. Não encontrarão nenhuma das duas. Como Comandante do Vazio você tem 500 de HP e quatro habilidades. Sobreviva às cinco ondas e sua lenda será gravada em um código de recompensa compartilhável — e todos os seus personagens sobem 3 níveis."
           }
         }
       }
@@ -26929,6 +27798,17 @@
         }
       }
     },
+    "Gambler's Spirit already used this run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Espírito do Apostador já foi usado nesta partida."
+          }
+        }
+      }
+    },
     "Game Language": {
       "extractionState": "manual",
       "localizations": {
@@ -27310,6 +28190,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dar todas as peças de armas"
+          }
+        }
+      }
+    },
+    "Give it a name...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dê um nome a ele..."
           }
         }
       }
@@ -27985,6 +28876,17 @@
         }
       }
     },
+    "Graphics and performance options for 3D Mode. Lower settings run smoother on older phones; higher settings look better on newer ones.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opções de gráficos e desempenho do Modo 3D. Configurações mais baixas rodam melhor em celulares antigos; as mais altas ficam mais bonitas nos novos."
+          }
+        }
+      }
+    },
     "Grave Crawler": {
       "extractionState": "manual",
       "localizations": {
@@ -28370,6 +29272,17 @@
         }
       }
     },
+    "Guide ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guia "
+          }
+        }
+      }
+    },
     "Gun Workshop tab": {
       "extractionState": "manual",
       "localizations": {
@@ -28700,6 +29613,17 @@
         }
       }
     },
+    "Hand items lost on defeat.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Itens nas mãos perdidos na derrota."
+          }
+        }
+      }
+    },
     "Happy Birthday Dungeon Descent! One year of descending. Tap the birthday badge to celebrate.": {
       "extractionState": "manual",
       "localizations": {
@@ -28729,6 +29653,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Feedback Háptico"
+          }
+        }
+      }
+    },
+    "Hard difficulty selected.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dificuldade Difícil selecionada."
           }
         }
       }
@@ -29081,6 +30016,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Esperou 3000 anos por alguém digno de copiar. Agora usa seu rosto. Usa suas habilidades. Sabe cada movimento antes que você o faça. Você está lutando contra si mesmo, e você mesmo é muito bom nisso."
+          }
+        }
+      }
+    },
+    "Have a VOID code from someone who beat Void Mode, or a birthday code? Enter it here for a reward.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tem um código VOID de alguém que venceu o Modo Vazio, ou um código de aniversário? Digite-o aqui para ganhar uma recompensa."
           }
         }
       }
@@ -29679,6 +30625,17 @@
         }
       }
     },
+    "Heavy attack — more damage": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ataque pesado — mais dano"
+          }
+        }
+      }
+    },
     "Heavy attack — more damage but risky": {
       "extractionState": "manual",
       "localizations": {
@@ -30027,6 +30984,50 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ocultar Itens do Menu"
+          }
+        }
+      }
+    },
+    "Hide and Seek begins. Something is in here with you — the Darkness Swallower. Find the way out before it finds you. Use North, South, East, or West to move, or Hide to try to lose it. Use headphones — you can hear which direction it is in.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Esconde-Esconde começa. Tem algo aqui com você — o Devorador da Escuridão. Encontre a saída antes que ele encontre você. Use Norte, Sul, Leste ou Oeste para se mover, ou Esconder para tentar despistá-lo. Use fones de ouvido — você consegue ouvir de que direção ele vem."
+          }
+        }
+      }
+    },
+    "Hide and Seek multiplayer. Create a room or join one with a code.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esconde-Esconde multijogador. Crie uma sala ou entre em uma com um código."
+          }
+        }
+      }
+    },
+    "Hide and Seek multiplayer. Up to five players. Create a room or join one with a code.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esconde-Esconde multijogador. Até cinco jogadores. Crie uma sala ou entre em uma com um código."
+          }
+        }
+      }
+    },
+    "Hide and try to lose the thing following you": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esconder-se e tentar despistar o que está te seguindo"
           }
         }
       }
@@ -30636,6 +31637,17 @@
         }
       }
     },
+    "Hunt log, newest first": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro da caçada, mais recente primeiro"
+          }
+        }
+      }
+    },
     "Hunt mode — +50% damage for 2 turns.": {
       "extractionState": "manual",
       "localizations": {
@@ -30654,6 +31666,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Caçada iniciada. Brian vai narrar. Mantenha a tela aberta."
+          }
+        }
+      }
+    },
+    "Hunt started. Brian will narrate. Your hunter keeps fighting while you look around.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caçada iniciada. Brian vai narrar. Seu caçador continua lutando enquanto você explora."
           }
         }
       }
@@ -30757,6 +31780,17 @@
         }
       }
     },
+    "I agree": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eu aceito"
+          }
+        }
+      }
+    },
     "I understand — Begin the Fight ⚔": {
       "extractionState": "manual",
       "localizations": {
@@ -30790,6 +31824,28 @@
         }
       }
     },
+    "IMPORT CHARACTER": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "IMPORTAR PERSONAGEM"
+          }
+        }
+      }
+    },
+    "IN THE CHEST": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NO BAÚ"
+          }
+        }
+      }
+    },
     "IN YOUR HANDS": {
       "extractionState": "manual",
       "localizations": {
@@ -30819,6 +31875,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "INT — Inteligência"
+          }
+        }
+      }
+    },
+    "INVENTORY": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "INVENTÁRIO"
           }
         }
       }
@@ -30977,6 +32044,17 @@
         }
       }
     },
+    "Import": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar"
+          }
+        }
+      }
+    },
     "Import Save": {
       "extractionState": "manual",
       "localizations": {
@@ -31050,6 +32128,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Importação falhou. O código pode estar corrompido ou inválido."
+          }
+        }
+      }
+    },
+    "Import save code": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importar código de save"
           }
         }
       }
@@ -32561,6 +33650,17 @@
         }
       }
     },
+    "It is right next to you. You can turn and fight it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Está bem ao seu lado. Você pode se virar e lutar."
+          }
+        }
+      }
+    },
     "It is the same color as the ice it moves through. You will not see it coming. You will only feel the temperature change.": {
       "extractionState": "manual",
       "localizations": {
@@ -32568,6 +33668,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tem a mesma cor do gelo por onde se move. Você não vai vê-lo chegar. Só vai sentir a temperatura mudar."
+          }
+        }
+      }
+    },
+    "It keeps descending when you leave the app. Your Lock Screen shows the run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ela continua descendo quando você sai do app. Sua Tela Bloqueada mostra a partida."
           }
         }
       }
@@ -33518,6 +34629,17 @@
         }
       }
     },
+    "Keep this device's save": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manter o save deste aparelho"
+          }
+        }
+      }
+    },
     "Keep this weapon": {
       "extractionState": "manual",
       "localizations": {
@@ -33569,6 +34691,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chuta uma bola de futebol encantada em você em vez de atacar normalmente. Dói mais do que deveria."
+          }
+        }
+      }
+    },
+    "Kill enemies to collect materials. Combine them into weapons with random special effects. Keep a weapon and it goes to your inventory and your stash.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mate inimigos para coletar materiais. Combine-os em armas com efeitos especiais aleatórios. Fique com uma arma e ela vai para seu inventário e seu estoque."
           }
         }
       }
@@ -34046,6 +35179,17 @@
         }
       }
     },
+    "Leave (lose items)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sair (perder itens)"
+          }
+        }
+      }
+    },
     "Leave arena and return to main menu": {
       "extractionState": "manual",
       "localizations": {
@@ -34064,6 +35208,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sair dos Territórios de Caça"
+          }
+        }
+      }
+    },
+    "Leave the room": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sair da sala"
+          }
+        }
+      }
+    },
+    "Leave the run": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sair da partida"
           }
         }
       }
@@ -34662,6 +35828,17 @@
         }
       }
     },
+    "Lifetime Statistics": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estatísticas Gerais"
+          }
+        }
+      }
+    },
     "Lifetime stats": {
       "extractionState": "manual",
       "localizations": {
@@ -34948,6 +36125,17 @@
         }
       }
     },
+    "Loading deaths...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carregando mortes..."
+          }
+        }
+      }
+    },
     "Loading global leaderboard.": {
       "extractionState": "manual",
       "localizations": {
@@ -35010,6 +36198,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Entrada bloqueada. "
+          }
+        }
+      }
+    },
+    "Locked — ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bloqueado — "
           }
         }
       }
@@ -35410,6 +36609,17 @@
         }
       }
     },
+    "MESSAGE": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MENSAGEM"
+          }
+        }
+      }
+    },
     "MESSAGES FROM THE DEVELOPER": {
       "extractionState": "manual",
       "localizations": {
@@ -35428,6 +36638,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "MINHA PONTUAÇÃO"
+          }
+        }
+      }
+    },
+    "MY TRACKS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MINHAS FAIXAS"
           }
         }
       }
@@ -35692,6 +36913,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Marque seu alvo — próximo ataque com crítico garantido."
+          }
+        }
+      }
+    },
+    "Mark yourself ready": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Marcar-se como pronto"
           }
         }
       }
@@ -36235,6 +37467,17 @@
         }
       }
     },
+    "Mine log": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro da mina"
+          }
+        }
+      }
+    },
     "Mine summary": {
       "extractionState": "manual",
       "localizations": {
@@ -36253,6 +37496,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mínima, só quando importa"
+          }
+        }
+      }
+    },
+    "Minimap": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minimapa"
           }
         }
       }
@@ -37049,6 +38303,17 @@
         }
       }
     },
+    "NAME YOUR FAMILIAR": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DÊ UM NOME AO SEU FAMILIAR"
+          }
+        }
+      }
+    },
     "NAVIGATE": {
       "extractionState": "manual",
       "localizations": {
@@ -37122,6 +38387,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mensagem NG+3: Você não deveria ainda estar vivo. A masmorra está impressionada e furiosa."
+          }
+        }
+      }
+    },
+    "NOW PLAYING": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TOCANDO AGORA"
           }
         }
       }
@@ -38105,6 +39381,17 @@
         }
       }
     },
+    "No achievements yet. Start playing!": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma conquista ainda. Comece a jogar!"
+          }
+        }
+      }
+    },
     "No active character to save.": {
       "extractionState": "manual",
       "localizations": {
@@ -38149,6 +39436,17 @@
         }
       }
     },
+    "No bounties available. Refresh to generate new ones.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma recompensa disponível. Atualize para gerar novas."
+          }
+        }
+      }
+    },
     "No bugs found. No missing functions. No duplicates. No alert() calls. No Portuguese.": {
       "extractionState": "manual",
       "localizations": {
@@ -38156,6 +39454,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum bug encontrado. Nenhuma função faltando. Nenhuma duplicata. Nenhuma chamada alert(). Nenhum português."
+          }
+        }
+      }
+    },
+    "No champions yet. Create your first character.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum campeão ainda. Crie seu primeiro personagem."
           }
         }
       }
@@ -38182,6 +39491,17 @@
         }
       }
     },
+    "No characters available. Create a character first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum personagem disponível. Crie um personagem primeiro."
+          }
+        }
+      }
+    },
     "No characters found.": {
       "extractionState": "manual",
       "localizations": {
@@ -38189,6 +39509,72 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum personagem encontrado."
+          }
+        }
+      }
+    },
+    "No characters found. Create one first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum personagem encontrado. Crie um primeiro."
+          }
+        }
+      }
+    },
+    "No characters found. Create one in solo mode first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum personagem encontrado. Crie um no modo solo primeiro."
+          }
+        }
+      }
+    },
+    "No characters to export.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum personagem para exportar."
+          }
+        }
+      }
+    },
+    "No characters yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum personagem ainda."
+          }
+        }
+      }
+    },
+    "No characters yet. Create a character and begin your descent.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum personagem ainda. Crie um personagem e comece sua descida."
+          }
+        }
+      }
+    },
+    "No characters yet. Create one first from the main menu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum personagem ainda. Crie um primeiro no menu principal."
           }
         }
       }
@@ -38237,6 +39623,28 @@
         }
       }
     },
+    "No community enemies to show.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum inimigo da comunidade para mostrar."
+          }
+        }
+      }
+    },
+    "No community enemies yet. Be the first to create one!": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum inimigo da comunidade ainda. Seja o primeiro a criar um!"
+          }
+        }
+      }
+    },
     "No corruption to purge.": {
       "extractionState": "manual",
       "localizations": {
@@ -38266,6 +39674,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sem história dramática. Apenas alguém que abriu a porta."
+          }
+        }
+      }
+    },
+    "No enemies match.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum inimigo corresponde."
           }
         }
       }
@@ -38391,6 +39810,17 @@
         }
       }
     },
+    "No gun equipped. Craft one at Home or buy one from the Blacksmith.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma arma equipada. Crie uma em Casa ou compre uma no Ferreiro."
+          }
+        }
+      }
+    },
     "No guns yet.": {
       "extractionState": "manual",
       "localizations": {
@@ -38398,6 +39828,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhuma arma ainda."
+          }
+        }
+      }
+    },
+    "No guns yet. Craft them at Home or buy them from the Blacksmith.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma arma de fogo ainda. Crie-as em Casa ou compre-as no Ferreiro."
           }
         }
       }
@@ -38453,6 +39894,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum lacaio estacionado."
+          }
+        }
+      }
+    },
+    "No minions yet. Use a Soul Trap in combat to capture enemies.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum lacaio ainda. Use uma Armadilha de Alma em combate para capturar inimigos."
           }
         }
       }
@@ -38567,6 +40019,17 @@
         }
       }
     },
+    "No parts yet. Defeat enemies in dungeons (8% drop chance) or dig in the Mine to find gun parts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma peça ainda. Derrote inimigos nas masmorras (8% de chance) ou cave na Mina para achar peças de arma."
+          }
+        }
+      }
+    },
     "No parts yet. Defeat enemies in dungeons to find gun parts.": {
       "extractionState": "manual",
       "localizations": {
@@ -38640,6 +40103,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhuma poção."
+          }
+        }
+      }
+    },
+    "No records yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum registro ainda."
           }
         }
       }
@@ -38721,6 +40195,17 @@
         }
       }
     },
+    "No skills unlocked yet — level up to choose skills.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma habilidade desbloqueada ainda — suba de nível para escolher habilidades."
+          }
+        }
+      }
+    },
     "No skills unlocked yet.": {
       "extractionState": "manual",
       "localizations": {
@@ -38761,6 +40246,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nenhum feitiço aprendido ainda."
+          }
+        }
+      }
+    },
+    "No spells learned yet.\n\nVisit the Arcane Shop to buy spell scrolls.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum feitiço aprendido ainda.\n\nVisite a Loja Arcana para comprar pergaminhos de feitiço."
           }
         }
       }
@@ -38816,6 +40312,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Não, ficar na masmorra"
+          }
+        }
+      }
+    },
+    "No upgradeable skills found.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma habilidade melhorável encontrada."
           }
         }
       }
@@ -38908,6 +40415,17 @@
         }
       }
     },
+    "None yet. Kill enemies to find materials.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum ainda. Mate inimigos para encontrar materiais."
+          }
+        }
+      }
+    },
     "Normal damage · 3 lives · Recommended for new players": {
       "extractionState": "manual",
       "localizations": {
@@ -38915,6 +40433,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dano normal · 3 vidas · Recomendado para novos jogadores"
+          }
+        }
+      }
+    },
+    "Normal difficulty selected.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dificuldade Normal selecionada."
           }
         }
       }
@@ -39139,6 +40668,17 @@
         }
       }
     },
+    "Not enough SP. A skill costs 5.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP insuficiente. Uma habilidade custa 5."
+          }
+        }
+      }
+    },
     "Not enough descent points.": {
       "extractionState": "manual",
       "localizations": {
@@ -39157,6 +40697,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fragmentos insuficientes."
+          }
+        }
+      }
+    },
+    "Not enough gold to reactivate the Market Sprite. You need 50 gold.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouro insuficiente para reativar o Espírito do Mercado. Você precisa de 50 de ouro."
           }
         }
       }
@@ -39271,6 +40822,17 @@
         }
       }
     },
+    "Not now": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agora não"
+          }
+        }
+      }
+    },
     "Not one creature but many — the shattered souls of every army Malachar ever destroyed, fused into a single unstoppable force. It appears only when the dead are truly restless. Defeat it once and it will return tomorrow, rebuilt from the fallen.": {
       "extractionState": "manual",
       "localizations": {
@@ -39344,6 +40906,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nada equipado para melhorar. Vá na aba de Inventário para equipar algo primeiro."
+          }
+        }
+      }
+    },
+    "Nothing found this run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nada encontrado nesta partida."
+          }
+        }
+      }
+    },
+    "Nothing in inventory to sell.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nada no inventário para vender."
+          }
+        }
+      }
+    },
+    "Nothing in this category.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nada nesta categoria."
           }
         }
       }
@@ -40030,6 +41625,17 @@
         }
       }
     },
+    "Only Attack, Heavy Strike and Defend work against The Clock.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Só Atacar, Golpe Pesado e Defender funcionam contra o Relógio."
+          }
+        }
+      }
+    },
     "Only active in Insane Mode difficulty. Starts at 100 percent and drains 2 percent every 5 seconds passively. Taking damage drains it further. At 50 percent your screen reader warns you. At 25 percent the UI starts corrupting. At 10 percent log entries scramble. At zero the dungeon absorbs you — not death, just gone. Encountering Julio restores 15 sanity. The Insanity Potion either restores it fully or drains it massively — you never know which until you drink it.": {
       "extractionState": "manual",
       "localizations": {
@@ -40404,6 +42010,17 @@
         }
       }
     },
+    "Other enemies in the ambush": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Outros inimigos da emboscada"
+          }
+        }
+      }
+    },
     "Overcharge your magic — 1.6x damage but costs 5 HP.": {
       "extractionState": "manual",
       "localizations": {
@@ -40459,6 +42076,17 @@
         }
       }
     },
+    "PERSONAL BEST RUNS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MELHORES PARTIDAS PESSOAIS"
+          }
+        }
+      }
+    },
     "PHASE TRANSITION": {
       "extractionState": "manual",
       "localizations": {
@@ -40466,6 +42094,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "TRANSIÇÃO DE FASE"
+          }
+        }
+      }
+    },
+    "PLAY AS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JOGAR COMO"
           }
         }
       }
@@ -40569,6 +42208,17 @@
         }
       }
     },
+    "Passive": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passivo"
+          }
+        }
+      }
+    },
     "Passively regenerate 8 HP after every floor.": {
       "extractionState": "manual",
       "localizations": {
@@ -40624,6 +42274,17 @@
         }
       }
     },
+    "Paste a save code from this game or the web version. It replaces your current save.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cole um código de save deste jogo ou da versão web. Ele substitui o seu save atual."
+          }
+        }
+      }
+    },
     "Paste a save code to restore your data. This will overwrite your current save.": {
       "extractionState": "manual",
       "localizations": {
@@ -40631,6 +42292,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cole um código de save para restaurar seus dados. Isso vai sobrescrever seu save atual."
+          }
+        }
+      }
+    },
+    "Paste code here...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cole o código aqui..."
+          }
+        }
+      }
+    },
+    "Paste save code from the clipboard": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colar o código de save da área de transferência"
           }
         }
       }
@@ -40653,6 +42336,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cole aqui o código de importação do seu personagem"
+          }
+        }
+      }
+    },
+    "Paste your save code here...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cole seu código de save aqui..."
           }
         }
       }
@@ -41229,6 +42923,28 @@
         }
       }
     },
+    "Play Hide and Seek again": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jogar Esconde-Esconde de novo"
+          }
+        }
+      }
+    },
+    "Play Hide and Seek with friends, up to five players": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jogar Esconde-Esconde com amigos, até cinco jogadores"
+          }
+        }
+      }
+    },
     "Play again with this character": {
       "extractionState": "manual",
       "localizations": {
@@ -41269,6 +42985,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toque a Caixinha de Música para fazer a criança dormir. 75 por cento de chance de sucesso."
+          }
+        }
+      }
+    },
+    "Play the game to earn score points. Every action counts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jogue para ganhar pontos. Cada ação conta."
           }
         }
       }
@@ -42637,6 +44364,17 @@
         }
       }
     },
+    "RUN SAVED TO LEADERBOARD": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PARTIDA SALVA NO PLACAR"
+          }
+        }
+      }
+    },
     "Race": {
       "extractionState": "manual",
       "localizations": {
@@ -43374,6 +45112,17 @@
         }
       }
     },
+    "Rarity Effects Guide.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guia de Efeitos de Raridade."
+          }
+        }
+      }
+    },
     "Raw alchemical components. Unpredictable.": {
       "extractionState": "manual",
       "localizations": {
@@ -43539,6 +45288,17 @@
         }
       }
     },
+    "Ready to descend.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pronto para descer."
+          }
+        }
+      }
+    },
     "Ready to fight": {
       "extractionState": "manual",
       "localizations": {
@@ -43572,6 +45332,17 @@
         }
       }
     },
+    "Real walls and doors with 3D sound. Use headphones.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paredes e portas reais com som 3D. Use fones de ouvido."
+          }
+        }
+      }
+    },
     "Reality around it is coming undone. So are you.": {
       "extractionState": "manual",
       "localizations": {
@@ -43579,6 +45350,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "A realidade ao seu redor está se desfazendo. Você também."
+          }
+        }
+      }
+    },
+    "Reason (optional)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Motivo (opcional)"
           }
         }
       }
@@ -43612,6 +45394,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Receba 300 de ouro. Pela causa da liberdade."
+          }
+        }
+      }
+    },
+    "Recent Challenges": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desafios Recentes"
           }
         }
       }
@@ -44144,6 +45937,17 @@
         }
       }
     },
+    "Removed from the roster.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removido da lista."
+          }
+        }
+      }
+    },
     "Removed leftover alert() call in old stats code": {
       "extractionState": "manual",
       "localizations": {
@@ -44228,6 +46032,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Jogue esta masmorra novamente — inimigos mais difíceis esperam"
+          }
+        }
+      }
+    },
+    "Report cancelled.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denúncia cancelada."
+          }
+        }
+      }
+    },
+    "Report sent. Thank you. The developer reviews reports within 24 hours. It is hidden for you now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denúncia enviada. Obrigado. O desenvolvedor analisa as denúncias em até 24 horas. Ela está oculta para você agora."
           }
         }
       }
@@ -44562,6 +46388,17 @@
         }
       }
     },
+    "Restore from iCloud": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar do iCloud"
+          }
+        }
+      }
+    },
     "Restore perfect balance — fully heal and restore all SP.": {
       "extractionState": "manual",
       "localizations": {
@@ -44569,6 +46406,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Restaure o equilíbrio perfeito — cure totalmente e restaure todo o SP."
+          }
+        }
+      }
+    },
+    "Restore save data from iCloud backup. This replaces the save on this device.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaurar os dados salvos do backup do iCloud. Isso substitui o save deste aparelho."
           }
         }
       }
@@ -45266,6 +47114,28 @@
         }
       }
     },
+    "Reward code: ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Código de recompensa: "
+          }
+        }
+      }
+    },
+    "Reward: Dungeon cleared + next dungeon unlocked.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recompensa: Masmorra concluída + próxima masmorra desbloqueada."
+          }
+        }
+      }
+    },
     "Reward: The Gauntlet Champion title and exclusive achievement.": {
       "extractionState": "manual",
       "localizations": {
@@ -45284,6 +47154,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Recompensas"
+          }
+        }
+      }
+    },
+    "Rewards: ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recompensas: "
           }
         }
       }
@@ -45405,6 +47286,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sala 1 · Andar 1"
+          }
+        }
+      }
+    },
+    "Room code": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Código da sala"
           }
         }
       }
@@ -45585,6 +47477,17 @@
         }
       }
     },
+    "Run Progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Progresso da Partida"
+          }
+        }
+      }
+    },
     "Run Start Quotes": {
       "extractionState": "manual",
       "localizations": {
@@ -45647,6 +47550,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Fugir do caçador"
+          }
+        }
+      }
+    },
+    "Run from the hunter. It will be one room behind you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fugir do caçador. Ele ficará uma sala atrás de você."
           }
         }
       }
@@ -45889,6 +47803,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Poder rúnico. +6 de ataque permanente nesta partida."
+          }
+        }
+      }
+    },
+    "Running resets distance to 1. It will catch you next time.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Correr volta a distância para 1. Ele vai pegar você na próxima vez."
           }
         }
       }
@@ -46212,6 +48137,17 @@
         }
       }
     },
+    "Save & Apply Changes": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar e Aplicar Alterações"
+          }
+        }
+      }
+    },
     "Save &amp; Apply Changes": {
       "extractionState": "manual",
       "localizations": {
@@ -46230,6 +48166,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sistema de Save + Nova Tentativa Rápida"
+          }
+        }
+      }
+    },
+    "Save Username": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar Nome de Usuário"
           }
         }
       }
@@ -46289,6 +48236,17 @@
         }
       }
     },
+    "Save code to import": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Código de save para importar"
+          }
+        }
+      }
+    },
     "Save code, tap to select all then copy": {
       "extractionState": "manual",
       "localizations": {
@@ -46307,6 +48265,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Salvamento falhou. Tente novamente."
+          }
+        }
+      }
+    },
+    "Save familiar name": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salvar o nome do familiar"
           }
         }
       }
@@ -47257,6 +49226,17 @@
         }
       }
     },
+    "Search enemies...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar inimigos..."
+          }
+        }
+      }
+    },
     "Search inventory items": {
       "extractionState": "manual",
       "localizations": {
@@ -47264,6 +49244,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Buscar itens do inventário"
+          }
+        }
+      }
+    },
+    "Search items...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buscar itens..."
           }
         }
       }
@@ -47341,6 +49332,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Eventos Sazonais."
+          }
+        }
+      }
+    },
+    "Seasonal Events. ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eventos Sazonais. "
           }
         }
       }
@@ -47785,6 +49787,17 @@
         }
       }
     },
+    "Sell": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vender"
+          }
+        }
+      }
+    },
     "Sell ": {
       "extractionState": "manual",
       "localizations": {
@@ -47917,6 +49930,17 @@
         }
       }
     },
+    "Send feedback": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar feedback"
+          }
+        }
+      }
+    },
     "Send hunter into the forest": {
       "extractionState": "manual",
       "localizations": {
@@ -47961,6 +49985,17 @@
         }
       }
     },
+    "Send report": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enviar denúncia"
+          }
+        }
+      }
+    },
     "Send you have been defeated emote": {
       "extractionState": "manual",
       "localizations": {
@@ -47968,6 +50003,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enviar emote você foi derrotado"
+          }
+        }
+      }
+    },
+    "Sends out a sonar pulse. Each direction answers: a long tone down open doorways, a sharp click off walls. Also works with a two-finger double tap.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Envia um pulso de sonar. Cada direção responde: um tom longo pelas passagens abertas, um estalo seco nas paredes. Também funciona com um toque duplo de dois dedos."
           }
         }
       }
@@ -48412,6 +50458,17 @@
         }
       }
     },
+    "Shadow Realm. Choose your champion. Swipe through your characters, then press Begin.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reino das Sombras. Escolha seu campeão. Deslize pelos seus personagens e depois toque em Começar."
+          }
+        }
+      }
+    },
     "Shadow Realm. Choose your champion. Use left and right arrows to browse your characters, then press Begin.": {
       "extractionState": "manual",
       "localizations": {
@@ -48577,6 +50634,17 @@
         }
       }
     },
+    "Shadows": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sombras"
+          }
+        }
+      }
+    },
     "Shake attack! Unleashing skill!": {
       "extractionState": "manual",
       "localizations": {
@@ -48705,6 +50773,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Compartilhar código de save"
+          }
+        }
+      }
+    },
+    "Share this code. Anyone who enters it gets a reward (Settings → General → Enter Code).": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compartilhe este código. Quem digitá-lo ganha uma recompensa (Configurações → Geral → Inserir Código)."
           }
         }
       }
@@ -49336,6 +51415,17 @@
         }
       }
     },
+    "Sign in to view your inbox.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entre para ver sua caixa de entrada."
+          }
+        }
+      }
+    },
     "Sign in with Google": {
       "extractionState": "manual",
       "localizations": {
@@ -49398,6 +51488,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Login realizado com sucesso. Sincronizando seus dados salvos."
+          }
+        }
+      }
+    },
+    "Signed in with Apple. Syncing your save data.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conectado com a Apple. Sincronizando seus dados salvos."
           }
         }
       }
@@ -50520,6 +52621,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Algo está vindo. Não vai parar."
+          }
+        }
+      }
+    },
+    "Something is in here with you. Find the way out before it finds you first. BETA.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tem algo aqui com você. Encontre a saída antes que ele encontre você. BETA."
           }
         }
       }
@@ -51866,6 +53978,17 @@
         }
       }
     },
+    "Start the run for everyone in the room": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Começar a partida para todos na sala"
+          }
+        }
+      }
+    },
     "Start with 2 potions · -2 SP per skill": {
       "extractionState": "manual",
       "localizations": {
@@ -52027,6 +54150,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ficar e Lutar"
+          }
+        }
+      }
+    },
+    "Stay in mine": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ficar na mina"
           }
         }
       }
@@ -52548,6 +54682,17 @@
         }
       }
     },
+    "Store everything in your hands in the mine chest": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardar tudo o que está em suas mãos no baú da mina"
+          }
+        }
+      }
+    },
     "Store is still loading. Please wait a few seconds and try again.": {
       "extractionState": "manual",
       "localizations": {
@@ -52566,6 +54711,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Armazenado:"
+          }
+        }
+      }
+    },
+    "Stored: ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Guardado: "
           }
         }
       }
@@ -53494,6 +55650,28 @@
         }
       }
     },
+    "TOP SCORES THIS SEASON": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MELHORES PONTUAÇÕES DA TEMPORADA"
+          }
+        }
+      }
+    },
+    "TYPE": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TIPO"
+          }
+        }
+      }
+    },
     "Take 25% less damage from all sources. Deal 20% less damage. Built to outlast.": {
       "extractionState": "manual",
       "localizations": {
@@ -53549,6 +55727,17 @@
         }
       }
     },
+    "Talk to players around the world. By chatting you agree to the Terms of Service at dungen-descent.org/terms: no tolerance for objectionable content or abusive players. Every message has Report and Block buttons.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Converse com jogadores do mundo todo. Ao conversar você aceita os Termos de Serviço em dungen-descent.org/terms: tolerância zero com conteúdo ofensivo ou jogadores abusivos. Toda mensagem tem os botões Denunciar e Bloquear."
+          }
+        }
+      }
+    },
     "Tap Delete Account again to confirm. Only removes cloud account. Local saves are safe.": {
       "extractionState": "manual",
       "localizations": {
@@ -53556,6 +55745,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toque em Excluir Conta novamente para confirmar. Só remove a conta na nuvem. Saves locais estão seguros."
+          }
+        }
+      }
+    },
+    "Tap Delete Account again to confirm. This deletes your account and its cloud save. Saves on this device are kept.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque em Excluir Conta de novo para confirmar. Isso exclui sua conta e o save dela na nuvem. Os saves deste aparelho são mantidos."
           }
         }
       }
@@ -53589,6 +55789,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toque para continuar ao resumo da partida"
+          }
+        }
+      }
+    },
+    "Tap to the beat": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toque no ritmo"
           }
         }
       }
@@ -53842,6 +56053,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Obrigado por assistir! 10 Moedas Misteriosas adicionadas à sua conta."
+          }
+        }
+      }
+    },
+    "Thank you. You agreed to the Terms of Service.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obrigado. Você aceitou os Termos de Serviço."
           }
         }
       }
@@ -57817,6 +60039,17 @@
         }
       }
     },
+    "The battle begins!": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A batalha começa!"
+          }
+        }
+      }
+    },
     "The bed is yours. Rest here to fully restore HP and SP.": {
       "extractionState": "manual",
       "localizations": {
@@ -58022,6 +60255,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "O relógio pausa. Seu turno. Ataque com precisão."
+          }
+        }
+      }
+    },
+    "The clock pauses. Your turn. Attack precisely. Heavy strike may miss.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O relógio pausa. Sua vez. Ataque com precisão. O golpe pesado pode errar."
           }
         }
       }
@@ -58330,6 +60574,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "A masmorra foi conquistada. O que você vai fazer?"
+          }
+        }
+      }
+    },
+    "The dungeon has claimed no one yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A masmorra ainda não levou ninguém."
           }
         }
       }
@@ -59456,6 +61711,17 @@
         }
       }
     },
+    "The report could not be sent. Check your connection. It is hidden for you now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível enviar a denúncia. Verifique sua conexão. Ela está oculta para você agora."
+          }
+        }
+      }
+    },
     "The reunion ending is the most emotional moment in the game. We stand by this.": {
       "extractionState": "manual",
       "localizations": {
@@ -59727,6 +61993,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Os túneis se estendem diante de você. Pique e golpeie."
+          }
+        }
+      }
+    },
+    "The vendor buys spare elixirs and sells one special elixir a day.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O vendedor compra elixires sobrando e vende um elixir especial por dia."
           }
         }
       }
@@ -60138,6 +62415,17 @@
         }
       }
     },
+    "There's no save from the web version of Dungeon Descent on this iPhone.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não há save da versão web do Dungeon Descent neste iPhone."
+          }
+        }
+      }
+    },
     "These combat keys work in The Spire and Daily Raid in addition to normal dungeons.": {
       "extractionState": "manual",
       "localizations": {
@@ -60369,6 +62657,17 @@
         }
       }
     },
+    "This account system is in Alpha. An account is ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este sistema de contas está em Alfa. Uma conta "
+          }
+        }
+      }
+    },
     "This cannot be undone.": {
       "extractionState": "manual",
       "localizations": {
@@ -60398,6 +62697,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Este código só funciona em 7 de setembro. Dia da Independência do Brasil."
+          }
+        }
+      }
+    },
+    "This device and your cloud account both have a save. Choose which one to keep.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este aparelho e sua conta na nuvem têm um save cada. Escolha qual manter."
+          }
+        }
+      }
+    },
+    "This device and your cloud account both have a save. The cloud save replaces the characters on this device. Keeping this device's save uploads it over the cloud one.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este aparelho e sua conta na nuvem têm um save cada. O save da nuvem substitui os personagens deste aparelho. Manter o save deste aparelho o envia por cima do da nuvem."
           }
         }
       }
@@ -60695,6 +63016,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lance fumaça — inimigo tem 35% de chance de errar no próximo turno."
+          }
+        }
+      }
+    },
+    "Throw your bomb for 60 damage. Once per floor.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arremesse sua bomba para causar 60 de dano. Uma vez por andar."
           }
         }
       }
@@ -61117,6 +63449,17 @@
         }
       }
     },
+    "Today's Challenge": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desafio de Hoje"
+          }
+        }
+      }
+    },
     "Today's Daily Challenge": {
       "extractionState": "manual",
       "localizations": {
@@ -61271,6 +63614,17 @@
         }
       }
     },
+    "Torch Flicker": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tremulação da Tocha"
+          }
+        }
+      }
+    },
     "Total Trophies Earned": {
       "extractionState": "manual",
       "localizations": {
@@ -61278,6 +63632,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Total de Troféus Ganhos"
+          }
+        }
+      }
+    },
+    "Total across all characters": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Total de todos os personagens"
           }
         }
       }
@@ -61377,6 +63742,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Combate de torneio"
+          }
+        }
+      }
+    },
+    "Tournament log": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Registro do torneio"
           }
         }
       }
@@ -61843,6 +64219,17 @@
         }
       }
     },
+    "Turn and fight the Darkness Swallower": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Virar e lutar contra o Devorador da Escuridão"
+          }
+        }
+      }
+    },
     "Turn-based combat with attack, heavy, defend, flee": {
       "extractionState": "manual",
       "localizations": {
@@ -62217,6 +64604,39 @@
         }
       }
     },
+    "Type a command or tap the mic to speak. Type help to see all commands.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite um comando ou toque no microfone para falar. Digite help para ver todos os comandos."
+          }
+        }
+      }
+    },
+    "Type a command...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite um comando..."
+          }
+        }
+      }
+    },
+    "Type a message...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite uma mensagem..."
+          }
+        }
+      }
+    },
     "UI corruption at 25% and 10% sanity — screen glitches, log entries corrupt, red flashes.": {
       "extractionState": "manual",
       "localizations": {
@@ -62279,6 +64699,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Raio supremo — 4x de dano, ignora toda defesa."
+          }
+        }
+      }
+    },
+    "Unblock Everyone": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear Todos"
+          }
+        }
+      }
+    },
+    "Unblock everyone and show hidden messages again": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desbloquear todos e mostrar as mensagens ocultas de novo"
           }
         }
       }
@@ -62389,6 +64831,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Passiva Imortal! Você sobrevive à morte com 1 HP. Isso só pode acontecer uma vez."
+          }
+        }
+      }
+    },
+    "Unequip": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desequipar"
           }
         }
       }
@@ -62723,6 +65176,17 @@
         }
       }
     },
+    "Up to 5 players. Everyone shares hiding spots and can rescue each other if caught — but the Darkness Swallower only needs to catch everyone once.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Até 5 jogadores. Todos compartilham os esconderijos e podem resgatar uns aos outros se forem pegos — mas o Devorador da Escuridão só precisa pegar todo mundo uma vez."
+          }
+        }
+      }
+    },
     "Update dismissed. Welcome to version 10.2.": {
       "extractionState": "manual",
       "localizations": {
@@ -62741,6 +65205,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Melhorar"
+          }
+        }
+      }
+    },
+    "Upgrade a skill up to level 5. Each level above 1 adds 10% to that skill's damage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Melhore uma habilidade até o nível 5. Cada nível acima do 1 adiciona 10% ao dano dessa habilidade."
           }
         }
       }
@@ -62789,6 +65264,17 @@
         }
       }
     },
+    "Upgraded skills left by fallen characters. Use one on a character of the same class.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Habilidades melhoradas deixadas por personagens caídos. Use uma em um personagem da mesma classe."
+          }
+        }
+      }
+    },
     "Upgrading save data. Please wait.": {
       "extractionState": "manual",
       "localizations": {
@@ -62829,6 +65315,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Enviando dados salvos. Quase terminando."
+          }
+        }
+      }
+    },
+    "Use": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar"
           }
         }
       }
@@ -63097,6 +65594,17 @@
         }
       }
     },
+    "Use the cloud save": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Usar o save da nuvem"
+          }
+        }
+      }
+    },
     "Use this in combat.": {
       "extractionState": "manual",
       "localizations": {
@@ -63115,6 +65623,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Nome de usuário"
+          }
+        }
+      }
+    },
+    "Username (3–20 letters, numbers or _)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome de usuário (3–20 letras, números ou _)"
           }
         }
       }
@@ -65033,6 +67552,17 @@
         }
       }
     },
+    "View every rarity effect for weapons and armor": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ver todos os efeitos de raridade de armas e armaduras"
+          }
+        }
+      }
+    },
     "View quests and achievements": {
       "extractionState": "manual",
       "localizations": {
@@ -65077,6 +67607,17 @@
         }
       }
     },
+    "Voice commands need microphone and speech recognition permission. Enable it in your device Settings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os comandos de voz precisam de permissão de microfone e de reconhecimento de fala. Ative nos Ajustes do aparelho."
+          }
+        }
+      }
+    },
     "Voice recognition error. Please type your command instead.": {
       "extractionState": "manual",
       "localizations": {
@@ -65106,6 +67647,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "VoiceOver detectado. Deseja ativar todos os recursos de acessibilidade? Pressione o primeiro botão para sim, segundo botão para não."
+          }
+        }
+      }
+    },
+    "VoiceOver: double tap to the beat": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VoiceOver: toque duas vezes no ritmo"
           }
         }
       }
@@ -65704,6 +68256,17 @@
         }
       }
     },
+    "WAKE UP": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ACORDAR"
+          }
+        }
+      }
+    },
     "WARNING. Corruption at 90 percent. You are almost lost.": {
       "extractionState": "manual",
       "localizations": {
@@ -65744,6 +68307,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "EVENTOS SEMANAIS"
+          }
+        }
+      }
+    },
+    "WORLD BOSS — ALL PLAYERS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CHEFE MUNDIAL — TODOS OS JOGADORES"
           }
         }
       }
@@ -65821,6 +68395,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Vagar por este andar — explore mais salas"
+          }
+        }
+      }
+    },
+    "Wander this floor, explore 3 more rooms": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explorar este andar, mais 3 salas"
           }
         }
       }
@@ -66287,6 +68872,17 @@
         }
       }
     },
+    "Wave 1 — A lone Warrior. Weak. Overconfident.\nWave 2 — A Paladin and an Archer. They think numbers will save them.\nWave 3 — Two Warriors and a Mage. Getting serious.\nWave 4 — Three heroes including an Elite. They have a plan.\nWave 5 — A full party of 4. One of them is legendary.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onda 1 — Um Guerreiro solitário. Fraco. Confiante demais.\nOnda 2 — Um Paladino e um Arqueiro. Acham que os números vão salvá-los.\nOnda 3 — Dois Guerreiros e um Mago. Ficando sério.\nOnda 4 — Três heróis, incluindo um Elite. Eles têm um plano.\nOnda 5 — Um grupo completo de 4. Um deles é lendário."
+          }
+        }
+      }
+    },
     "Wave 1 — Enemies": {
       "extractionState": "manual",
       "localizations": {
@@ -66481,6 +69077,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Perseguidora das Teias"
+          }
+        }
+      }
+    },
+    "Web Version Save": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save da Versão Web"
           }
         }
       }
@@ -66716,6 +69323,17 @@
         }
       }
     },
+    "What happened, or what you'd like to see...": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O que aconteceu, ou o que você gostaria de ver..."
+          }
+        }
+      }
+    },
     "What happens when I die?": {
       "extractionState": "manual",
       "localizations": {
@@ -66789,6 +69407,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "O que resta quando algo violento acontece e a energia não se dissipa. Está se acumulando há 3000 anos."
+          }
+        }
+      }
+    },
+    "What is wrong with it? For example: offensive, harassment, spam. You can also leave this empty.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O que há de errado? Por exemplo: ofensivo, assédio, spam. Você também pode deixar em branco."
           }
         }
       }
@@ -67662,6 +70291,28 @@
         }
       }
     },
+    "YOUR GREATEST MOMENTS — SAVED FOREVER": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SEUS MAIORES MOMENTOS — SALVOS PARA SEMPRE"
+          }
+        }
+      }
+    },
+    "YOUR GUNS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SUAS ARMAS DE FOGO"
+          }
+        }
+      }
+    },
     "YOUR HIGHEST FLOOR": {
       "extractionState": "manual",
       "localizations": {
@@ -67849,6 +70500,17 @@
         }
       }
     },
+    "You already have the most characters you can have. Delete one first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você já tem o máximo de personagens permitido. Exclua um primeiro."
+          }
+        }
+      }
+    },
     "You already have this minion. The Soul Trap is not consumed.": {
       "extractionState": "manual",
       "localizations": {
@@ -67933,6 +70595,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "Você é invisível para inimigos até atacar. O primeiro golpe é sempre crítico."
+          }
+        }
+      }
+    },
+    "You are not on the leaderboard yet. Upload your score!": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você ainda não está no placar. Envie sua pontuação!"
+          }
+        }
+      }
+    },
+    "You are registered. Enter a dungeon and complete it to earn your coin.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você está inscrito. Entre em uma masmorra e conclua-a para ganhar sua moeda."
           }
         }
       }
@@ -68069,6 +70753,17 @@
         }
       }
     },
+    "You cannot flee from The Clock.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você não pode fugir do Relógio."
+          }
+        }
+      }
+    },
     "You collected your first Soul Fragment. Collect 25 to build a custom spirit in the Bestiary.": {
       "extractionState": "manual",
       "localizations": {
@@ -68186,6 +70881,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Você escapou! O Devorador das Trevas recua para as sombras. Saque raro pela sua sobrevivência."
+          }
+        }
+      }
+    },
+    "You escaped. You made it out alive.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você escapou. Saiu vivo."
           }
         }
       }
@@ -68421,6 +71127,17 @@
         }
       }
     },
+    "You have fallen. Return and attack again — every hit counts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você caiu. Volte e ataque de novo — cada golpe conta."
+          }
+        }
+      }
+    },
     "You have fallen. The Infernal Gate remains sealed. Try again when you are ready.": {
       "extractionState": "manual",
       "localizations": {
@@ -68619,6 +71336,17 @@
         }
       }
     },
+    "You leave the merchant. ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você deixa o mercador. "
+          }
+        }
+      }
+    },
     "You leave the merchant. Continuing your descent.": {
       "extractionState": "manual",
       "localizations": {
@@ -68714,6 +71442,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Você precisa de um personagem para começar O Cerco. Vá em Jogar e crie um."
+          }
+        }
+      }
+    },
+    "You need to agree to the Terms of Service to post.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você precisa aceitar os Termos de Serviço para publicar."
           }
         }
       }
@@ -68883,6 +71622,17 @@
         }
       }
     },
+    "You step away. The hunt continues without you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você se afasta. A caçada continua sem você."
+          }
+        }
+      }
+    },
     "You step into a concealed magma pool.": {
       "extractionState": "manual",
       "localizations": {
@@ -68982,6 +71732,17 @@
         }
       }
     },
+    "You will no longer see their chat messages or community enemies. You can unblock everyone later in Settings, Chat.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você não verá mais as mensagens de chat nem os inimigos da comunidade dessa pessoa. Você pode desbloquear todos depois em Configurações, Chat."
+          }
+        }
+      }
+    },
     "YouTube player — ": {
       "extractionState": "manual",
       "localizations": {
@@ -69044,6 +71805,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sua Armadura Cronos anula o relógio. O Descensor do Tempo está vulnerável."
+          }
+        }
+      }
+    },
+    "Your Familiar": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu Familiar"
           }
         }
       }
@@ -69268,6 +72040,17 @@
         }
       }
     },
+    "Your damage to the global boss carries on. Return and attack again — every hit counts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu dano ao chefe mundial continua valendo. Volte e ataque de novo — cada golpe conta."
+          }
+        }
+      }
+    },
     "Your diamonds": {
       "extractionState": "manual",
       "localizations": {
@@ -69290,6 +72073,17 @@
         }
       }
     },
+    "Your enemy will appear in dungeons for all players after passing a content filter. By creating one you agree to the Terms of Service (dungen-descent.org/terms). Players can report or block any community enemy in the Bestiary, Community tab.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu inimigo aparecerá nas masmorras de todos os jogadores depois de passar por um filtro de conteúdo. Ao criar um você aceita os Termos de Serviço (dungen-descent.org/terms). Os jogadores podem denunciar ou bloquear qualquer inimigo da comunidade no Bestiário, aba Comunidade."
+          }
+        }
+      }
+    },
     "Your faith is absolute. The dungeon will test it.": {
       "extractionState": "manual",
       "localizations": {
@@ -69297,6 +72091,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sua fé é absoluta. A masmorra vai testá-la."
+          }
+        }
+      }
+    },
+    "Your familiar — press to view its bond level": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu familiar — toque para ver o nível de vínculo"
           }
         }
       }
@@ -69407,6 +72212,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Seu guia"
+          }
+        }
+      }
+    },
+    "Your hands are full.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suas mãos estão cheias."
           }
         }
       }
@@ -69642,6 +72458,17 @@
         }
       }
     },
+    "Your satchel is empty.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sua bolsa está vazia."
+          }
+        }
+      }
+    },
     "Your save code — tap to select all, then copy:": {
       "extractionState": "manual",
       "localizations": {
@@ -69719,6 +72546,28 @@
         }
       }
     },
+    "Your spirits — switch your spirit companion": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus espíritos — trocar seu espírito companheiro"
+          }
+        }
+      }
+    },
+    "Your strike didn't reach the Void. Check your connection and try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu golpe não alcançou o Vazio. Verifique sua conexão e tente de novo."
+          }
+        }
+      }
+    },
     "Your training diverges. This choice is permanent for this run.": {
       "extractionState": "manual",
       "localizations": {
@@ -69781,6 +72630,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Suas habilidades desbloqueadas. Use Mover Acima e Mover Abaixo para reordenar — habilidades aparecem em combate nesta ordem."
+          }
+        }
+      }
+    },
+    "Your username": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu nome de usuário"
           }
         }
       }
@@ -69880,6 +72740,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "[ SAIR ]"
+          }
+        }
+      }
+    },
+    "[ACTIVE]": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[ATIVO]"
+          }
+        }
+      }
+    },
+    "[SOLD]": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[VENDIDO]"
           }
         }
       }
@@ -70181,6 +73063,28 @@
         }
       }
     },
+    "iCloud backup disabled.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup no iCloud desativado."
+          }
+        }
+      }
+    },
+    "iCloud backup enabled. Your save will back up automatically.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backup no iCloud ativado. Seu save terá backup automático."
+          }
+        }
+      }
+    },
     "in chests or buy one from the shop. Use it during combat to capture the current enemy. Captured enemies become permanent minions.": {
       "extractionState": "manual",
       "localizations": {
@@ -70210,6 +73114,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "permite subir 1800 andares infinitamente."
+          }
+        }
+      }
+    },
+    "not required": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "não é necessária"
           }
         }
       }
@@ -70562,6 +73477,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "· Velocidade e precisão. +3% de chance de crítico e +5% de chance de fuga por ponto."
+          }
+        }
+      }
+    },
+    "· TAP TO CONTINUE ·": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "· TOQUE PARA CONTINUAR ·"
           }
         }
       }
@@ -72029,6 +74955,17 @@
         }
       }
     },
+    "• If you die, your character is **permanently deleted** from save data.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Se você morrer, seu personagem é **apagado para sempre** dos dados salvos."
+          }
+        }
+      }
+    },
     "• Level cap raised to 25": {
       "extractionState": "manual",
       "localizations": {
@@ -72080,6 +75017,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "• Você tem"
+          }
+        }
+      }
+    },
+    "• You have **one life**. No extra lives. No resurrection.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "• Você tem **uma vida**. Sem vidas extras. Sem ressurreição."
           }
         }
       }
@@ -72146,6 +75094,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "← Voltar ao Menu"
+          }
+        }
+      }
+    },
+    "← Back to Reforge": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "← Voltar para a Reforja"
           }
         }
       }
@@ -72282,6 +75241,17 @@
         }
       }
     },
+    "↩ Fight Again": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↩ Lutar de Novo"
+          }
+        }
+      }
+    },
     "↩ Try Again": {
       "extractionState": "manual",
       "localizations": {
@@ -72300,6 +75270,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "↻ Atualizar"
+          }
+        }
+      }
+    },
+    "↻ Try Again": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↻ Tentar de Novo"
           }
         }
       }
@@ -72590,6 +75571,17 @@
         }
       }
     },
+    "■ Stop": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "■ Parar"
+          }
+        }
+      }
+    },
     "■ Stop Custom Track": {
       "extractionState": "manual",
       "localizations": {
@@ -72612,6 +75604,17 @@
         }
       }
     },
+    "▶ Listen": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "▶ Ouvir"
+          }
+        }
+      }
+    },
     "▶ Preview": {
       "extractionState": "manual",
       "localizations": {
@@ -72630,6 +75633,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "▶ Retomar"
+          }
+        }
+      }
+    },
+    "▶ Single Player": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "▶ Um Jogador"
+          }
+        }
+      }
+    },
+    "▶ Start": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "▶ Começar"
           }
         }
       }
@@ -72667,6 +75692,17 @@
         }
       }
     },
+    "☀ Daily Quest": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "☀ Missão Diária"
+          }
+        }
+      }
+    },
     "☀️ Redeemed Souls backfired! Enemy stole your HP!": {
       "extractionState": "manual",
       "localizations": {
@@ -72696,6 +75732,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "☁ Sistema de Conta (Alfa) — saves na nuvem via Firebase. Entre com e-mail ou Google. O progresso sincroniza com a nuvem automaticamente toda vez que o jogo salva."
+          }
+        }
+      }
+    },
+    "☁ Back Up Now": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "☁ Fazer Backup Agora"
           }
         }
       }
@@ -73041,6 +76088,17 @@
         }
       }
     },
+    "⚒️ RECIPES": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚒️ RECEITAS"
+          }
+        }
+      }
+    },
     "⚓ The Void Anchor holds you in place. Fleeing is impossible.": {
       "extractionState": "manual",
       "localizations": {
@@ -73206,6 +76264,17 @@
         }
       }
     },
+    "⚔ Claim Reward": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚔ Resgatar Recompensa"
+          }
+        }
+      }
+    },
     "⚔ Class Strategy Guide": {
       "extractionState": "manual",
       "localizations": {
@@ -73294,6 +76363,17 @@
         }
       }
     },
+    "⚔ Dark Strike — 20-35 damage. No cooldown.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚔ Golpe Sombrio — 20-35 de dano. Sem recarga."
+          }
+        }
+      }
+    },
     "⚔ Descend": {
       "extractionState": "manual",
       "localizations": {
@@ -73360,6 +76440,17 @@
         }
       }
     },
+    "⚔ FIGHT — Stand your ground. Face it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚔ LUTAR — Mantenha sua posição. Encare-o."
+          }
+        }
+      }
+    },
     "⚔ Fight or Run — when the hunter reaches 2 rooms away, a choice appears. Fight it (scales with your level) or sprint away and buy one more turn. Kill the hunter and it is gone for the rest of the run. Hunter's Trophy item drops on kill.": {
       "extractionState": "manual",
       "localizations": {
@@ -73400,6 +76491,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "⚔ Easter Egg do Leo — nomeie seu personagem Leo ou Leonardo para uma reação especial da masmorra."
+          }
+        }
+      }
+    },
+    "⚔ Main Quest": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚔ Missão Principal"
           }
         }
       }
@@ -73609,6 +76711,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "⚔ Tentar Novamente"
+          }
+        }
+      }
+    },
+    "⚔ Turn and Fight": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚔ Virar e Lutar"
           }
         }
       }
@@ -74119,6 +77232,17 @@
         }
       }
     },
+    "⚗️ RECIPES": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚗️ RECEITAS"
+          }
+        }
+      }
+    },
     "⚙ Settings": {
       "extractionState": "manual",
       "localizations": {
@@ -74460,6 +77584,17 @@
         }
       }
     },
+    "⚡ Register for Challenge": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚡ Inscrever-se no Desafio"
+          }
+        }
+      }
+    },
     "⚡ Scroll of Smite — 80 unblockable damage!": {
       "extractionState": "manual",
       "localizations": {
@@ -74713,6 +77848,17 @@
         }
       }
     },
+    "✅ Weapon durability: Perfect (100/100)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✅ Durabilidade da arma: Perfeita (100/100)"
+          }
+        }
+      }
+    },
     "✓ Bought Today": {
       "extractionState": "manual",
       "localizations": {
@@ -74742,6 +77888,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "✓ Correto. O chefe está em silêncio. Você se sente mais forte. +59 HP."
+          }
+        }
+      }
+    },
+    "✓ Keep": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✓ Ficar"
           }
         }
       }
@@ -74867,6 +78024,28 @@
         }
       }
     },
+    "✦ ACTIVE NOW": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✦ ATIVO AGORA"
+          }
+        }
+      }
+    },
+    "✦ Challenge complete! Mystery Coin earned. Come back tomorrow.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✦ Desafio concluído! Moeda Misteriosa ganha. Volte amanhã."
+          }
+        }
+      }
+    },
     "✦ Choose Your Spirit Companion": {
       "extractionState": "manual",
       "localizations": {
@@ -74874,6 +78053,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "✦ Escolha Seu Espírito Companheiro"
+          }
+        }
+      }
+    },
+    "✦ Claim": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✦ Resgatar"
+          }
+        }
+      }
+    },
+    "✦ Claimed": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✦ Resgatado"
           }
         }
       }
@@ -74907,6 +78108,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "✦ Novo Personagem"
+          }
+        }
+      }
+    },
+    "✦ Owned": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✦ Comprado"
           }
         }
       }
@@ -74966,6 +78178,28 @@
         }
       }
     },
+    "✨ CAST A SPELL": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✨ LANÇAR UM FEITIÇO"
+          }
+        }
+      }
+    },
+    "✨ Choose Your Skill": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✨ Escolha Sua Habilidade"
+          }
+        }
+      }
+    },
     "✨ Chrono Armor resonates. The clock's power is nullified.": {
       "extractionState": "manual",
       "localizations": {
@@ -74984,6 +78218,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "✨ Guarda da Morte — nova passiva da Loja de Descida. Uma vez por partida, sobreviva a um golpe fatal com 1 HP em vez de morrer."
+          }
+        }
+      }
+    },
+    "✨ Effect: ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✨ Efeito: "
           }
         }
       }
@@ -75186,6 +78431,17 @@
         }
       }
     },
+    "✨ SKILL ORBS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✨ ORBES DE HABILIDADE"
+          }
+        }
+      }
+    },
     "✨ SPIRIT FORGE": {
       "extractionState": "manual",
       "localizations": {
@@ -75340,6 +78596,17 @@
         }
       }
     },
+    "✨ Spirits": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✨ Espíritos"
+          }
+        }
+      }
+    },
     "✨ Stone Skin — damage reduced by 3!": {
       "extractionState": "manual",
       "localizations": {
@@ -75391,6 +78658,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "✨ Você escapou do Devorador das Trevas! Saque raro concedido."
+          }
+        }
+      }
+    },
+    "✨ Your Spirits": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✨ Seus Espíritos"
           }
         }
       }
@@ -75468,6 +78746,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "❓ Legenda de Atributos — botão O que significam os atributos? no passo 1 da criação do personagem. Explica STR, DEF, AGI, INT, FAI, LCK em linguagem simples. Amigável a leitor de tela."
+          }
+        }
+      }
+    },
+    "❓ THE BOSS SPEAKS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "❓ O CHEFE FALA"
           }
         }
       }
@@ -75637,6 +78926,17 @@
         }
       }
     },
+    "⬆ Import": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⬆ Importar"
+          }
+        }
+      }
+    },
     "⬆ Level": {
       "extractionState": "manual",
       "localizations": {
@@ -75743,6 +79043,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "⬆️ MELHORIA DE HABILIDADE"
+          }
+        }
+      }
+    },
+    "⬇ Begin Endless Descent": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⬇ Começar a Descida Infinita"
           }
         }
       }
@@ -76638,6 +79949,17 @@
         }
       }
     },
+    "🌑 THE VOID REAPER IS DEFEATED": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌑 O CEIFADOR DO VAZIO FOI DERROTADO"
+          }
+        }
+      }
+    },
     "🌑 The Corrupted Chimera — exclusive to The Whispering Forest floor 9. Guaranteed to appear your first time reaching floor 9. Three corrupted parts each with unique mechanics.": {
       "extractionState": "manual",
       "localizations": {
@@ -76645,6 +79967,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🌑 A Quimera Corrompida — exclusiva do andar 9 da Floresta dos Sussurros. Garantida a aparecer na sua primeira vez alcançando o andar 9. Três partes corrompidas cada uma com mecânicas únicas."
+          }
+        }
+      }
+    },
+    "🌑 The Darkness Swallower": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌑 O Devorador da Escuridão"
           }
         }
       }
@@ -76704,6 +80037,17 @@
         }
       }
     },
+    "🌑 The Void Reaper": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌑 O Ceifador do Vazio"
+          }
+        }
+      }
+    },
     "🌑 The Void Reaper rebuilt on Firebase RTDB — date no longer resets on app reopen. Shared HP pool persists properly across all sessions.": {
       "extractionState": "manual",
       "localizations": {
@@ -76744,6 +80088,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🌑 Explosão do Vazio"
+          }
+        }
+      }
+    },
+    "🌑 Void Blast — 40-70 damage. Cooldown: 2 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌑 Explosão do Vazio — 40-70 de dano. Recarga: 2 turnos."
           }
         }
       }
@@ -76876,6 +80231,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🌟 Descida Sortuda — qualidade rara garantida!"
+          }
+        }
+      }
+    },
+    "🌟 TODAY'S ELIXIR": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌟 ELIXIR DO DIA"
           }
         }
       }
@@ -77067,6 +80433,17 @@
         }
       }
     },
+    "🌿 YOUR INGREDIENTS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌿 SEUS INGREDIENTES"
+          }
+        }
+      }
+    },
     "🍀 Lucky Charm — new Descent Shop passive. 15% chance to completely dodge any boss attack.": {
       "extractionState": "manual",
       "localizations": {
@@ -77107,6 +80484,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🍀 Poção da Sorte acabou."
+          }
+        }
+      }
+    },
+    "🍎 iCloud Backup": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🍎 Backup no iCloud"
           }
         }
       }
@@ -77217,6 +80605,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🎆 Um Fogo de Artifício foi dropado pelo inimigo!"
+          }
+        }
+      }
+    },
+    "🎆 FIREWORKS CORNER": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎆 CANTO DOS FOGOS"
           }
         }
       }
@@ -77349,6 +80748,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🎓 Dicas da primeira partida na masmorra — 10 dicas contextuais para novos jogadores. Desativadas permanentemente após a primeira masmorra completada."
+          }
+        }
+      }
+    },
+    "🎙️ NARRATED": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎙️ NARRADO"
           }
         }
       }
@@ -77617,6 +81027,28 @@
         }
       }
     },
+    "🎯 Target": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎯 Alvo"
+          }
+        }
+      }
+    },
+    "🎲 Gambler's Spirit — Choose Your Fate": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎲 Espírito do Apostador — Escolha Seu Destino"
+          }
+        }
+      }
+    },
     "🎲 Generate": {
       "extractionState": "manual",
       "localizations": {
@@ -77635,6 +81067,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🎲 Salas Processuais — cada andar agora tem uma sequência de sala gerada. Salas especiais aparecem no meio do andar: 💎 Câmara do Tesouro (saque garantido, sem combate), 🕯️ Santuário (cura 20% de HP), 💀 Câmara Amaldiçoada (inimigo elite, ouro triplo), 🔍 Passagem Oculta (ouro secreto), 🛒 Mercador Errante (loja no meio do andar)."
+          }
+        }
+      }
+    },
+    "🎲 Reroll Effect (2 Iron Scrap)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎲 Sortear Efeito (2 Sucatas de Ferro)"
           }
         }
       }
@@ -78002,6 +81445,17 @@
         }
       }
     },
+    "🏃 RUN — Sprint away. Buy one more turn.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🏃 CORRER — Fuja em disparada. Ganhe mais um turno."
+          }
+        }
+      }
+    },
     "🏅 Milestones": {
       "extractionState": "manual",
       "localizations": {
@@ -78211,6 +81665,17 @@
         }
       }
     },
+    "🏆 Tournament": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🏆 Torneio"
+          }
+        }
+      }
+    },
     "🏆 Tournament — a seasonal competition that runs every 3 months for 7 days. A unique boss appears. Deal as much damage as possible. Your score is recorded to a global Firebase leaderboard.": {
       "extractionState": "manual",
       "localizations": {
@@ -78372,6 +81837,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🏠 Casa"
+          }
+        }
+      }
+    },
+    "🏠 Main Menu": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🏠 Menu Principal"
           }
         }
       }
@@ -79861,6 +83337,17 @@
         }
       }
     },
+    "👥 Multiplayer": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "👥 Multijogador"
+          }
+        }
+      }
+    },
     "👻 Ghost Shroud — you phase out! You take no damage!": {
       "extractionState": "manual",
       "localizations": {
@@ -80026,6 +83513,17 @@
         }
       }
     },
+    "💀 Fallen to the Void": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "💀 Caído para o Vazio"
+          }
+        }
+      }
+    },
     "💀 Forsaken": {
       "extractionState": "manual",
       "localizations": {
@@ -80110,6 +83608,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "💀 Dreno de Alma"
+          }
+        }
+      }
+    },
+    "💀 Soul Drain — Steal 30-50 HP from target. Cooldown: 3 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "💀 Dreno de Alma — Rouba 30-50 de HP do alvo. Recarga: 3 turnos."
           }
         }
       }
@@ -80510,6 +84019,17 @@
         }
       }
     },
+    "💣 Bomb": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "💣 Bomba"
+          }
+        }
+      }
+    },
     "💣 Bomb Thrower path chosen. Handle with care.": {
       "extractionState": "manual",
       "localizations": {
@@ -80671,6 +84191,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "💬 Abrir Chat Global"
+          }
+        }
+      }
+    },
+    "💬 Send Feedback": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "💬 Enviar Feedback"
           }
         }
       }
@@ -80928,6 +84459,17 @@
         }
       }
     },
+    "📅 Enter the Daily Dungeon": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📅 Entrar na Masmorra Diária"
+          }
+        }
+      }
+    },
     "📈 Persistent Level System — level, HP, attack, and skills carry from AFK into dungeons, raids, boss rush, void reaper, and tournament.": {
       "extractionState": "manual",
       "localizations": {
@@ -81012,6 +84554,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "📋 Copiar para a Área de Transferência"
+          }
+        }
+      }
+    },
+    "📋 Register": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📋 Registrar"
           }
         }
       }
@@ -81170,6 +84723,17 @@
         }
       }
     },
+    "📖 Rarity Effects": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📖 Efeitos de Raridade"
+          }
+        }
+      }
+    },
     "📖 Skill Book": {
       "extractionState": "manual",
       "localizations": {
@@ -81265,6 +84829,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "📖 Duas novas histórias na Biblioteca — A Primeira Descida (origem das masmorras) e Como Realmente Começou (a história real de como este jogo foi construído)."
+          }
+        }
+      }
+    },
+    "📖 View All Rarity Effects": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📖 Ver Todos os Efeitos de Raridade"
+          }
+        }
+      }
+    },
+    "📖 View Spell Book": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📖 Ver Livro de Feitiços"
           }
         }
       }
@@ -81500,6 +85086,17 @@
         }
       }
     },
+    "📡 Echo-Location": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📡 Ecolocalização"
+          }
+        }
+      }
+    },
     "📤 Export": {
       "extractionState": "manual",
       "localizations": {
@@ -81544,6 +85141,17 @@
         }
       }
     },
+    "📥 Paste": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📥 Colar"
+          }
+        }
+      }
+    },
     "📦 Chest": {
       "extractionState": "manual",
       "localizations": {
@@ -81584,6 +85192,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "📦 Empilhamento de inventário — itens idênticos agora aparecem como uma única linha com uma contagem. 59 encantadores = um botão. Grande melhoria de acessibilidade para usuários de leitor de tela."
+          }
+        }
+      }
+    },
+    "📦 MATERIALS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📦 MATERIAIS"
           }
         }
       }
@@ -81870,6 +85489,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🔍 Procurar"
+          }
+        }
+      }
+    },
+    "🔍 Searched": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🔍 Vasculhado"
           }
         }
       }
@@ -83117,6 +86747,17 @@
         }
       }
     },
+    "🗺 Wander This Floor": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🗺 Explorar Este Andar"
+          }
+        }
+      }
+    },
     "🗺 You wander further. The floor opens up with more rooms to explore.": {
       "extractionState": "manual",
       "localizations": {
@@ -83179,6 +86820,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🗼 Andares de descanso da Torre a cada 10 andares — era a cada 50, agora a cada 10."
+          }
+        }
+      }
+    },
+    "🗼 The Spire": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🗼 A Torre"
           }
         }
       }
@@ -83289,6 +86941,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "😱 Pesadelo refletido! Você está congelado — o inimigo tem um golpe gratuito!"
+          }
+        }
+      }
+    },
+    "😴 Sleep — Restore HP & SP": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "😴 Dormir — Restaurar HP e SP"
           }
         }
       }
@@ -83480,6 +87143,17 @@
         }
       }
     },
+    "🛡 Shadow Shield — Reduce all damage by 60% for 2 turns. Cooldown: 3 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🛡 Escudo das Sombras — Reduz todo o dano em 60% por 2 turnos. Recarga: 3 turnos."
+          }
+        }
+      }
+    },
     "🛡 You brace yourself against multiple attackers.": {
       "extractionState": "manual",
       "localizations": {
@@ -83663,6 +87337,28 @@
           "stringUnit": {
             "state": "translated",
             "value": "🦈 A Testemunha aparece. Algo parece diferente nesta luta."
+          }
+        }
+      }
+    },
+    "🧊 3D Mode": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🧊 Modo 3D"
+          }
+        }
+      }
+    },
+    "🧊 3D Settings": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🧊 Configurações 3D"
           }
         }
       }
@@ -84008,6 +87704,17 @@
         }
       }
     },
+    "🪙 Reward: 1 Mystery Coin for completing a dungeon today": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🪙 Recompensa: 1 Moeda Misteriosa por concluir uma masmorra hoje"
+          }
+        }
+      }
+    },
     "🪙 SEND MYSTERY COINS": {
       "extractionState": "manual",
       "localizations": {
@@ -84114,6 +87821,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "🪦 O Obituário Global agora mostra mortes reais de jogadores reais — não só suas próprias mortes locais."
+          }
+        }
+      }
+    },
+    "🫥 Hide": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🫥 Esconder"
           }
         }
       }
