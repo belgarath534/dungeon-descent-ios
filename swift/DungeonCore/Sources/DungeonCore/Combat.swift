@@ -573,6 +573,10 @@ public enum Combat {
     static func killed(_ run: inout Run, _ result: TurnResult) -> TurnResult {
         var r = result
         r.enemyDied = true
+        if run.enemy?.isBoss == true, run.foes.contains(where: { $0.flag("bossMinion") }) {
+            run.foes.removeAll { $0.flag("bossMinion") }
+            r.log.append("With its master gone, the boss's minion fades into the dark.")
+        }
         r.defeated = run.enemy
         if let e = run.enemy, run.dungeon == ShadowWorld.name, !e.isBoss, !e.name.hasPrefix("Echo of") {
             run.shadowKilled.append(e)

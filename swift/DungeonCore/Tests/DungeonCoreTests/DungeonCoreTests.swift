@@ -4033,3 +4033,53 @@ final class BatchFiveTests: XCTestCase {
         XCTAssertFalse(RewardCodes.redeem("DDBD31", store: store, now: y2030).ok)
     }
 }
+
+final class BossTimerTests: XCTestCase {
+    func testTimerLengthEnrageAndMinionFallsWithBoss() {
+        var r = Run(character: PlayerCharacter(name: "B", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "The Hollow", difficulty: .insane))
+        XCTAssertEqual(BossTimer.seconds(for: r), 120)
+        r.dungeon = "Crypt of Malachar"
+        r.difficulty = .wanderer
+        XCTAssertEqual(BossTimer.seconds(for: r), 300)
+        var boss = Enemy(name: "Boss", icon: "", hp: 100, maxHp: 100, atk: 10...20, gold: 1...1)
+        boss.isBoss = true
+        Combat.begin(&r, against: boss)
+        XCTAssertFalse(BossTimer.beaten(r))
+        var d = SeededDice(seed: 5)
+        XCTAssertNotNil(BossTimer.enrage(&r, dice: &d))
+        XCTAssertEqual(r.enemy?.atk, 13...25)
+        XCTAssertEqual(r.foes.first?.name, "Crypt Stalker")
+        // Kill the boss: the minion goes with it.
+        r.enemy?.hp = 1
+        var dice = LoadedDice(rolls: [99], chances: [])
+        _ = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertTrue(r.foes.isEmpty)
+    }
+}
+
+final class ShadowRealmTests: XCTestCase {
+    func testWavesBossesAndTheBoard() {
+        var ch = PlayerCharacter(name: "Nyx", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = 3
+        var s = ShadowRealm.start(ch, weapon: nil, armor: nil)
+        XCTAssertEqual(s.maxHp, GameData.classInfo("Warrior").maxHp + 30)
+        XCTAssertEqual(s.atk, 14)
+        var d = SeededDice(seed: 8)
+        _ = ShadowRealm.spawn(&s, dice: &d)
+        XCTAssertFalse(s.enemy!.isBoss)
+        s.wave = 10
+        _ = ShadowRealm.spawn(&s, dice: &d)
+        XCTAssertEqual(s.enemy?.name, "Shadow Sovereign")
+        XCTAssertEqual(s.enemy?.hp, 280)
+        s.enemy?.hp = 1
+        let t = ShadowRealm.act(&s, .attack, dice: &d)
+        XCTAssertTrue(t.killed)
+        XCTAssertEqual(s.kills, 1)
+        XCTAssertNotNil(ShadowRealm.drink(&s))
+        XCTAssertEqual(s.potions, 2)
+        let store = MemoryStore()
+        for w in [3, 12, 7] { var r = s; r.wave = w; ShadowRealm.record(r, store: store) }
+        XCTAssertEqual(ShadowRealm.board(store).map(\.wave), [12, 7, 3])
+    }
+}

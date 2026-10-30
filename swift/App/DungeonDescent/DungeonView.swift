@@ -329,8 +329,16 @@ struct DungeonView: View {
 
     private func bossPhaseBar(_ e: Enemy) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Phase \(run.bossPhase) of 3").font(Theme.cinzel(10.4)).tracking(2).textCase(.uppercase)
-                .foregroundStyle(Theme.bloodBright)
+            HStack {
+                Text("Phase \(run.bossPhase) of 3").font(Theme.cinzel(10.4)).tracking(2).textCase(.uppercase)
+                    .foregroundStyle(Theme.bloodBright)
+                Spacer()
+                // #boss-timer-wrap
+                if let t = model.bossTimerLeft {
+                    Text("⏱ \(t / 60):\(String(format: "%02d", t % 60))").font(Theme.cinzel(11.5, weight: .bold))
+                        .foregroundStyle(Color(hex: t <= 30 ? 0xff4444 : t <= 60 ? 0xffaa00 : 0xa0e0ff))
+                }
+            }
             HStack(spacing: 6) {
                 ForEach(1...3, id: \.self) { i in
                     Rectangle().fill(i <= run.bossPhase ? Theme.bloodBright : Theme.bloodBright.opacity(0.2))
@@ -343,7 +351,7 @@ struct DungeonView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color(hex: 0x1a0808)).overlay(Rectangle().stroke(Theme.bloodBright))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Boss phase \(run.bossPhase) of 3")
+        .accessibilityLabel("Boss phase \(run.bossPhase) of 3" + (model.bossTimerLeft.map { ". Boss timer: \($0 / 60) minutes \($0 % 60) seconds left" } ?? ""))
     }
 
     // MARK: The room (.dg-room)

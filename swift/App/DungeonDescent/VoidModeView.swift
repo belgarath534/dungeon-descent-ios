@@ -209,6 +209,7 @@ struct VoidModeView: View {
 /// Settings → General → Enter Reward Code.
 struct RewardCodeBox: View {
     @EnvironmentObject var game: GameModel
+    @EnvironmentObject var router: Router
     @State private var text = ""
     @State private var result = ""
     @State private var ok = false
@@ -231,6 +232,13 @@ struct RewardCodeBox: View {
     }
 
     private func redeem() {
+        // SHADOW opens the secret Shadow Realm.
+        if text.trimmingCharacters(in: .whitespaces).uppercased() == ShadowRealm.code {
+            text = ""
+            result = ""
+            router.goTo(.shadowRealm)
+            return
+        }
         let out = RewardCodes.redeem(text, store: game.store)
         if out.gold > 0 { game.wallet.addGold(out.gold) }
         if out.coins > 0 { game.addMysteryCoins(out.coins) }

@@ -46,6 +46,8 @@ final class Router: ObservableObject {
         case seasonalshop
         case whatsnew
         case quit
+        /// The secret Shadow Realm (Redeem Code → SHADOW).
+        case shadowRealm
     }
 
     @Published private(set) var screen: Screen = .menu
@@ -128,6 +130,7 @@ struct RootView: View {
             case .arcane: MenuSpellsScreen(showingBook: false)
             case .mine: MineView()
             case .voidmode: VoidModeView()
+            case .shadowRealm: ShadowRealmView()
             case .voidreaper: VoidReaperView()
             case .siege: SiegeView()
             case .challenges: ChallengesView()

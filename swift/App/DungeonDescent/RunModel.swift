@@ -445,6 +445,7 @@ final class RunModel: ObservableObject {
             Sound.track(Soundtrack.bossTrack(dungeon: r.dungeon))
             spoken += " \(boss.name) rises before you. \(boss.hp) HP." + thirdEye(r) + guideSays(.bossEncounter, r)
             finish(r, d, phase: .fighting, spoken: spoken)
+            startBossTimer()
             return
         }
 
@@ -960,6 +961,7 @@ final class RunModel: ObservableObject {
         if !AppSettings.combatAnnouncements && result.bossPhaseMessage == nil { spoken = questLine }
         let riddle = action == .attack || action == .heavy ? BossRiddles.roll(&r, dice: &d) : nil
         finish(r, d, phase: .fighting, spoken: spoken)
+        checkBossTimer()
         if let riddle { ask(riddle) }
     }
 
@@ -1664,6 +1666,8 @@ final class RunModel: ObservableObject {
             finish(r, d, phase: .fighting, spoken: said + " " + (res.announcement ?? ""))
             return
         }
+        // A boss's minion falls with it, whatever brought the boss down.
+        if e.isBoss { r.foes.removeAll { $0.flag("bossMinion") } }
         // Killed outside a turn (a thrown item) with ambushers left: the next one steps up.
         if !r.foes.isEmpty {
             r.enemy = r.foes.removeFirst()
@@ -2205,6 +2209,72 @@ final class RunModel: ObservableObject {
     func closeMusicPlayer() {
         musicPlayerOpen = false
         Feedback.announce("Music Player closed. Returning to dungeon.")
+    }
+
+    // MARK: Boss timer
+
+    /// Seconds left on the boss timer, while it runs.
+    @Published private(set) var bossTimerLeft: Int?
+    private var bossTimer: Timer?
+
+    /// startBossTimer, 1.5 seconds after the boss appears.
+    private func startBossTimer() {
+        let total = BossTimer.seconds(for: run)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            guard let self, self.phase == .fighting, self.run.enemy?.isBoss == true else { return }
+            self.bossTimerLeft = total
+            Feedback.announce("Boss timer started. You have \(total / 60) minutes to reduce the boss below 50 percent HP.")
+            self.bossTimer?.invalidate()
+            self.bossTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+                Task { @MainActor in self?.tickBossTimer() }
+            }
+        }
+    }
+
+    private func tickBossTimer() {
+        guard var left = bossTimerLeft else { return }
+        // The fight ended some other way.
+        guard phase == .fighting, run.enemy?.isBoss == true else { stopBossTimer(); return }
+        // Skills, spells and items count too, not only attacks.
+        if BossTimer.beaten(run) { checkBossTimer(); return }
+        left -= 1
+        bossTimerLeft = left
+        switch left {
+        case 60: Feedback.announce("One minute remaining on the boss timer.")
+        case 30: Feedback.announce("30 seconds. Hurry.")
+        case 10: Feedback.announce("10 seconds!")
+        default: break
+        }
+        guard left <= 0 else { return }
+        stopBossTimer()
+        var r = run
+        var d = dice
+        if let line = BossTimer.enrage(&r, dice: &d) {
+            run = r; dice = d
+            persist()
+            add(line)
+            achievements.increment("bossEnrages")
+            _ = achievements.check()
+            Sound.sfx("sfx-heavy-hit")
+            Feedback.warning()
+            Feedback.announce("Time is up. The boss grows impatient. Attack increased by 25 percent. A \(r.foes.last?.name ?? "minion") joins the fight.")
+        }
+    }
+
+    /// checkBossTimerThreshold: below half its HP in time.
+    private func checkBossTimer() {
+        guard bossTimerLeft != nil, BossTimer.beaten(run) else { return }
+        stopBossTimer()
+        add("⏱ You beat the timer! The boss staggers.")
+        achievements.increment("bossTimerBeaten")
+        _ = achievements.check()
+        Feedback.announce("You beat the boss timer! The boss is staggered.", after: 1)
+    }
+
+    private func stopBossTimer() {
+        bossTimer?.invalidate()
+        bossTimer = nil
+        bossTimerLeft = nil
     }
 
     // MARK: Boss riddles
