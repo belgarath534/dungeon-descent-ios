@@ -118,6 +118,7 @@ final class RunModel: ObservableObject {
         r.applyStartBonuses(wallet: game.wallet)
         r.startNotes += Races.start(&r, classTraits: AppSettings.classTraits, wallet: game.wallet)
         if let dc = DailyChallenge.start(&r, store: game.store, wallet: game.wallet) { r.startNotes.append(dc) }
+        if let t = ClassTraits.start(&r, classTraits: AppSettings.classTraits) { r.startNotes.append(t) }
         r.applyMilestoneBuffs(game.milestoneEffects)
         r.event = Events.active()
         r.startNotes += Events.applyNextRun(&r, store: game.store)
@@ -139,6 +140,7 @@ final class RunModel: ObservableObject {
         game.achievements.trackGlobal("runsStarted")
         var d = SystemDice()
         Weather.start(&r, dice: &d)
+        ClassTraits.shapeWeather(&r)
         _ = RunModifiers.start(&r, store: game.store, wallet: game.wallet, dice: &d)
         Skills.start(&r, dice: &d)
         if r.floor >= Challenges.bossFloor(r) && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
@@ -379,6 +381,7 @@ final class RunModel: ObservableObject {
         r.searched = false
         r.sp = min(r.maxSp, r.sp + 2)
         if let heal = Subclasses.onRoom(&r) { add(heal) }
+        if let heal = ClassTraits.onRoom(&r) { add(heal) }
         roomTitle = Rooms.floorName(r.floor, dungeon: r.dungeon)
         roomText = Rooms.description(for: r, dice: &d)
         let label = "Room \(r.roomsOnFloor) of \(r.floorRoomsNeeded)."
@@ -519,6 +522,11 @@ final class RunModel: ObservableObject {
                 return
             }
             let enemy = Combat.nextEnemy(for: r, dice: &d)
+            if let line = ClassTraits.talksDown(r, enemy, dice: &d) {
+                add("\(label) \(line)")
+                finish(r, d, phase: .exploring, spoken: spoken + " " + line)
+                return
+            }
             Combat.begin(&r, against: enemy).forEach { add($0) }
             let ability = Self.sentence(enemy.desc ?? "A powerful foe.")
             let line = enemy.isElite
@@ -870,6 +878,11 @@ final class RunModel: ObservableObject {
         guard phase == .fighting else { return }
         if action == .defend && RunModifiers.noDefend(run) {
             Feedback.announce("Cannot defend in Berserk Mode.")
+            return
+        }
+        if action == .flee && !ClassTraits.canFlee(run) {
+            add("No Retreat — Berserkers cannot flee.")
+            Feedback.announce("No Retreat. Berserkers do not run.")
             return
         }
         if let e = run.enemy, TimeDescender.isClock(e) {
@@ -2586,6 +2599,7 @@ final class RunModel: ObservableObject {
             }
         }
         if let line = Subclasses.onFloor(&r, dice: &d) { add(line) }
+        ClassTraits.onFloor(&r).forEach { add($0) }
         if let line = Blacksmith.onFloor(&r) { add(line) }
         var hunterFloor = ""
         if let line = WhisperingForest.onFloor(&r) {

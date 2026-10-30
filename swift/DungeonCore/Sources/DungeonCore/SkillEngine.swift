@@ -66,6 +66,7 @@ public enum Skills {
         if run.freeSkills > 0 || run.weaponEffect == "apocalypse" { return 0 }
         var c = s.spCost
         c -= Races.skillCostCut(run)
+        c -= ClassTraits.skillCostCut(run)
         if run.has("cu-soul-surge") { c -= 1 }
         c -= Subclasses.skillCostCut(run)
         c -= run.weather?.spDiscount ?? 0

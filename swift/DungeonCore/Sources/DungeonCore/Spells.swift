@@ -186,13 +186,14 @@ public enum Spells {
         if run.subclass == "shadow-step" && void.contains(id) && (8...10).contains(run.floor) { return 0 }
         // Night Shroud: shadow spells cost no cooldown at night.
         if run.subclass == "night-shroud" && shadow.contains(id) && CoinShop.isNightNow() { return 0 }
-        return powerful.contains(id) ? cooldownPowerful : cooldownNormal
+        return ClassTraits.cooldown(run, id, powerful.contains(id) ? cooldownPowerful : cooldownNormal)
     }
 
     /// Spell damage: 1.6 × your attack, shaped by your subclass.
     static func power(_ run: Run, _ id: String, against e: Enemy) -> Double {
         var m = 1.0
         if run.subclass == "pure-magic" { m *= 1.5 }
+        m *= ClassTraits.spellPower(run, id)
         if run.subclass == "firelord" && fire.contains(id) { m *= 1.6 }
         if run.subclass == "earthbound" && id == "earthshake" { m *= 1.8 }
         if run.subclass == "void-born" && void.contains(id) && isSpirit(e) { m *= 1.5 }
@@ -395,9 +396,9 @@ public enum Spells {
             }
         case "void-collapse":
             let d = dmg(3.5); hit(d)
-            let back = Int((Double(d) * 0.20).rounded(.down))
+            let back = ClassTraits.voidSure(run, id) ? 0 : Int((Double(d) * 0.20).rounded(.down))
             run.hp = max(1, run.hp - back)
-            log.append("🌑 Void Collapse! \(d) damage! You take \(back) back.")
+            log.append(back > 0 ? "🌑 Void Collapse! \(d) damage! You take \(back) back." : "🌑 Void Collapse! \(d) damage!")
         case "soul-drain":
             run.fight.soulDrain = 2
             log.append("💀 Soul Drain! You steal life from the enemy for 2 turns.")
@@ -602,7 +603,7 @@ public enum Spells {
                 log.append("🌑 Void Echo! +50% ATK — but \(e.name) grows 25% stronger too!")
             }
         case "extraction":
-            if dice.chance(0.20) {
+            if ClassTraits.voidSure(run, id) || dice.chance(0.20) {
                 run.fight.controlled = max(run.fight.controlled, 1)
                 log.append("⚗️ Extraction! You control \(e.name)'s next attack — it strikes itself.")
             } else {

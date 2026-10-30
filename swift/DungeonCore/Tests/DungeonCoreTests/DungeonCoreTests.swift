@@ -397,10 +397,11 @@ final class InventoryTests: XCTestCase {
         XCTAssertTrue(out.used)
 
         var a = newRun("Alchemist")
+        _ = ClassTraits.start(&a, classTraits: true)
         a.hp = 1
         a.inventory = [item("Health Potion")]
         _ = Inventory.use(&a, at: 0)
-        XCTAssertEqual(a.hp, 55)   // round(40 × 1.35) = 54, +1
+        XCTAssertEqual(a.hp, 81)   // Master Brewer: 40 × 2, +1
 
         var full = newRun()
         full.inventory = [item("Health Potion")]
@@ -3691,5 +3692,121 @@ final class DailyChallengeTests: XCTestCase {
         XCTAssertNotNil(nm)
         let names = Set((GameContent.shared.nightmareEnemies!.t1 + GameContent.shared.nightmareEnemies!.t2).map(\.name))
         XCTAssertTrue(names.contains(nm!.name))
+    }
+}
+
+final class ClassTraitTests: XCTestCase {
+    func newRun(_ cls: String, dungeon: String = "Crypt of Malachar", traits: Bool = true) -> Run {
+        var r = Run(character: PlayerCharacter(name: "C", cls: cls, race: "Human", prof: "Thief",
+                                               dungeon: dungeon, difficulty: .wanderer))
+        r.spirit = nil
+        _ = ClassTraits.start(&r, classTraits: traits)
+        return r
+    }
+    var dummy: Enemy { Enemy(name: "Dummy", icon: "", hp: 500, maxHp: 500, atk: 10...10, gold: 1...1) }
+
+    func testEveryClassHasATrait() {
+        for c in GameData.classes { XCTAssertNotNil(ClassTraits.trait(c.id), c.id) }
+    }
+
+    func testStartEffectsAndTheSetting() {
+        let full = Run(character: PlayerCharacter(name: "C", cls: "Sorcerer", race: "Human", prof: "Thief",
+                                                  dungeon: "Crypt of Malachar", difficulty: .wanderer)).maxHp
+        XCTAssertEqual(newRun("Sorcerer").maxHp, jsRound(Double(full) * 0.8))
+        XCTAssertEqual(newRun("Sorcerer", traits: false).maxHp, full)
+        XCTAssertFalse(newRun("Sorcerer", traits: false).classTraits)
+        XCTAssertEqual(newRun("Berserker").atkBonus, 3)
+        XCTAssertEqual(newRun("Naturalist").defBonus, 3)
+        XCTAssertEqual(newRun("Shaman", dungeon: "Frosthold Abyss").defBonus, 4)
+        XCTAssertEqual(newRun("Shaman").defBonus, 0)
+        XCTAssertTrue(newRun("Wizard").inventory.contains { $0.name == "Spell Scroll" })
+        XCTAssertEqual(newRun("Cleric").potionMult, 3)
+        XCTAssertFalse(ClassTraits.canFlee(newRun("Berserker")))
+        XCTAssertTrue(ClassTraits.canFlee(newRun("Berserker", traits: false)))
+    }
+
+    func testOpeningShotEveryFight() {
+        for _ in 0..<2 {
+            var r = newRun("Ranger")
+            Combat.begin(&r, against: dummy)
+            var log: [String] = []
+            var d = LoadedDice()
+            XCTAssertEqual(ClassTraits.attack(&r, 20, dice: &d, log: &log), 35)
+            XCTAssertEqual(ClassTraits.attack(&r, 20, dice: &d, log: &log), 20)
+        }
+    }
+
+    func testFirstBloodEveryFight() {
+        var r = newRun("Assassin")
+        Combat.begin(&r, against: dummy)
+        XCTAssertTrue(ClassTraits.firstBloodCrit(&r))
+        XCTAssertFalse(ClassTraits.firstBloodCrit(&r))
+        Combat.begin(&r, against: dummy)
+        XCTAssertTrue(ClassTraits.firstBloodCrit(&r))
+    }
+
+    func testKillsFloorsAndRooms() {
+        var w = newRun("Warlock")
+        w.hp = 10
+        var d = LoadedDice()
+        XCTAssertFalse(ClassTraits.onKill(&w, dummy, dice: &d).isEmpty)
+        XCTAssertEqual(w.hp, 15)
+        var n = newRun("Necromancer")
+        n.hp = 10
+        var yes = LoadedDice(chances: [true])
+        _ = ClassTraits.onKill(&n, dummy, dice: &yes)
+        XCTAssertEqual(n.raised?.name, "Dummy")
+        Combat.begin(&n, against: dummy)
+        XCTAssertNil(n.raised)
+        XCTAssertNotNil(n.fight.ally)
+        var war = newRun("Warrior")
+        war.floor = 3
+        _ = ClassTraits.onFloor(&war)
+        XCTAssertEqual(war.atkBonus, 1)
+        var dr = newRun("Druid", dungeon: "The Hollow")
+        dr.hp = 10
+        XCTAssertNotNil(ClassTraits.onRoom(&dr))
+        XCTAssertEqual(dr.hp, 13)
+    }
+
+    func testUndyingResolveOnTheLastLife() {
+        var r = newRun("DeathKnight")
+        var log: [String] = []
+        r.hp = 0
+        r.lives = 2
+        XCTAssertFalse(ClassTraits.undying(&r, log: &log))
+        r.lives = 1
+        XCTAssertTrue(ClassTraits.undying(&r, log: &log))
+        XCTAssertEqual(r.hp, 1)
+        r.hp = 0
+        XCTAssertFalse(ClassTraits.undying(&r, log: &log), "once a run")
+    }
+
+    func testMonkIronBodyAndAvoids() {
+        var m = newRun("Monk")
+        m.def = 4
+        m.hp = m.maxHp
+        XCTAssertEqual(ClassTraits.defense(m), 0)
+        m.hp = 1
+        XCTAssertEqual(ClassTraits.defense(m), m.totalDef)
+        var log: [String] = []
+        var yes = LoadedDice(chances: [true])
+        XCTAssertTrue(ClassTraits.avoids(m, dummy, dice: &yes, log: &log))
+    }
+
+    func testShamanDoublesTheGoodSideOfTheWeather() {
+        var r = newRun("Shaman")
+        r.weather = Weather("dead-calm", "Dead Calm", "", "", "Enemies have -15% attack. Gold drops +30%.") { $0.enemyAtkMult = 0.85; $0.goldMult = 1.3 }
+        ClassTraits.shapeWeather(&r)
+        XCTAssertEqual(r.weather!.enemyAtkMult, 0.70, accuracy: 1e-9)
+        XCTAssertEqual(r.weather!.goldMult, 1.6, accuracy: 1e-9)
+    }
+
+    func testSpellsAndSkills() {
+        XCTAssertEqual(Spells.cooldownFor("shadow-blast", newRun("ShadowMage")), 0)
+        XCTAssertEqual(Spells.cooldownFor("time-stop", newRun("TimeMage")), 3)
+        XCTAssertEqual(ClassTraits.spellPower(newRun("Elementalist"), "fireball"), 1.4)
+        XCTAssertEqual(ClassTraits.skillCostCut(newRun("Sorcerer")), 3)
+        XCTAssertTrue(ClassTraits.voidSure(newRun("VoidWalker"), "extraction"))
     }
 }

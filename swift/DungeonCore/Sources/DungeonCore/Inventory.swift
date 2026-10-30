@@ -69,7 +69,6 @@ public enum Inventory {
                 break
             }
             var heal = jsRound(Double(item.heal ?? 40) * run.potionMult)
-            if run.cls == "Alchemist" { heal = jsRound(Double(heal) * 1.35) }
             heal = Races.potionHeal(run, heal)
             if let b = run.weather?.potionBoost, b > 0 { heal = jsRound(Double(heal) * (1 + b)) }
             run.hp = min(run.maxHp, run.hp + heal)

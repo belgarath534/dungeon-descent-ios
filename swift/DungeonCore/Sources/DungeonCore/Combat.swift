@@ -70,6 +70,7 @@ public enum Combat {
         Spirits.combatStart(&run, log: &log)
         ShadowWorld.combatStart(&run, log: &log)
         Spells.combatStart(&run, log: &log)
+        ClassTraits.combatStart(&run, log: &log)
         return log
     }
 
@@ -190,7 +191,7 @@ public enum Combat {
     static func scaleDamage(_ run: Run, _ dmg: Int, skill: Bool = false) -> Int {
         guard dmg > 0 else { return 0 }
         var m = 1 + run.allDamageBonus
-        if skill { m += run.skillDamageBonus + Subclasses.skillDamageBonus(run) }
+        if skill { m += run.skillDamageBonus + Subclasses.skillDamageBonus(run) + ClassTraits.skillDamageBonus(run) }
         if run.fight.vulnerableTurns > 0 { m += run.fight.vulnerable }
         return jsRound(Double(dmg) * m)
     }
@@ -238,7 +239,8 @@ public enum Combat {
                 // The Unlucky One: your luck is zero.
                 let unlucky = run.enemy?.flag("unlucky") == true
                 let rolledCrit = dice.chance(0.10 + run.critBonus + (run.weaponEffect == "keen" ? 0.05 : 0) + WeaponForge.critBonus(run)) && !unlucky
-                let firstStrike = Subclasses.firstStrikeCrit(&run)
+                let firstBlood = ClassTraits.firstBloodCrit(&run)
+                let firstStrike = Subclasses.firstStrikeCrit(&run) || firstBlood
                 let phantom = run.fight.phantomCrit
                 run.fight.phantomCrit = false
                 r.crit = rolledCrit || run.markedKill || firstStrike || phantom
@@ -250,7 +252,7 @@ public enum Combat {
                 dmg = Subclasses.afterRoll(&run, dmg, log: &r.log)
                 dmg = empowered(&run, dmg, log: &r.log)
                 dmg = gearDamage(&run, dmg, log: &r.log)
-                r.playerDamage = Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log)
+                r.playerDamage = ClassTraits.attack(&run, Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log), dice: &dice, log: &r.log)
                 r.log.append(r.crit ? "CRITICAL HIT! You strike for \(r.playerDamage) damage!"
                                     : "You attack for \(r.playerDamage) damage.")
             case .heavy:
@@ -261,13 +263,18 @@ public enum Combat {
                     var dmg = empowered(&run, jsRound(Double(baseAtk) * 1.7), log: &r.log)
                     if let e = run.enemy, run.subclass == "crusader", Bestiary.undeadNames.contains(e.name) { dmg = jsRound(Double(dmg) * 1.5) }
                     dmg = gearDamage(&run, dmg, log: &r.log)
-                    r.playerDamage = Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log)
+                    r.playerDamage = ClassTraits.attack(&run, Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log), dice: &dice, log: &r.log)
                     r.log.append("Heavy strike lands for \(r.playerDamage) damage!")
                 }
             case .defend:
                 run.defending = true
                 r.playerDamage = scaleDamage(run, jsRound(Double(baseAtk) * 0.5))
                 r.log.append("You defend, dealing \(r.playerDamage) and bracing for the counter.")
+            case .flee where !ClassTraits.canFlee(run):
+                r.log.append("No Retreat — Berserkers cannot flee.")
+                r.announcement = "No Retreat. Berserkers do not run."
+                r.acted = false
+                return r
             case .flee:
                 let guaranteed = run.swiftTurns > 0 || run.runeSpeed
                 if run.swiftTurns > 0 { run.swiftTurns -= 1 }
@@ -316,6 +323,7 @@ public enum Combat {
         }
         if action == .attack { Spirits.attack(&run, base: baseAtk, dice: &dice, log: &r.log) }
         minionAttack(&run, dice: &dice, log: &r.log)
+        ClassTraits.allyAttack(&run, dice: &dice, log: &r.log)
         Subclasses.companionAttack(&run, dice: &dice, log: &r.log)
         return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
     }
@@ -655,6 +663,7 @@ public enum Combat {
         }
         if Alchemy.avoids(&run, e, dice: &dice, log: &log) { return 0 }
         if Races.dodges(run, e, dice: &dice, log: &log) { return 0 }
+        if ClassTraits.avoids(run, e, dice: &dice, log: &log) { return 0 }
         if run.fight.enemyMiss > 0 {
             let p = run.fight.enemyMiss
             run.fight.enemyMiss = 0
@@ -700,7 +709,7 @@ public enum Combat {
             raw = jsRound(Double(raw) * 0.65)
         }
         let maxBlock = move.ignoreDefense ? 0 : Int((Double(raw) * 0.60).rounded(.down))
-        let defVal = run.totalDef + (run.defending ? 4 : 0)
+        let defVal = run.totalDef + ClassTraits.defense(run) + (run.defending ? 4 : 0)
         let blocked = min(defVal, maxBlock)
         var taken = max(1, raw - blocked)
         if run.has("cu-ember-ward") { taken = max(1, taken - 2) }
@@ -759,6 +768,7 @@ public enum Combat {
             log.append("Unstoppable! Death refused.")
         }
         if run.hp <= 0 { _ = Subclasses.cheatDeath(&run, hpBefore: hpBefore, log: &log) }
+        if run.hp <= 0 { _ = ClassTraits.undying(&run, log: &log) }
         run.fight.damageTaken += taken
         run.fight.recentHits.append(taken)
         if run.fight.recentHits.count > 3 { run.fight.recentHits.removeFirst() }

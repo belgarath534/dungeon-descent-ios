@@ -150,6 +150,12 @@ public struct Run: Codable, Sendable {
     public var brews = Alchemy.Brews()
     /// The race's ability is on (Races.start, with Class Traits on).
     public var raceTraits = false
+    /// The class trait is on (ClassTraits.start, with Class Traits on).
+    public var classTraits = false
+    /// DeathKnight's Undying Resolve, still unused this run.
+    public var undyingResolve = false
+    /// Necromancer: a killed enemy that fights for you in the next fight.
+    public var raised: Enemy? = nil
     /// Today's Daily Challenge effect ("ironDay" …), if you registered for it.
     public var dailyChallenge: String? = nil
     public var poisonTurns = 0
@@ -343,6 +349,11 @@ public struct FloorStats: Codable, Sendable, Equatable {
 
 /// Skill effects that last only for the current fight (reset when a new one starts).
 public struct FightEffects: Codable, Sendable {
+    /// Ranger's Opening Shot and Assassin's First Blood, still to come this fight.
+    public var openingShot = false
+    public var firstBlood = false
+    /// The Necromancer's risen enemy, striking beside you.
+    public var ally: Enemy? = nil
     /// Medusa's first gaze: defense down for this many turns.
     public var gazeTurns = 0
     /// Gold the Unlucky One took this fight (taken from your wallet too).

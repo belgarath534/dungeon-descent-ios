@@ -91,6 +91,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Enemy special abilities (burn, dodge, lifesteal …) | ENEMY_SPECIALS, enemy flags | ✅ all 176 named special moves and the common ability flags; the one-off Hollow and Shadow World mechanics not yet |
 | Room descriptions, floor names | ROOM_DESCS, FLOOR_NAMES | ✅ |
 | Attack / heavy / defend / enemy counter | doFight | 🟡 base rules only |
+| Class traits | CLASS_TRAITS, applyClassTraits, applyTraitPerFloor, applyTraitOnKill, and the class checks in initDungeon, doFight, enemyTurn, enemyDead and handleDeath | ✅ all 24 classes (`ClassTraits.swift`), announced when the run starts and following Settings → Gameplay → Class Traits. Both of the web version's layers apply: the announced trait and the older class bonuses in the fight code (Assassin's instant kill, Warlock's Dark Pact, Wizard's Arcane Surge, Bard's charm, Monk's dodge, the mage classes' smaller HP …). The trait descriptions now list everything a class does |
 | Potions, runes, scrolls, Phoenix Feather | useItem | ✅ except the shop's more exotic brews (soul trap, mirror flask, rage tonic …) |
 | Weapons and armor, equipping | equipWeapon, equipArmor | ✅ |
 | Weapon and armor rarities | WEAPON_RARITIES, RARITY_EFFECTS | ✅ six tiers, all 24 effects |
@@ -485,6 +486,19 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **Alchemist brews lost their bonus.** An Alchemist's Phantom Potion, Gravity Tonic, Leech
   Brew, Rage Tonic, Fog Flask, Time Potion and Corruption Flask were brewed stronger, but
   using one always gave the shop version's numbers. Swift uses what was brewed.
+- **Most class traits did less than they said, or nothing.** The Ranger's Opening Shot and
+  the Assassin's First Blood ("every combat") only worked in the first fight of a run. The
+  Necromancer's risen enemy, the Bard's enemies leaving, the Wizard's enemy reading, the
+  Paladin's stronger holy skills, the Naturalist's and Shaman's doubled weather, the Shaman's
+  outdoor defense, the Elementalist's stronger spells, the Void Walker's phasing and sure void
+  spells, the Shadow Mage's free shadow spells and the Time Mage's faster time spells were only
+  flags nothing read. The Druid healed once a floor instead of every room in The Hollow. The
+  Sorcerer's HP was cut twice (to 68%, not the 80% it says) and the Alchemist's potions healed
+  2.7 times instead of double. Swift does what each trait says. Two the web version made up and
+  never defined are left out: the Cleric's "one potion at a time" and the Time Mage's "always
+  wins initiative" (you always act first anyway). "Attacks from darkness" for the Shadow Mage
+  means at night, 8pm to 6am, like Night Shroud; "outdoors" for the Shaman means the Ashbound
+  Wastes, Frosthold and the Whispering Forest.
 - **Two Daily Challenges were only words.** Speed Run promised enemies hitting 25% harder and
   Cursed Day promised no potions in combat; neither was ever checked. Swift does both.
 - **Half the races did nothing.** The stat lines on the race cards (Human's "+All Stats",

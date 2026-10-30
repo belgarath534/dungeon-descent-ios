@@ -141,7 +141,7 @@ public enum Progression {
         var xp = Progression.xp(for: tier(of: enemy.name, in: run.dungeon, difficulty: run.difficulty))
         if Challenges.has(run, "double-xp") { xp *= 2 }
         xp *= RunModifiers.xpMult(run)
-        let drain = Races.onKill(&run)
+        let drain = Races.onKill(&run) + ClassTraits.onKill(&run, enemy, dice: &dice)
         let levels = gainXP(&run, xp)
         return KillReward(gold: g, xp: xp, levelsGained: levels,
                           message: "\(enemy.name) is defeated! You gain \(g) gold and \(xp) XP.\(luckNote)\(drain)")
