@@ -564,9 +564,8 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **Three first-run tips never showed.** The tips for your first fight, first boss and first
   elite were written but never called. Swift shows them.
 - **Legacy Mode never kept your level.** It saved your level when you cleared a dungeon, but
-  every new run started at level 1 anyway, and the Dungeon Tier scaling it promised applied
-  only to runs started a certain way. Swift starts a Legacy run at your saved level and
-  scales every enemy, Elite Guardian and boss by the tier.
+  every new run started at level 1 anyway. Swift starts a Legacy run at your saved level
+  (the Dungeon Tier scaling works as in the web version).
 - **The Independence Tournament could be won every run.** It promised one tournament per event
   but restarted after each win. Swift gives it once a year.
 - **Fireworks Corner XP went nowhere.** It was added to a character field nothing read; Swift
