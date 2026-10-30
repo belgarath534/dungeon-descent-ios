@@ -119,12 +119,15 @@ final class RunModel: ObservableObject {
         // else that adds items (seasonal shop, Coin Shop) goes in after.
         game.globalInventory.load(into: &r)
         r.applyStartBonuses(wallet: game.wallet)
+        r.startNotes += Legacy.start(&r, game.characters[index])
         r.startNotes += Races.start(&r, classTraits: AppSettings.classTraits, wallet: game.wallet)
         if let dc = DailyChallenge.start(&r, store: game.store, wallet: game.wallet) { r.startNotes.append(dc) }
         if let t = ClassTraits.start(&r, classTraits: AppSettings.classTraits) { r.startNotes.append(t) }
         r.applyMilestoneBuffs(game.milestoneEffects)
         r.event = Events.active()
         r.startNotes += Events.applyNextRun(&r, store: game.store)
+        var td = SystemDice()
+        if let t = IndependenceTournament.start(level: r.level, store: game.store, dice: &td) { r.startNotes.append(t) }
         let brewed = Alchemy.collect(into: &r, store: game.store)
         if brewed > 0 { r.startNotes.append("🧪 \(brewed) crafted potion\(brewed == 1 ? "" : "s") from your Alchemy Table added to inventory.") }
         // Home: the active minion fights beside you, the bed is ready again,
@@ -1016,6 +1019,12 @@ final class RunModel: ObservableObject {
         if Drops.firework(&r, dice: &d) {
             add("🎆 A Firework dropped from the enemy!")
             said += " Firework found. Use it in combat for massive damage."
+        }
+        if let t = IndependenceTournament.kill(store: game.store, wallet: game.wallet) {
+            add(t)
+            r.gold = game.wallet.gold
+            Sound.sfx("sfx-unlock")
+            said += " " + t
         }
         if let m = WeaponForge.drop(floor: floor, store: game.store, dice: &d) {
             add("📦 Material dropped: \(m.icon) \(m.name)!")
@@ -2051,6 +2060,30 @@ final class RunModel: ObservableObject {
         return "Withdrew \(amount)g. Safe remaining: \(safe - amount)g."
     }
 
+    private var fireworksReady = Date.distantPast
+
+    /// openFireworksCorner: 50 to 99 XP, every 8 seconds, July 4th only.
+    func launchFireworks() -> String {
+        guard Events.active() == "july4" else { return "The Fireworks Corner is only available during the Fourth of July event." }
+        guard Date() >= fireworksReady else {
+            Feedback.announce("The fireworks are reloading. Wait a moment.")
+            return "The fireworks are reloading. Wait a moment."
+        }
+        fireworksReady = Date().addingTimeInterval(8)
+        var r = run
+        var d = dice
+        let xp = 50 + d.roll(0...49)
+        let levels = Progression.gainXP(&r, xp)
+        add("🎆 You launch fireworks into the night sky! +\(xp) XP")
+        Sound.sfx("sfx-firework")
+        run = r
+        dice = d
+        if levels > 0 { levelUp = r.level }
+        persist()
+        Feedback.announce("Fireworks launched! Beautiful. You earned \(xp) experience points.")
+        return "🎆 +\(xp) XP!"
+    }
+
     func useSkillOrb(at index: Int) -> String {
         let res = Home.useSkillOrb(at: index, cls: run.cls, store: game.store)
         if res.used {
@@ -2264,7 +2297,19 @@ final class RunModel: ObservableObject {
         game.globalInventory.keep(from: run)
         game.checkLegends(run)
         game.recordFirstClear(run)
-        if !isChallenge { game.updateCharacter(characterIndex) { $0.completed = true; $0.floor = 10 } }
+        if !isChallenge {
+            var tierNews: String?
+            let cleared = run
+            game.updateCharacter(characterIndex) {
+                $0.completed = true
+                $0.floor = 10
+                tierNews = Legacy.cleared(&$0, run: cleared)
+            }
+            if let t = tierNews {
+                add("🌑 " + t)
+                Feedback.announce(t, after: 4)
+            }
+        }
         game.clearRun(for: characterIndex)
         if let dc = DailyChallenge.complete(run, store: game.store) {
             let line = "⚡ Daily Challenge complete: \(dc.name)! You earned 1 Mystery Coin."

@@ -117,7 +117,9 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Lifetime stats, Hall of Records | GLOBAL STATS TRACKING, GLOBAL_AWARDS, Hall of Legends | ✅ all the web's tracked stats, milestone awards (Mystery Coins and permanent effects), records and first clears |
 | Bestiary | BESTIARY_DATA, recordKill, BESTIARY_MILESTONES | ✅ 434 entries with filters, search and kill milestones; the Spirits tab (renderSpiritBestiary) by rarity with how to unlock each; the Community tab not yet |
 | Hardcore, Continue Journey, New Game+ | handleHardcoreDeath, continueJourney, startNGPlus | ✅ |
-| Legacy run mode | Legacy Mode | ⬜ |
+| Legacy run mode | Legacy Mode, applyTierScaling, saveCharPersistentLevel | ✅ the level (up to 25), XP and skills carry into the next run, with 3 level points a level to spend again; each clear raises the Dungeon Tier (+20% enemy HP, +10% attack, +15% gold a tier, bosses and the Elite Guardian too); death keeps the level and puts the tier back to 1 |
+| Independence Tournament | JULY4_TOURNAMENT, startJuly4Tournament, checkJuly4TournamentEnd (dd_july4_tourney) | ✅ during the Fourth of July event: a personal target, 25 points a kill, first place pays 500 gold and 5 trophies, once a year |
+| Fireworks Corner | openFireworksCorner | ✅ at Home on July 4th: 50 to 99 XP every 8 seconds, to your run |
 | Floor 10 Elite Guardian before the boss, 35% heal on each descent | startEliteGauntlet, advanceFloor | ✅ |
 | Skill Orbs | homeCreateSkillOrbs, useSkillOrb (dd_skill_orbs) | ✅ when a character's run ends in death, every Home skill upgrade above level 1 becomes a class-locked orb and the upgrades start over; Home → Skill Upgrade lists the orbs, and a character of the same class uses one to take that skill to the orb's level |
 | Shapeshifter's Mask | shadowItem shapeshifterMask | ✅ once a run, in a fight: copies the enemy's ability (12 of them) for the rest of the fight, or heals 30 HP |
@@ -561,3 +563,11 @@ Where an item's description and the web code disagree, Swift follows the descrip
   damage for each corruption stack the copied enemy inflicts.
 - **Three first-run tips never showed.** The tips for your first fight, first boss and first
   elite were written but never called. Swift shows them.
+- **Legacy Mode never kept your level.** It saved your level when you cleared a dungeon, but
+  every new run started at level 1 anyway, and the Dungeon Tier scaling it promised applied
+  only to runs started a certain way. Swift starts a Legacy run at your saved level and
+  scales every enemy, Elite Guardian and boss by the tier.
+- **The Independence Tournament could be won every run.** It promised one tournament per event
+  but restarted after each win. Swift gives it once a year.
+- **Fireworks Corner XP went nowhere.** It was added to a character field nothing read; Swift
+  gives it to your run.

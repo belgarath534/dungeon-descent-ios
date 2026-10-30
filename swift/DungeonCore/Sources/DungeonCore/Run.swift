@@ -169,6 +169,8 @@ public struct Run: Codable, Sendable {
     public var preBossDone = 0
     /// The Shapeshifter's Mask was used this run.
     public var maskUsed = false
+    /// Legacy Mode's Dungeon Tier for this run (1 = none).
+    public var legacyTier = 1
     public var devMedusa = false
     /// Today's Daily Challenge effect ("ironDay" …), if you registered for it.
     public var dailyChallenge: String? = nil

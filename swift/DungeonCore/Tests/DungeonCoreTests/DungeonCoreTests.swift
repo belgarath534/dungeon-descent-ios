@@ -4208,3 +4208,50 @@ final class DungeonTipsTests: XCTestCase {
         XCTAssertEqual(DungeonTips.seen(store), ["first-boss"])
     }
 }
+
+final class LegacyAndJuly4Tests: XCTestCase {
+    func testLegacyCarriesLevelAndScalesByTier() {
+        var ch = PlayerCharacter(name: "L", cls: "Warrior", race: "Human", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer, runMode: "legacy")
+        var r = Run(character: ch)
+        r.level = 7
+        r.unlockedSkills = ["a"]
+        XCTAssertNotNil(Legacy.cleared(&ch, run: r))
+        XCTAssertEqual(ch.dungeonTier, 2)
+        XCTAssertEqual(ch.persistLevel, 7)
+        var next = Run(character: ch)
+        XCTAssertEqual(Legacy.start(&next, ch).count, 2)
+        XCTAssertEqual(next.level, 7)
+        XCTAssertEqual(next.levelPoints, 18)
+        XCTAssertEqual(next.unlockedSkills, ["a"])
+        var e = Enemy(name: "X", icon: "x", hp: 100, maxHp: 100, atk: 10...20, gold: 10...10)
+        Legacy.shape(&e, next)
+        XCTAssertEqual(e.hp, 120)
+        XCTAssertEqual(e.atk, 11...22)
+        XCTAssertEqual(e.gold.lowerBound, 12)
+    }
+
+    func testClassicNeverScales() {
+        let ch = PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var r = Run(character: ch)
+        XCTAssertTrue(Legacy.start(&r, ch).isEmpty)
+        XCTAssertEqual(r.legacyTier, 1)
+    }
+
+    func testIndependenceTournamentOncePerYear() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        let july = DateComponents(calendar: Calendar(identifier: .gregorian), year: 2026, month: 7, day: 3, hour: 12).date!
+        var d = LoadedDice(rolls: [0])
+        XCTAssertNil(IndependenceTournament.start(level: 1, store: store, dice: &d, now: Date(timeIntervalSince1970: 0)))
+        XCTAssertNotNil(IndependenceTournament.start(level: 1, store: store, dice: &d, now: july))
+        XCTAssertEqual(IndependenceTournament.state(store).target, 600)
+        for _ in 0..<23 { XCTAssertNil(IndependenceTournament.kill(store: store, wallet: w, now: july)) }
+        XCTAssertNotNil(IndependenceTournament.kill(store: store, wallet: w, now: july))
+        XCTAssertEqual(w.gold, 500)
+        XCTAssertEqual(store.getItem("dd_trophies"), "5")
+        var d2 = LoadedDice(rolls: [0])
+        XCTAssertNil(IndependenceTournament.start(level: 1, store: store, dice: &d2, now: july))
+    }
+}

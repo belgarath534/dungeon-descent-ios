@@ -130,6 +130,7 @@ public enum Combat {
         if !elite { DailyChallenge.shape(&e, run) }
         if run.worldCurse { cursed(&e) }
         Challenges.shape(&e, run)
+        Legacy.shape(&e, run)
         return e
     }
 
@@ -156,6 +157,7 @@ public enum Combat {
         e.isElite = true
         e.mechanics["guardian"] = .bool(true)
         Challenges.shape(&e, run)
+        Legacy.shape(&e, run)
         return e
     }
 
@@ -171,6 +173,7 @@ public enum Combat {
         var b = Enemy.spawnBoss(t, playerLevel: run.level, playerMaxAtk: run.atk.upperBound, ngPlusCount: ngCount(run))
         if run.worldCurse { cursed(&b) }
         Challenges.shape(&b, run)
+        Legacy.shape(&b, run)
         return b
     }
 

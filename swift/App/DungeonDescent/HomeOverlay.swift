@@ -13,6 +13,7 @@ struct HomeOverlay: View {
     @State private var safeDraft = ""
     @State private var safeMsg = ""
     @State private var skillMsg = ""
+    @State private var fireworksMsg = ""
     @State private var minionMsg = ""
     @State private var forgeMsg = ""
     @State private var brewMsg = ""
@@ -92,10 +93,24 @@ struct HomeOverlay: View {
             .frame(maxWidth: .infinity)
         } else {
             VStack(alignment: .leading, spacing: 14) {
+                if Events.active() == "july4" { fireworks }
                 bed
                 safe
                 skills
             }
+        }
+    }
+
+    /// #home-fireworks-panel: July 4th only.
+    private var fireworks: some View {
+        section("🎆 FIREWORKS CORNER") {
+            note("Launch fireworks into the night sky and earn bonus XP. Recharges every 8 seconds.")
+            Button("🎆 Launch Fireworks!") { fireworksMsg = model.launchFireworks(); refreshed() }
+                .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xff6644))
+                .frame(maxWidth: .infinity).padding(10)
+                .background(Color(hex: 0x1a0500)).overlay(Rectangle().stroke(Color(hex: 0xcc4444)))
+                .accessibilityLabel("Launch fireworks for XP")
+            message(fireworksMsg, Color(hex: 0xff6644))
         }
     }
 
