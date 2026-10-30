@@ -3609,3 +3609,87 @@ final class DailyDescentTests: XCTestCase {
         XCTAssertEqual(DailyDescent.state(store).totalDays, 41)
     }
 }
+
+final class DailyChallengeTests: XCTestCase {
+    var cal: Calendar { var c = Calendar(identifier: .gregorian); c.timeZone = TimeZone(identifier: "UTC")!; return c }
+    func day(_ y: Int, _ m: Int, _ d: Int) -> Date { cal.date(from: DateComponents(year: y, month: m, day: d, hour: 12))! }
+    func newRun(_ diff: GameData.Difficulty = .wanderer) -> Run {
+        var r = Run(character: PlayerCharacter(name: "D", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: diff))
+        r.spirit = nil
+        return r
+    }
+
+    func testTodaysChallengeUsesTheWebFormula() {
+        // (2026 * 365 + 9 * 31 + 30) % 7 = 739799 % 7 = 4 → Nightmare Day
+        XCTAssertEqual(DailyChallenge.today(day(2026, 10, 30), calendar: cal).id, "dc-nightmare")
+        XCTAssertEqual(DailyChallenge.today(day(2026, 10, 31), calendar: cal).id, "dc-speed")
+        XCTAssertEqual(DailyChallenge.today(day(2026, 11, 3), calendar: cal).id, "dc-glass")
+    }
+
+    func testOnlyAppliesWhenRegistered() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        var r = newRun()
+        XCTAssertNil(DailyChallenge.start(&r, store: store, wallet: w, now: day(2026, 11, 3), calendar: cal))
+        XCTAssertNil(r.dailyChallenge)
+        DailyChallenge.register(store, now: day(2026, 11, 3), calendar: cal)
+        let full = r.maxHp
+        XCTAssertNotNil(DailyChallenge.start(&r, store: store, wallet: w, now: day(2026, 11, 3), calendar: cal))
+        XCTAssertEqual(r.dailyChallenge, "glassCannon")
+        XCTAssertEqual(r.maxHp, full / 2)
+        XCTAssertEqual(DailyChallenge.attackMult(r), 2)
+        XCTAssertFalse(DailyChallenge.isRegistered(store, now: day(2026, 11, 4), calendar: cal), "registration is for one day")
+    }
+
+    func testBlessedDayAndCompletion() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        let blessed = day(2026, 11, 5)
+        XCTAssertEqual(DailyChallenge.today(blessed, calendar: cal).effect, "blessedDay")
+        DailyChallenge.register(store, now: blessed, calendar: cal)
+        var r = newRun()
+        r.inventory = []
+        _ = DailyChallenge.start(&r, store: store, wallet: w, now: blessed, calendar: cal)
+        XCTAssertEqual(r.gold, 30)
+        XCTAssertEqual(r.inventory.filter { $0.name == "Health Potion" }.count, 3)
+        XCTAssertEqual(DailyChallenge.complete(r, store: store, now: blessed, calendar: cal)?.name, "Blessed Day")
+        XCTAssertNil(DailyChallenge.complete(r, store: store, now: blessed, calendar: cal), "once a day")
+        XCTAssertEqual(CoinShop.coins(store), 1)
+        XCTAssertEqual(DailyChallenge.history(store), [DailyChallenge.Past(date: "2026-11-5", name: "Blessed Day", completed: true)])
+    }
+
+    func testEffects() {
+        var r = newRun()
+        r.dailyChallenge = "cursedDay"
+        r.inCombat = true
+        r.hp = 10
+        r.inventory = [Item(name: "Health Potion", icon: "🧪", type: "potion", desc: "", heal: 40)]
+        XCTAssertFalse(Inventory.use(&r, at: 0).used)
+        r.inCombat = false
+        XCTAssertTrue(Inventory.use(&r, at: 0).used)
+
+        r.dailyChallenge = "hordeDay"
+        XCTAssertEqual(DailyChallenge.combatBonus(r) + Rooms.combatChance(r.difficulty), 0.70, accuracy: 1e-9)
+        r.dailyChallenge = "speedRun"
+        XCTAssertEqual(DailyChallenge.enemyMult(r), 1.25)
+        let xp0 = r.xp
+        Progression.gainXP(&r, 10)
+        XCTAssertEqual(r.xp - xp0, 20)
+
+        r.dailyChallenge = "ironDay"
+        var d = SeededDice(seed: 3)
+        let plain = newRun()
+        var d2 = SeededDice(seed: 3)
+        let a = Combat.nextEnemy(for: r, dice: &d), b = Combat.nextEnemy(for: plain, dice: &d2)
+        XCTAssertEqual(a.name, b.name)
+        if !a.isElite { XCTAssertEqual(a.maxHp, jsRound(Double(b.maxHp) * 1.5)) }
+
+        r.dailyChallenge = "nightmareDay"
+        var yes = LoadedDice(chances: [true])
+        let nm = DailyChallenge.nightmareEnemy(for: r, dice: &yes)
+        XCTAssertNotNil(nm)
+        let names = Set((GameContent.shared.nightmareEnemies!.t1 + GameContent.shared.nightmareEnemies!.t2).map(\.name))
+        XCTAssertTrue(names.contains(nm!.name))
+    }
+}

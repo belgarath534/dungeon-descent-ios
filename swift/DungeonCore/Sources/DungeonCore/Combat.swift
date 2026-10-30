@@ -99,6 +99,11 @@ public enum Combat {
             Challenges.shape(&stalker, run)
             return stalker
         }
+        if !elite, var nm = DailyChallenge.nightmareEnemy(for: run, dice: &dice) {
+            if run.worldCurse { cursed(&nm) }
+            Challenges.shape(&nm, run)
+            return nm
+        }
         if !elite, var seasonal = Events.seasonalEnemy(run, dice: &dice) {
             Challenges.shape(&seasonal, run)
             return seasonal
@@ -120,6 +125,7 @@ public enum Combat {
             let lo = jsRound(Double(e.atk.lowerBound) * m), hi = jsRound(Double(e.atk.upperBound) * m)
             e.atk = lo...max(lo, hi)
         }
+        if !elite { DailyChallenge.shape(&e, run) }
         if run.worldCurse { cursed(&e) }
         Challenges.shape(&e, run)
         return e
@@ -175,6 +181,8 @@ public enum Combat {
         // Blood Moon and the Liberty Shop's Sparkler.
         if let ev = Events.bonuses(run.event), ev.atkBoost > 0 { a = jsRound(Double(a) * (1 + ev.atkBoost)) }
         if run.sparkler { a = jsRound(Double(a) * 1.30) }
+        let dc = DailyChallenge.attackMult(run)
+        if dc != 1 { a = jsRound(Double(a) * dc) }
         return a
     }
 
@@ -686,6 +694,8 @@ public enum Combat {
         if let w = run.weather { raw = jsRound(Double(raw) * w.enemyAtkMult * w.damageTaken) }
         let rm = RunModifiers.enemyMult(run)
         if rm != 1 { raw = jsRound(Double(raw) * rm) }
+        let dcm = DailyChallenge.enemyMult(run)
+        if dcm != 1 { raw = jsRound(Double(raw) * dcm) }
         if run.undeadRes && Bestiary.undeadNames.contains(e.name) {
             raw = jsRound(Double(raw) * 0.65)
         }

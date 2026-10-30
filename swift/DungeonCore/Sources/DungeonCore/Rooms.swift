@@ -17,7 +17,7 @@ public enum Rooms {
     /// The next room: one a Scroll of Reveal already showed, or a fresh roll.
     public static func next(_ run: inout Run, dice: inout some Dice) -> Outcome {
         if !run.upcomingRooms.isEmpty { return run.upcomingRooms.removeFirst() }
-        return roll(run.difficulty, bonus: run.weather?.combatBonus ?? 0, dice: &dice)
+        return roll(run.difficulty, bonus: (run.weather?.combatBonus ?? 0) + DailyChallenge.combatBonus(run), dice: &dice)
     }
 
     /// How many rooms a new floor has (advanceFloor): floor 10 is just the boss.

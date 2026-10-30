@@ -117,6 +117,7 @@ final class RunModel: ObservableObject {
         game.globalInventory.load(into: &r)
         r.applyStartBonuses(wallet: game.wallet)
         r.startNotes += Races.start(&r, classTraits: AppSettings.classTraits, wallet: game.wallet)
+        if let dc = DailyChallenge.start(&r, store: game.store, wallet: game.wallet) { r.startNotes.append(dc) }
         r.applyMilestoneBuffs(game.milestoneEffects)
         r.event = Events.active()
         r.startNotes += Events.applyNextRun(&r, store: game.store)
@@ -180,6 +181,10 @@ final class RunModel: ObservableObject {
         }
         if let b = bountyBanner { add(b) }
         add("✦ Daily quest: \(game.dailyQuests.summary)")
+        if r.dailyChallenge == nil && !DailyChallenge.isCompleted(game.store) {
+            let dc = DailyChallenge.today()
+            add("⚡ Today's daily challenge is \(dc.name). Register for it in Quests, Challenge tab, to play it and earn a Mystery Coin.")
+        }
         persist()
         playMusic()
         if let g = r.roomGraph {
@@ -2122,6 +2127,12 @@ final class RunModel: ObservableObject {
         game.recordFirstClear(run)
         if !isChallenge { game.updateCharacter(characterIndex) { $0.completed = true; $0.floor = 10 } }
         game.clearRun(for: characterIndex)
+        if let dc = DailyChallenge.complete(run, store: game.store) {
+            let line = "⚡ Daily Challenge complete: \(dc.name)! You earned 1 Mystery Coin."
+            add(line)
+            Sound.sfx("sfx-unlock")
+            Feedback.announce(line, after: 3)
+        }
         if let line = challengeDone() {
             add(line)
             Feedback.announce(spoken + " " + line + " Return to the menu when you're ready.")

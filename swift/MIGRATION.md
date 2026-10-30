@@ -53,8 +53,8 @@ build there means the app doesn't compile; the log says why.
    boss phases, victory and defeat. Runs are saved after every action and can be
    continued. Class skills: all 358, learned at level-ups. Elites, enemy abilities,
    special rooms and dungeon events. Weapon and armor rarities. Achievements,
-   trophies and Game Center. Hardcore, Continue Journey and New Game+. Daily quests.
-   Next: bounties, daily challenge, boss rush, raids.
+   trophies and Game Center. Hardcore, Continue Journey and New Game+. Daily quests,
+   bounties, Daily Challenge, Daily Descent, Boss Rush and raids.
 4. **Native services:** Sign in with Apple / Google through the Firebase iOS SDK,
    cloud save, StoreKit 2 purchases, Game Center, Core Haptics, audio, Live Activity,
    Magic Tap, iCloud backup.
@@ -111,7 +111,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Hide and Seek | hsStart, hsMove, hsHide, the spatial growl, hs_rooms | ✅ single player and multiplayer (up to 5, the web version's hs_rooms layout and transactions, so Swift and web players share a house: shared hiding spots, rescuing caught teammates, the monster chasing whoever is nearest, joins, leaves, catches and escapes read out). The 7×7 house, the chase rules, the listening beat with its footstep, the explore and chase music, and the Darkness Swallower's growl panned left or right and louder as it closes in. The 3D view (for sighted watchers) isn't ported |
 | PVP Arena (Multiplayer) | goToMultiplayer, mpCreateRoom, mpJoinRoom, mpAction, mpRematch | ✅ create or join a 4-character room, Ready, turn-based Attack/Heavy/Skill/Defend/Taunt, emotes, rematch and leaving, using the web version's pvp_rooms layout exactly so Swift and web players can fight each other. The opponent's moves are read out as they happen. Web bugs fixed: when your opponent left mid-battle you were told you lost (now you win); an opponent joining was announced as "wants a rematch"; skills could be used with 0 SP |
 | Tournament | TOURNAMENT_BOSSES, getTournamentSeason, tnAttack | ✅ the first 7 days of January, April, July and October: the season's boss, Attack/Heavy/Defend with phases, damage plus speed and survival bonuses, 5 Mystery Coins for a kill, the season best (dd_tournament) and the shared season leaderboard. Web bugs fixed: the leaderboard stored and showed players' real email addresses (Swift stores the leaderboard name and hides old emails), and from October the countdown to the next tournament was negative |
-| Daily Challenge | DAILY_CHALLENGES | ⬜ |
+| Daily Challenge | DAILY_CHALLENGES, registerForDC, applyDailyChallenge, checkDailyChallengeCompletion, renderDCPanel (dd_dc_reg, dd_dc, dd_dc_history) | ✅ Quests → ⚡ Challenge: today's challenge by the web version's formula, Register and Cancel, the warning, the reward and Recent Challenges. Registered runs get the modifier (all seven work: Iron Day, Glass Cannon, Cursed Day, Blessed Day, Nightmare Day, Speed Run, Horde Day), and clearing a dungeon pays 1 Mystery Coin once a day. The run log says today's challenge when you aren't registered |
 | Achievements, trophies, Game Center | ACHIEVEMENTS, awardAchievement | ✅ all 115, same save keys and Game Center IDs |
 | Lifetime stats, Hall of Records | GLOBAL STATS TRACKING, GLOBAL_AWARDS, Hall of Legends | ✅ all the web's tracked stats, milestone awards (Mystery Coins and permanent effects), records and first clears |
 | Bestiary | BESTIARY_DATA, recordKill, BESTIARY_MILESTONES | ✅ 434 entries with filters, search and kill milestones; Spirits and Community tabs not yet |
@@ -122,7 +122,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Death: graveyard entry, gear kept, Classic level reset | showDefeat | ✅ |
 | Settings in the web version's look | settings-screen, settings-panel-* | ✅ categories; Audio, Accessibility (verbose rooms, combat announcements, repair unlocks), Gameplay (class traits), General (version, web save import), Account. Beta Features (3D Mode) and 3D Settings. Language, Notifications, Developer Tools not yet |
 | The Graveyard, Help, Credits, What's New | screen-graveyard, screen-help, screen-credits, screen-whatsnew | ✅ text from index.html through tools/extract-static-screens.py |
-| Quests & Achievements screen | screen-quests | ✅ main and daily quest, achievements with Load More; Daily Challenge not yet |
+| Quests & Achievements screen | screen-quests | ✅ main and daily quest, achievements with Load More, the Daily Challenge tab |
 | Web look: main menu, Your Champions, Death Log, Forge Your Legend | screen-menu, screen-charlist, screen-deathlog, screen-creation | ✅ same order, text, VoiceOver labels and sliders; creation cards come from index.html through tools/extract-creation.py |
 | The Shadow World dungeon | SHADOW_ENEMIES, addShadowCorruption, applyShadowEnemyMechanics, THE SHAPESHIFTER | ✅ dungeon 9, unlocked by finishing The Abyssal Deep: its 14 enemies and 3 elites with their moves (Mimic, Drifter, Null Fragment, Smear, Null Knight, Reflection, Sorrow Hound, Lurker, Void Weaver, Twice Dead, Shadow Archon, The Unborn, The Remnant; Hollow Echo, Null Sovereign, The Shapeless), Shadow Corruption and the Purge button, The Echo then the four-phase Shapeshifter, its floors, rooms, music and loot (Shadow Blade, Null Shield, Void Cloth, Shadow Cloak, Null Potion, Mirror Fragment, Echo Bone). The Stalker Floor: 10% of rooms from floor 3, a dark 5×5 room where the Darkness Swallower's growl pans to where it is and its footsteps follow you; reach an edge 3 times (150 gold and Shadow gear), get caught (35% of your HP), or turn and fight it when it's one step away. The Shadow events: The Mirror, The Voice, The Handwriting, The Offering, The Security Room (the growl plays in 3D from the Darkness Swallower's camera; the 15-second clock starts after its announcement) and The Two Doors, with the Offering Cloth and Door Key working. Not yet: the Shapeshifter's Mask and the Echo Staff (spells) |
 | Spirits in play | STARTER_SPIRITS, RARE_SPIRITS, ELITE_SPIRITS, openPauseSpirits, awardRareSpirit | ✅ all 24 spirits fight, guard and loot beside you; rare ones wake at level 5. The spirit row under the top bar, switching in Pause → Spirits (with the Market Sprite's 50 gold fee), elite spirits from 30% of elite kills and each dungeon's rare spirit on victory. Not yet: custom spirits from the Spirit Forge, trap detection (traps aren't in yet), the Spirit Bestiary |
@@ -485,6 +485,8 @@ Where an item's description and the web code disagree, Swift follows the descrip
 - **Alchemist brews lost their bonus.** An Alchemist's Phantom Potion, Gravity Tonic, Leech
   Brew, Rage Tonic, Fog Flask, Time Potion and Corruption Flask were brewed stronger, but
   using one always gave the shop version's numbers. Swift uses what was brewed.
+- **Two Daily Challenges were only words.** Speed Run promised enemies hitting 25% harder and
+  Cursed Day promised no potions in combat; neither was ever checked. Swift does both.
 - **Half the races did nothing.** The stat lines on the race cards (Human's "+All Stats",
   Elf's "+AGI +INT", Dwarf's "+STR +DEF", Orc's "+STR+STR -DEF", Tiefling, Shade, and the
   Gnome's and Merfolk's stats) were never applied; Golem had no code at all (no +5 defense,

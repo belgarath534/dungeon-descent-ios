@@ -41,6 +41,7 @@ public enum Progression {
         if run.has("cu-xp-boost") { amount = jsRound(Double(amount) * 1.15) }
         if run.backstoryXPBonus > 0 { amount = jsRound(Double(amount) * (1 + run.backstoryXPBonus)) }
         if let ev = Events.bonuses(run.event), ev.xpMult != 1 { amount = jsRound(Double(amount) * ev.xpMult) }
+        if DailyChallenge.xpMult(run) != 1 { amount = jsRound(Double(amount) * DailyChallenge.xpMult(run)) }
         if run.xpBoostFloors > 0 { amount = jsRound(Double(amount) * run.xpBoostMult) }
         run.xp += amount
         guard run.level < run.levelCap else { return 0 }

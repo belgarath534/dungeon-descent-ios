@@ -49,6 +49,10 @@ public enum Inventory {
         if Challenges.has(run, "no-potions") && (item.type.contains("potion") || item.type == "elixir" || item.type == "heal") {
             return Outcome(message: "Daily modifier Dry Run: potions cannot be used in this run.", used: false)
         }
+        // Cursed Day: no potions in a fight.
+        if DailyChallenge.blocksPotions(run) && (item.type.contains("potion") || item.type == "elixir" || item.type == "heal") {
+            return Outcome(message: "Cursed Day: potions cannot be used in combat.", used: false)
+        }
 
         switch item.type {
         case "potion":
@@ -176,7 +180,7 @@ public enum Inventory {
 
     /// Fills in which rooms a Scroll of Reveal shows. Call right after using one.
     public static func reveal(_ run: inout Run, dice: inout some Dice) -> String {
-        while run.upcomingRooms.count < 3 { run.upcomingRooms.append(Rooms.roll(run.difficulty, dice: &dice)) }
+        while run.upcomingRooms.count < 3 { run.upcomingRooms.append(Rooms.roll(run.difficulty, bonus: (run.weather?.combatBonus ?? 0) + DailyChallenge.combatBonus(run), dice: &dice)) }
         let names = run.upcomingRooms.prefix(3).map { o -> String in
             switch o {
             case .fight: return "Combat Room"

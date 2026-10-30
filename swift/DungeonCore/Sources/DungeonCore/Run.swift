@@ -150,6 +150,8 @@ public struct Run: Codable, Sendable {
     public var brews = Alchemy.Brews()
     /// The race's ability is on (Races.start, with Class Traits on).
     public var raceTraits = false
+    /// Today's Daily Challenge effect ("ironDay" …), if you registered for it.
+    public var dailyChallenge: String? = nil
     public var poisonTurns = 0
     public var poisonDamage = 0
     public var frozen = false
