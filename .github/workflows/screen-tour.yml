@@ -59,7 +59,7 @@ jobs:
           s = open(p).read()
           for anchor in ("        PRODUCT_NAME: DungeonDescent\n", "        TEST_TARGET_NAME: DungeonDescent\n"):
               assert s.count(anchor) == 1, anchor
-              s = s.replace(anchor, anchor + "        SUPPORTS_MACCATALYST: YES\n")
+              s = s.replace(anchor, anchor + "        SUPPORTS_MACCATALYST: YES\n        MACOSX_DEPLOYMENT_TARGET: \"13.0\"\n")
           open(p, "w").write(s)
           PY
           fi
