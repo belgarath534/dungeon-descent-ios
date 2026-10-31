@@ -55,6 +55,8 @@ targets:
         product: FirebaseDatabase
       - package: GoogleSignIn
         product: GoogleSignIn
+        # Google's library doesn't build for Apple Vision Pro; Apple and email sign-in do.
+        destinationFilters: [iOS]
       - target: DDLiveActivity
         destinationFilters: [iOS]
       # The Apple Watch app, embedded in the iPhone app like every watch app.
