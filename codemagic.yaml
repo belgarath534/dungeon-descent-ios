@@ -250,3 +250,111 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: false  # internal testers get every build anyway
+
+  dungeon-descent-vision:
+    name: Dungeon Descent Vision Pro (TestFlight)
+    # The native Apple Vision Pro build of the Swift app (same app, visionOS
+    # platform in App Store Connect). Start it by hand from Codemagic.
+    # The Swift rewrite in swift/. Same bundle ID as the web version, so each
+    # build replaces it on TestFlight. Start it by hand from Codemagic.
+    max_build_duration: 120
+    instance_type: mac_mini_m4
+    integrations:
+      app_store_connect: Accessible Backrooms
+    environment:
+      ios_signing:
+        provisioning_profiles:
+          - Dungeon Descent Live Activity App Store
+        certificates:
+          - Accessible Backrooms Distribution
+      xcode: latest
+    scripts:
+      - name: Install XcodeGen
+        script: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+      - name: Run the game rules tests
+        script: |
+          cd swift/DungeonCore
+          swift test
+      - name: Get the App Store profile from Apple
+        script: |
+          # The app needs a profile with iCloud and Push Notifications (Live
+          # Activity updates while the app is closed). The first build turns
+          # Push Notifications on for com.dungeon.descent and makes the profile
+          # with the App Store Connect integration's key; later builds reuse it.
+          set -e
+          ID=com.dungeon.descent
+          NAME="Dungeon Descent Push App Store"
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          fetch() {
+            TMP=$(mktemp -d)
+            app-store-connect profiles list --type IOS_APP_STORE --state ACTIVE \
+              --name "$NAME" --save --profiles-dir "$TMP" >/dev/null 2>&1 || true
+            for F in "$TMP"/*; do
+              [ -f "$F" ] || continue
+              if security cms -D -i "$F" | grep -q "iCloud.com.dungeon.descent" && \
+                 security cms -D -i "$F" | grep -q "aps-environment"; then
+                cp "$F" "$DEST/"; return 0
+              fi
+            done
+            return 1
+          }
+          if fetch; then echo "Using \"$NAME\" from Apple"; exit 0; fi
+          BID=$(app-store-connect bundle-ids list --bundle-id-identifier "$ID" --strict-match-identifier --json \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")')
+          [ -n "$BID" ] || { echo "No bundle ID $ID on Apple"; exit 1; }
+          echo "Turning on Push Notifications for $ID"
+          app-store-connect bundle-ids enable-capabilities "$BID" --capability "Push Notifications" || true
+          CERTS=""
+          for T in DISTRIBUTION IOS_DISTRIBUTION; do
+            C=$(app-store-connect certificates list --type $T --json 2>/dev/null \
+              | python3 -c 'import sys,json; print(" ".join(c["id"] for c in json.load(sys.stdin)))' || true)
+            CERTS="$CERTS $C"
+          done
+          [ -n "${CERTS// /}" ] || { echo "No distribution certificate found on Apple"; exit 1; }
+          app-store-connect profiles create "$BID" --certificate-ids $CERTS \
+            --type IOS_APP_STORE --name "$NAME" >/dev/null
+          echo "Made \"$NAME\""
+          fetch || { echo "Made the profile but it is missing iCloud or push; check the App ID on Apple"; exit 1; }
+      - name: Set build number
+        script: |
+          # TestFlight only accepts a build number higher than every earlier
+          # one, including the web version's builds from the other workflow.
+          # Ask Apple for the latest; if that fails, the project-wide build
+          # count is still higher than any number Codemagic has used before.
+          APP_ID=$(app-store-connect apps list --bundle-id-identifier com.dungeon.descent \
+            --strict-match-identifier --json 2>/dev/null \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")' || true)
+          LATEST=0
+          if [ -n "$APP_ID" ]; then
+            LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_ID" 2>/dev/null \
+              | grep -Eo '^[0-9]+$' | tail -1 || true)
+          fi
+          NEXT=$(( ${LATEST:-0} + 1 ))
+          if [ "${PROJECT_BUILD_NUMBER:-0}" -gt "$NEXT" ]; then NEXT=$PROJECT_BUILD_NUMBER; fi
+          echo "Latest on TestFlight: ${LATEST:-unknown}. Using build number $NEXT"
+          sed -i '' "s/CURRENT_PROJECT_VERSION: \"[0-9]*\"/CURRENT_PROJECT_VERSION: \"$NEXT\"/" swift/App/project.yml
+          grep CURRENT_PROJECT_VERSION swift/App/project.yml
+      - name: Generate the Xcode project
+        script: |
+          cd swift/App
+          xcodegen generate
+      - name: Use the App Store signing profiles
+        script: |
+          xcode-project use-profiles --project swift/App/DungeonDescent.xcodeproj
+      - name: Build signed Vision Pro app
+        script: |
+          # Firestore has no ready-made Vision Pro library; build it from source.
+          export FIREBASE_SOURCE_FIRESTORE=1
+          xcode-project build-ipa \
+            --project swift/App/DungeonDescent.xcodeproj \
+            --scheme DungeonDescent \
+            --archive-flags="-destination 'generic/platform=visionOS'"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false  # internal testers get every build anyway
