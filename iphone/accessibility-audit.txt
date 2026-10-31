@@ -3,20 +3,20 @@
 [Main menu] Contrast failed — "🪙 0 Demon Coins" (48). Contrast failed for SwiftUI.AccessibilityNode
 [Main menu] Contrast failed — ""Not all who enter are lost — most are."" (48). Contrast failed for SwiftUI.AccessibilityNode
 [Main menu] Contrast failed — "🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5)." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Main menu] Contrast failed — "🎃 Halloween · ACTIVE · 2d 5h remaining" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 29h remaining" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Main menu] Contrast failed — "🎃 Halloween · ACTIVE · 2d 4h remaining" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 28h remaining" (48). Contrast failed for SwiftUI.AccessibilityNode
 [Main menu] Contrast nearly passed — "BETA" (48). Contrast is not high enough for SwiftUI.AccessibilityNode unless font size is larger.
-[Main menu] Dynamic Type font sizes are partially unsupported — "by Leo Productions" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Main menu] Dynamic Type font sizes are partially unsupported — "🎃 Halloween · ACTIVE · 2d 5h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Main menu] Dynamic Type font sizes are partially unsupported — "BETA" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Main menu] Dynamic Type font sizes are partially unsupported — "🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5)." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Main menu] Dynamic Type font sizes are partially unsupported — "BETA" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Main menu] Dynamic Type font sizes are partially unsupported — "⚡ XP Weekend · ACTIVE · 29h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Main menu] Text clipped — "🪙 0 Demon Coins" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Main menu] Text clipped — "🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5)." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Main menu] Text clipped — "⚔️👥 MULTIPLAYER" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Main menu] Text clipped — "🎃 Halloween · ACTIVE · 2d 5h remaining" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Dynamic Type font sizes are partially unsupported — "⚡ XP Weekend · ACTIVE · 28h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "🎃 Halloween · ACTIVE · 2d 4h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "BETA" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "by Leo Productions" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Main menu] Text clipped — "🕯️ HIDE AND SEEK" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5)." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "🎃 Halloween · ACTIVE · 2d 4h remaining" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "⚔️👥 MULTIPLAYER" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "🪙 0 Demon Coins" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
 [Character list] Contrast failed — "Choose a warrior to continue, or forge a new legend." (48). Contrast failed for SwiftUI.AccessibilityNode
 [Character list] Contrast failed — "No champions yet. Create your first character." (48). Contrast failed for SwiftUI.AccessibilityNode
 [Character list] Contrast failed — "✦" (48). Contrast failed for SwiftUI.AccessibilityNode
@@ -29,14 +29,14 @@
 [Endless Descent] Contrast failed — "Create a character first." (48). Contrast failed for SwiftUI.AccessibilityNode
 [Endless Descent] Contrast failed — "DAILY CHALLENGE" (48). Contrast failed for SwiftUI.AccessibilityNode
 [Endless Descent] Contrast failed — "DESCENT POINTS" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "The dungeon has no end. Leave it running. See how far you fall." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "0" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Endless Descent] Dynamic Type font sizes are partially unsupported — "DAILY CHALLENGE" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Endless Descent] Dynamic Type font sizes are partially unsupported — "CHOOSE YOUR CHAMPION" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "Available to spend" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Endless Descent] Dynamic Type font sizes are partially unsupported — "🎯 Daily: Reach level 5 in one run. — +150 pts" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "It keeps descending when you leave the app. Your Lock Screen shows the run." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Endless Descent] Dynamic Type font sizes are partially unsupported — "DESCENT POINTS" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Endless Descent] Dynamic Type font sizes are partially unsupported — "It keeps descending when you leave the app. Your Lock Screen shows the run." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Endless Descent] Dynamic Type font sizes are partially unsupported — "Available to spend" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Endless Descent] Dynamic Type font sizes are partially unsupported — "0" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Endless Descent] Dynamic Type font sizes are partially unsupported — "The dungeon has no end. Leave it running. See how far you fall." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Endless Descent] Text clipped — "🎯 Daily: Reach level 5 in one run. — +150 pts" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
 [Bestiary] Dynamic Type font sizes are partially unsupported — "A record of the creatures you have faced in the dark." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Bestiary] Dynamic Type font sizes are unsupported — "❓" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
@@ -54,26 +54,26 @@
 [Quests] Contrast failed — "Quests & Achievements" (48). Contrast failed for SwiftUI.AccessibilityNode
 [Quests] Contrast nearly passed — "MAIN" (48). Contrast is not high enough for SwiftUI.AccessibilityNode unless font size is larger.
 [Quests] Contrast failed — "Progress: 0 / 3" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Quests] Dynamic Type font sizes are partially unsupported — "MAIN" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Quests] Dynamic Type font sizes are partially unsupported — "Progress: 0 / 3" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Quests] Dynamic Type font sizes are partially unsupported — "Reward: 80 gold" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Quests] Dynamic Type font sizes are partially unsupported — "DAILY" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Quests] Dynamic Type font sizes are partially unsupported — "Reward: Dungeon cleared + next dungeon unlocked." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Quests] Dynamic Type font sizes are partially unsupported — "MAIN" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Quests] Text clipped — "Reward: Dungeon cleared + next dungeon unlocked." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
 [What's New] Contrast failed — "The Festival Update" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Help] Dynamic Type font sizes are partially unsupported — "⚔ BASICS" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Help] Dynamic Type font sizes are partially unsupported — "🌐 MULTIPLAYER" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Help] Dynamic Type font sizes are partially unsupported — "⌨ KEY COMMANDS" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Help] Dynamic Type font sizes are partially unsupported — "🏚 DUNGEONS" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Help] Dynamic Type font sizes are partially unsupported — "🧙 CHARACTERS" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Help] Dynamic Type font sizes are partially unsupported — "♿ ACCESSIBILITY" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Help] Dynamic Type font sizes are partially unsupported — "🧙 CHARACTERS" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Help] Dynamic Type font sizes are partially unsupported — "⚔ COMBAT" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Help] Dynamic Type font sizes are partially unsupported — "🗺 STRATEGIES" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Help] Dynamic Type font sizes are partially unsupported — "🏚 DUNGEONS" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Help] Dynamic Type font sizes are partially unsupported — "⚔ BASICS" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Help] Dynamic Type font sizes are partially unsupported — "✨ FEATURES" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Help] Dynamic Type font sizes are partially unsupported — "🗺 STRATEGIES" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Help] Dynamic Type font sizes are partially unsupported — "⌨ KEY COMMANDS" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Help] Dynamic Type font sizes are partially unsupported — "🌐 MULTIPLAYER" (9). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Help] Text clipped — "🧙 CHARACTERS" (9). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Help] Text clipped — "🏚 DUNGEONS" (9). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
 [Help] Text clipped — "🌐 MULTIPLAYER" (9). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
 [Help] Text clipped — "🗺 STRATEGIES" (9). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Help] Text clipped — "🏚 DUNGEONS" (9). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
 [Help] Contrast failed — "Everything you need to know about Dungeon Descent. Use your screen reader heading navigation to jump between sections." (48). Contrast failed for SwiftUI.AccessibilityNode
 [Help] Contrast failed — "🧙 CHARACTERS" (9). Contrast failed for SwiftUI.AccessibilityNode
 [Help] Contrast failed — "🏚 DUNGEONS" (9). Contrast failed for SwiftUI.AccessibilityNode
