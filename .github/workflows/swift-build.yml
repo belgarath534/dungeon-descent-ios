@@ -18,7 +18,7 @@ concurrency:
 jobs:
   build:
     runs-on: macos-15
-    timeout-minutes: 40
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
 
@@ -57,6 +57,9 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild -showsdks | grep -qi xros || xcodebuild -downloadPlatform visionOS
+          # Firestore's ready-made library has no Vision Pro version; this
+          # builds it from source (Vision Pro only, so iPhone builds stay fast).
+          export FIREBASE_SOURCE_FIRESTORE=1
           xcodebuild \
             -project DungeonDescent.xcodeproj \
             -scheme DungeonDescent \
