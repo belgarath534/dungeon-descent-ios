@@ -112,7 +112,12 @@ struct MainMenuView: View {
                 .accessibilityHidden(true)
             ScrollView {
                 VStack(spacing: 0) {
-                    Color.clear.frame(height: 1)
+                    // The space above the title is the logo's VoiceOver element
+                    // (a 1-point strip was too small, so VoiceOver skipped it).
+                    Color.clear
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 36)
+                        .contentShape(Rectangle())
                         .accessibilityElement()
                         .accessibilityLabel("Dungeon Descent game logo")
                         .accessibilityAddTraits(.isImage)
@@ -122,7 +127,6 @@ struct MainMenuView: View {
                     footer
                 }
                 .padding(.horizontal, 12)
-                .padding(.top, 36)
                 .padding(.bottom, 80)
                 .frame(maxWidth: 520)
                 .frame(maxWidth: .infinity)
