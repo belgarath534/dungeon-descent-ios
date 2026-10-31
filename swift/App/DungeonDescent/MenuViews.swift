@@ -105,10 +105,16 @@ struct MainMenuView: View {
                 .scaledToFill()
                 .opacity(0.18)
                 .ignoresSafeArea()
-                .accessibilityLabel("Dungeon Descent game logo")
-                .accessibilitySortPriority(1)
+                // Read from the top of the list below: as its own full-screen
+                // element it came after the last button, so swiping past
+                // the end jumped VoiceOver back to the top.
+                .accessibilityHidden(true)
             ScrollView {
                 VStack(spacing: 0) {
+                    Color.clear.frame(height: 1)
+                        .accessibilityElement()
+                        .accessibilityLabel("Dungeon Descent game logo")
+                        .accessibilityAddTraits(.isImage)
                     header
                     Ornament()
                     nav
