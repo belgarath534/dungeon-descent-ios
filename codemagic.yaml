@@ -187,7 +187,7 @@ workflows:
             CERTS="$CERTS $C"
           done
           if [ -z "${CERTS// /}" ]; then echo "No distribution certificate found on Apple"; exit 1; fi
-          app-store-connect profiles create --bundle-id "$BID" --certificate-ids $CERTS \
+          app-store-connect profiles create "$BID" --certificate-ids $CERTS \
             --type IOS_APP_STORE --name "$NAME" >/dev/null
           echo "Made \"$NAME\""
           fetch || { echo "Made the profile but couldn't download it"; exit 1; }
