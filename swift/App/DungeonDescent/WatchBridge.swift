@@ -105,6 +105,11 @@ final class WatchBridge: NSObject, WCSessionDelegate {
         Task { @MainActor in replyHandler(self.handle(message)) }
     }
 
+    /// A button press the watch queued while the phone couldn't answer.
+    func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+        Task { @MainActor in _ = self.handle(userInfo); self.push() }
+    }
+
     func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
         Task { @MainActor in _ = self.handle(message); self.push() }
     }

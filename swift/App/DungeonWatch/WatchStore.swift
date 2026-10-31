@@ -35,15 +35,16 @@ final class WatchStore: NSObject, ObservableObject {
 
     private func send(_ cmd: WatchLink.Command, index: Int? = nil) {
         let s = WCSession.default
-        guard s.activationState == .activated else { message = "Connecting to your iPhone…"; return }
-        guard s.isReachable else {
-            message = "Your iPhone isn't in reach. Bring it closer and try again."
-            if cmd != .status { WKInterfaceDevice.current().play(.failure) }
+        guard s.activationState == .activated else {
+            if cmd != .status { message = "Connecting to your iPhone… try again in a moment." }
             return
         }
         var msg: [String: Any] = [WatchLink.commandKey: cmd.rawValue]
         if let index { msg[WatchLink.indexKey] = index }
-        busy = true
+        // isReachable is often false for a moment even with the phone in hand
+        // (right after opening, or while the phone app sleeps), so always try:
+        // a message wakes the phone app when it can.
+        busy = cmd != .status
         s.sendMessage(msg, replyHandler: { reply in
             Task { @MainActor in
                 self.busy = false
@@ -56,8 +57,13 @@ final class WatchStore: NSObject, ObservableObject {
         }, errorHandler: { error in
             Task { @MainActor in
                 self.busy = false
-                self.message = "Couldn't reach your iPhone. Open Dungeon Descent on it and try again."
-                if cmd != .status { WKInterfaceDevice.current().play(.failure) }
+                // A status check that fails stays quiet: the last state the
+                // phone sent is still on screen.
+                guard cmd != .status else { return }
+                // A button press waits in line and happens as soon as they connect.
+                s.transferUserInfo(msg)
+                self.message = "Sent — your iPhone will do it as soon as it connects."
+                WKInterfaceDevice.current().play(.click)
             }
         })
     }
