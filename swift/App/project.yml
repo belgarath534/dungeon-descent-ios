@@ -196,8 +196,8 @@ targets:
   # accessibility audit (the "Screen tour" GitHub workflow). Not in the App Store build.
   DungeonDescentUITests:
     type: bundle.ui-testing
-    platform: iOS
-    deploymentTarget: "16.0"
+    platform: auto
+    supportedDestinations: [iOS, visionOS]
     sources:
       - path: UITests
     dependencies:
@@ -206,6 +206,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.uitests
         TEST_TARGET_NAME: DungeonDescent
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        XROS_DEPLOYMENT_TARGET: "1.0"
         GENERATE_INFOPLIST_FILE: YES
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_VERSION: "5.0"

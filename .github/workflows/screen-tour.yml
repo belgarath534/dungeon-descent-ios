@@ -14,7 +14,7 @@ on:
       device:
         description: Which device to run on
         type: choice
-        options: [all, iphone, mac]
+        options: [all, iphone, mac, vision]
         default: all
   # Also runs when the tour itself changes on the Swift branch.
   push:
@@ -35,9 +35,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        device: ${{ fromJSON((inputs.device == '' || inputs.device == 'all' || inputs.device == null) && '["iphone","mac"]' || format('["{0}"]', inputs.device)) }}
+        device: ${{ fromJSON((inputs.device == '' || inputs.device == 'all' || inputs.device == null) && '["iphone","mac","vision"]' || format('["{0}"]', inputs.device)) }}
     runs-on: macos-15
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -66,7 +66,7 @@ jobs:
               assert s.count(dep) == 1, dep
               s = s.replace(dep, "")
           dests = "    supportedDestinations: [iOS, visionOS]\n"
-          assert s.count(dests) == 1
+          assert s.count(dests) >= 1
           s = s.replace(dests, "    supportedDestinations: [iOS, visionOS, macCatalyst]\n")
           open(p, "w").write(s)
           PY
@@ -92,6 +92,22 @@ jobs:
             xcrun simctl boot "$UDID" || true
             echo "destination=id=$UDID" >> "$GITHUB_OUTPUT"
             echo "signing=CODE_SIGNING_ALLOWED=NO" >> "$GITHUB_OUTPUT"
+          elif [ "${{ matrix.device }}" = "vision" ]; then
+            find_vision() { xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)["devices"]
+          for rt in sorted((k for k in d if "xrOS" in k or "visionOS" in k), reverse=True):
+              if d[rt]:
+                  print(d[rt][0]["udid"]); break
+          '; }
+            UDID=$(find_vision)
+            if [ -z "$UDID" ]; then xcodebuild -downloadPlatform visionOS; UDID=$(find_vision); fi
+            echo "Vision Pro simulator: $UDID"
+            xcrun simctl boot "$UDID" || true
+            echo "destination=id=$UDID" >> "$GITHUB_OUTPUT"
+            echo "signing=CODE_SIGNING_ALLOWED=NO" >> "$GITHUB_OUTPUT"
+            # Firestore has no ready-made Vision Pro library; build it from source.
+            echo "FIREBASE_SOURCE_FIRESTORE=1" >> "$GITHUB_ENV"
           else
             # Apple doesn't run UI tests on "Designed for iPad", so the tour
             # builds the same app as Mac Catalyst (only here, not for the App
