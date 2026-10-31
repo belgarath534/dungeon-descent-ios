@@ -54,7 +54,10 @@ targets:
       - target: DDLiveActivity
       # The Apple Watch app, embedded in the iPhone app like every watch app.
       - target: DungeonWatch
-    scheme: {}
+    scheme:
+      # The screen tour (UITests/), run by the "Screen tour" GitHub workflow.
+      testTargets:
+        - DungeonDescentUITests
     info:
       path: DungeonDescent/Info.plist
       properties:
@@ -173,3 +176,20 @@ targets:
         SWIFT_VERSION: "5.0"
         CODE_SIGN_STYLE: Automatic
         SKIP_INSTALL: YES
+  # Opens the game, visits a few screens, saves screenshots and runs Apple's
+  # accessibility audit (the "Screen tour" GitHub workflow). Not in the App Store build.
+  DungeonDescentUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: UITests
+    dependencies:
+      - target: DungeonDescent
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.uitests
+        TEST_TARGET_NAME: DungeonDescent
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic

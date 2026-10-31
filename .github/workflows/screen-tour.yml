@@ -1,0 +1,156 @@
+# Runs the game on devices we don't have in hand and takes pictures of it:
+# an iPhone simulator, and a Mac running the iPhone/iPad app (the way Apple
+# Silicon Macs run it from the App Store). Each run visits a few screens,
+# saves a screenshot of each and runs Apple's accessibility audit.
+#
+# Started by hand (Actions → Screen tour → Run workflow) because macOS
+# minutes cost more. The results go to the screen-tour-results branch, one
+# folder per device, and are also attached to the run.
+name: Screen tour
+
+on:
+  workflow_dispatch:
+    inputs:
+      device:
+        description: Which device to run on
+        type: choice
+        options: [all, iphone, mac]
+        default: all
+  # Also runs when the tour itself changes on the Swift branch.
+  push:
+    branches: [swift-rewrite]
+    paths:
+      - 'swift/App/UITests/**'
+      - '.github/workflows/screen-tour.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: screen-tour
+  cancel-in-progress: false
+
+jobs:
+  tour:
+    strategy:
+      fail-fast: false
+      matrix:
+        device: ${{ fromJSON((inputs.device == '' || inputs.device == 'all' || inputs.device == null) && '["iphone","mac"]' || format('["{0}"]', inputs.device)) }}
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick the newest Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: Generate the Xcode project
+        working-directory: swift/App
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          xcodegen generate
+
+      - name: Choose where it runs
+        id: dest
+        run: |
+          if [ "${{ matrix.device }}" = "iphone" ]; then
+            UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, re, sys
+          d = json.load(sys.stdin)["devices"]
+          def ver(k):
+              m = re.search(r"iOS-(\d+)-(\d+)", k)
+              return (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+          for rt in sorted((k for k in d if "iOS" in k), key=ver, reverse=True):
+              phones = [x for x in d[rt] if x["name"].startswith("iPhone")]
+              if phones:
+                  print(phones[0]["udid"]); break
+          ')
+            echo "Simulator: $UDID"
+            xcrun simctl boot "$UDID" || true
+            echo "destination=id=$UDID" >> "$GITHUB_OUTPUT"
+            echo "signing=CODE_SIGNING_ALLOWED=NO" >> "$GITHUB_OUTPUT"
+          else
+            echo "destination=platform=macOS,arch=arm64,variant=Designed for iPad" >> "$GITHUB_OUTPUT"
+            # Signed to run on this Mac only, without the App Store entitlements
+            # (iCloud, Game Center), which need Apple's profile.
+            echo "signing=CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER= CODE_SIGN_ENTITLEMENTS=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run the screen tour
+        working-directory: swift/App
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project DungeonDescent.xcodeproj \
+            -scheme DungeonDescent \
+            -destination "${{ steps.dest.outputs.destination }}" \
+            -derivedDataPath build \
+            -resultBundlePath tour.xcresult \
+            ${{ steps.dest.outputs.signing }} \
+            2>&1 | tee test.log | grep -E "error:|Test Case|\*\* TEST|Testing failed|Unable to|xcodebuild: error" || true
+          ls -d tour.xcresult
+
+      - name: Pull the screenshots out
+        if: always()
+        working-directory: swift/App
+        run: |
+          OUT="results/${{ matrix.device }}"
+          mkdir -p "$OUT" raw
+          if [ -d tour.xcresult ]; then
+            xcrun xcresulttool export attachments --path tour.xcresult --output-path raw || true
+          fi
+          python3 - "$OUT" <<'PY'
+          import json, os, shutil, sys
+          out = sys.argv[1]
+          try:
+              manifest = json.load(open("raw/manifest.json"))
+          except Exception as e:
+              print("No attachments:", e); manifest = []
+          for test in manifest:
+              for a in test.get("attachments", []):
+                  src = os.path.join("raw", a["exportedFileName"])
+                  name = a.get("suggestedHumanReadableName") or a["exportedFileName"]
+                  # "01-menu_0_UUID.png" → "01-menu.png"
+                  base, ext = os.path.splitext(name)
+                  base = base.split("_")[0]
+                  shutil.copy(src, os.path.join(out, base + ext))
+          PY
+          cp test.log "$OUT/test-log.txt" 2>/dev/null || true
+          ls -la "$OUT"
+          echo "──── Accessibility audit ────"
+          cat "$OUT"/accessibility-audit* 2>/dev/null || echo "(none)"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screen-tour-${{ matrix.device }}
+          path: swift/App/results/${{ matrix.device }}
+          if-no-files-found: ignore
+
+      - name: Save to the screen-tour-results branch
+        if: always()
+        working-directory: swift/App
+        run: |
+          D=${{ matrix.device }}
+          [ -d "results/$D" ] || exit 0
+          git config user.name "Screen tour"
+          git config user.email "actions@users.noreply.github.com"
+          WT=$(mktemp -d)
+          if git fetch origin screen-tour-results 2>/dev/null; then
+            git worktree add "$WT" FETCH_HEAD
+            cd "$WT" && git checkout -B screen-tour-results
+          else
+            git worktree add --detach "$WT"
+            cd "$WT" && git checkout --orphan screen-tour-results && git rm -rqf . || true
+          fi
+          rm -rf "$WT/$D" && cp -R "$GITHUB_WORKSPACE/swift/App/results/$D" "$WT/$D"
+          cd "$WT"
+          git add -A "$D"
+          git commit -qm "Screen tour: $D, $(date -u +%Y-%m-%dT%H:%MZ), ${GITHUB_SHA::7}" || exit 0
+          for i in 1 2 3; do
+            git push origin screen-tour-results && break
+            git pull --rebase origin screen-tour-results || true
+          done
