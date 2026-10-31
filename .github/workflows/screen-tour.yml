@@ -73,10 +73,12 @@ jobs:
             echo "destination=id=$UDID" >> "$GITHUB_OUTPUT"
             echo "signing=CODE_SIGNING_ALLOWED=NO" >> "$GITHUB_OUTPUT"
           else
-            echo "destination=platform=macOS,arch=arm64,variant=Designed for iPad" >> "$GITHUB_OUTPUT"
-            # Signed to run on this Mac only, without the App Store entitlements
-            # (iCloud, Game Center), which need Apple's profile.
-            echo "signing=CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER= CODE_SIGN_ENTITLEMENTS=" >> "$GITHUB_OUTPUT"
+            # Apple doesn't run UI tests on "Designed for iPad", so the tour
+            # builds the same app as Mac Catalyst (only here, not for the App
+            # Store), signed to run on this Mac only, without the App Store
+            # entitlements (iCloud, Game Center), which need Apple's profile.
+            echo "destination=platform=macOS,variant=Mac Catalyst" >> "$GITHUB_OUTPUT"
+            echo "signing=SUPPORTS_MACCATALYST=YES CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER= CODE_SIGN_ENTITLEMENTS=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run the screen tour

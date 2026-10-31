@@ -58,7 +58,8 @@ final class ScreenTour: XCTestCase {
         for _ in 0..<4 {
             var closed = false
             for label in ["Continue to the game", "Not now", "OK", "✕ Close", "Close"] {
-                let b = app.buttons[label].firstMatch
+                // Button styles show labels in capitals, and so does the accessibility tree.
+                let b = app.buttons.matching(NSPredicate(format: "label ==[c] %@", label)).firstMatch
                 if b.exists && b.isHittable { b.tap(); closed = true; sleep(1) }
             }
             if !closed { break }
@@ -67,7 +68,7 @@ final class ScreenTour: XCTestCase {
 
     private func visit(prefix: String, name: String, screen: String) {
         launch()
-        let button = app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", prefix)).firstMatch
+        let button = app.buttons.matching(NSPredicate(format: "label BEGINSWITH[c] %@", prefix)).firstMatch
         guard scrollTo(button) else {
             auditReport.append("[\(screen)] Couldn't find a button starting with \"\(prefix)\".")
             shot(name + "-not-found")

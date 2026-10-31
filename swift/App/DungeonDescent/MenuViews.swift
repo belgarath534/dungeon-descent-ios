@@ -105,10 +105,12 @@ struct MainMenuView: View {
             // (image descriptions work) but not press, read before the menu:
             // as the last item it sent focus back to the top.
             Button {} label: {
-                Image("MenuLogo")
-                    .resizable()
-                    .scaledToFill()
-                    .opacity(0.18)
+                // The logo fills the screen without setting its size: a
+                // scaledToFill image is wider than the phone, and as the
+                // ZStack's biggest child it made every pop-up wider too.
+                Color.clear
+                    .overlay(Image("MenuLogo").resizable().scaledToFill().opacity(0.18))
+                    .clipped()
             }
             .buttonStyle(.plain)
             .disabled(true)
