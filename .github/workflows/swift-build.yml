@@ -57,6 +57,8 @@ jobs:
         run: |
           mkdir -p Payload
           cp -R build/Build/Products/Release-iphoneos/DungeonDescent.app Payload/
+          # The Apple Watch app rides inside the iPhone app.
+          ls Payload/DungeonDescent.app/Watch/DungeonWatch.app/DungeonWatch
           zip -qr DungeonDescent-unsigned.ipa Payload
 
       - uses: actions/upload-artifact@v4
