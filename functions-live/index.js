@@ -148,8 +148,11 @@ async function send(req, res) {
   const aps = { timestamp: now, event: t.end ? 'end' : 'update', 'content-state': t.state, 'stale-date': Math.floor(t.at) + 45 };
   if (t.end) aps['dismissal-date'] = now + 30 * 60;
   if (t.alert) aps.alert = { title: 'Endless Descent', body: t.alert, sound: 'default' };
-  const r = await push(t.token, { aps }, t.alert || t.end ? 10 : 5, t.sandbox);
-  if (r.status !== 200) console.warn('APNs', r.status, r.body);
+  // High priority for every fight: low-priority Live Activity updates are
+  // held back while the phone is locked, which left the Lock Screen stale.
+  // The app's NSSupportsLiveActivitiesFrequentUpdates raises the budget.
+  const r = await push(t.token, { aps }, 10, t.sandbox);
+  console.log('APNs', r.status, r.body || '', 'floor', t.state && t.state.floor);
   // A dead token stops the rest of the plan.
   if (r.status === 410 || /BadDeviceToken|ExpiredToken/.test(r.body)) {
     await db.collection('liveActivity').doc(t.uid).set({ planId: 'dead' }, { merge: true });
