@@ -150,6 +150,8 @@ struct DungeonView: View {
             }
             .accessibilityHidden(true)
         }
+        if let c = model.startCard { StartCardOverlay(card: c) { model.skipStartCard() } }
+        if let c = model.bossPreview { BossPreviewOverlay(card: c) { model.bossPreview = nil } }
         if model.trueEnding { TrueEndingOverlay(model: model) }
         if model.musicPlayerOpen {
             // #ov-music-player
@@ -1351,5 +1353,62 @@ private struct TrueEndingOverlay: View {
     private func close(_ s: Router.Screen) {
         model.trueEnding = false
         router.goTo(s)
+    }
+}
+
+/// The run start quote and the dungeon intro: a dark card that fades on its own.
+/// VoiceOver hears it as an announcement, so the card itself stays out of the way.
+private struct StartCardOverlay: View {
+    let card: RunModel.Card
+    let skip: () -> Void
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.92).ignoresSafeArea()
+            VStack(spacing: 16) {
+                Text(card.eyebrow).font(Theme.cinzel(9.6)).tracking(5).foregroundStyle(Theme.goldDim)
+                if !card.title.isEmpty {
+                    Text(card.title).font(Theme.decorative(24)).foregroundStyle(Theme.gold).multilineTextAlignment(.center)
+                }
+                Text(card.text).font(Theme.cinzel(16).italic()).foregroundStyle(Theme.ashLight)
+                    .multilineTextAlignment(.center).lineSpacing(6).frame(maxWidth: 400)
+                if let b = card.byline {
+                    Text(b).font(Theme.decorative(12)).foregroundStyle(Theme.goldDim).padding(.top, 4)
+                }
+            }
+            .padding(30)
+        }
+        .transition(.opacity)
+        .onTapGesture(perform: skip)
+        .accessibilityHidden(true)
+    }
+}
+
+/// #boss-preview-overlay: who the boss is, then ⚔ Face It.
+private struct BossPreviewOverlay: View {
+    let card: RunModel.Card
+    let dismiss: () -> Void
+    @AccessibilityFocusState private var focus: Bool
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.94).ignoresSafeArea()
+            VStack(spacing: 14) {
+                Text(card.eyebrow).font(Theme.cinzel(9.6)).tracking(4).foregroundStyle(Color(hex: 0xcc4444))
+                Text(card.title).font(Theme.decorative(24)).foregroundStyle(Color(hex: 0xff6644))
+                    .multilineTextAlignment(.center).accessibilityAddTraits(.isHeader)
+                Text(card.text).font(Theme.crimson(16, italic: true)).foregroundStyle(Theme.ashLight)
+                    .multilineTextAlignment(.center).frame(maxWidth: 420)
+                if let b = card.byline {
+                    Text(b).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xcc4444)).padding(.top, 6)
+                }
+                Button("⚔ Face It", action: dismiss).buttonStyle(WebButtonStyle(kind: .red))
+                    .accessibilityLabel("Face the boss")
+                    .accessibilityFocused($focus)
+                    .padding(.top, 8)
+            }
+            .padding(30)
+        }
+        .onAppear { DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { focus = true } }
     }
 }

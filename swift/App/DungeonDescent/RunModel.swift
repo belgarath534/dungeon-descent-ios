@@ -185,17 +185,18 @@ final class RunModel: ObservableObject {
         startForest()
         if WhisperingForest.here(r) { add("🌲 The forest's corruption creeps in while you explore. Music Boxes and potions push it back.") }
         if let c = Corruption.status(r) { add(c) }
+        let lead = showStartCards(r)
         if let w = r.weather {
             add(w.announcement)
-            Feedback.announce(w.announcement, after: 4)
+            Feedback.announce(w.announcement, after: 4 + lead)
         }
         if let m = RunModifiers.modifier(r.modifier) {
             let line = "🎲 Run modifier: \(m.icon) \(m.name). \(m.desc)"
             add(line)
-            Feedback.announce("Run modifier. \(m.name). \(m.desc) You can turn run modifiers off in Settings, Gameplay.", after: 4.5)
+            Feedback.announce("Run modifier. \(m.name). \(m.desc) You can turn run modifiers off in Settings, Gameplay.", after: 4.5 + lead)
         }
         let hello = guideSays(.dungeonStart, r)
-        if !hello.isEmpty { Feedback.announce(hello, after: 2.5) }
+        if !hello.isEmpty { Feedback.announce(hello, after: 2.5 + lead) }
         if r.hunter != nil {
             add("🏹 Hunter Mode active. Something has entered the dungeon behind you. It is 10 rooms away. Keep moving.")
         }
@@ -212,6 +213,59 @@ final class RunModel: ObservableObject {
             add("🧊 3D Mode. \(g.exitsText)")
             SpatialAudio.shared.exitCues(g.here, after: 3)
         }
+    }
+
+    // MARK: Run start quote, dungeon intro, boss preview
+
+    struct Card: Equatable {
+        var eyebrow: String
+        var title: String
+        var text: String
+        var byline: String? = nil
+    }
+    /// showRunStartQuote then showDungeonIntro, each held about four seconds.
+    @Published private(set) var startCard: Card?
+    /// showDungeonIntro plays once per dungeon each time the app is opened.
+    private static var introShown: Set<String> = []
+
+    /// Queues the cards and returns how long they take, in seconds.
+    private func showStartCards(_ r: Run) -> Double {
+        var cards: [Card] = []
+        if let q = Intros.runStartQuote(dungeon: r.dungeon, cls: r.cls) {
+            cards.append(Card(eyebrow: r.dungeon.uppercased(), title: "", text: q, byline: "— \(r.name) the \(r.cls)"))
+        }
+        if let intro = Intros.dungeonIntros[r.dungeon], !Self.introShown.contains(r.dungeon) {
+            Self.introShown.insert(r.dungeon)
+            cards.append(Card(eyebrow: intro.eyebrow, title: r.dungeon, text: intro.text))
+        }
+        for (i, c) in cards.enumerated() {
+            let at = 0.4 + 4.8 * Double(i)
+            DispatchQueue.main.asyncAfter(deadline: .now() + at) { [weak self] in
+                self?.startCard = c
+                Feedback.announce(c.title.isEmpty ? c.text : "\(c.eyebrow). \(c.title). \(c.text)")
+            }
+        }
+        if !cards.isEmpty {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4 + 4.8 * Double(cards.count)) { [weak self] in
+                self?.startCard = nil
+            }
+        }
+        return 4.8 * Double(cards.count)
+    }
+
+    func skipStartCard() { startCard = nil }
+
+    /// showBossPreview: the boss's card before the fight, until you press Face It.
+    @Published var bossPreview: Card?
+
+    private func previewBoss(_ boss: Enemy) -> String {
+        let desc = Intros.bossIntro(boss.name)
+        let phases = boss.flag("fourPhase") ? 4 : 3
+        let eyebrow = boss.name.contains("DDDI") ? "⚖ COMPLIANCE REQUIRED" : "⚠ Boss Encounter — Floor \(run.floor)"
+        bossPreview = Card(eyebrow: eyebrow, title: "\(boss.icon) \(boss.name)", text: desc,
+                           byline: "HP: \(boss.hp) — \(phases) Phases — Grows stronger each phase")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { Sound.sfx("vampire-evil-laugh") }
+        return " Boss encounter. \(desc) \(phases == 4 ? "Four" : "Three") phases. Grows stronger each phase. Press Face It to begin."
     }
 
     /// Set when a Hardcore death deleted the character; the screen should close.
@@ -462,7 +516,7 @@ final class RunModel: ObservableObject {
             add("\(boss.icon) \(boss.name) rises before you. \(boss.hp) HP.")
             enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: true))
             Sound.track(Soundtrack.bossTrack(dungeon: r.dungeon))
-            spoken += " \(boss.name) rises before you. \(boss.hp) HP." + thirdEye(r) + guideSays(.bossEncounter, r)
+            spoken += " \(boss.name) rises before you. \(boss.hp) HP." + previewBoss(boss) + thirdEye(r) + guideSays(.bossEncounter, r)
             finish(r, d, phase: .fighting, spoken: spoken)
             startBossTimer()
             return

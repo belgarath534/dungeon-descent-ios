@@ -512,7 +512,10 @@ final class InventoryTests: XCTestCase {
         var axe = Inventory.ShopItem(id: 1, item: item("Battle Axe"))
         XCTAssertFalse(Inventory.buy(&r, &axe, wallet: w, hour: 12).used)
         var d = SeededDice(seed: 3)
-        XCTAssertEqual(Inventory.shopStock(for: r, dice: &d).count, 4)
+        // Four from the dungeon's stock, plus the class item.
+        let stock = Inventory.shopStock(for: r, dice: &d)
+        XCTAssertEqual(stock.count, 5)
+        XCTAssertEqual(stock.last?.item.name, Intros.classShopItem(r)?.name)
     }
 
     func testLuckPotionFortuneAndPhoenix() {
@@ -4577,5 +4580,33 @@ final class HollowAbyssalTests: XCTestCase {
         var dice = SeededDice(seed: 9)
         for _ in 0..<3 { _ = Combat.takeTurn(&r, .defend, dice: &dice) }
         XCTAssertTrue(HollowAbyssal.silenced(r))
+    }
+}
+
+final class IntrosTests: XCTestCase {
+    func run(_ cls: String) -> Run {
+        Run(character: PlayerCharacter(name: "T", cls: cls, race: "Human", prof: "Thief",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+    }
+
+    func testWarBannerIsPermanentAndShadowOilCrits() {
+        var w = run("Warrior")
+        w.inventory = [Intros.classShopItem(w)!]
+        let before = w.atkBonus
+        XCTAssertTrue(Inventory.use(&w, at: 0).used)
+        XCTAssertEqual(w.atkBonus, before + 5)
+        var a = run("Assassin")
+        a.inventory = [Intros.classShopItem(a)!]
+        _ = Inventory.use(&a, at: 0)
+        XCTAssertTrue(a.markedKill)
+        var ng = run("Warrior")
+        ng.ngPlus = true
+        XCTAssertEqual(Intros.classShopItem(ng)?.name, "Veteran Elixir")
+    }
+
+    func testIntrosCoverEveryDungeon() {
+        for d in TrueEnding.dungeons + ["The Shadow World"] { XCTAssertNotNil(Intros.dungeonIntros[d], d) }
+        XCTAssertNotNil(Intros.runStartQuote(dungeon: "Crypt of Malachar", cls: "Warrior"))
+        XCTAssertEqual(Intros.bossIntro("Nobody"), Intros.bossFallback)
     }
 }

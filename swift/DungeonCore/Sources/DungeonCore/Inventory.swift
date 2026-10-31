@@ -31,6 +31,7 @@ public enum Inventory {
         var out = Outcome(message: "")
 
         if ShapeshifterMask.isMask(item) { return ShapeshifterMask.use(&run, at: index) }
+        if let o = Intros.use(&run, at: index) { return o }
 
         // Mirror Fragment (Shadow World): purges every corruption stack.
         if item.extra["shadowItem"] == .string("mirrorFragment") {
@@ -466,6 +467,7 @@ public enum Inventory {
         while picks.count < 4 && !stock.isEmpty {
             picks.append(ShopItem(id: picks.count, item: stock.remove(at: dice.roll(0...(stock.count - 1)))))
         }
+        if let classItem = Intros.classShopItem(run) { picks.append(ShopItem(id: picks.count, item: classItem)) }
         return picks
     }
 
