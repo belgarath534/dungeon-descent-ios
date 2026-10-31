@@ -49,7 +49,9 @@ final class ScreenTour: XCTestCase {
         app.terminate()
         app.launch()
         sleep(4)
-        app.tap() // lets the interruption monitor see any system alert
+        #if !targetEnvironment(macCatalyst)
+        app.tap() // lets the interruption monitor see any system alert (iPhone only)
+        #endif
         dismissPopups()
     }
 
