@@ -4704,3 +4704,32 @@ final class FestivalTests: XCTestCase {
         XCTAssertEqual(Titles.seasonal["muertos-title"], "Remembered")
     }
 }
+
+final class AFKPlanTests: XCTestCase {
+    /// The Live Activity's plan (fights worked out ahead) and the game's own
+    /// catch-up later roll the same dice, so they land on the same floor.
+    func testPlannedFightsMatchLaterFights() {
+        let ch = PlayerCharacter(name: "Plan", cls: "Warrior", race: "Human", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        let save = AFKSave(raw: [:])
+        var start = AFKRun(character: ch, index: 0, save: save, weapon: nil, armor: nil)
+        start.diceState = 12345
+
+        func play(_ r0: AFKRun, _ n: Int) -> AFKRun {
+            var r = r0
+            for _ in 0..<n where r.running {
+                var d = SeededDice(seed: r.diceState!)
+                _ = r.fight(dice: &d, save: save, now: r.lastFightAt + r.fightSeconds)
+                r.diceState = d.state
+            }
+            return r
+        }
+        // Planned all at once vs. fought in two sittings: same result.
+        let planned = play(start, 60)
+        let later = play(play(start, 25), 35)
+        XCTAssertEqual(planned.floor, later.floor)
+        XCTAssertEqual(planned.hp, later.hp)
+        XCTAssertEqual(planned.points, later.points)
+        XCTAssertEqual(planned.diceState, later.diceState)
+    }
+}

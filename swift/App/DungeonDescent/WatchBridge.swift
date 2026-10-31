@@ -42,7 +42,7 @@ final class WatchBridge: NSObject, WCSessionDelegate {
                                 level: r.level, points: r.points, potions: r.potions,
                                 enemiesDefeated: r.enemiesDefeated, bossesDefeated: r.bossesDefeated,
                                 running: r.running, nextFightAt: r.lastFightAt + r.fightSeconds,
-                                startedAt: r.startedAt, log: Array(r.log.suffix(4).reversed().map(\.text)))
+                                startedAt: r.startedAt, log: Array(r.log.prefix(4).map(\.text)))
         }
         let save = afk.save
         return WatchLink.Snapshot(characters: chars, run: run, totalPoints: save.totalPoints, bestFloor: save.bestFloor,
@@ -87,6 +87,10 @@ final class WatchBridge: NSObject, WCSessionDelegate {
                 afk.endRun()
                 note = afk.phase == .skills ? "Run ended. You leveled up — pick your new skills on your iPhone." : "Run ended."
             } else { note = "No run going." }
+        }
+        // Changed from the watch with the phone in a pocket: new plan for the Lock Screen.
+        if cmd != .status && UIApplication.shared.applicationState != .active {
+            if afk.run?.running == true { LiveActivityPush.planAndSend() } else { LiveActivityPush.cancel() }
         }
         return WatchLink.encode(snapshot(message: note))
     }

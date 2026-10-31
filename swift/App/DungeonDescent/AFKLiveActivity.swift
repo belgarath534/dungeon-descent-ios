@@ -13,7 +13,7 @@ enum AFKLiveActivity {
     }
 
     @available(iOS 16.2, *)
-    private static func state(_ run: AFKRun, status: String) -> DDLiveActivityAttributes.ContentState {
+    static func state(_ run: AFKRun, status: String) -> DDLiveActivityAttributes.ContentState {
         DDLiveActivityAttributes.ContentState(
             floor: run.floor, hp: run.hp, maxHp: run.maxHp, points: run.points, level: run.level,
             potions: run.potions, nextFight: Date(timeIntervalSince1970: run.lastFightAt + run.fightSeconds),
@@ -34,7 +34,14 @@ enum AFKLiveActivity {
         }
         let attrs = DDLiveActivityAttributes(name: run.charName, cls: run.cls,
                                              startedAt: Date(timeIntervalSince1970: run.startedAt))
-        _ = try? Activity.request(attributes: attrs, content: content(run, status: run.log.first?.text ?? ""), pushType: nil)
+        let c = content(run, status: run.log.first?.text ?? "")
+        // With a push token the server can update it while the app is closed
+        // (LiveActivityPush); without the push permission, a plain one.
+        if let a = try? Activity.request(attributes: attrs, content: c, pushType: .token) {
+            LiveActivityPush.observe(a)
+        } else {
+            _ = try? Activity.request(attributes: attrs, content: c, pushType: nil)
+        }
     }
 
     /// Shows the run as it is now; `alert` lights up the Lock Screen for it.
@@ -44,6 +51,7 @@ enum AFKLiveActivity {
             if run.running { start(run) }
             return
         }
+        LiveActivityPush.observe(activity)
         let c = content(run, status: run.log.first?.text ?? "")
         Task {
             if let alert {

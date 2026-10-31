@@ -47,6 +47,9 @@ public struct AFKRun: Codable, Sendable {
     public var enemiesDefeated = 0
     public var bossesDefeated = 0
     public var running = true
+    /// The run's dice (SeededDice state), so fights worked out ahead of time
+    /// for the Live Activity come out the same when the app fights them.
+    public var diceState: UInt64?
     /// When the run began and when the last fight happened (seconds since 1970).
     public var startedAt: Double
     public var lastFightAt: Double

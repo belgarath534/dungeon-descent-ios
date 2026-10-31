@@ -1,0 +1,13 @@
+{
+  "name": "live-activity",
+  "description": "Sends Endless Descent's Live Activity updates, one per fight, while the app is closed",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "engines": { "node": "22" },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.4.0",
+    "@google-cloud/tasks": "^5.5.0",
+    "firebase-admin": "^12.6.0"
+  }
+}

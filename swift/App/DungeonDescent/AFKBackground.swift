@@ -28,6 +28,9 @@ enum AFKBackground {
         afk.inForeground = false
         afk.catchUp()
         game.saveNow()
-        if afk.run?.running == true { schedule() }
+        if afk.run?.running == true {
+            schedule()
+            LiveActivityPush.planAndSend()
+        }
     }
 }

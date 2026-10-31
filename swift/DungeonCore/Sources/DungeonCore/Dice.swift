@@ -18,7 +18,8 @@ public struct SystemDice: Dice {
 
 /// Repeatable dice (SplitMix64). Same seed, same rolls.
 public struct SeededDice: Dice {
-    private var state: UInt64
+    /// Where the sequence is; a SeededDice made from it rolls on exactly the same.
+    public private(set) var state: UInt64
     public init(seed: UInt64) { state = seed }
 
     private mutating func next() -> UInt64 {

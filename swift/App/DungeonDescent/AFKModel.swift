@@ -26,7 +26,6 @@ final class AFKModel: ObservableObject {
 
     private let game: GameModel
     private var timer: Timer?
-    private var dice = SystemDice()
     static let saveKey = "swift_afk_run"
 
     init(game: GameModel) {
@@ -67,7 +66,8 @@ final class AFKModel: ObservableObject {
         }
         let ch = game.characters[picked]
         let inv = game.globalInventory
-        let r = AFKRun(character: ch, index: picked, save: save, weapon: inv.equippedWeapon, armor: inv.equippedArmor)
+        var r = AFKRun(character: ch, index: picked, save: save, weapon: inv.equippedWeapon, armor: inv.equippedArmor)
+        r.diceState = UInt64.random(in: 1...UInt64.max)
         run = r
         awayReport = nil
         phase = .running
@@ -117,12 +117,14 @@ final class AFKModel: ObservableObject {
         guard due > 0 else { return }
         let floor0 = r.floor, points0 = r.points, level0 = r.level
         var s = save
+        var dice = SeededDice(seed: r.diceState ?? UInt64.random(in: 1...UInt64.max))
         var spoken: [String] = []
         var alert: String?
         var fought = 0
         for _ in 0..<min(due, 50_000) {
             let at = r.lastFightAt + r.fightSeconds
             let step = r.fight(dice: &dice, save: s, now: at)
+            r.diceState = dice.state
             fought += 1
             spoken += step.spoken
             if let a = step.alert { alert = a }
@@ -152,6 +154,30 @@ final class AFKModel: ObservableObject {
             if !inForeground { AFKLiveActivity.update(r, alert: alert) }
             finish()
         }
+    }
+
+    /// The next fights, worked out now with the run's own dice: the Live
+    /// Activity's plan while the app is closed. catchUp() rolls the same
+    /// dice later, so the game comes out exactly where the Lock Screen was.
+    func plannedFights(_ count: Int) -> [(run: AFKRun, alert: String?)] {
+        guard var r = run, r.running else { return [] }
+        if r.diceState == nil {
+            r.diceState = UInt64.random(in: 1...UInt64.max)
+            run = r
+            persist()
+        }
+        var s = save
+        var dice = SeededDice(seed: r.diceState!)
+        var out: [(run: AFKRun, alert: String?)] = []
+        for _ in 0..<count {
+            let at = r.lastFightAt + r.fightSeconds
+            let step = r.fight(dice: &dice, save: s, now: at)
+            var alert = step.alert
+            if let c = s.checkChallenge(&r, date: Date(timeIntervalSince1970: at)) { alert = alert ?? c }
+            out.append((r, alert))
+            if !r.running { break }
+        }
+        return out
     }
 
     /// afkUsePotion

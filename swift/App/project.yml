@@ -79,6 +79,8 @@ targets:
           - com.dungeon.descent.afk-refresh
         # Endless Descent's run on the Lock Screen and in the Dynamic Island.
         NSSupportsLiveActivities: true
+        # One update per fight from the liveActivity function (LiveActivityPush.swift).
+        NSSupportsLiveActivitiesFrequentUpdates: true
         # The Command Center's mic.
         NSMicrophoneUsageDescription: Dungeon Descent listens for a spoken command when you tap the mic in the Command Center.
         NSSpeechRecognitionUsageDescription: Dungeon Descent turns your spoken command into text in the Command Center.
@@ -114,6 +116,8 @@ targets:
       path: DungeonDescent/DungeonDescent.entitlements
       properties:
         com.apple.developer.game-center: true
+        # Live Activity updates pushed while the app is closed.
+        aps-environment: development
         com.apple.developer.applesignin:
           - Default
         com.apple.developer.icloud-container-identifiers:

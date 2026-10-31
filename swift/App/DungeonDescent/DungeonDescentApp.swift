@@ -42,8 +42,12 @@ struct DungeonDescentApp: App {
         .onChange(of: scenePhase) { phase in
             game.afk.inForeground = phase == .active
             if phase == .background {
-                if AFKModel.isRunning(game.store) { AFKBackground.schedule() } else { AFKBackground.cancel() }
+                if AFKModel.isRunning(game.store) {
+                    AFKBackground.schedule()
+                    LiveActivityPush.planAndSend()
+                } else { AFKBackground.cancel() }
             }
+            if phase == .active && AFKModel.isRunning(game.store) { LiveActivityPush.cancel() }
             if phase == .background { AudioEngine.shared.enterBackground() }
             if phase == .active { AudioEngine.shared.enterForeground() }
             if phase != .active {
