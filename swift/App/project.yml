@@ -73,6 +73,10 @@ targets:
         LSRequiresIPhoneOS: true
         UIBackgroundModes:
           - audio
+          # Endless Descent catches up in the background (AFKBackground.swift).
+          - fetch
+        BGTaskSchedulerPermittedIdentifiers:
+          - com.dungeon.descent.afk-refresh
         # Endless Descent's run on the Lock Screen and in the Dynamic Island.
         NSSupportsLiveActivities: true
         # The Command Center's mic.

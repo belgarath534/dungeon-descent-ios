@@ -35,7 +35,15 @@ struct DungeonDescentApp: App {
                     if url.scheme == "dungeondescent" && url.host == "afk" { router.goTo(.afk) }
                 }
         }
+        // Endless Descent keeps going while the app is paused (AFKBackground).
+        .backgroundTask(.appRefresh(AFKBackground.id)) {
+            await MainActor.run { AFKBackground.refresh() }
+        }
         .onChange(of: scenePhase) { phase in
+            game.afk.inForeground = phase == .active
+            if phase == .background {
+                if AFKModel.isRunning(game.store) { AFKBackground.schedule() } else { AFKBackground.cancel() }
+            }
             if phase == .background { AudioEngine.shared.enterBackground() }
             if phase == .active { AudioEngine.shared.enterForeground() }
             if phase != .active {
