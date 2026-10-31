@@ -112,13 +112,16 @@ struct MainMenuView: View {
                 .accessibilityHidden(true)
             ScrollView {
                 VStack(spacing: 0) {
-                    // The space above the title is the logo's VoiceOver element
-                    // (a 1-point strip was too small, so VoiceOver skipped it).
-                    Color.clear
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 36)
-                        .contentShape(Rectangle())
-                        .accessibilityElement()
+                    // The real logo, first in the list, so VoiceOver's image
+                    // descriptions can see what's in it. (The big faded copy
+                    // behind the menu stays hidden: as a full-screen element it
+                    // came after the last button and sent focus back to the top.)
+                    Image("MenuLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: 220, maxHeight: 120)
+                        .padding(.top, 12)
+                        .padding(.bottom, 8)
                         .accessibilityLabel("Dungeon Descent game logo")
                         .accessibilityAddTraits(.isImage)
                     header
