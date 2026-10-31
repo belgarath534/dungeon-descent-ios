@@ -150,6 +150,7 @@ struct DungeonView: View {
             }
             .accessibilityHidden(true)
         }
+        if model.trueEnding { TrueEndingOverlay(model: model) }
         if model.musicPlayerOpen {
             // #ov-music-player
             WebScreen {
@@ -1288,5 +1289,67 @@ struct RhythmOverlay: View {
             .frame(maxWidth: 380).padding(28)
         }
         .accessibilityAddTraits(.isModal)
+    }
+}
+
+/// #true-ending-overlay: the lines fade in one by one, then the title.
+private struct TrueEndingOverlay: View {
+    @ObservedObject var model: RunModel
+    @EnvironmentObject var router: Router
+    @State private var shown = 0
+    @State private var titled = false
+    @AccessibilityFocusState private var focus: Bool
+
+    var body: some View {
+        ZStack {
+            Color.black.ignoresSafeArea()
+            ScrollView {
+                VStack(spacing: 14) {
+                    ForEach(0..<shown, id: \.self) { i in
+                        Text(TrueEnding.lines[i].0).font(Theme.crimson(17, italic: true))
+                            .foregroundStyle(Color(hex: 0xb0a080)).multilineTextAlignment(.center)
+                            .transition(.opacity)
+                    }
+                    if titled {
+                        Text(TrueEnding.title).font(Theme.decorative(30)).tracking(4).foregroundStyle(Theme.gold)
+                            .padding(.top, 20).accessibilityAddTraits(.isHeader)
+                            .accessibilityFocused($focus)
+                        Text(TrueEnding.subtitle).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe0c080))
+                            .multilineTextAlignment(.center)
+                        VStack(spacing: 10) {
+                            Button("📜 View Credits") { close(.credits) }.buttonStyle(WebButtonStyle(kind: .gold))
+                                .accessibilityLabel("View credits")
+                            Button("🏠 Return Home") { close(.menu) }.buttonStyle(WebButtonStyle(kind: .ghost))
+                                .accessibilityLabel("Return home")
+                        }
+                        .padding(.top, 20)
+                    }
+                }
+                .padding(30)
+                .frame(maxWidth: .infinity)
+                .animation(.easeIn(duration: 1), value: shown)
+                .animation(.easeIn(duration: 1.5), value: titled)
+            }
+        }
+        .onAppear(perform: play)
+    }
+
+    private func play() {
+        for (i, line) in TrueEnding.lines.enumerated() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + line.1) {
+                shown = max(shown, i + 1)
+                Feedback.announce(line.0)
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + TrueEnding.titleAt) {
+            titled = true
+            Feedback.announce("Dungeon Master. \(TrueEnding.subtitle)")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) { focus = true }
+        }
+    }
+
+    private func close(_ s: Router.Screen) {
+        model.trueEnding = false
+        router.goTo(s)
     }
 }

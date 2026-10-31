@@ -132,6 +132,13 @@ struct DevToolsPanel: View {
             row("Force Ambush", "Triggers an ambush fight in the next room.", "Force", label: "Force ambush") {
                 inRun { $0.devForce(medusa: false) }
             }
+            row("🏆 Reset True Ending", "Resets the true ending flag so it fires again on next dungeon clear.", "Reset", label: "Reset true ending") {
+                TrueEnding.reset(game.store)
+                Feedback.announce("True ending reset. It will fire again on the next dungeon clear once all eight are cleared.")
+            }
+            row("🏆 Show True Ending Now", "Show the true ending screen immediately.", "Show", label: "Show true ending now") {
+                inRun { $0.showTrueEnding() }
+            }
             sendCoins
             generator
         }

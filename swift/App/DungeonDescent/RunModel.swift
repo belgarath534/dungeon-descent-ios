@@ -1842,6 +1842,14 @@ final class RunModel: ObservableObject {
         }
     }
 
+    /// showTrueEnding: all eight dungeons cleared, once.
+    @Published var trueEnding = false
+
+    func showTrueEnding() {
+        TrueEnding.markSeen(game.store)
+        trueEnding = true
+    }
+
     /// spawnGauntletWave: the next wave's minion charges.
     private func nextPreBossWave(_ r: inout Run, _ d: inout SystemDice, _ said: String) {
         let wave = r.preBossDone + 1
@@ -2345,6 +2353,9 @@ final class RunModel: ObservableObject {
         game.globalInventory.keep(from: run)
         game.checkLegends(run)
         game.recordFirstClear(run)
+        if TrueEnding.record(run.dungeon, store: game.store) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in self?.showTrueEnding() }
+        }
         if !isChallenge {
             var tierNews: String?
             let cleared = run

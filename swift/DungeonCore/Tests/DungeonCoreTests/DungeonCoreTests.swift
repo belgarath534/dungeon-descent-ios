@@ -4488,3 +4488,16 @@ final class BossRelicTests: XCTestCase {
         XCTAssertEqual(r.hp, r.maxHp - 7)
     }
 }
+
+final class TrueEndingTests: XCTestCase {
+    func testPlaysOnceAfterAllEight() {
+        let store = MemoryStore()
+        for d in TrueEnding.dungeons.dropLast() { XCTAssertFalse(TrueEnding.record(d, store: store)) }
+        XCTAssertFalse(TrueEnding.record("The Shadow World", store: store), "the Shadow World isn't one of the eight")
+        XCTAssertTrue(TrueEnding.record(TrueEnding.dungeons.last!, store: store))
+        TrueEnding.markSeen(store)
+        XCTAssertFalse(TrueEnding.record("Crypt of Malachar", store: store))
+        TrueEnding.reset(store)
+        XCTAssertTrue(TrueEnding.record("Crypt of Malachar", store: store))
+    }
+}
