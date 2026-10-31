@@ -674,7 +674,21 @@
  },
  "whatsnew": [
   {
-   "num": "v11.7.2 — Latest",
+   "num": "v11.7.3 — Latest",
+   "date": "The Swift Rebuild",
+   "label": "Version 11.7.3",
+   "changes": [
+    "🍎 Dungeon Descent has been rebuilt from the ground up as a native iPhone app in Swift. It's faster, smoother and works better with VoiceOver, and your characters and progress come with you.",
+    "🐛 Rebuilding every system found over 100 bugs in the old version, and every one is fixed: 105 skills that did nothing now work, spells finish what they start, subclasses, races, class traits, run modifiers, dungeon conditions and seasonal items all do what they say.",
+    "🏚️ Enemies in The Hollow and the Abyssal Deep use their real abilities: the Bell Ringer, the Wall Crawler, the Door Warden, the Twin, the Pressure Beast, the Deep Stalker and more.",
+    "📜 New: an opening quote for your class, an intro the first time you enter each dungeon, a boss preview before the floor 10 boss, and a class item in every floor shop.",
+    "👑 New: clear all eight dungeons to see the True Ending.",
+    "🏰 The Spire's bosses appear, the Gauntlet has its real last dungeon, the Siege can be won, and the Mine's enemies fight with their own moves.",
+    "🔒 The tournament leaderboard no longer shows players' email addresses."
+   ]
+  },
+  {
+   "num": "v11.7.2",
    "date": "The Run Briefing Update",
    "label": "Version 11.7.2",
    "changes": [

@@ -20,6 +20,7 @@ struct MainMenuView: View {
     @State private var familiarOpen = false
     @State private var trophiesOpen = false
     @State private var birthdayOpen = false
+    @State private var whatsNewOpen = false
     @ObservedObject private var reaper = VoidReaperLive.shared
 
     enum Action {
@@ -144,6 +145,12 @@ struct MainMenuView: View {
             if dailyOpen, let d = daily { dailyOverlay(d.next) }
             if trophiesOpen { TrophyOverlay { trophiesOpen = false } }
             if birthdayOpen { BirthdayOverlay { birthdayOpen = false } }
+            if whatsNewOpen {
+                WhatsNewPopup {
+                    whatsNewOpen = false
+                    game.store.setItem(WhatsNewPopup.seenKey, WhatsNewPopup.version)
+                }
+            }
             if familiarOpen {
                 FamiliarOverlay { familiarOpen = false; familiar = game.familiarBadge }
             }
@@ -151,6 +158,8 @@ struct MainMenuView: View {
         .onAppear {
             Sound.track("menu")
             Sound.ambient(nil)
+            // showWhatsNewPopup: once after each update
+            if game.store.getItem(WhatsNewPopup.seenKey) != WhatsNewPopup.version { whatsNewOpen = true }
             trophies = game.achievements.trophies
             familiar = game.familiarBadge
             daily = DailyDescent.status(game.store)

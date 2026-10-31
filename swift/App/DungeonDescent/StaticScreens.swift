@@ -236,3 +236,45 @@ struct WhatsNewView: View {
         .onAppear { Feedback.announce("What is New screen. Patch notes for every version.") }
     }
 }
+
+/// #whats-new-popup: the newest patch notes, once after each update.
+struct WhatsNewPopup: View {
+    static let version = "11.7.3"
+    static let seenKey = "dd_whats_new_seen"
+    let close: () -> Void
+    @AccessibilityFocusState private var focus: Bool
+
+    var body: some View {
+        let v = Statics.shared?.whatsnew.first
+        ZStack {
+            Color.black.opacity(0.9).ignoresSafeArea()
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("🎉 v\(Self.version)").font(Theme.decorative(20)).foregroundStyle(Theme.gold)
+                            .frame(maxWidth: .infinity).accessibilityAddTraits(.isHeader)
+                            .accessibilityFocused($focus)
+                        if let d = v?.date, !d.isEmpty {
+                            Text(d).font(Theme.cinzel(11)).tracking(2).foregroundStyle(Theme.textDim).frame(maxWidth: .infinity)
+                        }
+                        ForEach(Array((v?.changes ?? []).enumerated()), id: \.offset) { _, c in
+                            Text("• " + c).font(Theme.crimson(14)).foregroundStyle(Theme.textSecondary).lineSpacing(3)
+                        }
+                    }
+                    .padding(22)
+                }
+                Button("⚔ Continue", action: close).buttonStyle(WebButtonStyle(kind: .gold))
+                    .accessibilityLabel("Continue to the game")
+                    .padding([.horizontal, .bottom], 18)
+            }
+            .frame(maxWidth: 480, maxHeight: 620)
+            .background(Color(hex: 0x0a0a0a))
+            .overlay(Rectangle().stroke(Color(hex: 0x443300)))
+            .padding(24)
+        }
+        .onAppear {
+            Feedback.announce("What is new in version \(Self.version). Press Continue to start playing.")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { focus = true }
+        }
+    }
+}
