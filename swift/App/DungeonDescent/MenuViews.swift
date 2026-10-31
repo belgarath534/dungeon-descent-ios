@@ -100,21 +100,26 @@ struct MainMenuView: View {
     var body: some View {
         ZStack {
             WebBackground()
+            // #menu-logo-bg: the logo fills the page, faint, behind everything.
+            // VoiceOver can land on it (image descriptions work), and it is
+            // read first: as the last item it sent focus back to the top.
+            Image("MenuLogo")
+                .resizable()
+                .scaledToFill()
+                .opacity(0.18)
+                .ignoresSafeArea()
+                .accessibilityLabel("Dungeon Descent game logo")
+                .accessibilityAddTraits(.isImage)
+                .accessibilitySortPriority(2)
             ScrollView {
                 VStack(spacing: 0) {
                     header
-                        .padding(.top, 36)
-                        // #menu-logo-bg: the faint logo behind the top of the
-                        // menu. It lives inside the list as a button (as its
-                        // own full-screen layer it came after the last item
-                        // and sent VoiceOver back to the top), and it is the
-                        // real picture, so VoiceOver's image descriptions work.
-                        .background(alignment: .top) { logoButton }
                     Ornament()
                     nav
                     footer
                 }
                 .padding(.horizontal, 12)
+                .padding(.top, 36)
                 .padding(.bottom, 80)
                 .frame(maxWidth: 520)
                 .frame(maxWidth: .infinity)
@@ -147,6 +152,9 @@ struct MainMenuView: View {
                 FamiliarOverlay { familiarOpen = false; familiar = game.familiarBadge }
             }
         }
+        // One container, so the logo's sort priority puts it before the menu
+        // instead of after the last item
+        .accessibilityElement(children: .contain)
         .onAppear {
             Sound.track("menu")
             Sound.ambient(nil)
@@ -179,23 +187,6 @@ struct MainMenuView: View {
             reaper.start(store: game.store)
         }
         .webImportAlerts(webImport, game: game)
-    }
-
-    private var logoButton: some View {
-        Button {
-            Feedback.announce("Dungeon Descent, by Leo Productions.")
-        } label: {
-            Image("MenuLogo")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 520, height: 560)
-                .opacity(0.18)
-                .clipped()
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Dungeon Descent game logo")
-        .accessibilityAddTraits(.isImage)
-        .offset(y: -40)
     }
 
     private var header: some View {
