@@ -70,6 +70,7 @@ public enum Combat {
         Alchemy.combatStart(&run, log: &log)
         Spirits.combatStart(&run, log: &log)
         ShadowWorld.combatStart(&run, log: &log)
+        HollowAbyssal.combatStart(&run, log: &log)
         Spells.combatStart(&run, log: &log)
         ClassTraits.combatStart(&run, log: &log)
         return log
@@ -135,7 +136,7 @@ public enum Combat {
         if run.worldCurse { cursed(&e) }
         Challenges.shape(&e, run)
         Legacy.shape(&e, run)
-        return e
+        return HollowAbyssal.prepare(e, for: run)
     }
 
     /// The Void Curse (a Void Reaper left standing): 50% more HP and attack.
@@ -221,6 +222,7 @@ public enum Combat {
 
         var baseAtk = attackRoll(run, dice: &dice)
         run.defending = false
+        HollowAbyssal.playerTurnStart(&run)
         // Coin Shop upgrades (doFight)
         if run.has("cu-berserker-mark") && Double(run.hp) <= Double(run.maxHp) * 0.5 { baseAtk += 3 }
         if run.fight.huntersMarkReady {
@@ -238,6 +240,13 @@ public enum Combat {
         baseAtk = ShapeshifterMask.attackRoll(&run, baseAtk, log: &r.log)
         baseAtk = BossRelics.attackRoll(run, baseAtk)
         if action == .attack || action == .heavy { baseAtk = Alchemy.rage(&run, baseAtk, log: &r.log) }
+        if action != .flee && !run.frozen {
+            guard let a = HollowAbyssal.attackRoll(&run, baseAtk, dice: &dice, log: &r.log) else {
+                if action == .defend { run.defending = true }
+                return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
+            }
+            baseAtk = a
+        }
 
         if run.frozen {
             run.frozen = false
@@ -285,6 +294,8 @@ public enum Combat {
                 r.announcement = "No Retreat. Berserkers do not run."
                 r.acted = false
                 return r
+            case .flee where HollowAbyssal.blocksFlee(run) != nil:
+                r.log.append(HollowAbyssal.blocksFlee(run)!)
             case .flee:
                 let guaranteed = run.swiftTurns > 0 || run.runeSpeed
                 if run.swiftTurns > 0 { run.swiftTurns -= 1 }
@@ -425,7 +436,7 @@ public enum Combat {
                 r.announcement = lines.joined(separator: " ")
                 return r
             }
-            if let line = resurrects(&run) {
+            if let line = resurrects(&run) ?? HollowAbyssal.rises(&run) {
                 r.log.append(line)
                 r.announcement = line
                 return r
@@ -464,7 +475,7 @@ public enum Combat {
                 r.announcement = lines.joined(separator: " ")
                 return r
             }
-            if let line = resurrects(&run) {
+            if let line = resurrects(&run) ?? HollowAbyssal.rises(&run) {
                 r.log.append(line)
                 r.announcement = line
                 return r
@@ -737,12 +748,15 @@ public enum Combat {
         if move.skipAttack { return 0 }
         let shadow = ShadowWorld.beforeAttack(&run, log: &log)
         if shadow.skip || run.hp <= 0 { return 0 }
+        let deep = HollowAbyssal.beforeAttack(&run, dice: &dice, log: &log)
+        if deep.skip { return 0 }
         if run.armorEffect == "sturdy" && dice.chance(0.05) {
             log.append("🛡️ Sturdy armor fully blocks the attack!")
             return 0
         }
-        var raw = dice.roll(e.currentAtk) + EnemyAbilities.secondStrike(e, dice: &dice, log: &log)
-        raw = jsRound(Double(raw) * move.multiplier * shadow.multiplier) + move.extra
+        let swing = run.enemy?.currentAtk ?? e.currentAtk
+        var raw = (deep.maxRoll ? swing.upperBound : dice.roll(swing)) + EnemyAbilities.secondStrike(e, dice: &dice, log: &log)
+        raw = jsRound(Double(raw) * move.multiplier * shadow.multiplier * deep.multiplier) + move.extra
         if Alchemy.gravity(&run, log: &log) { raw = 1 }
         if run.fight.softenHits > 0 {
             run.fight.softenHits -= 1
@@ -757,7 +771,7 @@ public enum Combat {
         if run.undeadRes && Bestiary.undeadNames.contains(e.name) {
             raw = jsRound(Double(raw) * 0.65)
         }
-        let maxBlock = move.ignoreDefense ? 0 : Int((Double(raw) * 0.60).rounded(.down))
+        let maxBlock = move.ignoreDefense || deep.ignoreDefense ? 0 : Int((Double(raw) * 0.60).rounded(.down))
         let defVal = run.totalDef + ClassTraits.defense(run) + (run.defending ? 4 : 0)
         let blocked = min(defVal, maxBlock)
         var taken = max(1, raw - blocked)
@@ -856,6 +870,7 @@ public enum Combat {
         }
         EnemyAbilities.afterAttack(&run, taken: taken, dice: &dice, log: &log)
         ShadowWorld.afterAttack(&run, log: &log)
+        HollowAbyssal.afterAttack(&run, taken: taken, log: &log)
         WhisperingForest.afterAttack(&run, log: &log)
         if var c = run.enemy, c.cursedTurns > 0 {
             c.cursedTurns -= 1

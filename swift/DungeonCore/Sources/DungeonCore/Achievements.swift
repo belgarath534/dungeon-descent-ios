@@ -145,6 +145,7 @@ public final class AchievementBook {
             increment("totalKills")
             trackGlobal("totalKills")
             if e.isElite { increment("eliteKills"); trackGlobal("eliteKills") }
+            if e.flag("isTwin") { increment("twinKilled") }
             setMax("bestGoldRun", Double(run.gold))
             setMax("maxFloorReached", Double(run.floor))
             if e.isBoss {

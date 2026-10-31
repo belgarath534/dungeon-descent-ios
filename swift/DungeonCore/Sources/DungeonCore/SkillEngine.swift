@@ -103,6 +103,11 @@ public enum Skills {
             r.announcement = "\(skill.name) can only be used once per run."
             return r
         }
+        if HollowAbyssal.silenced(run) {
+            r.acted = false
+            r.announcement = "Your skills are silenced!"
+            return r
+        }
         let price = cost(skill, run)
         guard run.sp >= price else {
             r.acted = false

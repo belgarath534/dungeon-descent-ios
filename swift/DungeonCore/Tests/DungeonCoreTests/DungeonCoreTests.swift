@@ -4501,3 +4501,81 @@ final class TrueEndingTests: XCTestCase {
         XCTAssertTrue(TrueEnding.record("Crypt of Malachar", store: store))
     }
 }
+
+final class HollowAbyssalTests: XCTestCase {
+    func run(_ dungeon: String) -> Run {
+        var r = Run(character: PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: dungeon, difficulty: .wanderer))
+        r.spirit = nil
+        return r
+    }
+    func foe(_ dungeon: String, _ name: String) -> Enemy {
+        let t = Bestiary.enemies(for: dungeon)
+        let all = t.t1 + t.t2 + t.t3 + t.elites
+        return Enemy.spawn(all.first { $0.name == name }!, floor: 1, playerLevel: 1)
+    }
+
+    func testRisenRisesOnce() {
+        var r = run("The Hollow")
+        var e = foe("The Hollow", "The Risen")
+        e.hp = 1
+        Combat.begin(&r, against: e)
+        var dice = SeededDice(seed: 1)
+        let t = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertFalse(t.enemyDied)
+        XCTAssertEqual(r.enemy?.hp, jsRound(Double(e.maxHp) * 0.2))
+        r.enemy?.hp = 1
+        XCTAssertTrue(Combat.takeTurn(&r, .attack, dice: &dice).enemyDied)
+    }
+
+    func testTwinMirrorsYou() {
+        let r = run("The Hollow")
+        let e = HollowAbyssal.prepare(foe("The Hollow", "The Twin"), for: r)
+        XCTAssertEqual(e.maxHp, r.maxHp)
+        XCTAssertEqual(e.atk, (r.atkBonus + 5)...(r.atkBonus + 12))
+    }
+
+    func testDoorWardenBlocksFlee() {
+        var r = run("The Hollow")
+        Combat.begin(&r, against: foe("The Hollow", "The Door Warden"))
+        var dice = SeededDice(seed: 3)
+        let t = Combat.takeTurn(&r, .flee, dice: &dice)
+        XCTAssertFalse(t.fled)
+        XCTAssertTrue(r.inCombat)
+    }
+
+    func testBellSkipsYourNextTurn() {
+        var r = run("The Hollow")
+        var e = foe("The Hollow", "The Bell Ringer")
+        e.hp = 9999; e.maxHp = 9999
+        r.hp = 9999; r.maxHp = 9999
+        Combat.begin(&r, against: e)
+        var dice = SeededDice(seed: 5)
+        _ = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertFalse(r.frozen)
+        _ = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertTrue(r.frozen)
+    }
+
+    func testDeepStalkerStudiesThenStrikes() {
+        var r = run("The Abyssal Deep")
+        var e = foe("The Abyssal Deep", "Deep Stalker")
+        e.hp = 9999; e.maxHp = 9999
+        Combat.begin(&r, against: e)
+        var dice = SeededDice(seed: 7)
+        let t = Combat.takeTurn(&r, .attack, dice: &dice)
+        XCTAssertEqual(t.enemyDamage, 0)
+        XCTAssertTrue(t.log.contains { $0.contains("studying") })
+    }
+
+    func testDrownedSailorSilencesSkills() {
+        var r = run("The Abyssal Deep")
+        var e = foe("The Abyssal Deep", "Drowned Sailor")
+        e.hp = 9999; e.maxHp = 9999
+        r.hp = 9999; r.maxHp = 9999
+        Combat.begin(&r, against: e)
+        var dice = SeededDice(seed: 9)
+        for _ in 0..<3 { _ = Combat.takeTurn(&r, .defend, dice: &dice) }
+        XCTAssertTrue(HollowAbyssal.silenced(r))
+    }
+}
