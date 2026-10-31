@@ -8,6 +8,8 @@ import DungeonCore
 struct WebSettingsView: View {
     @EnvironmentObject var game: GameModel
     @StateObject private var webImport = WebImportFlow()
+    /// Signing in or out shows or hides Developer Tools right away.
+    @ObservedObject private var account = CloudAccount.shared
     /// The run in progress, when opened from the dungeon (for Developer Tools).
     var run: RunModel? = nil
     let close: () -> Void
@@ -110,7 +112,7 @@ struct WebSettingsView: View {
                 .foregroundStyle(Theme.textSecondary).padding(.bottom, 24)
             VStack(spacing: 10) {
                 // 3D Settings only shows while 3D Mode is on.
-                ForEach(Self.categories.filter { ($0.id != "3dmode" || threeD) && ($0.id != "dev" || !DevToolsPanel.locked) }, id: \.id) { c in
+                ForEach(Self.categories.filter { ($0.id != "3dmode" || threeD) && ($0.id != "dev" || (CloudAccount.shared.isDeveloper && !DevToolsPanel.locked)) }, id: \.id) { c in
                     Button { open(c.id) } label: {
                         HStack(spacing: 16) {
                             Text(c.icon).font(.system(size: 24)).accessibilityHidden(true)
@@ -175,7 +177,9 @@ struct WebSettingsView: View {
         case "redeem": RedeemPanel()
         case "feedback": FeedbackPanel()
         case "hidemenu": HideMenuPanel()
-        case "dev": DevToolsPanel(run: run) { panel = nil }
+        case "dev":
+            // Only signed in as the developer; the password is the second lock.
+            if CloudAccount.shared.isDeveloper { DevToolsPanel(run: run) { panel = nil } } else { general }
         case "language": LanguagePanel()
         default: general
         }

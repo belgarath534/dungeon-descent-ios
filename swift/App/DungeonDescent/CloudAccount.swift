@@ -16,6 +16,12 @@ import DungeonCore
 final class CloudAccount: NSObject, ObservableObject {
     static let shared = CloudAccount()
 
+    /// The developer's account (Leo), the same one the Firestore rules'
+    /// isDev() trusts. Developer Tools only exist for it.
+    static let developerUID = "WgqZGmnPKeYIymlMkx0aAg8G2T52"
+    /// Signed in as the developer.
+    var isDeveloper: Bool { (user ?? Auth.auth().currentUser)?.uid == Self.developerUID }
+
     @Published private(set) var user: User?
     /// The line under the buttons (#account-error / #account-sync-indicator).
     @Published var message = ""
