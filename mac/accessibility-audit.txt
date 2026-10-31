@@ -4,9 +4,9 @@
 [Main menu] Contrast failed — "🪙 0 Demon Coins" (48). Contrast failed for element
 [Main menu] Contrast failed — ""Not all who enter are lost — most are."" (48). Contrast failed for element
 [Main menu] Contrast failed — "🌑 The Void Stirs — 56% awakened. 5 days until it wakes (Nov 5)." (48). Contrast failed for element
-[Main menu] Contrast failed — "🎃 Halloween · ACTIVE · 2d 2h remaining, ⚡ XP Weekend · ACTIVE · 26h remaining" (48). Contrast failed for element
-[Main menu] Contrast failed — "🎃 Halloween · ACTIVE · 2d 2h remaining" (48). Contrast failed for element
-[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 26h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "🎃 Halloween · ACTIVE · 2d 1h remaining, ⚡ XP Weekend · ACTIVE · 25h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "🎃 Halloween · ACTIVE · 2d 1h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 25h remaining" (48). Contrast failed for element
 [Main menu] Contrast failed — "⚔️👥 Multiplayer" (48). Contrast failed for element
 [Main menu] Contrast failed — "BETA" (48). Contrast failed for element
 [Main menu] Contrast failed — "🕯️ Hide and Seek" (48). Contrast failed for element
