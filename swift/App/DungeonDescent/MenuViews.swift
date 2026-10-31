@@ -101,16 +101,21 @@ struct MainMenuView: View {
         ZStack {
             WebBackground()
             // #menu-logo-bg: the logo fills the page, faint, behind everything.
-            // VoiceOver can land on it (image descriptions work), and it is
-            // read first: as the last item it sent focus back to the top.
-            Image("MenuLogo")
-                .resizable()
-                .scaledToFill()
-                .opacity(0.18)
-                .ignoresSafeArea()
-                .accessibilityLabel("Dungeon Descent game logo")
-                .accessibilityAddTraits(.isImage)
-                .accessibilitySortPriority(2)
+            // For VoiceOver it's a dimmed button you can land on and read
+            // (image descriptions work) but not press, read before the menu:
+            // as the last item it sent focus back to the top.
+            Button {} label: {
+                Image("MenuLogo")
+                    .resizable()
+                    .scaledToFill()
+                    .opacity(0.18)
+            }
+            .buttonStyle(.plain)
+            .disabled(true)
+            .ignoresSafeArea()
+            .accessibilityLabel("Dungeon Descent game logo")
+            .accessibilityAddTraits(.isImage)
+            .accessibilitySortPriority(2)
             ScrollView {
                 VStack(spacing: 0) {
                     header
