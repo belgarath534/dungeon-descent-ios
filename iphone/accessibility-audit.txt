@@ -1,0 +1,41 @@
+[Main menu] Hit area is too small — "Join the Dungeon Descent Discord server" (9). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
+[Main menu] Contrast failed — "🪙 0 Demon Coins" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Main menu] Contrast failed — "The Festival Update" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Main menu] Contrast failed — "🕯️ HIDE AND SEEK" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Main menu] Contrast failed — "BETA" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "BETA" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "by Leo Productions" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "The Festival Update" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "⚡ XP Weekend · ACTIVE · 29h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5)." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "BETA" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "🎃 Halloween · ACTIVE · 2d 5h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Text clipped — "🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5)." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "🪙 0 Demon Coins" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "⚔️👥 MULTIPLAYER" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "🎃 Halloween · ACTIVE · 2d 5h remaining" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "🎉 v11.8" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "🕯️ HIDE AND SEEK" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Character list] Couldn't find a button starting with "Play,".
+[Endless Descent] Couldn't find a button starting with "Endless Descent".
+[Bestiary] Hit area is too small — "Join the Dungeon Descent Discord server" (9). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
+[Bestiary] Contrast failed — "🪙 0 Demon Coins" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Bestiary] Contrast failed — "The Festival Update" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Bestiary] Contrast failed — "🕯️ HIDE AND SEEK" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Bestiary] Contrast failed — "BETA" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Bestiary] Dynamic Type font sizes are partially unsupported — "BETA" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Bestiary] Dynamic Type font sizes are partially unsupported — "⚡ XP Weekend · ACTIVE · 29h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Bestiary] Dynamic Type font sizes are partially unsupported — "🎃 Halloween · ACTIVE · 2d 5h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Bestiary] Dynamic Type font sizes are partially unsupported — "🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5)." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Bestiary] Dynamic Type font sizes are partially unsupported — "BETA" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Bestiary] Dynamic Type font sizes are partially unsupported — "The Festival Update" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Bestiary] Dynamic Type font sizes are partially unsupported — "by Leo Productions" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Bestiary] Text clipped — "🪙 0 Demon Coins" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Bestiary] Text clipped — "🎃 Halloween · ACTIVE · 2d 5h remaining" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Bestiary] Text clipped — "🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5)." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Bestiary] Text clipped — "🕯️ HIDE AND SEEK" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Bestiary] Text clipped — "🎉 v11.8" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Bestiary] Text clipped — "⚔️👥 MULTIPLAYER" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Quests] Couldn't find a button starting with "Quests".
+[What's New] Couldn't find a button starting with "What's New".
+[Help] Couldn't find a button starting with "Help".
