@@ -99,9 +99,11 @@ struct AccountPanel: View {
             button("Create Account", bg: 0x0a0a1a, border: 0x333366, fg: 0xaaaaff, label: "Create new account") {
                 await cloud.signUp(email: email, password: password)
             }
+            #if canImport(GoogleSignIn)
             button("🔵 Sign in with Google", bg: 0x1a0a0a, border: 0x663333, fg: 0xffaaaa, label: "Sign in with Google") {
                 await cloud.signInWithGoogle()
             }
+            #endif
             button("🍎 Sign in with Apple", bg: 0x0a0a0a, border: 0x444444, fg: 0xcccccc, label: "Sign in with Apple") {
                 await cloud.signInWithApple()
             }

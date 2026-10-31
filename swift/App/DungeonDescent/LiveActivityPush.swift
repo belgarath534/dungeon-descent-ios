@@ -3,8 +3,8 @@ import UIKit
 import FirebaseAuth
 import DungeonCore
 
-#if targetEnvironment(macCatalyst)
-/// No Live Activities on a Mac.
+#if targetEnvironment(macCatalyst) || os(visionOS)
+/// No Live Activities on a Mac or Apple Vision Pro.
 @MainActor
 enum LiveActivityPush {
     static func planAndSend() {}

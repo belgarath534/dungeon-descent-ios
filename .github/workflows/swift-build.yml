@@ -52,6 +52,21 @@ jobs:
             build 2>&1 | tee xcodebuild.log | grep -E "error:|warning:|BUILD (SUCCEEDED|FAILED)" || true
           grep -q "BUILD SUCCEEDED" xcodebuild.log
 
+      - name: Build the app for Apple Vision Pro (unsigned)
+        working-directory: swift/App
+        run: |
+          set -o pipefail
+          xcodebuild -showsdks | grep -qi xros || xcodebuild -downloadPlatform visionOS
+          xcodebuild \
+            -project DungeonDescent.xcodeproj \
+            -scheme DungeonDescent \
+            -configuration Release \
+            -destination 'generic/platform=visionOS' \
+            -derivedDataPath build-vision \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build 2>&1 | tee xcodebuild-vision.log | grep -E "error:|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" xcodebuild-vision.log
+
       - name: Package unsigned IPA
         working-directory: swift/App
         run: |
@@ -68,4 +83,5 @@ jobs:
           path: |
             swift/App/DungeonDescent-unsigned.ipa
             swift/App/xcodebuild.log
+            swift/App/xcodebuild-vision.log
           if-no-files-found: ignore

@@ -2,8 +2,8 @@ import Foundation
 import UIKit
 import DungeonCore
 
-#if targetEnvironment(macCatalyst)
-/// No Apple Watch on a Mac: nothing to connect to.
+#if targetEnvironment(macCatalyst) || os(visionOS)
+/// No Apple Watch on a Mac or Apple Vision Pro: nothing to connect to.
 final class WatchBridge {
     static let shared = WatchBridge()
     func activate() {}

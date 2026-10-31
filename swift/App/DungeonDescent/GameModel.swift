@@ -235,22 +235,30 @@ enum Feedback {
 
     static func hit(heavy: Bool = false) {
         guard AppSettings.haptics else { return }
+        #if !os(visionOS)
         UIImpactFeedbackGenerator(style: heavy ? .heavy : .medium).impactOccurred()
+        #endif
     }
 
     static func tap() {
         guard AppSettings.haptics else { return }
+        #if !os(visionOS)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        #endif
     }
 
     static func success() {
         guard AppSettings.haptics else { return }
+        #if !os(visionOS)
         UINotificationFeedbackGenerator().notificationOccurred(.success)
+        #endif
     }
 
     static func warning() {
         guard AppSettings.haptics else { return }
+        #if !os(visionOS)
         UINotificationFeedbackGenerator().notificationOccurred(.error)
+        #endif
     }
 }
 

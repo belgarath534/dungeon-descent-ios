@@ -4,7 +4,9 @@ import CryptoKit
 import FirebaseAuth
 import FirebaseCore
 import FirebaseFirestore
+#if canImport(GoogleSignIn)
 import GoogleSignIn
+#endif
 import DungeonCore
 
 /// The account system (ACCOUNT SYSTEM — BETA): the same Firebase project,
@@ -183,6 +185,7 @@ final class CloudAccount: NSObject, ObservableObject {
 
     /// accountGoogleLogin: Google's own sign-in sheet, then Firebase.
     func signInWithGoogle() async {
+        #if canImport(GoogleSignIn)
         guard let clientID = FirebaseApp.app()?.options.clientID else { say("Cloud not ready. Check connection."); return }
         guard let presenter = Self.topViewController() else { return }
         GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: clientID)
@@ -204,6 +207,9 @@ final class CloudAccount: NSObject, ObservableObject {
             if (error as? GIDSignInError)?.code == .canceled { message = ""; return }
             say("Google sign in failed: \(error.localizedDescription)")
         }
+        #else
+        say("Google sign in isn't available on this device. Use Apple or email.")
+        #endif
     }
 
     // MARK: Apple
@@ -605,7 +611,9 @@ final class CloudAccount: NSObject, ObservableObject {
     func signOut() {
         do {
             try Auth.auth().signOut()
+            #if canImport(GoogleSignIn)
             GIDSignIn.sharedInstance.signOut()
+            #endif
             user = nil
             say("Signed out successfully. You can sign back in anytime.", color: 0x44ff88)
         } catch {

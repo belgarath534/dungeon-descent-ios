@@ -1,5 +1,7 @@
 import SwiftUI
+#if canImport(GoogleSignIn)
 import GoogleSignIn
+#endif
 
 @main
 struct DungeonDescentApp: App {
@@ -31,7 +33,9 @@ struct DungeonDescentApp: App {
                 }
                 // Tapping the Live Activity opens its run.
                 .onOpenURL { url in
+                    #if canImport(GoogleSignIn)
                     if GIDSignIn.sharedInstance.handle(url) { return }
+                    #endif
                     if url.scheme == "dungeondescent" && url.host == "afk" { router.goTo(.afk) }
                 }
         }

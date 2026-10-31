@@ -1,8 +1,8 @@
 import Foundation
 import DungeonCore
 
-#if targetEnvironment(macCatalyst)
-/// No Live Activities on a Mac.
+#if targetEnvironment(macCatalyst) || os(visionOS)
+/// No Live Activities on a Mac or Apple Vision Pro.
 @MainActor
 enum AFKLiveActivity {
     static func start(_ run: AFKRun) {}

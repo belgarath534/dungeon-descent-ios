@@ -1,4 +1,4 @@
-#if !targetEnvironment(macCatalyst)
+#if !targetEnvironment(macCatalyst) && !os(visionOS)
 import ActivityKit
 import Foundation
 

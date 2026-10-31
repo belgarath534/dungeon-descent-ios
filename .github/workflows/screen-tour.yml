@@ -61,9 +61,13 @@ jobs:
               assert s.count(anchor) == 1, anchor
               s = s.replace(anchor, anchor + "        SUPPORTS_MACCATALYST: YES\n        MACOSX_DEPLOYMENT_TARGET: \"13.0\"\n")
           # No watch app and no Live Activity in a Mac build.
-          for dep in ("      - target: DungeonWatch\n", "      - target: DDLiveActivity\n"):
+          for dep in ("      - target: DungeonWatch\n        destinationFilters: [iOS]\n",
+                      "      - target: DDLiveActivity\n        destinationFilters: [iOS]\n"):
               assert s.count(dep) == 1, dep
               s = s.replace(dep, "")
+          dests = "    supportedDestinations: [iOS, visionOS]\n"
+          assert s.count(dests) == 1
+          s = s.replace(dests, "    supportedDestinations: [iOS, visionOS, macCatalyst]\n")
           open(p, "w").write(s)
           PY
           fi

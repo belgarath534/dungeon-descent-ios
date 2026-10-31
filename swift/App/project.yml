@@ -9,6 +9,7 @@ options:
   deploymentTarget:
     iOS: "16.0"
     watchOS: "9.0"
+    visionOS: "1.0"
   createIntermediateGroups: true
   # English is the source; Localizable.xcstrings holds the Portuguese.
   developmentLanguage: en
@@ -32,7 +33,10 @@ packages:
 targets:
   DungeonDescent:
     type: application
-    platform: iOS
+    # One app for iPhone, iPad and, natively, Apple Vision Pro. The watch app
+    # and the Live Activity are iPhone-only (destinationFilters below).
+    platform: auto
+    supportedDestinations: [iOS, visionOS]
     sources:
       - path: DungeonDescent
       - path: Shared
@@ -52,8 +56,10 @@ targets:
       - package: GoogleSignIn
         product: GoogleSignIn
       - target: DDLiveActivity
+        destinationFilters: [iOS]
       # The Apple Watch app, embedded in the iPhone app like every watch app.
       - target: DungeonWatch
+        destinationFilters: [iOS]
     scheme:
       # The screen tour (UITests/), run by the "Screen tour" GitHub workflow.
       testTargets:
