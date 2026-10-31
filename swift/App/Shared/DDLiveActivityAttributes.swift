@@ -1,3 +1,4 @@
+#if !targetEnvironment(macCatalyst)
 import ActivityKit
 import Foundation
 
@@ -24,3 +25,4 @@ struct DDLiveActivityAttributes: ActivityAttributes {
     var cls: String
     var startedAt: Date
 }
+#endif

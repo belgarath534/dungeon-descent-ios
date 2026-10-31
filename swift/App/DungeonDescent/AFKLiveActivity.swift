@@ -1,6 +1,17 @@
-import ActivityKit
 import Foundation
 import DungeonCore
+
+#if targetEnvironment(macCatalyst)
+/// No Live Activities on a Mac.
+@MainActor
+enum AFKLiveActivity {
+    static func start(_ run: AFKRun) {}
+    static func update(_ run: AFKRun, alert: String? = nil) {}
+    static func end(_ run: AFKRun) {}
+    static func endAll() {}
+}
+#else
+import ActivityKit
 
 /// Starts, updates and ends the Endless Descent Live Activity (the web
 /// version's _gameStatusNotify did the same with a plain status line).
@@ -78,3 +89,4 @@ enum AFKLiveActivity {
         }
     }
 }
+#endif

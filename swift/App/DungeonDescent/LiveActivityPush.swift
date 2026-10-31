@@ -1,8 +1,17 @@
-import ActivityKit
 import Foundation
 import UIKit
 import FirebaseAuth
 import DungeonCore
+
+#if targetEnvironment(macCatalyst)
+/// No Live Activities on a Mac.
+@MainActor
+enum LiveActivityPush {
+    static func planAndSend() {}
+    static func cancel() {}
+}
+#else
+import ActivityKit
 
 /// Keeps the Endless Descent Live Activity moving while the app is closed.
 /// iOS pauses the app soon after you leave it, so it can't update the Lock
@@ -92,3 +101,4 @@ private final class BackgroundTime {
         id = .invalid
     }
 }
+#endif
