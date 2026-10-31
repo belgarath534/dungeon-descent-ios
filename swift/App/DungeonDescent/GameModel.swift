@@ -223,14 +223,11 @@ enum Feedback {
     static func announce(_ english: String, after delay: Double = 0) {
         guard UIAccessibility.isVoiceOverRunning, !english.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         let text = Language.t(english)
-        let s = NSAttributedString(string: text, attributes: [.accessibilitySpeechQueueAnnouncement: true])
         guard delay > 0 else {
-            UIAccessibility.post(notification: .announcement, argument: s)
+            Announcer.shared.say(text)
             return
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            UIAccessibility.post(notification: .announcement, argument: s)
-        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { Announcer.shared.say(text) }
     }
 
     static func hit(heavy: Bool = false) {
@@ -275,4 +272,68 @@ enum AppSettings {
     // Accessibility panel
     static var verboseRooms: Bool { flag("swift_verbose_rooms") }
     static var combatAnnouncements: Bool { flag("swift_combat_announcements") }
+}
+
+/// Says VoiceOver lines one at a time and makes sure each is heard. iOS drops
+/// the rest of an announcement when VoiceOver starts reading something else
+/// (the new room's buttons after a move, say), and never tries again, so a
+/// line that was cut off is said again once VoiceOver is free.
+@MainActor
+final class Announcer {
+    static let shared = Announcer()
+    private var queue: [String] = []
+    private var current: String?
+    private var tries = 0
+    private var watchdog: DispatchWorkItem?
+
+    private init() {
+        NotificationCenter.default.addObserver(forName: UIAccessibility.announcementDidFinishNotification, object: nil, queue: .main) { note in
+            let text = note.userInfo?[UIAccessibility.announcementStringValueUserInfoKey] as? String
+            let ok = (note.userInfo?[UIAccessibility.announcementWasSuccessfulUserInfoKey] as? NSNumber)?.boolValue ?? true
+            Task { @MainActor in Announcer.shared.finished(text, ok: ok) }
+        }
+    }
+
+    func say(_ text: String) {
+        // The same line twice in a row would only repeat itself.
+        if text == current || queue.last == text { return }
+        queue.append(text)
+        if current == nil { next() }
+    }
+
+    private func next() {
+        watchdog?.cancel()
+        guard !queue.isEmpty, UIAccessibility.isVoiceOverRunning else { current = nil; queue.removeAll(); return }
+        let text = queue.removeFirst()
+        current = text
+        tries = 0
+        post(text)
+    }
+
+    private func post(_ text: String) {
+        UIAccessibility.post(notification: .announcement,
+                             argument: NSAttributedString(string: text, attributes: [.accessibilitySpeechQueueAnnouncement: true]))
+        // If iOS never reports back, move on after about as long as it takes to say.
+        let w = DispatchWorkItem { [weak self] in
+            guard let self, self.current == text else { return }
+            self.next()
+        }
+        watchdog = w
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3 + Double(text.count) / 12, execute: w)
+    }
+
+    private func finished(_ text: String?, ok: Bool) {
+        guard let cur = current, text == nil || text == cur else { return }
+        if !ok && tries < 2 {
+            // Cut off: say it again once VoiceOver has finished the other thing.
+            tries += 1
+            watchdog?.cancel()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+                guard let self, self.current == cur else { return }
+                self.post(cur)
+            }
+            return
+        }
+        next()
+    }
 }
