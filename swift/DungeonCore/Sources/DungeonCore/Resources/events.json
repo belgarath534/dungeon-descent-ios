@@ -824,6 +824,300 @@
     "isBoss": true,
     "desc": "The dark twin of the Leprechaun. Drunk on cursed ale. Hits harder every turn."
    }
+  ],
+  "muertos": [
+   {
+    "name": "Calaca Dancer",
+    "icon": "💀",
+    "hp": 30,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     6,
+     12
+    ],
+    "dodgeChance": 0.15,
+    "desc": "A skeleton in its best clothes. It dances, and it dodges like it dances."
+   },
+   {
+    "name": "La Catrina",
+    "icon": "💃",
+    "hp": 60,
+    "atk": [
+     9,
+     16
+    ],
+    "gold": [
+     12,
+     20
+    ],
+    "lifesteal": 0.2,
+    "desc": "Elegant, smiling, and very much dead. She takes a little of your life with every touch."
+   },
+   {
+    "name": "Alebrije",
+    "icon": "🦎",
+    "hp": 45,
+    "atk": [
+     8,
+     14
+    ],
+    "gold": [
+     8,
+     15
+    ],
+    "burn": 3,
+    "burnTurns": 2,
+    "desc": "A spirit guide painted in impossible colors. Its bite burns."
+   },
+   {
+    "name": "Xolo Spirit",
+    "icon": "🐕",
+    "hp": 35,
+    "atk": [
+     7,
+     13
+    ],
+    "gold": [
+     7,
+     13
+    ],
+    "desc": "The hairless dog who guides souls home. It guards the way."
+   }
+  ],
+  "mexico": [
+   {
+    "name": "Charro Fantasma",
+    "icon": "🤠",
+    "hp": 45,
+    "atk": [
+     9,
+     15
+    ],
+    "gold": [
+     9,
+     16
+    ],
+    "desc": "A ghostly horseman in a silver-studded suit. He rides through walls."
+   },
+   {
+    "name": "Luchador Spirit",
+    "icon": "🤼",
+    "hp": 55,
+    "atk": [
+     8,
+     15
+    ],
+    "gold": [
+     10,
+     17
+    ],
+    "grows": true,
+    "desc": "The masked wrestler never stays down. He gets stronger every round."
+   },
+   {
+    "name": "Grito Champion",
+    "icon": "📯",
+    "hp": 70,
+    "atk": [
+     11,
+     18
+    ],
+    "gold": [
+     16,
+     26
+    ],
+    "desc": "Its battle cry shakes the dungeon. Answer it with your own."
+   }
+  ],
+  "newyear": [
+   {
+    "name": "Midnight Reveler",
+    "icon": "🥳",
+    "hp": 35,
+    "atk": [
+     7,
+     13
+    ],
+    "gold": [
+     8,
+     14
+    ],
+    "desc": "It never left last year’s party. It never will."
+   },
+   {
+    "name": "Countdown Golem",
+    "icon": "⏳",
+    "hp": 65,
+    "atk": [
+     10,
+     17
+    ],
+    "gold": [
+     12,
+     20
+    ],
+    "immuneFirstHit": true,
+    "desc": "Ten, nine, eight… it shrugs off the first blow."
+   },
+   {
+    "name": "Firework Wisp",
+    "icon": "🎇",
+    "hp": 25,
+    "atk": [
+     8,
+     14
+    ],
+    "gold": [
+     6,
+     11
+    ],
+    "burn": 3,
+    "burnTurns": 2,
+    "desc": "A spark that forgot to go out."
+   }
+  ],
+  "lunar": [
+   {
+    "name": "Dragon Dancer",
+    "icon": "🐉",
+    "hp": 60,
+    "atk": [
+     10,
+     17
+    ],
+    "gold": [
+     14,
+     24
+    ],
+    "dodgeChance": 0.15,
+    "desc": "A long paper dragon with something real inside it."
+   },
+   {
+    "name": "Nian Beast",
+    "icon": "🦁",
+    "hp": 75,
+    "atk": [
+     11,
+     19
+    ],
+    "gold": [
+     16,
+     26
+    ],
+    "desc": "The beast that comes at the new year. It fears the color red and loud noise."
+   },
+   {
+    "name": "Lantern Spirit",
+    "icon": "🏮",
+    "hp": 30,
+    "atk": [
+     6,
+     12
+    ],
+    "gold": [
+     8,
+     14
+    ],
+    "desc": "A lantern that floated too far from home."
+   }
+  ],
+  "chaos": [
+   {
+    "name": "Jester of Mischief",
+    "icon": "🃏",
+    "hp": 40,
+    "atk": [
+     5,
+     18
+    ],
+    "gold": [
+     5,
+     30
+    ],
+    "dodgeChance": 0.2,
+    "desc": "Nothing it does makes sense. Neither does its gold."
+   },
+   {
+    "name": "Rubber Chicken",
+    "icon": "🐔",
+    "hp": 20,
+    "atk": [
+     1,
+     25
+    ],
+    "gold": [
+     1,
+     40
+    ],
+    "desc": "It squeaks. It hurts. Sometimes."
+   }
+  ],
+  "longestnight": [
+   {
+    "name": "Night Stalker",
+    "icon": "🌑",
+    "hp": 50,
+    "atk": [
+     10,
+     16
+    ],
+    "gold": [
+     10,
+     18
+    ],
+    "dodgeChance": 0.15,
+    "desc": "It only hunts on the longest night. Tonight it has all the time it needs."
+   },
+   {
+    "name": "Frost Owl",
+    "icon": "🦉",
+    "hp": 35,
+    "atk": [
+     8,
+     13
+    ],
+    "gold": [
+     8,
+     14
+    ],
+    "desc": "It watches from the dark and never blinks."
+   }
+  ],
+  "eclipse": [
+   {
+    "name": "Eclipse Wraith",
+    "icon": "🌘",
+    "hp": 55,
+    "atk": [
+     10,
+     17
+    ],
+    "gold": [
+     14,
+     22
+    ],
+    "lifesteal": 0.15,
+    "desc": "Born in the moment the sun goes dark. It feeds while the light is gone."
+   },
+   {
+    "name": "Corona Shade",
+    "icon": "☀️",
+    "hp": 45,
+    "atk": [
+     9,
+     16
+    ],
+    "gold": [
+     12,
+     20
+    ],
+    "burn": 4,
+    "burnTurns": 2,
+    "desc": "A ring of fire around nothing at all."
+   }
   ]
  },
  "shops": {
@@ -1069,6 +1363,43 @@
     "cost": 28,
     "desc": "Earn the title \"The Beloved\". Exclusive to Valentine's Day."
    }
+  ],
+  "marigolds": [
+   {
+    "id": "muertos-candle",
+    "name": "Ofrenda Candle",
+    "icon": "🕯️",
+    "cost": 8,
+    "desc": "Heals 60 HP and restores 10 SP. A light left for the ones who came back."
+   },
+   {
+    "id": "muertos-skull",
+    "name": "Sugar Skull",
+    "icon": "💀",
+    "cost": 6,
+    "desc": "Heals 45 HP. Sweet, and a little haunted."
+   },
+   {
+    "id": "muertos-marigold",
+    "name": "Marigold Path",
+    "icon": "🌼",
+    "cost": 15,
+    "desc": "+8 attack for 4 turns. The petals light the way home."
+   },
+   {
+    "id": "muertos-gold",
+    "name": "Pan de Muerto",
+    "icon": "🍞",
+    "cost": 10,
+    "desc": "Receive 250 gold."
+   },
+   {
+    "id": "muertos-title",
+    "name": "The Remembered",
+    "icon": "🌼",
+    "cost": 25,
+    "desc": "Earn the title \"The Remembered\". Only during Día de los Muertos."
+   }
   ]
  },
  "list": [
@@ -1183,6 +1514,69 @@
    "desc": "Four times a year the dungeon stops sending one enemy at a time. It sends all of them. Every battle is a multi-enemy ambush for a full 24 hours.",
    "bonuses": "+50% XP. +50% gold. ALL battles are ambushes — 2 to 3 enemies per fight. No single combat. Good luck.",
    "dates": "Active: January 15, April 15, July 15, October 15"
+  },
+  {
+   "id": "muertos",
+   "title": "🌼 Día de los Muertos",
+   "desc": "November 1st and 2nd. The marigolds light the way home, and the dead come back to visit. A fallen hero from your Graveyard returns as a ghost and fights beside you in every fight. Calacas, La Catrina, Alebrijes and Xolo spirits fill the dungeon.",
+   "bonuses": "+30% XP. +20% gold. Enemies 10% stronger. 4 Día de los Muertos enemies. A ghost ally from your Graveyard. Earn 🌼 Marigolds — spend them at 🌼 The Ofrenda.",
+   "dates": "Active: November 1 — November 2"
+  },
+  {
+   "id": "mexico",
+   "title": "🇲🇽 Independencia de México",
+   "desc": "September 15th and 16th. ¡Viva México! Answer the Grito Champion with your own: the ¡El Grito! button in combat gives you +30% attack for 3 turns, once a fight. Ghostly charros and luchadores who never stay down join the dungeon.",
+   "bonuses": "+30% XP. +16% gold (for the 16th of September). Enemies 10% stronger. 3 Mexican Independence enemies. ¡El Grito! battle cry.",
+   "dates": "Active: September 15 — September 16"
+  },
+  {
+   "id": "newyear",
+   "title": "🎆 New Year",
+   "desc": "December 31st and January 1st. The old year ends, the new one begins, and the dungeon parties through both. Midnight Revelers, a Countdown Golem and Firework Wisps join in.",
+   "bonuses": "Double XP. +20% gold. 3 New Year enemies.",
+   "dates": "Active: December 31 — January 1"
+  },
+  {
+   "id": "lunar",
+   "title": "🐉 Lunar New Year",
+   "desc": "Three days at the start of the lunar new year — the date moves with the moon. Dragon dancers, the Nian Beast and lantern spirits come out. Defeated enemies sometimes leave a 🧧 red envelope with gold, or even a Mystery Coin.",
+   "bonuses": "+40% XP. +28% gold. Enemies 10% stronger. 3 Lunar New Year enemies. Red envelopes.",
+   "dates": "Active: the first three days of the lunar new year"
+  },
+  {
+   "id": "chaos",
+   "title": "🃏 Chaos Day",
+   "desc": "April 1st. Nothing makes sense. Every fight rolls a random twist: enemies with half their HP, enemies that hit harder but carry triple gold, enemies that trip, laugh, or insist on a new name.",
+   "bonuses": "+25% XP. +25% gold. A random twist every fight. 2 Chaos Day enemies.",
+   "dates": "Active: April 1st only"
+  },
+  {
+   "id": "longestnight",
+   "title": "🌑 The Longest Night",
+   "desc": "December 21st, the winter solstice. The sun never comes up in the dungeon — it is night all day, with every night bonus and the night shop discount on. Night Stalkers and Frost Owls hunt.",
+   "bonuses": "+30% XP. +10% gold. Enemies 20% stronger. Night all day. 2 Longest Night enemies.",
+   "dates": "Active: December 21st only"
+  },
+  {
+   "id": "eclipse",
+   "title": "🌘 The Eclipse",
+   "desc": "One evening a month, the sun goes dark over the dungeon for four hours — the same time for every player, so watch for it. Eclipse Wraiths and Corona Shades rise while the light is gone.",
+   "bonuses": "+50% XP. Double gold. Enemies 30% stronger. 2 Eclipse enemies.",
+   "dates": "Active: one evening a month, 18:00 — 22:00 UTC"
+  },
+  {
+   "id": "nightmarket",
+   "title": "🏮 Night Market",
+   "desc": "The first weekend of every month, the traders set up their lanterns. The Wandering Merchant shows up far more often, and everything in the shop is 25% off.",
+   "bonuses": "+10% XP. +10% gold. The merchant comes 4 times as often. 25% off in the shop.",
+   "dates": "Active: the first Saturday and Sunday of every month"
+  },
+  {
+   "id": "migration",
+   "title": "🐾 Monster Migration",
+   "desc": "Two days a month, the monsters move. Enemies from the other dungeons wander into yours — with all their abilities — at your floor's tier. Each wanderer you defeat gives bonus XP.",
+   "bonuses": "+25% XP. Enemies 5% stronger. Enemies from every other dungeon. +15 XP for each wanderer defeated.",
+   "dates": "Active: two days a month"
   }
  ]
 }

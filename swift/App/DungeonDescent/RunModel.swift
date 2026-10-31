@@ -139,6 +139,7 @@ final class RunModel: ObservableObject {
         r.event = Events.active()
         r.startNotes += Events.applyNextRun(&r, store: game.store)
         var td = SystemDice()
+        r.festivalGhost = Festival.ghost(store: game.store, dice: &td)
         if let t = IndependenceTournament.start(level: r.level, store: game.store, dice: &td) { r.startNotes.append(t) }
         let brewed = Alchemy.collect(into: &r, store: game.store)
         if brewed > 0 { r.startNotes.append("🧪 \(brewed) crafted potion\(brewed == 1 ? "" : "s") from your Alchemy Table added to inventory.") }
@@ -971,6 +972,20 @@ final class RunModel: ObservableObject {
         Feedback.announce(msg.hasPrefix("✨") ? "Purge. Corruption cleared. \(ShadowWorld.purgeCost) SP spent." : msg)
     }
 
+    /// Independencia de México: ¡El Grito!, once a fight. A free action.
+    var canGrito: Bool { phase == .fighting && Festival.canGrito(run) && !run.fight.gritoUsed }
+
+    func grito() {
+        var r = run
+        let msg = Festival.grito(&r)
+        run = r
+        guard !msg.isEmpty else { return }
+        add(msg)
+        persist()
+        Sound.sfx("sfx-confirm")
+        Feedback.announce(msg.hasPrefix("🇲🇽") ? "Viva México! Your battle cry gives you plus \(r.fight.buffAtk) attack for 3 turns." : msg)
+    }
+
     /// Bomb Thrower's once-per-floor bomb.
     var canBomb: Bool { phase == .fighting && Subclasses.canBomb(run) }
 
@@ -1077,6 +1092,7 @@ final class RunModel: ObservableObject {
         var said = ""
         for e in fallen {
             let reward = Progression.rewardKill(&r, e, dice: &d, wallet: game.wallet)
+            if reward.mysteryCoins > 0 { game.addMysteryCoins(reward.mysteryCoins) }
             add(reward.message)
             said += " " + reward.message
             achievements.record(.enemyKilled(e, run: r))
@@ -3241,7 +3257,7 @@ final class RunModel: ObservableObject {
     }
 
     func price(_ entry: Inventory.ShopItem) -> Int {
-        Races.shopPrice(Spirits.shopPrice(RunModifiers.potionCost(entry.item, Inventory.price(entry.item, hour: hour), run), run), run)
+        Races.shopPrice(Spirits.shopPrice(RunModifiers.potionCost(entry.item, Inventory.price(entry.item, hour: hour, event: run.event), run), run), run)
     }
 
     func buy(_ id: Int) {

@@ -514,6 +514,10 @@ struct DungeonView: View {
                     Button("✨ Purge (\(ShadowWorld.purgeCost) SP)") { model.purge() }.buttonStyle(DungeonButtonStyle(kind: .skill))
                         .accessibilityLabel("Purge shadow corruption for \(ShadowWorld.purgeCost) SP. \(run.shadowCorruption) stacks.")
                 }
+                if model.canGrito {
+                    Button("🇲🇽 ¡El Grito!") { model.grito() }.buttonStyle(DungeonButtonStyle(kind: .skill))
+                        .accessibilityLabel("El Grito, Mexican Independence battle cry. Plus 30 percent attack for 3 turns, once a fight.")
+                }
                 if model.canBomb {
                     Button("💣 Bomb") { model.throwBomb() }.buttonStyle(DungeonButtonStyle(kind: .combat))
                         .accessibilityLabel("Throw your bomb for 60 damage. Once per floor.")

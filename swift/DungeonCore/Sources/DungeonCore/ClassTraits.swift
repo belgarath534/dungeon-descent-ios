@@ -200,7 +200,7 @@ public enum ClassTraits {
         let d = dice.roll(ally.atk)
         e.hp = max(0, e.hp - d)
         run.enemy = e
-        log.append("💀 The risen \(ally.name) strikes \(e.name) for \(d).")
+        log.append(ally.flag("ghost") ? "🌼 The \(ally.name) strikes \(e.name) for \(d)." : "💀 The risen \(ally.name) strikes \(e.name) for \(d).")
     }
 
     /// Kill heals, and the Necromancer's dead rising. Returns notes for the kill message.

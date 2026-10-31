@@ -146,7 +146,7 @@ public enum CoinShop {
 
     /// isNightTime: 8 PM to 8 AM.
     public static func isNight(hour: Int) -> Bool { hour >= 20 || hour < 8 }
-    public static func isNightNow() -> Bool { isNight(hour: Calendar.current.component(.hour, from: Date())) }
+    public static func isNightNow() -> Bool { Festival.isNight() || isNight(hour: Calendar.current.component(.hour, from: Date())) }
 }
 
 extension RaidSave {
@@ -174,7 +174,7 @@ public enum Titles {
     ]
     /// The seasonal shops' titles, owned once bought (the web version gave them
     /// to whichever character was selected, which from the menu was none).
-    public static let seasonal: [String: String] = ["liberty-title": "Patriot", "stpat-title": "Lucky One", "val-title": "Beloved"]
+    public static let seasonal: [String: String] = ["liberty-title": "Patriot", "stpat-title": "Lucky One", "val-title": "Beloved", "muertos-title": "Remembered"]
 
     public static func current(_ store: GameStore) -> String {
         let t = store.getItem("dd_title") ?? ""

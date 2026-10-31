@@ -472,16 +472,16 @@ public enum Inventory {
     }
 
     /// Price after the night discount (25% off from 8pm to 8am, as isNightTime()).
-    public static func price(_ item: Item, hour: Int) -> Int {
+    public static func price(_ item: Item, hour: Int, event: String? = nil) -> Int {
         let cost = item.cost ?? 0
-        let night = hour >= 20 || hour < 8
+        let night = hour >= 20 || hour < 8 || Festival.shopDiscount(event: event)
         return night ? Int((Double(cost) * 0.75).rounded(.down)) : cost
     }
 
     /// Buys a shop item with gold from the run and the shared wallet.
     public static func buy(_ run: inout Run, _ entry: inout ShopItem, wallet: Wallet, hour: Int) -> Outcome {
         guard !entry.sold else { return Outcome(message: "Already sold.", used: false) }
-        let cost = Races.shopPrice(Spirits.shopPrice(RunModifiers.potionCost(entry.item, price(entry.item, hour: hour), run), run), run)
+        let cost = Races.shopPrice(Spirits.shopPrice(RunModifiers.potionCost(entry.item, price(entry.item, hour: hour, event: run.event), run), run), run)
         guard run.gold >= cost, wallet.spendGold(cost) else {
             return Outcome(message: "Not enough gold. You need \(cost) gold. You have \(run.gold).", used: false)
         }

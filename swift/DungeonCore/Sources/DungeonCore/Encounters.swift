@@ -37,8 +37,9 @@ public enum Encounters {
                 // One roll against the running total, done as a chain of chances.
                 var picked = "normal"
                 for room in specialRooms {
-                    if dice.chance(room.chance / max(0.0001, 1 - roll)) { picked = room.type; break }
-                    roll += room.chance
+                    let chance = room.type == "merchant" ? Festival.merchantChance(run, room.chance) : room.chance
+                    if dice.chance(chance / max(0.0001, 1 - roll)) { picked = room.type; break }
+                    roll += chance
                 }
                 plan.append(picked)
             }

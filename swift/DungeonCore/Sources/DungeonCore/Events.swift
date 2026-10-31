@@ -51,8 +51,8 @@ public enum Events {
         return DateComponents(year: year, month: month, day: day)
     }
 
-    /// getActiveEvent: the event running on this day, if any.
-    public static func active(on date: Date = Date()) -> String? {
+    /// The events before v11.8 (Festival.swift's active(on:) adds the new ones).
+    static func baseActive(on date: Date) -> String? {
         let cal = calendar
         let c = cal.dateComponents(in: .current, from: date)
         guard let month = c.month, let day = c.day, let year = c.year, let weekday = c.weekday else { return nil }
@@ -97,7 +97,7 @@ public enum Events {
         case "friday13": return Bonuses(id: "friday13", label: "🔪 Friday the 13th", enemyMult: 1.30, goldMult: 0.75)
         case "stpatricks": return Bonuses(id: "stpatricks", label: "☘️ St. Patrick's Day", xpMult: 1.30, enemyMult: 1.15, goldMult: 1.50, currency: c("shamrocks", "☘️", "Shamrocks", "☘️ Shamrock Shop"))
         case "easter": return Bonuses(id: "easter", label: "🐰 Easter", xpMult: 1.50, enemyMult: 0.80)
-        default: return nil
+        default: return id.flatMap { Festival.bonuses($0) }
         }
     }
 
@@ -126,6 +126,12 @@ public enum Events {
         case "xpweekend": end = endOfToday.flatMap { cal.date(byAdding: .day, value: weekday == 1 ? 0 : 1, to: $0) }
         case "bloodmoon": end = at(month, 7)
         case "architect": end = at(month, 14)
+        case "muertos": end = at(11, 2)
+        case "mexico": end = at(9, 16)
+        case "newyear": end = month == 12 ? cal.date(from: DateComponents(year: year + 1, month: 1, day: 1, hour: 23, minute: 59, second: 59)) : at(1, 1)
+        case "eclipse":
+            var utc = Calendar(identifier: .gregorian); utc.timeZone = TimeZone(identifier: "UTC")!
+            end = utc.date(bySettingHour: 22, minute: 0, second: 0, of: now)
         default: end = endOfToday // Void Week, Ambush Day and the one-day events
         }
         guard let end else { return 0 }
@@ -198,7 +204,7 @@ public enum Events {
     /// the event's enemy strength (and New Game+), not by floor.
     static func seasonalEnemy(_ run: Run, dice: inout some Dice) -> Enemy? {
         guard let b = bonuses(run.event) else { return nil }
-        let pool = enemies(b.id)
+        let pool = b.id == "migration" ? Festival.migrants(run) : enemies(b.id)
         guard !pool.isEmpty, dice.chance(0.20) else { return nil }
         let t = pool[dice.roll(0...(pool.count - 1))]
         let m = b.enemyMult * (run.ngPlus ? 1.20 : 1.0)
@@ -206,6 +212,8 @@ public enum Events {
         let lo = jsRound(Double(t.atk.lowerBound) * m), hi = jsRound(Double(t.atk.upperBound) * m)
         var e = Enemy(name: t.name, icon: t.icon, hp: hp, maxHp: hp, atk: lo...max(lo, hi), gold: t.gold)
         e.desc = t.desc
+        // The v11.8 events' enemies keep their abilities (dodge, lifesteal, burn …).
+        if Festival.ids.contains(b.id) { e.mechanics = t.mechanics; if t.coward { e.mechanics["coward"] = .bool(true) } }
         e.mechanics["seasonal"] = .string(b.label)
         return e
     }
@@ -304,6 +312,12 @@ public enum Events {
         case "santa-potion": msg = potion("Eggnog Flask", "🥛", 60, "Heals 60 HP and 10 SP.")
         case "harvest-potion": msg = potion("Harvest Brew", "🍂", 70, "Heals 70 HP.")
         case "val-chocolate-box": msg = potion("Box of Chocolates", "🍫", 55, "Heals 55 HP.")
+        case "muertos-candle": msg = potion("Ofrenda Candle", "🕯️", 60, "Heals 60 HP.")
+        case "muertos-skull": msg = potion("Sugar Skull", "💀", 45, "Heals 45 HP.")
+        case "muertos-gold": wallet.addGold(250); msg = "250 gold received."
+        case "muertos-marigold":
+            next.items.append(SeasonalItems.all["val-rose"].map { var it = $0; it.name = "Marigold Path"; it.icon = "🌼"; it.desc = "+8 ATK for 4 turns. The petals light the way home."; return it }!)
+            msg = "Marigold Path will be in your bag when your next run starts."
         case "santa-bonus-gold": wallet.addGold(150); msg = "150 gold received from Santa."
         case "liberty-gold": wallet.addGold(300); msg = "300 gold received from the Liberty Treasury."
         case "harvest-gold": wallet.addGold(200); msg = "200 gold received from the harvest."

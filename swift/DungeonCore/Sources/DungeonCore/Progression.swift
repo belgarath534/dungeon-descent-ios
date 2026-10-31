@@ -110,6 +110,8 @@ public enum Progression {
         public var xp: Int
         public var levelsGained: Int
         public var message: String
+        /// Lunar New Year's red envelopes can hold a Mystery Coin (the app adds it).
+        public var mysteryCoins = 0
     }
 
     /// Pays out for a defeated enemy: gold into the run and the shared wallet, then XP.
@@ -145,9 +147,13 @@ public enum Progression {
         xp *= RunModifiers.xpMult(run)
         xp = CustomSpirits.xp(run, xp)
         let drain = Races.onKill(&run) + ClassTraits.onKill(&run, enemy, dice: &dice)
+        let fest = Festival.onKill(&run, enemy, dice: &dice)
+        if fest.gold > 0 { run.gold += fest.gold; wallet.addGold(fest.gold); g += fest.gold }
+        xp += fest.xp
         let levels = gainXP(&run, xp)
         return KillReward(gold: g, xp: xp, levelsGained: levels,
-                          message: "\(enemy.name) is defeated! You gain \(g) gold and \(xp) XP.\(luckNote)\(drain)")
+                          message: "\(enemy.name) is defeated! You gain \(g) gold and \(xp) XP.\(luckNote)\(drain)\(fest.note)",
+                          mysteryCoins: fest.mysteryCoin ? 1 : 0)
     }
 
     public enum DeathOutcome: Equatable, Sendable {

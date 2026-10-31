@@ -156,6 +156,8 @@ public struct Run: Codable, Sendable {
     public var undyingResolve = false
     /// Necromancer: a killed enemy that fights for you in the next fight.
     public var raised: Enemy? = nil
+    /// Día de los Muertos: the hero from The Graveyard who fights beside you.
+    public var festivalGhost: Enemy? = nil
     /// Developer Tools: the next fight is an ambush / Medusa.
     public var devAmbush = false
     /// The Curse Shop's Cursed Modifier: this run gets a run modifier whatever the setting.
@@ -439,6 +441,8 @@ public struct FightEffects: Codable, Sendable {
     /// Wind Walker / Shadow first-strike crit and Trapper's first-hit stun are spent.
     public var subFirstStrike = false
     public var paradoxUsed = false
+    /// ¡El Grito! was given this fight.
+    public var gritoUsed = false
     /// Medusa's Serpent Guard is still up this fight.
     public var medusaGuard = false
     /// The Sorrow Hound's fear: your attacks do 20% less for this many turns.

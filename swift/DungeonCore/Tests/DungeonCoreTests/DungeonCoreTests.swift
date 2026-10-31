@@ -1904,7 +1904,7 @@ final class EventTests: XCTestCase {
 
     func testCalendar() {
         XCTAssertEqual(Events.active(on: day(2026, 10, 26)), "halloween")
-        XCTAssertEqual(Events.active(on: day(2026, 11, 2)), "halloween")
+        XCTAssertEqual(Events.active(on: day(2026, 11, 2)), "muertos") // v11.8: Día de los Muertos takes Nov 1–2
         XCTAssertEqual(Events.active(on: day(2026, 12, 3)), "christmas")
         XCTAssertEqual(Events.active(on: day(2026, 11, 24)), "thanksgiving")
         XCTAssertEqual(Events.active(on: day(2026, 4, 5)), "easter") // Easter Sunday 2026
@@ -1912,13 +1912,13 @@ final class EventTests: XCTestCase {
         XCTAssertEqual(Events.easter(2027).day, 28)
         XCTAssertEqual(Events.active(on: day(2026, 3, 13)), "friday13")
         XCTAssertEqual(Events.active(on: day(2026, 7, 4)), "july4")
-        XCTAssertEqual(Events.daysLeft("halloween", from: day(2026, 10, 26)), 7)
+        XCTAssertEqual(Events.daysLeft("halloween", from: day(2026, 10, 26)), 5)
         XCTAssertEqual(Events.daysUntil("christmas", from: day(2026, 10, 26)), 36)
         XCTAssertFalse(Events.bannerLines(on: day(2026, 10, 26)).isEmpty)
     }
 
     func testDataAndEnemies() {
-        XCTAssertEqual(Events.list.count, 16)
+        XCTAssertEqual(Events.list.count, 25)
         XCTAssertEqual(Events.enemies("halloween").count, 11) // the Pumpkin King is a boss
         XCTAssertEqual(Events.shop("demonCoins").count, 5)
     }
@@ -4608,5 +4608,99 @@ final class IntrosTests: XCTestCase {
         for d in TrueEnding.dungeons + ["The Shadow World"] { XCTAssertNotNil(Intros.dungeonIntros[d], d) }
         XCTAssertNotNil(Intros.runStartQuote(dungeon: "Crypt of Malachar", cls: "Warrior"))
         XCTAssertEqual(Intros.bossIntro("Nobody"), Intros.bossFallback)
+    }
+}
+
+final class FestivalTests: XCTestCase {
+    func day(_ y: Int, _ m: Int, _ d: Int, hour: Int = 12) -> Date {
+        Calendar(identifier: .gregorian).date(from: DateComponents(year: y, month: m, day: d, hour: hour))!
+    }
+    func run(_ event: String?) -> Run {
+        var r = Run(character: PlayerCharacter(name: "F", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.event = event
+        return r
+    }
+
+    func testDatedEvents() {
+        XCTAssertEqual(Events.active(on: day(2026, 11, 1)), "muertos")
+        XCTAssertEqual(Events.active(on: day(2026, 9, 15)), "mexico")
+        XCTAssertEqual(Events.active(on: day(2026, 9, 16)), "mexico")
+        XCTAssertEqual(Events.active(on: day(2026, 12, 31)), "newyear")
+        XCTAssertEqual(Events.active(on: day(2027, 1, 1)), "newyear")
+        XCTAssertEqual(Events.active(on: day(2027, 2, 6)), "lunar")
+        XCTAssertEqual(Events.active(on: day(2027, 2, 8)), "lunar")
+        XCTAssertEqual(Events.active(on: day(2027, 4, 1)), "chaos")
+        XCTAssertEqual(Events.active(on: day(2026, 12, 21)), "longestnight")
+        XCTAssertEqual(Events.active(on: day(2026, 9, 7)), "brazil")
+        XCTAssertEqual(Events.active(on: day(2027, 3, 6)), "nightmarket") // first Saturday of March 2027
+        for id in Festival.ids { XCTAssertNotNil(Events.bonuses(id), id) }
+        XCTAssertEqual(Events.bonuses("muertos")?.currency?.key, "marigolds")
+        XCTAssertEqual(Events.shop("marigolds").count, 5)
+        XCTAssertEqual(Events.enemies("muertos").count, 4)
+    }
+
+    func testMonthlyEvents() {
+        var utc = Calendar(identifier: .gregorian); utc.timeZone = TimeZone(identifier: "UTC")!
+        let ecl = Festival.eclipseDay(year: 2027, month: 4)
+        let evening = utc.date(from: DateComponents(year: 2027, month: 4, day: ecl, hour: 19))!
+        XCTAssertEqual(Events.active(on: evening), "eclipse")
+        let mig = Festival.migrationDay(year: 2027, month: 4)
+        XCTAssertEqual(Events.active(on: day(2027, 4, mig)), "migration")
+        XCTAssertNotEqual(ecl, mig)
+        let r = run("migration")
+        let pool = Festival.migrants(r)
+        XCTAssertFalse(pool.isEmpty)
+        XCTAssertFalse(pool.contains { Bestiary.crypt.t1.map(\.name).contains($0.name) && $0.desc?.contains("Crypt") == true })
+    }
+
+    func testShopAndMerchant() {
+        var potion = Item(name: "P", icon: "🧪", type: "potion", desc: "")
+        potion.cost = 12
+        XCTAssertEqual(Inventory.price(potion, hour: 12), 12)
+        XCTAssertEqual(Inventory.price(potion, hour: 12, event: "nightmarket"), 9)
+        XCTAssertEqual(Festival.merchantChance(run("nightmarket"), 0.06), 0.25)
+        XCTAssertEqual(Festival.merchantChance(run(nil), 0.06), 0.06)
+    }
+
+    func testGrito() {
+        var r = run("mexico")
+        Combat.begin(&r, against: Enemy(name: "Goblin", icon: "👺", hp: 40, maxHp: 40, atk: 4...8, gold: 2...4))
+        let before = r.totalAtkBonus
+        XCTAssertTrue(Festival.grito(&r).contains("VIVA"))
+        XCTAssertGreaterThan(r.totalAtkBonus, before)
+        XCTAssertEqual(r.fight.buffTurns, 3)
+        XCTAssertTrue(Festival.grito(&r).contains("already"))
+        var n = run(nil)
+        Combat.begin(&n, against: Enemy(name: "Goblin", icon: "👺", hp: 40, maxHp: 40, atk: 4...8, gold: 2...4))
+        XCTAssertEqual(Festival.grito(&n), "")
+    }
+
+    func testGhostAllyAndEnvelopes() {
+        let store = MemoryStore()
+        CharacterRoster(store: store).addToGraveyard(.object(["name": .string("Old Brom"), "cls": .string("Warrior"), "level": .number(4)]))
+        var d = SeededDice(seed: 3)
+        var r = run("muertos")
+        r.festivalGhost = Festival.ghost(store: store, dice: &d)
+        XCTAssertEqual(r.festivalGhost?.name, "ghost of Old Brom")
+        let log = Combat.begin(&r, against: Enemy(name: "Goblin", icon: "👺", hp: 40, maxHp: 40, atk: 4...8, gold: 2...4))
+        XCTAssertNotNil(r.fight.ally)
+        XCTAssertTrue(log.contains { $0.contains("Old Brom") })
+        var l = run("lunar")
+        let w = Wallet(store: MemoryStore())
+        var got = false
+        for s in 0..<200 {
+            var dd = SeededDice(seed: UInt64(s))
+            let k = Progression.rewardKill(&l, Enemy(name: "Goblin", icon: "👺", hp: 0, maxHp: 40, atk: 4...8, gold: 2...4), dice: &dd, wallet: w)
+            if k.message.contains("🧧") { got = true; break }
+        }
+        XCTAssertTrue(got)
+    }
+
+    func testChaosTwistAndOfrenda() {
+        var r = run("chaos")
+        let log = Combat.begin(&r, against: Enemy(name: "Goblin", icon: "👺", hp: 40, maxHp: 40, atk: 4...8, gold: 2...4))
+        XCTAssertTrue(log.contains { $0.hasPrefix("🃏 Chaos Day") })
+        XCTAssertEqual(Titles.seasonal["muertos-title"], "Remembered")
     }
 }

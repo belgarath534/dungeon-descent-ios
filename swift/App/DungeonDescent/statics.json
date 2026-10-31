@@ -674,7 +674,24 @@
  },
  "whatsnew": [
   {
-   "num": "v11.7.3 — Latest",
+   "num": "v11.8 — Latest",
+   "date": "The Festival Update",
+   "label": "Version 11.8",
+   "changes": [
+    "🎉 Nine new events come to the dungeon, each with its own enemies, bonuses and twist. Check the Events screen in the menu to see when each one is on.",
+    "🌼 Día de los Muertos (November 1–2) — a fallen hero from your Graveyard returns as a ghost and fights beside you. Earn Marigolds and spend them at 🌼 The Ofrenda.",
+    "🇲🇽 Independencia de México (September 15–16) — the ¡El Grito! battle cry gives you +30% attack for 3 turns, once a fight.",
+    "🎆 New Year (December 31–January 1) — double XP into the new year.",
+    "🐉 Lunar New Year — three days that move with the moon. Enemies sometimes leave a 🧧 red envelope with gold or a Mystery Coin.",
+    "🃏 Chaos Day (April 1) — every fight rolls a random twist.",
+    "🌑 The Longest Night (December 21) — it is night all day, with every night bonus on.",
+    "🌘 The Eclipse — one evening a month the sun goes dark, the same time for every player. Double gold, and much tougher enemies.",
+    "🏮 Night Market — the first weekend of every month, the merchant comes far more often and everything is 25% off.",
+    "🐾 Monster Migration — two days a month, enemies from the other dungeons wander into yours with all their abilities."
+   ]
+  },
+  {
+   "num": "v11.7.3",
    "date": "The Swift Rebuild",
    "label": "Version 11.7.3",
    "changes": [

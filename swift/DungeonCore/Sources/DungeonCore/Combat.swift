@@ -73,6 +73,7 @@ public enum Combat {
         HollowAbyssal.combatStart(&run, log: &log)
         Spells.combatStart(&run, log: &log)
         ClassTraits.combatStart(&run, log: &log)
+        Festival.combatStart(&run, log: &log)
         return log
     }
 
