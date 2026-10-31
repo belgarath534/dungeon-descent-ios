@@ -91,8 +91,9 @@ struct AchievementsView: View {
             .background(Theme.bgPanel)
             .overlay(Rectangle().stroke(Theme.borderDim))
             .overlay(alignment: .leading) { Rectangle().fill(border).frame(width: 3) }
+            // Read the whole card: a label here replaced all of its text, so
+            // VoiceOver only said "Main quest" or "Daily quest".
             .accessibilityElement(children: .combine)
-            .accessibilityLabel(label)
     }
 
     private func badge(_ t: String, _ c: Color, _ b: Color) -> some View {

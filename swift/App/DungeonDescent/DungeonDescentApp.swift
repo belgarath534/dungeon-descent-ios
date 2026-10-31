@@ -35,6 +35,8 @@ struct DungeonDescentApp: App {
                 }
         }
         .onChange(of: scenePhase) { phase in
+            if phase == .background { AudioEngine.shared.enterBackground() }
+            if phase == .active { AudioEngine.shared.enterForeground() }
             if phase != .active {
                 game.saveNow()
                 CloudAccount.shared.autoSync()

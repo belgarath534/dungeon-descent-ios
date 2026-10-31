@@ -45,6 +45,9 @@ final class AudioEngine {
     func playTrack(_ requested: String) {
         // "menu" means the menu music of the day (holiday versions included).
         let name = requested == "menu" ? Soundtrack.menuTrack() : requested
+        // The game choosing its own music ends the Music Player's track
+        // (the player sets the flag again right after it calls this).
+        musicPlayerActive = false
         // A custom track plays instead of the game's music until it's stopped.
         guard AppSettings.musicOn, customLabel == nil else { musicName = name; return }
         if name == musicName, music?.isPlaying == true { return }
@@ -165,6 +168,31 @@ final class AudioEngine {
         fadeOut(music)
         music = nil
         musicName = nil
+    }
+
+    // MARK: Leaving the app
+
+    /// The Music Player is playing a track you chose.
+    var musicPlayerActive = false
+    private var pausedForBackground = false
+
+    /// Leaving the app: the game's music and ambience stop, unless the Music
+    /// Player or one of your own tracks is playing (they kept going before,
+    /// because the app may play audio in the background).
+    func enterBackground() {
+        guard !musicPlayerActive, customLabel == nil else { return }
+        if music?.isPlaying == true || ambient?.isPlaying == true {
+            music?.pause()
+            ambient?.pause()
+            pausedForBackground = true
+        }
+    }
+
+    func enterForeground() {
+        guard pausedForBackground else { return }
+        pausedForBackground = false
+        if AppSettings.musicOn { music?.play() }
+        ambient?.play()
     }
 
     // MARK: Custom tracks (playCustomTrack, stopCustomTrack)

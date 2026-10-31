@@ -452,12 +452,14 @@ struct MusicPlayerPanel: View {
         // Stop everything first, custom track included (mpPlay).
         if AudioEngine.shared.customLabel != nil { AudioEngine.shared.stopCustom() }
         Sound.track(k)
+        AudioEngine.shared.musicPlayerActive = true
         mpPlaying = true
         Feedback.announce("Now playing: \(label)")
     }
 
     private func stop() {
         Sound.stopMusic()
+        AudioEngine.shared.musicPlayerActive = false
         mpPlaying = false
         Feedback.announce("Music stopped.")
     }
