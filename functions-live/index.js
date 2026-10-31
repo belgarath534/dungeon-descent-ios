@@ -109,7 +109,10 @@ async function plan(req, res) {
   });
   if (!token || !states.length) { res.json({ ok: true, queued: 0 }); return; }
 
-  const url = 'https://' + req.get('host') + '/send';
+  // This function's own /send. Through cloudfunctions.net its name is part
+  // of the path; on its run.app address it isn't.
+  const host = req.get('host');
+  const url = 'https://' + host + (host.endsWith('cloudfunctions.net') ? '/liveActivity/send' : '/send');
   const now = Date.now() / 1000;
   const jobs = states.filter((s) => s && typeof s.at === 'number' && s.state && s.at > now - 5 && s.at < now + 6 * 3600);
   let queued = 0;
