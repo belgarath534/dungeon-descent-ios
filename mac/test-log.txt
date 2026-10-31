@@ -11,9 +11,9 @@ Build settings from command line:
 
 Resolve Package Graph
 
-Fetching from https://github.com/google/GoogleSignIn-iOS
-
 Fetching from https://github.com/firebase/firebase-ios-sdk
+
+Fetching from https://github.com/google/GoogleSignIn-iOS
 
 Fetching from https://github.com/google/gtm-session-fetcher.git
 
@@ -23,11 +23,11 @@ Fetching from https://github.com/google/app-check.git
 
 Fetching from https://github.com/openid/AppAuth-iOS.git
 
-Fetching from https://github.com/google/GoogleUtilities.git
+Fetching from https://github.com/google/promises.git
 
 Fetching from https://github.com/google/interop-ios-for-google-sdks.git
 
-Fetching from https://github.com/google/promises.git
+Fetching from https://github.com/google/GoogleUtilities.git
 
 Fetching from https://github.com/google/grpc-binary.git
 
@@ -37,69 +37,45 @@ Fetching from https://github.com/google/abseil-cpp-binary.git
 
 Fetching from https://github.com/firebase/nanopb.git
 
-Fetching from https://github.com/google/GoogleAppMeasurement.git
-
 Fetching from https://github.com/google/GoogleDataTransport.git
+
+Fetching from https://github.com/google/GoogleAppMeasurement.git
 
 Fetching from https://github.com/apple/swift-protobuf.git
 
 Fetching from https://github.com/googleads/google-ads-on-device-conversion-ios-sdk
 
-Creating working copy of package ‘app-check’
-
-Checking out 11.3.2 of package ‘app-check’
-
-Creating working copy of package ‘promises’
-
-Checking out 2.4.1 of package ‘promises’
-
-Creating working copy of package ‘nanopb’
-
-Checking out 2.30910.1 of package ‘nanopb’
-
-Creating working copy of package ‘GoogleAppMeasurement’
-
-Checking out 11.15.0 of package ‘GoogleAppMeasurement’
-
 Creating working copy of package ‘gtm-session-fetcher’
 
 Checking out 3.5.0 of package ‘gtm-session-fetcher’
-
-Creating working copy of package ‘GoogleDataTransport’
-
-Checking out 10.1.1 of package ‘GoogleDataTransport’
-
-Creating working copy of package ‘abseil-cpp-binary’
-
-Checking out 1.2024072200.0 of package ‘abseil-cpp-binary’
-
-Creating working copy of package ‘GTMAppAuth’
-
-Checking out 4.1.1 of package ‘GTMAppAuth’
-
-Creating working copy of package ‘firebase-ios-sdk’
-
-Checking out 11.15.0 of package ‘firebase-ios-sdk’
-
-Creating working copy of package ‘AppAuth-iOS’
-
-Checking out 1.7.6 of package ‘AppAuth-iOS’
 
 Creating working copy of package ‘GoogleSignIn-iOS’
 
 Checking out 8.0.0 of package ‘GoogleSignIn-iOS’
 
-Creating working copy of package ‘GoogleUtilities’
+Creating working copy of package ‘GTMAppAuth’
 
-Checking out 8.1.5 of package ‘GoogleUtilities’
+Checking out 4.1.1 of package ‘GTMAppAuth’
 
-Creating working copy of package ‘swift-protobuf’
+Creating working copy of package ‘nanopb’
 
-Checking out 1.39.0 of package ‘swift-protobuf’
+Checking out 2.30910.1 of package ‘nanopb’
 
-Creating working copy of package ‘leveldb’
+Creating working copy of package ‘AppAuth-iOS’
 
-Checking out 1.22.5 of package ‘leveldb’
+Checking out 1.7.6 of package ‘AppAuth-iOS’
+
+Creating working copy of package ‘app-check’
+
+Checking out 11.3.2 of package ‘app-check’
+
+Creating working copy of package ‘GoogleAppMeasurement’
+
+Checking out 11.15.0 of package ‘GoogleAppMeasurement’
+
+Creating working copy of package ‘firebase-ios-sdk’
+
+Checking out 11.15.0 of package ‘firebase-ios-sdk’
 
 Creating working copy of package ‘grpc-binary’
 
@@ -109,229 +85,59 @@ Creating working copy of package ‘interop-ios-for-google-sdks’
 
 Checking out 101.0.0 of package ‘interop-ios-for-google-sdks’
 
+Creating working copy of package ‘GoogleUtilities’
+
+Checking out 8.1.5 of package ‘GoogleUtilities’
+
+Creating working copy of package ‘GoogleDataTransport’
+
+Checking out 10.1.1 of package ‘GoogleDataTransport’
+
+Creating working copy of package ‘swift-protobuf’
+
+Checking out 1.39.0 of package ‘swift-protobuf’
+
+Creating working copy of package ‘promises’
+
+Checking out 2.4.1 of package ‘promises’
+
+Creating working copy of package ‘leveldb’
+
+Checking out 1.22.5 of package ‘leveldb’
+
+Creating working copy of package ‘abseil-cpp-binary’
+
+Checking out 1.2024072200.0 of package ‘abseil-cpp-binary’
+
 Creating working copy of package ‘google-ads-on-device-conversion-ios-sdk’
 
 Checking out 2.3.0 of package ‘google-ads-on-device-conversion-ios-sdk’
 
 
 Resolved source packages:
-  SwiftProtobuf: https://github.com/apple/swift-protobuf.git @ 1.39.0
-  gRPC: https://github.com/google/grpc-binary.git @ 1.69.1
+  InteropForGoogle: https://github.com/google/interop-ios-for-google-sdks.git @ 101.0.0
   GoogleAppMeasurement: https://github.com/google/GoogleAppMeasurement.git @ 11.15.0
   GoogleUtilities: https://github.com/google/GoogleUtilities.git @ 8.1.5
-  abseil: https://github.com/google/abseil-cpp-binary.git @ 1.2024072200.0
-  Firebase: https://github.com/firebase/firebase-ios-sdk @ 11.15.0
-  Promises: https://github.com/google/promises.git @ 2.4.1
-  AppAuth: https://github.com/openid/AppAuth-iOS.git @ 1.7.6
-  AppCheck: https://github.com/google/app-check.git @ 11.3.2
   GTMAppAuth: https://github.com/google/GTMAppAuth.git @ 4.1.1
   GTMSessionFetcher: https://github.com/google/gtm-session-fetcher.git @ 3.5.0
-  GoogleSignIn: https://github.com/google/GoogleSignIn-iOS @ 8.0.0
   GoogleAdsOnDeviceConversion: https://github.com/googleads/google-ads-on-device-conversion-ios-sdk @ 2.3.0
-  InteropForGoogle: https://github.com/google/interop-ios-for-google-sdks.git @ 101.0.0
-  GoogleDataTransport: https://github.com/google/GoogleDataTransport.git @ 10.1.1
+  SwiftProtobuf: https://github.com/apple/swift-protobuf.git @ 1.39.0
+  GoogleSignIn: https://github.com/google/GoogleSignIn-iOS @ 8.0.0
+  abseil: https://github.com/google/abseil-cpp-binary.git @ 1.2024072200.0
   DungeonCore: /Users/runner/work/dungeon-descent-ios/dungeon-descent-ios/swift/DungeonCore
-  leveldb: https://github.com/firebase/leveldb.git @ 1.22.5
+  AppCheck: https://github.com/google/app-check.git @ 11.3.2
   nanopb: https://github.com/firebase/nanopb.git @ 2.30910.1
+  leveldb: https://github.com/firebase/leveldb.git @ 1.22.5
+  Promises: https://github.com/google/promises.git @ 2.4.1
+  AppAuth: https://github.com/openid/AppAuth-iOS.git @ 1.7.6
+  GoogleDataTransport: https://github.com/google/GoogleDataTransport.git @ 10.1.1
+  Firebase: https://github.com/firebase/firebase-ios-sdk @ 11.15.0
+  gRPC: https://github.com/google/grpc-binary.git @ 1.69.1
 
 Writing result bundle at path:
 	/Users/runner/work/dungeon-descent-ios/dungeon-descent-ios/swift/App/tour.xcresult
 
-xcodebuild: error: Unable to find a destination matching the provided destination specifier:
-		{ platform:macOS, variant:Mac Catalyst }
-
-	Available destinations for the "DungeonDescent" scheme:
-		{ platform:macOS, arch:arm64, variant:Designed for [iPad,iPhone], id:827517a3ba20fe920ba539a242d3eb0943781f22, name:My Mac }
-		{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device }
-		{ platform:iOS Simulator, id:dvtdevice-DVTiOSDeviceSimulatorPlaceholder-iphonesimulator:placeholder, name:Any iOS Simulator Device }
-		{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:97022B41-AAD9-4405-B447-6855CC8AC6C1, OS:2.3, name:Apple Vision Pro }
-		{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:D2B3E3A4-AAF1-44F5-8882-F4921A445FBE, OS:2.4, name:Apple Vision Pro }
-		{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:36223E31-67C6-43D8-9A57-9A4093A7EBE4, OS:2.5, name:Apple Vision Pro }
-		{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:B6CDEC8A-C010-458A-B9D1-F94268AE8AA7, OS:26.1, name:Apple Vision Pro }
-		{ platform:visionOS Simulator, arch:arm64, variant:Designed for [iPad,iPhone], id:4A6BF193-14FD-45A8-9119-99B9A713F26A, OS:26.2, name:Apple Vision Pro }
-		{ platform:iOS Simulator, arch:arm64, id:9425692B-BBEF-41B5-8CFE-2871CB62223A, OS:18.5, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:9425692B-BBEF-41B5-8CFE-2871CB62223A, OS:18.5, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:arm64, id:FD52C7A1-D37B-499F-A681-4C2FA7ACE913, OS:18.6, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:FD52C7A1-D37B-499F-A681-4C2FA7ACE913, OS:18.6, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:arm64, id:FECCD1E6-4608-4995-A7E2-19A25B999937, OS:26.0.1, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:FECCD1E6-4608-4995-A7E2-19A25B999937, OS:26.0.1, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:arm64, id:AA8F49C2-6329-496A-87BE-CC4EB006C8FA, OS:26.1, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:AA8F49C2-6329-496A-87BE-CC4EB006C8FA, OS:26.1, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:arm64, id:A64DBEDE-D008-4F91-A00D-36B86D4CBD6E, OS:26.2, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:A64DBEDE-D008-4F91-A00D-36B86D4CBD6E, OS:26.2, name:iPad (10th generation) }
-		{ platform:iOS Simulator, arch:arm64, id:9375E0E8-A6D8-4D52-AE61-70F60A3C64EF, OS:18.5, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:x86_64, id:9375E0E8-A6D8-4D52-AE61-70F60A3C64EF, OS:18.5, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:arm64, id:362D8E6B-415E-429C-BDE1-A27143A8DF01, OS:18.6, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:x86_64, id:362D8E6B-415E-429C-BDE1-A27143A8DF01, OS:18.6, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:arm64, id:8B65C808-AB7D-4B8A-844F-088BCD53E403, OS:26.0.1, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:x86_64, id:8B65C808-AB7D-4B8A-844F-088BCD53E403, OS:26.0.1, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:arm64, id:3E23280B-48D2-402D-8ED0-1B7A04DC38F7, OS:26.1, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:x86_64, id:3E23280B-48D2-402D-8ED0-1B7A04DC38F7, OS:26.1, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:arm64, id:AB48E0CB-033A-492D-91E3-964D4E007A28, OS:26.2, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:x86_64, id:AB48E0CB-033A-492D-91E3-964D4E007A28, OS:26.2, name:iPad (A16) }
-		{ platform:iOS Simulator, arch:arm64, id:92AF3C15-4C4F-4C22-9454-E46B74133F91, OS:18.5, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:92AF3C15-4C4F-4C22-9454-E46B74133F91, OS:18.5, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:9EE59D8B-DD0B-4815-9144-DB738F7DC66D, OS:18.6, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:9EE59D8B-DD0B-4815-9144-DB738F7DC66D, OS:18.6, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:68598195-D5C3-4E8D-91C9-2810819C20AD, OS:26.0.1, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:68598195-D5C3-4E8D-91C9-2810819C20AD, OS:26.0.1, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:9C9054BC-B071-4C5A-9F23-7F5E333A5A4F, OS:26.1, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:9C9054BC-B071-4C5A-9F23-7F5E333A5A4F, OS:26.1, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:40889409-80F7-4A30-91A4-683882A8DC17, OS:26.2, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:40889409-80F7-4A30-91A4-683882A8DC17, OS:26.2, name:iPad Air 11-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:59910AA7-F2D1-43DB-9B8E-AF9C0389E5D4, OS:18.5, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:59910AA7-F2D1-43DB-9B8E-AF9C0389E5D4, OS:18.5, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:E625D47B-3354-4BBA-BCC3-C8EB37C9449D, OS:18.6, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:E625D47B-3354-4BBA-BCC3-C8EB37C9449D, OS:18.6, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:8FCBBFFA-C296-422F-91A4-74547C1C366D, OS:26.0.1, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:8FCBBFFA-C296-422F-91A4-74547C1C366D, OS:26.0.1, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:BA65FC47-5B45-4809-9FCF-8BD421E56E51, OS:26.1, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:BA65FC47-5B45-4809-9FCF-8BD421E56E51, OS:26.1, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:154F235C-1548-4742-AB5C-84E9131697F2, OS:26.2, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:154F235C-1548-4742-AB5C-84E9131697F2, OS:26.2, name:iPad Air 11-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:8602C2F6-A8CF-41C3-A9CB-CE70D118E97B, OS:18.5, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:8602C2F6-A8CF-41C3-A9CB-CE70D118E97B, OS:18.5, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:55DEBC91-DF8F-4CB9-8773-C9C72A9E60DF, OS:18.6, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:55DEBC91-DF8F-4CB9-8773-C9C72A9E60DF, OS:18.6, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:313C299C-DF80-4E6E-ADA9-8EF111452377, OS:26.0.1, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:313C299C-DF80-4E6E-ADA9-8EF111452377, OS:26.0.1, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:7D103C40-392B-4D0F-9DEA-FF58967FE09C, OS:26.1, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:7D103C40-392B-4D0F-9DEA-FF58967FE09C, OS:26.1, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:81BE15E6-D796-4DB6-80F4-7C9A7FC3D83A, OS:26.2, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:x86_64, id:81BE15E6-D796-4DB6-80F4-7C9A7FC3D83A, OS:26.2, name:iPad Air 13-inch (M2) }
-		{ platform:iOS Simulator, arch:arm64, id:B45FA9E1-E9EE-49E3-8C4D-C1BC75838525, OS:18.5, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:B45FA9E1-E9EE-49E3-8C4D-C1BC75838525, OS:18.5, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:5B967288-E70C-48A5-8D14-2D20120DA67D, OS:18.6, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:5B967288-E70C-48A5-8D14-2D20120DA67D, OS:18.6, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:5DA8C9F2-0BCB-4B38-965D-5D14BE384D1C, OS:26.0.1, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:5DA8C9F2-0BCB-4B38-965D-5D14BE384D1C, OS:26.0.1, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:B4B83641-13E5-4E49-A594-1D7EC6A2C2E8, OS:26.1, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:B4B83641-13E5-4E49-A594-1D7EC6A2C2E8, OS:26.1, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:8FE486EC-7437-4006-8C83-D370704BFAB0, OS:26.2, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:x86_64, id:8FE486EC-7437-4006-8C83-D370704BFAB0, OS:26.2, name:iPad Air 13-inch (M3) }
-		{ platform:iOS Simulator, arch:arm64, id:C9D0D65F-D295-492F-AC87-69E7811EDB5D, OS:18.5, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:C9D0D65F-D295-492F-AC87-69E7811EDB5D, OS:18.5, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:0701EF8F-9E11-4643-887F-4BF0637A67C8, OS:18.6, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:0701EF8F-9E11-4643-887F-4BF0637A67C8, OS:18.6, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:D60B1951-F6BE-44A1-A0D3-6DC7B02F5BB8, OS:26.0.1, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:D60B1951-F6BE-44A1-A0D3-6DC7B02F5BB8, OS:26.0.1, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:D833497E-EC11-4128-8994-FE6AF49608FC, OS:26.1, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:D833497E-EC11-4128-8994-FE6AF49608FC, OS:26.1, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:C2E75AD2-ED65-4A40-BAB4-DDEE1AB86CA8, OS:26.2, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:C2E75AD2-ED65-4A40-BAB4-DDEE1AB86CA8, OS:26.2, name:iPad Pro 11-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:A53E5BFB-9AFC-467D-8BAA-49D76EC50B62, OS:26.0.1, name:iPad Pro 11-inch (M5) }
-		{ platform:iOS Simulator, arch:x86_64, id:A53E5BFB-9AFC-467D-8BAA-49D76EC50B62, OS:26.0.1, name:iPad Pro 11-inch (M5) }
-		{ platform:iOS Simulator, arch:arm64, id:237E5AA5-BDA0-42AE-97CB-77227661542F, OS:26.1, name:iPad Pro 11-inch (M5) }
-		{ platform:iOS Simulator, arch:x86_64, id:237E5AA5-BDA0-42AE-97CB-77227661542F, OS:26.1, name:iPad Pro 11-inch (M5) }
-		{ platform:iOS Simulator, arch:arm64, id:CBC79C65-B345-49C4-8CD6-8D0352D75971, OS:26.2, name:iPad Pro 11-inch (M5) }
-		{ platform:iOS Simulator, arch:x86_64, id:CBC79C65-B345-49C4-8CD6-8D0352D75971, OS:26.2, name:iPad Pro 11-inch (M5) }
-		{ platform:iOS Simulator, arch:arm64, id:1FA90808-70DD-4E27-A9F8-B18D00F4B6CA, OS:18.5, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:1FA90808-70DD-4E27-A9F8-B18D00F4B6CA, OS:18.5, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:DE8238E1-0E9B-4B90-9A66-D3DF9EAD7C1C, OS:18.6, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:DE8238E1-0E9B-4B90-9A66-D3DF9EAD7C1C, OS:18.6, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:8979A6A2-5366-4734-9A04-568A8A571073, OS:26.0.1, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:8979A6A2-5366-4734-9A04-568A8A571073, OS:26.0.1, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:BCA5D258-3D89-4D2E-83B2-39AD233B2F88, OS:26.1, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:BCA5D258-3D89-4D2E-83B2-39AD233B2F88, OS:26.1, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:8263B284-48BD-4DEF-8C9A-CCE8BBC8F362, OS:26.2, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:x86_64, id:8263B284-48BD-4DEF-8C9A-CCE8BBC8F362, OS:26.2, name:iPad Pro 13-inch (M4) }
-		{ platform:iOS Simulator, arch:arm64, id:4E298747-8173-41FD-943C-CF97FBE9C7A8, OS:26.0.1, name:iPad Pro 13-inch (M5) }
-		{ platform:iOS Simulator, arch:x86_64, id:4E298747-8173-41FD-943C-CF97FBE9C7A8, OS:26.0.1, name:iPad Pro 13-inch (M5) }
-		{ platform:iOS Simulator, arch:arm64, id:F117FC38-97C2-4375-B607-5688A239C820, OS:26.1, name:iPad Pro 13-inch (M5) }
-		{ platform:iOS Simulator, arch:x86_64, id:F117FC38-97C2-4375-B607-5688A239C820, OS:26.1, name:iPad Pro 13-inch (M5) }
-		{ platform:iOS Simulator, arch:arm64, id:6F2DF744-A04D-42AA-AF1A-94B47978B0DF, OS:26.2, name:iPad Pro 13-inch (M5) }
-		{ platform:iOS Simulator, arch:x86_64, id:6F2DF744-A04D-42AA-AF1A-94B47978B0DF, OS:26.2, name:iPad Pro 13-inch (M5) }
-		{ platform:iOS Simulator, arch:arm64, id:7E24F4E0-ACDA-47AC-9E78-126C0EA2729E, OS:18.5, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:x86_64, id:7E24F4E0-ACDA-47AC-9E78-126C0EA2729E, OS:18.5, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:arm64, id:67ACE2CC-FA45-4B2C-A052-73CE56C13FE3, OS:18.6, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:x86_64, id:67ACE2CC-FA45-4B2C-A052-73CE56C13FE3, OS:18.6, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:arm64, id:A3E6A555-E5C1-400E-9636-05EFF6712F04, OS:26.0.1, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:x86_64, id:A3E6A555-E5C1-400E-9636-05EFF6712F04, OS:26.0.1, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:arm64, id:7F31809A-52C9-42AF-A755-1EA68643C596, OS:26.1, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:x86_64, id:7F31809A-52C9-42AF-A755-1EA68643C596, OS:26.1, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:arm64, id:58FC786A-CE65-4DA0-B4B5-579AA6B53315, OS:26.2, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:x86_64, id:58FC786A-CE65-4DA0-B4B5-579AA6B53315, OS:26.2, name:iPad mini (A17 Pro) }
-		{ platform:iOS Simulator, arch:arm64, id:141DD5FC-FF1D-429C-B43E-1323E1915FDE, OS:18.5, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:x86_64, id:141DD5FC-FF1D-429C-B43E-1323E1915FDE, OS:18.5, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:arm64, id:FC1B0315-B768-47F1-8203-42455909FE86, OS:18.6, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:x86_64, id:FC1B0315-B768-47F1-8203-42455909FE86, OS:18.6, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:arm64, id:32B1E7C0-88D0-4F33-AF11-720248FD0C1D, OS:26.0.1, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:x86_64, id:32B1E7C0-88D0-4F33-AF11-720248FD0C1D, OS:26.0.1, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:arm64, id:C99B8425-CE6E-4F61-986E-2D582FBE05B0, OS:26.1, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:x86_64, id:C99B8425-CE6E-4F61-986E-2D582FBE05B0, OS:26.1, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:arm64, id:1CD403CB-B38F-447D-A90D-9985D4D2649C, OS:26.2, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:x86_64, id:1CD403CB-B38F-447D-A90D-9985D4D2649C, OS:26.2, name:iPhone 16 }
-		{ platform:iOS Simulator, arch:arm64, id:48673FE0-21AD-4D40-9CBD-926B77290522, OS:18.5, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:x86_64, id:48673FE0-21AD-4D40-9CBD-926B77290522, OS:18.5, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:arm64, id:0C9EA9A4-E1E3-4878-9690-C77FD338A577, OS:18.6, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:x86_64, id:0C9EA9A4-E1E3-4878-9690-C77FD338A577, OS:18.6, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:arm64, id:03F5A56F-7BB1-41DB-ADA6-21C5092EAD85, OS:26.0.1, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:x86_64, id:03F5A56F-7BB1-41DB-ADA6-21C5092EAD85, OS:26.0.1, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:arm64, id:AB7F1874-B626-4D6B-ACC2-D3ECC360BBEC, OS:26.1, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:x86_64, id:AB7F1874-B626-4D6B-ACC2-D3ECC360BBEC, OS:26.1, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:arm64, id:BEEA34E7-4673-4560-8C74-AEE974417071, OS:26.2, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:x86_64, id:BEEA34E7-4673-4560-8C74-AEE974417071, OS:26.2, name:iPhone 16 Plus }
-		{ platform:iOS Simulator, arch:arm64, id:15FAB4A1-2F41-4DFB-B3E0-FB0C9936253D, OS:18.5, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:x86_64, id:15FAB4A1-2F41-4DFB-B3E0-FB0C9936253D, OS:18.5, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:arm64, id:388CDC20-2304-4FC7-ADC8-B06C7619013C, OS:18.6, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:x86_64, id:388CDC20-2304-4FC7-ADC8-B06C7619013C, OS:18.6, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:arm64, id:4A492F97-F21D-41DD-98E7-E093681AF73A, OS:26.0.1, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:x86_64, id:4A492F97-F21D-41DD-98E7-E093681AF73A, OS:26.0.1, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:arm64, id:28B1F3D7-95C0-4B2E-8EB2-34F140C86738, OS:26.1, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:x86_64, id:28B1F3D7-95C0-4B2E-8EB2-34F140C86738, OS:26.1, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:arm64, id:CB833DA5-BA4E-42BE-B82D-C1E0C39A3C02, OS:26.2, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:x86_64, id:CB833DA5-BA4E-42BE-B82D-C1E0C39A3C02, OS:26.2, name:iPhone 16 Pro }
-		{ platform:iOS Simulator, arch:arm64, id:05149308-5C0B-4991-A958-E061DE68556F, OS:18.5, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:x86_64, id:05149308-5C0B-4991-A958-E061DE68556F, OS:18.5, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:arm64, id:BCE69EF3-7FCD-49FC-8681-B9EA8D75E47E, OS:18.6, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:x86_64, id:BCE69EF3-7FCD-49FC-8681-B9EA8D75E47E, OS:18.6, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:arm64, id:253C917A-BB01-4A9A-BEB1-AEB9A9DDF129, OS:26.0.1, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:x86_64, id:253C917A-BB01-4A9A-BEB1-AEB9A9DDF129, OS:26.0.1, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:arm64, id:80D2B68F-AA67-4B76-BF80-AC75CFC0FAB9, OS:26.1, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:x86_64, id:80D2B68F-AA67-4B76-BF80-AC75CFC0FAB9, OS:26.1, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:arm64, id:A765D722-4A0B-4A3A-99B7-112DC46F1647, OS:26.2, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:x86_64, id:A765D722-4A0B-4A3A-99B7-112DC46F1647, OS:26.2, name:iPhone 16 Pro Max }
-		{ platform:iOS Simulator, arch:arm64, id:2A6295B6-754E-4209-9524-C62EAE190E66, OS:18.5, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:x86_64, id:2A6295B6-754E-4209-9524-C62EAE190E66, OS:18.5, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:arm64, id:05ECB474-A92B-4B24-8AC7-C1B403D14F07, OS:18.6, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:x86_64, id:05ECB474-A92B-4B24-8AC7-C1B403D14F07, OS:18.6, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:arm64, id:4DA069C5-8C13-432E-845F-48101D239233, OS:26.0.1, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:x86_64, id:4DA069C5-8C13-432E-845F-48101D239233, OS:26.0.1, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:arm64, id:F41ABD92-F53E-462D-AFD2-7444EA07A208, OS:26.1, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:x86_64, id:F41ABD92-F53E-462D-AFD2-7444EA07A208, OS:26.1, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:arm64, id:ED707CAC-13AC-4620-B1D8-8FAF8C2B804D, OS:26.2, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:x86_64, id:ED707CAC-13AC-4620-B1D8-8FAF8C2B804D, OS:26.2, name:iPhone 16e }
-		{ platform:iOS Simulator, arch:arm64, id:119FD34C-9723-4C27-9BDC-1823F10C49DD, OS:26.0.1, name:iPhone 17 }
-		{ platform:iOS Simulator, arch:x86_64, id:119FD34C-9723-4C27-9BDC-1823F10C49DD, OS:26.0.1, name:iPhone 17 }
-		{ platform:iOS Simulator, arch:arm64, id:1DCA4959-29B7-4682-80C6-1C53842F455B, OS:26.1, name:iPhone 17 }
-		{ platform:iOS Simulator, arch:x86_64, id:1DCA4959-29B7-4682-80C6-1C53842F455B, OS:26.1, name:iPhone 17 }
-		{ platform:iOS Simulator, arch:arm64, id:8C9F4118-331E-4250-B1FC-194972BA6726, OS:26.2, name:iPhone 17 }
-		{ platform:iOS Simulator, arch:x86_64, id:8C9F4118-331E-4250-B1FC-194972BA6726, OS:26.2, name:iPhone 17 }
-		{ platform:iOS Simulator, arch:arm64, id:5FE087D1-CA01-475C-AC56-FD8BBC672523, OS:26.0.1, name:iPhone 17 Pro }
-		{ platform:iOS Simulator, arch:x86_64, id:5FE087D1-CA01-475C-AC56-FD8BBC672523, OS:26.0.1, name:iPhone 17 Pro }
-		{ platform:iOS Simulator, arch:arm64, id:8264D408-00DF-42F6-9EA7-E934B9D217BC, OS:26.1, name:iPhone 17 Pro }
-		{ platform:iOS Simulator, arch:x86_64, id:8264D408-00DF-42F6-9EA7-E934B9D217BC, OS:26.1, name:iPhone 17 Pro }
-		{ platform:iOS Simulator, arch:arm64, id:B7CD7ED2-0DFF-42FE-A30F-21CD2E3D3D2C, OS:26.2, name:iPhone 17 Pro }
-		{ platform:iOS Simulator, arch:x86_64, id:B7CD7ED2-0DFF-42FE-A30F-21CD2E3D3D2C, OS:26.2, name:iPhone 17 Pro }
-		{ platform:iOS Simulator, arch:arm64, id:5EE03D31-025C-4C3E-9089-684E8E2DB730, OS:26.0.1, name:iPhone 17 Pro Max }
-		{ platform:iOS Simulator, arch:x86_64, id:5EE03D31-025C-4C3E-9089-684E8E2DB730, OS:26.0.1, name:iPhone 17 Pro Max }
-		{ platform:iOS Simulator, arch:arm64, id:001889B9-3951-4933-87D0-B89FF8D561D9, OS:26.1, name:iPhone 17 Pro Max }
-		{ platform:iOS Simulator, arch:x86_64, id:001889B9-3951-4933-87D0-B89FF8D561D9, OS:26.1, name:iPhone 17 Pro Max }
-		{ platform:iOS Simulator, arch:arm64, id:A79AB685-CC5B-4589-9565-0DF10B54130F, OS:26.2, name:iPhone 17 Pro Max }
-		{ platform:iOS Simulator, arch:x86_64, id:A79AB685-CC5B-4589-9565-0DF10B54130F, OS:26.2, name:iPhone 17 Pro Max }
-		{ platform:iOS Simulator, arch:arm64, id:6A771341-AECF-4057-9DB5-9AF7C1CCDFEB, OS:26.0.1, name:iPhone Air }
-		{ platform:iOS Simulator, arch:x86_64, id:6A771341-AECF-4057-9DB5-9AF7C1CCDFEB, OS:26.0.1, name:iPhone Air }
-		{ platform:iOS Simulator, arch:arm64, id:B14FB39F-B472-4A78-A1DC-CBFDD8EDACA7, OS:26.1, name:iPhone Air }
-		{ platform:iOS Simulator, arch:x86_64, id:B14FB39F-B472-4A78-A1DC-CBFDD8EDACA7, OS:26.1, name:iPhone Air }
-		{ platform:iOS Simulator, arch:arm64, id:6C2153FE-DEAE-4712-8816-98E12A7AFEE0, OS:26.2, name:iPhone Air }
-		{ platform:iOS Simulator, arch:x86_64, id:6C2153FE-DEAE-4712-8816-98E12A7AFEE0, OS:26.2, name:iPhone Air }
-		{ platform:iOS Simulator, arch:arm64, id:4B35B468-69CD-4004-BDA9-463359998DBA, OS:18.5, name:iPhone SE (3rd generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:4B35B468-69CD-4004-BDA9-463359998DBA, OS:18.5, name:iPhone SE (3rd generation) }
-		{ platform:iOS Simulator, arch:arm64, id:4F81E126-BE3E-449A-94EC-1FD73DB135B2, OS:18.6, name:iPhone SE (3rd generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:4F81E126-BE3E-449A-94EC-1FD73DB135B2, OS:18.6, name:iPhone SE (3rd generation) }
-		{ platform:iOS Simulator, arch:arm64, id:FE1ABE1D-2635-4135-8D2E-3408DF5178D4, OS:26.0.1, name:iPhone SE (3rd generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:FE1ABE1D-2635-4135-8D2E-3408DF5178D4, OS:26.0.1, name:iPhone SE (3rd generation) }
-		{ platform:iOS Simulator, arch:arm64, id:7C068BBB-07E2-43EA-9DF8-45BC30A1157B, OS:26.1, name:iPhone SE (3rd generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:7C068BBB-07E2-43EA-9DF8-45BC30A1157B, OS:26.1, name:iPhone SE (3rd generation) }
-		{ platform:iOS Simulator, arch:arm64, id:B220EC43-535F-472F-935A-5B2D0E9F2975, OS:26.2, name:iPhone SE (3rd generation) }
-		{ platform:iOS Simulator, arch:x86_64, id:B220EC43-535F-472F-935A-5B2D0E9F2975, OS:26.2, name:iPhone SE (3rd generation) }
+--- xcodebuild: WARNING: Using the first of multiple matching destinations:
+{ platform:macOS, arch:arm64, variant:Mac Catalyst, id:581d4d31df5587e3c6378eca1b3a0b41ad66e20d, name:My Mac }
+{ platform:macOS, arch:x86_64, variant:Mac Catalyst, id:581d4d31df5587e3c6378eca1b3a0b41ad66e20d, name:My Mac }
+xcodebuild: error: Failed to build project DungeonDescent with scheme DungeonDescent.: Cannot test target “DungeonDescentUITests” on “My Mac”: My Mac’s macOS 15.8.2 doesn’t match DungeonDescentUITests’s macOS 26.2 deployment target.
