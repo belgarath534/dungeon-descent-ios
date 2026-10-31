@@ -60,6 +60,10 @@ jobs:
           for anchor in ("        PRODUCT_NAME: DungeonDescent\n", "        TEST_TARGET_NAME: DungeonDescent\n"):
               assert s.count(anchor) == 1, anchor
               s = s.replace(anchor, anchor + "        SUPPORTS_MACCATALYST: YES\n        MACOSX_DEPLOYMENT_TARGET: \"13.0\"\n")
+          # No watch app in a Mac build.
+          watch = "      - target: DungeonWatch\n"
+          assert s.count(watch) == 1
+          s = s.replace(watch, "")
           open(p, "w").write(s)
           PY
           fi

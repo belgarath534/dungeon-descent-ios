@@ -1,7 +1,16 @@
 import Foundation
 import UIKit
-import WatchConnectivity
 import DungeonCore
+
+#if targetEnvironment(macCatalyst)
+/// No Apple Watch on a Mac: nothing to connect to.
+final class WatchBridge {
+    static let shared = WatchBridge()
+    func activate() {}
+    @MainActor func push() {}
+}
+#else
+import WatchConnectivity
 
 /// The iPhone's end of the Apple Watch app. The watch picks a character and
 /// starts, checks, heals or ends an Endless Descent run; the phone does it
@@ -100,3 +109,4 @@ final class WatchBridge: NSObject, WCSessionDelegate {
     func sessionDidDeactivate(_ session: WCSession) { session.activate() }
     func sessionWatchStateDidChange(_ session: WCSession) { Task { @MainActor in self.push() } }
 }
+#endif
