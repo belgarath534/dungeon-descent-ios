@@ -28,6 +28,22 @@ extension UIColor {
     }
 }
 
+#if os(visionOS)
+/// Apple Vision Pro: the iPhone's 3D room view (ARView) doesn't exist here.
+/// Vision Pro gets its own spatial dungeon later; for now the room's colors.
+struct Dungeon3DView: View {
+    let graph: RoomGraph
+    let dungeon: String
+    let settings: ThreeDMode.Settings
+
+    var body: some View {
+        let t = Theme3D.of(dungeon)
+        LinearGradient(colors: [Color(uiColor: UIColor(hex: t.ceil)), Color(uiColor: UIColor(hex: t.floor))],
+                       startPoint: .top, endPoint: .bottom)
+            .accessibilityHidden(true)
+    }
+}
+#else
 /// 3D Mode's view: the floor's rooms built in RealityKit, seen from where
 /// you stand. You face north like the compass; drag to look around. It's
 /// for sighted play, so VoiceOver skips it (the sound does the work).
@@ -217,6 +233,8 @@ final class DungeonScene3D: NSObject {
 }
 
 /// A small top-down map of the rooms you've seen (sighted play only).
+#endif
+
 struct Minimap3D: View {
     let graph: RoomGraph
 
