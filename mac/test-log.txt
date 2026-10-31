@@ -11,67 +11,99 @@ Build settings from command line:
 
 Resolve Package Graph
 
-Fetching from https://github.com/firebase/firebase-ios-sdk
-
 Fetching from https://github.com/google/GoogleSignIn-iOS
 
-Fetching from https://github.com/google/gtm-session-fetcher.git
+Fetching from https://github.com/firebase/firebase-ios-sdk
 
 Fetching from https://github.com/google/GTMAppAuth.git
+
+Fetching from https://github.com/google/gtm-session-fetcher.git
 
 Fetching from https://github.com/google/app-check.git
 
 Fetching from https://github.com/openid/AppAuth-iOS.git
 
-Fetching from https://github.com/google/promises.git
-
 Fetching from https://github.com/google/interop-ios-for-google-sdks.git
 
 Fetching from https://github.com/google/GoogleUtilities.git
 
-Fetching from https://github.com/google/grpc-binary.git
-
-Fetching from https://github.com/firebase/leveldb.git
+Fetching from https://github.com/google/promises.git
 
 Fetching from https://github.com/google/abseil-cpp-binary.git
 
-Fetching from https://github.com/firebase/nanopb.git
+Fetching from https://github.com/google/grpc-binary.git
 
 Fetching from https://github.com/google/GoogleDataTransport.git
 
+Fetching from https://github.com/firebase/leveldb.git
+
 Fetching from https://github.com/google/GoogleAppMeasurement.git
+
+Fetching from https://github.com/firebase/nanopb.git
 
 Fetching from https://github.com/apple/swift-protobuf.git
 
 Fetching from https://github.com/googleads/google-ads-on-device-conversion-ios-sdk
 
-Creating working copy of package ‘gtm-session-fetcher’
+Creating working copy of package ‘leveldb’
 
-Checking out 3.5.0 of package ‘gtm-session-fetcher’
-
-Creating working copy of package ‘GoogleSignIn-iOS’
-
-Checking out 8.0.0 of package ‘GoogleSignIn-iOS’
-
-Creating working copy of package ‘GTMAppAuth’
-
-Checking out 4.1.1 of package ‘GTMAppAuth’
+Checking out 1.22.5 of package ‘leveldb’
 
 Creating working copy of package ‘nanopb’
 
 Checking out 2.30910.1 of package ‘nanopb’
 
+Creating working copy of package ‘GoogleDataTransport’
+
+Checking out 10.1.1 of package ‘GoogleDataTransport’
+
+Creating working copy of package ‘google-ads-on-device-conversion-ios-sdk’
+
+Checking out 2.3.0 of package ‘google-ads-on-device-conversion-ios-sdk’
+
+Creating working copy of package ‘GoogleSignIn-iOS’
+
+Checking out 8.0.0 of package ‘GoogleSignIn-iOS’
+
+Creating working copy of package ‘gtm-session-fetcher’
+
+Checking out 3.5.0 of package ‘gtm-session-fetcher’
+
 Creating working copy of package ‘AppAuth-iOS’
 
 Checking out 1.7.6 of package ‘AppAuth-iOS’
 
-Creating working copy of package ‘app-check’
+Creating working copy of package ‘promises’
 
-Checking out 11.3.2 of package ‘app-check’
+Checking out 2.4.1 of package ‘promises’
+
+Creating working copy of package ‘abseil-cpp-binary’
+
+Checking out 1.2024072200.0 of package ‘abseil-cpp-binary’
+
+Creating working copy of package ‘interop-ios-for-google-sdks’
+
+Checking out 101.0.0 of package ‘interop-ios-for-google-sdks’
+
+Creating working copy of package ‘GTMAppAuth’
+
+Checking out 4.1.1 of package ‘GTMAppAuth’
+
+Creating working copy of package ‘swift-protobuf’
+
+Checking out 1.39.0 of package ‘swift-protobuf’
+
+Creating working copy of package ‘GoogleUtilities’
+
+Checking out 8.1.5 of package ‘GoogleUtilities’
 
 Creating working copy of package ‘GoogleAppMeasurement’
 
 Checking out 11.15.0 of package ‘GoogleAppMeasurement’
+
+Creating working copy of package ‘app-check’
+
+Checking out 11.3.2 of package ‘app-check’
 
 Creating working copy of package ‘firebase-ios-sdk’
 
@@ -81,63 +113,31 @@ Creating working copy of package ‘grpc-binary’
 
 Checking out 1.69.1 of package ‘grpc-binary’
 
-Creating working copy of package ‘interop-ios-for-google-sdks’
-
-Checking out 101.0.0 of package ‘interop-ios-for-google-sdks’
-
-Creating working copy of package ‘GoogleUtilities’
-
-Checking out 8.1.5 of package ‘GoogleUtilities’
-
-Creating working copy of package ‘GoogleDataTransport’
-
-Checking out 10.1.1 of package ‘GoogleDataTransport’
-
-Creating working copy of package ‘swift-protobuf’
-
-Checking out 1.39.0 of package ‘swift-protobuf’
-
-Creating working copy of package ‘promises’
-
-Checking out 2.4.1 of package ‘promises’
-
-Creating working copy of package ‘leveldb’
-
-Checking out 1.22.5 of package ‘leveldb’
-
-Creating working copy of package ‘abseil-cpp-binary’
-
-Checking out 1.2024072200.0 of package ‘abseil-cpp-binary’
-
-Creating working copy of package ‘google-ads-on-device-conversion-ios-sdk’
-
-Checking out 2.3.0 of package ‘google-ads-on-device-conversion-ios-sdk’
-
 
 Resolved source packages:
-  InteropForGoogle: https://github.com/google/interop-ios-for-google-sdks.git @ 101.0.0
   GoogleAppMeasurement: https://github.com/google/GoogleAppMeasurement.git @ 11.15.0
-  GoogleUtilities: https://github.com/google/GoogleUtilities.git @ 8.1.5
-  GTMAppAuth: https://github.com/google/GTMAppAuth.git @ 4.1.1
-  GTMSessionFetcher: https://github.com/google/gtm-session-fetcher.git @ 3.5.0
-  GoogleAdsOnDeviceConversion: https://github.com/googleads/google-ads-on-device-conversion-ios-sdk @ 2.3.0
   SwiftProtobuf: https://github.com/apple/swift-protobuf.git @ 1.39.0
-  GoogleSignIn: https://github.com/google/GoogleSignIn-iOS @ 8.0.0
-  abseil: https://github.com/google/abseil-cpp-binary.git @ 1.2024072200.0
-  DungeonCore: /Users/runner/work/dungeon-descent-ios/dungeon-descent-ios/swift/DungeonCore
-  AppCheck: https://github.com/google/app-check.git @ 11.3.2
-  nanopb: https://github.com/firebase/nanopb.git @ 2.30910.1
+  InteropForGoogle: https://github.com/google/interop-ios-for-google-sdks.git @ 101.0.0
   leveldb: https://github.com/firebase/leveldb.git @ 1.22.5
-  Promises: https://github.com/google/promises.git @ 2.4.1
   AppAuth: https://github.com/openid/AppAuth-iOS.git @ 1.7.6
-  GoogleDataTransport: https://github.com/google/GoogleDataTransport.git @ 10.1.1
+  AppCheck: https://github.com/google/app-check.git @ 11.3.2
   Firebase: https://github.com/firebase/firebase-ios-sdk @ 11.15.0
+  GoogleAdsOnDeviceConversion: https://github.com/googleads/google-ads-on-device-conversion-ios-sdk @ 2.3.0
+  nanopb: https://github.com/firebase/nanopb.git @ 2.30910.1
+  abseil: https://github.com/google/abseil-cpp-binary.git @ 1.2024072200.0
+  GoogleDataTransport: https://github.com/google/GoogleDataTransport.git @ 10.1.1
+  GoogleSignIn: https://github.com/google/GoogleSignIn-iOS @ 8.0.0
+  Promises: https://github.com/google/promises.git @ 2.4.1
+  GTMAppAuth: https://github.com/google/GTMAppAuth.git @ 4.1.1
   gRPC: https://github.com/google/grpc-binary.git @ 1.69.1
+  GoogleUtilities: https://github.com/google/GoogleUtilities.git @ 8.1.5
+  DungeonCore: /Users/runner/work/dungeon-descent-ios/dungeon-descent-ios/swift/DungeonCore
+  GTMSessionFetcher: https://github.com/google/gtm-session-fetcher.git @ 3.5.0
 
 Writing result bundle at path:
 	/Users/runner/work/dungeon-descent-ios/dungeon-descent-ios/swift/App/tour.xcresult
 
 --- xcodebuild: WARNING: Using the first of multiple matching destinations:
-{ platform:macOS, arch:arm64, variant:Mac Catalyst, id:581d4d31df5587e3c6378eca1b3a0b41ad66e20d, name:My Mac }
-{ platform:macOS, arch:x86_64, variant:Mac Catalyst, id:581d4d31df5587e3c6378eca1b3a0b41ad66e20d, name:My Mac }
+{ platform:macOS, arch:arm64, variant:Mac Catalyst, id:582247ce5523ecede4617d129b47bde4b0376715, name:My Mac }
+{ platform:macOS, arch:x86_64, variant:Mac Catalyst, id:582247ce5523ecede4617d129b47bde4b0376715, name:My Mac }
 xcodebuild: error: Failed to build project DungeonDescent with scheme DungeonDescent.: Cannot test target “DungeonDescentUITests” on “My Mac”: My Mac’s macOS 15.8.2 doesn’t match DungeonDescentUITests’s macOS 26.2 deployment target.
