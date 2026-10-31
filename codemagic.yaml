@@ -153,6 +153,24 @@ workflows:
           done
           echo "No active App Store profile with iCloud for com.dungeon.descent was found on Apple"
           exit 1
+      - name: Get the Apple Watch app's profile from Apple
+        script: |
+          # The watch app (com.dungeon.descent.watchkitapp) needs its own App
+          # Store profile, made once in the Apple Developer site and named
+          # "Dungeon Descent Watch App Store".
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          TMP=$(mktemp -d)
+          app-store-connect profiles list --type IOS_APP_STORE --state ACTIVE \
+            --name "Dungeon Descent Watch App Store" --save --profiles-dir "$TMP" || true
+          if ls "$TMP"/* >/dev/null 2>&1; then
+            cp "$TMP"/* "$DEST/"
+            echo "Using \"Dungeon Descent Watch App Store\" from Apple"
+          else
+            echo "No active profile named \"Dungeon Descent Watch App Store\" was found on Apple."
+            echo "Make one for com.dungeon.descent.watchkitapp (App Store distribution) and run again."
+            exit 1
+          fi
       - name: Set build number
         script: |
           # TestFlight only accepts a build number higher than every earlier

@@ -5,6 +5,9 @@ import DungeonCore
 /// App-wide state: the save file, the wallet and the character list.
 @MainActor
 final class GameModel: ObservableObject {
+    /// One for the app's lifetime, so the Apple Watch can reach it even when
+    /// it wakes the app in the background with no screen showing.
+    static let shared = GameModel()
     /// Endless Descent, kept for the app's lifetime so a run outlives its screen.
     lazy var afk = AFKModel(game: self)
     let store: GameStore

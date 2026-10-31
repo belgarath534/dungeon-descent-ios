@@ -3,7 +3,7 @@ import GoogleSignIn
 
 @main
 struct DungeonDescentApp: App {
-    @StateObject private var game = GameModel()
+    @StateObject private var game = GameModel.shared
     @StateObject private var router = Router()
     /// The game's language; changing it redraws every screen.
     @State private var locale = Language.locale
@@ -11,6 +11,7 @@ struct DungeonDescentApp: App {
 
     init() {
         CloudAccount.configure()
+        WatchBridge.shared.activate()
     }
 
     var body: some Scene {

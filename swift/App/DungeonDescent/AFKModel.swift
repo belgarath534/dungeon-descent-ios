@@ -53,12 +53,14 @@ final class AFKModel: ObservableObject {
     private func persist() {
         guard let r = run, let d = try? JSONEncoder().encode(r), let s = String(data: d, encoding: .utf8) else { return }
         game.store.setItem(Self.saveKey, s)
+        WatchBridge.shared.push()
     }
 
     // MARK: Running
 
-    /// startAFKRun
-    func begin() {
+    /// startAFKRun. Quiet when the Apple Watch starts it with the phone in a
+    /// pocket: no music and nothing spoken on the phone.
+    func begin(quiet: Bool = false) {
         guard game.characters.indices.contains(picked) else {
             Feedback.announce("Select a character first.")
             return
@@ -71,8 +73,10 @@ final class AFKModel: ObservableObject {
         phase = .running
         persist()
         game.saveNow()
-        Sound.track("afk")
-        Feedback.announce("Endless Descent started. \(ch.name). Floor 1. HP: \(r.hp). Auto-combat every \(Int(r.fightSeconds)) seconds.")
+        if !quiet {
+            Sound.track("afk")
+            Feedback.announce("Endless Descent started. \(ch.name). Floor 1. HP: \(r.hp). Auto-combat every \(Int(r.fightSeconds)) seconds.")
+        }
         AFKLiveActivity.start(r)
         startTimer()
     }
@@ -151,14 +155,16 @@ final class AFKModel: ObservableObject {
     }
 
     /// afkUsePotion
-    func usePotion() {
-        guard var r = run else { return }
+    @discardableResult
+    func usePotion() -> String {
+        guard var r = run else { return "No run going." }
         let msg = r.usePotion()
         run = r
         persist()
         if r.running { AFKLiveActivity.update(r) }
         Sound.sfx("sfx-potion")
         Feedback.announce(msg)
+        return msg
     }
 
     /// endAFKRun: the End Run button.
@@ -186,6 +192,7 @@ final class AFKModel: ObservableObject {
         game.store.removeItem(Self.saveKey)
         game.saveNow()
         AFKLiveActivity.end(r)
+        WatchBridge.shared.push()
 
         let learned = Set(r.skills)
         let available = Skills.all(for: r.cls).filter { !learned.contains($0.effect) }
