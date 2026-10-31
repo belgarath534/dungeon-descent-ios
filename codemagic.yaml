@@ -156,6 +156,104 @@ workflows:
       - name: Get the Apple Watch app's profile from Apple
         script: |
           # The watch app (com.dungeon.descent.watchkitapp) needs its own App
+          # Store profile. The first build makes it with the App Store Connect
+          # integration's key: the bundle ID, then a profile with the team's
+          # distribution certificates. Later builds reuse it.
+          set -e
+          ID=com.dungeon.descent.watchkitapp
+          NAME="Dungeon Descent Watch App Store"
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          fetch() {
+            TMP=$(mktemp -d)
+            app-store-connect profiles list --type IOS_APP_STORE --state ACTIVE \
+              --name "$NAME" --save --profiles-dir "$TMP" >/dev/null 2>&1 || true
+            if ls "$TMP"/* >/dev/null 2>&1; then cp "$TMP"/* "$DEST/"; return 0; fi
+            return 1
+          }
+          if fetch; then echo "Using \"$NAME\" from Apple"; exit 0; fi
+          echo "No \"$NAME\" yet. Making it."
+          BID=$(app-store-connect bundle-ids list --bundle-id-identifier "$ID" --strict-match-identifier --json 2>/dev/null \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")' || true)
+          if [ -z "$BID" ]; then
+            BID=$(app-store-connect bundle-ids create "$ID" --name "Dungeon Descent Watch" --platform IOS --json \
+              | python3 -c 'import sys,json; d=json.load(sys.stdin); print((d[0] if isinstance(d,list) else d)["id"])')
+            echo "Registered $ID"
+          fi
+          CERTS=""
+          for T in DISTRIBUTION IOS_DISTRIBUTION; do
+            C=$(app-store-connect certificates list --type $T --json 2>/dev/null \
+              | python3 -c 'import sys,json; print(" ".join(c["id"] for c in json.load(sys.stdin)))' || true)
+            CERTS="$CERTS $C"
+          done
+          if [ -z "${CERTS// /}" ]; then echo "No distribution certificate found on Apple"; exit 1; fi
+          app-store-connect profiles create --bundle-id "$BID" --certificate-ids $CERTS \
+            --type IOS_APP_STORE --name "$NAME" >/dev/null
+          echo "Made \"$NAME\""
+          fetch || { echo "Made the profile but couldn't download it"; exit 1; }
+      - name: Set build number
+        script: |
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = $BUILD_NUMBER;/" ios/App/App.xcodeproj/project.pbxproj
+          grep -m1 CURRENT_PROJECT_VERSION ios/App/App.xcodeproj/project.pbxproj
+      - name: Build signed IPA
+        script: |
+          xcode-project build-ipa \
+            --workspace ios/App/App.xcworkspace \
+            --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false  # internal testers get every build anyway; true tries external beta review and fails without Test Information
+
+  dungeon-descent-swift:
+    name: Dungeon Descent Swift (TestFlight)
+    # The Swift rewrite in swift/. Same bundle ID as the web version, so each
+    # build replaces it on TestFlight. Start it by hand from Codemagic.
+    max_build_duration: 60
+    instance_type: mac_mini_m4
+    integrations:
+      app_store_connect: Accessible Backrooms
+    environment:
+      ios_signing:
+        provisioning_profiles:
+          - Dungeon Descent Live Activity App Store
+        certificates:
+          - Accessible Backrooms Distribution
+      xcode: latest
+    scripts:
+      - name: Install XcodeGen
+        script: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+      - name: Run the game rules tests
+        script: |
+          cd swift/DungeonCore
+          swift test
+      - name: Get the App Store profile from Apple
+        script: |
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          for NAME in "Dungeon Descent iCloud App Store" "Dungeon Descent App Store"; do
+            TMP=$(mktemp -d)
+            app-store-connect profiles list --type IOS_APP_STORE --state ACTIVE \
+              --name "$NAME" --save --profiles-dir "$TMP" || true
+            for F in "$TMP"/*; do
+              [ -f "$F" ] || continue
+              if security cms -D -i "$F" | grep -q "iCloud.com.dungeon.descent"; then
+                echo "Using \"$NAME\" from Apple, it includes iCloud"
+                cp "$F" "$DEST/"
+                exit 0
+              fi
+              echo "\"$NAME\" on Apple does not include iCloud, skipping it"
+            done
+          done
+          echo "No active App Store profile with iCloud for com.dungeon.descent was found on Apple"
+          exit 1
+      - name: Get the Apple Watch app's profile from Apple
+        script: |
+          # The watch app (com.dungeon.descent.watchkitapp) needs its own App
           # Store profile, made once in the Apple Developer site and named
           # "Dungeon Descent Watch App Store".
           DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
