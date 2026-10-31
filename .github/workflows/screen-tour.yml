@@ -51,6 +51,18 @@ jobs:
         working-directory: swift/App
         run: |
           brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          if [ "${{ matrix.device }}" = "mac" ]; then
+            # The tour's own copy only: let the app and its tests build for
+            # Mac Catalyst. The App Store build never sees this.
+            python3 - <<'PY'
+          p = "project.yml"
+          s = open(p).read()
+          for anchor in ("        PRODUCT_NAME: DungeonDescent\n", "        TEST_TARGET_NAME: DungeonDescent\n"):
+              assert s.count(anchor) == 1, anchor
+              s = s.replace(anchor, anchor + "        SUPPORTS_MACCATALYST: YES\n")
+          open(p, "w").write(s)
+          PY
+          fi
           xcodegen generate
 
       - name: Choose where it runs
