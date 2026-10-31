@@ -1,1 +1,23 @@
-No accessibility issues found.
+[Main menu] Element has no description — "" (3). This element is missing useful accessibility information.
+[Main menu] Contrast failed — "by Leo Productions" (48). Contrast failed for element
+[Main menu] Contrast failed — "Your gold, 0. Diamonds, 0. Mystery Coins, 0." (48). Contrast failed for element
+[Main menu] Contrast failed — "🪙 0 Demon Coins" (48). Contrast failed for element
+[Main menu] Contrast failed — ""Not all who enter are lost — most are."" (48). Contrast failed for element
+[Main menu] Contrast failed — "🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5)." (48). Contrast failed for element
+[Main menu] Contrast failed — "🎃 Halloween · ACTIVE · 2d 3h remaining, ⚡ XP Weekend · ACTIVE · 27h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "🎃 Halloween · ACTIVE · 2d 3h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 27h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "⚔️👥 Multiplayer" (48). Contrast failed for element
+[Main menu] Contrast failed — "BETA" (48). Contrast failed for element
+[Main menu] Contrast failed — "🕯️ Hide and Seek" (48). Contrast failed for element
+[Main menu] Contrast failed — "BETA" (48). Contrast failed for element
+[Main menu] Parent/Child mismatch — "" (3). This element is not an accessibility child of the parent element.
+[Main menu] Element has no description — "" (81). This element is missing useful accessibility information.
+[Character list] Element has no description — "" (3). This element is missing useful accessibility information.
+[Character list] Contrast failed — "Choose a warrior to continue, or forge a new legend." (48). Contrast failed for element
+[Character list] Contrast failed — "No champions yet. Create your first character." (48). Contrast failed for element
+[Character list] Contrast failed — "✦" (48). Contrast failed for element
+[Character list] Contrast failed — "CREATE NEW CHARACTER" (48). Contrast failed for element
+[Character list] Contrast failed — "✦" (48). Contrast failed for element
+[Character list] Parent/Child mismatch — "" (3). This element is not an accessibility child of the parent element.
+[Character list] Element has no description — "" (81). This element is missing useful accessibility information.

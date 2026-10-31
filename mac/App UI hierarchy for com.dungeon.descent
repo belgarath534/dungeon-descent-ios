@@ -1,304 +1,289 @@
-Application, 0x134722880, pid: 14411, title: 'DungeonDescent', Disabled <App element pid: 14411>
-  Window (Main), 0x1347244b0, {{0.0, 25.0}, {1024.0, 684.0}}, identifier: 'SceneWindow', title: 'Dungeon Descent', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jKwAAAAAAAAA=>
-    Group, 0x134725840, {{0.0, 25.0}, {1024.0, 684.0}}, Keyboard Focused, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jLQAAAAAAAAA=>
-      Window, 0x134722c60, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADA+nJIAQAAAAQAAAAAAAAA>
-        Other, 0x1347260a0, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADA3wJKAQAAAAUAAAAAAAAA>
-          Other, 0x1347261e0, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABw5gJKAQAAAAYAAAAAAAAA>
-            Other, 0x134726320, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACgm2VIAQAAAAcAAAAAAAAA>
-              Other, 0x134726700, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADgc+gAAGAAAAgAAAAAAAAA>
-                Other, 0x13471ed70, {{0.0, -144.4}, {1024.1, 1024.1}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgbOgAAGAAAAkAAAAAAAAA>
-                  Other, 0x13471eeb0, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAsugAAGAAAAoAAAAAAAAA>
-                  Button, 0x13471eff0, {{0.0, -144.4}, {1024.1, 1024.1}}, label: 'Dungeon Descent game logo', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACgo+kAAGAAAAsAAAAAAAAA>
-                  ScrollView, 0x13471f5b0, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAtI5JAQAAAAwAAAAAAAAA>
-                    Other, 0x134726460, {{0.0, 52.7}, {1024.1, 1912.7}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgvXNIAQAAAA8AAAAAAAAA>
-                      StaticText, 0x1347265a0, {{391.2, 98.9}, {241.8, 104.7}}, label: 'Dungeon Descent' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgYegAAGAAABMAAAAAAAAA>
-                      StaticText, 0x13471fe90, {{453.1, 205.2}, {117.8, 10.8}}, label: 'by Leo Productions' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAXugAAGAAABQAAAAAAAAA>
-                      Link, 0x13471ffd0, {{457.4, 223.7}, {110.1, 10.8}}, label: 'Join the Dungeon Descent Discord server' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACgd+gAAGAAABUAAAAAAAAA>
-                      Button, 0x134720110, {{442.0, 248.3}, {140.1, 21.6}}, label: 'Daily Descent. Day 1 reward ready. Tap to claim.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgdugAAGAAABYAAAAAAAAA>
-                      Button, 0x13471f130, {{483.9, 275.6}, {57.0, 26.9}}, label: 'Your trophies — press to view', value: 0 <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACgWegAAGAAABcAAAAAAAAA>
-                      Button, 0x13471f270, {{477.0, 308.0}, {70.1, 26.9}}, label: 'Your familiar — press to view its bond level', value: ✨ Lv.1 <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAb+gAAGAAABgAAAAAAAAA>
-                      StaticText, 0x13471f3b0, {{474.7, 340.7}, {74.7, 12.3}}, label: 'Your gold, 0. Diamonds, 0. Mystery Coins, 0.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAWegAAGAAABkAAAAAAAAA>
-                      StaticText, 0x1347204b0, {{471.2, 359.2}, {81.6, 11.6}}, label: '🪙 0 Demon Coins' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABAZOgAAGAAABoAAAAAAAAA>
-                      StaticText, 0x1347205f0, {{424.3, 380.0}, {175.6, 16.2}}, label: '"Not all who enter are lost — most are."' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABAeOgAAGAAABsAAAAAAAAA>
-                      StaticText, 0x134720730, {{385.4, 402.3}, {253.3, 10.8}}, label: '🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5).' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgV+gAAGAAABwAAAAAAAAA>
-                      StaticText, 0x134720870, {{388.5, 418.9}, {247.2, 47.7}}, label: '🎃 Halloween · ACTIVE · 2d 3h remaining, ⚡ XP Weekend · ACTIVE · 27h remaining' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACgXugAAGAAAB0AAAAAAAAA>
-                        StaticText, 0x1347209b0, {{434.3, 423.9}, {155.5, 23.1}}, label: '🎃 Halloween · ACTIVE · 2d 3h remaining' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAga+gAAGAAAC8AAAAAAAAA>
-                        StaticText, 0x134720d60, {{401.2, 450.0}, {221.8, 11.6}}, label: '⚡ XP Weekend · ACTIVE · 27h remaining' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgXOgAAGAAADAAAAAAAAAA>
-                      Other, 0x134720ea0, {{411.6, 492.0}, {201.0, 1325.9}}, label: 'Main menu' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAoOkAAGAAAB4AAAAAAAAA>
-                        Button, 0x134720fe0, {{411.6, 492.0}, {201.0, 34.7}}, label: 'PLAY, CHOOSE OR CREATE YOUR CHARACTER' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAYOgAAGAAADEAAAAAAAAA>
-                        Button, 0x134721120, {{411.6, 528.2}, {201.0, 34.7}}, label: 'PVP Arena, fight another player in real time turn based combat' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABAaegAAGAAADIAAAAAAAAA>
-                          StaticText, 0x134721260, {{436.2, 538.2}, {123.2, 14.6}}, label: '⚔️👥 Multiplayer' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAW+gAAGAAAFkAAAAAAAAA>
-                          StaticText, 0x134711bd0, {{564.0, 540.1}, {23.9, 10.8}}, label: 'BETA' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgXegAAGAAAFoAAAAAAAAA>
-                        Button, 0x134711d10, {{411.6, 564.4}, {201.0, 34.6}}, label: 'Hide and Seek, something is chasing you, find the way out' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgdegAAGAAADMAAAAAAAAA>
-                          StaticText, 0x134711e50, {{438.1, 574.4}, {119.4, 14.6}}, label: '🕯️ Hide and Seek' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAeegAAGAAAFcAAAAAAAAA>
-                          StaticText, 0x13471dad0, {{562.1, 576.3}, {23.9, 10.8}}, label: 'BETA' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABge+gAAGAAAFgAAAAAAAAA>
-                        Other, 0x13471dc10, {{481.2, 605.6}, {61.6, 0.8}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADAXOgAAGAAADQAAAAAAAAA>
-                        Button, 0x13471dd50, {{411.6, 612.9}, {201.0, 34.6}}, label: 'Visit Leo Audio Gaming on YouTube, opens in new tab' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgf+gAAGAAADUAAAAAAAAA>
-                        Button, 0x13471de90, {{411.6, 649.1}, {201.0, 34.6}}, label: 'Bestiary, view all enemies you have encountered' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACgcugAAGAAADYAAAAAAAAA>
-                        Button, 0x13471dfd0, {{411.6, 685.3}, {201.0, 34.7}}, label: 'Quests and achievements' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADAdegAAGAAADcAAAAAAAAA>
-                        Button, 0x13471e110, {{411.6, 721.5}, {201.0, 34.6}}, label: 'Mystery Coin Shop, spend your Mystery Coins on permanent upgrades' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAVugAAGAAADgAAAAAAAAA>
-                        Button, 0x134726990, {{411.6, 757.7}, {201.0, 34.7}}, label: 'Endless Descent, AFK mode' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAcugAAGAAADkAAAAAAAAA>
-                        Button, 0x134726ad0, {{411.6, 793.8}, {201.0, 34.6}}, label: 'The Spire, climb 1800 floors to face The Time Eater' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgeugAAGAAADoAAAAAAAAA>
-                        Button, 0x134726c10, {{411.6, 830.0}, {201.0, 34.7}}, label: 'Void Mode, become the Void Commander and survive five waves of heroes' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAdOgAAGAAADsAAAAAAAAA>
-                        Button, 0x134726d50, {{411.6, 866.2}, {201.0, 34.6}}, label: 'Command Center — type or speak commands to control the game' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAm+kAAGAAADwAAAAAAAAA>
-                        Button, 0x134726e90, {{411.6, 902.4}, {201.0, 34.7}}, label: 'OPEN SEASONAL SHOP, 💀 CURSE SHOP' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADgn+kAAGAAAD0AAAAAAAAA>
-                        Button, 0x134726fd0, {{411.6, 938.6}, {201.0, 34.6}}, label: 'Spell Book — view your learned spells' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACgmekAAGAAAD4AAAAAAAAA>
-                        Button, 0x134727110, {{411.6, 974.8}, {201.0, 34.6}}, label: 'Arcane Shop — buy spell scrolls and the spell book' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgjukAAGAAAD8AAAAAAAAA>
-                        Button, 0x134727250, {{411.6, 1011.0}, {201.0, 34.6}}, label: 'The Graveyard, memorial for your fallen and deleted characters' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAj+kAAGAAAEAAAAAAAAAA>
-                        Button, 0x134727390, {{411.6, 1047.2}, {201.0, 34.6}}, label: 'Obituary, see recent deaths from players around the world' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADgkOkAAGAAAEEAAAAAAAAA>
-                        Button, 0x1347274d0, {{411.6, 1083.4}, {201.0, 34.7}}, label: 'Challenges — The Gauntlet and Daily Dungeon' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgk+kAAGAAAEIAAAAAAAAA>
-                        Button, 0x134727610, {{411.6, 1119.6}, {201.0, 34.6}}, label: 'Blacksmith — upgrade and buy weapons using your global gold' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABAi+kAAGAAAEMAAAAAAAAA>
-                        Button, 0x134727750, {{411.6, 1155.7}, {201.0, 34.6}}, label: 'The Mine — dig for diamonds, gun parts, and rare loot' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgiekAAGAAAEQAAAAAAAAA>
-                        Button, 0x134727890, {{411.6, 1191.9}, {201.0, 34.7}}, label: 'Boss Rush, fight all nine bosses back to back' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADAg+kAAGAAAEUAAAAAAAAA>
-                        Button, 0x1347279d0, {{411.6, 1228.1}, {201.0, 34.7}}, label: 'Tournament, compete against other players for the highest score' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAgukAAGAAAEYAAAAAAAAA>
-                        Button, 0x134727b10, {{411.6, 1264.3}, {201.0, 34.6}}, label: 'The Chronicles, lore and history of the dungeons' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgq+kAAGAAAEcAAAAAAAAA>
-                        Button, 0x134727c50, {{411.6, 1300.5}, {201.0, 34.6}}, label: 'The Codex, world lore enemy lore and artifacts unlocked through gameplay' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgrOkAAGAAAEgAAAAAAAAA>
-                        Button, 0x134727d90, {{411.6, 1336.7}, {201.0, 34.7}}, label: 'Community Enemy Creator, build an enemy and set it loose in the dungeon' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgu+kAAGAAAEkAAAAAAAAA>
-                        Button, 0x134727ed0, {{411.6, 1372.9}, {201.0, 34.7}}, label: 'Global Chat, talk to other players' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACgrekAAGAAAEoAAAAAAAAA>
-                        Button, 0x134728010, {{411.6, 1409.1}, {201.0, 34.7}}, label: 'The Bounty Board — register for bounties and earn rewards' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADgWugAAGAAAEsAAAAAAAAA>
-                        Button, 0x1347282a0, {{411.6, 1445.3}, {201.0, 34.6}}, label: 'The Siege — defend your fortress against waves of enemies' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABAvekAAGAAAEwAAAAAAAAA>
-                        Button, 0x1347283e0, {{411.6, 1481.5}, {201.0, 34.7}}, label: 'What's New, see the full patch notes for every version' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADgrukAAGAAAE0AAAAAAAAA>
-                        Button, 0x134728520, {{411.6, 1517.6}, {201.0, 34.7}}, label: 'Help, full game manual and guide' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgsOkAAGAAAE4AAAAAAAAA>
-                        Button, 0x134728660, {{411.6, 1553.8}, {201.0, 34.7}}, label: 'Hall of Records, view your lifetime stats and claim milestone awards' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgsekAAGAAAE8AAAAAAAAA>
-                        Button, 0x1347287a0, {{411.6, 1590.0}, {201.0, 34.6}}, label: 'High score, view your lifetime score and rank' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAsukAAGAAAFAAAAAAAAAA>
-                        Button, 0x1347288e0, {{411.6, 1626.2}, {201.0, 34.6}}, label: 'Seasonal events, see active and upcoming events' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADggekAAGAAAFEAAAAAAAAA>
-                        Button, 0x134728a20, {{411.6, 1662.4}, {201.0, 34.7}}, label: 'Credits, see who made the game' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABAgekAAGAAAFIAAAAAAAAA>
-                        Button, 0x134728b60, {{411.6, 1698.6}, {201.0, 34.7}}, label: 'Raid, survive five waves of enemies for daily rewards' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgoekAAGAAAFMAAAAAAAAA>
-                        Other, 0x134728ca0, {{481.2, 1739.8}, {61.6, 0.8}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADAjekAAGAAAFQAAAAAAAAA>
-                        Button, 0x144624130, {{411.6, 1747.1}, {201.0, 34.7}}, label: 'Settings, adjust music and sound' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADAl+kAAGAAAFUAAAAAAAAA>
-                        Button, 0x134728de0, {{411.6, 1783.3}, {201.0, 34.6}}, label: 'Quit Dungeon Descent' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgmOkAAGAAAFYAAAAAAAAA>
-                      StaticText, 0x134729120, {{471.6, 1839.1}, {80.9, 9.2}}, label: 'VERSION 11 POINT 8, RELEASE' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABAkOkAAGAAAB8AAAAAAAAA>
-                      StaticText, 0x134729260, {{474.7, 1853.0}, {74.7, 9.2}}, label: '1 players currently online' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAhekAAGAAACAAAAAAAAAA>
-                      StaticText, 0x1347293a0, {{499.3, 1866.8}, {25.4, 16.2}}, label: 'Your global gold, 0' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAlOkAAGAAACEAAAAAAAAA>
-                      StaticText, 0x1347294e0, {{499.3, 1887.6}, {25.4, 16.2}}, label: 'Your diamonds, 0' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAvOkAAGAAACIAAAAAAAAA>
-                    Other, 0x134729620, {{1012.6, 52.7}, {11.6, 656.8}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAwoXpIAQAAABAAAAAAAAAA>
-                  ScrollView, 0x134729760, {{327.2, 142.8}, {369.6, 429.7}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAA3JxJAQAAAA0AAAAAAAAA>
-                    Other, 0x1347298a0, {{327.2, 142.8}, {369.6, 451.2}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACwMXpIAQAAABEAAAAAAAAA>
-                      StaticText, 0x1347299e0, {{483.2, 159.8}, {57.8, 20.8}}, label: '🎉 v11.8' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAY+gAAGAAACMAAAAAAAAA>
-                      StaticText, 0x134729b20, {{453.1, 188.2}, {117.8, 11.5}}, label: 'The Festival Update' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAfugAAGAAACQAAAAAAAAA>
-                      StaticText, 0x134729c60, {{344.2, 207.5}, {329.6, 46.2}}, label: '• 🎉 Nine new events come to the dungeon, each with its own enemies, bonuses and twist. Check the Events screen in the menu to see when each one is on.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADgX+gAAGAAACUAAAAAAAAA>
-                      StaticText, 0x134729ef0, {{344.2, 261.4}, {335.7, 46.2}}, label: '• 🌼 Día de los Muertos (November 1–2) — a fallen hero from your Graveyard returns as a ghost and fights beside you. Earn Marigolds and spend them at 🌼 The Ofrenda.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgZ+gAAGAAACYAAAAAAAAA>
-                      StaticText, 0x13472a030, {{344.2, 315.3}, {325.7, 30.0}}, label: '• 🇲🇽 Independencia de México (September 15–16) — the ¡El Grito! battle cry gives you +30% attack for 3 turns, once a fight.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABAc+gAAGAAACcAAAAAAAAA>
-                      StaticText, 0x13472a400, {{344.2, 353.0}, {309.5, 13.9}}, label: '• 🎆 New Year (December 31–January 1) — double XP into the new year.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACgfOgAAGAAACgAAAAAAAAA>
-                      StaticText, 0x13472a540, {{344.2, 374.6}, {304.2, 30.0}}, label: '• 🐉 Lunar New Year — three days that move with the moon. Enemies sometimes leave a 🧧 red envelope with gold or a Mystery Coin.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADAcOgAAGAAACkAAAAAAAAA>
-                      StaticText, 0x13472a7a0, {{344.2, 412.3}, {256.4, 13.9}}, label: '• 🃏 Chaos Day (April 1) — every fight rolls a random twist.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAgcOgAAGAAACoAAAAAAAAA>
-                      StaticText, 0x13472a8e0, {{344.2, 433.9}, {329.6, 30.0}}, label: '• 🌑 The Longest Night (December 21) — it is night all day, with every night bonus on.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABAfegAAGAAACsAAAAAAAAA>
-                      StaticText, 0x13472aa20, {{344.2, 471.6}, {334.2, 30.0}}, label: '• 🌘 The Eclipse — one evening a month the sun goes dark, the same time for every player. Double gold, and much tougher enemies.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADgbugAAGAAACwAAAAAAAAA>
-                      StaticText, 0x13472ac80, {{344.2, 509.3}, {328.8, 30.0}}, label: '• 🏮 Night Market — the first weekend of every month, the merchant comes far more often and everything is 25% off.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AABgWOgAAGAAAC0AAAAAAAAA>
-                      StaticText, 0x13472adc0, {{344.2, 547.1}, {301.8, 30.0}}, label: '• 🐾 Monster Migration — two days a month, enemies from the other dungeons wander into yours with all their abilities.' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AACAaugAAGAAAC4AAAAAAAAA>
-                    Other, 0x13472b010, {{685.3, 142.8}, {11.5, 429.7}} <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AADg6ghKAQAAABIAAAAAAAAA>
-                  Button, 0x13472b150, {{452.0, 572.5}, {120.1, 33.9}}, label: 'CONTINUE TO THE GAME' <AX element pid: 14411, token: SzgAAAAAAABvY29j/v///////3/+////////f0s4AAAAd+gAAGAAAA4AAAAAAAAA>
-    Button, 0x13472b290, {{6.0, 31.0}, {16.0, 16.0}}, identifier: '_XCUI:CloseWindow' <AX element pid: 14411, token: SzgAAAAAAABvY29jLgAAAAAAAAA=>
-    Button, 0x13472b3d0, {{46.0, 31.0}, {16.0, 16.0}}, identifier: '_XCUI:FullScreenWindow' <AX element pid: 14411, token: SzgAAAAAAABvY29jLwAAAAAAAAA=>
-      Group, 0x1446079c0, {{47.0, 31.0}, {14.0, 16.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNwAAAAAAAAA=>
-    Button, 0x144626ed0, {{26.0, 31.0}, {16.0, 16.0}}, identifier: '_XCUI:MinimizeWindow' <AX element pid: 14411, token: SzgAAAAAAABvY29jMAAAAAAAAAA=>
-  MenuBar, 0x144621020, {{0.0, 0.0}, {1024.0, 24.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jAgAAAAAAAAA=>
-    MenuBarItem, 0x144621160, {{10.0, 0.0}, {32.0, 24.0}}, title: 'Apple' <AX element pid: 14411, token: SzgAAAAAAABvY29jAgAAAAAAAAAAAAAAAAAAAA==>
-      Menu, 0x1446212a0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAA=>
-        MenuItem, 0x1446213e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_aboutThisMacRequested:', title: 'About This Mac' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAAAAAAAAAAAA==>
-        MenuItem, 0x144621520, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_systemInformationRequested:', title: 'System Information' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAABAAAAAAAAAA==>
-        MenuItem, 0x144621660, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAACAAAAAAAAAA==>
-        MenuItem, 0x1446217a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_systemSettingsRequested:', title: 'System Settings…' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAADAAAAAAAAAA==>
-        MenuItem, 0x1446218e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_appStoreRequested:', title: 'App Store' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAEAAAAAAAAAA==>
-        MenuItem, 0x144621a20, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAFAAAAAAAAAA==>
-        MenuItem, 0x144629960, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentsRequested:', title: 'Recent Items' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAGAAAAAAAAAA==>
-          Menu, 0x144629aa0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAA=>
-            MenuItem, 0x144629be0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Applications', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x144629d20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'DungeonDescent' <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAABAAAAAAAAAA==>
-            MenuItem, 0x144629e60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “DungeonDescent” in Finder' <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAACAAAAAAAAAA==>
-            MenuItem, 0x144629fa0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Installer' <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAADAAAAAAAAAA==>
-            MenuItem, 0x14462a0e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “Installer” in Finder' <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAEAAAAAAAAAA==>
-            MenuItem, 0x14462a220, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'System Settings' <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAFAAAAAAAAAA==>
-            MenuItem, 0x14462a360, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “System Settings” in Finder' <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAGAAAAAAAAAA==>
-            MenuItem, 0x14462a4a0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAHAAAAAAAAAA==>
-            MenuItem, 0x14462a5e0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Documents', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAIAAAAAAAAAA==>
-            MenuItem, 0x14462a720, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'AnkaGuestAddons.pkg' <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAJAAAAAAAAAA==>
-            MenuItem, 0x14462a860, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “AnkaGuestAddons.pkg” in Finder' <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAKAAAAAAAAAA==>
-            MenuItem, 0x14462a9a0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAALAAAAAAAAAA==>
-            MenuItem, 0x14462aae0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Servers', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAMAAAAAAAAAA==>
-            MenuItem, 0x14462ac20, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAANAAAAAAAAAA==>
-            MenuItem, 0x14462ad60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_clearRecentItemsRequested:', title: 'Clear Menu' <AX element pid: 14411, token: SzgAAAAAAABvY29jQwAAAAAAAAAOAAAAAAAAAA==>
-        MenuItem, 0x14462aea0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAHAAAAAAAAAA==>
-        MenuItem, 0x14462afe0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_forceQuitPanelRequested:', title: 'Force Quit…' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAIAAAAAAAAAA==>
-        MenuItem, 0x14462b120, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_forceQuitRequested:', title: 'Force Quit DungeonDescent' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAJAAAAAAAAAA==>
-        MenuItem, 0x14462b260, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAKAAAAAAAAAA==>
-        MenuItem, 0x14462b3a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_sleepRequested:', title: 'Sleep' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAALAAAAAAAAAA==>
-        MenuItem, 0x14462b4e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_restartRequested:', title: 'Restart…' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAMAAAAAAAAAA==>
-        MenuItem, 0x14462b620, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_restartNowRequested:', title: 'Restart' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAANAAAAAAAAAA==>
-        MenuItem, 0x14462b760, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_shutDownRequested:', title: 'Shut Down…' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAOAAAAAAAAAA==>
-        MenuItem, 0x14462b8a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_shutDownNowRequested:', title: 'Shut Down' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAPAAAAAAAAAA==>
-        MenuItem, 0x14462b9e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAQAAAAAAAAAA==>
-        MenuItem, 0x14462bb20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_lockScreenRequested:', title: 'Lock Screen' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAARAAAAAAAAAA==>
-        MenuItem, 0x14462bc60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_logOutRequested:', title: 'Log Out Anka…' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAASAAAAAAAAAA==>
-        MenuItem, 0x14462bda0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_logOutNowRequested:', title: 'Log Out Anka' <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAATAAAAAAAAAA==>
-        MenuItem, 0x14462bee0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMgAAAAAAAAAUAAAAAAAAAA==>
-    MenuBarItem, 0x14462c020, {{43.0, 0.0}, {130.0, 24.0}}, identifier: 'com.apple.menu.application', title: 'DungeonDescent' <AX element pid: 14411, token: SzgAAAAAAABvY29jAgAAAAAAAAABAAAAAAAAAA==>
-      Menu, 0x14462c160, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAA=>
-        MenuItem, 0x14462c2a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'orderFrontStandardAboutPanel:', title: 'About DungeonDescent' <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAAAAAAAAAAAAA==>
-        MenuItem, 0x14462c3e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAABAAAAAAAAAA==>
-        MenuItem, 0x14462c520, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAACAAAAAAAAAA==>
-        MenuItem, 0x14462c660, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.services', title: 'Services' <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAADAAAAAAAAAA==>
-          Menu, 0x14462c7a0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAA=>
-            MenuItem, 0x14462c8e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Activity Monitor' <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x14462ca20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Allocations & Leaks' <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAABAAAAAAAAAA==>
-            MenuItem, 0x14462cb60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'File Activity' <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAACAAAAAAAAAA==>
-            MenuItem, 0x14462cca0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'System Trace' <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAADAAAAAAAAAA==>
-            MenuItem, 0x14462cde0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Time Profile Active Application' <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAAEAAAAAAAAAA==>
-            MenuItem, 0x14462cf20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Time Profile App Under Mouse' <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAAFAAAAAAAAAA==>
-            MenuItem, 0x14462d060, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Time Profile Entire System' <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAAGAAAAAAAAAA==>
-            MenuItem, 0x14462d1a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Toggle Instruments Recording' <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAAHAAAAAAAAAA==>
-            MenuItem, 0x14462d2e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_configureServicesMenu:', title: 'Services Settings…' <AX element pid: 14411, token: SzgAAAAAAABvY29jPAAAAAAAAAAIAAAAAAAAAA==>
-        MenuItem, 0x14462d420, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAAEAAAAAAAAAA==>
-        MenuItem, 0x14462d560, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'hide:', title: 'Hide DungeonDescent' <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAAFAAAAAAAAAA==>
-        MenuItem, 0x14462d6a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'hideOtherApplications:', title: 'Hide Others' <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAAGAAAAAAAAAA==>
-        MenuItem, 0x14462d7e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'unhideAllApplications:', title: 'Show All', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAAHAAAAAAAAAA==>
-        MenuItem, 0x14462d920, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAAIAAAAAAAAAA==>
-        MenuItem, 0x14462da60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'terminate:', title: 'Quit DungeonDescent' <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAAJAAAAAAAAAA==>
-        MenuItem, 0x14462dba0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'NSAlternateQuitMenuItem', title: 'Quit and Keep Windows' <AX element pid: 14411, token: SzgAAAAAAABvY29jOAAAAAAAAAAKAAAAAAAAAA==>
-    MenuBarItem, 0x14462dce0, {{173.0, 0.0}, {40.0, 24.0}}, identifier: 'com.apple.menu.file', title: 'File' <AX element pid: 14411, token: SzgAAAAAAABvY29jAgAAAAAAAAACAAAAAAAAAA==>
-      Menu, 0x14462de20, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAA=>
-        MenuItem, 0x14462df60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'performClose:', title: 'Close' <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAAAAAAAAAAAAA==>
-        MenuItem, 0x14462e0a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'closeAll:', title: 'Close All' <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAABAAAAAAAAAA==>
-        MenuItem, 0x14462e1e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAACAAAAAAAAAA==>
-        MenuItem, 0x14462e320, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAADAAAAAAAAAA==>
-        MenuItem, 0x14462e460, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'duplicate:', title: 'Duplicate', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAAEAAAAAAAAAA==>
-        MenuItem, 0x14462e5a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'move:', title: 'Move', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAAFAAAAAAAAAA==>
-        MenuItem, 0x14462e6e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'rename:', title: 'Rename…', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAAGAAAAAAAAAA==>
-        MenuItem, 0x14462e820, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'export:', title: 'Export As…', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAAHAAAAAAAAAA==>
-        MenuItem, 0x14462e960, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNQAAAAAAAAAIAAAAAAAAAA==>
-    MenuBarItem, 0x13472b510, {{213.0, 0.0}, {42.0, 24.0}}, identifier: 'com.apple.menu.edit', title: 'Edit' <AX element pid: 14411, token: SzgAAAAAAABvY29jAgAAAAAAAAADAAAAAAAAAA==>
-      Menu, 0x13472b650, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAA=>
-        MenuItem, 0x13472b790, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'undo:', title: 'Undo', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAAAAAAAAAAAA==>
-        MenuItem, 0x13472b8d0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'redo:', title: 'Redo', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAABAAAAAAAAAA==>
-        MenuItem, 0x14462eaa0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAACAAAAAAAAAA==>
-        MenuItem, 0x14462ebe0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'cut:', title: 'Cut', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAADAAAAAAAAAA==>
-        MenuItem, 0x14462ed20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'copy:', title: 'Copy', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAEAAAAAAAAAA==>
-        MenuItem, 0x14462ee60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'paste:', title: 'Paste', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAFAAAAAAAAAA==>
-        MenuItem, 0x14462efa0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'pasteAndMatchStyle:', title: 'Paste and Match Style', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAGAAAAAAAAAA==>
-        MenuItem, 0x14462f0e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'delete:', title: 'Delete', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAHAAAAAAAAAA==>
-        MenuItem, 0x14462f220, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'selectAll:', title: 'Select All', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAIAAAAAAAAAA==>
-        MenuItem, 0x14462f360, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAJAAAAAAAAAA==>
-        MenuItem, 0x14462f4a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'find:', title: 'Find…', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAKAAAAAAAAAA==>
-        MenuItem, 0x14462f5e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'findAndReplace:', title: 'Find & Replace', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAALAAAAAAAAAA==>
-        MenuItem, 0x14462f720, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'findNext:', title: 'Find Next', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAMAAAAAAAAAA==>
-        MenuItem, 0x14462f860, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'findPrevious:', title: 'Find Previous', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAANAAAAAAAAAA==>
-        MenuItem, 0x14462f9a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'useSelectionForFind:', title: 'Use Selection for Find', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAOAAAAAAAAAA==>
-        MenuItem, 0x14462fae0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAPAAAAAAAAAA==>
-        MenuItem, 0x14462fc20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.spelling', title: 'Spelling and Grammar' <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAQAAAAAAAAAA==>
-          Menu, 0x14462fd60, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jOgAAAAAAAAA=>
-            MenuItem, 0x14462fea0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'showGuessPanel:', title: 'Show Spelling and Grammar' <AX element pid: 14411, token: SzgAAAAAAABvY29jOgAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x14462ffe0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'checkSpelling:', title: 'Check Document Now' <AX element pid: 14411, token: SzgAAAAAAABvY29jOgAAAAAAAAABAAAAAAAAAA==>
-            MenuItem, 0x144630120, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOgAAAAAAAAACAAAAAAAAAA==>
-            MenuItem, 0x144630260, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleContinuousSpellChecking:', title: 'Check Spelling While Typing' <AX element pid: 14411, token: SzgAAAAAAABvY29jOgAAAAAAAAADAAAAAAAAAA==>
-            MenuItem, 0x1446303a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleGrammarChecking:', title: 'Check Grammar With Spelling' <AX element pid: 14411, token: SzgAAAAAAABvY29jOgAAAAAAAAAEAAAAAAAAAA==>
-            MenuItem, 0x1446304e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticSpellingCorrection:', title: 'Correct Spelling Automatically' <AX element pid: 14411, token: SzgAAAAAAABvY29jOgAAAAAAAAAFAAAAAAAAAA==>
-        MenuItem, 0x144630620, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.substitutions', title: 'Substitutions' <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAARAAAAAAAAAA==>
-          Menu, 0x144630760, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jOwAAAAAAAAA=>
-            MenuItem, 0x1446308a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'orderFrontSubstitutionsPanel:', title: 'Smart Substitutions', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOwAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x1446309e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOwAAAAAAAAABAAAAAAAAAA==>
-            MenuItem, 0x144630b20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleSmartInsertDelete:', title: 'Smart Copy/Paste', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOwAAAAAAAAACAAAAAAAAAA==>
-            MenuItem, 0x144630c60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticQuoteSubstitution:', title: 'Smart Quotes' <AX element pid: 14411, token: SzgAAAAAAABvY29jOwAAAAAAAAADAAAAAAAAAA==>
-            MenuItem, 0x144630da0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticDashSubstitution:', title: 'Smart Dashes' <AX element pid: 14411, token: SzgAAAAAAABvY29jOwAAAAAAAAAEAAAAAAAAAA==>
-            MenuItem, 0x144630ee0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticLinkDetection:', title: 'Smart Links', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jOwAAAAAAAAAFAAAAAAAAAA==>
-            MenuItem, 0x144631020, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticTextReplacement:', title: 'Text Replacement' <AX element pid: 14411, token: SzgAAAAAAABvY29jOwAAAAAAAAAGAAAAAAAAAA==>
-        MenuItem, 0x144631160, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.transformations', title: 'Transformations' <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAASAAAAAAAAAA==>
-          Menu, 0x1446312a0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jPQAAAAAAAAA=>
-            MenuItem, 0x1446313e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'uppercaseWord:', title: 'Make Upper Case', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPQAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x144631520, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'lowercaseWord:', title: 'Make Lower Case', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPQAAAAAAAAABAAAAAAAAAA==>
-            MenuItem, 0x144631660, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'capitalizeWord:', title: 'Capitalize', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPQAAAAAAAAACAAAAAAAAAA==>
-        MenuItem, 0x1446317a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.command.speech', title: 'Speech' <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAATAAAAAAAAAA==>
-          Menu, 0x1446318e0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jPgAAAAAAAAA=>
-            MenuItem, 0x144631a20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'startSpeaking:', title: 'Start Speaking' <AX element pid: 14411, token: SzgAAAAAAABvY29jPgAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x144631b60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'stopSpeaking:', title: 'Stop Speaking', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPgAAAAAAAAABAAAAAAAAAA==>
-        MenuItem, 0x144631ca0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAUAAAAAAAAAA==>
-        MenuItem, 0x144631de0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NSMenuItemAutoFillIdentifier', title: 'AutoFill' <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAVAAAAAAAAAA==>
-          Menu, 0x144631f20, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jQQAAAAAAAAA=>
-            MenuItem, 0x144632060, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_handleInsertFromContactsCommand:', title: 'Contact…', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQQAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x1446321a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_handleInsertFromPasswordsCommand:', title: 'Passwords…', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQQAAAAAAAAABAAAAAAAAAA==>
-        MenuItem, 0x1446322e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'startDictation:', title: 'Start Dictation…' <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAWAAAAAAAAAA==>
-        MenuItem, 0x144632420, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'orderFrontCharacterPalette:', title: 'Emoji & Symbols' <AX element pid: 14411, token: SzgAAAAAAABvY29jMwAAAAAAAAAXAAAAAAAAAA==>
-    MenuBarItem, 0x144632560, {{255.0, 0.0}, {61.0, 24.0}}, identifier: 'com.apple.menu.format', title: 'Format' <AX element pid: 14411, token: SzgAAAAAAABvY29jAgAAAAAAAAAEAAAAAAAAAA==>
-      Menu, 0x1446326a0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jOQAAAAAAAAA=>
-        MenuItem, 0x1446327e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.font', title: 'Font' <AX element pid: 14411, token: SzgAAAAAAABvY29jOQAAAAAAAAAAAAAAAAAAAA==>
-          Menu, 0x144632920, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAA=>
-            MenuItem, 0x144632a60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'show_fonts', title: 'Show Fonts' <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x144632ba0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleBoldface:', title: 'Bold', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAABAAAAAAAAAA==>
-            MenuItem, 0x144632ce0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleItalics:', title: 'Italic', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAACAAAAAAAAAA==>
-            MenuItem, 0x144632e20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleUnderline:', title: 'Underline', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAADAAAAAAAAAA==>
-            MenuItem, 0x144632f60, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAAEAAAAAAAAAA==>
-            MenuItem, 0x1446330a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'increaseSize:', title: 'Bigger', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAAFAAAAAAAAAA==>
-            MenuItem, 0x1446331e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'decreaseSize:', title: 'Smaller', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAAGAAAAAAAAAA==>
-            MenuItem, 0x144633320, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAAHAAAAAAAAAA==>
-            MenuItem, 0x144633460, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'orderFrontColorPanel:', title: 'Show Colors' <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAAIAAAAAAAAAA==>
-            MenuItem, 0x1446335a0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAAJAAAAAAAAAA==>
-            MenuItem, 0x1446336e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'copyFont:', title: 'Copy Style', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAAKAAAAAAAAAA==>
-            MenuItem, 0x144633820, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'pasteFont:', title: 'Paste Style', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jPwAAAAAAAAALAAAAAAAAAA==>
-        MenuItem, 0x144633960, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.text', title: 'Text' <AX element pid: 14411, token: SzgAAAAAAABvY29jOQAAAAAAAAABAAAAAAAAAA==>
-          Menu, 0x144633aa0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jQAAAAAAAAAA=>
-            MenuItem, 0x144633be0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alignLeft:', title: 'Align Left', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQAAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x144633d20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alignCenter:', title: 'Center', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQAAAAAAAAAABAAAAAAAAAA==>
-            MenuItem, 0x144633e60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alignJustified:', title: 'Justify', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQAAAAAAAAAACAAAAAAAAAA==>
-            MenuItem, 0x144633fa0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alignRight:', title: 'Align Right', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQAAAAAAAAAADAAAAAAAAAA==>
-            MenuItem, 0x1446340e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQAAAAAAAAAAEAAAAAAAAAA==>
-            MenuItem, 0x13472ba10, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.writing-direction', title: 'Writing Direction' <AX element pid: 14411, token: SzgAAAAAAABvY29jQAAAAAAAAAAFAAAAAAAAAA==>
-              Menu, 0x13472bb50, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jRQAAAAAAAAA=>
-                MenuItem, 0x13472bc90, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'makeTextWritingDirectionNatural:', title: 'Default', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jRQAAAAAAAAAAAAAAAAAAAA==>
-                MenuItem, 0x13472bdd0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'makeTextWritingDirectionRightToLeft:', title: 'Right to Left', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jRQAAAAAAAAABAAAAAAAAAA==>
-                MenuItem, 0x1346128c0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'makeTextWritingDirectionLeftToRight:', title: 'Left to Right', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jRQAAAAAAAAACAAAAAAAAAA==>
-    MenuBarItem, 0x134613aa0, {{316.0, 0.0}, {48.0, 24.0}}, identifier: 'com.apple.menu.view', title: 'View' <AX element pid: 14411, token: SzgAAAAAAABvY29jAgAAAAAAAAAFAAAAAAAAAA==>
-      Menu, 0x134619cc0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jNgAAAAAAAAA=>
-        MenuItem, 0x144634220, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleToolbarShown:', title: 'Show Toolbar', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNgAAAAAAAAAAAAAAAAAAAA==>
-        MenuItem, 0x144634360, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'runToolbarCustomizationPalette:', title: 'Customize Toolbar…', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNgAAAAAAAAABAAAAAAAAAA==>
-        MenuItem, 0x1446344a0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNgAAAAAAAAACAAAAAAAAAA==>
-        MenuItem, 0x1446345e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleSidebar:', title: 'Show Sidebar', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNgAAAAAAAAADAAAAAAAAAA==>
-        MenuItem, 0x144634720, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleFullScreen:', title: 'Enter Full Screen' <AX element pid: 14411, token: SzgAAAAAAABvY29jNgAAAAAAAAAEAAAAAAAAAA==>
-    MenuBarItem, 0x144634860, {{364.0, 0.0}, {67.0, 24.0}}, identifier: 'com.apple.menu.window', title: 'Window' <AX element pid: 14411, token: SzgAAAAAAABvY29jAgAAAAAAAAAGAAAAAAAAAA==>
-      Menu, 0x1446349a0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAA=>
-        MenuItem, 0x144634ae0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'performMiniaturize:', title: 'Minimize' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAAAAAAAAAAAA==>
-        MenuItem, 0x144634c20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'miniaturizeAll:', title: 'Minimize All' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAABAAAAAAAAAA==>
-        MenuItem, 0x144634d60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'performZoom:', title: 'Zoom' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAACAAAAAAAAAA==>
-        MenuItem, 0x144634ea0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'zoomAll:', title: 'Zoom All' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAADAAAAAAAAAA==>
-        MenuItem, 0x144634fe0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomFill:', title: 'Fill' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAEAAAAAAAAAA==>
-        MenuItem, 0x144635120, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomCenter:', title: 'Center' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAFAAAAAAAAAA==>
-        MenuItem, 0x134617930, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAGAAAAAAAAAA==>
-        MenuItem, 0x1346196a0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Move & Resize' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAHAAAAAAAAAA==>
-          Menu, 0x134618150, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAA=>
-            MenuItem, 0x134618a20, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Halves', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x13461a0b0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomLeft:', title: 'Left' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAABAAAAAAAAAA==>
-            MenuItem, 0x1346172f0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomRight:', title: 'Right' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAACAAAAAAAAAA==>
-            MenuItem, 0x134616ed0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTop:', title: 'Top' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAADAAAAAAAAAA==>
-            MenuItem, 0x134613680, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottom:', title: 'Bottom' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAEAAAAAAAAAA==>
-            MenuItem, 0x134614520, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAFAAAAAAAAAA==>
-            MenuItem, 0x13461b070, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Quarters', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAGAAAAAAAAAA==>
-            MenuItem, 0x13461b1b0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTopLeft:', title: 'Top Left' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAHAAAAAAAAAA==>
-            MenuItem, 0x13461b2f0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTopRight:', title: 'Top Right' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAIAAAAAAAAAA==>
-            MenuItem, 0x13461b430, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottomLeft:', title: 'Bottom Left' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAJAAAAAAAAAA==>
-            MenuItem, 0x13461b5f0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottomRight:', title: 'Bottom Right' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAKAAAAAAAAAA==>
-            MenuItem, 0x13461b730, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAALAAAAAAAAAA==>
-            MenuItem, 0x13461b870, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Arrange', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAMAAAAAAAAAA==>
-            MenuItem, 0x13461b9b0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomLeftAndRight:', title: 'Left & Right' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAANAAAAAAAAAA==>
-            MenuItem, 0x13461baf0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomLeftThreeUp:', title: 'Left & Quarters' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAOAAAAAAAAAA==>
-            MenuItem, 0x13461bc30, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomRightAndLeft:', title: 'Right & Left' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAPAAAAAAAAAA==>
-            MenuItem, 0x13461bd70, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomRightThreeUp:', title: 'Right & Quarters' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAQAAAAAAAAAA==>
-            MenuItem, 0x13461beb0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTopAndBottom:', title: 'Top & Bottom' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAARAAAAAAAAAA==>
-            MenuItem, 0x13461bff0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTopThreeUp:', title: 'Top & Quarters' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAASAAAAAAAAAA==>
-            MenuItem, 0x13461c130, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottomAndTop:', title: 'Bottom & Top' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAATAAAAAAAAAA==>
-            MenuItem, 0x13461c270, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottomThreeUp:', title: 'Bottom & Quarters' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAUAAAAAAAAAA==>
-            MenuItem, 0x13461c3b0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomQuarters:', title: 'Quarters' <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAVAAAAAAAAAA==>
-            MenuItem, 0x13461c4f0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAWAAAAAAAAAA==>
-            MenuItem, 0x13461c630, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomUntile:', title: 'Return to Previous Size', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jQgAAAAAAAAAXAAAAAAAAAA==>
-        MenuItem, 0x13461c770, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Full Screen Tile' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAIAAAAAAAAAA==>
-          Menu, 0x13461c8b0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jRgAAAAAAAAA=>
-            MenuItem, 0x13461c9f0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_tileLeft:', title: 'Left of Screen' <AX element pid: 14411, token: SzgAAAAAAABvY29jRgAAAAAAAAAAAAAAAAAAAA==>
-            MenuItem, 0x13461cb30, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_tileRight:', title: 'Right of Screen' <AX element pid: 14411, token: SzgAAAAAAABvY29jRgAAAAAAAAABAAAAAAAAAA==>
-        MenuItem, 0x13461cc70, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAJAAAAAAAAAA==>
-        MenuItem, 0x13461cdb0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_removeWindowFromStageManagerSet:', title: 'Remove Window from Set', Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAKAAAAAAAAAA==>
-        MenuItem, 0x13461cef0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAALAAAAAAAAAA==>
-        MenuItem, 0x13461d030, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'arrangeInFront:', title: 'Bring All to Front' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAMAAAAAAAAAA==>
-        MenuItem, 0x13461d170, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alternateArrangeInFront:', title: 'Arrange in Front' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAANAAAAAAAAAA==>
-        MenuItem, 0x13461d2b0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAOAAAAAAAAAA==>
-        MenuItem, 0x13461d3f0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'makeKeyAndOrderFront:', title: 'Dungeon Descent' <AX element pid: 14411, token: SzgAAAAAAABvY29jNAAAAAAAAAAPAAAAAAAAAA==>
-    MenuBarItem, 0x13461d530, {{431.0, 0.0}, {46.0, 24.0}}, identifier: 'com.apple.menu.help', title: 'Help' <AX element pid: 14411, token: SzgAAAAAAABvY29jAgAAAAAAAAAHAAAAAAAAAA==>
-      Menu, 0x13461d670, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 14411, token: SzgAAAAAAABvY29jMQAAAAAAAAA=>
-        MenuItem, 0x13461d7b0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'showHelp:', title: 'DungeonDescent Help' <AX element pid: 14411, token: SzgAAAAAAABvY29jMQAAAAAAAAAAAAAAAAAAAA==>
-  TouchBar, 0x13461d8f0, {{80.0, 0.0}, {685.0, 30.0}}, Disabled <AX element pid: 14411, token: SzgAAAAAAABvY29jLAAAAAAAAAA=>
+Application, 0x1099b1510, pid: 15272, title: 'DungeonDescent', Disabled <App element pid: 15272>
+  Window (Main), 0x1099b04c0, {{0.0, 25.0}, {1024.0, 684.0}}, identifier: 'SceneWindow', title: 'Dungeon Descent', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jKwAAAAAAAAA=>
+    Group, 0x1099af520, {{0.0, 25.0}, {1024.0, 684.0}}, Keyboard Focused, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jLQAAAAAAAAA=>
+      Window, 0x1099b3bc0, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACAxoQhAQAAAAQAAAAAAAAA>
+        Other, 0x10999f610, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABwrYQhAQAAAAUAAAAAAAAA>
+          Other, 0x1099b8290, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADQy4QhAQAAAAYAAAAAAAAA>
+            Other, 0x1297e95c0, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAwo4QhAQAAAAcAAAAAAAAA>
+              Other, 0x1099a4b80, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADg6YQDAGAAAAgAAAAAAAAA>
+                Other, 0x1099718a0, {{0.0, -144.4}, {1024.1, 1024.1}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADA3IQDAGAAAAkAAAAAAAAA>
+                  Other, 0x1099a4fa0, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABAwYYDAGAAAAoAAAAAAAAA>
+                  Button, 0x1099b5d30, {{0.0, -144.4}, {1024.1, 1024.1}}, label: 'Dungeon Descent game logo', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADgOIQDAGAAAAsAAAAAAAAA>
+                  ScrollView, 0x1099a4370, {{0.0, 25.0}, {1024.1, 684.5}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAAPAkhAQAAAAwAAAAAAAAA>
+                    Other, 0x1099a29a0, {{0.0, 52.7}, {1024.1, 1912.7}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACQ5XMgAQAAAA0AAAAAAAAA>
+                      StaticText, 0x1099a09b0, {{391.2, 98.9}, {241.8, 104.7}}, label: 'Dungeon Descent' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAAAIQDAGAAAA8AAAAAAAAA>
+                      StaticText, 0x10999efd0, {{453.1, 205.2}, {117.8, 10.8}}, label: 'by Leo Productions' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABgCYQDAGAAABAAAAAAAAAA>
+                      Link, 0x1099b7410, {{457.4, 223.7}, {110.1, 10.8}}, label: 'Join the Dungeon Descent Discord server' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACAL4QDAGAAABEAAAAAAAAA>
+                      Button, 0x1099b8d30, {{442.0, 248.3}, {140.1, 21.6}}, label: 'Daily Descent. Day 1 reward ready. Tap to claim.' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADgFYQDAGAAABIAAAAAAAAA>
+                      Button, 0x1099b0ed0, {{483.9, 275.6}, {57.0, 26.9}}, label: 'Your trophies — press to view', value: 0 <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACgN4QDAGAAABMAAAAAAAAA>
+                      Button, 0x1099ac950, {{477.0, 308.0}, {70.1, 26.9}}, label: 'Your familiar — press to view its bond level', value: 👺 Lv.1 <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACgI4QDAGAAABQAAAAAAAAA>
+                      StaticText, 0x1099b2290, {{474.7, 340.7}, {74.7, 12.3}}, label: 'Your gold, 0. Diamonds, 0. Mystery Coins, 0.' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADAF4QDAGAAABUAAAAAAAAA>
+                      StaticText, 0x1099b08c0, {{471.2, 359.2}, {81.6, 11.6}}, label: '🪙 0 Demon Coins' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAgA4QDAGAAABYAAAAAAAAA>
+                      StaticText, 0x1099b4940, {{424.3, 380.0}, {175.6, 16.2}}, label: '"Not all who enter are lost — most are."' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAACoQDAGAAABcAAAAAAAAA>
+                      StaticText, 0x1099a2fb0, {{385.4, 402.3}, {253.3, 10.8}}, label: '🌑 The Void Stirs — 55% awakened. 5 days until it wakes (Nov 5).' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACgFIQDAGAAABgAAAAAAAAA>
+                      StaticText, 0x1099a0fc0, {{388.5, 418.9}, {247.2, 47.7}}, label: '🎃 Halloween · ACTIVE · 2d 3h remaining, ⚡ XP Weekend · ACTIVE · 27h remaining' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAgIYQDAGAAABkAAAAAAAAA>
+                        StaticText, 0x1099b6340, {{434.3, 423.9}, {155.5, 23.1}}, label: '🎃 Halloween · ACTIVE · 2d 3h remaining' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACAG4QDAGAAAB8AAAAAAAAA>
+                        StaticText, 0x1099b7830, {{401.2, 450.0}, {221.8, 11.6}}, label: '⚡ XP Weekend · ACTIVE · 27h remaining' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAAKIQDAGAAACAAAAAAAAAA>
+                      Other, 0x1099acf60, {{411.6, 492.0}, {201.0, 1325.9}}, label: 'Main menu' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABA1YQDAGAAABoAAAAAAAAA>
+                        Button, 0x1099b7c50, {{411.6, 492.0}, {201.0, 34.7}}, label: 'PLAY, CHOOSE OR CREATE YOUR CHARACTER' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABg+4QDAGAAACEAAAAAAAAA>
+                        Button, 0x1099755e0, {{411.6, 528.2}, {201.0, 34.7}}, label: 'PVP Arena, fight another player in real time turn based combat' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACA24QDAGAAACIAAAAAAAAA>
+                          StaticText, 0x1099852a0, {{436.2, 538.2}, {123.2, 14.6}}, label: '⚔️👥 Multiplayer' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAg14QDAGAAAEcAAAAAAAAA>
+                          StaticText, 0x109966910, {{564.0, 540.1}, {23.9, 10.8}}, label: 'BETA' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABA7oQDAGAAAEgAAAAAAAAA>
+                        Button, 0x109996e40, {{411.6, 564.4}, {201.0, 34.6}}, label: 'Hide and Seek, something is chasing you, find the way out' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABg7IQDAGAAACMAAAAAAAAA>
+                          StaticText, 0x10997d830, {{438.1, 574.4}, {119.4, 14.6}}, label: '🕯️ Hide and Seek' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABg3YQDAGAAAEkAAAAAAAAA>
+                          StaticText, 0x1099b3580, {{562.1, 576.3}, {23.9, 10.8}}, label: 'BETA' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACgyoQDAGAAAEoAAAAAAAAA>
+                        Other, 0x1099b3160, {{481.2, 605.6}, {61.6, 0.8}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACA6oQDAGAAACQAAAAAAAAA>
+                        Button, 0x1099aeb50, {{411.6, 612.9}, {201.0, 34.6}}, label: 'Visit Leo Audio Gaming on YouTube, opens in new tab' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACA74QDAGAAACUAAAAAAAAA>
+                        Button, 0x1099aaf70, {{411.6, 649.1}, {201.0, 34.6}}, label: 'Bestiary, view all enemies you have encountered' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABg2IQDAGAAACYAAAAAAAAA>
+                        Button, 0x1099aa960, {{411.6, 685.3}, {201.0, 34.7}}, label: 'Quests and achievements' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABA0IQDAGAAACcAAAAAAAAA>
+                        Button, 0x1099a8f80, {{411.6, 721.5}, {201.0, 34.6}}, label: 'Mystery Coin Shop, spend your Mystery Coins on permanent upgrades' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADgwYQDAGAAACgAAAAAAAAA>
+                        Button, 0x1099a8970, {{411.6, 757.7}, {201.0, 34.7}}, label: 'Endless Descent, AFK mode' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACA9IQDAGAAACkAAAAAAAAA>
+                        Button, 0x1099a6f90, {{411.6, 793.8}, {201.0, 34.6}}, label: 'The Spire, climb 1800 floors to face The Time Eater' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADgxoQDAGAAACoAAAAAAAAA>
+                        Button, 0x1099a6b70, {{411.6, 830.0}, {201.0, 34.7}}, label: 'Void Mode, become the Void Commander and survive five waves of heroes' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACg44QDAGAAACsAAAAAAAAA>
+                        Button, 0x1099a6360, {{411.6, 866.2}, {201.0, 34.6}}, label: 'Command Center — type or speak commands to control the game' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAg0oQDAGAAACwAAAAAAAAA>
+                        Button, 0x1099c41d0, {{411.6, 902.4}, {201.0, 34.7}}, label: 'OPEN SEASONAL SHOP, 💀 CURSE SHOP' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABA5IQDAGAAAC0AAAAAAAAA>
+                        Button, 0x1099c4820, {{411.6, 938.6}, {201.0, 34.6}}, label: 'Spell Book — view your learned spells' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADA5oQDAGAAAC4AAAAAAAAA>
+                        Button, 0x1099c4960, {{411.6, 974.8}, {201.0, 34.6}}, label: 'Arcane Shop — buy spell scrolls and the spell book' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABA34QDAGAAAC8AAAAAAAAA>
+                        Button, 0x1099c4aa0, {{411.6, 1011.0}, {201.0, 34.6}}, label: 'The Graveyard, memorial for your fallen and deleted characters' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABg54QDAGAAADAAAAAAAAAA>
+                        Button, 0x1099c4cd0, {{411.6, 1047.2}, {201.0, 34.6}}, label: 'Obituary, see recent deaths from players around the world' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAA1IQDAGAAADEAAAAAAAAA>
+                        Button, 0x1099c4e10, {{411.6, 1083.4}, {201.0, 34.7}}, label: 'Challenges — The Gauntlet and Daily Dungeon' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADAzYQDAGAAADIAAAAAAAAA>
+                        Button, 0x1099c4f50, {{411.6, 1119.6}, {201.0, 34.6}}, label: 'Blacksmith — upgrade and buy weapons using your global gold' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADA8IQDAGAAADMAAAAAAAAA>
+                        Button, 0x1099c5090, {{411.6, 1155.7}, {201.0, 34.6}}, label: 'The Mine — dig for diamonds, gun parts, and rare loot' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAA6IQDAGAAADQAAAAAAAAA>
+                        Button, 0x1099c51d0, {{411.6, 1191.9}, {201.0, 34.7}}, label: 'Boss Rush, fight all nine bosses back to back' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAA7YQDAGAAADUAAAAAAAAA>
+                        Button, 0x1099c5310, {{411.6, 1228.1}, {201.0, 34.7}}, label: 'Tournament, compete against other players for the highest score' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADg5IQDAGAAADYAAAAAAAAA>
+                        Button, 0x1099c5450, {{411.6, 1264.3}, {201.0, 34.6}}, label: 'The Chronicles, lore and history of the dungeons' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAg4YQDAGAAADcAAAAAAAAA>
+                        Button, 0x1099c5590, {{411.6, 1300.5}, {201.0, 34.6}}, label: 'The Codex, world lore enemy lore and artifacts unlocked through gameplay' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAA/IQDAGAAADgAAAAAAAAA>
+                        Button, 0x1099c56d0, {{411.6, 1336.7}, {201.0, 34.7}}, label: 'Community Enemy Creator, build an enemy and set it loose in the dungeon' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACAx4QDAGAAADkAAAAAAAAA>
+                        Button, 0x1099c5810, {{411.6, 1372.9}, {201.0, 34.7}}, label: 'Global Chat, talk to other players' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAA2YQDAGAAADoAAAAAAAAA>
+                        Button, 0x1099c5950, {{411.6, 1409.1}, {201.0, 34.7}}, label: 'The Bounty Board — register for bounties and earn rewards' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADA14QDAGAAADsAAAAAAAAA>
+                        Button, 0x1099c5be0, {{411.6, 1445.3}, {201.0, 34.6}}, label: 'The Siege — defend your fortress against waves of enemies' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACAzIQDAGAAADwAAAAAAAAA>
+                        Button, 0x1099c5d20, {{411.6, 1481.5}, {201.0, 34.7}}, label: 'What's New, see the full patch notes for every version' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADg34QDAGAAAD0AAAAAAAAA>
+                        Button, 0x1099c5e60, {{411.6, 1517.6}, {201.0, 34.7}}, label: 'Help, full game manual and guide' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABgyYQDAGAAAD4AAAAAAAAA>
+                        Button, 0x1099c5fa0, {{411.6, 1553.8}, {201.0, 34.7}}, label: 'Hall of Records, view your lifetime stats and claim milestone awards' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABg4oQDAGAAAD8AAAAAAAAA>
+                        Button, 0x1099c60e0, {{411.6, 1590.0}, {201.0, 34.6}}, label: 'High score, view your lifetime score and rank' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACA+YQDAGAAAEAAAAAAAAAA>
+                        Button, 0x1099c6220, {{411.6, 1626.2}, {201.0, 34.6}}, label: 'Seasonal events, see active and upcoming events' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABg9oQDAGAAAEEAAAAAAAAA>
+                        Button, 0x1099c6360, {{411.6, 1662.4}, {201.0, 34.7}}, label: 'Credits, see who made the game' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADg+IQDAGAAAEIAAAAAAAAA>
+                        Button, 0x1099c64a0, {{411.6, 1698.6}, {201.0, 34.7}}, label: 'Raid, survive five waves of enemies for daily rewards' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADg84QDAGAAAEMAAAAAAAAA>
+                        Other, 0x1099c65e0, {{481.2, 1739.8}, {61.6, 0.8}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADg2oQDAGAAAEQAAAAAAAAA>
+                        Button, 0x1099c6720, {{411.6, 1747.1}, {201.0, 34.7}}, label: 'Settings, adjust music and sound' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADg1YQDAGAAAEUAAAAAAAAA>
+                        Button, 0x1099c6860, {{411.6, 1783.3}, {201.0, 34.6}}, label: 'Quit Dungeon Descent' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABg04QDAGAAAEYAAAAAAAAA>
+                      StaticText, 0x1099c6ba0, {{471.6, 1839.1}, {80.9, 9.2}}, label: 'VERSION 11 POINT 8, RELEASE' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AABA+IQDAGAAABsAAAAAAAAA>
+                      StaticText, 0x1099c6ce0, {{472.0, 1853.0}, {80.1, 9.2}}, label: '2 players currently online' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACgxYQDAGAAABwAAAAAAAAA>
+                      StaticText, 0x1099c6e20, {{499.3, 1866.8}, {25.4, 16.2}}, label: 'Your global gold, 0' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AADA64QDAGAAAB0AAAAAAAAA>
+                      StaticText, 0x1099c6f60, {{499.3, 1887.6}, {25.4, 16.2}}, label: 'Your diamonds, 0' <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AAAg5oQDAGAAAB4AAAAAAAAA>
+                    Other, 0x1099c70a0, {{1012.6, 52.7}, {11.6, 656.8}} <AX element pid: 15272, token: qDsAAAAAAABvY29j/v///////3/+////////f6g7AACAu3ggAQAAAA4AAAAAAAAA>
+    Button, 0x1099c71e0, {{6.0, 31.0}, {16.0, 16.0}}, identifier: '_XCUI:CloseWindow' <AX element pid: 15272, token: qDsAAAAAAABvY29jLgAAAAAAAAA=>
+    Button, 0x1099c7320, {{46.0, 31.0}, {16.0, 16.0}}, identifier: '_XCUI:FullScreenWindow' <AX element pid: 15272, token: qDsAAAAAAABvY29jLwAAAAAAAAA=>
+      Group, 0x1099c7460, {{47.0, 31.0}, {14.0, 16.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMQAAAAAAAAA=>
+        Group, 0x1099c75a0, {{47.0, 31.0}, {14.0, 16.0}}, Disabled <AX element pid: 15564, token: zDwAAKg7AABvY29jKgAAAAAAAAA=>
+    Button, 0x1099c76e0, {{26.0, 31.0}, {16.0, 16.0}}, identifier: '_XCUI:MinimizeWindow' <AX element pid: 15272, token: qDsAAAAAAABvY29jMAAAAAAAAAA=>
+  MenuBar, 0x1099c7820, {{0.0, 0.0}, {1024.0, 24.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jAgAAAAAAAAA=>
+    MenuBarItem, 0x1099c7960, {{10.0, 0.0}, {32.0, 24.0}}, title: 'Apple' <AX element pid: 15272, token: qDsAAAAAAABvY29jAgAAAAAAAAAAAAAAAAAAAA==>
+      Menu, 0x1099c7aa0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAA=>
+        MenuItem, 0x1099c7be0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_aboutThisMacRequested:', title: 'About This Mac' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAAAAAAAAAAAA==>
+        MenuItem, 0x1099c7d20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_systemInformationRequested:', title: 'System Information' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAABAAAAAAAAAA==>
+        MenuItem, 0x1099c7e60, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAACAAAAAAAAAA==>
+        MenuItem, 0x1099c7fa0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_systemSettingsRequested:', title: 'System Settings…, 1 update' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAADAAAAAAAAAA==>
+        MenuItem, 0x1099c80e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_appStoreRequested:', title: 'App Store' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAEAAAAAAAAAA==>
+        MenuItem, 0x1099c8220, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAFAAAAAAAAAA==>
+        MenuItem, 0x1099c8360, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentsRequested:', title: 'Recent Items' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAGAAAAAAAAAA==>
+          Menu, 0x1099c84a0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAA=>
+            MenuItem, 0x1099c85e0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Applications', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x1099c8720, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'DungeonDescent' <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAABAAAAAAAAAA==>
+            MenuItem, 0x1099c8860, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “DungeonDescent” in Finder' <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAACAAAAAAAAAA==>
+            MenuItem, 0x1099c89a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Installer' <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAADAAAAAAAAAA==>
+            MenuItem, 0x1099c8ae0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “Installer” in Finder' <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAEAAAAAAAAAA==>
+            MenuItem, 0x1099c8c20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'System Settings' <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAFAAAAAAAAAA==>
+            MenuItem, 0x1099c8d60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “System Settings” in Finder' <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAGAAAAAAAAAA==>
+            MenuItem, 0x1099c8ea0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAHAAAAAAAAAA==>
+            MenuItem, 0x1099c8fe0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Documents', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAIAAAAAAAAAA==>
+            MenuItem, 0x1099c9120, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'AnkaGuestAddons.pkg' <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAJAAAAAAAAAA==>
+            MenuItem, 0x1099c9260, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_recentItemRequested:', title: 'Show “AnkaGuestAddons.pkg” in Finder' <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAKAAAAAAAAAA==>
+            MenuItem, 0x1099c93a0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAALAAAAAAAAAA==>
+            MenuItem, 0x1099c94e0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Servers', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAMAAAAAAAAAA==>
+            MenuItem, 0x1099c9620, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAANAAAAAAAAAA==>
+            MenuItem, 0x1099c9760, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_clearRecentItemsRequested:', title: 'Clear Menu' <AX element pid: 15272, token: qDsAAAAAAABvY29jOgAAAAAAAAAOAAAAAAAAAA==>
+        MenuItem, 0x1099c98a0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAHAAAAAAAAAA==>
+        MenuItem, 0x1099c99e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_forceQuitPanelRequested:', title: 'Force Quit…' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAIAAAAAAAAAA==>
+        MenuItem, 0x1099c9b20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_forceQuitRequested:', title: 'Force Quit DungeonDescent' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAJAAAAAAAAAA==>
+        MenuItem, 0x1099c9c60, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAKAAAAAAAAAA==>
+        MenuItem, 0x1099c9da0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_sleepRequested:', title: 'Sleep' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAALAAAAAAAAAA==>
+        MenuItem, 0x1099c9ee0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_restartRequested:', title: 'Restart…' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAMAAAAAAAAAA==>
+        MenuItem, 0x1099ca020, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_restartNowRequested:', title: 'Restart' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAANAAAAAAAAAA==>
+        MenuItem, 0x1099ca160, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_shutDownRequested:', title: 'Shut Down…' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAOAAAAAAAAAA==>
+        MenuItem, 0x1099ca2a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_shutDownNowRequested:', title: 'Shut Down' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAPAAAAAAAAAA==>
+        MenuItem, 0x1099ca3e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAQAAAAAAAAAA==>
+        MenuItem, 0x1099ca520, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_lockScreenRequested:', title: 'Lock Screen' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAARAAAAAAAAAA==>
+        MenuItem, 0x1099ca660, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_logOutRequested:', title: 'Log Out Anka…' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAASAAAAAAAAAA==>
+        MenuItem, 0x1099ca7a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_logOutNowRequested:', title: 'Log Out Anka' <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAATAAAAAAAAAA==>
+        MenuItem, 0x1099ca8e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMgAAAAAAAAAUAAAAAAAAAA==>
+    MenuBarItem, 0x1099caa20, {{43.0, 0.0}, {130.0, 24.0}}, identifier: 'com.apple.menu.application', title: 'DungeonDescent' <AX element pid: 15272, token: qDsAAAAAAABvY29jAgAAAAAAAAABAAAAAAAAAA==>
+      Menu, 0x1099cab60, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAA=>
+        MenuItem, 0x1099caca0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'orderFrontStandardAboutPanel:', title: 'About DungeonDescent' <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAAAAAAAAAAAAA==>
+        MenuItem, 0x1099cade0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAABAAAAAAAAAA==>
+        MenuItem, 0x1099caf20, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAACAAAAAAAAAA==>
+        MenuItem, 0x1099cb060, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.services', title: 'Services' <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAADAAAAAAAAAA==>
+          Menu, 0x1099cb1a0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAA=>
+            MenuItem, 0x1099cb2e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Activity Monitor' <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x1099cb420, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Allocations & Leaks' <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAABAAAAAAAAAA==>
+            MenuItem, 0x1099cb560, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'File Activity' <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAACAAAAAAAAAA==>
+            MenuItem, 0x1099cb6a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'System Trace' <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAADAAAAAAAAAA==>
+            MenuItem, 0x1099cb7e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Time Profile Active Application' <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAAEAAAAAAAAAA==>
+            MenuItem, 0x1099cb920, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Time Profile App Under Mouse' <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAAFAAAAAAAAAA==>
+            MenuItem, 0x1099cba60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Time Profile Entire System' <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAAGAAAAAAAAAA==>
+            MenuItem, 0x1099cbba0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_processRequest:', title: 'Toggle Instruments Recording' <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAAHAAAAAAAAAA==>
+            MenuItem, 0x1099cbce0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_configureServicesMenu:', title: 'Services Settings…' <AX element pid: 15272, token: qDsAAAAAAABvY29jOwAAAAAAAAAIAAAAAAAAAA==>
+        MenuItem, 0x1099cbe20, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAAEAAAAAAAAAA==>
+        MenuItem, 0x1099cbf60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'hide:', title: 'Hide DungeonDescent' <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAAFAAAAAAAAAA==>
+        MenuItem, 0x1099cc0a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'hideOtherApplications:', title: 'Hide Others' <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAAGAAAAAAAAAA==>
+        MenuItem, 0x1099cc1e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'unhideAllApplications:', title: 'Show All', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAAHAAAAAAAAAA==>
+        MenuItem, 0x1099cc320, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAAIAAAAAAAAAA==>
+        MenuItem, 0x1099cc460, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'terminate:', title: 'Quit DungeonDescent' <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAAJAAAAAAAAAA==>
+        MenuItem, 0x1099cc5a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'NSAlternateQuitMenuItem', title: 'Quit and Keep Windows' <AX element pid: 15272, token: qDsAAAAAAABvY29jMwAAAAAAAAAKAAAAAAAAAA==>
+    MenuBarItem, 0x1099cc6e0, {{173.0, 0.0}, {40.0, 24.0}}, identifier: 'com.apple.menu.file', title: 'File' <AX element pid: 15272, token: qDsAAAAAAABvY29jAgAAAAAAAAACAAAAAAAAAA==>
+      Menu, 0x1099cc820, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAA=>
+        MenuItem, 0x1099cc960, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'performClose:', title: 'Close' <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAAAAAAAAAAAAA==>
+        MenuItem, 0x1099ccaa0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'closeAll:', title: 'Close All' <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAABAAAAAAAAAA==>
+        MenuItem, 0x1099ccbe0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAACAAAAAAAAAA==>
+        MenuItem, 0x1099ccd20, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAADAAAAAAAAAA==>
+        MenuItem, 0x1099cce60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'duplicate:', title: 'Duplicate', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAAEAAAAAAAAAA==>
+        MenuItem, 0x1099ccfa0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'move:', title: 'Move', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAAFAAAAAAAAAA==>
+        MenuItem, 0x1099cd0e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'rename:', title: 'Rename…', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAAGAAAAAAAAAA==>
+        MenuItem, 0x1099cd220, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'export:', title: 'Export As…', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAAHAAAAAAAAAA==>
+        MenuItem, 0x1099cd360, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNAAAAAAAAAAIAAAAAAAAAA==>
+    MenuBarItem, 0x1099cd4a0, {{213.0, 0.0}, {42.0, 24.0}}, identifier: 'com.apple.menu.edit', title: 'Edit' <AX element pid: 15272, token: qDsAAAAAAABvY29jAgAAAAAAAAADAAAAAAAAAA==>
+      Menu, 0x1099cd5e0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAA=>
+        MenuItem, 0x1099cd720, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'undo:', title: 'Undo', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAAAAAAAAAAAA==>
+        MenuItem, 0x1099cd860, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'redo:', title: 'Redo', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAABAAAAAAAAAA==>
+        MenuItem, 0x1099cd9a0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAACAAAAAAAAAA==>
+        MenuItem, 0x1099cdae0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'cut:', title: 'Cut', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAADAAAAAAAAAA==>
+        MenuItem, 0x1099cdc20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'copy:', title: 'Copy', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAEAAAAAAAAAA==>
+        MenuItem, 0x1099cdd60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'paste:', title: 'Paste', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAFAAAAAAAAAA==>
+        MenuItem, 0x1099cdea0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'pasteAndMatchStyle:', title: 'Paste and Match Style', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAGAAAAAAAAAA==>
+        MenuItem, 0x1099cdfe0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'delete:', title: 'Delete', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAHAAAAAAAAAA==>
+        MenuItem, 0x1099ce120, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'selectAll:', title: 'Select All', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAIAAAAAAAAAA==>
+        MenuItem, 0x1099ce260, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAJAAAAAAAAAA==>
+        MenuItem, 0x1099ce3a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'find:', title: 'Find…', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAKAAAAAAAAAA==>
+        MenuItem, 0x1099ce4e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'findAndReplace:', title: 'Find & Replace', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAALAAAAAAAAAA==>
+        MenuItem, 0x1099ce620, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'findNext:', title: 'Find Next', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAMAAAAAAAAAA==>
+        MenuItem, 0x1099ce760, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'findPrevious:', title: 'Find Previous', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAANAAAAAAAAAA==>
+        MenuItem, 0x1099ce8a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'useSelectionForFind:', title: 'Use Selection for Find', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAOAAAAAAAAAA==>
+        MenuItem, 0x1099ce9e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAPAAAAAAAAAA==>
+        MenuItem, 0x1099ceb20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.spelling', title: 'Spelling and Grammar' <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAQAAAAAAAAAA==>
+          Menu, 0x1099cec60, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jPAAAAAAAAAA=>
+            MenuItem, 0x1099ceda0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'showGuessPanel:', title: 'Show Spelling and Grammar' <AX element pid: 15272, token: qDsAAAAAAABvY29jPAAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x1099ceee0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'checkSpelling:', title: 'Check Document Now' <AX element pid: 15272, token: qDsAAAAAAABvY29jPAAAAAAAAAABAAAAAAAAAA==>
+            MenuItem, 0x1099cf020, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jPAAAAAAAAAACAAAAAAAAAA==>
+            MenuItem, 0x1099cf160, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleContinuousSpellChecking:', title: 'Check Spelling While Typing' <AX element pid: 15272, token: qDsAAAAAAABvY29jPAAAAAAAAAADAAAAAAAAAA==>
+            MenuItem, 0x1099cf2a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleGrammarChecking:', title: 'Check Grammar With Spelling' <AX element pid: 15272, token: qDsAAAAAAABvY29jPAAAAAAAAAAEAAAAAAAAAA==>
+            MenuItem, 0x1099cf3e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticSpellingCorrection:', title: 'Correct Spelling Automatically' <AX element pid: 15272, token: qDsAAAAAAABvY29jPAAAAAAAAAAFAAAAAAAAAA==>
+        MenuItem, 0x1099cf520, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.substitutions', title: 'Substitutions' <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAARAAAAAAAAAA==>
+          Menu, 0x1099cf660, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jPQAAAAAAAAA=>
+            MenuItem, 0x1099cf7a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'orderFrontSubstitutionsPanel:', title: 'Smart Substitutions', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jPQAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x1099cf8e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jPQAAAAAAAAABAAAAAAAAAA==>
+            MenuItem, 0x1099cfa20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleSmartInsertDelete:', title: 'Smart Copy/Paste', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jPQAAAAAAAAACAAAAAAAAAA==>
+            MenuItem, 0x1099cfb60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticQuoteSubstitution:', title: 'Smart Quotes' <AX element pid: 15272, token: qDsAAAAAAABvY29jPQAAAAAAAAADAAAAAAAAAA==>
+            MenuItem, 0x1099cfca0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticDashSubstitution:', title: 'Smart Dashes' <AX element pid: 15272, token: qDsAAAAAAABvY29jPQAAAAAAAAAEAAAAAAAAAA==>
+            MenuItem, 0x1099cfde0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticLinkDetection:', title: 'Smart Links', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jPQAAAAAAAAAFAAAAAAAAAA==>
+            MenuItem, 0x1099cff20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleAutomaticTextReplacement:', title: 'Text Replacement' <AX element pid: 15272, token: qDsAAAAAAABvY29jPQAAAAAAAAAGAAAAAAAAAA==>
+        MenuItem, 0x1099d0060, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.transformations', title: 'Transformations' <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAASAAAAAAAAAA==>
+          Menu, 0x1099d01a0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jPgAAAAAAAAA=>
+            MenuItem, 0x1099d02e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'uppercaseWord:', title: 'Make Upper Case', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jPgAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x1099d0420, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'lowercaseWord:', title: 'Make Lower Case', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jPgAAAAAAAAABAAAAAAAAAA==>
+            MenuItem, 0x1099d0560, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'capitalizeWord:', title: 'Capitalize', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jPgAAAAAAAAACAAAAAAAAAA==>
+        MenuItem, 0x1099d06a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.command.speech', title: 'Speech' <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAATAAAAAAAAAA==>
+          Menu, 0x1099d07e0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jPwAAAAAAAAA=>
+            MenuItem, 0x1099d0920, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'startSpeaking:', title: 'Start Speaking' <AX element pid: 15272, token: qDsAAAAAAABvY29jPwAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x1099d0a60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'stopSpeaking:', title: 'Stop Speaking', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jPwAAAAAAAAABAAAAAAAAAA==>
+        MenuItem, 0x1099d0ba0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAUAAAAAAAAAA==>
+        MenuItem, 0x1099d0ce0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_NSMenuItemAutoFillIdentifier', title: 'AutoFill' <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAVAAAAAAAAAA==>
+          Menu, 0x1099d0e20, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jQAAAAAAAAAA=>
+            MenuItem, 0x1099d0f60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_handleInsertFromContactsCommand:', title: 'Contact…', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQAAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x1099d10a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_handleInsertFromPasswordsCommand:', title: 'Passwords…', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQAAAAAAAAAABAAAAAAAAAA==>
+        MenuItem, 0x1099d11e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'startDictation:', title: 'Start Dictation…' <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAWAAAAAAAAAA==>
+        MenuItem, 0x1099d1320, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'orderFrontCharacterPalette:', title: 'Emoji & Symbols' <AX element pid: 15272, token: qDsAAAAAAABvY29jNQAAAAAAAAAXAAAAAAAAAA==>
+    MenuBarItem, 0x1099d1460, {{255.0, 0.0}, {61.0, 24.0}}, identifier: 'com.apple.menu.format', title: 'Format' <AX element pid: 15272, token: qDsAAAAAAABvY29jAgAAAAAAAAAEAAAAAAAAAA==>
+      Menu, 0x1099d15a0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jNgAAAAAAAAA=>
+        MenuItem, 0x1099d16e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.font', title: 'Font' <AX element pid: 15272, token: qDsAAAAAAABvY29jNgAAAAAAAAAAAAAAAAAAAA==>
+          Menu, 0x1099d1820, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAA=>
+            MenuItem, 0x109a7cfe0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'show_fonts', title: 'Show Fonts' <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x109a73470, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleBoldface:', title: 'Bold', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAABAAAAAAAAAA==>
+            MenuItem, 0x109a72670, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleItalics:', title: 'Italic', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAACAAAAAAAAAA==>
+            MenuItem, 0x109a73f20, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleUnderline:', title: 'Underline', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAADAAAAAAAAAA==>
+            MenuItem, 0x109a763e0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAAEAAAAAAAAAA==>
+            MenuItem, 0x109a782b0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'increaseSize:', title: 'Bigger', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAAFAAAAAAAAAA==>
+            MenuItem, 0x109a773e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'decreaseSize:', title: 'Smaller', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAAGAAAAAAAAAA==>
+            MenuItem, 0x109a12b50, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAAHAAAAAAAAAA==>
+            MenuItem, 0x109a12340, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'orderFrontColorPanel:', title: 'Show Colors' <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAAIAAAAAAAAAA==>
+            MenuItem, 0x109a26c20, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAAJAAAAAAAAAA==>
+            MenuItem, 0x109a14950, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'copyFont:', title: 'Copy Style', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAAKAAAAAAAAAA==>
+            MenuItem, 0x109a2ddc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'pasteFont:', title: 'Paste Style', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQQAAAAAAAAALAAAAAAAAAA==>
+        MenuItem, 0x109a10f80, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.text', title: 'Text' <AX element pid: 15272, token: qDsAAAAAAABvY29jNgAAAAAAAAABAAAAAAAAAA==>
+          Menu, 0x109a78e90, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jQgAAAAAAAAA=>
+            MenuItem, 0x109a77c70, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alignLeft:', title: 'Align Left', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQgAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x109a76fc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alignCenter:', title: 'Center', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQgAAAAAAAAABAAAAAAAAAA==>
+            MenuItem, 0x109a75da0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alignJustified:', title: 'Justify', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQgAAAAAAAAACAAAAAAAAAA==>
+            MenuItem, 0x109a75120, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alignRight:', title: 'Align Right', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQgAAAAAAAAADAAAAAAAAAA==>
+            MenuItem, 0x109a75540, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQgAAAAAAAAAEAAAAAAAAAA==>
+            MenuItem, 0x109a72030, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'com.apple.menu.writing-direction', title: 'Writing Direction' <AX element pid: 15272, token: qDsAAAAAAABvY29jQgAAAAAAAAAFAAAAAAAAAA==>
+              Menu, 0x109a2f430, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jRQAAAAAAAAA=>
+                MenuItem, 0x109a69d90, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'makeTextWritingDirectionNatural:', title: 'Default', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jRQAAAAAAAAAAAAAAAAAAAA==>
+                MenuItem, 0x109a68b70, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'makeTextWritingDirectionRightToLeft:', title: 'Right to Left', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jRQAAAAAAAAABAAAAAAAAAA==>
+                MenuItem, 0x109a67ec0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'makeTextWritingDirectionLeftToRight:', title: 'Left to Right', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jRQAAAAAAAAACAAAAAAAAAA==>
+    MenuBarItem, 0x109a66ca0, {{316.0, 0.0}, {48.0, 24.0}}, identifier: 'com.apple.menu.view', title: 'View' <AX element pid: 15272, token: qDsAAAAAAABvY29jAgAAAAAAAAAFAAAAAAAAAA==>
+      Menu, 0x109a655b0, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jNwAAAAAAAAA=>
+        MenuItem, 0x109a66410, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleToolbarShown:', title: 'Show Toolbar', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNwAAAAAAAAAAAAAAAAAAAA==>
+        MenuItem, 0x109a708e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'runToolbarCustomizationPalette:', title: 'Customize Toolbar…', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNwAAAAAAAAABAAAAAAAAAA==>
+        MenuItem, 0x109a704c0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNwAAAAAAAAACAAAAAAAAAA==>
+        MenuItem, 0x109a700a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleSidebar:', title: 'Show Sidebar', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jNwAAAAAAAAADAAAAAAAAAA==>
+        MenuItem, 0x109a6fa90, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'toggleFullScreen:', title: 'Enter Full Screen' <AX element pid: 15272, token: qDsAAAAAAABvY29jNwAAAAAAAAAEAAAAAAAAAA==>
+    MenuBarItem, 0x109a6e870, {{364.0, 0.0}, {67.0, 24.0}}, identifier: 'com.apple.menu.window', title: 'Window' <AX element pid: 15272, token: qDsAAAAAAABvY29jAgAAAAAAAAAGAAAAAAAAAA==>
+      Menu, 0x109a6e450, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAA=>
+        MenuItem, 0x109a6db90, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'performMiniaturize:', title: 'Minimize' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAAAAAAAAAAAA==>
+        MenuItem, 0x109a6cab0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'miniaturizeAll:', title: 'Minimize All' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAABAAAAAAAAAA==>
+        MenuItem, 0x109a6c690, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'performZoom:', title: 'Zoom' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAACAAAAAAAAAA==>
+        MenuItem, 0x109a6c270, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'zoomAll:', title: 'Zoom All' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAADAAAAAAAAAA==>
+        MenuItem, 0x109a6bc60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomFill:', title: 'Fill' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAEAAAAAAAAAA==>
+        MenuItem, 0x109a6aa40, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomCenter:', title: 'Center' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAFAAAAAAAAAA==>
+        MenuItem, 0x109a6a1b0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAGAAAAAAAAAA==>
+        MenuItem, 0x109a65ff0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Move & Resize' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAHAAAAAAAAAA==>
+          Menu, 0x109a28120, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAA=>
+            MenuItem, 0x109a27040, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Halves', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x109a0ef90, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomLeft:', title: 'Left' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAABAAAAAAAAAA==>
+            MenuItem, 0x109a12f70, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomRight:', title: 'Right' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAACAAAAAAAAAA==>
+            MenuItem, 0x109a28980, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTop:', title: 'Top' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAADAAAAAAAAAA==>
+            MenuItem, 0x109a28da0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottom:', title: 'Bottom' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAEAAAAAAAAAA==>
+            MenuItem, 0x109a0ab90, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAFAAAAAAAAAA==>
+            MenuItem, 0x109a3b970, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Quarters', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAGAAAAAAAAAA==>
+            MenuItem, 0x109a202f0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTopLeft:', title: 'Top Left' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAHAAAAAAAAAA==>
+            MenuItem, 0x109a05410, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTopRight:', title: 'Top Right' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAIAAAAAAAAAA==>
+            MenuItem, 0x109a18310, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottomLeft:', title: 'Bottom Left' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAJAAAAAAAAAA==>
+            MenuItem, 0x109a04080, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottomRight:', title: 'Bottom Right' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAKAAAAAAAAAA==>
+            MenuItem, 0x109a39280, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAALAAAAAAAAAA==>
+            MenuItem, 0x109a08550, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Arrange', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAMAAAAAAAAAA==>
+            MenuItem, 0x109a29fc0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomLeftAndRight:', title: 'Left & Right' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAANAAAAAAAAAA==>
+            MenuItem, 0x109a0c990, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomLeftThreeUp:', title: 'Left & Quarters' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAOAAAAAAAAAA==>
+            MenuItem, 0x109a2c4a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomRightAndLeft:', title: 'Right & Left' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAPAAAAAAAAAA==>
+            MenuItem, 0x12a8fd550, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomRightThreeUp:', title: 'Right & Quarters' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAQAAAAAAAAAA==>
+            MenuItem, 0x109a7fb60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTopAndBottom:', title: 'Top & Bottom' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAARAAAAAAAAAA==>
+            MenuItem, 0x109a7f690, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomTopThreeUp:', title: 'Top & Quarters' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAASAAAAAAAAAA==>
+            MenuItem, 0x109a7f7d0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottomAndTop:', title: 'Bottom & Top' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAATAAAAAAAAAA==>
+            MenuItem, 0x109a7fdb0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomBottomThreeUp:', title: 'Bottom & Quarters' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAUAAAAAAAAAA==>
+            MenuItem, 0x109a7fef0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomQuarters:', title: 'Quarters' <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAVAAAAAAAAAA==>
+            MenuItem, 0x109a80030, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAWAAAAAAAAAA==>
+            MenuItem, 0x109a80170, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_zoomUntile:', title: 'Return to Previous Size', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jQwAAAAAAAAAXAAAAAAAAAA==>
+        MenuItem, 0x109a802b0, {{0.0, 768.0}, {0.0, 0.0}}, title: 'Full Screen Tile' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAIAAAAAAAAAA==>
+          Menu, 0x1099d1960, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jRwAAAAAAAAA=>
+            MenuItem, 0x1099d1aa0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_tileLeft:', title: 'Left of Screen' <AX element pid: 15272, token: qDsAAAAAAABvY29jRwAAAAAAAAAAAAAAAAAAAA==>
+            MenuItem, 0x1099d1be0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_tileRight:', title: 'Right of Screen' <AX element pid: 15272, token: qDsAAAAAAABvY29jRwAAAAAAAAABAAAAAAAAAA==>
+        MenuItem, 0x1099d1d20, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAJAAAAAAAAAA==>
+        MenuItem, 0x1099d1e60, {{0.0, 768.0}, {0.0, 0.0}}, identifier: '_removeWindowFromStageManagerSet:', title: 'Remove Window from Set', Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAKAAAAAAAAAA==>
+        MenuItem, 0x1099d1fa0, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAALAAAAAAAAAA==>
+        MenuItem, 0x1099d20e0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'arrangeInFront:', title: 'Bring All to Front' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAMAAAAAAAAAA==>
+        MenuItem, 0x1099d2220, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'alternateArrangeInFront:', title: 'Arrange in Front' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAANAAAAAAAAAA==>
+        MenuItem, 0x1099d2360, {{0.0, 768.0}, {0.0, 0.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAOAAAAAAAAAA==>
+        MenuItem, 0x1099d24a0, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'makeKeyAndOrderFront:', title: 'Dungeon Descent' <AX element pid: 15272, token: qDsAAAAAAABvY29jOAAAAAAAAAAPAAAAAAAAAA==>
+    MenuBarItem, 0x1099d25e0, {{431.0, 0.0}, {46.0, 24.0}}, identifier: 'com.apple.menu.help', title: 'Help' <AX element pid: 15272, token: qDsAAAAAAABvY29jAgAAAAAAAAAHAAAAAAAAAA==>
+      Menu, 0x1099d2720, {{0.0, 768.0}, {0.0, 0.0}} <AX element pid: 15272, token: qDsAAAAAAABvY29jOQAAAAAAAAA=>
+        MenuItem, 0x1099d2860, {{0.0, 768.0}, {0.0, 0.0}}, identifier: 'showHelp:', title: 'DungeonDescent Help' <AX element pid: 15272, token: qDsAAAAAAABvY29jOQAAAAAAAAAAAAAAAAAAAA==>
+  TouchBar, 0x1099d29a0, {{80.0, 0.0}, {685.0, 30.0}}, Disabled <AX element pid: 15272, token: qDsAAAAAAABvY29jLAAAAAAAAAA=>
