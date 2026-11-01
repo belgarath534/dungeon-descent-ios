@@ -1,0 +1,9 @@
+Thanks for testing Dungeon Descent 11.8!
+
+Please try:
+• Endless Descent: sign in, start a run, then lock your phone. The Lock Screen and Dynamic Island should update every fight. Open the game again and check it shows the same floor.
+• Apple Watch app: install it from the iPhone's Watch app (Available Apps). Pick a character, start a run, use a potion and end the run from your wrist.
+• The nine new events and the parts of the game you usually play.
+• VoiceOver: tell us anything that reads wrong, is missing a label or is hard to reach.
+
+Report problems with a screenshot from TestFlight, or in the Discord.

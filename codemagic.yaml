@@ -595,3 +595,45 @@ workflows:
             if [ -f "$CM_BUILD_DIR/.installer_cert_id" ]; then
               app-store-connect certificates delete "$(cat "$CM_BUILD_DIR/.installer_cert_id")" --ignore-not-found || true
             fi
+
+  testflight-notes:
+    name: TestFlight "What to Test" notes (iPhone, Mac, Vision Pro)
+    # Puts store/en-US/testflight/<PLATFORM>.txt into the newest 11.8 build of
+    # each platform. Start it by hand from Codemagic.
+    max_build_duration: 15
+    instance_type: mac_mini_m4
+    integrations:
+      app_store_connect: Accessible Backrooms
+    scripts:
+      - name: Set What to Test
+        script: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+          def asc(*args):
+              r = subprocess.run(["app-store-connect", *args, "--json"], capture_output=True, text=True)
+              if r.returncode != 0:
+                  raise RuntimeError(r.stderr.strip() or r.stdout.strip())
+              return json.loads(r.stdout or "null") or []
+          app = asc("apps", "list", "--bundle-id-identifier", "com.dungeon.descent", "--strict-match-identifier")[0]["id"]
+          def newest(builds):
+              return sorted(builds, key=lambda b: b["attributes"].get("uploadedDate") or "", reverse=True)
+          base = ["apps", "builds", app, "--pre-release-version", "11.8", "--processing-state", "VALID"]
+          picked = {}
+          for p in ("IOS", "MAC_OS"):
+              b = newest(asc(*base, "--platform", p))
+              if b: picked[p] = b[0]
+          seen = {b["id"] for b in picked.values()}
+          everything = newest(asc(*base))
+          ios_mac = {b["id"] for p in ("IOS", "MAC_OS") for b in asc(*base, "--platform", p)}
+          rest = [b for b in everything if b["id"] not in ios_mac]
+          if rest: picked["VISION_OS"] = rest[0]
+          failed = False
+          for p, b in picked.items():
+              text = open(f"store/en-US/testflight/{p}.txt").read().strip()
+              try:
+                  asc("beta-build-localizations", "create", b["id"], "--locale", "en-US", "--whats-new", text)
+                  print(f'{p}: build {b["attributes"].get("version")} — What to Test set')
+              except RuntimeError as e:
+                  failed = True; print(f"{p}: couldn't set it: {e}")
+          sys.exit(1 if failed else 0)
+          PY

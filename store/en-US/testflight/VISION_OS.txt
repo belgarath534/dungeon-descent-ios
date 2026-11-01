@@ -1,0 +1,9 @@
+Thanks for testing Dungeon Descent on Apple Vision Pro!
+
+Please try:
+• Moving around the menus and a dungeon run with look and pinch, and with VoiceOver.
+• Whether text is easy to read and the window is a comfortable size.
+• Sound: music, effects and the dungeon ambience.
+• Signing in with Apple or email so your cloud save comes with you.
+
+Report problems with a screenshot from TestFlight, or in the Discord.
