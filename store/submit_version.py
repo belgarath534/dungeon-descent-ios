@@ -136,12 +136,30 @@ if not submit:
     sys.exit(0)
 
 # 3. Send to App Review
-sub = call("POST", "/reviewSubmissions", json={"data": {"type": "reviewSubmissions",
+# Screenshots that were just uploaded need a few minutes of processing first.
+for _ in range(30):
+    pending = []
+    for st in sets:
+        for shot in call("GET", f"/appScreenshotSets/{st['id']}/appScreenshots")["data"]:
+            state = ((shot["attributes"].get("assetDeliveryState") or {}).get("state"))
+            if state != "COMPLETE":
+                pending.append(state)
+    if not pending:
+        break
+    print(f"Waiting for Apple to process {len(pending)} screenshot(s)…")
+    time.sleep(30)
+
+# Reuse a submission left open by an earlier try, else start one.
+open_subs = call("GET", "/reviewSubmissions", params={"filter[app]": app, "filter[platform]": platform,
+                 "filter[state]": "READY_FOR_REVIEW"})["data"]
+sub = open_subs[0] if open_subs else call("POST", "/reviewSubmissions", json={"data": {"type": "reviewSubmissions",
            "attributes": {"platform": platform},
            "relationships": {"app": {"data": {"type": "apps", "id": app}}}}})["data"]
-call("POST", "/reviewSubmissionItems", json={"data": {"type": "reviewSubmissionItems", "relationships": {
-     "reviewSubmission": {"data": {"type": "reviewSubmissions", "id": sub["id"]}},
-     "appStoreVersion": {"data": {"type": "appStoreVersions", "id": target["id"]}}}}})
+items = call("GET", f"/reviewSubmissions/{sub['id']}/items")["data"]
+if not items:
+    call("POST", "/reviewSubmissionItems", json={"data": {"type": "reviewSubmissionItems", "relationships": {
+         "reviewSubmission": {"data": {"type": "reviewSubmissions", "id": sub["id"]}},
+         "appStoreVersion": {"data": {"type": "appStoreVersions", "id": target["id"]}}}}})
 call("PATCH", f"/reviewSubmissions/{sub['id']}", json={"data": {"type": "reviewSubmissions", "id": sub["id"],
      "attributes": {"submitted": True}}})
 print(f"Submitted {platform} {version} (build {build['attributes']['version']}) for App Review.")
