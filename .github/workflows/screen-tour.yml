@@ -147,6 +147,22 @@ jobs:
           echo "──── Accessibility audit ────"
           cat "$OUT"/accessibility-audit* 2>/dev/null || echo "(none)"
 
+      - name: Vision Pro screenshots from the simulator
+        # The test tool's screenshots come out blank on Apple Vision Pro, so
+        # the simulator itself takes them, with the game opened on each screen.
+        if: always() && matrix.device == 'vision' && env.SIM_UDID != ''
+        working-directory: swift/App
+        run: |
+          OUT=results/vision; mkdir -p "$OUT"
+          for S in menu charlist afk events whatsnew help; do
+            xcrun simctl terminate "$SIM_UDID" com.dungeon.descent 2>/dev/null || true
+            if [ "$S" = menu ]; then xcrun simctl launch "$SIM_UDID" com.dungeon.descent
+            else xcrun simctl launch "$SIM_UDID" com.dungeon.descent -startScreen "$S"; fi
+            sleep 12
+            xcrun simctl io "$SIM_UDID" screenshot "$OUT/store-$S.png" || true
+          done
+          ls -la "$OUT"
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:

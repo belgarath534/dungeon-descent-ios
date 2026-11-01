@@ -28,6 +28,14 @@ struct DungeonDescentApp: App {
                     CloudAccount.shared.start(game: game)
                     // An Endless Descent run left going picks up where it is.
                     if AFKModel.isRunning(game.store) { router.goTo(.afk) }
+                    // App Store screenshots from the simulator: -startScreen <name>
+                    // opens that screen (simctl can't tap through the menu).
+                    let args = ProcessInfo.processInfo.arguments
+                    if let i = args.firstIndex(of: "-startScreen"), i + 1 < args.count {
+                        let screens: [String: Router.Screen] = ["charlist": .charlist, "afk": .afk, "events": .events,
+                                                                "help": .help, "whatsnew": .whatsnew, "bestiary": .bestiary]
+                        if let s = screens[args[i + 1]] { router.goTo(s) }
+                    }
                     // Reminders stay current (the comeback one moves 48 hours out).
                     Task { _ = await GameNotifications.apply(game.store, ask: false) }
                 }
