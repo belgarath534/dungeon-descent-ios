@@ -36,7 +36,7 @@ targets:
     # One app for iPhone, iPad and, natively, Apple Vision Pro. The watch app
     # and the Live Activity are iPhone-only (destinationFilters below).
     platform: auto
-    supportedDestinations: [iOS, visionOS]
+    supportedDestinations: [iOS, visionOS, macCatalyst]
     sources:
       - path: DungeonDescent
       - path: Shared
@@ -140,6 +140,11 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         # Apple Vision Pro's layered icon (back: the app icon; front, middle: clear).
         "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xros*]": AppIconVision
+        # The Mac version is the same app on the App Store: same bundle ID,
+        # its own sandboxed entitlements, macOS 13 and later.
+        DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER: NO
+        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": DungeonDescent/DungeonDescent-Mac.entitlements
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
         SWIFT_VERSION: "5.0"
         CODE_SIGN_STYLE: Automatic
   # The Live Activity, same bundle ID and App Store profile as the web
@@ -199,7 +204,7 @@ targets:
   DungeonDescentUITests:
     type: bundle.ui-testing
     platform: auto
-    supportedDestinations: [iOS, visionOS]
+    supportedDestinations: [iOS, visionOS, macCatalyst]
     sources:
       - path: UITests
     dependencies:
@@ -210,6 +215,7 @@ targets:
         TEST_TARGET_NAME: DungeonDescent
         IPHONEOS_DEPLOYMENT_TARGET: "16.0"
         XROS_DEPLOYMENT_TARGET: "1.0"
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
         GENERATE_INFOPLIST_FILE: YES
         TARGETED_DEVICE_FAMILY: "1,2"
         SWIFT_VERSION: "5.0"

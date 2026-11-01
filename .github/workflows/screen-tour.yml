@@ -51,26 +51,6 @@ jobs:
         working-directory: swift/App
         run: |
           brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
-          if [ "${{ matrix.device }}" = "mac" ]; then
-            # The tour's own copy only: let the app and its tests build for
-            # Mac Catalyst. The App Store build never sees this.
-            python3 - <<'PY'
-          p = "project.yml"
-          s = open(p).read()
-          for anchor in ("        PRODUCT_NAME: DungeonDescent\n", "        TEST_TARGET_NAME: DungeonDescent\n"):
-              assert s.count(anchor) == 1, anchor
-              s = s.replace(anchor, anchor + "        SUPPORTS_MACCATALYST: YES\n        MACOSX_DEPLOYMENT_TARGET: \"13.0\"\n")
-          # No watch app and no Live Activity in a Mac build.
-          for dep in ("      - target: DungeonWatch\n        destinationFilters: [iOS]\n",
-                      "      - target: DDLiveActivity\n        destinationFilters: [iOS]\n"):
-              assert s.count(dep) == 1, dep
-              s = s.replace(dep, "")
-          dests = "    supportedDestinations: [iOS, visionOS]\n"
-          assert s.count(dests) >= 1
-          s = s.replace(dests, "    supportedDestinations: [iOS, visionOS, macCatalyst]\n")
-          open(p, "w").write(s)
-          PY
-          fi
           xcodegen generate
 
       - name: Choose where it runs
@@ -109,12 +89,10 @@ jobs:
             # Firestore has no ready-made Vision Pro library; build it from source.
             echo "FIREBASE_SOURCE_FIRESTORE=1" >> "$GITHUB_ENV"
           else
-            # Apple doesn't run UI tests on "Designed for iPad", so the tour
-            # builds the same app as Mac Catalyst (only here, not for the App
-            # Store), signed to run on this Mac only, without the App Store
-            # entitlements (iCloud, Game Center), which need Apple's profile.
+            # The Mac version (Mac Catalyst), signed to run on this Mac only,
+            # without the App Store entitlements, which need Apple's profile.
             echo "destination=platform=macOS,variant=Mac Catalyst" >> "$GITHUB_OUTPUT"
-            echo "signing=SUPPORTS_MACCATALYST=YES CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER= CODE_SIGN_ENTITLEMENTS=" >> "$GITHUB_OUTPUT"
+            echo "signing=CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER= CODE_SIGN_ENTITLEMENTS=" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run the screen tour
