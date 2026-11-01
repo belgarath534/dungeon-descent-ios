@@ -1,0 +1,400 @@
+2026-11-01 08:04:56.198 A  DungeonDescent[45405:52775] (PlugInKit) continuous-discovery
+2026-11-01 08:04:56.198 Df DungeonDescent[45405:52775] [com.apple.PlugInKit:discovery] <PKDiscoveryDriver:0x600002650ea0> created discovery driver
+2026-11-01 08:04:56.198 Df DungeonDescent[45405:52775] [com.apple.PlugInKit:discovery] [d 9258162D-6030-48A2-AE57-074FF122303E] <PKHost:0x6000017b7540> Beginning discovery for flags: 0, point: com.apple.AudioUnit
+2026-11-01 08:04:56.217 Df DungeonDescent[45405:55828] [com.apple.PlugInKit:discovery] [d 9258162D-6030-48A2-AE57-074FF122303E] <PKHost:0x6000017b7540> Completed discovery. Final # of matches: 0
+2026-11-01 08:04:56.218 Df DungeonDescent[45405:55828] [com.apple.PlugInKit:discovery] <PKDiscoveryDriver:0x600002650ea0> delivering update to host (0 plugins)
+2026-11-01 08:04:56.218 A  DungeonDescent[45405:55828] (ExtensionFoundation) discovering extensions
+2026-11-01 08:04:56.218 Df DungeonDescent[45405:55828] [com.apple.extensionkit:NSExtension] discovered extensions: attributes {
+    "LS:ExtensionPlatforms" =     (
+        7,
+        12
+    );
+    NSExtensionPointName = "com.apple.AudioUnit";
+}, extensionSet {(
+)}
+2026-11-01 08:04:56.218 A  DungeonDescent[45405:52775] (PlugInKit) continuous-discovery
+2026-11-01 08:04:56.218 Df DungeonDescent[45405:52775] [com.apple.PlugInKit:discovery] <PKDiscoveryDriver:0x600002645200> created discovery driver
+2026-11-01 08:04:56.218 Df DungeonDescent[45405:52775] [com.apple.PlugInKit:discovery] [d 408F354F-5709-4767-A9B1-80EE6A931235] <PKHost:0x6000017b7540> Beginning discovery for flags: 0, point: com.apple.AudioUnit-UI
+2026-11-01 08:04:56.218 Df DungeonDescent[45405:55828] [com.apple.PlugInKit:discovery] <PKDiscoveryDriver:0x600002650ea0> installing watchers for continuous discovery
+2026-11-01 08:04:56.221 Df DungeonDescent[45405:55827] [com.apple.PlugInKit:discovery] [d 408F354F-5709-4767-A9B1-80EE6A931235] <PKHost:0x6000017b7540> Completed discovery. Final # of matches: 0
+2026-11-01 08:04:56.221 Df DungeonDescent[45405:55827] [com.apple.PlugInKit:discovery] <PKDiscoveryDriver:0x600002645200> delivering update to host (0 plugins)
+2026-11-01 08:04:56.221 A  DungeonDescent[45405:55827] (ExtensionFoundation) discovering extensions
+2026-11-01 08:04:56.222 Df DungeonDescent[45405:55827] [com.apple.extensionkit:NSExtension] discovered extensions: attributes {
+    "LS:ExtensionPlatforms" =     (
+        7,
+        12
+    );
+    NSExtensionPointName = "com.apple.AudioUnit-UI";
+}, extensionSet {(
+)}
+2026-11-01 08:04:56.222 A  DungeonDescent[45405:52775] (PlugInKit) continuous-discovery
+2026-11-01 08:04:56.222 Df DungeonDescent[45405:52775] [com.apple.PlugInKit:discovery] <PKDiscoveryDriver:0x600002653480> created discovery driver
+2026-11-01 08:04:56.223 Df DungeonDescent[45405:52775] [com.apple.PlugInKit:discovery] [d 6C746D11-D42E-4CCB-814F-3E9DB89A6231] <PKHost:0x6000017b7540> Beginning discovery for flags: 0, point: com.apple.AudioUnit-Speech
+2026-11-01 08:04:56.223 Df DungeonDescent[45405:55827] [com.apple.PlugInKit:discovery] <PKDiscoveryDriver:0x600002645200> installing watchers for continuous discovery
+2026-11-01 08:04:56.223 Df DungeonDescent[45405:55828] [com.apple.launchservices:appinstallation] registering for distributed notification com.apple.LaunchServices.pluginsregistered in this process
+2026-11-01 08:04:56.223 Df DungeonDescent[45405:55828] [com.apple.xpc:connection] [0x10199e560] activating connection: mach=true listener=false peer=false name=com.apple.distributed_notifications@1v3
+2026-11-01 08:04:56.223 Df DungeonDescent[45405:55828] [com.apple.launchservices:appinstallation] registering for distributed notification com.apple.LaunchServices.pluginsunregistered in this process
+2026-11-01 08:04:56.230 Df DungeonDescent[45405:55828] [com.apple.launchservices:progress] Establishing xpc connection to lsd
+2026-11-01 08:04:56.231 Df DungeonDescent[45405:55828] [com.apple.xpc:connection] [0x1018b55b0] activating connection: mach=true listener=false peer=false name=com.apple.lsd.xpc
+2026-11-01 08:04:56.231 Df DungeonDescent[45405:557ae] [com.apple.PlugInKit:discovery] [d 6C746D11-D42E-4CCB-814F-3E9DB89A6231] <PKHost:0x6000017b7540> Completed discovery. Final # of matches: 4
+2026-11-01 08:04:56.232 Df DungeonDescent[45405:557ae] [com.apple.PlugInKit:discovery] <PKDiscoveryDriver:0x600002653480> delivering update to host (4 plugins)
+2026-11-01 08:04:56.233 A  DungeonDescent[45405:557ae] (ExtensionFoundation) discovering extensions
+2026-11-01 08:04:56.242 Df DungeonDescent[45405:5577a] [com.apple.launchservices:progress] Received LSWorkspaceObserverPing, xpc connection established
+2026-11-01 08:04:56.244 Df DungeonDescent[45405:557ae] [com.apple.xpc:connection] [0x1018b51f0] activating connection: mach=true listener=false peer=false name=com.apple.lsd.mapdb
+2026-11-01 08:04:56.261 Df DungeonDescent[45405:557ae] [com.apple.extensionkit:NSExtension] discovered extensions: attributes {
+    "LS:ExtensionPlatforms" =     (
+        7,
+        12
+    );
+    NSExtensionPointName = "com.apple.AudioUnit-Speech";
+}, extensionSet {(
+    <EXConcreteExtension: 0x6000039fcdd0> {id = com.apple.texttospeech.SiriAUSP},
+    <EXConcreteExtension: 0x6000039f70c0> {id = com.apple.ax.KonaTTSSupport.KonaSynthesizer},
+    <EXConcreteExtension: 0x6000039fcea0> {id = com.apple.speech.MacinTalkFramework.MacinTalkAUSP},
+    <EXConcreteExtension: 0x6000039f6ff0> {id = com.apple.ax.MauiTTSSupport.MauiAUSP}
+)}
+2026-11-01 08:04:56.262 Df DungeonDescent[45405:557ae] [com.apple.PlugInKit:discovery] <PKDiscoveryDriver:0x600002653480> installing watchers for continuous discovery
+2026-11-01 08:04:56.281 Df DungeonDescent[45405:52775] [com.apple.coreaudio:ddagg]        AggregateDevice.mm:1008  PrimarySessionActiveWithInputEnabled 0 -> 0
+2026-11-01 08:04:56.289 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AudioConverter]        ACv2Workarounds.mm:51    com.dungeon.descent: fix84702776_86723525_86479548_89800354_SinglePacketDesc: false
+2026-11-01 08:04:56.293 Df DungeonDescent[45405:52775] [com.apple.coreaudio:ac]          ACMP3Decoder.cpp:153   (0x10223a240) Input format:  2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame
+2026-11-01 08:04:56.294 Df DungeonDescent[45405:52775] [com.apple.coreaudio:ac]          ACMP3Decoder.cpp:156   (0x10223a240) Output format:  2 ch,  44100 Hz, Int16, interleaved
+2026-11-01 08:04:56.297 Df DungeonDescent[45405:52775] [com.apple.audio.caulk:alloc] Registered notify signal com.apple.caulk.alloc.audiodump (0)
+2026-11-01 08:04:56.298 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AudioConverter]        AudioConverter.cpp:1067  Created a new in process converter -> 0x600000cd9aa0, from  2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame to  2 ch,  44100 Hz, Float32, deinterleaved
+2026-11-01 08:04:56.298 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:487   AudioQueueObject: aq@0x10321f400: New output; format  2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame (passthrough? no)
+2026-11-01 08:04:56.302 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:aqme]           AQMixEngine.cpp:733   AQMEDevice (0x101cc6bc8) has neither a defaultOutStreamClient nor a defaultInStreamClient
+2026-11-01 08:04:56.306 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:EnhanceDialogueProcessor] EnhanceDialogueProcessor.cpp:226   EnhanceDialogueProcessor() - Product does not support Enhance Dialogue
+2026-11-01 08:04:56.306 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:EnhanceDialogueProcessor] EnhanceDialogueProcessor.cpp:226   EnhanceDialogueProcessor() - Product does not support Enhance Dialogue
+2026-11-01 08:04:56.306 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AudioConverter]        AudioConverter.cpp:1067  Created a new in process converter -> 0x600000cd33c0, from  2 ch,  48000 Hz, Float32, deinterleaved to  2 ch,  48000 Hz, Float32, interleaved
+2026-11-01 08:04:56.316 Df DungeonDescent[45405:55827] [com.apple.SpatialAudioServices:Default] <RCSXPCClient: 0x60000264e280, status=0>: init SAS XPC client
+2026-11-01 08:04:56.317 Df DungeonDescent[45405:55827] [com.apple.SpatialAudioServices:Default] <RCSXPCClient: 0x60000264e280, status=0>: establish connection for SAS XPC client
+2026-11-01 08:04:56.319 Df DungeonDescent[45405:55827] [com.apple.xpc:connection] [0x1018b67d0] activating connection: mach=true listener=false peer=false name=com.apple.roomcongruenceservice
+2026-11-01 08:04:56.319 Df DungeonDescent[45405:55827] [com.apple.xpc:connection] [0x1018b67d0] failed to do a bootstrap look-up: xpc_error=[3: No such process]
+2026-11-01 08:04:56.319 Df DungeonDescent[45405:55827] [com.apple.xpc:connection] [0x1018b67d0] invalidated after a failed init
+2026-11-01 08:04:56.321 E  DungeonDescent[45405:557ae] [com.apple.coreaudio:aqme]  SpatialExperienceHost.mm:200   SpatialExperienceHost@0x60000351e1b0 (sessionID 0x0): unable to configure room congruence subscriber with error:Error Domain=SpatialAudioServicesErrorDomain Code=2020631397 "xpc error" UserInfo={NSLocalizedDescription=xpc error}
+2026-11-01 08:04:56.351 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|AUSpatialMixerV2] Constructing
+2026-11-01 08:04:56.396 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|OutputElement|SetStreamFormat] Setting output stream format:  2 ch,  44100 Hz, Float32, deinterleaved
+2026-11-01 08:04:56.400 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|AUSpatialMixerV2] Constructed
+2026-11-01 08:04:56.405 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|SetBusCount] Setting input bus count = 1
+2026-11-01 08:04:56.414 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InputElement #0|SetStreamFormat] Setting stream format:  2 ch,  48000 Hz, Float32, deinterleaved
+2026-11-01 08:04:56.417 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InputElement #0|SetStreamFormat] Number of channels in stream format changed
+2026-11-01 08:04:56.418 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InputElement #0|SetStreamFormat] Setting default audio channel layout tag = Stereo for 2 channels
+2026-11-01 08:04:56.419 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=0, element=0): output type = 1
+2026-11-01 08:04:56.420 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=0, element=0): only frequency domain filtering = true
+2026-11-01 08:04:56.421 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=1, element=0): spatialization algorithm = 7
+2026-11-01 08:04:56.421 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|OutputElement|SetStreamFormat] Setting output stream format:  2 ch,  48000 Hz, Float32, deinterleaved
+2026-11-01 08:04:56.421 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|SetAudioChannelLayout] [OutputElement] Setting audio channel layout Stereo
+2026-11-01 08:04:56.421 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|OutputElement|SetFullLayout] Current output audio channel layout is Stereo
+2026-11-01 08:04:56.426 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:SpatialMgr] SpatializationManager.cpp:1418  Loaded preset file /Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Audio/Tunings/Generic/AU/aumx-3dem-appl-headphone-general-stereo.aupreset
+2026-11-01 08:04:56.426 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:SpatialMgr] SpatializationManager.cpp:1672  Retrieving preset file aumx-3dem-appl-headphone-general-stereo.aupreset: 0x101cc7890
+2026-11-01 08:04:56.426 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|RestoreState] started
+2026-11-01 08:04:56.428 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=0, element=0): optional feature support dictionary = {
+    NearFieldHOA = 0;
+    SourceDiffuse = 0;
+    SourceDirectivity = 0;
+    SourceDivergence = 0;
+    SourceExtent = 0;
+}
+2026-11-01 08:04:56.429 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=0, element=0): uses headphone post-processing reverb = true
+2026-11-01 08:04:56.430 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=0, element=0): room congruence tuning dictionary = {
+    alpha = 1;
+    beta = 5;
+    exp = "0.01";
+    isRoomCongruenceEnabled = 1;
+    isWarpingEnabled = 1;
+    k = "0.17";
+    libraryRoomIr = 2;
+    lowerReverbLevelLimit = "-16";
+    lowerVolumeLimit = 300;
+    upperVolumeLimit = 1000;
+    useSpectralMatching = 0;
+}
+2026-11-01 08:04:56.431 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=0, element=0): custom post-processing early reflection IR CString = /Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Audio/Tunings/IRs/Generic/BRIR_Movie_200.ir
+2026-11-01 08:04:56.437 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=0, element=0): HRTF type = 2
+2026-11-01 08:04:56.437 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=0, element=0): custom post-processing late reverb IR CString = /Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Audio/Tunings/IRs/Generic/Reverb_Movie_200.ir
+2026-11-01 08:04:56.444 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=0, element=0): distance parameters = ReferenceDistance = 1.000000, MaxDistance = 1000.000000, MaxAttenuation = 46.500000
+2026-11-01 08:04:56.445 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=2, element=0): default audio channel layout tag = 6619138
+2026-11-01 08:04:56.445 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|OutputElement|SetFullLayout] Current output audio channel layout is Stereo
+2026-11-01 08:04:56.446 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=1, element=0): rendering flags = 4
+2026-11-01 08:04:56.446 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=1, element=0): default audio channel layout tag = 65536
+2026-11-01 08:04:56.447 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=1, element=0): enable reverb send decorrelation filters = true
+2026-11-01 08:04:56.447 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|setProperty] (scope=1, element=0): source mode = 3
+2026-11-01 08:04:56.448 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|SetProperty] TuningWarperParameters = <CFArray 0x600000cea8e0 [0x1e5af4160]>{type = immutable, count = 0, values = ()}
+2026-11-01 08:04:56.449 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|RestoreState] finished
+2026-11-01 08:04:56.451 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:aqme]        MEMixerChannel.cpp:2195  client <CA_UISoundClientBase@0x10199ed60>: using SpatialExperienceHost 0x600000020890 with mIsInitialized=0 and AU=0x101cc6e20
+2026-11-01 08:04:56.451 Df DungeonDescent[45405:557ae] [com.apple.coreaudio:aqme]        MEMixerChannel.cpp:2195  client <CA_UISoundClientBase@0x10199ed60>: using SpatialExperienceHost 0x600000020890 with mIsInitialized=0 and AU=0x101cc6e20
+2026-11-01 08:04:56.451 E  DungeonDescent[45405:557ae] (AudioToolbox)      CA_UISoundClient.cpp:437   Got error -4 attempting to SetIntendedSpatialAudioExperience
+2026-11-01 08:04:56.451 Df DungeonDescent[45405:55827] [com.apple.SpatialAudioServices:Default] <RCSXPCClient: 0x600002665620, status=0>: init SAS XPC client
+2026-11-01 08:04:56.452 Df DungeonDescent[45405:55827] [com.apple.SpatialAudioServices:Default] <RCSXPCClient: 0x600002665620, status=0>: establish connection for SAS XPC client
+2026-11-01 08:04:56.452 Df DungeonDescent[45405:55827] [com.apple.xpc:connection] [0x1018b67d0] activating connection: mach=true listener=false peer=false name=com.apple.roomcongruenceservice
+2026-11-01 08:04:56.453 Df DungeonDescent[45405:55827] [com.apple.xpc:connection] [0x1018b67d0] failed to do a bootstrap look-up: xpc_error=[3: No such process]
+2026-11-01 08:04:56.453 Df DungeonDescent[45405:55827] [com.apple.xpc:connection] [0x1018b67d0] invalidated after a failed init
+2026-11-01 08:04:56.453 E  DungeonDescent[45405:52775] [com.apple.coreaudio:aqme]  SpatialExperienceHost.mm:200   SpatialExperienceHost@0x60000351f7b0 (sessionID 0x0): unable to configure room congruence subscriber with error:Error Domain=SpatialAudioServicesErrorDomain Code=2020631397 "xpc error" UserInfo={NSLocalizedDescription=xpc error}
+2026-11-01 08:04:56.455 Df DungeonDescent[45405:55828] [com.apple.coreaudio:SpatialMgr] SpatializationManager.cpp:1459  Could not load preset file, invalid model/product name!
+2026-11-01 08:04:56.455 Df DungeonDescent[45405:55828] [com.apple.coreaudio:aqme]        MEMixerChannel.cpp:3254  2-channel audio content is NOT eligible for spatialization
+2026-11-01 08:04:56.455 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|SetBusCount] Setting input bus count = 1 (not changed)
+2026-11-01 08:04:56.456 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|SetAudioChannelLayout] [OutputElement] Setting audio channel layout Stereo
+2026-11-01 08:04:56.456 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|OutputElement|SetFullLayout] Current output audio channel layout is Stereo
+2026-11-01 08:04:56.456 Df DungeonDescent[45405:55828] [com.apple.coreaudio:SpatialMgr] SpatializationManager.cpp:1672  Retrieving preset file aumx-3dem-appl-headphone-general-stereo.aupreset: 0x101cc7890
+2026-11-01 08:04:56.456 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|RestoreState] repeated call, suppressing logs for properties that do not change
+2026-11-01 08:04:56.457 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|SetProperty] TuningWarperParameters = <CFArray 0x600000cea8e0 [0x1e5af4160]>{type = immutable, count = 0, values = ()}
+2026-11-01 08:04:56.457 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|RestoreState] finished
+2026-11-01 08:04:56.458 Df DungeonDescent[45405:55828] [com.apple.coreaudio:aqme]        MEMixerChannel.cpp:2195  client <CA_UISoundClientBase@0x10199ed60>: using SpatialExperienceHost 0x600000020890 with mIsInitialized=0 and AU=0x101cc6e20
+2026-11-01 08:04:56.458 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|Initialize] Initializing with max frames per slice = 4096
+2026-11-01 08:04:56.460 Df DungeonDescent[45405:55828] [com.apple.coreaudio:IRData] addToPersonalizedHRTFCallbackPool: Callback is added in the personalized HRTF callback pool (OnDataChangeOnly) with caller ID AUSM-0x101cc6e20.
+2026-11-01 08:04:56.460 Df DungeonDescent[45405:55828] [com.apple.coreaudio:PersonalizedIRData] [IRDataLoader|RegisterObservers] Registering observers.
+2026-11-01 08:04:56.461 E  DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InputElement #0|Initialize] Number of channels = 0 in AudioChannelLayout does not match number of channels = 2 in stream format.
+2026-11-01 08:04:56.462 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InputElement #0|Initialize] Setting default audio channel layout tag = Stereo for 2 channels
+2026-11-01 08:04:56.464 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InputElement #0|InitializeChannelProcessors] Initializing 2 channel processors
+2026-11-01 08:04:56.480 E  DungeonDescent[45405:55828] [com.apple.coreaudio:PersonalizedIRData] [IRDataLoader|CheckSupport] Invalid selection - no access to SAS.
+2026-11-01 08:04:56.481 Df DungeonDescent[45405:55828] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: Personalized HRIR type 2 is disabled. Reverting back to generic HRIR: (null).
+2026-11-01 08:04:56.545 Df DungeonDescent[45405:55828] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: IR loaded: (null)
+2026-11-01 08:04:56.549 Df DungeonDescent[45405:55828] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: IR loaded: (null)
+2026-11-01 08:04:56.552 E  DungeonDescent[45405:55828] [com.apple.coreaudio:PersonalizedIRData] [IRDataLoader|CheckSupport] Invalid selection - no access to SAS.
+2026-11-01 08:04:56.552 Df DungeonDescent[45405:55828] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: Personalized HRIR type 2 is disabled. Reverting back to generic HRIR: (null).
+2026-11-01 08:04:56.553 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InputElement #0|SetIsUsingPersonalizedHRTF] AUSM_HRIR: Generic HRIR is loaded from /Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Audio/Tunings/IRs/Generic/HRIR_Movie.ir.
+2026-11-01 08:04:56.562 Df DungeonDescent[45405:55828] [com.apple.xpc:connection] [0x1019a5aa0] activating connection: mach=true listener=false peer=false name=com.apple.audioanalyticsd
+2026-11-01 08:04:56.563 Df DungeonDescent[45405:55828] [com.apple.xpc:connection] [0x1019a5aa0] failed to do a bootstrap look-up: xpc_error=[3: No such process]
+2026-11-01 08:04:56.563 Df DungeonDescent[45405:55828] [com.apple.xpc:connection] [0x1019a5aa0] invalidated after a failed init
+2026-11-01 08:04:56.568 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InputElement #0|InitializeChannelProcessors] Initializing 2 channel processors
+2026-11-01 08:04:56.569 E  DungeonDescent[45405:55828] [com.apple.coreaudio:PersonalizedIRData] [IRDataLoader|CheckSupport] Invalid selection - no access to SAS.
+2026-11-01 08:04:56.570 Df DungeonDescent[45405:55828] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: Personalized HRIR type 2 is disabled. Reverting back to generic HRIR: (null).
+2026-11-01 08:04:56.571 E  DungeonDescent[45405:55828] [com.apple.coreaudio:PersonalizedIRData] [IRDataLoader|CheckSupport] Invalid selection - no access to SAS.
+2026-11-01 08:04:56.572 Df DungeonDescent[45405:55828] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: Personalized HRIR type 2 is disabled. Reverting back to generic HRIR: (null).
+2026-11-01 08:04:56.573 E  DungeonDescent[45405:55828] [com.apple.coreaudio:PersonalizedIRData] [IRDataLoader|CheckSupport] Invalid selection - no access to SAS.
+2026-11-01 08:04:56.573 Df DungeonDescent[45405:55828] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: Personalized HRIR type 2 is disabled. Reverting back to generic HRIR: (null).
+2026-11-01 08:04:56.573 E  DungeonDescent[45405:55828] [com.apple.coreaudio:PersonalizedIRData] [IRDataLoader|CheckSupport] Invalid selection - no access to SAS.
+2026-11-01 08:04:56.573 Df DungeonDescent[45405:55828] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: Personalized HRIR type 2 is disabled. Reverting back to generic HRIR: (null).
+2026-11-01 08:04:56.574 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InputElement #0|SetIsUsingPersonalizedHRTF] AUSM_HRIR: Generic HRIR is loaded from /Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Audio/Tunings/IRs/Generic/HRIR_Movie.ir.
+2026-11-01 08:04:56.574 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|ReconfigureSharedBuffers] Reinitializing shared buffers. immediateUpdate = true, fftParams {.numOutputs, .numFFTSubFilters, .partitionLength}: hrtfParams = {0, 0, 0}, sceneBusParams = {0, 0, 0}, postProcBusParams = {0, 0, 0}, combinedBusParams = {0, 0, 0}
+2026-11-01 08:04:56.576 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AudioConverter]        AudioConverter.cpp:1067  Created a new in process converter -> 0x600000d51230, from  1 ch,  44100 Hz, lpcm (0x00000008) 8-bit unsigned integer to  1 ch,  44100 Hz, Float32 (actually:  1 ch,  44100 Hz, Float32)
+2026-11-01 08:04:56.576 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AudioConverter]        AudioConverter.cpp:1067  Created a new in process converter -> 0x600000d514d0, from  1 ch,  44100 Hz, Int16 (actually:  1 ch,  44100 Hz, Int16) to  1 ch,  44100 Hz, Float32 (actually:  1 ch,  44100 Hz, Float32)
+2026-11-01 08:04:56.576 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AudioConverter]        AudioConverter.cpp:1067  Created a new in process converter -> 0x600000d510b0, from  2 ch,  44100 Hz, Float32, deinterleaved to  2 ch,  44100 Hz, Float32, deinterleaved
+2026-11-01 08:04:56.585 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|InitializeTorqueEngine] Not initializing TorqueEngine
+2026-11-01 08:04:56.586 Df DungeonDescent[45405:55827] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|UpdateAutoModeReverbBus] updating early room for input -1
+2026-11-01 08:04:56.586 Df DungeonDescent[45405:55828] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|Initialize] Initialized in 127.99ms
+2026-11-01 08:04:56.587 Df DungeonDescent[45405:55828] [com.apple.coreaudio:aqme]        MEMixerChannel.cpp:2195  client <CA_UISoundClientBase@0x10199ed60>: using SpatialExperienceHost 0x600000020890 with mIsInitialized=1 and AU=0x101cc6e20
+2026-11-01 08:04:56.587 Df DungeonDescent[45405:55828] [com.apple.coreaudio:aqme]  MEDeviceStreamClient.cpp:245   AQME Default-InputOutput: client starting: <CA_UISoundClientBase@0x10199ed60>; running count now 1
+2026-11-01 08:04:56.587 Df DungeonDescent[45405:55828] [com.apple.coreaudio:aqme]            AQMEIO_HAL.cpp:2849  FetchAndLogFrameSize starting IO deviceID=116, frame size is 512
+2026-11-01 08:04:56.611 Df DungeonDescent[45405:55828] [com.apple.coreaudio:aqme]            AQMEIO_HAL.cpp:2818  aqmeio@0x10322c218, device 116 (iOSSimulatorAudioDevice-45405-0), AudioDeviceStart (err 0)
+2026-11-01 08:04:56.617 Df DungeonDescent[45405:55827] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: IR loaded: /Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Audio/Tunings/IRs/Generic/BRIR_Movie_200.ir
+2026-11-01 08:04:56.618 Df DungeonDescent[45405:55827] [com.apple.coreaudio:AUSpatialMixerV2] [0x101cc6e20|UpdateAutoModeReverbBus] updating late reverb
+2026-11-01 08:04:56.619 Df DungeonDescent[45405:55827] [com.apple.coreaudio:IRData] IRDataInterpolator|loadPrivate: IR loaded: /Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Audio/Tunings/IRs/Generic/Reverb_Movie_200.ir
+2026-11-01 08:04:56.624 Df DungeonDescent[45405:52775] [com.apple.coreaudio:aqme]              AQIONode.cpp:693   client <AudioQueueObject@0x10321f400; ; [45405]; play> is NOT Now Playing eligible
+2026-11-01 08:04:56.625 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:3236  CheckSpatialization: aq@0x10321f400 automatic spatialization check: spatialize=0
+2026-11-01 08:04:56.625 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:3249  CheckSpatialization: aq@0x10321f400 CheckSpatialization mAutomaticSpatialization=1, mSpatializationEnabled=0 mContentRequiresAUSpatialMixer=0 mHasMetadata=0 mIsOffline=0 STSLabel valid:0 is stereo: 1
+2026-11-01 08:04:56.627 Df DungeonDescent[45405:52775] [com.apple.coreaudio:ac]          ACMP3Decoder.cpp:153   (0x117a41e40) Input format:  2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame
+2026-11-01 08:04:56.628 Df DungeonDescent[45405:52775] [com.apple.coreaudio:ac]          ACMP3Decoder.cpp:156   (0x117a41e40) Output format:  2 ch,  44100 Hz, Int16, interleaved
+2026-11-01 08:04:56.631 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AudioConverter]        AudioConverter.cpp:1067  Created a new in process converter -> 0x600000d4e130, from  2 ch,  44100 Hz, .mp3 (0x00000000) 0 bits/channel, 0 bytes/packet, 1152 frames/packet, 0 bytes/frame to  2 ch,  44100 Hz, Float32, deinterleaved
+2026-11-01 08:04:56.632 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]        AQAudioConverter.h:65    AQAudioConverter: Constructed an AudioConverter for the client <AudioQueueObject@0x10321f400; ; [45405]; play>.
+2026-11-01 08:04:56.633 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:10012 SetLoudnessFromLM: -> aq@0x10321f400:
+2026-11-01 08:04:56.634 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:10122 SetLoudnessFromLM: is CoreAudioServices/LoudnessManager enabled? yes
+2026-11-01 08:04:56.635 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:10125 SetLoudnessFromLM: is CoreAudioServices/LoudnessManagerV2 enabled? yes
+2026-11-01 08:04:56.635 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:10128 SetLoudnessFromLM: is CoreAudioServices/lm-disable-hardware-check on? no
+2026-11-01 08:04:56.635 E  DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]        LoudnessManager.mm:1755  ReadPListFile: unable to open stream for LoudnessManager plist
+2026-11-01 08:04:56.635 E  DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]        LoudnessManager.mm:1261  GetHardwarePlatformKey: cannot get acoustic ID
+2026-11-01 08:04:56.635 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]        LoudnessManager.mm:1301  GetHardwarePlatformKey: unrecognised embedded platform type: 0
+2026-11-01 08:04:56.636 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]        LoudnessManager.mm:1387  GetHardwarePlatformKey: GetHardwarePlatformKey(): hardware platform key is Default
+2026-11-01 08:04:56.636 E  DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]        LoudnessManager.mm:1215  IsHardwareSupported: no plist loaded, returning false
+2026-11-01 08:04:56.636 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:10131 SetLoudnessFromLM: is hardware supported? no
+2026-11-01 08:04:56.636 E  DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]        LoudnessManager.mm:1215  IsHardwareSupported: no plist loaded, returning false
+2026-11-01 08:04:56.636 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:10141 SetLoudnessFromLM: hardware not supported, Loudness Manager disabled
+2026-11-01 08:04:56.639 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AudioConverter]        AudioConverter.cpp:1317  AudioConverter -> 0x600000d4e130: The in-process GetProperty call returned 1886547824 for property 1752658554 with size 8.
+2026-11-01 08:04:56.652 Df DungeonDescent[45405:52775] [com.apple.coreaudio:aqme]              AQIONode.cpp:693   client <AudioQueueObject@0x10321f400; ; [45405]; play> is NOT Now Playing eligible
+2026-11-01 08:04:56.653 Df DungeonDescent[45405:52775] [com.apple.coreaudio:aqme]        MEMixerChannel.cpp:2195  client <AudioQueueObject@0x10321f400; ; [45405]; play>: using SpatialExperienceHost 0x600000020960 with mIsInitialized=1 and AU=0x0
+2026-11-01 08:04:56.653 Df DungeonDescent[45405:52775] [com.apple.coreaudio:AQ]      AudioQueueObject.cpp:5762  ApplyParameters: aq@0x10321f400 volume 0.000 1.000 1.000 1.000 1.000 1.000, 1.000
+2026-11-01 08:04:56.653 Df DungeonDescent[45405:52775] [com.apple.coreaudio:aqme]  MEDeviceStreamClient.cpp:245   AQME Default-InputOutput: client starting: <AudioQueueObject@0x10321f400; ; [45405]; play>; running count now 2
+2026-11-01 08:04:56.668 Df DungeonDescent[45405:558ad] [com.apple.coreaudio:default] AQSTL aq(0x10321f400) start time resolved to: 219101687 ioTS st: 219101687 ht: 4740.791863
+2026-11-01 08:04:56.709 Df DungeonDescent[45405:52775] [com.apple.network:path] nw_path_evaluator_start [1B0F6C0D-17B0-46DB-BBC8-7145C310B0D7 <NULL> generic, attribution: developer]
+	path: satisfied (Path is satisfied), interface: en0
+2026-11-01 08:04:57.193 Df DungeonDescent[45405:52775] [com.apple.re:ECS.CARE] CAREEnablePCTCachePorts is now enabled. The feature is available on this platform.
+2026-11-01 08:04:57.398 Df DungeonDescent[45405:52775] [com.apple.re:Network] Session: changing state Init->Active
+2026-11-01 08:04:57.398 Df DungeonDescent[45405:52775] [com.apple.re:Network] Session: handling event 'TransitionOut' in state 'Init'
+2026-11-01 08:04:57.398 Df DungeonDescent[45405:52775] [com.apple.re:Network] Session: handling event 'TransitionIn' in state 'Active'
+2026-11-01 08:04:57.398 Df DungeonDescent[45405:52775] [com.apple.re:Network] Session: handling event 'DispatchBacklog' in state 'Active'
+2026-11-01 08:04:57.398 Df DungeonDescent[45405:52775] [com.apple.re:Network] SharedAppSyncManager: session started (0x10206e000).
+2026-11-01 08:04:57.399 Df DungeonDescent[45405:52775] [com.apple.re:CAProtocol] CAProtocolLayer.openConnection file-descriptor=7
+2026-11-01 08:04:57.405 Df DungeonDescent[45405:52775] [com.apple.re:CAProtocol] CAProtocolLayer.addConnection 0x1018b2de0
+2026-11-01 08:04:57.406 Df DungeonDescent[45405:52775] [com.apple.re:ECS.CARE] CAREEnableKeepAlive is now enabled.
+2026-11-01 08:04:57.406 Df DungeonDescent[45405:55828] [com.apple.network:connection] [C1 349FBF4E-2D15-4396-8D84-16FD55328A84 AF_UNIX:"" tcp, definite, prohibit joining protocols, attribution: developer, reuse local address, context: re-nw-unix-context (private), proc: CE2C60AE-8D7D-389F-BF7B-552881053C78, delegated upid: 0, local address: AF_UNIX:""] start
+2026-11-01 08:04:57.407 Df DungeonDescent[45405:52775] [com.apple.re:ECS.CARE] CARE CAREEnableEntityDisabledWhenContextReleased is now enabled.
+2026-11-01 08:04:57.408 Df DungeonDescent[45405:52775] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):com.dungeon.descent] Sending action(s) in update: _UISceneResizeFinishedAction
+2026-11-01 08:04:57.408 Df DungeonDescent[45405:55828] [com.apple.network:connection] [C1 AF_UNIX:"" initial socket-flow ((null))] event: path:start @0.001s
+2026-11-01 08:04:57.409 Df DungeonDescent[45405:55828] [com.apple.network:connection] [C1 AF_UNIX:"" waiting socket-flow (satisfied (Endpoint is always satisfied), interface: lo0)] event: path:satisfied @0.001s, uuid: 659DAF63-188C-409A-8DEB-B42E05A540AA
+2026-11-01 08:04:57.416 Df DungeonDescent[45405:55828] [com.apple.network:connection] nw_socket_set_connected_fd  Not guarding connected fd 7
+2026-11-01 08:04:57.417 Df DungeonDescent[45405:55828] [com.apple.network:connection] [C1 AF_UNIX:"" in_progress socket-flow (satisfied (Endpoint is always satisfied), interface: lo0)] event: flow:start_connect @0.010s
+2026-11-01 08:04:57.417 Df DungeonDescent[45405:55828] [com.apple.network:connection] nw_connection_report_state_with_handler_on_nw_queue [C1] reporting state preparing
+2026-11-01 08:04:57.418 Df DungeonDescent[45405:55828] [com.apple.network:connection] nw_flow_connected [C1 AF_UNIX:"" in_progress socket-flow (satisfied (Endpoint is always satisfied), interface: lo0)] Transport protocol connected (socket)
+2026-11-01 08:04:57.418 Df DungeonDescent[45405:55828] [com.apple.network:connection] [C1 AF_UNIX:"" in_progress socket-flow (satisfied (Endpoint is always satisfied), interface: lo0)] event: flow:finish_transport @0.010s
+2026-11-01 08:04:57.418 Df DungeonDescent[45405:55828] [com.apple.network:connection] nw_flow_connected [C1 AF_UNIX:"" in_progress socket-flow (satisfied (Endpoint is always satisfied), interface: lo0)] Output protocol connected (re-net-header)
+2026-11-01 08:04:57.418 Df DungeonDescent[45405:55828] [com.apple.network:connection] [C1 AF_UNIX:"" ready socket-flow (satisfied (Endpoint is always satisfied), interface: lo0)] event: flow:finish_connect @0.011s
+2026-11-01 08:04:57.419 E  DungeonDescent[45405:55828] [com.apple.network:connection] nw_socket_copy_info [C1:2] getsockopt TCP_INFO failed [102: Operation not supported on socket]
+2026-11-01 08:04:57.419 E  DungeonDescent[45405:55828] [com.apple.network:] nw_socket_copy_info getsockopt TCP_INFO failed [102: Operation not supported on socket]
+2026-11-01 08:04:57.419 Df DungeonDescent[45405:55828] [com.apple.network:connection] nw_connection_report_state_with_handler_on_nw_queue [C1] reporting state ready
+2026-11-01 08:04:57.573 Df DungeonDescent[45405:52775] [com.apple.UIKit:UpdateScheduler] Target list changed: <CADisplay:Virtual-0 Virtual-0>
+2026-11-01 08:04:58.261 Df DungeonDescent[45405:52775] [com.apple.Accessibility:AXCommon] Read Per-App on Init: Smart invert = (null)
+2026-11-01 08:04:58.262 Df DungeonDescent[45405:52775] [com.apple.BackgroundTasks:Framework] Handling app launch
+2026-11-01 08:04:58.264 Df DungeonDescent[45405:52775] [com.apple.re:Audio] AudioPlaybackClientService <REAudioPlaybackClientService: 0x60000025cf00> received connection identifier 17
+2026-11-01 08:04:58.264 Df DungeonDescent[45405:52775] [com.apple.UIKit:UIFocus] Focus system enabled
+2026-11-01 08:04:58.548 Df DungeonDescent[45405:52775] [com.apple.UIKit:UIFocus] Failed to update focus with context <UIFocusUpdateContext: 0x600003037450; previouslyFocusedItem: (nil); nextFocusedItem: (nil); focusHeading: None>. No additional info available.
+2026-11-01 08:04:58.549 Df DungeonDescent[45405:52775] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 2, <UIWindowScene: 0x1019220c0> (com.dungeon.descent)
+2026-11-01 08:04:58.552 Df DungeonDescent[45405:52775] [com.apple.MRUIKit:MRUIAudioSessionSceneComponent] updating audio session token 0x0 for scene <UIWindowScene: 0x1019220c0; role: UIWindowSceneSessionRoleApplication; persistentIdentifier: com.dungeon.descent; activationState: UISceneActivationStateForegroundActive>
+2026-11-01 08:04:58.581 Df DungeonDescent[45405:52775] [com.apple.UserNotifications:Connections] [com.dungeon.descent] Creating a user notification center
+2026-11-01 08:04:58.582 Df DungeonDescent[45405:52775] [com.apple.UserNotifications:Connections] [com.dungeon.descent] Getting notification settings (async)
+2026-11-01 08:04:58.583 E  DungeonDescent[45405:52775] [com.apple.GameKit:Error] _authenticateUsingAlert:Failed to authenticate player with existing credentials.Error: Error Domain=GKErrorDomain Code=3 "The requested operation could not be completed due to an error communicating with the server." UserInfo={NSLocalizedDescription=The requested operation could not be completed due to an error communicating with the server.}
+2026-11-01 08:04:58.585 Df DungeonDescent[45405:557ae] [com.apple.xpc:connection] [0x101ca1eb0] activating connection: mach=true listener=false peer=false name=com.apple.usernotifications.listener
+2026-11-01 08:04:58.600 Df DungeonDescent[45405:52775] [com.apple.re:CAProtocol] CAProtocolLayer.onConnectionStateChanged 0x1018b2de0 prevState=invalid newState=preparing
+2026-11-01 08:04:58.601 Df DungeonDescent[45405:52775] [com.apple.re:CAProtocol] CAProtocolLayer.onConnectionStateChanged 0x1018b2de0 prevState=preparing newState=ready
+2026-11-01 08:04:58.602 Df DungeonDescent[45405:52775] [com.apple.re:Network] Connection(n/a->fd://7) state changed Pending->Active
+2026-11-01 08:04:58.676 Df DungeonDescent[45405:52775] [com.apple.re:Network] Connection Stats: address=fd://7, outbound=0, inbound=0, ProtocolConnectionStats: send=0(0 bytes), recv=0(0 bytes) <period=4742788 ms, onSend>
+2026-11-01 08:04:58.679 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardSceneDelegate] forceReloadInputViews
+2026-11-01 08:04:58.683 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardSceneDelegate] Reloading input views for key-window scene responder: <(null): 0x0; > force:Y
+2026-11-01 08:04:58.688 Df DungeonDescent[45405:5577a] [com.apple.UserNotifications:Connections] [com.dungeon.descent] Got notification settings [ hasResult: 1 hasCompletionHandler: 1 ]
+2026-11-01 08:04:58.710 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardArbiterClientLog] -[_UIKeyboardArbiterClientInputDestination _didHandleKeyboardClientChange:shouldConsiderSnapshottingKeyboard:isLocalEvent:]  Keyboard client did change: <<<_UIKeyboardChangedInformation: 0x101c61610>; appId (null) bundleId (null) animation fence (null); position {{0, 0}, {0, 0}}; animated YES; on screen NO; tracking NO; resizing NO; local NO, dock state: Unknown, hasValidNotif: NO>; source canvas (null); source display (null); source bundle (null); host bundle (null); animation fence (null); position {{0, 0}, {0, 0}} (with IAV same); floating 0; on screen NO;  intersectable YES; snapshot NO> is local: 0
+2026-11-01 08:04:58.711 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardArbiterClientLog] -[_UIKeyboardArbiterClientInputDestination syncKeyboardUIChangeInfo:]  Sync Keyboard UI Change info: <<_UIKeyboardUIInformation: 0x600003d1b750>; appId (null) bundleId (null) animation fence (null); position {{0, 0}, {0, 0}}; animated NO; on screen NO; tracking NO; resizing NO; local NO, dock state: Unknown, hasValidNotif: NO>
+2026-11-01 08:04:58.711 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardArbiterClientLog] -[_UIKeyboardArbiterClientInputDestination keyboardUIDidChange:onComplete:]  Setting currentUIState: <<_UIKeyboardUIInformation: 0x600003d1b750>; appId (null) bundleId (null) animation fence (null); position {{0, 0}, {0, 0}}; animated NO; on screen NO; tracking NO; resizing NO; local NO, dock state: Unknown, hasValidNotif: NO>
+2026-11-01 08:04:58.720 E  DungeonDescent[45405:55827] [com.apple.GameKit:Error] Could not load services for GameKit. This likely means your game is missing the com.apple.developer.game-center entitlement. For more info see:
+ https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_game-center
+
+ERROR: Error Domain=NSCocoaErrorDomain Code=4099 "The connection to service named com.apple.gamed was invalidated from this process." UserInfo={NSDebugDescription=The connection to service named com.apple.gamed was invalidated from this process.}
+2026-11-01 08:04:58.723 E  DungeonDescent[45405:55827] [com.apple.GameKit:Error] No gamed service found for selector getStoreBagValuesForKeys:handler:
+2026-11-01 08:04:58.737 Df DungeonDescent[45405:52775] [com.apple.re:Foundation.Core] TransformServiceFlushOnQuery is TRUE
+2026-11-01 08:04:58.744 Df DungeonDescent[45405:52775] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _MRUIOrnamentClientSettings on FBSSceneClientSettings
+2026-11-01 08:04:58.757 Df DungeonDescent[45405:52775] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600002659140; process scope; status: target> was:none
+2026-11-01 08:04:58.757 Df DungeonDescent[45405:52775] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600002659140; display: B6405A92-DD7A-47CD-AE2D-E325066AC622; environment: keyboardFocus; token: 0xBAC1608A; status: none> was:target
+2026-11-01 08:04:58.760 Df DungeonDescent[45405:52775] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600002702580; process scope; status: target> was:none
+2026-11-01 08:04:58.761 Df DungeonDescent[45405:52775] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600002702580; display: B6405A92-DD7A-47CD-AE2D-E325066AC622; environment: keyboardFocus; token: 0xD2EA7E40; status: none> was:target
+2026-11-01 08:04:58.766 Df DungeonDescent[45405:52775] [com.apple.MRUIKit:MRUICoalescingSceneClientSettingsUpdater] Animation settings for update are incompatible with pending changes. Flushing current changes in _MRUIOrnamentClientConfigurationUpdater.
+2026-11-01 08:04:58.767 Df DungeonDescent[45405:52775] [com.apple.MRUIKit:MRUICoalescingSceneClientSettingsUpdater] Performing batch update for client settings in _MRUIOrnamentClientConfigurationUpdater; animation = <BSAnimationSettings:0x600002cfcb00 duration=0.000000 delay=0.000000 interval=0.000000 range={0.000000,0.000000,0.000000} reason=0 timing=(null) speed=1.000000 beginTime=0.000000>
+2026-11-01 08:04:58.774 Df DungeonDescent[45405:52775] [com.apple.UIKit:EventEnvironment] Enqueuing clear events of window: <_MRUIPlatterOrnamentBackingWindow: 0x102501600>; contextId: 0xD2EA7E40
+2026-11-01 08:04:58.788 Df DungeonDescent[45405:52775] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600002706940; process scope; status: target> was:none
+2026-11-01 08:04:58.788 Df DungeonDescent[45405:52775] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600002706940; display: B6405A92-DD7A-47CD-AE2D-E325066AC622; environment: keyboardFocus; token: 0xA9621881; status: none> was:target
+2026-11-01 08:04:58.790 Df DungeonDescent[45405:52775] [com.apple.MRUIKit:MRUICoalescingSceneClientSettingsUpdater] Animation settings for update are incompatible with pending changes. Flushing current changes in _MRUIOrnamentClientConfigurationUpdater.
+2026-11-01 08:04:58.791 Df DungeonDescent[45405:52775] [com.apple.MRUIKit:MRUICoalescingSceneClientSettingsUpdater] Performing batch update for client settings in _MRUIOrnamentClientConfigurationUpdater; animation = (null)
+2026-11-01 08:04:58.795 Df DungeonDescent[45405:52775] [com.apple.MRUIKit:MRUICoalescingSceneClientSettingsUpdater] Animation settings for update are incompatible with pending changes. Flushing current changes in _MRUIOrnamentClientConfigurationUpdater.
+2026-11-01 08:04:58.796 Df DungeonDescent[45405:52775] [com.apple.MRUIKit:MRUICoalescingSceneClientSettingsUpdater] Performing batch update for client settings in _MRUIOrnamentClientConfigurationUpdater; animation = <BSAnimationSettings:0x600002c94000 duration=0.000000 delay=0.000000 interval=0.000000 range={0.000000,0.000000,0.000000} reason=0 timing=(null) speed=1.000000 beginTime=0.000000>
+2026-11-01 08:04:58.854 Df DungeonDescent[45405:52775] [com.apple.UIKit:TrackingElementWindowController] Change from input view set: (null)
+2026-11-01 08:04:58.855 Df DungeonDescent[45405:52775] [com.apple.UIKit:TrackingElementWindowController] Change to input view set: (null)
+2026-11-01 08:04:58.887 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardLayoutGuide] _moveGuideOffscreenAtEdge: 4
+2026-11-01 08:04:58.888 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardLayoutGuide] changeOffsetConstants: offset is changing to {0, 0} [previous offset: {-1, -1}]
+2026-11-01 08:04:58.890 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardLayoutGuide] changeSizingConstants: size is changing [not transitioning] to {1680, 0} [previous size: {1, 0}]
+2026-11-01 08:04:58.890 Df DungeonDescent[45405:52775] [com.apple.re:ECS.CARE] CARERetainCALayerEntities is now enabled.
+2026-11-01 08:04:58.895 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardArbiterClientLog] -[_UIKeyboardArbiterClientInputDestination handleKeyboardUIDidChange:]_block_invoke  Keyboard destination responder is not on screen
+2026-11-01 08:04:58.895 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardArbiterClientLog] -[_UIKeyboardArbiterClientInputDestination handleKeyboardUIDidChange:]_block_invoke  Unexpected bundleIdentifier: (null) for applicationIdentifier: (null)
+2026-11-01 08:04:58.896 Df DungeonDescent[45405:52775] [com.apple.UIKit:KeyboardArbiterClientLog] -[_UIKeyboardArbiterClientInputDestination handleKeyboardUIDidChange:]_block_invoke  Keyboard destination should not update UI and should not skip fencing: (null)
+2026-11-01 08:04:58.900 Df DungeonDescent[45405:52775] [com.apple.UIKit:EventEnvironment] Performing clear events of window: <_MRUIPlatterOrnamentBackingWindow: 0x102501600>; contextId: 0x0
+2026-11-01 08:04:58.911 Df DungeonDescent[45405:52775] [com.apple.re:Network] Session: handling event 'DispatchBacklog' in state 'Active'
+2026-11-01 08:04:58.912 Df DungeonDescent[45405:52775] [com.apple.re:Network] Remote peer ready with capabilities 0x3b
+2026-11-01 08:04:58.913 Df DungeonDescent[45405:52775] [com.apple.re:Network] Session: handling event 'ParticipantsUpdate' in state 'Active'
+2026-11-01 08:04:58.914 Df DungeonDescent[45405:52775] [com.apple.re:Network] New peer joined object syncing. PeerID=11364714362777492292. Address='fd://7'. Identity='fd://7'.
+2026-11-01 08:04:58.915 Df DungeonDescent[45405:52775] [com.apple.re:Network] Adding new peer state. PeerID=11364714362777492292.
+2026-11-01 08:04:58.933 Df DungeonDescent[45405:52775] [com.apple.re:ECS.CARE] CAREEnableTransactionBatching is now enabled
+2026-11-01 08:04:58.933 Df DungeonDescent[45405:52775] [com.apple.re:ECS.CARE] CAREEnableFlushInCAProtocol is now enabled.
+2026-11-01 08:04:58.934 Df DungeonDescent[45405:52775] [com.apple.MRUIKit:MRUICoalescingSceneClientSettingsUpdater] Performing batch update for client settings in _MRUIOrnamentClientConfigurationUpdater; animation = (null)
+2026-11-01 08:04:58.949 Df DungeonDescent[45405:52775] [com.apple.UIKit:UIFocus] Failed to update focus with context <UIFocusUpdateContext: 0x600003042370; previouslyFocusedItem: (nil); nextFocusedItem: (nil); focusHeading: None>. No additional info available.
+2026-11-01 08:04:58.998 Df DungeonDescent[45405:52775] [com.apple.pencilkit:PencilTextInput] Interaction moved to a view. Should be active: Off
+2026-11-01 08:04:59.005 F  DungeonDescent[45405:557ae] [com.apple.runtime-issues:Hang Risk] __delegate_identifier__:Performance Diagnostics__:::____message__:{"message":"[Internal] Thread running at User-initiated quality-of-service class waiting on a thread without a QoS class specified (base priority 33). Investigate ways to avoid priority inversions","antipattern trigger":"dispatch_semaphore_wait","message type":"elevatable","category type":3,"subcategory type":-1,"show in console":"0"}'1A F6 E3 F6 B0 82 3E 43 89 86 4F 30 B3 66 AD 1D 08 3F 20 00 1A F6 E3 F6 B0 82 3E 43 89 86 4F 30 B3 66 AD 1D 54 39 0A 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF B0 C4 01 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF D4 43 00 00 1A F6 E3 F6 B0 82 3E 43 89 86 4F 30 B3 66 AD 1D 1C 39 0A 00 1A F6 E3 F6 B0 82 3E 43 89 86 4F 30 B3 66 AD 1D D0 3D 20 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF B0 C4 01 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF D4 43 00 00 1A F6 E3 F6 B0 82 3E 43 89 86 4F 30 B3 66 AD 1D D8 3C 20 00 1A F6 E3 F6 B0 82 3E 43 89 86 4F 30 B3 66 AD 1D 48 3D 20 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF B0 C4 01 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF D4 43 00 00 1A F6 E3 F6 B0 82 3E 43 89 86 4F 30 B3 66 AD 1D 34 3D 20 00 1A F6 E3 F6 B0 82 3E 43 89 86 4F 30 B3 66 AD 1D 40 36 0E 00 B4 A7 28 92 C6 34 3D 53 9B 0D 3B 7F BF 07 39 30 98 F2 0A 00 E6 F1 2A 3D 25 92 3F FF 9B 1C E5 E2 3F 6F 5C 88 E4 8C 3A 02 E6 F1 2A 3D 25 92 3F FF 9B 1C E5 E2 3F 6F 5C 88 B0 77 3A 02 E6 F1 2A 3D 25 92 3F FF 9B 1C E5 E2 3F 6F 5C 88 B8 71 3A 02 E6 F1 2A 3D 25 92 3F FF 9B 1C E5 E2 3F 6F 5C 88 B0 73 3A 02 E6 F1 2A 3D 25 92 3F FF 9B 1C E5 E2 3F 6F 5C 88 D8 5B 38 02 E6 F1 2A 3D 25 92 3F FF 9B 1C E5 E2 3F 6F 5C 88 30 47 38 02 E6 F1 2A 3D 25 92 3F FF 9B 1C E5 E2 3F 6F 5C 88 A4 35 32 02 E6 F1 2A 3D 25 92 3F FF 9B 1C E5 E2 3F 6F 5C 88 A0 32 32 02 E6 F1 2A 3D 25 92 3F FF 9B 1C E5 E2 3F 6F 5C 88 18 3F 37 02 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF A8 17 00 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF B0 C4 01 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF 28 AC 00 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF E8 B6 00 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF 34 65 01 00 48 C3 CC 57 A2 24 3F 05 80 AE 12 4A DC 14 F0 AF 74 5C 01 00 C3 71 37 58 17 13 35 A7 A3 66 CF DC D4 38 66 55 88 2B 00 00 C3 71 37 58 17 13 35 A7 A3 66 CF DC D4 38 66 55 8C 19 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00'
+2026-11-01 08:04:59.005 A  DungeonDescent[45405:557ae] (libsystem_trace.dylib) Activity for state dumps
+2026-11-01 08:04:59.025 Sd DungeonDescent[45405:0] (A059EB0B-327D-3C14-B7A6-201E8A2D57A1) UAUserActivity
+UAUserActivityManager supportsActivityContinuation=YES isEnabled=YES serverPid=0 PROJECT:UserActivity-551
+2026-11-01 08:04:59.025 Sd DungeonDescent[45405:0] (A320F88D-B23D-3981-9D7D-CD2B3CBA0FC2) TCC Authorization Cache
+{
+    kTCCServiceWorldSensing =     {
+        "<Credential (0x60000292d420) | Requestor>" = "<Authorization Record (0x6000035027e0) | Service: kTCCServiceWorldSensing, AuthRight: Unknown, Reason: None, Version: 1, >";
+    };
+}
+2026-11-01 08:04:59.025 Sd DungeonDescent[45405:0] (A059EB0B-327D-3C14-B7A6-201E8A2D57A1) UAUserActivity
+[AA673A5F-7469-4F04-8646-A369CE504532 userInfo.count=1 dirty 
+2026-11-01 08:04:59.026 A  DungeonDescent[45405:5577a] (RunningBoardServices) didChangeInheritances
+2026-11-01 08:04:59.049 Df DungeonDescent[45405:557ae] [com.apple.CFNetwork:Default] TCP Conn [2:0x600003327200] using empty proxy configuration
+2026-11-01 08:04:59.049 Df DungeonDescent[45405:557ae] [com.apple.CFNetwork:Default] Stream client bypassing proxies on TCP Conn [2:0x600003327200]
+2026-11-01 08:04:59.049 Df DungeonDescent[45405:557ae] [com.apple.CFNetwork:Default] TCP Conn 0x600003327200 started
+2026-11-01 08:04:59.053 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2 1EA26BEE-22C1-4BFE-B965-2AE2DE65DA9C s-gke-usc1-nssi4-49.firebaseio.com:443 tcp, definite, attribution: developer, context: Default Network Context (private), proc: CE2C60AE-8D7D-389F-BF7B-552881053C78, delegated upid: 0, traffic class: 200, no proxy, prohibit fallback, allow socket access] start
+2026-11-01 08:04:59.055 Df DungeonDescent[45405:52775] [com.apple.network:activity] Unsetting the global parent activity (null)
+2026-11-01 08:04:59.056 Df DungeonDescent[45405:52775] [com.apple.network:activity] Unset the global parent activity
+2026-11-01 08:04:59.057 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2 s-gke-usc1-nssi4-49.firebaseio.com:443 initial parent-flow ((null))] event: path:start @0.003s
+2026-11-01 08:04:59.065 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2 s-gke-usc1-nssi4-49.firebaseio.com:443 waiting parent-flow (satisfied (Path is satisfied), interface: en0)] event: path:satisfied @0.009s, uuid: BBD94F3B-AD34-4A72-ABFE-E9C7BABF7AF9
+2026-11-01 08:04:59.066 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2 s-gke-usc1-nssi4-49.firebaseio.com:443 in_progress parent-flow (satisfied (Path is satisfied), interface: en0)] event: flow:start_connect @0.012s
+2026-11-01 08:04:59.066 Df DungeonDescent[45405:55906] [com.apple.network:connection] nw_connection_report_state_with_handler_on_nw_queue [C2] reporting state preparing
+2026-11-01 08:04:59.068 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2 s-gke-usc1-nssi4-49.firebaseio.com:443 in_progress parent-flow (satisfied (Path is satisfied), interface: en0)] event: flow:start_child @0.013s
+2026-11-01 08:04:59.075 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2.1 s-gke-usc1-nssi4-49.firebaseio.com:443 initial path ((null))] event: path:start @0.021s
+2026-11-01 08:04:59.076 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2.1 s-gke-usc1-nssi4-49.firebaseio.com:443 waiting path (satisfied (Path is satisfied), interface: en0)] event: path:satisfied @0.021s, uuid: BBD94F3B-AD34-4A72-ABFE-E9C7BABF7AF9
+2026-11-01 08:04:59.085 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2.1 s-gke-usc1-nssi4-49.firebaseio.com:443 in_progress resolver (satisfied (Path is satisfied), interface: en0)] event: resolver:start_dns @0.030s
+2026-11-01 08:04:59.826 Df DungeonDescent[45405:55906] [com.apple.network:connection] nw_endpoint_resolver_update [C2.1 s-gke-usc1-nssi4-49.firebaseio.com:443 in_progress resolver (satisfied (Path is satisfied), interface: en0)] Adding endpoint handler for 34.120.206.254:443
+2026-11-01 08:04:59.826 Df DungeonDescent[45405:55906] [com.apple.network:connection] nw_endpoint_resolver_update [C2.1 s-gke-usc1-nssi4-49.firebaseio.com:443 in_progress resolver (satisfied (Path is satisfied), interface: en0)] Adding endpoint handler for 34.120.160.131:443
+2026-11-01 08:04:59.826 Df DungeonDescent[45405:55906] [com.apple.network:connection] nw_endpoint_resolver_update [C2.1 s-gke-usc1-nssi4-49.firebaseio.com:443 in_progress resolver (satisfied (Path is satisfied), interface: en0)] Adding endpoint handler for 35.201.97.85:443
+2026-11-01 08:04:59.826 Df DungeonDescent[45405:55906] [com.apple.network:connection] nw_endpoint_resolver_update [C2.1 s-gke-usc1-nssi4-49.firebaseio.com:443 in_progress resolver (satisfied (Path is satisfied), interface: en0)] Adding endpoint handler for 35.190.39.113:443
+2026-11-01 08:04:59.827 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2.1 s-gke-usc1-nssi4-49.firebaseio.com:443 in_progress resolver (satisfied (Path is satisfied), interface: en0)] event: resolver:receive_dns @0.772s
+2026-11-01 08:04:59.827 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2.1.1 34.120.206.254:443 initial path ((null))] event: path:start @0.772s
+2026-11-01 08:04:59.827 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2.1.1 34.120.206.254:443 waiting path (satisfied (Path is satisfied), interface: en0)] event: path:satisfied @0.773s, uuid: B3A34541-5518-4E8C-A860-81078DFE338A
+2026-11-01 08:04:59.829 Df DungeonDescent[45405:55906] [com.apple.network:connection] nw_socket_initialize_socket [C2.1.1:1] Not guarding fd 13
+2026-11-01 08:04:59.829 Df DungeonDescent[45405:55906] [com.apple.network:connection] [C2.1.1 34.120.206.254:443 in_progress socket-flow (satisfied (Path is satisfied), interface: en0)] event: flow:start_connect @0.774s
+2026-11-01 08:04:59.849 Df DungeonDescent[45405:557ae] [com.apple.network:connection] nw_socket_handle_socket_event [C2.1.1:1] Socket received CONNECTED event
+2026-11-01 08:04:59.901 Df DungeonDescent[45405:557ae] [com.apple.network:connection] nw_flow_connected [C2.1.1 34.120.206.254:443 in_progress socket-flow (satisfied (Path is satisfied), interface: en0)] Output protocol connected (socket)
+2026-11-01 08:04:59.909 Df DungeonDescent[45405:557ae] [com.apple.network:connection] [C2.1.1 34.120.206.254:443 ready socket-flow (satisfied (Path is satisfied), interface: en0)] event: flow:child_finish_connect @0.855s
+2026-11-01 08:04:59.909 Df DungeonDescent[45405:557ae] [com.apple.network:connection] [C2.1 s-gke-usc1-nssi4-49.firebaseio.com:443 ready resolver (satisfied (Path is satisfied), interface: en0)] event: flow:child_finish_connect @0.855s
+2026-11-01 08:04:59.909 Df DungeonDescent[45405:557ae] [com.apple.network:connection] nw_flow_connected [C2 34.120.206.254:443 in_progress parent-flow (satisfied (Path is satisfied), interface: en0)] Output protocol connected (endpoint_flow)
+2026-11-01 08:04:59.914 Df DungeonDescent[45405:557ae] [com.apple.network:connection] [C2 34.120.206.254:443 ready parent-flow (satisfied (Path is satisfied), interface: en0)] event: flow:finish_connect @0.860s
+2026-11-01 08:04:59.917 Df DungeonDescent[45405:557ae] [com.apple.network:connection] nw_connection_report_state_with_handler_on_nw_queue [C2] reporting state ready
+2026-11-01 08:04:59.918 Df DungeonDescent[45405:5577a] [com.apple.CFNetwork:Default] TCP Conn 0x600003327200 event 1. err: 0
+2026-11-01 08:04:59.927 Df DungeonDescent[45405:5577a] [com.apple.CFNetwork:Default] TCP Conn 0x600003327200 complete. fd: 15, err: 0
+2026-11-01 08:04:59.933 Df DungeonDescent[45405:5590d] [com.apple.CFNetwork:Default] TCP Conn 0x600003327200 starting SSL negotiation
+2026-11-01 08:04:59.976 A  DungeonDescent[45405:5590d] (Security) SecTrustEvaluateIfNecessary
+2026-11-01 08:04:59.981 Df DungeonDescent[45405:5590d] [com.apple.xpc:connection] [0x1018e00c0] activating connection: mach=true listener=false peer=false name=com.apple.trustd
+2026-11-01 08:04:59.982 Df DungeonDescent[45405:5590d] [com.apple.xpc:connection] [0x1018c97b0] activating connection: mach=true listener=false peer=false name=com.apple.trustd
+2026-11-01 08:04:59.986 E  DungeonDescent[45405:5577a] [com.apple.GameKit:Error] Could not load services for GameKit. This likely means your game is missing the com.apple.developer.game-center entitlement. For more info see:
+ https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_game-center
+
+ERROR: Error Domain=NSCocoaErrorDomain Code=4099 "The connection to service named com.apple.gamed was invalidated from this process." UserInfo={NSDebugDescription=The connection to service named com.apple.gamed was invalidated from this process.}
+2026-11-01 08:04:59.988 E  DungeonDescent[45405:5577a] [com.apple.GameKit:Error] No gamed service found for selector getStoreBagValuesForKeys:handler:
+2026-11-01 08:05:00.060 Df DungeonDescent[45405:5590d] [com.apple.xpc:connection] [0x1018c97b0] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-11-01 08:05:00.134 Df DungeonDescent[45405:5590d] [com.apple.CFNetwork:Default] TCP Conn 0x600003327200 SSL Handshake DONE
+2026-11-01 08:05:00.202 Df DungeonDescent[45405:55906] [com.apple.calls.copresencecore:Client] Handling com.apple.copresence.conversationmanagerhost.shouldconnect by requesting initial state.
+2026-11-01 08:05:00.204 Df DungeonDescent[45405:55906] [com.apple.calls.copresencecore:Client] Host has no conversations.
+2026-11-01 08:05:00.206 Df DungeonDescent[45405:55906] [com.apple.calls.copresencecore:Client] Handling com.apple.copresence.conversationmanagerhost.shouldconnect by requesting initial state.
+2026-11-01 08:05:00.207 Df DungeonDescent[45405:52775] [com.apple.calls.copresence:client] Initialized group state observer on queue: <OS_dispatch_queue_main: com.apple.main-thread>
+2026-11-01 08:05:00.212 Df DungeonDescent[45405:52775] [com.apple.calls.copresence:client] Group session eligibility changed to new value: false
+2026-11-01 08:05:00.222 E  DungeonDescent[45405:557ae] [com.apple.GameKit:Error] Could not load services for GameKit. This likely means your game is missing the com.apple.developer.game-center entitlement. For more info see:
+ https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_game-center
+
+ERROR: Error Domain=NSCocoaErrorDomain Code=4099 "The connection to service named com.apple.gamed was invalidated from this process." UserInfo={NSDebugDescription=The connection to service named com.apple.gamed was invalidated from this process.}
+2026-11-01 08:05:00.224 E  DungeonDescent[45405:557ae] [com.apple.GameKit:Error] No gamed service found for selector getStoreBagValuesForKeys:handler:
+2026-11-01 08:05:00.251 E  DungeonDescent[45405:52775] [com.apple.GameKit:Account] startAuthenticationForExistingPrimaryPlayer:Failed to Authenticate player.Error: Error Domain=GKErrorDomain Code=3 "The requested operation could not be completed due to an error communicating with the server." UserInfo={NSLocalizedDescription=The requested operation could not be completed due to an error communicating with the server.}
+2026-11-01 08:05:00.293 E  DungeonDescent[45405:55906] [com.apple.calls.copresencecore:Client] ConversationManagerClient not requesting initial state since the sandbox does not have access to CopresenceCore.XPCIdentity.machService(CopresenceCore.MachServiceName.conversationManagerHostDeprecated)
+2026-11-01 08:05:00.512 F  DungeonDescent[45405:55906] [com.apple.runtime-issues:GroupActivities] Using SharePlay requires that you add the Group Activities capability to your application's target.
+2026-11-01 08:05:00.512 A  DungeonDescent[45405:55906] (libsystem_trace.dylib) Activity for state dumps
+2026-11-01 08:05:00.515 E  DungeonDescent[45405:52775] [com.apple.GameKit:Account] authenticationDidCompleteWithError: Authentication failed for player with error: Error Domain=GKErrorDomain Code=3 "The requested operation could not be completed due to an error communicating with the server." UserInfo={NSLocalizedDescription=The requested operation could not be completed due to an error communicating with the server.}
+2026-11-01 08:05:00.518 E  DungeonDescent[45405:52775] [com.apple.GameKit:Error] reportAuthenticationFailedForPlayer: Authentication failed for player in 4.67202 seconds
+2026-11-01 08:05:00.544 E  DungeonDescent[45405:5590a] [com.apple.GameKit:Error] Could not load services for GameKit. This likely means your game is missing the com.apple.developer.game-center entitlement. For more info see:
+ https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_game-center
+
+ERROR: Error Domain=NSCocoaErrorDomain Code=4099 "The connection to service named com.apple.gamed was invalidated from this process." UserInfo={NSDebugDescription=The connection to service named com.apple.gamed was invalidated from this process.}
+2026-11-01 08:05:00.544 Df DungeonDescent[45405:52775] [com.apple.GameKit:General] Calling AuthenticateHandlerWithError: Error Domain=GKErrorDomain Code=6 "The requested operation could not be completed because local player has not been authenticated." UserInfo={NSLocalizedDescription=The requested operation could not be completed because local player has not been authenticated., NSUnderlyingError=0x600000cd5380 {Error Domain=GKErrorDomain Code=3 "The requested operation could not be completed due to an error communicating with the server." UserInfo={NSLocalizedDescription=The requested operation could not be completed due to an error communicating with the server.}}}
+2026-11-01 08:05:00.551 E  DungeonDescent[45405:5590a] [com.apple.GameKit:Error] No gamed service found for selector isAppDistributorThirdParty:
+2026-11-01 08:05:00.557 E  DungeonDescent[45405:5590a] [com.apple.GameKit:Error] Could not load services for GameKit. This likely means your game is missing the com.apple.developer.game-center entitlement. For more info see:
+ https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_game-center
+
+ERROR: Error Domain=NSCocoaErrorDomain Code=4099 "The connection to service named com.apple.gamed was invalidated from this process." UserInfo={NSDebugDescription=The connection to service named com.apple.gamed was invalidated from this process.}
+2026-11-01 08:05:00.608 E  DungeonDescent[45405:52775] [com.apple.GameKit:Match] Matchmaker getStoreBagValuesForKeys encountered error: Error Domain=GKErrorDomain Code=3 "The requested operation could not be completed due to an error communicating with the server." UserInfo={NSLocalizedDescription=The requested operation could not be completed due to an error communicating with the server.}
+2026-11-01 08:05:00.611 E  DungeonDescent[45405:5590a] [com.apple.GameKit:Error] No gamed service found for selector getOcelotStateForCurrentAppWithHandler:
+2026-11-01 08:05:00.615 E  DungeonDescent[45405:5590a] [com.apple.GameKit:Error] Could not load services for GameKit. This likely means your game is missing the com.apple.developer.game-center entitlement. For more info see:
+ https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_game-center
+
+ERROR: Error Domain=NSCocoaErrorDomain Code=4099 "The connection to service named com.apple.gamed was invalidated from this process." UserInfo={NSDebugDescription=The connection to service named com.apple.gamed was invalidated from this process.}
+2026-11-01 08:05:00.911 E  DungeonDescent[45405:5590a] [com.apple.GameKit:Error] No gamed service found for selector updateHUDActivityAssertion:sceneIdentifier:
+2026-11-01 08:05:01.011 E  DungeonDescent[45405:52775] [com.apple.Accessibility:AXLoading] Failed to load item AXCodeItem<0x600002920b60> [Rank:6000] SpringBoardUIServices [AXBundle name:/Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle/SpringBoardUIServices] [Platforms and Targets:{     iOS = SpringBoardUIServices; } Framework] [Excluded: (null)]. error: Error Domain=AXLoading Code=0 "URL does not exist: file:///Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS%2026.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle" UserInfo={NSLocalizedDescription=URL does not exist: file:///Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS%2026.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle}
+2026-11-01 08:05:01.105 Sd DungeonDescent[45405:0] (A059EB0B-327D-3C14-B7A6-201E8A2D57A1) UAUserActivity
+UAUserActivityManager supportsActivityContinuation=YES isEnabled=YES serverPid=0 PROJECT:UserActivity-551
+2026-11-01 08:05:01.177 E  DungeonDescent[45405:52775] [com.apple.UIKit:TraitCollection] Class CKBrowserSwitcherViewController overrides the -traitCollection getter, which is not supported. If you're trying to override traits, you must use the appropriate API.
+2026-11-01 08:05:01.189 Sd DungeonDescent[45405:0] (A320F88D-B23D-3981-9D7D-CD2B3CBA0FC2) TCC Authorization Cache
+{
+    kTCCServiceWorldSensing =     {
+        "<Credential (0x60000292d420) | Requestor>" = "<Authorization Record (0x6000035027e0) | Service: kTCCServiceWorldSensing, AuthRight: Unknown, Reason: None, Version: 1, >";
+    };
+}
+2026-11-01 08:05:01.189 Sd DungeonDescent[45405:0] (A059EB0B-327D-3C14-B7A6-201E8A2D57A1) UAUserActivity
+[AA673A5F-7469-4F04-8646-A369CE504532 userInfo.count=1 dirty 
+2026-11-01 08:05:05.507 E  DungeonDescent[45405:52775] [com.apple.Accessibility:AXLoading] Failed to load item AXCodeItem<0x600002920b60> [Rank:6000] SpringBoardUIServices [AXBundle name:/Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle/SpringBoardUIServices] [Platforms and Targets:{     iOS = SpringBoardUIServices; } Framework] [Excluded: (null)]. error: Error Domain=AXLoading Code=0 "URL does not exist: file:///Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS%2026.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle" UserInfo={NSLocalizedDescription=URL does not exist: file:///Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS%2026.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle}
+2026-11-01 08:05:05.862 E  DungeonDescent[45405:52775] [com.apple.Accessibility:AXLoading] Failed to load item AXCodeItem<0x600002920b60> [Rank:6000] SpringBoardUIServices [AXBundle name:/Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle/SpringBoardUIServices] [Platforms and Targets:{     iOS = SpringBoardUIServices; } Framework] [Excluded: (null)]. error: Error Domain=AXLoading Code=0 "URL does not exist: file:///Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS%2026.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle" UserInfo={NSLocalizedDescription=URL does not exist: file:///Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS%2026.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle}
+2026-11-01 08:05:06.765 E  DungeonDescent[45405:52775] [com.apple.Accessibility:AXLoading] Failed to load item AXCodeItem<0x600002920b60> [Rank:6000] SpringBoardUIServices [AXBundle name:/Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle/SpringBoardUIServices] [Platforms and Targets:{     iOS = SpringBoardUIServices; } Framework] [Excluded: (null)]. error: Error Domain=AXLoading Code=0 "URL does not exist: file:///Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS%2026.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle" UserInfo={NSLocalizedDescription=URL does not exist: file:///Library/Developer/CoreSimulator/Volumes/xrOS_23N301/Library/Developer/CoreSimulator/Profiles/Runtimes/xrOS%2026.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/SpringBoardUIServices.axbundle}
+2026-11-01 08:05:07.432 Df DungeonDescent[45405:52775] [com.apple.re:Network] Connection Stats: address=fd://7, outbound=8, inbound=14, ProtocolConnectionStats: send=0(216 bytes), recv=0(5394 bytes) <period=8756 ms, onSend>
+2026-11-01 08:05:25.514 E  DungeonDescent[45405:5582d] [com.apple.coreaudio:AMCP]          HALC_ProxyIOContext.cpp:1623  HALC_ProxyIOContext::IOWorkLoop: skipping cycle due to overload
