@@ -4,10 +4,10 @@
 [Main menu] Contrast failed — "🌼 0 Marigolds" (48). Contrast failed for element
 [Main menu] Contrast failed — ""Not all who enter are lost — most are."" (48). Contrast failed for element
 [Main menu] Contrast failed — "🌑 The Void Stirs — 58% awakened. 5 days until it wakes (Nov 5)." (48). Contrast failed for element
-[Main menu] Contrast failed — "🌼 Día de los Muertos · ACTIVE · 1d 21h remaining, ⚡ XP Weekend · ACTIVE · 21h remaining, 🔴 Blood Moon · ACTIVE · 6d 21h remaining" (48). Contrast failed for element
-[Main menu] Contrast failed — "🌼 Día de los Muertos · ACTIVE · 1d 21h remaining" (48). Contrast failed for element
-[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 21h remaining" (48). Contrast failed for element
-[Main menu] Contrast failed — "🔴 Blood Moon · ACTIVE · 6d 21h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "🌼 Día de los Muertos · ACTIVE · 1d 19h remaining, ⚡ XP Weekend · ACTIVE · 19h remaining, 🔴 Blood Moon · ACTIVE · 6d 19h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "🌼 Día de los Muertos · ACTIVE · 1d 19h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 19h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "🔴 Blood Moon · ACTIVE · 6d 19h remaining" (48). Contrast failed for element
 [Main menu] Contrast failed — "⚔️👥 Multiplayer" (48). Contrast failed for element
 [Main menu] Contrast failed — "BETA" (48). Contrast failed for element
 [Main menu] Contrast failed — "🕯️ Hide and Seek" (48). Contrast failed for element
