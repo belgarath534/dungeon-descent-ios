@@ -456,6 +456,10 @@ workflows:
       app_store_connect: Accessible Backrooms
     environment:
       ios_signing:
+        # Installs the Apple Distribution certificate (Codemagic wants a profile
+        # listed with it; the Mac build uses its own Mac profile).
+        provisioning_profiles:
+          - Dungeon Descent Live Activity App Store
         certificates:
           - Accessible Backrooms Distribution
       xcode: latest
