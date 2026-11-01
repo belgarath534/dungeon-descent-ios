@@ -442,3 +442,109 @@ workflows:
         script: |
           python3 -m pip install --quiet --user pyjwt cryptography requests
           python3 store/upload_screenshots.py
+
+  dungeon-descent-mac:
+    name: Dungeon Descent Mac (TestFlight)
+    # The Mac version (Mac Catalyst) of the Swift app, same bundle ID, macOS
+    # platform in App Store Connect. Needs the "Dungeon Descent Mac Installer"
+    # certificate in Codemagic (Code signing identities → Generate certificate
+    # → Mac Installer Distribution). Start it by hand from Codemagic.
+    max_build_duration: 90
+    instance_type: mac_mini_m4
+    integrations:
+      app_store_connect: Accessible Backrooms
+    environment:
+      ios_signing:
+        certificates:
+          - Accessible Backrooms Distribution
+          - Dungeon Descent Mac Installer
+      xcode: latest
+    scripts:
+      - name: Install XcodeGen
+        script: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+      - name: Run the game rules tests
+        script: |
+          cd swift/DungeonCore
+          swift test
+      - name: Get the Mac App Store profile from Apple
+        script: |
+          # A Mac Catalyst App Store profile for com.dungeon.descent, made once
+          # with the App Store Connect integration's key; later builds reuse it.
+          set -e
+          ID=com.dungeon.descent
+          NAME="Dungeon Descent Mac App Store"
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          fetch() {
+            TMP=$(mktemp -d)
+            app-store-connect profiles list --type MAC_CATALYST_APP_STORE --state ACTIVE \
+              --name "$NAME" --save --profiles-dir "$TMP" >/dev/null 2>&1 || true
+            if ls "$TMP"/* >/dev/null 2>&1; then cp "$TMP"/* "$DEST/"; return 0; fi
+            return 1
+          }
+          if fetch; then echo "Using \"$NAME\" from Apple"; exit 0; fi
+          BID=$(app-store-connect bundle-ids list --bundle-id-identifier "$ID" --strict-match-identifier --json \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")')
+          [ -n "$BID" ] || { echo "No bundle ID $ID on Apple"; exit 1; }
+          CERTS=$(app-store-connect certificates list --type DISTRIBUTION --json 2>/dev/null \
+            | python3 -c 'import sys,json; print(" ".join(c["id"] for c in json.load(sys.stdin)))' || true)
+          [ -n "${CERTS// /}" ] || { echo "No Apple Distribution certificate found on Apple"; exit 1; }
+          app-store-connect profiles create "$BID" --certificate-ids $CERTS \
+            --type MAC_CATALYST_APP_STORE --name "$NAME" >/dev/null
+          echo "Made \"$NAME\""
+          fetch || { echo "Made the profile but couldn't download it"; exit 1; }
+      - name: Set build number
+        script: |
+          APP_ID=$(app-store-connect apps list --bundle-id-identifier com.dungeon.descent \
+            --strict-match-identifier --json 2>/dev/null \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")' || true)
+          LATEST=0
+          if [ -n "$APP_ID" ]; then
+            LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_ID" --platform MAC_OS 2>/dev/null \
+              | grep -Eo '^[0-9]+$' | tail -1 || true)
+          fi
+          NEXT=$(( ${LATEST:-0} + 1 ))
+          if [ "${PROJECT_BUILD_NUMBER:-0}" -gt "$NEXT" ]; then NEXT=$PROJECT_BUILD_NUMBER; fi
+          echo "Using build number $NEXT"
+          sed -i '' "s/CURRENT_PROJECT_VERSION: \"[0-9]*\"/CURRENT_PROJECT_VERSION: \"$NEXT\"/" swift/App/project.yml
+      - name: Generate the Xcode project
+        script: |
+          cd swift/App
+          xcodegen generate
+      - name: Build, sign and package the Mac app
+        script: |
+          set -eo pipefail
+          cd swift/App
+          xcodebuild -project DungeonDescent.xcodeproj -scheme DungeonDescent -configuration Release \
+            -destination 'generic/platform=macOS,variant=Mac Catalyst' \
+            -archivePath "$CM_BUILD_DIR/build/mac/DungeonDescent.xcarchive" \
+            CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=ZPD555RW3A \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="Dungeon Descent Mac App Store" \
+            archive | tail -40
+          cat > "$CM_BUILD_DIR/build/mac/ExportOptions.plist" <<'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store</string>
+            <key>teamID</key><string>ZPD555RW3A</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>signingCertificate</key><string>Apple Distribution</string>
+            <key>installerSigningCertificate</key><string>3rd Party Mac Developer Installer</string>
+            <key>provisioningProfiles</key>
+            <dict><key>com.dungeon.descent</key><string>Dungeon Descent Mac App Store</string></dict>
+          </dict>
+          </plist>
+          PLIST
+          xcodebuild -exportArchive -archivePath "$CM_BUILD_DIR/build/mac/DungeonDescent.xcarchive" \
+            -exportOptionsPlist "$CM_BUILD_DIR/build/mac/ExportOptions.plist" \
+            -exportPath "$CM_BUILD_DIR/build/mac/export" | tail -20
+          ls -la "$CM_BUILD_DIR/build/mac/export"
+    artifacts:
+      - build/mac/export/*.pkg
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false
