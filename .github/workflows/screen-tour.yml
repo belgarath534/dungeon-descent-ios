@@ -14,7 +14,7 @@ on:
       device:
         description: Which device to run on
         type: choice
-        options: [all, iphone, mac, vision]
+        options: [all, iphone, mac, vision, watch]
         default: all
   # Also runs when the tour itself changes on the Swift branch.
   push:
@@ -32,6 +32,7 @@ concurrency:
 
 jobs:
   tour:
+    if: inputs.device != 'watch'
     strategy:
       fail-fast: false
       matrix:
@@ -174,3 +175,71 @@ jobs:
             git push origin screen-tour-results && break
             git pull --rebase origin screen-tour-results || true
           done
+
+  # The Apple Watch app in the watch simulator, with sample data (-demo /
+  # -demoRun), for the App Store's Apple Watch screenshots.
+  watch:
+    if: inputs.device == '' || inputs.device == null || inputs.device == 'all' || inputs.device == 'watch'
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pick the newest Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+      - name: Build the watch app for the simulator
+        working-directory: swift/App
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          xcodegen generate
+          set -o pipefail
+          xcodebuild -project DungeonDescent.xcodeproj -target DungeonWatch -configuration Debug \
+            -sdk watchsimulator -derivedDataPath build CODE_SIGNING_ALLOWED=NO \
+            SYMROOT="$PWD/build/sym" build 2>&1 | grep -E "error:|BUILD (SUCCEEDED|FAILED)" || true
+          ls -d build/sym/Debug-watchsimulator/DungeonWatch.app
+      - name: Take the screenshots
+        working-directory: swift/App
+        run: |
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)["devices"]
+          best = None
+          for rt in sorted((k for k in d if "watchOS" in k), reverse=True):
+              for x in d[rt]:
+                  for pref in ("Ultra", "Series 10 (46mm)", "Series 11 (46mm)", "Series 9 (45mm)", "46mm", "45mm"):
+                      if pref in x["name"]:
+                          print(x["udid"], x["name"].replace(" ", "_"), sep="|"); sys.exit()
+              if d[rt] and not best: best = d[rt][0]
+          if best: print(best["udid"], best["name"].replace(" ", "_"), sep="|")
+          ')
+          NAME=${UDID#*|}; UDID=${UDID%%|*}
+          echo "Watch simulator: $NAME ($UDID)"
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b || sleep 20
+          xcrun simctl install "$UDID" build/sym/Debug-watchsimulator/DungeonWatch.app
+          mkdir -p results/watch
+          shoot() {
+            xcrun simctl terminate "$UDID" com.dungeon.descent.watchkitapp 2>/dev/null || true
+            xcrun simctl launch "$UDID" com.dungeon.descent.watchkitapp "$1"
+            sleep 8
+            xcrun simctl io "$UDID" screenshot "results/watch/$2.png"
+          }
+          shoot -demoRun 01-run
+          shoot -demo 02-characters
+          echo "$NAME" > results/watch/device.txt
+          ls -la results/watch
+      - name: Save to the screen-tour-results branch
+        working-directory: swift/App
+        run: |
+          D=watch
+          git config user.name "Screen tour"
+          git config user.email "actions@users.noreply.github.com"
+          WT=$(mktemp -d)
+          git fetch origin screen-tour-results
+          git worktree add "$WT" FETCH_HEAD
+          cd "$WT" && git checkout -B screen-tour-results
+          mkdir -p "$WT/$D" && find "$GITHUB_WORKSPACE/swift/App/results/$D" -maxdepth 1 -type f \( -name '*.png' -o -name '*.txt' \) -exec cp {} "$WT/$D/" \;
+          git add -A "$D"
+          git commit -qm "Screen tour: watch, $(date -u +%Y-%m-%dT%H:%MZ), ${GITHUB_SHA::7}" || exit 0
+          for i in 1 2 3; do git push origin screen-tour-results && break; git pull --rebase origin screen-tour-results || true; done

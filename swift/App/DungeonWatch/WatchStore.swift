@@ -17,12 +17,35 @@ final class WatchStore: NSObject, ObservableObject {
 
     override init() {
         super.init()
+        // App Store screenshots: started with -demo (characters) or -demoRun
+        // (a run going), the watch shows sample data instead of the phone's.
+        let args = ProcessInfo.processInfo.arguments
+        if args.contains("-demo") || args.contains("-demoRun") {
+            snapshot = Self.demo(running: args.contains("-demoRun"))
+            return
+        }
         if let d = UserDefaults.standard.data(forKey: cacheKey),
            let s = try? JSONDecoder().decode(WatchLink.Snapshot.self, from: d) { snapshot = s }
         if WCSession.isSupported() {
             WCSession.default.delegate = self
             WCSession.default.activate()
         }
+    }
+
+    static func demo(running: Bool) -> WatchLink.Snapshot {
+        let now = Date().timeIntervalSince1970
+        let chars = [
+            WatchLink.Character(index: 0, name: "Seraphine", cls: "Paladin", level: 14, dungeon: "The Hollow"),
+            WatchLink.Character(index: 1, name: "Grimwald", cls: "Necromancer", level: 9, dungeon: "Crypt of Malachar"),
+            WatchLink.Character(index: 2, name: "Kestrel", cls: "Ranger", level: 6, dungeon: "Frosthold Abyss"),
+        ]
+        let run = WatchLink.Run(charName: "Seraphine", cls: "Paladin", floor: 27, hp: 640, maxHp: 1000, level: 15,
+                                points: 412, potions: 3, enemiesDefeated: 58, bossesDefeated: 2, running: true,
+                                nextFightAt: now + 11, startedAt: now - 1800,
+                                log: ["⚔ Bone Colossus defeated! +18 points.", "🧪 Potion used. Restored 250 HP.",
+                                      "⬇ Descended to floor 27."])
+        return WatchLink.Snapshot(characters: chars, run: running ? run : nil, totalPoints: 1280, bestFloor: 41,
+                                  message: nil, sentAt: now)
     }
 
     var run: WatchLink.Run? { snapshot?.run }

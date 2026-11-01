@@ -195,6 +195,11 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         WKApplication: true
         WKCompanionAppBundleIdentifier: com.dungeon.descent
+    # Game Center is on for the app, so App Store review wants it on the watch app too.
+    entitlements:
+      path: DungeonWatch/DungeonWatch.entitlements
+      properties:
+        com.apple.developer.game-center: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.watchkitapp
