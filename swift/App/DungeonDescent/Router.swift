@@ -146,6 +146,7 @@ struct RootView: View {
             case .quit: QuitScreen()
             }
         }
+        .navigationShortcuts()
         .preferredColorScheme(.dark)
     }
 }

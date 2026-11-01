@@ -37,6 +37,7 @@ struct DungeonView: View {
     var body: some View {
         ZStack {
             WebBackground()
+            dungeonKeys
             ScrollView {
                 VStack(spacing: 12) {
                     topBar
@@ -487,13 +488,13 @@ struct DungeonView: View {
             }
             combatLog
             FlowRow(spacing: 8) {
-                Button("⚔ Attack") { model.act(.attack) }.buttonStyle(DungeonButtonStyle(kind: .combat))
+                Button("⚔ Attack") { model.act(.attack) }.buttonStyle(DungeonButtonStyle(kind: .combat)).combatKey("a")
                     .accessibilityLabel("Attack")
-                Button("💥 Heavy") { model.act(.heavy) }.buttonStyle(DungeonButtonStyle(kind: .combat))
+                Button("💥 Heavy") { model.act(.heavy) }.buttonStyle(DungeonButtonStyle(kind: .combat)).combatKey("h")
                     .accessibilityLabel("Heavy strike, powerful but can miss")
-                Button("🛡 Defend") { model.act(.defend) }.buttonStyle(DungeonButtonStyle(kind: .combat))
+                Button("🛡 Defend") { model.act(.defend) }.buttonStyle(DungeonButtonStyle(kind: .combat)).combatKey("d")
                     .accessibilityLabel("Defend, reduces incoming damage")
-                Button("🧪 Potion") { drinkPotion() }.buttonStyle(DungeonButtonStyle(kind: .combat))
+                Button("🧪 Potion") { drinkPotion() }.buttonStyle(DungeonButtonStyle(kind: .combat)).combatKey("p")
                     .accessibilityLabel("Use a health potion")
                 if let g = model.gun {
                     GunButton(gun: g) { model.shoot(g) }
@@ -508,6 +509,7 @@ struct DungeonView: View {
                         }
                     }
                     .buttonStyle(DungeonButtonStyle(kind: .skill))
+                    .combatKey("s")
                     .accessibilityLabel(run.spellCooldown > 0 ? "Spells, on cooldown, \(run.spellCooldown) turns" : "Cast a spell from your spell book")
                 }
                 if model.canPurge {
@@ -527,17 +529,18 @@ struct DungeonView: View {
                         .accessibilityLabel("Use Soul Trap to capture this enemy as a minion")
                 }
                 if run.enemy?.isBoss != true {
-                    Button("🏃 Flee") { model.act(.flee) }.buttonStyle(DungeonButtonStyle(kind: .combat))
+                    Button("🏃 Flee") { model.act(.flee) }.buttonStyle(DungeonButtonStyle(kind: .combat)).combatKey("f")
                         .accessibilityLabel("Attempt to flee combat")
                 }
-                Button("🔍 Examine") { examine() }.buttonStyle(DungeonButtonStyle(kind: .combat))
+                Button("🔍 Examine") { examine() }.buttonStyle(DungeonButtonStyle(kind: .combat)).combatKey("e")
                     .accessibilityLabel("Examine enemy to learn their weakness and abilities")
                 Button("🎒 Inventory") { toggleInventory() }.buttonStyle(DungeonButtonStyle(kind: .combat))
                     .accessibilityLabel("Open inventory during combat")
-                ForEach(model.skills, id: \.effect) { s in
+                ForEach(Array(model.skills.enumerated()), id: \.element.effect) { i, s in
                     let cost = model.skillCost(s)
                     Button("\(s.icon) \(s.name) (\(cost))") { model.useSkill(s.effect) }
                         .buttonStyle(DungeonButtonStyle(kind: .skill))
+                        .modifier(SkillKey(index: i))
                         .disabled(cost > run.sp)
                         .accessibilityLabel("\(s.name). \(s.desc) Costs \(cost) SP.\(cost > run.sp ? " Not enough SP." : "")")
                 }
@@ -1025,6 +1028,21 @@ struct DungeonView: View {
                     .buttonStyle(WebButtonStyle(kind: .ghost))
             }
         }
+    }
+
+    /// Alt+R reads the status; I opens the inventory and Backspace the
+    /// pause menu, as in the web version.
+    private var dungeonKeys: some View {
+        Group {
+            Button("Status") {
+                Feedback.announce("Floor \(run.floor). \(run.dungeon). HP \(run.hp) of \(run.maxHp). SP \(run.sp). Gold \(run.gold).")
+            }.keyboardShortcut("r", modifiers: .option)
+            Button("Inventory") { toggleInventory() }.keyboardShortcut("i", modifiers: [])
+            Button("Pause") { openPause() }.keyboardShortcut(.delete, modifiers: [])
+        }
+        .opacity(0)
+        .frame(width: 0, height: 0)
+        .accessibilityHidden(true)
     }
 
     private func openPause() {
