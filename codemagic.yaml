@@ -548,15 +548,31 @@ workflows:
             <key>teamID</key><string>ZPD555RW3A</string>
             <key>signingStyle</key><string>manual</string>
             <key>signingCertificate</key><string>Apple Distribution</string>
-            <key>installerSigningCertificate</key><string>3rd Party Mac Developer Installer</string>
+            <key>installerSigningCertificate</key><string>INSTALLER_ID</string>
             <key>provisioningProfiles</key>
             <dict><key>com.dungeon.descent</key><string>Dungeon Descent Mac App Store</string></dict>
           </dict>
           </plist>
           PLIST
+          # The installer certificate this build installed, by its fingerprint
+          # (its name differs between older and newer Apple certificates).
+          security find-identity -v -p basic | grep -i installer || true
+          INSTALLER_ID=$(security find-identity -v -p basic | grep -i installer | head -1 | awk '{print $2}')
+          [ -n "$INSTALLER_ID" ] || { echo "No installer certificate in the keychain"; exit 1; }
+          sed -i '' "s/INSTALLER_ID/$INSTALLER_ID/" "$CM_BUILD_DIR/build/mac/ExportOptions.plist"
+          sed -i '' 's#<string>app-store</string>#<string>app-store-connect</string>#' "$CM_BUILD_DIR/build/mac/ExportOptions.plist"
+          set +e
           xcodebuild -exportArchive -archivePath "$CM_BUILD_DIR/build/mac/DungeonDescent.xcarchive" \
             -exportOptionsPlist "$CM_BUILD_DIR/build/mac/ExportOptions.plist" \
             -exportPath "$CM_BUILD_DIR/build/mac/export" | tail -20
+          RC=${PIPESTATUS[0]}
+          if [ "$RC" != "0" ]; then
+            echo "──── Apple's export log ────"
+            L=$(ls -td "$TMPDIR"/DungeonDescent_*.xcdistributionlogs 2>/dev/null | head -1)
+            [ -n "$L" ] && grep -hiE "error|fail|productbuild|installer|identity" "$L"/*.log | tail -40
+            exit "$RC"
+          fi
+          set -e
           ls -la "$CM_BUILD_DIR/build/mac/export"
       - name: Upload to App Store Connect
         script: |
