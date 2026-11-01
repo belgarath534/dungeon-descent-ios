@@ -138,6 +138,8 @@ targets:
         PRODUCT_NAME: DungeonDescent
         TARGETED_DEVICE_FAMILY: "1,2"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # Apple Vision Pro's layered icon (back: the app icon; front, middle: clear).
+        "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xros*]": AppIconVision
         SWIFT_VERSION: "5.0"
         CODE_SIGN_STYLE: Automatic
   # The Live Activity, same bundle ID and App Store profile as the web
