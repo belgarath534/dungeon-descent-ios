@@ -162,7 +162,11 @@ jobs:
             git worktree add --detach "$WT"
             cd "$WT" && git checkout --orphan screen-tour-results && git rm -rqf . || true
           fi
-          rm -rf "$WT/$D" && cp -R "$GITHUB_WORKSPACE/swift/App/results/$D" "$WT/$D"
+          rm -rf "$WT/$D" && mkdir -p "$WT/$D"
+          # Pictures and text only: the screen recordings are far over GitHub's
+          # 100 MB file limit (they stay in the run's attachments).
+          find "$GITHUB_WORKSPACE/swift/App/results/$D" -maxdepth 1 -type f \( -name '*.png' -o -name '*.txt' \) \
+            -exec cp {} "$WT/$D/" \;
           cd "$WT"
           git add -A "$D"
           git commit -qm "Screen tour: $D, $(date -u +%Y-%m-%dT%H:%MZ), ${GITHUB_SHA::7}" || exit 0
