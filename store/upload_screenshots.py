@@ -17,8 +17,27 @@ API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
 
 
+def private_key():
+    """Codemagic's integration hands the key over as text, a file path
+    (@file:...) or another variable (@env:...), sometimes with escaped
+    newlines or without the PEM header."""
+    key = os.environ["APP_STORE_CONNECT_PRIVATE_KEY"].strip()
+    raw = key
+    print(f"Key format: {len(raw)} chars, starts with @: {raw.startswith('@')}, PEM header: {'BEGIN' in raw}, "
+          f"escaped newlines: {chr(92) + 'n' in raw}, real newlines: {chr(10) in raw}")
+    if key.startswith("@file:"):
+        key = open(os.path.expanduser(key[6:])).read()
+    elif key.startswith("@env:"):
+        key = os.environ[key[5:]]
+    key = key.replace("\\n", "\n").strip().strip('"')
+    if "BEGIN" not in key:
+        body = "".join(key.split())
+        key = "-----BEGIN PRIVATE KEY-----\n" + "\n".join(body[i:i + 64] for i in range(0, len(body), 64)) + "\n-----END PRIVATE KEY-----"
+    return key
+
+
 def token():
-    key = os.environ["APP_STORE_CONNECT_PRIVATE_KEY"]
+    key = private_key()
     now = int(time.time())
     return jwt.encode({"iss": os.environ["APP_STORE_CONNECT_ISSUER_ID"], "iat": now, "exp": now + 1000,
                        "aud": "appstoreconnect-v1"}, key, algorithm="ES256",
