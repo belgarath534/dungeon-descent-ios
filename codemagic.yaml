@@ -446,9 +446,10 @@ workflows:
   dungeon-descent-mac:
     name: Dungeon Descent Mac (TestFlight)
     # The Mac version (Mac Catalyst) of the Swift app, same bundle ID, macOS
-    # platform in App Store Connect. Needs the "Dungeon Descent Mac Installer"
-    # certificate in Codemagic (Code signing identities → Generate certificate
-    # → Mac Installer Distribution). Start it by hand from Codemagic.
+    # platform in App Store Connect. Mac App Store packages need a Mac
+    # Installer certificate, which Codemagic can't generate: each build makes
+    # a temporary one with a key that lives only in the build, and deletes it
+    # from Apple at the end (also when the build fails). Start it by hand.
     max_build_duration: 90
     instance_type: mac_mini_m4
     integrations:
@@ -457,7 +458,6 @@ workflows:
       ios_signing:
         certificates:
           - Accessible Backrooms Distribution
-          - Dungeon Descent Mac Installer
       xcode: latest
     scripts:
       - name: Install XcodeGen
@@ -494,6 +494,21 @@ workflows:
             --type MAC_CATALYST_APP_STORE --name "$NAME" >/dev/null
           echo "Made \"$NAME\""
           fetch || { echo "Made the profile but couldn't download it"; exit 1; }
+      - name: Temporary Mac installer certificate
+        script: |
+          set -e
+          umask 077
+          W=$(mktemp -d)
+          openssl genrsa -out "$W/installer.key" 2048 2>/dev/null
+          PW=$(openssl rand -hex 16)
+          app-store-connect certificates create --type MAC_INSTALLER_DISTRIBUTION \
+            --certificate-key "@file:$W/installer.key" --save --p12-path "$W/installer.p12" \
+            --p12-password "$PW" --json > "$W/installer.json"
+          python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["id"] if isinstance(d,dict) else d[0]["id"])' \
+            "$W/installer.json" > "$CM_BUILD_DIR/.installer_cert_id"
+          echo "Made temporary installer certificate $(cat "$CM_BUILD_DIR/.installer_cert_id")"
+          keychain add-certificates --certificate "$W/installer.p12" --certificate-password "$PW"
+          rm -f "$W/installer.key" "$W/installer.json"
       - name: Set build number
         script: |
           APP_ID=$(app-store-connect apps list --bundle-id-identifier com.dungeon.descent \
@@ -542,9 +557,22 @@ workflows:
             -exportOptionsPlist "$CM_BUILD_DIR/build/mac/ExportOptions.plist" \
             -exportPath "$CM_BUILD_DIR/build/mac/export" | tail -20
           ls -la "$CM_BUILD_DIR/build/mac/export"
+      - name: Upload to App Store Connect
+        script: |
+          app-store-connect publish --path "$CM_BUILD_DIR"/build/mac/export/*.pkg
+      - name: Delete the temporary installer certificate
+        script: |
+          if [ -f "$CM_BUILD_DIR/.installer_cert_id" ]; then
+            app-store-connect certificates delete "$(cat "$CM_BUILD_DIR/.installer_cert_id")" --ignore-not-found
+            rm -f "$CM_BUILD_DIR/.installer_cert_id"
+          fi
     artifacts:
       - build/mac/export/*.pkg
     publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: false
+      scripts:
+        # Runs even when the build failed, so no certificate is left behind.
+        - name: Make sure the temporary installer certificate is gone
+          script: |
+            if [ -f "$CM_BUILD_DIR/.installer_cert_id" ]; then
+              app-store-connect certificates delete "$(cat "$CM_BUILD_DIR/.installer_cert_id")" --ignore-not-found || true
+            fi
