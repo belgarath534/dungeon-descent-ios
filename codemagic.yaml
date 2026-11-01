@@ -511,7 +511,9 @@ workflows:
           python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["id"] if isinstance(d,dict) else d[0]["id"])' \
             "$W/installer.json" > "$CM_BUILD_DIR/.installer_cert_id"
           echo "Made temporary installer certificate $(cat "$CM_BUILD_DIR/.installer_cert_id")"
-          keychain add-certificates --certificate "$W/installer.p12" --certificate-password "$PW"
+          # Xcode packages with productbuild, which also has to be allowed to use the key.
+          keychain add-certificates --certificate "$W/installer.p12" --certificate-password "$PW" \
+            --allow-app /usr/bin/codesign /usr/bin/productsign /usr/bin/productbuild
           rm -f "$W/installer.key" "$W/installer.json"
       - name: Set build number
         script: |
