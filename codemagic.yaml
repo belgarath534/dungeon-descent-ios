@@ -205,7 +205,9 @@ workflows:
           if [ -n "$GOOD" ]; then
             cp "$GOOD" "$DEST/"; echo "Using \"$NAME\" from Apple (with Game Center)"; exit 0
           fi
-          python3 -c 'import sys,json; [print(p["id"]) for p in json.load(open(sys.argv[1]))]' "$TMP/list.json" | while read -r OLD; do
+          # Old ones with this name in any state (turning Game Center on makes them Invalid).
+          app-store-connect profiles list --type IOS_APP_STORE --name "$NAME" --json > "$TMP/all.json" 2>/dev/null || echo "[]" > "$TMP/all.json"
+          python3 -c 'import sys,json; [print(p["id"]) for p in json.load(open(sys.argv[1]))]' "$TMP/all.json" | while read -r OLD; do
             app-store-connect profiles delete "$OLD" --ignore-not-found >/dev/null && echo "Removed the old watch profile (no Game Center)"
           done
           CERTS=""
