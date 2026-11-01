@@ -358,3 +358,54 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: false  # internal testers get every build anyway
+
+  store-listing:
+    name: App Store listing text (iPhone, Mac, Vision Pro)
+    # Puts store/en-US/*.txt (description, promotional text, What's New,
+    # keywords) into every Dungeon Descent version waiting for submission in
+    # App Store Connect, on every platform. Start it by hand from Codemagic.
+    max_build_duration: 15
+    instance_type: mac_mini_m4
+    integrations:
+      app_store_connect: Accessible Backrooms
+    scripts:
+      - name: Fill in the listing
+        script: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+          def asc(*args):
+              r = subprocess.run(["app-store-connect", *args, "--json"], capture_output=True, text=True)
+              if r.returncode != 0:
+                  raise RuntimeError(r.stderr.strip() or r.stdout.strip())
+              return json.loads(r.stdout or "null")
+          text = {k: open(f"store/en-US/{k}.txt").read().strip()
+                  for k in ("description", "promotional_text", "whats_new", "keywords")}
+          apps = asc("apps", "list", "--bundle-id-identifier", "com.dungeon.descent", "--strict-match-identifier")
+          app_id = apps[0]["id"]
+          versions = asc("apps", "app-store-versions", app_id, "--state", "PREPARE_FOR_SUBMISSION")
+          if not versions:
+              print("No version is waiting for submission."); sys.exit(1)
+          failed = False
+          for v in versions:
+              a = v["attributes"]
+              name = f'{a.get("platform")} {a.get("versionString")}'
+              locs = asc("app-store-versions", "localizations", v["id"], "--locale", "en-US")
+              if not locs:
+                  print(f"{name}: no en-US listing, skipped"); continue
+              lid = locs[0]["id"]
+              try:
+                  asc("app-store-version-localizations", "modify", lid,
+                      "--description", text["description"],
+                      "--promotional-text", text["promotional_text"],
+                      "--keywords", text["keywords"])
+                  print(f"{name}: description, promotional text and keywords set")
+              except RuntimeError as e:
+                  failed = True; print(f"{name}: couldn't set the listing: {e}")
+              try:
+                  asc("app-store-version-localizations", "modify", lid, "--whats-new", text["whats_new"])
+                  print(f"{name}: What's New set")
+              except RuntimeError as e:
+                  # A platform's first version has no What's New.
+                  print(f"{name}: What's New not set (normal for a platform's first version): {e}")
+          sys.exit(1 if failed else 0)
+          PY

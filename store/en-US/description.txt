@@ -1,0 +1,18 @@
+Dungeon Descent is a dark fantasy dungeon crawler built from the ground up for VoiceOver, so blind and sighted players can enjoy every part of it.
+
+Create a hero from 24 classes and a range of races, choose a background, and descend through eight dungeons, from the Crypt of Malachar to the Abyssal Deep, then into the Shadow World. Every floor brings new enemies, traps, treasure, merchants and bosses, each with its own abilities and riddles.
+
+FEATURES
+• 24 classes with hundreds of skills, subclasses and spells
+• Eight dungeons plus the Shadow World, each with its own enemies, bosses and sounds
+• Endless Descent: an auto-battle mode that keeps going while you're away, with live updates on your Lock Screen and Dynamic Island
+• Apple Watch app: pick a character and start, check, heal or end a run from your wrist
+• The Spire, Boss Rush, the Gauntlet, the Siege, Void Mode, the Mine and more
+• Seasonal events all year: Halloween, Día de los Muertos, Lunar New Year, Christmas, the Eclipse, Monster Migration and many more
+• Bestiary, Codex, Chronicles and Hall of Records
+• Familiars, spirits, minions, a blacksmith and an alchemy table
+• Multiplayer arena and Hide and Seek (beta), Global Chat, tournaments and a leaderboard
+• Cloud saves with your account, plus iCloud backup
+• Full VoiceOver support, spatial audio and haptics
+
+Sign in with the same account to carry your progress across the website, Android and Apple devices.
