@@ -1,1 +1,2 @@
-No accessibility issues found.
+[Bestiary] Couldn't find a button starting with "Bestiary".
+[Quests] Couldn't find a button starting with "Quests".
