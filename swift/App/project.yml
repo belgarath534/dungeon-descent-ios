@@ -144,6 +144,11 @@ targets:
         # its own sandboxed entitlements, macOS 13 and later.
         DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER: NO
         "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": DungeonDescent/DungeonDescent-Mac.entitlements
+        # Mac App Store signing (Codemagic's Mac workflow makes this profile).
+        "CODE_SIGN_STYLE[sdk=macosx*]": Manual
+        "DEVELOPMENT_TEAM[sdk=macosx*]": ZPD555RW3A
+        "CODE_SIGN_IDENTITY[sdk=macosx*]": Apple Distribution
+        "PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]": Dungeon Descent Mac App Store
         MACOSX_DEPLOYMENT_TARGET: "13.0"
         SWIFT_VERSION: "5.0"
         CODE_SIGN_STYLE: Automatic
