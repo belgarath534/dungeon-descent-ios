@@ -382,7 +382,12 @@ workflows:
                   for k in ("description", "promotional_text", "whats_new", "keywords")}
           apps = asc("apps", "list", "--bundle-id-identifier", "com.dungeon.descent", "--strict-match-identifier")
           app_id = apps[0]["id"]
-          versions = asc("apps", "app-store-versions", app_id, "--state", "PREPARE_FOR_SUBMISSION")
+          every = asc("apps", "app-store-versions", app_id) or []
+          print("All versions:")
+          for v in every:
+              print("  ", v["attributes"].get("platform"), v["attributes"].get("versionString"), v["attributes"].get("appStoreState") or v["attributes"].get("appVersionState"))
+          editable = {"PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED"}
+          versions = [v for v in every if (v["attributes"].get("appStoreState") or v["attributes"].get("appVersionState")) in editable]
           if not versions:
               print("No version is waiting for submission."); sys.exit(1)
           failed = False
