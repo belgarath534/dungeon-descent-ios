@@ -372,7 +372,7 @@ workflows:
       - name: Fill in the listing
         script: |
           python3 - <<'PY'
-          import json, subprocess, sys
+          import json, os, subprocess, sys
           def asc(*args):
               r = subprocess.run(["app-store-connect", *args, "--json"], capture_output=True, text=True)
               if r.returncode != 0:
@@ -398,6 +398,12 @@ workflows:
               if not locs:
                   print(f"{name}: no en-US listing, skipped"); continue
               lid = locs[0]["id"]
+              cur = locs[0].get("attributes", {})
+              if os.environ.get("MODE") == "read":
+                  print(f"===== {name} =====")
+                  for k in ("promotionalText", "description", "whatsNew", "keywords"):
+                      print(f"--- {k} ---"); print(cur.get(k) or "(empty)")
+                  continue
               try:
                   asc("app-store-version-localizations", "modify", lid,
                       "--description", text["description"],
