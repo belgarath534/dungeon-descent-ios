@@ -23,37 +23,7 @@
 [Character list] Parent/Child mismatch — "" (3). This element is not an accessibility child of the parent element.
 [Character list] Element has no description — "" (81). This element is missing useful accessibility information.
 [Endless Descent] Couldn't find a button starting with "Endless Descent".
-[Bestiary] Element has no description — "" (3). This element is missing useful accessibility information.
-[Bestiary] Contrast failed — "A record of the creatures you have faced in the dark." (48). Contrast failed for element
-[Bestiary] Contrast failed — "Enemies revealed: 0 of 434" (48). Contrast failed for element
-[Bestiary] Contrast failed — "❓" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Unknown Creature" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Floor 1-3" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Venture deeper to reveal this entry." (48). Contrast failed for element
-[Bestiary] Contrast failed — "Not yet encountered" (48). Contrast failed for element
-[Bestiary] Contrast failed — "❓" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Unknown Creature" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Floor 1-3" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Venture deeper to reveal this entry." (48). Contrast failed for element
-[Bestiary] Contrast failed — "Not yet encountered" (48). Contrast failed for element
-[Bestiary] Contrast failed — "❓" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Unknown Creature" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Floor 1-3" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Venture deeper to reveal this entry." (48). Contrast failed for element
-[Bestiary] Contrast failed — "Not yet encountered" (48). Contrast failed for element
-[Bestiary] Contrast failed — "❓" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Unknown Creature" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Floor 1-3" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Venture deeper to reveal this entry." (48). Contrast failed for element
-[Bestiary] Contrast failed — "Not yet encountered" (48). Contrast failed for element
-[Bestiary] Contrast failed — "❓" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Unknown Creature" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Floor 1-3" (48). Contrast failed for element
-[Bestiary] Contrast failed — "❓" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Unknown Creature" (48). Contrast failed for element
-[Bestiary] Contrast failed — "Floor 1-3" (48). Contrast failed for element
-[Bestiary] Parent/Child mismatch — "" (3). This element is not an accessibility child of the parent element.
-[Bestiary] Element has no description — "" (81). This element is missing useful accessibility information.
+[Bestiary] Couldn't find a button starting with "Bestiary".
 [Quests] Couldn't find a button starting with "Quests".
 [What's New] Element has no description — "" (3). This element is missing useful accessibility information.
 [What's New] Contrast failed — "The Festival Update" (48). Contrast failed for element
