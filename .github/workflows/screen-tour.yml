@@ -84,6 +84,7 @@ jobs:
             UDID=$(find_vision)
             if [ -z "$UDID" ]; then xcodebuild -downloadPlatform visionOS; UDID=$(find_vision); fi
             echo "Vision Pro simulator: $UDID"
+            echo "SIM_UDID=$UDID" >> "$GITHUB_ENV"
             xcrun simctl boot "$UDID" || true
             echo "destination=id=$UDID" >> "$GITHUB_OUTPUT"
             echo "signing=CODE_SIGNING_ALLOWED=NO" >> "$GITHUB_OUTPUT"
@@ -136,6 +137,13 @@ jobs:
                   shutil.copy(src, os.path.join(out, base + ext))
           PY
           cp test.log "$OUT/test-log.txt" 2>/dev/null || true
+          # If the game quit on its own: its crash reports and its own log.
+          find "$HOME/Library/Logs/DiagnosticReports" -name 'DungeonDescent*' -mmin -120 2>/dev/null | while read -r F; do
+            cp "$F" "$OUT/crash-$(basename "$F").txt"; done
+          if [ -n "$SIM_UDID" ]; then
+            xcrun simctl spawn "$SIM_UDID" log show --last 60m --style compact \
+              --predicate 'process == "DungeonDescent"' 2>/dev/null | tail -400 > "$OUT/app-log.txt" || true
+          fi
           ls -la "$OUT"
           echo "──── Accessibility audit ────"
           cat "$OUT"/accessibility-audit* 2>/dev/null || echo "(none)"
