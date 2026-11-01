@@ -378,8 +378,14 @@ workflows:
               if r.returncode != 0:
                   raise RuntimeError(r.stderr.strip() or r.stdout.strip())
               return json.loads(r.stdout or "null")
-          text = {k: open(f"store/en-US/{k}.txt").read().strip()
-                  for k in ("description", "promotional_text", "whats_new", "keywords")}
+          def text_for(platform):
+              # iPhone/iPad: the full text. Mac and Vision Pro: the .other files
+              # (no Apple Watch, Lock Screen or Google sign-in there).
+              def read(k):
+                  if platform != "IOS" and os.path.exists(f"store/en-US/{k}.other.txt"):
+                      return open(f"store/en-US/{k}.other.txt").read().strip()
+                  return open(f"store/en-US/{k}.txt").read().strip()
+              return {k: read(k) for k in ("description", "promotional_text", "whats_new", "keywords")}
           apps = asc("apps", "list", "--bundle-id-identifier", "com.dungeon.descent", "--strict-match-identifier")
           app_id = apps[0]["id"]
           every = asc("apps", "app-store-versions", app_id) or []
@@ -398,6 +404,7 @@ workflows:
               if not locs:
                   print(f"{name}: no en-US listing, skipped"); continue
               lid = locs[0]["id"]
+              text = text_for(a.get("platform"))
               cur = locs[0].get("attributes", {})
               if os.environ.get("MODE") == "read":
                   print(f"===== {name} =====")

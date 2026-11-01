@@ -1,18 +1,34 @@
-Dungeon Descent is a dark fantasy dungeon crawler built from the ground up for VoiceOver, so blind and sighted players can enjoy every part of it.
+Descend into a dark fantasy dungeon you can play completely by ear. Dungeon Descent is a turn-based dungeon crawler RPG built from the ground up for VoiceOver and screen reader players, and fun for everyone. Made by a blind developer.
 
-Create a hero from 24 classes and a range of races, choose a background, and descend through eight dungeons, from the Crypt of Malachar to the Abyssal Deep, then into the Shadow World. Every floor brings new enemies, traps, treasure, merchants and bosses, each with its own abilities and riddles.
+FULLY ACCESSIBLE
+• Every button, room, enemy, attack and piece of loot is announced.
+• Works with VoiceOver, voice commands, buttons and haptics.
+• A step-by-step tutorial teaches everything.
 
-FEATURES
-• 24 classes with hundreds of skills, subclasses and spells
-• Eight dungeons plus the Shadow World, each with its own enemies, bosses and sounds
-• Endless Descent: an auto-battle mode that keeps going while you're away, with live updates on your Lock Screen and Dynamic Island
-• Apple Watch app: pick a character and start, check, heal or end a run from your wrist
-• The Spire, Boss Rush, the Gauntlet, the Siege, Void Mode, the Mine and more
-• Seasonal events all year: Halloween, Día de los Muertos, Lunar New Year, Christmas, the Eclipse, Monster Migration and many more
-• Bestiary, Codex, Chronicles and Hall of Records
-• Familiars, spirits, minions, a blacksmith and an alchemy table
-• Multiplayer arena and Hide and Seek (beta), Global Chat, tournaments and a leaderboard
-• Cloud saves with your account, plus iCloud backup
-• Full VoiceOver support, spatial audio and haptics
+FORGE YOUR LEGEND
+• 24 classes, from Warrior and Paladin to Necromancer and Bard.
+• 15 races and 11 professions, each with its own strengths.
+• Choose your dungeon and your difficulty, from forgiving to one life only.
 
-Sign in with the same account to carry your progress across the website, Android and Apple devices.
+FIGHT, LOOT, SURVIVE
+• Turn-based combat: attack, heavy strike, defend, potions, spells and class skills.
+• Weapons, armor, runes, scrolls, a blacksmith and an arcane shop.
+• Rooms full of traps, treasure, curses and bosses.
+
+ON YOUR WRIST
+• The Apple Watch app lets you pick a character and start, check, heal or end an Endless Descent run without taking out your phone.
+
+ENDLESS THINGS TO DO
+• Endless Descent, The Spire, Void Mode, Boss Rush and more modes. Endless Descent keeps going while you're away, with live updates on your Lock Screen and Dynamic Island.
+• Quests, daily challenges and seasonal events all year, including Día de los Muertos, Lunar New Year, the Eclipse and Monster Migration, plus a bestiary of hundreds of creatures.
+• 100 Game Center achievements.
+
+PLAY WITH OTHERS (OPTIONAL)
+• Global chat, community-made enemies, leaderboards and tournaments.
+• Every message and community enemy can be reported or blocked.
+
+YOUR SAVE IS SAFE
+• Progress saves on your device, with optional iCloud backup.
+• An optional account syncs your progress. Sign in with Apple, Google or email, and delete your account any time in the game.
+
+No ads. No purchases. Put on headphones and descend.
