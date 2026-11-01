@@ -15,7 +15,11 @@ final class ICloudBackup: ObservableObject {
     @Published var busy = false
     private var lastSync = Date.distantPast
 
-    private let container = CKContainer(identifier: "iCloud.com.dungeon.descent")
+    /// Made the first time iCloud backup is actually used, not at launch:
+    /// CloudKit stops the app if it isn't allowed iCloud (an unsigned build),
+    /// and on Apple Vision Pro the window goes inactive right after opening,
+    /// which reached here before anyone had turned backup on.
+    private lazy var container = CKContainer(identifier: "iCloud.com.dungeon.descent")
     private var db: CKDatabase { container.privateCloudDatabase }
     private let recordID = CKRecord.ID(recordName: "save")
 
