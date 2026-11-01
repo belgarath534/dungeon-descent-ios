@@ -1,0 +1,59 @@
+[Main menu] Element has no description — "" (3). This element is missing useful accessibility information.
+[Main menu] Contrast failed — "by Leo Productions" (48). Contrast failed for element
+[Main menu] Contrast failed — "Your gold, 0. Diamonds, 0. Mystery Coins, 0." (48). Contrast failed for element
+[Main menu] Contrast failed — "🌼 0 Marigolds" (48). Contrast failed for element
+[Main menu] Contrast failed — ""Not all who enter are lost — most are."" (48). Contrast failed for element
+[Main menu] Contrast failed — "🌑 The Void Stirs — 58% awakened. 5 days until it wakes (Nov 5)." (48). Contrast failed for element
+[Main menu] Contrast failed — "🌼 Día de los Muertos · ACTIVE · 1d 21h remaining, ⚡ XP Weekend · ACTIVE · 21h remaining, 🔴 Blood Moon · ACTIVE · 6d 21h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "🌼 Día de los Muertos · ACTIVE · 1d 21h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 21h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "🔴 Blood Moon · ACTIVE · 6d 21h remaining" (48). Contrast failed for element
+[Main menu] Contrast failed — "⚔️👥 Multiplayer" (48). Contrast failed for element
+[Main menu] Contrast failed — "BETA" (48). Contrast failed for element
+[Main menu] Contrast failed — "🕯️ Hide and Seek" (48). Contrast failed for element
+[Main menu] Contrast failed — "BETA" (48). Contrast failed for element
+[Main menu] Parent/Child mismatch — "" (3). This element is not an accessibility child of the parent element.
+[Main menu] Element has no description — "" (81). This element is missing useful accessibility information.
+[Character list] Element has no description — "" (3). This element is missing useful accessibility information.
+[Character list] Contrast failed — "Choose a warrior to continue, or forge a new legend." (48). Contrast failed for element
+[Character list] Contrast failed — "No champions yet. Create your first character." (48). Contrast failed for element
+[Character list] Contrast failed — "✦" (48). Contrast failed for element
+[Character list] Contrast failed — "CREATE NEW CHARACTER" (48). Contrast failed for element
+[Character list] Contrast failed — "✦" (48). Contrast failed for element
+[Character list] Parent/Child mismatch — "" (3). This element is not an accessibility child of the parent element.
+[Character list] Element has no description — "" (81). This element is missing useful accessibility information.
+[Endless Descent] Couldn't find a button starting with "Endless Descent".
+[Bestiary] Couldn't find a button starting with "Bestiary".
+[Quests] Couldn't find a button starting with "Quests".
+[What's New] Element has no description — "" (3). This element is missing useful accessibility information.
+[What's New] Contrast failed — "The Festival Update" (48). Contrast failed for element
+[What's New] Contrast failed — "• 🎉 Nine new events come to the dungeon, each with its own enemies, bonuses and twist. Check the Events screen in the menu to see when each one is on." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🌼 Día de los Muertos (November 1–2) — a fallen hero from your Graveyard returns as a ghost and fights beside you. Earn Marigolds and spend them at 🌼 The Ofrenda." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🇲🇽 Independencia de México (September 15–16) — the ¡El Grito! battle cry gives you +30% attack for 3 turns, once a fight." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🎆 New Year (December 31–January 1) — double XP into the new year." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🐉 Lunar New Year — three days that move with the moon. Enemies sometimes leave a 🧧 red envelope with gold or a Mystery Coin." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🃏 Chaos Day (April 1) — every fight rolls a random twist." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🌑 The Longest Night (December 21) — it is night all day, with every night bonus on." (48). Contrast failed for element
+[What's New] Contrast nearly passed — "• 🌘 The Eclipse — one evening a month the sun goes dark, the same time for every player. Double gold, and much tougher enemies." (48). Contrast is not high enough for element unless font size is larger.
+[What's New] Contrast failed — "• 🏮 Night Market — the first weekend of every month, the merchant comes far more often and everything is 25% off." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🐾 Monster Migration — two days a month, enemies from the other dungeons wander into yours with all their abilities." (48). Contrast failed for element
+[What's New] Contrast failed — "The Swift Rebuild" (48). Contrast failed for element
+[What's New] Contrast failed — "• 🍎 Dungeon Descent has been rebuilt from the ground up as a native iPhone app in Swift. It's faster, smoother and works better with VoiceOver, and your characters and progress come with you." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🐛 Rebuilding every system found over 100 bugs in the old version, and every one is fixed: 105 skills that did nothing now work, spells finish what they start, subclasses, races, class traits, run modifiers, dungeon conditions and seasonal items all do what they say." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🏚️ Enemies in The Hollow and the Abyssal Deep use their real abilities: the Bell Ringer, the Wall Crawler, the Door Warden, the Twin, the Pressure Beast, the Deep Stalker and more." (48). Contrast failed for element
+[What's New] Contrast failed — "• 📜 New: an opening quote for your class, an intro the first time you enter each dungeon, a boss preview before the floor 10 boss, and a class item in every floor shop." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🏰 The Spire's bosses appear, the Gauntlet has its real last dungeon, the Siege can be won, and the Mine's enemies fight with their own moves." (48). Contrast failed for element
+[What's New] Contrast failed — "• 🔒 The tournament leaderboard no longer shows players' email addresses." (48). Contrast failed for element
+[What's New] Label duplicates role description — "• 🐛 Fixed the Command Center (text-command play style) character creator being badly out of date — 6 missing classes, a missing dungeon, and an entirely missing Profession step that silently gave every terminal-created character "Wanderer" instead of a real profession." (48). The accessibilityLabel of this element duplicates information that is available in the accessibilityRoleDescription.
+[What's New] Label duplicates role description — "• 🐛 Fixed Portuguese translation gaps across Siege, Raid, Boss Rush, Tournament, and Mine combat logs — these never translated anything, not even static text." (48). The accessibilityLabel of this element duplicates information that is available in the accessibilityRoleDescription.
+[What's New] Parent/Child mismatch — "" (3). This element is not an accessibility child of the parent element.
+[What's New] Element has no description — "" (81). This element is missing useful accessibility information.
+[Help] Element has no description — "" (3). This element is missing useful accessibility information.
+[Help] Contrast failed — "Everything you need to know about Dungeon Descent. Use your screen reader heading navigation to jump between sections." (48). Contrast failed for element
+[Help] Contrast failed — "Dungeon Descent is a fully accessible turn-based dungeon crawler built specifically for screen reader users. You create a character, choose a dungeon, and descend through 10 floors fighting enemies, finding loot, and surviving long enough to defeat the final boss. Every element of the game is announced by your screen reader automatically." (48). Contrast failed for element
+[Help] Contrast failed — "From the main menu press Play. If you have no characters, press New Character. You will go through 12 creation steps — Class, Race, Profession, Name, Dungeon, Difficulty, Run Mode (Classic or Legacy), Spirit Companion, then four optional steps: Corruption Mode, Hunter Mode, Your Guide (name your companion), and Your Origin (backstory). Then you descend. The dungeon announces every room, every enemy, every event automatically." (48). Contrast failed for element
+[Help] Contrast failed — "Survive all 10 floors and defeat the boss on floor 10. The boss has 3 phases and gets stronger each phase. Defeat all 3 phases and the dungeon is complete. Completing a dungeon unlocks the next one." (48). Contrast failed for element
+[Help] Contrast failed — "A death cinematic plays — a unique line based on which dungeon you were in, which enemy killed you, and how deep you got. Then the run summary shows your stats. Your character stays on your roster unless you delete them. You can try again immediately." (48). Contrast failed for element
+[Help] Contrast failed — "A run is one complete attempt at a dungeon from floor 1 to floor 10. Each run your XP, gold, and skills reset. Your character persists between runs — their completion history, earned spirits, and journal entries carry over forever." (48). Contrast failed for element
+[Help] Parent/Child mismatch — "" (3). This element is not an accessibility child of the parent element.
+[Help] Element has no description — "" (81). This element is missing useful accessibility information.
