@@ -33,6 +33,7 @@ export function createInitialState({ startRoom, chapter = 1 } = {}) {
     previousRoom: null,
     gameOver: null,
     ward: { active: false, location: 'capsule', power: 0, stability: 0, emilyAlive: true, warned: {} },
+    counters: {},
     stats: { actions: 0, secretsFound: 0 },
   };
 }

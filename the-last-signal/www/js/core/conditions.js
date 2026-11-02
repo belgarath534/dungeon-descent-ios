@@ -62,6 +62,9 @@ const CHECKS = {
   stalkerAlertBelow: (v, s) => (s.stalker?.alert ?? 0) < v,
   // There is somewhere to back away to that 001 is not standing in.
   canFlee: (v, s) => (!!s.previousRoom && s.previousRoom !== s.location && s.previousRoom !== s.stalker?.room) === !!v,
+  // Named counters, such as the jury's leaning in Part Two.
+  counterAtLeast: (v, s) => (s.counters?.[v.id] ?? 0) >= v.n,
+  counterBelow: (v, s) => (s.counters?.[v.id] ?? 0) < v.n,
   // { countAtLeast: { flags: [...], n: 2 } }: at least n of these flags are set.
   countAtLeast: (v, s) => v.flags.filter((f) => s.flags[f]).length >= v.n,
   all: (v, s) => v.every((c) => evaluate(c, s)),

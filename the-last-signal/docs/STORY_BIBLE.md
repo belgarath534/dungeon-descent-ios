@@ -185,6 +185,18 @@ The creator's idea: after Part One, the protagonist is put on trial, framed by s
 | Your lawyer is **Nadia Okafor**. Bail is paid by Emily or Daniel if you called them. Detective Ruiz's initial is now A. | Avoids confusion with Sarah. |
 | Pryce was about to testify against the board. The 3 AM tip came through the facility's old phone exchange: **someone is still inside the facility network**, and they just sent the signal **from the courthouse**. | Sets up the trial. |
 
+### Part Two, Chapter 3: The Trial (built)
+
+| Detail | Why |
+|---|---|
+| **Judge Amara Bell.** **Prosecutor Grant Holloway**, calm and silver-haired. | The courtroom cast. |
+| The jury's leaning is a hidden counter. Good cross-examination, honest answers, and the witnesses you recruited raise it; lies (the caught lie to Ruiz comes back) and the prosecution's witness lower it. | Every earlier choice counts in court. |
+| Cross-examining **Ruiz**: the tip came eight hours before the body was found; your radio vanished from the police evidence room; you did not resist arrest; she never had a reason to doubt you. | Uses what you learned in Chapter 1. |
+| **Victor Lane**, the prosecution's surprise eyewitness, is the board's old private security, the man behind "the number on the board". Only Theo can expose him. | Pays off Chapter 1's security log and recruiting Theo. |
+| At recess Sarah traces the courthouse signal to the **courthouse evidence room**. | The frame came from inside. |
+| Your witnesses testify in their own voices. You choose whether to take the stand and how to close. | Agency in the courtroom. |
+| The jury retires. The lights go out. Over the speakers: "Guilty or not, it doesn't matter. I kept a copy of everything. Including him." | The cliffhanger: "him" is Daniel, a copy of his mind. The verdict comes next chapter. |
+
 ## 3. Open questions for the creator
 
 1. **Timeline.** Did the protagonist leave before or after the experiment and the abandonment? Chapter 1 avoids saying.

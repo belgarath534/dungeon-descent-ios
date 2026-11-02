@@ -202,6 +202,17 @@ export const SOUNDSCAPES = {
     keep(scene, api.loopNoise({ filter: 'bandpass', freq: 800, Q: 0.6, gain: 0.02 }, bus));
   },
 
+  courtroom({ api, bus, scene }) {
+    keep(scene, api.loopNoise({ freq: 400, gain: 0.02 }, bus)); // air conditioning
+    keep(scene, api.loopNoise({ filter: 'highpass', freq: 5000, gain: 0.004 }, bus)); // speakers hissing
+    every(scene, 6000, 14000, () => api.noise(0.2, { filter: 'bandpass', freq: 1200, gain: 0.02, bus, pan: 0.6 })); // a cough, jury side
+  },
+
+  hallway({ api, bus, scene }) {
+    keep(scene, api.loopNoise({ freq: 700, gain: 0.015 }, bus));
+    every(scene, 1500, 4000, () => api.tone(2600, 0.03, { gain: 0.008, bus, pan: Math.random() * 2 - 1 })); // heels on marble
+  },
+
   elevator({ api, bus, scene }) {
     powerHum(api, bus, scene, 0.3, 70);
     keep(scene, api.loopNoise({ freq: 400, gain: 0.03 }, bus));

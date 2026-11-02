@@ -284,6 +284,12 @@ function installCoreEffects(ctx) {
 
   effects.register('checkpoint', (v, c) => c.requestCheckpoint());
 
+  // { count: { id: 'jury', add: 2 } } adds to a named counter.
+  effects.register('count', (v, c) => {
+    c.state.counters ||= {};
+    c.state.counters[v.id] = (c.state.counters[v.id] ?? 0) + v.add;
+  });
+
   // Jump the clock forward to a time of day, e.g. { hour: 19, minute: 30 }.
   // Only ever forward, so timers and systems stay consistent.
   effects.register('setClock', (v, c) => {
