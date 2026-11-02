@@ -142,6 +142,22 @@ export const CUES = {
   },
   flatline: (a) => a.tone(1000, 3, { gain: 0.05, attack: 0.01 }),
 
+  // ---- Prototype 001 -----------------------------------------------------
+  'footsteps.heavy': (a, o) => {
+    for (let i = 0; i < 3; i++) {
+      a.tone(55, 0.18, { gain: softer(a, 0.22), pan: o.pan, at: i * 0.55 });
+      a.noise(0.12, { freq: 400, gain: softer(a, 0.1), pan: o.pan, at: i * 0.55 });
+      a.tone(420, 0.2, { slideTo: 380, type: 'sawtooth', lowpass: 900, gain: 0.015, pan: o.pan, at: i * 0.55 + 0.1 });
+    }
+  },
+  'footsteps.far': (a, o) => {
+    for (let i = 0; i < 3; i++) a.tone(50, 0.15, { gain: 0.07, pan: o.pan, lowpass: 200, at: i * 0.6 });
+  },
+  hit: (a) => {
+    a.noise(0.25, { freq: 900, gain: softer(a, 0.3) });
+    a.tone(70, 0.4, { gain: softer(a, 0.3) });
+  },
+
   'chapter.end': (a) => {
     a.tone(55, 3, { type: 'sawtooth', lowpass: 300, gain: 0.12, attack: 0.8 });
     [392, 349, 311].forEach((f, i) => a.tone(f, 0.7, { gain: 0.04, attack: 0.1, at: 0.6 + i * 0.6 }));

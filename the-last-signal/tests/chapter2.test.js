@@ -25,7 +25,7 @@ function finishTalk(game) {
 }
 
 // Plays Chapter 1 the honest way and starts Chapter 2.
-function startChapter2() {
+export function startChapter2() {
   const game = createGame({ content, bus: createEventBus() });
   game.newGame();
   game.act('glovebox', 'open');
@@ -110,7 +110,7 @@ test('chapter 2, honest path: Emily is saved and Daniel asks to wake 001', () =>
   assert.equal(game.view().mode, 'chapterEnd');
   assert.ok(game.state.flags.agreed_activate_001);
   assert.ok(game.state.ward.emilyAlive);
-  assert.equal(game.hasNextChapter(), false);
+  assert.equal(game.hasNextChapter(), true);
 });
 
 test('chapter 2: lying about Emily is exposed by her alarm on the radio', () => {

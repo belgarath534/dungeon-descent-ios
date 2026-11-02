@@ -37,6 +37,7 @@ export const CUE_SAMPLES = {
   'radio.static': 'sfx-radio-static',
   'radio.on': 'sfx-radio-static',
   'chapter.end': 'sfx-stinger',
+  'stinger.death': 'sfx-stinger',
 };
 
 // Turned down when "Reduce sudden loud sounds" is on.

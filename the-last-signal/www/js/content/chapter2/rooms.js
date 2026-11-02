@@ -9,6 +9,7 @@ export const rooms = {
   b1_landing: {
     id: 'b1_landing',
     name: 'Sublevel 1, elevator landing',
+    shortName: 'elevator landing',
     zone: 'sublevel',
     soundscape: 'sublevel',
     description:
@@ -414,11 +415,30 @@ export const rooms = {
     name: 'Storage',
     zone: 'sublevel',
     soundscape: 'storage',
-    description:
-      'Metal shelving to the ceiling, crowded with crates and parts. On your right, a charging rack with a few portable power cells. And in the middle of the floor ahead of you, standing on a low crate, something tall under a grey tarp.',
-    revisit: 'Storage. The charging rack on the right, the shape under the tarp ahead.',
+    description: [
+      {
+        when: { notFlag: 'woke_001' },
+        text: 'Metal shelving to the ceiling, crowded with crates and parts. On your right, a charging rack with a few portable power cells. And in the middle of the floor ahead of you, standing on a low crate, something tall under a grey tarp.',
+      },
+      {
+        when: { stalkerRecharging: true },
+        text: 'Metal shelving to the ceiling. The charging rack on your right. Ahead, on its crate, Prototype 001 stands docked and still, whining softly as it charges. On your left, behind the shelves, the freight lift.',
+      },
+      {
+        text: 'Metal shelving to the ceiling. The charging rack on your right. Ahead, the empty crate where 001 stood, its grey tarp in a heap on the floor. On your left, behind the shelves, the freight lift.',
+      },
+    ],
+    revisit: [
+      { when: { notFlag: 'woke_001' }, text: 'Storage. The charging rack on the right, the shape under the tarp ahead.' },
+      { when: { stalkerRecharging: true }, text: 'Storage. 001 is docked ahead, charging. The freight lift on your left.' },
+      { text: 'Storage. The empty crate ahead, the charging rack on the right, the freight lift on your left.' },
+    ],
     listen: {
-      text: 'The charging rack clicks softly on your right. The shape under the tarp makes no sound at all. No fan, no hum, no standby tone. Complete silence, which is somehow worse.',
+      text: [
+        { when: { notFlag: 'woke_001' }, text: 'The charging rack clicks softly on your right. The shape under the tarp makes no sound at all. No fan, no hum, no standby tone. Complete silence, which is somehow worse.' },
+        { when: { stalkerRecharging: true }, text: 'The rising whine of 001 charging, straight ahead. Under it, very softly, a heartbeat: three short, one long.' },
+        { text: 'The charging rack clicks softly on your right. The crate ahead is empty and silent.' },
+      ],
     },
     objects: [
       {
@@ -446,6 +466,7 @@ export const rooms = {
         id: 'tarp',
         name: 'Shape under the tarp',
         position: 'ahead',
+        when: { notFlag: 'ch3_started' },
         actions: [
           {
             id: 'examine',

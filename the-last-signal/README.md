@@ -38,6 +38,11 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 - A lie about Emily can be discovered through her alarms or the records.
 - 3 documents, 1 recording, 2 hidden discoveries. Choices from Chapter 1 carry over.
 
+**Chapter 3: Awakening.** Wake Prototype 001 and learn who sent the signal. 001 patrols Sublevel 1, tracked entirely by sound: footsteps in the ear of its direction, warnings before it walks in, and Listen to locate it. Hide, hold still, back away, or speak to it. Take its key while it recharges and ride the freight lift to Sublevel 2.
+
+- Caught once: hurt. Caught again before treatment: death, then retry from the last checkpoint.
+- Emily still needs care while 001 roams.
+
 **Foundation:** accessible menus, first-run setup, three speech modes, spatial sound effects and room ambience, journal, inventory, message history, autosave and 3 save slots, settings (speech, volumes, mono audio, startle reduction, trust feedback, text size, high contrast, keyboard shortcuts), and a sound glossary.
 
 ## Documents

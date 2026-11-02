@@ -29,6 +29,9 @@ export function createInitialState({ startRoom, chapter = 1 } = {}) {
     dialogue: { active: null, seen: {} },
     firedTriggers: {},
     ended: null,
+    stalker: { active: false, room: null, step: 0, nextMoveAt: 0, rechargeUntil: 0, alert: 0, alertDecayAt: 0 },
+    previousRoom: null,
+    gameOver: null,
     ward: { active: false, location: 'capsule', power: 0, stability: 0, emilyAlive: true, warned: {} },
     stats: { actions: 0, secretsFound: 0 },
   };

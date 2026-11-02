@@ -5,7 +5,7 @@
 
 import { SAVE_VERSION } from './state.js';
 
-export const SLOTS = ['auto', '1', '2', '3'];
+export const SLOTS = ['auto', 'checkpoint', '1', '2', '3'];
 
 // migrations[n] upgrades a save from version n to n + 1.
 const migrations = {

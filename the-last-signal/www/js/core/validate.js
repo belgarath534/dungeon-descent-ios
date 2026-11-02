@@ -127,6 +127,7 @@ export function validateContent(content, effectNames) {
     checkEffects(d.onRead, `journal.${id}.onRead`);
     if (!Array.isArray(d.text)) problems.push(`journal.${id}: text must be a list of paragraphs`);
   }
+  for (const r of content.stalkerRoute || []) if (!content.rooms[r]) problems.push(`stalkerRoute: unknown room "${r}"`);
   for (const [n, ch] of Object.entries(content.chapters)) {
     if (!content.rooms[ch.start.room]) problems.push(`chapters.${n}.start.room does not exist`);
     checkEffects(ch.start.effects, `chapters.${n}.start.effects`);

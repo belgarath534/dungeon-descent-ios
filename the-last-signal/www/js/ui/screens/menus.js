@@ -59,7 +59,7 @@ export function titleScreen(app) {
     h('h1', { class: 'game-title' }, 'The Last Signal'),
     h('p', { class: 'tagline' }, 'A psychological horror investigation. Played by ear.'),
     buttonGroup('Main menu', items),
-    h('p', { class: 'fineprint' }, 'Early development build. Chapters 1 and 2.'),
+    h('p', { class: 'fineprint' }, 'Early development build. Chapters 1 to 3.'),
   );
 
   return {
@@ -113,7 +113,7 @@ export function pauseScreen(app) {
 
 // ---- save / load ------------------------------------------------------------
 function describeSlot(s) {
-  const name = s.slot === 'auto' ? 'Autosave' : `Slot ${s.slot}`;
+  const name = s.slot === 'auto' ? 'Autosave' : s.slot === 'checkpoint' ? 'Checkpoint' : `Slot ${s.slot}`;
   if (s.empty) return `${name}: empty`;
   if (s.corrupt) return `${name}: damaged save`;
   const m = s.meta;
@@ -123,7 +123,7 @@ function describeSlot(s) {
 
 export function savesScreen(app, p) {
   const saving = p.mode === 'save';
-  const slots = app.saves.list().filter((s) => !(saving && s.slot === 'auto'));
+  const slots = app.saves.list().filter((s) => !(saving && (s.slot === 'auto' || s.slot === 'checkpoint')));
   const result = h('p', { role: 'status', class: 'result' });
 
   const buttons = slots.map((s) =>
@@ -191,6 +191,8 @@ const SOUND_GLOSSARY = [
   ['monitor', 'Emily\u2019s heart monitor.'],
   ['alarm', 'Emily\u2019s monitor alarm: she needs attention soon.'],
   ['alarm.critical', 'Urgent alarm: Emily is in danger right now.'],
+  ['footsteps.heavy', 'Prototype 001, one room away. The ear tells you which side.'],
+  ['footsteps.far', 'Prototype 001, two rooms away.'],
 ];
 
 export function helpScreen(app) {

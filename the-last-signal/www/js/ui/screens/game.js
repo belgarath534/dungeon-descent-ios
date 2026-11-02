@@ -58,13 +58,14 @@ export function gameScreen(app) {
     showBeat(beat.lines);
     render();
     app.autosave();
+    if (beat.checkpoint) app.saves.save('checkpoint', game.snapshot(), game.saveMeta());
     focusEl(beatEl);
   }
 
   // ---- controls -----------------------------------------------------------
   function render() {
     const v = game.view();
-    title.textContent = v.mode === 'chapterEnd' ? v.ended.title : v.room.name;
+    title.textContent = v.mode === 'gameOver' ? v.gameOver.title : v.mode === 'chapterEnd' ? v.ended.title : v.room.name;
     status.textContent = `Time: ${v.clock}`;
     document.title = `${title.textContent} — The Last Signal`;
     // Music never plays over exploration, so it cannot mask speech or clues.
@@ -75,12 +76,13 @@ export function gameScreen(app) {
     if (v.mode !== 'explore') submenu = null;
 
     const groups = [];
-    if (v.mode === 'chapterEnd') groups.push(...chapterEndControls(v));
+    if (v.mode === 'gameOver') groups.push(gameOverControls(v));
+    else if (v.mode === 'chapterEnd') groups.push(...chapterEndControls(v));
     else if (v.mode === 'dialogue') groups.push(dialogueControls(v));
     else if (submenu) groups.push(objectControls(v.objects.find((o) => o.id === submenu)));
     else groups.push(...exploreControls(v));
 
-    if (v.mode !== 'chapterEnd') groups.push(menuControls(v));
+    if (v.mode !== 'chapterEnd' && v.mode !== 'gameOver') groups.push(menuControls(v));
     controls.replaceChildren(...groups.filter(Boolean));
   }
 
@@ -181,6 +183,20 @@ export function gameScreen(app) {
       button('Return to the main menu', () => app.show('title')),
     );
     return [summary, buttonGroup('What next', buttons)];
+  }
+
+  function gameOverControls(v) {
+    const hasCheckpoint = !app.saves.list().find((x) => x.slot === 'checkpoint')?.empty;
+    const buttons = [];
+    if (hasCheckpoint) buttons.push(button('Try again from the last checkpoint', () => app.loadFrom('checkpoint')));
+    buttons.push(button('Return to the main menu', () => app.show('title')));
+    return h(
+      'section',
+      { class: 'group', 'aria-labelledby': 'go-h' },
+      h('h2', { id: 'go-h' }, 'You died'),
+      h('p', {}, v.gameOver.text),
+      h('ul', { class: 'btn-list' }, buttons.map((b) => h('li', {}, b))),
+    );
   }
 
   function repeat() {

@@ -14,6 +14,7 @@ import { installDialogue } from '../systems/dialogue.js';
 import { installTrust, trustLevel } from '../systems/trust.js';
 import { installJournal } from '../systems/journal.js';
 import { installWard } from '../systems/ward.js';
+import { installStalker } from '../systems/stalker.js';
 
 export function createGame({ content, bus }) {
   let state = null;
@@ -45,8 +46,20 @@ export function createGame({ content, bus }) {
     onTick(fn) {
       tickHooks.push(fn);
     },
+    onListen(fn) {
+      listenHooks.push(fn);
+    },
+    runListenHooks() {
+      for (const fn of listenHooks) fn(ctx);
+    },
+    // Ask the UI to save a checkpoint once this action finishes.
+    requestCheckpoint() {
+      checkpoint = true;
+    },
   };
   const tickHooks = [];
+  const listenHooks = [];
+  let checkpoint = false;
 
   installCoreEffects(ctx);
   const world = installWorld(ctx);
@@ -54,11 +67,12 @@ export function createGame({ content, bus }) {
   const trust = installTrust(ctx);
   const journal = installJournal(ctx);
   const ward = installWard(ctx);
+  installStalker(ctx);
 
   // Scheduled events and triggers run between player actions, never in
   // the middle of a conversation.
   function runPending() {
-    for (let guard = 0; guard < 20 && !state.dialogue.active; guard++) {
+    for (let guard = 0; guard < 20 && !state.dialogue.active && !state.gameOver; guard++) {
       const now = state.time.minutes;
       state.timers.sort((a, b) => a.at - b.at);
       const due = state.timers.find((t) => t.at <= now);
@@ -81,11 +95,12 @@ export function createGame({ content, bus }) {
   function run(fn) {
     if (!state) throw new Error('No game in progress');
     output = [];
+    checkpoint = false;
     fn();
     runPending();
     state.stats.actions += 1;
     bus.emit('state:changed', { state });
-    return { lines: output };
+    return { lines: output, checkpoint };
   }
 
   function roomActions() {
@@ -100,6 +115,7 @@ export function createGame({ content, bus }) {
   }
 
   function mode() {
+    if (state.gameOver) return 'gameOver';
     if (state.ended) return 'chapterEnd';
     if (state.dialogue.active) return 'dialogue';
     return 'explore';
@@ -160,6 +176,7 @@ export function createGame({ content, bus }) {
             : [],
         choices: m === 'dialogue' ? dialogue.choices() : [],
         ended: state.ended || null,
+        gameOver: state.gameOver || null,
       };
     },
 
@@ -261,6 +278,8 @@ function installCoreEffects(ctx) {
     c.cue('secret');
     c.say('You found something hidden.', { kind: 'system' });
   });
+
+  effects.register('checkpoint', (v, c) => c.requestCheckpoint());
 
   effects.register('endChapter', (v, c) => {
     c.state.flags[`chapter_${c.state.chapter}_complete`] = true;

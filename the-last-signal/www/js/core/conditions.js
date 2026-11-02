@@ -23,6 +23,9 @@
 //       wardActive / emilyAlive boolean (Emily's life support, see systems/ward.js)
 //       emilyIn                 'capsule' | 'ward'
 //       wardPowerBelow / emilyStabilityBelow   number
+//       stalkerActive / stalkerHere / stalkerRecharging   boolean (Prototype 001)
+//       stalkerIn               room id | room id[]
+//       stalkerAlertBelow       number
 //       all / any               condition[]
 //       not                     condition
 
@@ -52,6 +55,13 @@ const CHECKS = {
   emilyIn: (v, s) => !!s.ward?.active && s.ward.location === v,
   wardPowerBelow: (v, s) => (s.ward?.power ?? 0) < v,
   emilyStabilityBelow: (v, s) => (s.ward?.stability ?? 0) < v,
+  stalkerActive: (v, s) => !!s.stalker?.active === !!v,
+  stalkerHere: (v, s) => (!!s.stalker?.active && s.stalker.room === s.location) === !!v,
+  stalkerIn: (v, s) => !!s.stalker?.active && asList(v).includes(s.stalker.room),
+  stalkerRecharging: (v, s) => (!!s.stalker?.active && s.time.minutes < s.stalker.rechargeUntil) === !!v,
+  stalkerAlertBelow: (v, s) => (s.stalker?.alert ?? 0) < v,
+  // There is somewhere to back away to that 001 is not standing in.
+  canFlee: (v, s) => (!!s.previousRoom && s.previousRoom !== s.location && s.previousRoom !== s.stalker?.room) === !!v,
   all: (v, s) => v.every((c) => evaluate(c, s)),
   any: (v, s) => v.some((c) => evaluate(c, s)),
   not: (v, s) => !evaluate(v, s),

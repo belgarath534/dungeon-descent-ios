@@ -29,6 +29,13 @@ Run through this with VoiceOver on an iPhone after each increment. Automated tes
 - [ ] Screen reader mode: no double speech (the game never talks over VoiceOver).
 - [ ] Built-in voice mode, with VoiceOver off: new text is read aloud, and each control is read as you tab to it.
 
+## Stealth (Chapter 3)
+
+- [ ] 001's footsteps are clearly in the correct ear, and you can tell one room away from two rooms away.
+- [ ] The warning "It is coming toward you" arrives in time to act.
+- [ ] Listen always tells you where 001 is in words.
+- [ ] Being caught, dying and "Try again from the last checkpoint" are all clear and easy to reach.
+
 ## Saving
 
 - [ ] Leave the app mid-conversation, reopen it, choose Continue: the game reminds you of the conversation and offers the same replies.

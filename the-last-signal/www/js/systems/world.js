@@ -116,6 +116,7 @@ export function installWorld(ctx) {
 
   function enterRoom(roomId, c = ctx) {
     if (!rooms[roomId]) throw new Error(`Unknown room "${roomId}"`);
+    if (c.state.location !== roomId) c.state.previousRoom = c.state.location;
     c.state.location = roomId;
     const r = rooms[roomId];
     c.bus.emit('room:entered', { room: r });
@@ -138,6 +139,7 @@ export function installWorld(ctx) {
     ctx.say(pickText(l.text, ctx.state) || 'You hold still and listen. Nothing stands out.');
     for (const d of details(l.details)) ctx.say(d);
     effects.apply(l.effects, ctx);
+    ctx.runListenHooks();
     ctx.advanceTime(1);
   }
 
@@ -153,8 +155,8 @@ export function installWorld(ctx) {
     ctx.cue(exit.sound || 'door', { pan: DIRECTION_PAN[exit.dir] });
     if (exit.text) ctx.say(exit.text);
     effects.apply(exit.effects, ctx);
-    ctx.advanceTime(exit.time ?? 2);
     enterRoom(exit.to);
+    ctx.advanceTime(exit.time ?? 2);
   }
 
   function act(objectId, actionId) {

@@ -82,10 +82,30 @@ Small details I wrote so the first chapter could be played. Each can be changed 
 - Warnings always come before anything permanent: a quiet chirp at 50 percent, then loud radio alarms at 25 and 10 percent, then a final alarm. She can die while you are elsewhere, but only after all of those.
 - If she dies, the story continues, and it is remembered.
 
+## 2c. Chapter 3: Awakening
+
+### Decisions made (the creator said: you choose)
+
+- **Who sent the signal: Daniel.** "Three short, one long" was Prototype 001's heartbeat, the first sound it made the night its core was switched on (Emily cried). He used it because it was "the only voice I had left that was still mine." Revealed when 001 wakes and makes the sound.
+- **Did Daniel know Emily was captured: no.** The board told him she resigned because she did not want to see what he had become. He believed them, and blames himself for that.
+- **What happens if 001 catches you:** the first time it hurts you and walks on. Caught again while still hurt, you die and restart from the last checkpoint. The medical ward can patch you up.
+
+### Details added (placeholders)
+
+| Detail | Why |
+|---|---|
+| Sublevel 2 holds the revival codes, the board's records, "and what's left of me". | Sets up finding Daniel's body there, as in the brief. |
+| The only way down is a freight lift in storage that answers only to a key kept inside 001 ("they built it to carry their equipment"). | Gives a reason to wake 001. |
+| 001 wakes gentle ("Hello. I am here to help."), then corrects itself: "Intruder detected." | Shows the modified programming from the brief. |
+| 001 patrols Sublevel 1 on a fixed route and recharges in storage, when it cannot see you. | Stealth that can be played entirely by ear. |
+| Telling 001 "Daniel built you to be kind" makes it hesitate once: "Kindness is not a requirement." | Pays off the whiteboard secret from Chapter 1. |
+| 001 stops and stands over Emily's bed on its rounds. | Unexplained on purpose; feeds the prototype mystery. |
+| The key's tag says 001's original behavioural layer is archived on Sublevel 2. | A possible way to restore 001 later. |
+
 ## 3. Open questions for the creator
 
 1. **Timeline.** Did the protagonist leave before or after the experiment and the abandonment? Chapter 1 avoids saying.
-2. **What was the protagonist's job** at the facility, and did they know Daniel or Emily personally?
+2. ~~Answered in 2c.~~ **What was the protagonist's job** at the facility, and did they know Daniel or Emily personally?
 3. **Names.** Does the facility have a name? Does the protagonist have a name or a fixed gender?
 4. **How long has the facility been abandoned?** Chapter 1 only says "dark for a long time".
 5. **Who sent the signal?** Daniel implies he has been waiting for someone to pick up the radio. Was it Daniel, Emily's capsule, Prototype 001, or something else?
