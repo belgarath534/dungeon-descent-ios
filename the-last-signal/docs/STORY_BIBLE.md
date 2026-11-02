@@ -156,6 +156,23 @@ Most endings close on the signal returning ("three short tones, one long") as a 
 - **Chapter 7: The Last Signal.** The finale and the endings.
 - **Part Two is a sequel inside the same app,** offered as "Continue to Part Two" after the finale, carrying every choice over. One app means one set of updates and bug fixes.
 
+## Part Two (creator's idea: a trial; details decided by Claude at the creator's request)
+
+The creator's idea: after Part One, the protagonist is put on trial, framed by someone from the organization, and believes their life is over until something turns it around. Part Two continues from whichever Part One ending the player reached, inside the same game.
+
+**Plan:** 1 Summons (the arrest), 2 Investigation, 3 The trial, 4 Who really framed you, 5 The verdict and new endings.
+
+### Part Two, Chapter 1: Summons (built)
+
+| Detail | Why |
+|---|---|
+| Months later. The opening depends on the Part One ending: **Two Coffees**, dinner where Emily and Daniel finally say "I love you" (creator's request); **Home**, Daniel calls, he walked to the end of the street; **First of Its Kind**, Daniel in 001's body cooks you soup; **Names**, alone, the news; **Silence / Code Four**, alone, the old radio clicks on by itself. | One sequel, six ways in. |
+| **Dr. Alan Pryce**, a former board member, is found dead. At the scene: a police radio looping the signal, a note with your badge number, a torn page of the facility visitor log with your name. Your own radio, handed into evidence after the facility call, is missing from the evidence room. | The frame-up. |
+| **Detective Ruiz** (your former partner) arrests you. You can ask for a lawyer, tell her everything, or deny ever being at the facility (a lie, caught at once by the dispatch log). | Choices that will matter at the trial. |
+| **The anonymous tip** naming you came in at 3:02 AM, hours before the body was found, and the caller played the signal down the phone. | The first crack in the frame. |
+| **One phone call:** Emily, Daniel, 001-Daniel, the number Daniel left (revenge ending: "It wasn't me."), or the public defender, **Okafor**. | Who can help you depends on Part One. |
+| **The voice in the vent:** "You opened the door. You should have left it closed. Every answer you give, I already have a copy of." | Whoever framed you is close, and knows the signal. |
+
 ## 3. Open questions for the creator
 
 1. **Timeline.** Did the protagonist leave before or after the experiment and the abandonment? Chapter 1 avoids saying.

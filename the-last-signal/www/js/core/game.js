@@ -213,6 +213,9 @@ export function createGame({ content, bus }) {
       return run(() => {
         const n = state.chapter + 1;
         const ch = content.chapters[n];
+        // Saves made before endings were recorded as flags still know their ending.
+        const reached = state.ended?.ending;
+        if (reached && !state.flags[`ending_${reached}`]) state.flags[`ending_${reached}`] = true;
         state.chapter = n;
         state.ended = null;
         for (const line of ch.start.intro) ctx.say(line);
@@ -281,9 +284,23 @@ function installCoreEffects(ctx) {
 
   effects.register('checkpoint', (v, c) => c.requestCheckpoint());
 
+  // Jump the clock forward to a time of day, e.g. { hour: 19, minute: 30 }.
+  // Only ever forward, so timers and systems stay consistent.
+  effects.register('setClock', (v, c) => {
+    const start = 1 * 60 + 47;
+    const now = (start + c.state.time.minutes) % 1440;
+    const target = v.hour * 60 + (v.minute || 0);
+    c.state.time.minutes += (target - now + 1440) % 1440;
+  });
+
   effects.register('endChapter', (v, c) => {
     c.state.flags[`chapter_${c.state.chapter}_complete`] = true;
     c.state.ended = { chapter: c.state.chapter, title: v.title, text: v.text, ending: v.ending || null };
+    // Remember which ending this playthrough reached: later parts start from it.
+    if (v.ending) {
+      for (const k of Object.keys(c.state.flags)) if (k.startsWith('ending_')) delete c.state.flags[k];
+      c.state.flags[`ending_${v.ending}`] = true;
+    }
     c.cue('chapter.end');
     c.say(v.text);
     c.say(v.title, { kind: 'heading' });

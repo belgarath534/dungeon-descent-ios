@@ -164,6 +164,23 @@ export const SOUNDSCAPES = {
     });
   },
 
+  // Part Two: the city.
+  apartment({ api, bus, scene }) {
+    bed(api, bus, scene, 'amb-rain', { gain: 0.25, lowpass: 900 }, () => {});
+    keep(scene, api.loopTone({ freq: 100, gain: 0.006 }, bus)); // the fridge
+  },
+
+  station({ api, bus, scene }) {
+    keep(scene, api.loopTone({ freq: 120, gain: 0.006 }, bus)); // fluorescent buzz
+    keep(scene, api.loopNoise({ freq: 600, gain: 0.015 }, bus));
+    every(scene, 7000, 15000, () => [0, 0.4].forEach((t) => api.tone(1400, 0.25, { gain: 0.01, at: t, bus, pan: 0.7 })));
+  },
+
+  cell({ api, bus, scene }) {
+    keep(scene, api.loopNoise({ freq: 150, gain: 0.02 }, bus));
+    every(scene, 2500, 4000, () => api.tone(1500, 0.05, { slideTo: 1000, gain: 0.015, bus, pan: 0.5 }));
+  },
+
   elevator({ api, bus, scene }) {
     powerHum(api, bus, scene, 0.3, 70);
     keep(scene, api.loopNoise({ freq: 400, gain: 0.03 }, bus));

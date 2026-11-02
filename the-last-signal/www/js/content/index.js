@@ -7,8 +7,9 @@ import { chapter4 } from './chapter4/index.js';
 import { chapter5 } from './chapter5/index.js';
 import { chapter6 } from './chapter6/index.js';
 import { chapter7 } from './chapter7/index.js';
+import { part2chapter1 } from './part2_chapter1/index.js';
 
-const CHAPTERS = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7];
+const CHAPTERS = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, part2chapter1];
 
 const merge = (key, tag) =>
   Object.assign(
@@ -34,7 +35,7 @@ function withAdditions(rooms) {
 export const content = {
   start: chapter1.start,
   chapters: Object.fromEntries(
-    CHAPTERS.map((c) => [c.number, { title: c.title, start: c.start, secrets: c.secrets, summary: c.summary || [], afterEnd: c.afterEnd }]),
+    CHAPTERS.map((c) => [c.number, { title: c.title, part: c.part || 1, start: c.start, secrets: c.secrets, summary: c.summary || [], afterEnd: c.afterEnd }]),
   ),
   rooms: withAdditions(merge('rooms')),
   stalkerRoute: CHAPTERS.find((c) => c.stalkerRoute)?.stalkerRoute || [],

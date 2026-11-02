@@ -154,7 +154,10 @@ export function gameScreen(app) {
     const content = game.ctx.content;
     const lines = [`Daniel seems ${app.trustLevel().label} toward you.`];
     // Every chapter's notes so far: earlier choices still matter.
+    // Notes from every chapter so far in this part: earlier choices still matter.
+    const part = content.chapters[s.chapter]?.part || 1;
     for (let n = 1; n <= s.chapter; n++) {
+      if ((content.chapters[n]?.part || 1) !== part) continue;
       for (const l of content.chapters[n]?.summary || []) if (evaluate(l.when, s)) lines.push(l.text);
     }
     for (const lie of Object.values(s.trust.daniel.lies)) {
@@ -180,11 +183,15 @@ export function gameScreen(app) {
       ending ? h('p', {}, ending.blurb) : null,
       h('ul', { class: 'summary' }, lines.map((l) => h('li', {}, l))),
       ending
-        ? h('p', {}, `Endings found: ${seenNow.length} of ${Object.keys(content.endings).length}. Part Two will continue from this ending, inside this same game.`)
+        ? h('p', {}, `Endings found: ${seenNow.length} of ${Object.keys(content.endings).length}. Part Two continues from this ending.`)
         : h('p', {}, hasNext ? 'Your progress is saved.' : 'This is the end of the current build. Your progress is saved, and your choices will carry into the next chapter.'),
     );
     const buttons = [];
     if (ending) {
+      if (hasNext) {
+        const next = content.chapters[s.chapter + 1];
+        buttons.push(button(`Continue to Part Two: ${next.title}`, () => perform(() => game.startNextChapter())));
+      }
       buttons.push(button('Go back to the final choice', () => app.loadFrom('checkpoint')));
     } else if (hasNext) {
       const next = content.chapters[s.chapter + 1];
