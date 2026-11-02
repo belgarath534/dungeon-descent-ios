@@ -136,6 +136,7 @@ export const dialogues = {
       open_it: {
         lines: [],
         effects: [
+          { setFlag: 'isolation_open' },
           {
             endChapter: {
               title: 'End of Chapter 5',

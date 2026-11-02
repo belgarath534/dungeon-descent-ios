@@ -127,6 +127,11 @@ export function validateContent(content, effectNames) {
     checkEffects(d.onRead, `journal.${id}.onRead`);
     if (!Array.isArray(d.text)) problems.push(`journal.${id}: text must be a list of paragraphs`);
   }
+  // Every ending reached in dialogue must be described, and vice versa.
+  const used = new Set();
+  JSON.stringify(content.dialogues, (k, v) => { if (k === 'endChapter' && v?.ending) used.add(v.ending); return v; });
+  for (const id of used) if (!content.endings?.[id]) problems.push(`ending "${id}" has no description`);
+  for (const id of Object.keys(content.endings || {})) if (!used.has(id)) problems.push(`ending "${id}" is never reached`);
   for (const r of content.stalkerRoute || []) if (!content.rooms[r]) problems.push(`stalkerRoute: unknown room "${r}"`);
   for (const [n, ch] of Object.entries(content.chapters)) {
     if (!content.rooms[ch.start.room]) problems.push(`chapters.${n}.start.room does not exist`);

@@ -283,7 +283,7 @@ function installCoreEffects(ctx) {
 
   effects.register('endChapter', (v, c) => {
     c.state.flags[`chapter_${c.state.chapter}_complete`] = true;
-    c.state.ended = { chapter: c.state.chapter, title: v.title, text: v.text };
+    c.state.ended = { chapter: c.state.chapter, title: v.title, text: v.text, ending: v.ending || null };
     c.cue('chapter.end');
     c.say(v.text);
     c.say(v.title, { kind: 'heading' });

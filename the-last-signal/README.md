@@ -24,6 +24,8 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 
 ## What is in this build
 
+**Part One is complete: seven chapters, six endings.** Part Two will continue inside this same game.
+
 **Chapter 1: The Signal.** Patrol car, front gate, reception, security office, main corridor, Daniel's office, and the elevator to the sublevels.
 
 - First contact with Daniel over the radio, with honest, evasive and dishonest answers.
@@ -49,6 +51,10 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 - 3 documents, 1 hidden discovery. Every earlier choice carries over.
 
 **Chapter 5: Relocated.** Emily knows where the board hid the rest of Daniel. Get bolt cutters from storage past 001, take the elevator up with a maintenance trick, cut the chain on the stairwell door from Chapter 1, and open the isolation room with his own heartbeat. A quiet romantic thread between Emily and Daniel begins.
+
+**Chapter 6: The Board.** Meet Daniel in person and give him Emily's lanyard. Give 001 back the kind core Daniel wrote. Then the last board member walks in: Marcus, the "M." from Chapter 1. Arrest him, hear him out, or let Daniel decide.
+
+**Chapter 7: The Last Signal.** The finale of Part One, with six endings depending on everything you did: Two Coffees (romantic), Home, Silence, Code Four, Names, and The First of Its Kind. Endings found are remembered across playthroughs, and you can go back to the final choice to try another.
 
 **Foundation:** accessible menus, first-run setup, three speech modes, spatial sound effects and room ambience, journal, inventory, message history, autosave and 3 save slots, settings (speech, volumes, mono audio, startle reduction, trust feedback, text size, high contrast, keyboard shortcuts), and a sound glossary.
 

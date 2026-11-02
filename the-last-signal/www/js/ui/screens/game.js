@@ -166,22 +166,32 @@ export function gameScreen(app) {
     lines.push(`Hidden discoveries: ${t.secrets[0]} of ${t.secrets[1]}.`);
 
     const hasNext = game.hasNextChapter();
+    const ending = s.ended?.ending && content.endings?.[s.ended.ending];
+    if (ending) {
+      // Endings found are remembered across every playthrough.
+      const seen = app.endingsSeen();
+      if (!seen.includes(s.ended.ending)) app.recordEnding(s.ended.ending);
+    }
+    const seenNow = app.endingsSeen();
     const summary = h(
       'section',
       { class: 'group', 'aria-labelledby': 'summary-h' },
-      h('h2', { id: 'summary-h' }, 'Your choices so far'),
+      h('h2', { id: 'summary-h' }, ending ? `Ending: ${ending.name}` : 'Your choices so far'),
+      ending ? h('p', {}, ending.blurb) : null,
       h('ul', { class: 'summary' }, lines.map((l) => h('li', {}, l))),
-      h('p', {}, hasNext ? 'Your progress is saved.' : 'This is the end of the current build. Your progress is saved, and your choices will carry into the next chapter.'),
+      ending
+        ? h('p', {}, `Endings found: ${seenNow.length} of ${Object.keys(content.endings).length}. Part Two will continue from this ending, inside this same game.`)
+        : h('p', {}, hasNext ? 'Your progress is saved.' : 'This is the end of the current build. Your progress is saved, and your choices will carry into the next chapter.'),
     );
     const buttons = [];
-    if (hasNext) {
+    if (ending) {
+      buttons.push(button('Go back to the final choice', () => app.loadFrom('checkpoint')));
+    } else if (hasNext) {
       const next = content.chapters[s.chapter + 1];
       buttons.push(button(`Continue to ${next.title}`, () => perform(() => game.startNextChapter())));
     }
-    buttons.push(
-      button(`Keep exploring Chapter ${s.chapter}`, () => perform(() => game.continueAfterChapter())),
-      button('Return to the main menu', () => app.show('title')),
-    );
+    if (!ending) buttons.push(button(`Keep exploring Chapter ${s.chapter}`, () => perform(() => game.continueAfterChapter())));
+    buttons.push(button('Return to the main menu', () => app.show('title')));
     return [summary, buttonGroup('What next', buttons)];
   }
 

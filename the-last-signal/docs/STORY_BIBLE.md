@@ -128,6 +128,27 @@ Small details I wrote so the first chapter could be played. Each can be changed 
 | Daniel tries to stop you at the stairwell. You can be honest, lie, or say Emily sent you. | Honesty choice. |
 | The robotic body: tall, steel and grey composite, a face built to look gentle, amber eyes like 001's original ones. First words in person: "You came anyway." | The first face-to-face meeting. |
 
+## 2f. Chapter 6: The Board, and Chapter 7: The Last Signal (decided by Claude at the creator's request; change freely)
+
+- **Marcus Hale**, former secretary to the Project Board, is "M." from the Chapter 1 override note. He signed Resolution 14, hid the override card, keeps Daniel's body breathing, and writes "still here" on the chart. He carries the remote for Daniel's clamps, with a red button that switches Daniel off for good, and he never could press it. The rest of the board scattered.
+- **The secret connection** (the brief's possible ending): the secondary transfer put a full copy of Daniel's mind into 001's core, as a backup. The board rewrote 001 so it would never know. That is why 001 stood over Emily's bed. Restoring 001's original core makes it remember: "Two cups. One was always a mistake."
+- **Daniel's "incident":** on waking in the robot body he reached for a board member. He did not hurt him. That was enough to have him clamped in isolation with audio access only.
+- **Marcus's fate:** arrest him, hear him out and make him help (then arrest him), or let Daniel decide, which leads to the revenge path (a capsule, as was done to Emily).
+- **Emily's lanyard:** give it to Daniel. If Emily confided in you, you can keep her secret for her to tell. You can also invent a message she never said, which closes the romantic ending.
+
+### The six endings of Part One
+
+| Ending | How to reach it |
+|---|---|
+| **Two Coffees** (romantic) | Bring Daniel home with Emily awake and alive, her lanyard given without inventing her words, and trust 50 or more. |
+| **Home** (restored) | Bring Daniel home. Needs Emily awake or Marcus helping, 001's copy reachable (001 restored or the copy known about), and trust 30 or more. |
+| **Silence** (lost) | Try to bring him home with low trust (he switches himself off), or press the red button. |
+| **Code Four** (abandon) | Walk away. Always possible. |
+| **Names** (revenge) | Open his clamps with Marcus's remote and let him hunt the board. |
+| **The First of Its Kind** (secret connection) | With 001 restored and the copy known, Daniel goes into the body he designed to be kind. |
+
+Most endings close on the signal returning ("three short tones, one long") as a hook for Part Two.
+
 ## Plan for the rest of the story (agreed with the creator)
 
 - **Part One** ends at Chapter 7 with all the endings from the brief, plus a **romantic ending** (Daniel restored to his body, walking out with Emily), unlocked only by keeping Emily alive, being honest, and finding the right secrets. Other routes are bittersweet or tragic.

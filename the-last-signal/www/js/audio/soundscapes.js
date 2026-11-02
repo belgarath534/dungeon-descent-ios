@@ -154,6 +154,16 @@ export const SOUNDSCAPES = {
     every(scene, 5000, 9000, () => api.tone(420, 1.2, { slideTo: 380, type: 'sawtooth', lowpass: 700, gain: 0.012, attack: 0.3, bus }));
   },
 
+  // Isolation: Daniel's own body, close. Its whir slows like breathing.
+  isolation({ api, bus, scene }) {
+    keep(scene, api.loopNoise({ freq: 120, gain: 0.02 }, bus));
+    keep(scene, api.loopTone({ freq: 210, type: 'sawtooth', gain: 0.004 }, bus));
+    every(scene, 6000, 6100, () => {
+      [0, 0.25, 0.5].forEach((t) => api.tone(1000, 0.1, { gain: 0.012, at: t, bus }));
+      api.tone(1000, 0.5, { gain: 0.012, at: 0.85, bus });
+    });
+  },
+
   elevator({ api, bus, scene }) {
     powerHum(api, bus, scene, 0.3, 70);
     keep(scene, api.loopNoise({ freq: 400, gain: 0.03 }, bus));

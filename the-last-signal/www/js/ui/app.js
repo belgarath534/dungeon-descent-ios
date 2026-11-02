@@ -98,6 +98,23 @@ export function createApp({ root, game, saves, settings, announcer, audio, bus, 
       app.show('game', { newGame: true });
     },
 
+    // Endings found in any playthrough, kept with the settings, not the save.
+    endingsSeen() {
+      try {
+        return JSON.parse(localStorage.getItem('tls.endings') || '[]');
+      } catch {
+        return [];
+      }
+    },
+    recordEnding(id) {
+      try {
+        const list = app.endingsSeen();
+        if (!list.includes(id)) localStorage.setItem('tls.endings', JSON.stringify([...list, id]));
+      } catch {
+        /* storage unavailable */
+      }
+    },
+
     get currentScreen() {
       return current?.name;
     },

@@ -5,8 +5,10 @@ import { chapter2 } from './chapter2/index.js';
 import { chapter3 } from './chapter3/index.js';
 import { chapter4 } from './chapter4/index.js';
 import { chapter5 } from './chapter5/index.js';
+import { chapter6 } from './chapter6/index.js';
+import { chapter7 } from './chapter7/index.js';
 
-const CHAPTERS = [chapter1, chapter2, chapter3, chapter4, chapter5];
+const CHAPTERS = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7];
 
 const merge = (key, tag) =>
   Object.assign(
@@ -44,5 +46,6 @@ export const content = {
   dialogues: merge('dialogues'),
   events: merge('events'),
   triggers: CHAPTERS.flatMap((c) => c.triggers || []),
+  endings: Object.assign({}, ...CHAPTERS.map((c) => c.endings || {})),
   globalActions: CHAPTERS.flatMap((c) => c.globalActions || []),
 };
