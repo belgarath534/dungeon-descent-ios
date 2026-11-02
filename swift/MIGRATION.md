@@ -72,7 +72,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | Gold and diamonds | GLOBAL GOLD SYSTEM | ✅ |
 | Character list, 5 slots, save format | CHARACTER STORAGE | ✅ |
 | Dungeon unlocks | getUnlockedDungeons | ✅ |
-| Classes, races, professions, difficulties | CHARACTER CREATION, initDungeon's race bonuses, getShopDiscount | 🟡 all 15 races (`Races.swift`): every race card's stat line and ability. All 11 professions: Blacksmith, Herbalist, Scholar, Mercenary, Gravedigger, Thief, Pilgrim, Grave Robber, Street Rat (Smoke Bomb for any class, +20% flee), Warden (+3 defense, the first debuff each floor slides off) and Tinkerer (2 Health Potions, skills cost 2 less SP) |
+| Classes, races, professions, difficulties | CHARACTER CREATION, initDungeon's race bonuses, getShopDiscount | ✅ all 15 races (`Races.swift`): every race card's stat line and ability. All 11 professions: Blacksmith, Herbalist, Scholar, Mercenary, Gravedigger, Thief, Pilgrim, Grave Robber, Street Rat (Smoke Bomb for any class, +20% flee), Warden (+3 defense, the first debuff each floor slides off) and Tinkerer (2 Health Potions, skills cost 2 less SP) |
 | Run start stats | initDungeon | ✅ equipment, coin upgrades, milestone buffs, dream buffs, spirits, Legacy levels and profession bonuses |
 | High Score | HIGH SCORE SYSTEM, renderHighScore, uploadToLeaderboard, renderLeaderboardTab, loadInbox | ✅ score (dd_score), ranks and the category breakdown, earned for kills, elites, bosses, achievements, Boss Rush and Endless milestones. Upload to the shared global leaderboard (top 20, the web version's "leaderboard" collection), the weekly champion's 3 Mystery Coins, and the developer inbox with coin claims. Web bug fixed: the inbox's message list had been deleted, so a non-empty inbox stayed on "Loading inbox..." forever |
 | Endless milestones | advanceFloor | ✅ every 25 floors a full heal and +5 max HP, every 10 floors a 30% heal |
@@ -201,12 +201,13 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 
 ## Things to keep in mind
 
-- **Web bug found:** Mercenary is supposed to start with 15 gold, but `initDungeon`
-  replaces it with the wallet balance right after, so the bonus never reaches the
-  player. Swift keeps that behavior for now (see `Run.swift`); decide whether to fix it.
 - Android has its own HTML copy, so no Android code is needed here.
 
 ## Web bugs fixed in the Swift version
+
+- **Mercenary's starting gold** was set before `initDungeon`'s wallet sync replaced it, so
+  the card's +15 gold never arrived. Swift gives it in `applyStartBonuses`; the website and
+  Android have the same fix.
 
 Where an item's description and the web code disagree, Swift follows the description:
 

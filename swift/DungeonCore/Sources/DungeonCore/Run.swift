@@ -293,9 +293,7 @@ public struct Run: Codable, Sendable {
         spirit = ch.lastSpirit.flatMap { Spirits.spirit($0)?.id } ?? "ember-fox"
         undeadRes = ch.prof == "Gravedigger"
         pilgrimProf = ch.prof == "Pilgrim"
-        // Mercenary's starting blade. (The web version also sets 15 starting
-        // gold, but then overwrites it with the wallet balance a few lines
-        // later, so it never actually reaches the player.)
+        // Mercenary's starting blade (the 15 starting gold is in applyStartBonuses).
         if ch.prof == "Mercenary" { atkBonus += 3 }
         if ch.prof == "Warden" { defBonus += 3 }
         if ch.race == "Halfling" {
@@ -335,6 +333,12 @@ public struct Run: Codable, Sendable {
             gold += 50
             wallet.addGold(50)
             graveRobberLoot = true
+        }
+        // Mercenary's card promises starting gold. The web version set it before
+        // its wallet sync replaced it, so it never arrived (fixed there too).
+        if prof == "Mercenary" {
+            gold += 15
+            wallet.addGold(15)
         }
         // The origin chosen at creation (BACKSTORIES). The web version applied
         // these to the previous run's state, so they never reached the player.

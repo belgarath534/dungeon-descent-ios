@@ -345,6 +345,11 @@ final class ProgressionTests: XCTestCase {
         XCTAssertEqual(robber.gold, 50)
         XCTAssertEqual(w.gold, 50)
         XCTAssertTrue(robber.graveRobberLoot)
+        var merc = newRun(prof: "Mercenary")
+        let mw = Wallet(store: MemoryStore())
+        merc.applyStartBonuses(wallet: mw)
+        XCTAssertEqual(merc.gold, 15)
+        XCTAssertEqual(mw.gold, 15)
         XCTAssertEqual(newRun(race: "Halfling").atk, 6...14)
         XCTAssertEqual(newRun(prof: "Warden").defBonus, 3)
     }
