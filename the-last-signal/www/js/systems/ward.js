@@ -77,23 +77,31 @@ export function installWard(ctx) {
     w.power = Math.max(0, w.power - POWER_DRAIN);
     w.stability = Math.max(0, w.stability - (w.power > 0 ? STABILITY_DRAIN : STABILITY_DRAIN_UNPOWERED));
 
+    // Every warning ends by saying exactly what to do, and where.
+    const fixStability = w.location === 'ward'
+      ? ' Go to the medical ward and choose Check on Emily.'
+      : ' She needs the medical ward: power its door, then wheel her capsule there.';
+    const fixPower = w.location === 'ward'
+      ? ' Put a power cell in the medical ward\u2019s power bay.'
+      : ' Put a power cell in her capsule, in the preservation lab.';
+
     for (const t of THRESHOLDS) {
       if (w.power <= t && w.power > 0) {
         warn('power', t, t <= 10
-          ? `Radio alarm: Emily’s power is almost gone, ${Math.round(w.power)} percent. Find a power cell now.`
+          ? `Radio alarm: Emily’s power is almost gone, ${Math.round(w.power)} percent. Find a power cell now.${fixPower}`
           : t <= 25
-            ? `Radio alarm: Emily’s power is at ${Math.round(w.power)} percent.`
-            : `Your radio chirps quietly: Emily’s power is at ${Math.round(w.power)} percent.`);
+            ? `Radio alarm: Emily’s power is at ${Math.round(w.power)} percent.${fixPower}`
+            : `Your radio chirps quietly: Emily’s power is at ${Math.round(w.power)} percent.${fixPower}`);
       }
       if (w.stability <= t) {
         warn('stab', t, t <= 10
-          ? `Radio alarm, urgent: Emily is critical. Get to her now, or she will die.`
+          ? `Radio alarm, urgent: Emily is critical. Get to her now, or she will die.${fixStability}`
           : t <= 25
-            ? `Radio alarm: Emily’s condition is getting worse. She needs you to check on her.`
-            : `Your radio chirps quietly: Emily’s condition is slipping. Check on her when you can.`);
+            ? `Radio alarm: Emily’s condition is getting worse. She needs you to check on her.${fixStability}`
+            : `Your radio chirps quietly: Emily’s condition is slipping. Check on her when you can.${fixStability}`);
       }
     }
-    if (w.power === 0) warn('power', 0, 'Radio alarm: Emily’s power has run out. Her life support is failing.');
+    if (w.power === 0) warn('power', 0, `Radio alarm: Emily’s power has run out. Her life support is failing.${fixPower}`);
 
     if (w.stability <= 0) {
       w.emilyAlive = false;
