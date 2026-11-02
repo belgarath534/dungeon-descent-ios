@@ -453,6 +453,7 @@ export const rooms = {
         dir: 'east',
         to: 'main_corridor',
         label: 'Chained stairwell door',
+        when: { notFlag: 'chain_cut' },
         locked: true,
         lockedText: 'The chain is heavy and new, much newer than anything else here. It is not coming off without tools you do not have.',
       },

@@ -48,6 +48,8 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 - Emily's care from a distance: Daniel can watch her if he trusts you, and a medical link can power her ward and run a partial check.
 - 3 documents, 1 hidden discovery. Every earlier choice carries over.
 
+**Chapter 5: Relocated.** Emily knows where the board hid the rest of Daniel. Get bolt cutters from storage past 001, take the elevator up with a maintenance trick, cut the chain on the stairwell door from Chapter 1, and open the isolation room with his own heartbeat. A quiet romantic thread between Emily and Daniel begins.
+
 **Foundation:** accessible menus, first-run setup, three speech modes, spatial sound effects and room ambience, journal, inventory, message history, autosave and 3 save slots, settings (speech, volumes, mono audio, startle reduction, trust feedback, text size, high contrast, keyboard shortcuts), and a sound glossary.
 
 ## Documents

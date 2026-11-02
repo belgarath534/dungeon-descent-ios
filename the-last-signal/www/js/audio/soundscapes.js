@@ -148,6 +148,12 @@ export const SOUNDSCAPES = {
     every(scene, 4000, 4100, () => api.noise(1.6, { freq: 500, gain: 0.04, attack: 0.7, bus }));
   },
 
+  // The stairwell: hollow concrete, and Daniel's whir behind the isolation door.
+  stairwell({ api, bus, scene }) {
+    bed(api, bus, scene, 'amb-corridor', { gain: 0.3, lowpass: 800 }, () => keep(scene, api.loopNoise({ freq: 150, gain: 0.04 }, bus)));
+    every(scene, 5000, 9000, () => api.tone(420, 1.2, { slideTo: 380, type: 'sawtooth', lowpass: 700, gain: 0.012, attack: 0.3, bus }));
+  },
+
   elevator({ api, bus, scene }) {
     powerHum(api, bus, scene, 0.3, 70);
     keep(scene, api.loopNoise({ freq: 400, gain: 0.03 }, bus));

@@ -116,6 +116,25 @@ Small details I wrote so the first chapter could be played. Each can be changed 
 | **The turning point:** Emily and Daniel talk over the radio. He apologises for believing she left; she asks where he is; he will not say, "not even you". Trust +15. Any hidden lie about Emily is exposed during the call. | The brief's major turning point. It does not guarantee lasting trust. |
 | 001's original behavioural layer, the one Daniel wrote, is in a humming archive box (found by listening). | A way to restore 001 in a later chapter. |
 
+## 2e. Chapter 5: Relocated (placeholders, need approval)
+
+| Detail | Why |
+|---|---|
+| Daniel's robotic body was moved to **Isolation**, a sealed room in the east stairwell between the surface and Sublevel 1, behind the chained door from Chapter 1. Restraints on, network limited to facility audio. | The brief: Daniel was isolated somewhere inside the facility. Explains why he can only talk through radios and speakers. |
+| The isolation door opens to a rhythm code: three short, one long, his own heartbeat. "Somebody on the Board thought that was funny." | Pays off the signal. |
+| Fresh footprints and a padlock dated within the last month: someone from the board still visits. | Sets up Chapter 6 and the "still here" note. |
+| Emily knows the way and an elevator maintenance trick. If Emily is dead, the board's isolation order in the records room gives the same information. | Both routes reach the same place. |
+| **The romance, kept quiet:** eleven years of building things together; he brought two coffees every morning and pretended one was a mistake; she meant to tell him something the night she was taken, and never did. She sends him her lanyard and asks you not to repeat what she said. | Creator's request for a romantic thread, kept understated so it does not undercut the horror. |
+| Daniel tries to stop you at the stairwell. You can be honest, lie, or say Emily sent you. | Honesty choice. |
+| The robotic body: tall, steel and grey composite, a face built to look gentle, amber eyes like 001's original ones. First words in person: "You came anyway." | The first face-to-face meeting. |
+
+## Plan for the rest of the story (agreed with the creator)
+
+- **Part One** ends at Chapter 7 with all the endings from the brief, plus a **romantic ending** (Daniel restored to his body, walking out with Emily), unlocked only by keeping Emily alive, being honest, and finding the right secrets. Other routes are bittersweet or tragic.
+- **Chapter 6: The Board.** Who writes "still here"; facing the people who did this (the revenge path); restoring 001 with Daniel's original core.
+- **Chapter 7: The Last Signal.** The finale and the endings.
+- **Part Two is a sequel inside the same app,** offered as "Continue to Part Two" after the finale, carrying every choice over. One app means one set of updates and bug fixes.
+
 ## 3. Open questions for the creator
 
 1. **Timeline.** Did the protagonist leave before or after the experiment and the abandonment? Chapter 1 avoids saying.
