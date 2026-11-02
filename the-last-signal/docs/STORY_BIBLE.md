@@ -173,6 +173,18 @@ The creator's idea: after Part One, the protagonist is put on trial, framed by s
 | **One phone call:** Emily, Daniel, 001-Daniel, the number Daniel left (revenge ending: "It wasn't me."), or the public defender, **Okafor**. | Who can help you depends on Part One. |
 | **The voice in the vent:** "You opened the door. You should have left it closed. Every answer you give, I already have a copy of." | Whoever framed you is close, and knows the signal. |
 
+### Part Two, Chapter 2: Witnesses (built)
+
+| Detail | Why |
+|---|---|
+| **Sarah Quinn** (creator's idea): ran the facility's audio and radio systems, so every channel Daniel used went through her boxes. She sat two desks from you for a year and had a quiet crush on you; you never noticed her. Emily and Daniel knew her (and knew about the crush). She has watched the facility network since that night, and you. | Creator's request: a new character who knew you when you didn't know her. |
+| Sarah knows who you are: you left the last coffee for the night shift, walked Ana to her car when it rained, and were **the only one who quit** when the board took Daniel off his project. | Creator's request: people who knew you defend you. Settles the open question of why the protagonist left. |
+| At first Sarah looks suspicious (she knows the signal and the network). You can say so. Emily vouches for her, and laughs that you thanked the wrong person for Sarah's birthday card. | A red herring, then an ally. The "cooked" moment. |
+| Sarah's slow romance is optional: "I'm noticing now" or "Thank you, for all of it". | Kept slow, as agreed. |
+| **Witnesses** you can win over: Emily, Daniel (human endings), Marcus (if arrested), and the old night shift at the diner: Ana (accounts), Theo (the night guard who wrote "somebody is still talking on the radio"), Priya (labs, terrified; demanding she owes you drives her away). Two at least before Okafor will go on. | The people who knew you, standing up for you. |
+| Your lawyer is **Nadia Okafor**. Bail is paid by Emily or Daniel if you called them. Detective Ruiz's initial is now A. | Avoids confusion with Sarah. |
+| Pryce was about to testify against the board. The 3 AM tip came through the facility's old phone exchange: **someone is still inside the facility network**, and they just sent the signal **from the courthouse**. | Sets up the trial. |
+
 ## 3. Open questions for the creator
 
 1. **Timeline.** Did the protagonist leave before or after the experiment and the abandonment? Chapter 1 avoids saying.

@@ -58,6 +58,8 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 
 **Part Two, Chapter 1: Summons.** Months later, starting differently for each Part One ending (in Two Coffees, Emily and Daniel finally say "I love you"). Then you are arrested for the murder of a former board member, framed with your own name, your badge number and the signal. Interrogation, one phone call, and a voice in the vent.
 
+**Part Two, Chapter 2: Witnesses.** Out on bail, three days until trial. Meet Sarah, who ran the facility's radios and knew you for a year when you never noticed her. Find the people who knew you and will stand up for you. Ends with the signal coming from inside the courthouse.
+
 **Foundation:** accessible menus, first-run setup, three speech modes, spatial sound effects and room ambience, journal, inventory, message history, autosave and 3 save slots, settings (speech, volumes, mono audio, startle reduction, trust feedback, text size, high contrast, keyboard shortcuts), and a sound glossary.
 
 ## Documents

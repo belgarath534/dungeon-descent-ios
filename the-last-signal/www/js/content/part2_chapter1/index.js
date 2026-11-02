@@ -80,6 +80,7 @@ const rooms = {
         dir: 'out',
         to: 'apartment',
         label: 'Front door',
+        when: { notFlag: 'p2c2_started' },
         locked: true,
         lockedText: 'You reach for the handle, and someone on the other side knocks first. Three hard knocks.',
       },
@@ -461,7 +462,7 @@ export const part2chapter1 = {
   documents: {
     doc_p2_charge: {
       title: 'Charge sheet',
-      text: ['Charge: murder of Dr. Alan Pryce.', 'Arresting officer: Detective S. Ruiz.', 'Basis: physical evidence at the scene; anonymous information received 3:02 AM.'],
+      text: ['Charge: murder of Dr. Alan Pryce.', 'Arresting officer: Detective A. Ruiz.', 'Basis: physical evidence at the scene; anonymous information received 3:02 AM.'],
     },
     doc_p2_scene: {
       title: 'Scene report, Pryce residence',

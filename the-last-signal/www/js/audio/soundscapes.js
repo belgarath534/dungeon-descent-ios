@@ -181,6 +181,27 @@ export const SOUNDSCAPES = {
     every(scene, 2500, 4000, () => api.tone(1500, 0.05, { slideTo: 1000, gain: 0.015, bus, pan: 0.5 }));
   },
 
+  street({ api, bus, scene }) {
+    bed(api, bus, scene, 'amb-rain', { gain: 0.45 }, () => keep(scene, api.loopNoise({ freq: 2500, gain: 0.04 }, bus)));
+    every(scene, 3000, 7000, () => api.noise(1.5, { freq: 700, sweepTo: 300, gain: 0.03, attack: 0.5, bus, pan: Math.random() * 2 - 1 }));
+  },
+
+  office_city({ api, bus, scene }) {
+    keep(scene, api.loopNoise({ freq: 90, gain: 0.03 }, bus)); // laundromat below
+    bed(api, bus, scene, 'amb-rain', { gain: 0.1, lowpass: 600 }, () => {});
+  },
+
+  cafe({ api, bus, scene }) {
+    keep(scene, api.loopNoise({ filter: 'bandpass', freq: 900, Q: 0.6, gain: 0.03 }, bus)); // chatter
+    every(scene, 3000, 8000, () => api.tone(2200, 0.04, { gain: 0.01, bus, pan: Math.random() - 0.5 })); // cups
+    every(scene, 15000, 25000, () => api.noise(2, { filter: 'highpass', freq: 3000, gain: 0.02, attack: 0.3, bus, pan: -0.6 })); // espresso
+  },
+
+  diner({ api, bus, scene }) {
+    keep(scene, api.loopNoise({ filter: 'bandpass', freq: 3500, Q: 0.8, gain: 0.012, pan: 0.4 }, bus)); // grill
+    keep(scene, api.loopNoise({ filter: 'bandpass', freq: 800, Q: 0.6, gain: 0.02 }, bus));
+  },
+
   elevator({ api, bus, scene }) {
     powerHum(api, bus, scene, 0.3, 70);
     keep(scene, api.loopNoise({ freq: 400, gain: 0.03 }, bus));
