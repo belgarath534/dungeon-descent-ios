@@ -13,6 +13,7 @@ import { installWorld } from '../systems/world.js';
 import { installDialogue } from '../systems/dialogue.js';
 import { installTrust, trustLevel } from '../systems/trust.js';
 import { installJournal } from '../systems/journal.js';
+import { installWard } from '../systems/ward.js';
 
 export function createGame({ content, bus }) {
   let state = null;
@@ -33,16 +34,26 @@ export function createGame({ content, bus }) {
     cue(name, opts = {}) {
       bus.emit('cue', { name, ...opts });
     },
+    // Time moves one minute at a time so systems such as Emily's life
+    // support react at exactly the right moment.
     advanceTime(minutes) {
-      state.time.minutes += minutes;
+      for (let i = 0; i < minutes; i++) {
+        state.time.minutes += 1;
+        for (const hook of tickHooks) hook(ctx);
+      }
+    },
+    onTick(fn) {
+      tickHooks.push(fn);
     },
   };
+  const tickHooks = [];
 
   installCoreEffects(ctx);
   const world = installWorld(ctx);
   const dialogue = installDialogue(ctx);
   const trust = installTrust(ctx);
   const journal = installJournal(ctx);
+  const ward = installWard(ctx);
 
   // Scheduled events and triggers run between player actions, never in
   // the middle of a conversation.
@@ -179,9 +190,37 @@ export function createGame({ content, bus }) {
       if (!a || !evaluate(a.when, state)) return run(() => ctx.say('You cannot do that now.', { kind: 'system' }));
       return run(() => effects.apply(a.effects, ctx));
     },
+    hasNextChapter: () => !!content.chapters[state.chapter + 1],
+
+    startNextChapter() {
+      return run(() => {
+        const n = state.chapter + 1;
+        const ch = content.chapters[n];
+        state.chapter = n;
+        state.ended = null;
+        for (const line of ch.start.intro) ctx.say(line);
+        effects.apply(ch.start.effects, ctx);
+        world.enterRoom(ch.start.room);
+      });
+    },
+
+    // Progress counts for the chapter summary, covering every chapter so far.
+    chapterSummary() {
+      const upTo = (list) => Object.values(list).filter((d) => (d.chapter || 1) <= state.chapter).length;
+      let secrets = 0;
+      for (let n = 1; n <= state.chapter; n++) secrets += content.chapters[n]?.secrets || 0;
+      return {
+        documents: [state.journal.documents.length, upTo(content.documents)],
+        recordings: [state.journal.recordings.length, upTo(content.recordings)],
+        secrets: [state.stats.secretsFound, secrets],
+      };
+    },
+
+    wardReport: () => ward.report(),
+
     continueAfterChapter() {
       return run(() => {
-        const after = content.afterChapterEnd || {};
+        const after = content.chapters[state.chapter]?.afterEnd || {};
         state.ended = null;
         for (const id of after.resetTriggers || []) delete state.firedTriggers[id];
         effects.apply(after.effects, ctx);

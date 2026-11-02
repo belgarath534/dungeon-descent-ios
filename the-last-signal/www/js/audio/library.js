@@ -10,6 +10,7 @@ export const SAMPLE_FILES = {
   'amb-corridor': 'audio/amb-corridor.mp3',
   'amb-facility': 'audio/amb-facility.mp3',
   'amb-generator': 'audio/amb-generator.mp3',
+  'amb-sublevel': 'audio/music-sublevel.mp3',
   // music
   'music-title': 'audio/music-title.mp3',
   'music-descent': 'audio/music-descent.mp3',

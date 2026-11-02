@@ -19,6 +19,10 @@
 //       minutesAtLeast          number of in-game minutes elapsed
 //       at                      room id | room id[] (player's location)
 //       inDialogue              boolean
+//       chapter                 number (current chapter)
+//       wardActive / emilyAlive boolean (Emily's life support, see systems/ward.js)
+//       emilyIn                 'capsule' | 'ward'
+//       wardPowerBelow / emilyStabilityBelow   number
 //       all / any               condition[]
 //       not                     condition
 
@@ -42,6 +46,12 @@ const CHECKS = {
   minutesAtLeast: (v, s) => s.time.minutes >= v,
   at: (v, s) => asList(v).includes(s.location),
   inDialogue: (v, s) => !!s.dialogue.active === !!v,
+  chapter: (v, s) => s.chapter === v,
+  wardActive: (v, s) => !!s.ward?.active === !!v,
+  emilyAlive: (v, s) => (s.ward?.emilyAlive ?? true) === !!v,
+  emilyIn: (v, s) => !!s.ward?.active && s.ward.location === v,
+  wardPowerBelow: (v, s) => (s.ward?.power ?? 0) < v,
+  emilyStabilityBelow: (v, s) => (s.ward?.stability ?? 0) < v,
   all: (v, s) => v.every((c) => evaluate(c, s)),
   any: (v, s) => v.some((c) => evaluate(c, s)),
   not: (v, s) => !evaluate(v, s),

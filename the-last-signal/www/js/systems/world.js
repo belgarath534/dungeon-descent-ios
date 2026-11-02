@@ -51,6 +51,12 @@ export function installWorld(ctx) {
     c.state.inventory = c.state.inventory.filter((i) => i !== itemId);
   });
 
+  // { useOne: [ids] } removes the first of these items the player carries.
+  effects.register('useOne', (ids, c) => {
+    const id = ids.find((i) => c.state.inventory.includes(i));
+    if (id) c.state.inventory = c.state.inventory.filter((i) => i !== id);
+  });
+
   effects.register('moveTo', (roomId, c) => enterRoom(roomId, c));
 
   // ---- queries ---------------------------------------------------------

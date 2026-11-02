@@ -86,7 +86,7 @@ All sounds are synthesised for now, so the full sound design exists from day one
 
 These plug into the same engine. Each one is a new file in `systems/` plus content.
 
-- **Medical ward (Emily).** A `ward.js` system with vitals and ward power that change as in-game time passes, registered as a timer-driven event. Warnings get louder in stages (a sound cue, then a spoken warning, then an urgent warning) and always reach the player wherever they are, through the radio or speakers, before anything irreversible happens. Proposed: real time never matters (see open question 7 in the story bible).
+- **Medical ward (Emily): built in Chapter 2.** `systems/ward.js`. Power and stability change every in-game minute through `ctx.onTick`. Warnings are staged and become part of the action's text. Content uses the effects `wardStart`, `wardMoveIn`, `wardAddPower`, `wardStabilize`, `wardReport` and the conditions `emilyAlive`, `emilyIn`, `wardActive`.
 - **Prototype 001.** A `patrol.js` system: 001 moves between rooms on the in-game clock along a route. Its position is always audible as footsteps panned by direction and muffled by distance in rooms, so stealth is fully playable by ear. New actions: hide, hold still, and listen for its position.
 - **Endings.** An ending is a trigger with conditions over flags, trust history, Emily's fate and discoveries, so nothing is locked in early and the creator can rebalance endings freely.
 - **iOS app.** Wrap `www/` with Capacitor as its own app (its own bundle ID, separate from Dungeon Descent). Add the ScreenReader plugin, which the announcer already uses if present, plus an audio session set to "playback" so the silent switch does not mute the game.

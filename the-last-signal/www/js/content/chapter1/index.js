@@ -6,7 +6,15 @@ import { items, documents, recordings, objectives } from './journal.js';
 import { speakers, dialogues } from './dialogues.js';
 
 export const chapter1 = {
+  number: 1,
   title: 'Chapter 1: The Signal',
+  secrets: 2,
+
+  summary: [
+    { when: { flag: 'daniel_named' }, text: 'You learned his name: Daniel.' },
+    { when: { flag: 'daniel_opened_elevator' }, text: 'Daniel opened the way down for you.' },
+    { when: [{ flag: 'used_override' }, { notFlag: 'daniel_opened_elevator' }], text: 'You found your own way down.' },
+  ],
 
   start: {
     room: 'patrol_car',
@@ -74,7 +82,7 @@ export const chapter1 = {
   ],
 
   // "Keep exploring" after the chapter-end screen.
-  afterChapterEnd: {
+  afterEnd: {
     resetTriggers: ['chapter_end'],
     effects: [
       { say: 'You hold the door open and step back out. The facility is still waiting. Take the elevator again when you are ready.' },
@@ -96,7 +104,4 @@ export const chapter1 = {
       effects: [{ sound: 'radio.on' }, { startDialogue: 'daniel_silent' }],
     },
   ],
-
-  // Totals used by the chapter summary.
-  totals: { documents: 7, recordings: 1, secrets: 2 },
 };

@@ -120,6 +120,28 @@ export const CUES = {
   secret: (a) => {
     [784, 988, 1175].forEach((f, i) => a.tone(f, 0.15, { gain: 0.04, at: i * 0.09 }));
   },
+  'door.heavy': (a, o) => {
+    a.noise(0.6, { freq: 300, gain: 0.12, pan: o.pan, attack: 0.1 });
+    a.tone(55, 0.3, { gain: 0.18, pan: o.pan, at: 0.5 });
+  },
+  cart: (a) => {
+    for (let i = 0; i < 6; i++) a.noise(0.25, { filter: 'bandpass', freq: 700, Q: 2, gain: 0.05, at: i * 0.3 });
+  },
+  tarp: (a, o) => a.noise(0.5, { filter: 'bandpass', freq: 1500, Q: 0.8, gain: 0.05, pan: o.pan, attack: 0.1 }),
+
+  // ---- Emily's monitor ---------------------------------------------------
+  monitor: (a, o) => {
+    a.tone(1000, 0.08, { gain: 0.04, pan: o.pan });
+    a.tone(1000, 0.08, { gain: 0.04, pan: o.pan, at: 1 });
+  },
+  alarm: (a) => {
+    [880, 660, 880, 660].forEach((f, i) => a.tone(f, 0.15, { type: 'triangle', gain: 0.06, at: i * 0.18 }));
+  },
+  'alarm.critical': (a) => {
+    for (let i = 0; i < 6; i++) a.tone(1200, 0.08, { type: 'square', lowpass: 2500, gain: softer(a, 0.05), at: i * 0.12 });
+  },
+  flatline: (a) => a.tone(1000, 3, { gain: 0.05, attack: 0.01 }),
+
   'chapter.end': (a) => {
     a.tone(55, 3, { type: 'sawtooth', lowpass: 300, gain: 0.12, attack: 0.8 });
     [392, 349, 311].forEach((f, i) => a.tone(f, 0.7, { gain: 0.04, attack: 0.1, at: 0.6 + i * 0.6 }));

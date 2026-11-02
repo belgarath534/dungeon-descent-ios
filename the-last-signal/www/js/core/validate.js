@@ -127,7 +127,15 @@ export function validateContent(content, effectNames) {
     checkEffects(d.onRead, `journal.${id}.onRead`);
     if (!Array.isArray(d.text)) problems.push(`journal.${id}: text must be a list of paragraphs`);
   }
-  checkEffects(content.afterChapterEnd?.effects, 'afterChapterEnd.effects');
+  for (const [n, ch] of Object.entries(content.chapters)) {
+    if (!content.rooms[ch.start.room]) problems.push(`chapters.${n}.start.room does not exist`);
+    checkEffects(ch.start.effects, `chapters.${n}.start.effects`);
+    checkEffects(ch.afterEnd?.effects, `chapters.${n}.afterEnd.effects`);
+    (ch.summary || []).forEach((l, i) => checkCondition(l.when, `chapters.${n}.summary[${i}]`));
+    for (const id of ch.afterEnd?.resetTriggers || []) {
+      if (!content.triggers.some((t) => t.id === id)) problems.push(`chapters.${n}.afterEnd: unknown trigger "${id}"`);
+    }
+  }
 
   return problems;
 }

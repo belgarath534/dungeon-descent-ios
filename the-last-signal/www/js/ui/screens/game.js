@@ -16,6 +16,7 @@
 
 import { h, button, buttonGroup, focusEl } from '../dom.js';
 import { DIRECTION_PAN } from '../../systems/world.js';
+import { evaluate } from '../../core/conditions.js';
 
 const POSITION_WORD = { left: 'on your left', right: 'on your right', ahead: 'ahead', behind: 'behind you' };
 const DIR_WORD = { north: 'North', south: 'South', east: 'East', west: 'West', up: 'Up', down: 'Down', in: 'In', out: 'Out' };
@@ -146,34 +147,40 @@ export function gameScreen(app) {
     return buttonGroup('Menu', items);
   }
 
-  function chapterEndControls(v) {
+  function chapterEndControls() {
     const s = game.state;
-    const totals = game.ctx.content.totals;
-    const t = s.trust.daniel;
-    const lines = [];
-    lines.push(`Daniel seems ${app.trustLevel().label} toward you.`);
-    if (s.flags.daniel_named) lines.push('You learned his name: Daniel.');
-    if (s.flags.daniel_opened_elevator) lines.push('Daniel opened the way down for you.');
-    else if (s.flags.used_override) lines.push('You found your own way down.');
-    for (const lie of Object.values(t.lies)) {
+    const content = game.ctx.content;
+    const lines = [`Daniel seems ${app.trustLevel().label} toward you.`];
+    // Every chapter's notes so far: earlier choices still matter.
+    for (let n = 1; n <= s.chapter; n++) {
+      for (const l of content.chapters[n]?.summary || []) if (evaluate(l.when, s)) lines.push(l.text);
+    }
+    for (const lie of Object.values(s.trust.daniel.lies)) {
       lines.push(lie.exposed ? `Daniel caught you lying about ${lie.about}.` : `You lied to Daniel about ${lie.about}. He has not found out. Yet.`);
     }
-    lines.push(`Documents found: ${s.journal.documents.length} of ${totals.documents}.`);
-    lines.push(`Recordings found: ${s.journal.recordings.length} of ${totals.recordings}.`);
-    lines.push(`Hidden discoveries: ${s.stats.secretsFound} of ${totals.secrets}.`);
+    const t = game.chapterSummary();
+    lines.push(`Documents found: ${t.documents[0]} of ${t.documents[1]}.`);
+    lines.push(`Recordings found: ${t.recordings[0]} of ${t.recordings[1]}.`);
+    lines.push(`Hidden discoveries: ${t.secrets[0]} of ${t.secrets[1]}.`);
 
+    const hasNext = game.hasNextChapter();
     const summary = h(
       'section',
       { class: 'group', 'aria-labelledby': 'summary-h' },
       h('h2', { id: 'summary-h' }, 'Your choices so far'),
       h('ul', { class: 'summary' }, lines.map((l) => h('li', {}, l))),
-      h('p', {}, 'This is the end of the current build. Your progress is saved.'),
+      h('p', {}, hasNext ? 'Your progress is saved.' : 'This is the end of the current build. Your progress is saved, and your choices will carry into the next chapter.'),
     );
-    const next = buttonGroup('What next', [
-      button('Keep exploring Chapter 1', () => perform(() => game.continueAfterChapter())),
+    const buttons = [];
+    if (hasNext) {
+      const next = content.chapters[s.chapter + 1];
+      buttons.push(button(`Continue to ${next.title}`, () => perform(() => game.startNextChapter())));
+    }
+    buttons.push(
+      button(`Keep exploring Chapter ${s.chapter}`, () => perform(() => game.continueAfterChapter())),
       button('Return to the main menu', () => app.show('title')),
-    ]);
-    return [summary, next];
+    );
+    return [summary, buttonGroup('What next', buttons)];
   }
 
   function repeat() {

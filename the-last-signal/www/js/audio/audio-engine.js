@@ -229,9 +229,9 @@ export function createAudio({ settings }) {
       results.forEach((r, i) => r.status === 'rejected' && console.warn('[audio] could not load', entries[i][0], r.reason));
       // Swap the current room's synthesised bed for the recorded one.
       if (current) {
-        const { id, powered } = current;
+        const { id, powered, key, state } = current;
         current.id = null;
-        api_setSoundscape(id, { powered });
+        api_setSoundscape(id, { powered, key, state });
       }
     });
     return libraryLoading;
@@ -306,9 +306,11 @@ export function createAudio({ settings }) {
     }, fade * 1000 + 100);
   }
 
-  function api_setSoundscape(id, { powered = false } = {}) {
+  // `key` decides when the scene must be rebuilt (e.g. power restored,
+  // Emily moved); `state` lets a soundscape react to the story.
+  function api_setSoundscape(id, { powered = false, key = String(powered), state = null } = {}) {
     if (!ensure()) return;
-    if (current && current.id === id && current.powered === powered) return;
+    if (current && current.id === id && current.key === key) return;
     stopCurrent();
     const profile = SOUNDSCAPES[id];
     if (!profile) return;
@@ -316,8 +318,8 @@ export function createAudio({ settings }) {
     gain.gain.value = 0;
     gain.connect(ambBus);
     gain.gain.linearRampToValueAtTime(1, ac.currentTime + 1.5);
-    const scene = { id, powered, nodes: [], timers: [], gain };
-    profile({ api, bus: gain, scene, powered, panner });
+    const scene = { id, powered, key, state, nodes: [], timers: [], gain };
+    profile({ api, bus: gain, scene, powered, panner, state });
     current = scene;
   }
 

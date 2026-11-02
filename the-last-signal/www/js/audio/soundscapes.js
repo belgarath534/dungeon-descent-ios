@@ -83,6 +83,46 @@ export const SOUNDSCAPES = {
     );
   },
 
+  // Sublevel 1: the deep ambience track plus ventilation.
+  sublevel({ api, bus, scene }) {
+    bed(api, bus, scene, 'amb-sublevel', { gain: 0.3 }, () =>
+      keep(scene, api.loopNoise({ freq: 160, gain: 0.05 }, bus)),
+    );
+    keep(scene, api.loopSample('amb-generator', { gain: 0.08, lowpass: 500 }, bus));
+  },
+
+  // The preservation lab: cold air, and Emily's monitor on the right while she is here.
+  cold_lab({ api, bus, scene, state }) {
+    keep(scene, api.loopNoise({ filter: 'highpass', freq: 3000, gain: 0.02 }, bus));
+    bed(api, bus, scene, 'amb-corridor', { gain: 0.25, lowpass: 1200 }, () => {});
+    const w = state?.ward;
+    if (w?.emilyAlive && w.location === 'capsule') {
+      every(scene, 1000, 1100, () => api.tone(1000, 0.07, { gain: 0.025, bus, pan: 0.6 }));
+    }
+  },
+
+  // The medical ward: life support pump and monitor while Emily is here.
+  ward({ api, bus, scene, state }) {
+    powerHum(api, bus, scene, 0.15, 120);
+    const w = state?.ward;
+    if (w?.emilyAlive && w.location === 'ward') {
+      every(scene, 1000, 1100, () => api.tone(1000, 0.07, { gain: 0.025, bus, pan: 0.6 }));
+      every(scene, 3500, 3600, () => api.noise(1.2, { freq: 400, gain: 0.03, attack: 0.5, bus, pan: 0.6 }));
+    }
+  },
+
+  transfer({ api, bus, scene }) {
+    powerHum(api, bus, scene, 0.1, 100);
+    every(scene, 3000, 9000, () =>
+      api.noise(0.15, { filter: 'bandpass', freq: 3000, Q: 4, gain: 0.03, bus, pan: Math.random() * 2 - 1 }),
+    );
+  },
+
+  storage({ api, bus, scene }) {
+    keep(scene, api.loopNoise({ freq: 200, gain: 0.025 }, bus));
+    every(scene, 4000, 8000, () => api.tone(2400, 0.02, { gain: 0.01, bus, pan: 0.6 }));
+  },
+
   elevator({ api, bus, scene }) {
     powerHum(api, bus, scene, 0.3, 70);
     keep(scene, api.loopNoise({ freq: 400, gain: 0.03 }, bus));

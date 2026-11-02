@@ -110,14 +110,17 @@ export function createApp({ root, game, saves, settings, announcer, audio, bus, 
   // ---- engine events -> feedback ---------------------------------------
   bus.on('cue', (c) => audio.cue(c.name, c));
 
-  bus.on('room:entered', ({ room }) => {
-    audio.setSoundscape(room.soundscape, { powered: !!game.state?.flags.power_on });
-  });
-
-  bus.on('state:changed', ({ state }) => {
-    const room = game.ctx.content.rooms[state.location];
-    if (room) audio.setSoundscape(room.soundscape, { powered: !!state.flags.power_on });
-  });
+  function updateSoundscape() {
+    const state = game.state;
+    const room = state && game.ctx.content.rooms[state.location];
+    if (!room) return;
+    const powered = !!state.flags.power_on;
+    const w = state.ward || {};
+    const key = `${powered}|${w.emilyAlive}|${w.active ? w.location : '-'}`;
+    audio.setSoundscape(room.soundscape, { powered, key, state });
+  }
+  bus.on('room:entered', updateSoundscape);
+  bus.on('state:changed', updateSoundscape);
 
   bus.on('trust:changed', ({ delta, level, levelChanged }) => {
     const mode = settings.get('trustFeedback');

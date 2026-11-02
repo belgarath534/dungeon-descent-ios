@@ -60,6 +60,28 @@ Small details I wrote so the first chapter could be played. Each can be changed 
 | A faint mechanical sound far below the corridor. | Corridor, Listen | Foreshadowing (could be Prototype 001, Daniel's body, or anything else). |
 | Daniel is described in an old photo as a man in his forties with ink on his fingers. | Photo | Physical detail; easy to change. |
 
+## 2b. Details added in Chapter 2: Preservation (placeholders, need approval)
+
+| Detail | Where | Why |
+|---|---|---|
+| Sublevel 1 has an elevator landing, laboratory corridor, transfer suite, preservation lab, medical ward and storage. The elevator only goes down for now. | Map | Needs a map to explore. |
+| Daniel's speakers do not reach the preservation lab ("they made sure of that"). He sends the player for the records there, not knowing what else is inside. | Arrival dialogue | Lets the player discover Emily first and decide what to tell him. |
+| Emily is in Capsule 3, preserved for "interference" and "attempted access to sealed Sublevel 2 records". Revival is not authorized. | Preservation log | Matches the brief: captured and preserved so she could not interfere. |
+| **The big choice:** tell Daniel she is alive, or lie. A lie is exposed if he hears her loud monitor alarms on the facility radio channel, or if the player sends him the records. | Daniel dialogue | Honesty with consequences, as in the brief. |
+| Daniel's reaction to the news never says whether he knew she had been captured. His only line about her: "She was the only one who argued for me." | Dialogue | Leaves open question 6 open. |
+| The transfer suite: a restraint chair with "I DID NOT AGREE" scratched into the armrest, and a recording of the transfer ("Board resolution fourteen... Consent is not required." "He's asking for Emily." "The body doesn't matter now.") | Transfer suite | Shows the non-consensual transfer from the brief; hints the body still exists somewhere. |
+| An empty case labelled "TRANSFER. SECONDARY." with the destination scratched out. | Transfer suite (secret) | A hint toward the prototype/experiment connection, deliberately vague. |
+| A smashed glass wall, broken outward from inside a lab. | Corridor | Unexplained on purpose. |
+| A revival protocol: Emily can only be woken with authorization codes from Sublevel 2, and "familiar voices help". | Medical ward (secret) | Sets up a path to the Emily and Daniel radio conversation. |
+| Prototype 001 stands under a tarp in storage, crate stencilled "DO NOT ACTIVATE. BOARD ORDER." Daniel asks the player to wake it because "it remembers things I don't. Things they took out of me." The player can agree or refuse for now. | Storage, chapter end | The brief's activation request. 001 is not activated yet; that is Chapter 3. |
+
+### How Emily's care works (my defaults for open questions 7 and 8)
+
+- Her power and condition change with **in-game time only** (time passes when you act, never while you read).
+- Power cells (three in Chapter 2) top up her power. Checking on her in the ward restores her condition.
+- Warnings always come before anything permanent: a quiet chirp at 50 percent, then loud radio alarms at 25 and 10 percent, then a final alarm. She can die while you are elsewhere, but only after all of those.
+- If she dies, the story continues, and it is remembered.
+
 ## 3. Open questions for the creator
 
 1. **Timeline.** Did the protagonist leave before or after the experiment and the abandonment? Chapter 1 avoids saying.
@@ -68,6 +90,8 @@ Small details I wrote so the first chapter could be played. Each can be changed 
 4. **How long has the facility been abandoned?** Chapter 1 only says "dark for a long time".
 5. **Who sent the signal?** Daniel implies he has been waiting for someone to pick up the radio. Was it Daniel, Emily's capsule, Prototype 001, or something else?
 6. **Does Daniel know Emily is alive** and where she is?
-7. **Emily's care loop.** Should her vitals run on in-game time (time passes as you act, never while you read) or on real time? I recommend in-game time for accessibility; see `ARCHITECTURE.md`.
-8. **Can Emily die off-screen** while the player is far away, or does the game always give a warning and a chance to return first?
+7. **Emily's care loop.** Built with in-game time and staged warnings (see above). Change it if you want it harder or easier.
+8. **Emily's death.** Built so she can die while you are elsewhere, but only after several warnings. Is that right?
+10. **Who smashed the glass wall** on Sublevel 1, and what was in the empty transfer case?
+11. **Where is Daniel's robotic body,** in relation to the facility? Chapter 2 only says he cannot reach storage.
 9. **Prototype 001's danger.** If it catches the player, is that death, capture, injury, or a chase? This affects how stealth works for blind players.

@@ -59,7 +59,7 @@ export function titleScreen(app) {
     h('h1', { class: 'game-title' }, 'The Last Signal'),
     h('p', { class: 'tagline' }, 'A psychological horror investigation. Played by ear.'),
     buttonGroup('Main menu', items),
-    h('p', { class: 'fineprint' }, 'Early development build. Chapter 1.'),
+    h('p', { class: 'fineprint' }, 'Early development build. Chapters 1 and 2.'),
   );
 
   return {
@@ -188,6 +188,9 @@ const SOUND_GLOSSARY = [
   ['pickup', 'An item was added to your inventory.'],
   ['locked', 'The way is locked or blocked.'],
   ['secret', 'You found something hidden.'],
+  ['monitor', 'Emily\u2019s heart monitor.'],
+  ['alarm', 'Emily\u2019s monitor alarm: she needs attention soon.'],
+  ['alarm.critical', 'Urgent alarm: Emily is in danger right now.'],
 ];
 
 export function helpScreen(app) {

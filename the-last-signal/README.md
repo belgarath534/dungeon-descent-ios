@@ -32,6 +32,12 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 - 7 documents, 1 recording, 2 hidden discoveries.
 - A chapter summary of your choices.
 
+**Chapter 2: Preservation.** Sublevel 1. Find Emily Carter alive in a failing preservation capsule, decide whether to tell Daniel, power the medical ward, move her there and keep her alive. Ends with Daniel asking you to wake Prototype 001.
+
+- Emily's power and condition change as you act, with staged warnings over the radio. She can die.
+- A lie about Emily can be discovered through her alarms or the records.
+- 3 documents, 1 recording, 2 hidden discoveries. Choices from Chapter 1 carry over.
+
 **Foundation:** accessible menus, first-run setup, three speech modes, spatial sound effects and room ambience, journal, inventory, message history, autosave and 3 save slots, settings (speech, volumes, mono audio, startle reduction, trust feedback, text size, high contrast, keyboard shortcuts), and a sound glossary.
 
 ## Documents
