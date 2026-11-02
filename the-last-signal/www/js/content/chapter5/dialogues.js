@@ -137,6 +137,7 @@ export const dialogues = {
         lines: [],
         effects: [
           { setFlag: 'isolation_open' },
+          { sound: 'stinger.soft' },
           {
             endChapter: {
               title: 'End of Chapter 5',

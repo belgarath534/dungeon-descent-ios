@@ -90,6 +90,7 @@ export function settingsScreen(app) {
       field('Ambience volume', volume(app, 'ambienceVolume')),
       field('Effects volume', volume(app, 'effectsVolume')),
       field('Music volume', volume(app, 'musicVolume'), 'Music plays on the main menu and at the end of chapters, never over exploration.'),
+      checkbox(app, 'explorationMusic', 'Music while exploring', 'Quiet music under every chapter. Turn off if it ever covers your screen reader.'),
       checkbox(app, 'monoAudio', 'Mono audio', 'Plays every sound in both ears. Directions are still spoken in text.'),
       checkbox(app, 'reduceStartles', 'Reduce sudden loud sounds'),
       buttonGroup('Headphone check', [

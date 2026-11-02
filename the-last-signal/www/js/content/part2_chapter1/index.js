@@ -289,7 +289,7 @@ const dialogues = {
           'Alan Pryce. Former director at a research company that shut down two years ago. Found dead in his study at eleven tonight.',
           'On his desk, a police radio, playing a recording on a loop. Three short tones and one long. In his hand, a note with your badge number on it. And in his drawer, a page torn from that company’s visitor log, with your name on it, dated the night of that emergency call you answered.',
         ],
-        effects: [{ addDocument: 'doc_p2_charge' }, { addDocument: 'doc_p2_scene' }],
+        effects: [{ sound: 'stinger.soft' }, { addDocument: 'doc_p2_charge' }, { addDocument: 'doc_p2_scene' }],
         choices: [
           { text: 'I want a lawyer.', effects: [{ setFlag: 'asked_lawyer' }], next: 'lawyer' },
           { text: 'I was at that facility. I’ll tell you everything.', effects: [{ setFlag: 'told_ruiz_story' }], next: 'story' },

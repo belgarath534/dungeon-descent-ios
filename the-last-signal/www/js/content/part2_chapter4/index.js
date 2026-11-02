@@ -154,7 +154,7 @@ const dialogues = {
           { narration: 'Sarah has gone very pale.' },
           { speaker: 'sarah', text: 'She’s in the exchange. The facility’s old network. Every radio, every speaker, every phone line it still touches. She lives in it.' },
         ],
-        effects: [{ setFlag: 'voss_named' }],
+        effects: [{ setFlag: 'voss_named' }, { sound: 'stinger.soft' }],
         next: 'pryce',
       },
       pryce: {

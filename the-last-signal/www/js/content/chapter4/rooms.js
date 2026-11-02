@@ -194,7 +194,7 @@ export const rooms = {
             once: true,
             text: 'A man in his forties, thinner than he should be, his hair grown long. Tubes, wires, a ventilator mask. His eyes are closed. His hands lie on the sheet, and there is still ink on his fingers, faded almost to nothing. You know this face from the photo in his office. It is Daniel.',
             afterText: 'Daniel’s body, breathing because a machine tells it to.',
-            effects: [{ setFlag: 'saw_body' }, { objective: { id: 'find_daniel', status: 'done' } }, { startDialogue: 'daniel_body' }],
+            effects: [{ sound: 'stinger.soft' }, { setFlag: 'saw_body' }, { objective: { id: 'find_daniel', status: 'done' } }, { startDialogue: 'daniel_body' }],
           },
         ],
       },

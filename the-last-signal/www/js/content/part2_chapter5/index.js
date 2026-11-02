@@ -54,7 +54,7 @@ const dialogues = {
           { narration: 'Her voice is muffled through the steel. Then it is suddenly clear, on your radio instead.' },
           'Can you hear me? Tell me you can hear me.',
         ],
-        effects: [{ setFlag: 'corridor_sealed' }],
+        effects: [{ setFlag: 'corridor_sealed' }, { sound: 'stinger.soft' }],
         choices: [
           { text: 'I can hear you. I’m right here.', next: 'here' },
           { text: 'Sarah, stay calm. Where are you?', next: 'here' },
@@ -166,7 +166,7 @@ const dialogues = {
           { narration: 'It is Daniel’s voice. Daniel’s exact voice, saying words he would never say. It takes you long, terrible minutes to force the door.' },
           { speaker: 'sarah', via: 'radio', text: 'Where did you go? You went quiet. Please don’t go quiet on me.' },
         ],
-        effects: [{ advanceTime: 5 }],
+        effects: [{ sound: 'stinger.soft' }, { advanceTime: 5 }],
         end: true,
       },
     },

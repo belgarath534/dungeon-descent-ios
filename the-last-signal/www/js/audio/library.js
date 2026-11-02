@@ -23,6 +23,28 @@ export const SAMPLE_FILES = {
   'sfx-car-door': 'audio/sfx-car-door.mp3',
   'sfx-locked': 'audio/sfx-locked.mp3',
   'sfx-stinger': 'audio/sfx-stinger.mp3',
+  'sfx-thunder': 'audio/sfx-thunder.mp3',
+  'sfx-chant': 'audio/sfx-chant.mp3',
+  'sfx-hit-soft': 'audio/sfx-hit-soft.mp3',
+  'sfx-far-metal': 'audio/sfx-far-metal.mp3',
+  'sfx-far-clank': 'audio/sfx-far-clank.mp3',
+  'sfx-creak': 'audio/sfx-creak.mp3',
+  'sfx-crack': 'audio/sfx-crack.mp3',
+};
+
+// Music, downloaded only when first played (see audio-engine.js).
+export const MUSIC_FILES = {
+  'music-outside': 'audio/music-outside.mp3',
+  'music-surface': 'audio/music-surface.mp3',
+  'music-sublevel1': 'audio/music-sublevel1.mp3',
+  'music-hunt': 'audio/music-hunt.mp3',
+  'music-sublevel2': 'audio/music-sublevel2.mp3',
+  'music-isolation': 'audio/music-isolation.mp3',
+  'music-city': 'audio/music-city.mp3',
+  'music-sad': 'audio/music-sad.mp3',
+  'music-trial': 'audio/music-trial.mp3',
+  'music-voss': 'audio/music-voss.mp3',
+  'music-love': 'audio/music-love.mp3',
 };
 
 // Which game cue each recording replaces. Cues not listed here keep
@@ -38,7 +60,9 @@ export const CUE_SAMPLES = {
   'radio.on': 'sfx-radio-static',
   'chapter.end': 'sfx-stinger',
   'stinger.death': 'sfx-stinger',
+  'stinger.soft': 'sfx-hit-soft',
+  thunder: 'sfx-thunder',
 };
 
 // Turned down when "Reduce sudden loud sounds" is on.
-export const STARTLING = new Set(['sfx-stinger', 'sfx-locker', 'sfx-car-door']);
+export const STARTLING = new Set(['sfx-stinger', 'sfx-locker', 'sfx-car-door', 'sfx-hit-soft', 'sfx-thunder']);

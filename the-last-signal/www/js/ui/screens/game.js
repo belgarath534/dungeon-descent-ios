@@ -17,6 +17,7 @@
 import { h, button, buttonGroup, focusEl } from '../dom.js';
 import { DIRECTION_PAN } from '../../systems/world.js';
 import { evaluate } from '../../core/conditions.js';
+import { endMusic } from '../../audio/music.js';
 
 const POSITION_WORD = { left: 'on your left', right: 'on your right', ahead: 'ahead', behind: 'behind you' };
 const DIR_WORD = { north: 'North', south: 'South', east: 'East', west: 'West', up: 'Up', down: 'Down', in: 'In', out: 'Out' };
@@ -69,8 +70,9 @@ export function gameScreen(app) {
     status.textContent = `Time: ${v.clock}`;
     document.title = `${title.textContent} — The Last Signal`;
     // Music never plays over exploration, so it cannot mask speech or clues.
-    if (v.mode === 'chapterEnd') app.audio.playMusic('music-descent', { loop: false, fade: 4 });
-    else app.audio.stopMusic();
+    if (v.mode === 'chapterEnd') app.audio.playMusic(endMusic(v.ended), { loop: false, fade: 4 });
+    else if (v.mode === 'gameOver') app.audio.stopMusic();
+    else app.updateMusic?.();
 
     if (submenu && !v.objects.some((o) => o.id === submenu)) submenu = null;
     if (v.mode !== 'explore') submenu = null;

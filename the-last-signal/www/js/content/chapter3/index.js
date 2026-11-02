@@ -52,7 +52,7 @@ export const chapter3 = {
               label: 'Wake Prototype 001',
               cue: 'power.on',
               text: 'You pull the tarp away. It slides to the floor with a sigh. You put your palm flat against 001’s chest plate, the way Daniel said. It is cold. Then, under your hand, it is not. Something deep inside it turns over, and a sound comes out of its chest, soft and clear: three short tones, and one long one.',
-              effects: [{ setFlag: 'woke_001' }, { sound: 'signal' }, { objective: { id: 'wake_001', status: 'done' } }, { startDialogue: 'boot_001' }],
+              effects: [{ setFlag: 'woke_001' }, { sound: 'signal' }, { sound: 'stinger.soft' }, { objective: { id: 'wake_001', status: 'done' } }, { startDialogue: 'boot_001' }],
             },
           ],
         },

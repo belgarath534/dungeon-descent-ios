@@ -17,6 +17,15 @@ function every(scene, minMs, maxMs, fn) {
 
 const keep = (scene, node) => node && scene.nodes.push(node);
 
+// A recorded sound somewhere far off: random side, muffled, quiet.
+function distant(api, bus, scene, names, minMs, maxMs, gain = 0.25) {
+  every(scene, minMs, maxMs, () =>
+    api.oneShot(names[Math.floor(Math.random() * names.length)], {
+      bus, gain, lowpass: 900 + Math.random() * 800, pan: Math.random() * 1.6 - 0.8, rate: 0.85 + Math.random() * 0.2,
+    }),
+  );
+}
+
 // Recorded loop if it has loaded, otherwise the synthesised fallback.
 function bed(api, bus, scene, sample, opts, fallback) {
   const node = api.loopSample(sample, opts, bus);
@@ -48,6 +57,7 @@ export const SOUNDSCAPES = {
     every(scene, 9000, 20000, () =>
       api.tone(38, 2.5, { type: 'sawtooth', lowpass: 120, gain: 0.05, attack: 0.6, bus }),
     );
+    distant(api, bus, scene, ['sfx-thunder'], 25000, 50000, 0.35);
   },
 
   lobby({ api, bus, scene, powered }) {
@@ -64,6 +74,7 @@ export const SOUNDSCAPES = {
   },
 
   office({ api, bus, scene, powered }) {
+    distant(api, bus, scene, ['sfx-creak', 'sfx-crack'], 14000, 30000, 0.2);
     bed(api, bus, scene, 'amb-facility', { gain: 0.25, lowpass: 2000 }, () =>
       keep(scene, api.loopNoise({ freq: 250, gain: 0.03 }, bus)),
     );
@@ -74,6 +85,7 @@ export const SOUNDSCAPES = {
   },
 
   corridor({ api, bus, scene, powered }) {
+    distant(api, bus, scene, ['sfx-creak', 'sfx-far-clank'], 12000, 26000, 0.22);
     bed(api, bus, scene, 'amb-corridor', { gain: 0.45 }, () =>
       keep(scene, api.loopNoise({ freq: 180, gain: 0.045 }, bus)),
     );
@@ -85,6 +97,7 @@ export const SOUNDSCAPES = {
 
   // Sublevel 1: the deep ambience track plus ventilation.
   sublevel({ api, bus, scene }) {
+    distant(api, bus, scene, ['sfx-far-metal', 'sfx-far-clank', 'sfx-crack'], 9000, 22000, 0.25);
     bed(api, bus, scene, 'amb-sublevel', { gain: 0.3 }, () =>
       keep(scene, api.loopNoise({ freq: 160, gain: 0.05 }, bus)),
     );
@@ -112,6 +125,7 @@ export const SOUNDSCAPES = {
   },
 
   transfer({ api, bus, scene }) {
+    distant(api, bus, scene, ['sfx-chant'], 30000, 60000, 0.06);
     powerHum(api, bus, scene, 0.1, 100);
     every(scene, 3000, 9000, () =>
       api.noise(0.15, { filter: 'bandpass', freq: 3000, Q: 4, gain: 0.03, bus, pan: Math.random() * 2 - 1 }),
@@ -119,12 +133,14 @@ export const SOUNDSCAPES = {
   },
 
   storage({ api, bus, scene }) {
+    distant(api, bus, scene, ['sfx-far-clank', 'sfx-creak'], 15000, 30000, 0.2);
     keep(scene, api.loopNoise({ freq: 200, gain: 0.025 }, bus));
     every(scene, 4000, 8000, () => api.tone(2400, 0.02, { gain: 0.01, bus, pan: 0.6 }));
   },
 
   // Sublevel 2: warm, everything still running.
   b2({ api, bus, scene }) {
+    distant(api, bus, scene, ['sfx-far-metal', 'sfx-far-clank'], 15000, 30000, 0.2);
     powerHum(api, bus, scene, 0.3, 60);
     bed(api, bus, scene, 'amb-sublevel', { gain: 0.18, lowpass: 900 }, () => {});
     keep(scene, api.loopNoise({ freq: 350, gain: 0.03 }, bus));
@@ -150,6 +166,7 @@ export const SOUNDSCAPES = {
 
   // The stairwell: hollow concrete, and Daniel's whir behind the isolation door.
   stairwell({ api, bus, scene }) {
+    distant(api, bus, scene, ['sfx-creak', 'sfx-crack', 'sfx-far-clank'], 10000, 22000, 0.25);
     bed(api, bus, scene, 'amb-corridor', { gain: 0.3, lowpass: 800 }, () => keep(scene, api.loopNoise({ freq: 150, gain: 0.04 }, bus)));
     every(scene, 5000, 9000, () => api.tone(420, 1.2, { slideTo: 380, type: 'sawtooth', lowpass: 700, gain: 0.012, attack: 0.3, bus }));
   },
@@ -182,6 +199,7 @@ export const SOUNDSCAPES = {
   },
 
   street({ api, bus, scene }) {
+    distant(api, bus, scene, ['sfx-thunder'], 30000, 60000, 0.25);
     bed(api, bus, scene, 'amb-rain', { gain: 0.45 }, () => keep(scene, api.loopNoise({ freq: 2500, gain: 0.04 }, bus)));
     every(scene, 3000, 7000, () => api.noise(1.5, { freq: 700, sweepTo: 300, gain: 0.03, attack: 0.5, bus, pan: Math.random() * 2 - 1 }));
   },
@@ -222,6 +240,7 @@ export const SOUNDSCAPES = {
 
   // The heart of the network: thousands of relays, and Voss all around you.
   switching({ api, bus, scene }) {
+    distant(api, bus, scene, ['sfx-chant'], 12000, 25000, 0.1);
     powerHum(api, bus, scene, 0.2, 60);
     every(scene, 80, 300, () => api.noise(0.02, { filter: 'highpass', freq: 3000, gain: 0.012, bus, pan: Math.random() * 2 - 1 }));
     every(scene, 6000, 6100, () => api.noise(1.4, { freq: 600, gain: 0.02, attack: 0.6, bus }));

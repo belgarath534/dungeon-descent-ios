@@ -11,7 +11,7 @@
 
 import { CUES } from './cues.js';
 import { SOUNDSCAPES } from './soundscapes.js';
-import { SAMPLE_FILES, CUE_SAMPLES, STARTLING } from './library.js';
+import { SAMPLE_FILES, MUSIC_FILES, CUE_SAMPLES, STARTLING } from './library.js';
 
 export function createAudio({ settings }) {
   let ac = null;
@@ -138,6 +138,31 @@ export function createAudio({ settings }) {
 
     hasSample: (name) => samples.has(name),
 
+    // A recorded one-shot inside a soundscape (a distant bang, a creak).
+    // Does nothing if the file has not loaded.
+    oneShot(name, o = {}) {
+      const buf = samples.get(name);
+      if (!buf) return;
+      const src = ac.createBufferSource();
+      src.buffer = buf;
+      src.playbackRate.value = o.rate || 1;
+      let node = src;
+      if (o.lowpass) {
+        const f = ac.createBiquadFilter();
+        f.type = 'lowpass';
+        f.frequency.value = o.lowpass;
+        src.connect(f);
+        node = f;
+      }
+      const g = ac.createGain();
+      g.gain.value = o.gain ?? 0.3;
+      const p = panner(o.pan || 0);
+      node.connect(g);
+      g.connect(p);
+      p.connect(o.bus || sfxBus);
+      src.start();
+    },
+
     // A recorded ambience loop. Returns null if the file is not loaded yet,
     // so soundscapes can fall back to synthesised noise.
     loopSample(name, o, bus) {
@@ -237,19 +262,23 @@ export function createAudio({ settings }) {
     return libraryLoading;
   }
 
-  function startMusic(name, { loop = true, fade = 2 } = {}) {
+  // Music tracks are large, so each is downloaded only when first needed.
+  function startMusic(name, { loop = true, fade = 2, gain: level = 1 } = {}) {
     if (music?.name === name) return;
     stopMusic(fade);
     const buf = samples.get(name);
     if (!buf) {
-      // Not loaded yet: start it as soon as it is.
       music = { name, pending: true };
-      loadLibrary()?.then(() => {
-        if (music?.name === name && music.pending) {
-          music = null;
-          startMusic(name, { loop, fade });
-        }
-      });
+      const url = MUSIC_FILES[name] || SAMPLE_FILES[name];
+      if (!url) return;
+      loadOne(name, url)
+        .then(() => {
+          if (music?.name === name && music.pending) {
+            music = null;
+            startMusic(name, { loop, fade, gain: level });
+          }
+        })
+        .catch((err) => console.warn('[audio] music failed to load', name, err));
       return;
     }
     const src = ac.createBufferSource();
@@ -257,7 +286,7 @@ export function createAudio({ settings }) {
     src.loop = loop;
     const gain = ac.createGain();
     gain.gain.setValueAtTime(0, ac.currentTime);
-    gain.gain.linearRampToValueAtTime(1, ac.currentTime + fade);
+    gain.gain.linearRampToValueAtTime(level, ac.currentTime + fade);
     src.connect(gain);
     gain.connect(musicBus);
     src.start();
@@ -350,6 +379,7 @@ export function createAudio({ settings }) {
 
     playMusic: (name, opts) => ensure() && startMusic(name, opts),
     stopMusic: (fade) => ac && stopMusic(fade),
+    currentMusic: () => (music && !music.pending ? music.name : null),
 
     stopAmbience: () => ac && stopCurrent(0.5),
 

@@ -3,6 +3,7 @@
 
 import { focusEl } from './dom.js';
 import { trustLevel } from '../systems/trust.js';
+import { pickMusic, EXPLORATION_MUSIC_LEVEL } from '../audio/music.js';
 
 export function createApp({ root, game, saves, settings, announcer, audio, bus, screens }) {
   let current = null; // { name, instance }
@@ -135,7 +136,19 @@ export function createApp({ root, game, saves, settings, announcer, audio, bus, 
     const w = state.ward || {};
     const key = `${powered}|${w.emilyAlive}|${w.active ? w.location : '-'}`;
     audio.setSoundscape(room.soundscape, { powered, key, state });
+    app.updateMusic();
   }
+
+  // Exploration music follows where you are. Chapter ends and game over
+  // choose their own music in the game screen.
+  app.updateMusic = () => {
+    const state = game.state;
+    if (!state || state.ended || state.gameOver || app.currentScreen === 'title') return;
+    const room = game.ctx.content.rooms[state.location];
+    const track = settings.get('explorationMusic') === false ? null : pickMusic(state, room);
+    if (track) audio.playMusic(track, { gain: EXPLORATION_MUSIC_LEVEL, fade: 3 });
+    else audio.stopMusic(2);
+  };
   bus.on('room:entered', updateSoundscape);
   bus.on('state:changed', updateSoundscape);
 
@@ -189,6 +202,7 @@ export function createApp({ root, game, saves, settings, announcer, audio, bus, 
     }
   });
 
+  settings.onChange((k) => (k === 'explorationMusic' || k === '*') && app.updateMusic());
   app.trustLevel = () => trustLevel(game.state.trust.daniel.value);
   return app;
 }
