@@ -1,0 +1,233 @@
+// The game engine: owns the state, wires the systems together and exposes
+// a small API to the UI. It never touches the DOM or audio directly;
+// it emits events ("cue", "room:entered", "trust:changed"...) instead,
+// so the whole engine runs headless in tests.
+//
+// Every player action returns a "beat": the lines of text that action
+// produced, in order. The UI shows a beat as one block of narration.
+
+import { evaluate } from './conditions.js';
+import { createEffects } from './effects.js';
+import { createInitialState, cloneState, clockLabel } from './state.js';
+import { installWorld } from '../systems/world.js';
+import { installDialogue } from '../systems/dialogue.js';
+import { installTrust, trustLevel } from '../systems/trust.js';
+import { installJournal } from '../systems/journal.js';
+
+export function createGame({ content, bus }) {
+  let state = null;
+  let output = [];
+  const effects = createEffects();
+
+  const ctx = {
+    get state() {
+      return state;
+    },
+    content,
+    bus,
+    effects,
+    say(text, opts = {}) {
+      if (!text) return;
+      output.push({ text, kind: opts.kind || 'narration', speaker: opts.speaker, speakerId: opts.speakerId });
+    },
+    cue(name, opts = {}) {
+      bus.emit('cue', { name, ...opts });
+    },
+    advanceTime(minutes) {
+      state.time.minutes += minutes;
+    },
+  };
+
+  installCoreEffects(ctx);
+  const world = installWorld(ctx);
+  const dialogue = installDialogue(ctx);
+  const trust = installTrust(ctx);
+  const journal = installJournal(ctx);
+
+  // Scheduled events and triggers run between player actions, never in
+  // the middle of a conversation.
+  function runPending() {
+    for (let guard = 0; guard < 20 && !state.dialogue.active; guard++) {
+      const now = state.time.minutes;
+      state.timers.sort((a, b) => a.at - b.at);
+      const due = state.timers.find((t) => t.at <= now);
+      if (due) {
+        state.timers = state.timers.filter((t) => t !== due);
+        const ev = content.events[due.event];
+        if (!ev) throw new Error(`Unknown event "${due.event}"`);
+        if (evaluate(ev.when, state)) effects.apply(ev.effects, ctx);
+        continue;
+      }
+      const trig = content.triggers.find(
+        (t) => !state.firedTriggers[t.id] && evaluate(t.when, state),
+      );
+      if (!trig) break;
+      if (trig.once !== false) state.firedTriggers[trig.id] = true;
+      effects.apply(trig.effects, ctx);
+    }
+  }
+
+  function run(fn) {
+    if (!state) throw new Error('No game in progress');
+    output = [];
+    fn();
+    runPending();
+    state.stats.actions += 1;
+    bus.emit('state:changed', { state });
+    return { lines: output };
+  }
+
+  function roomActions() {
+    const list = [
+      { id: 'look', label: 'Look around' },
+      { id: 'listen', label: 'Listen' },
+    ];
+    for (const a of content.globalActions || []) {
+      if (evaluate(a.when, state)) list.push({ id: a.id, label: a.label });
+    }
+    return list;
+  }
+
+  function mode() {
+    if (state.ended) return 'chapterEnd';
+    if (state.dialogue.active) return 'dialogue';
+    return 'explore';
+  }
+
+  return {
+    ctx,
+    get state() {
+      return state;
+    },
+
+    newGame() {
+      state = createInitialState({ startRoom: content.start.room });
+      state.inventory = [...(content.start.inventory || [])];
+      return run(() => {
+        for (const line of content.start.intro) ctx.say(line);
+        effects.apply(content.start.effects, ctx);
+        world.enterRoom(content.start.room);
+      });
+    },
+
+    loadState(saved) {
+      state = cloneState(saved);
+      bus.emit('room:entered', { room: world.room() });
+      bus.emit('state:changed', { state });
+    },
+
+    snapshot: () => cloneState(state),
+
+    saveMeta() {
+      return {
+        room: world.room().name,
+        chapter: state.chapter,
+        clock: clockLabel(state.time.minutes),
+      };
+    },
+
+    view() {
+      const m = mode();
+      const room = world.room();
+      return {
+        mode: m,
+        room: { id: room.id, name: room.name, zone: room.zone },
+        clock: clockLabel(state.time.minutes),
+        roomActions: m === 'explore' ? roomActions() : [],
+        objects:
+          m === 'explore'
+            ? world.visibleObjects().map((o) => ({ id: o.id, name: o.name, position: o.position }))
+            : [],
+        exits:
+          m === 'explore'
+            ? world.visibleExits().map((e) => ({
+                id: e.id,
+                dir: e.dir,
+                label: world.exitLabel(e),
+                lockedKnown: world.lockedKnown(e),
+              }))
+            : [],
+        choices: m === 'dialogue' ? dialogue.choices() : [],
+        ended: state.ended || null,
+      };
+    },
+
+    objectActions: (id) => world.objectActions(id).map((a) => ({ id: a.id, label: a.label })),
+    objectInfo: (id) => world.visibleObjects().find((o) => o.id === id) || null,
+
+    // Text shown after loading a save or returning to the game.
+    resume: () =>
+      run(() => {
+        if (state.ended) return;
+        if (state.dialogue.active) {
+          ctx.say('You are in the middle of a conversation.', { kind: 'system' });
+          dialogue.replay();
+        } else {
+          world.describeHere();
+        }
+      }),
+
+    look: () => run(() => world.look()),
+    listen: () => run(() => world.listen()),
+    go: (exitId) => run(() => world.go(exitId)),
+    act: (objectId, actionId) => run(() => world.act(objectId, actionId)),
+    choose: (index) => run(() => dialogue.choose(index)),
+    roomAction(id) {
+      if (id === 'look') return this.look();
+      if (id === 'listen') return this.listen();
+      const a = (content.globalActions || []).find((x) => x.id === id);
+      if (!a || !evaluate(a.when, state)) return run(() => ctx.say('You cannot do that now.', { kind: 'system' }));
+      return run(() => effects.apply(a.effects, ctx));
+    },
+    continueAfterChapter() {
+      return run(() => {
+        const after = content.afterChapterEnd || {};
+        state.ended = null;
+        for (const id of after.resetTriggers || []) delete state.firedTriggers[id];
+        effects.apply(after.effects, ctx);
+      });
+    },
+
+    markRead: (id) => journal.markRead(id),
+    objectives: (status) => journal.objectivesByStatus(status),
+    trustLevel: () => trustLevel(state.trust.daniel.value),
+    speakerName: (id) => dialogue.speakerName(id),
+  };
+}
+
+function installCoreEffects(ctx) {
+  const { effects } = ctx;
+  const list = (v) => (Array.isArray(v) ? v : [v]);
+
+  effects.register('setFlag', (v, c) => list(v).forEach((f) => (c.state.flags[f] = true)));
+  effects.register('clearFlag', (v, c) => list(v).forEach((f) => delete c.state.flags[f]));
+  effects.register('say', (v, c) => list(v).forEach((t) => c.say(t)));
+  effects.register('sound', (v, c) => c.cue(typeof v === 'string' ? v : v.name, typeof v === 'object' ? v : {}));
+  effects.register('advanceTime', (v, c) => c.advanceTime(v));
+
+  // { schedule: { event: 'id', in: 10 } }  -- fires after 10 in-game minutes.
+  effects.register('schedule', (v, c) => {
+    c.state.timers = c.state.timers.filter((t) => t.event !== v.event);
+    c.state.timers.push({ event: v.event, at: c.state.time.minutes + v.in });
+  });
+  effects.register('cancelTimer', (v, c) => {
+    c.state.timers = c.state.timers.filter((t) => t.event !== v);
+  });
+
+  effects.register('secret', (v, c) => {
+    const key = `secret:${v}`;
+    if (c.state.flags[key]) return;
+    c.state.flags[key] = true;
+    c.state.stats.secretsFound += 1;
+    c.cue('secret');
+    c.say('You found something hidden.', { kind: 'system' });
+  });
+
+  effects.register('endChapter', (v, c) => {
+    c.state.flags[`chapter_${c.state.chapter}_complete`] = true;
+    c.state.ended = { chapter: c.state.chapter, title: v.title, text: v.text };
+    c.cue('chapter.end');
+    c.say(v.text);
+    c.say(v.title, { kind: 'heading' });
+  });
+}
