@@ -67,6 +67,7 @@ export function titleScreen(app) {
     title: 'Main menu',
     onShow() {
       app.audio.setSoundscape('outdoor_rain');
+      app.audio.playMusic('music-title');
     },
   };
 }

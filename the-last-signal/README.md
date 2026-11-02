@@ -39,3 +39,6 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): how the code is organised and what comes next.
 - [docs/STORY_BIBLE.md](docs/STORY_BIBLE.md): the canon from the brief, what was added in Chapter 1 and needs approval, and open questions.
 - [docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md): the VoiceOver testing checklist.
+- [docs/AUDIO_CREDITS.md](docs/AUDIO_CREDITS.md): where every sound and song came from (all CC0).
+
+Live build: https://the-last-signal-game-bk6r.netlify.app

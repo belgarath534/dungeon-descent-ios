@@ -1,7 +1,9 @@
-// Procedural audio: every sound is synthesised with the Web Audio API,
-// so the game has a complete, consistent sound language before any
-// recorded assets exist. Recorded files can later replace any cue by
-// name (see registerSample) without touching game code.
+// Audio engine. Two layers:
+//   1. Procedural sounds synthesised with the Web Audio API. These always
+//      work, even offline or before any file has loaded.
+//   2. Recorded files (see library.js). Once loaded, a recording replaces
+//      the synthesised cue of the same name, and room ambience switches to
+//      recorded loops. Missing or failed files just fall back to layer 1.
 //
 // Spatial rule used everywhere: things on your left play in the left ear,
 // things on your right in the right ear, things ahead in the centre.
@@ -9,10 +11,13 @@
 
 import { CUES } from './cues.js';
 import { SOUNDSCAPES } from './soundscapes.js';
+import { SAMPLE_FILES, CUE_SAMPLES, STARTLING } from './library.js';
 
 export function createAudio({ settings }) {
   let ac = null;
-  let master, sfxBus, ambBus;
+  let master, sfxBus, ambBus, musicBus;
+  let music = null; // { name, src, gain }
+  let libraryLoading = null;
   let noiseBuffer = null;
   let current = null; // { id, powered, nodes: [], timers: [], gain }
   const samples = new Map();
@@ -25,8 +30,10 @@ export function createAudio({ settings }) {
     master = ac.createGain();
     sfxBus = ac.createGain();
     ambBus = ac.createGain();
+    musicBus = ac.createGain();
     sfxBus.connect(master);
     ambBus.connect(master);
+    musicBus.connect(master);
     master.connect(ac.destination);
     noiseBuffer = makeNoise(ac, 3);
     applyVolumes();
@@ -45,6 +52,7 @@ export function createAudio({ settings }) {
     master.gain.value = settings.get('masterVolume');
     sfxBus.gain.value = settings.get('effectsVolume');
     ambBus.gain.value = settings.get('ambienceVolume');
+    musicBus.gain.value = settings.get('musicVolume') ?? 0.45;
   }
 
   function panner(pan = 0) {
@@ -128,6 +136,34 @@ export function createAudio({ settings }) {
       return src;
     },
 
+    hasSample: (name) => samples.has(name),
+
+    // A recorded ambience loop. Returns null if the file is not loaded yet,
+    // so soundscapes can fall back to synthesised noise.
+    loopSample(name, o, bus) {
+      const buf = samples.get(name);
+      if (!buf) return null;
+      const src = ac.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+      let node = src;
+      if (o.lowpass) {
+        const f = ac.createBiquadFilter();
+        f.type = 'lowpass';
+        f.frequency.value = o.lowpass;
+        src.connect(f);
+        node = f;
+      }
+      const g = ac.createGain();
+      g.gain.value = o.gain ?? 0.5;
+      const p = panner(o.pan || 0);
+      node.connect(g);
+      g.connect(p);
+      p.connect(bus);
+      src.start(0, Math.random() * Math.max(0, buf.duration - 1));
+      return src;
+    },
+
     loopTone(o, bus) {
       const osc = ac.createOscillator();
       osc.type = o.type || 'sine';
@@ -162,10 +198,90 @@ export function createAudio({ settings }) {
     const buf = samples.get(name);
     const src = ac.createBufferSource();
     src.buffer = buf;
+    const g = ac.createGain();
+    let gain = o.gain ?? 0.8;
+    if (STARTLING.has(name) && settings.get('reduceStartles')) gain *= 0.35;
+    g.gain.value = gain;
     const p = panner(o.pan || 0);
-    src.connect(p);
+    src.connect(g);
+    g.connect(p);
     p.connect(sfxBus);
     src.start();
+  }
+
+  async function loadOne(name, url) {
+    if (samples.has(name)) return;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`${url}: ${res.status}`);
+    const data = await res.arrayBuffer();
+    // Safari's older decodeAudioData only supports callbacks.
+    const buf = await new Promise((resolve, reject) => {
+      const r = ac.decodeAudioData(data, resolve, reject);
+      if (r?.then) r.then(resolve, reject);
+    });
+    samples.set(name, buf);
+  }
+
+  function loadLibrary() {
+    if (libraryLoading || !ac) return libraryLoading;
+    const entries = Object.entries(SAMPLE_FILES);
+    libraryLoading = Promise.allSettled(entries.map(([name, url]) => loadOne(name, url))).then((results) => {
+      results.forEach((r, i) => r.status === 'rejected' && console.warn('[audio] could not load', entries[i][0], r.reason));
+      // Swap the current room's synthesised bed for the recorded one.
+      if (current) {
+        const { id, powered } = current;
+        current.id = null;
+        api_setSoundscape(id, { powered });
+      }
+    });
+    return libraryLoading;
+  }
+
+  function startMusic(name, { loop = true, fade = 2 } = {}) {
+    if (music?.name === name) return;
+    stopMusic(fade);
+    const buf = samples.get(name);
+    if (!buf) {
+      // Not loaded yet: start it as soon as it is.
+      music = { name, pending: true };
+      loadLibrary()?.then(() => {
+        if (music?.name === name && music.pending) {
+          music = null;
+          startMusic(name, { loop, fade });
+        }
+      });
+      return;
+    }
+    const src = ac.createBufferSource();
+    src.buffer = buf;
+    src.loop = loop;
+    const gain = ac.createGain();
+    gain.gain.setValueAtTime(0, ac.currentTime);
+    gain.gain.linearRampToValueAtTime(1, ac.currentTime + fade);
+    src.connect(gain);
+    gain.connect(musicBus);
+    src.start();
+    src.onended = () => {
+      if (music?.src === src) music = null;
+    };
+    music = { name, src, gain };
+  }
+
+  function stopMusic(fade = 1.5) {
+    if (!music) return;
+    const old = music;
+    music = null;
+    if (old.pending) return;
+    const t = ac.currentTime;
+    old.gain.gain.setValueAtTime(old.gain.gain.value, t);
+    old.gain.gain.linearRampToValueAtTime(0, t + fade);
+    setTimeout(() => {
+      try {
+        old.src.stop();
+      } catch {
+        /* already stopped */
+      }
+    }, fade * 1000 + 100);
   }
 
   // ---- ambience -------------------------------------------------------------
@@ -190,16 +306,34 @@ export function createAudio({ settings }) {
     }, fade * 1000 + 100);
   }
 
+  function api_setSoundscape(id, { powered = false } = {}) {
+    if (!ensure()) return;
+    if (current && current.id === id && current.powered === powered) return;
+    stopCurrent();
+    const profile = SOUNDSCAPES[id];
+    if (!profile) return;
+    const gain = ac.createGain();
+    gain.gain.value = 0;
+    gain.connect(ambBus);
+    gain.gain.linearRampToValueAtTime(1, ac.currentTime + 1.5);
+    const scene = { id, powered, nodes: [], timers: [], gain };
+    profile({ api, bus: gain, scene, powered, panner });
+    current = scene;
+  }
+
   return {
     unlock() {
       const ctx = ensure();
       if (ctx && ctx.state === 'suspended') ctx.resume();
+      loadLibrary();
     },
 
     applyVolumes,
 
     cue(name, opts = {}) {
       if (!ensure()) return;
+      const sample = CUE_SAMPLES[name];
+      if (sample && samples.has(sample)) return playSample(sample, opts);
       if (samples.has(name)) return playSample(name, opts);
       const fn = CUES[name];
       if (!fn) return;
@@ -210,29 +344,20 @@ export function createAudio({ settings }) {
       }
     },
 
-    setSoundscape(id, { powered = false } = {}) {
-      if (!ensure()) return;
-      if (current && current.id === id && current.powered === powered) return;
-      stopCurrent();
-      const profile = SOUNDSCAPES[id];
-      if (!profile) return;
-      const gain = ac.createGain();
-      gain.gain.value = 0;
-      gain.connect(ambBus);
-      gain.gain.linearRampToValueAtTime(1, ac.currentTime + 1.5);
-      const scene = { id, powered, nodes: [], timers: [], gain };
-      profile({ api, bus: gain, scene, powered, panner });
-      current = scene;
-    },
+    setSoundscape: api_setSoundscape,
+
+    playMusic: (name, opts) => ensure() && startMusic(name, opts),
+    stopMusic: (fade) => ac && stopMusic(fade),
 
     stopAmbience: () => ac && stopCurrent(0.5),
 
     // Replace a synthesised cue with a recorded file later on.
     async registerSample(name, url) {
       if (!ensure()) return;
-      const res = await fetch(url);
-      samples.set(name, await ac.decodeAudioData(await res.arrayBuffer()));
+      await loadOne(name, url);
     },
+
+    loaded: () => [...samples.keys()],
 
     suspend: () => ac?.suspend(),
     resume: () => ac?.resume(),

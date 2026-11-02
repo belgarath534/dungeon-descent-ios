@@ -11,6 +11,7 @@ export const DEFAULT_SETTINGS = {
   voiceName: '',
   masterVolume: 0.8,
   ambienceVolume: 0.6,
+  musicVolume: 0.45,
   effectsVolume: 0.8,
   monoAudio: false,
   // How Daniel's trust changes are communicated: 'off', 'sound', 'speech'.

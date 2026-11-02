@@ -1,0 +1,4 @@
+# Netlify hosting: the game is static files in www/, no build step.
+[build]
+  publish = "www"
+  command = "echo 'no build step'"

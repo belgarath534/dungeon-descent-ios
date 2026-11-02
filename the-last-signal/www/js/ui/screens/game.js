@@ -66,6 +66,9 @@ export function gameScreen(app) {
     title.textContent = v.mode === 'chapterEnd' ? v.ended.title : v.room.name;
     status.textContent = `Time: ${v.clock}`;
     document.title = `${title.textContent} — The Last Signal`;
+    // Music never plays over exploration, so it cannot mask speech or clues.
+    if (v.mode === 'chapterEnd') app.audio.playMusic('music-descent', { loop: false, fade: 4 });
+    else app.audio.stopMusic();
 
     if (submenu && !v.objects.some((o) => o.id === submenu)) submenu = null;
     if (v.mode !== 'explore') submenu = null;
