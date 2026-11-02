@@ -213,6 +213,13 @@ export const SOUNDSCAPES = {
     every(scene, 1500, 4000, () => api.tone(2600, 0.03, { gain: 0.008, bus, pan: Math.random() * 2 - 1 })); // heels on marble
   },
 
+  // The basement evidence room: Voss is in the terminal's speaker.
+  evidence({ api, bus, scene }) {
+    keep(scene, api.loopTone({ freq: 120, gain: 0.006 }, bus));
+    keep(scene, api.loopNoise({ filter: 'highpass', freq: 4000, gain: 0.006 }, bus));
+    every(scene, 5000, 5100, () => api.noise(1.4, { freq: 600, gain: 0.015, attack: 0.6, bus })); // breathing it does not need
+  },
+
   elevator({ api, bus, scene }) {
     powerHum(api, bus, scene, 0.3, 70);
     keep(scene, api.loopNoise({ freq: 400, gain: 0.03 }, bus));

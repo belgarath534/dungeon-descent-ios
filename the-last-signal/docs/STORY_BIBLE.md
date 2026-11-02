@@ -197,6 +197,18 @@ The creator's idea: after Part One, the protagonist is put on trial, framed by s
 | Your witnesses testify in their own voices. You choose whether to take the stand and how to close. | Agency in the courtroom. |
 | The jury retires. The lights go out. Over the speakers: "Guilty or not, it doesn't matter. I kept a copy of everything. Including him." | The cliffhanger: "him" is Daniel, a copy of his mind. The verdict comes next chapter. |
 
+### Part Two, Chapter 4: The Verdict (built; villain chosen by Claude at the creator's request)
+
+| Detail | Why |
+|---|---|
+| **The verdict follows the jury.** A strong trial (8 or more): not guilty. A weak one: guilty, then Ruiz bursts in with your radio and the news that she caught Victor Lane returning it to the evidence room; the verdict is set aside. | The creator's "I thought my life was over until..." |
+| **Dr. Helena Voss**, chair of the Project Board, is the voice. Her body died of cancer a year ago; she had copied her mind into the facility network first. **Daniel's transfer was her rehearsal.** | The villain behind everything. |
+| She lives in the facility's old phone and radio exchange, so she can speak through any radio, speaker or phone it touches. Lane works for her. She had Pryce killed because he was about to expose her, and framed you. | Explains the vent, the courtroom speakers, the 3 AM tip. |
+| The transfer made **three copies of Daniel**: the frame on the wall, 001, and the **master copy, which Voss kept**. | Pays off "including him". |
+| She wants a **body**. Daniel's body if it is still in containment; otherwise "someone you care about. Sarah has a good heart, I hear." She offers to delete Daniel's copy if you bring her one; refuse, and she will use his voice to ruin everyone you love. | The stakes for the finale. |
+| Your old radio was modified to connect to her terminal. | The physical link. |
+| Sarah: the exchange has one physical heart, a switching room on Sublevel 2 behind monitoring. Cut it there and Voss has nowhere to go except whatever body she can reach. | Sets up Part Two's finale back at the facility. |
+
 ## 3. Open questions for the creator
 
 1. **Timeline.** Did the protagonist leave before or after the experiment and the abandonment? Chapter 1 avoids saying.
