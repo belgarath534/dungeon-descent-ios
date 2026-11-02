@@ -123,6 +123,31 @@ export const SOUNDSCAPES = {
     every(scene, 4000, 8000, () => api.tone(2400, 0.02, { gain: 0.01, bus, pan: 0.6 }));
   },
 
+  // Sublevel 2: warm, everything still running.
+  b2({ api, bus, scene }) {
+    powerHum(api, bus, scene, 0.3, 60);
+    bed(api, bus, scene, 'amb-sublevel', { gain: 0.18, lowpass: 900 }, () => {});
+    keep(scene, api.loopNoise({ freq: 350, gain: 0.03 }, bus));
+  },
+
+  b2_quiet({ api, bus, scene }) {
+    powerHum(api, bus, scene, 0.1, 60);
+    keep(scene, api.loopTone({ freq: 120, gain: 0.004 }, bus)); // the lamp
+  },
+
+  b2_screens({ api, bus, scene }) {
+    powerHum(api, bus, scene, 0.15, 60);
+    keep(scene, api.loopNoise({ filter: 'highpass', freq: 5000, gain: 0.008 }, bus));
+    every(scene, 2000, 4000, () => api.tone(3000, 0.01, { gain: 0.006, bus, pan: Math.random() - 0.5 }));
+  },
+
+  // Daniel's body: a ventilator and a slow, low heart monitor, straight ahead.
+  containment({ api, bus, scene }) {
+    powerHum(api, bus, scene, 0.15, 60);
+    every(scene, 1400, 1450, () => api.tone(700, 0.08, { gain: 0.025, bus }));
+    every(scene, 4000, 4100, () => api.noise(1.6, { freq: 500, gain: 0.04, attack: 0.7, bus }));
+  },
+
   elevator({ api, bus, scene }) {
     powerHum(api, bus, scene, 0.3, 70);
     keep(scene, api.loopNoise({ freq: 400, gain: 0.03 }, bus));

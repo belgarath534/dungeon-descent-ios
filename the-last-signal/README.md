@@ -43,6 +43,11 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 - Caught once: hurt. Caught again before treatment: death, then retry from the last checkpoint.
 - Emily still needs care while 001 roams.
 
+**Chapter 4: Remains.** Sublevel 2. Find Daniel's body, kept breathing by machines, and the empty frame where his robotic body used to stand. Find Emily's revival codes, ride back up past 001, wake her, and let her speak to Daniel over the radio.
+
+- Emily's care from a distance: Daniel can watch her if he trusts you, and a medical link can power her ward and run a partial check.
+- 3 documents, 1 hidden discovery. Every earlier choice carries over.
+
 **Foundation:** accessible menus, first-run setup, three speech modes, spatial sound effects and room ambience, journal, inventory, message history, autosave and 3 save slots, settings (speech, volumes, mono audio, startle reduction, trust feedback, text size, high contrast, keyboard shortcuts), and a sound glossary.
 
 ## Documents

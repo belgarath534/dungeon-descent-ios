@@ -3,8 +3,9 @@
 import { chapter1 } from './chapter1/index.js';
 import { chapter2 } from './chapter2/index.js';
 import { chapter3 } from './chapter3/index.js';
+import { chapter4 } from './chapter4/index.js';
 
-const CHAPTERS = [chapter1, chapter2, chapter3];
+const CHAPTERS = [chapter1, chapter2, chapter3, chapter4];
 
 const merge = (key, tag) =>
   Object.assign(

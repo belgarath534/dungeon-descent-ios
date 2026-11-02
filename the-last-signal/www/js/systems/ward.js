@@ -46,6 +46,7 @@ export function installWard(ctx) {
   function report() {
     const w = ward();
     if (!w.emilyAlive) return 'The monitor shows a flat line. Emily is gone.';
+    if (ctx.state.flags.emily_awake) return 'Emily is awake, resting in the medical ward. Her monitor no longer needs watching.';
     const where = w.location === 'ward' ? 'the medical ward' : 'her capsule in the preservation lab';
     return `Emily’s monitor, from ${where}: power ${Math.round(w.power)} percent. Her condition: ${describeStability(w.stability)}, ${Math.round(w.stability)} percent.`;
   }
@@ -74,8 +75,15 @@ export function installWard(ctx) {
     const w = ward();
     if (!w.active || !w.emilyAlive) return;
 
-    w.power = Math.max(0, w.power - POWER_DRAIN);
-    w.stability = Math.max(0, w.stability - (w.power > 0 ? STABILITY_DRAIN : STABILITY_DRAIN_UNPOWERED));
+    const flags = ctx.state.flags;
+    // Wired into Sublevel 2's own supply: her power no longer runs down.
+    if (!flags.ward_mains) w.power = Math.max(0, w.power - POWER_DRAIN);
+    // She declines more slowly once she has been looked after a few times,
+    // and much more slowly while Daniel watches over her from the ward systems.
+    let drain = w.power > 0 ? STABILITY_DRAIN : STABILITY_DRAIN_UNPOWERED;
+    if (w.power > 0 && (w.checks || 0) >= 3) drain *= 0.6;
+    if (w.power > 0 && flags.daniel_watching) drain *= 0.35;
+    w.stability = Math.max(0, w.stability - drain);
 
     // Every warning ends by saying exactly what to do, and where.
     const fixStability = w.location === 'ward'
@@ -142,8 +150,16 @@ export function installWard(ctx) {
     const w = ward();
     if (!w.emilyAlive) return;
     w.stability = Math.min(100, Math.max(w.stability, amount));
+    if (amount >= 100) w.checks = (w.checks || 0) + 1;
     rearm('stab', w.stability);
     c.say(`Emily’s condition: ${describeStability(w.stability)}.`, { kind: 'system' });
+  });
+
+  // Emily is awake: the slow decline is over.
+  effects.register('wardEnd', () => {
+    const w = ward();
+    w.active = false;
+    ctx.state.flags.emily_awake = true;
   });
 
   effects.register('wardReport', (v, c) => c.say(report(), { kind: 'system' }));

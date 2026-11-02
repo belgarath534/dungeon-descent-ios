@@ -98,7 +98,7 @@ export const chapter3 = {
             {
               id: 'ride',
               label: 'Use 001’s key and ride the lift down',
-              when: { has: 'key_001' },
+              when: [{ has: 'key_001' }, { notFlag: 'ch4_started' }],
               cue: 'elevator.open',
               effects: [
                 {

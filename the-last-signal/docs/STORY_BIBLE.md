@@ -102,6 +102,20 @@ Small details I wrote so the first chapter could be played. Each can be changed 
 | 001 stops and stands over Emily's bed on its rounds. | Unexplained on purpose; feeds the prototype mystery. |
 | The key's tag says 001's original behavioural layer is archived on Sublevel 2. | A possible way to restore 001 later. |
 
+## 2d. Chapter 4: Remains (placeholders, need approval)
+
+| Detail | Why |
+|---|---|
+| Sublevel 2 never lost power: freight lift bay, main hall, records, monitoring, containment. | The board's real work lived here. |
+| **Daniel's biological body** lies in containment, kept breathing by machines. No neural activity since the transfer. The chart's board note: "leverage". The latest entry, in different handwriting: "still here". | The brief: the player discovers his original body. "Still here" is deliberately unexplained. |
+| An empty frame labelled TRANSFER RECIPIENT, RELOCATED. Board minutes: location restricted to Board members. Daniel: "The rest of me is somewhere else. Don't ask me where. Not yet." | Keeps the robotic body's location a mystery, as the brief requires. |
+| Board minutes confirm Emily was told Daniel "had taken leave", and preservation was approved if she persisted. | Fits both sides of the lie told to Daniel and Emily. |
+| The player can tell Daniel his body is breathing, or lie that it is gone (a lie that can matter later). | Honesty choice with weight. |
+| **Emily's care away from the ward:** if Daniel trusts you (20+) and knows about Emily, he offers to watch her through the ward systems (her decline slows a lot). A medical link in monitoring can wire the ward to Sublevel 2's power (power stops draining) and run a partial check (up to 70 percent). After three full checks, her decline slows anyway. | Answers the creator's question about caring for her from far away. |
+| **Emily wakes** when the revival codes are entered in the ward. She is too weak to walk. | Ends the care loop and starts her as a character. |
+| **The turning point:** Emily and Daniel talk over the radio. He apologises for believing she left; she asks where he is; he will not say, "not even you". Trust +15. Any hidden lie about Emily is exposed during the call. | The brief's major turning point. It does not guarantee lasting trust. |
+| 001's original behavioural layer, the one Daniel wrote, is in a humming archive box (found by listening). | A way to restore 001 in a later chapter. |
+
 ## 3. Open questions for the creator
 
 1. **Timeline.** Did the protagonist leave before or after the experiment and the abandonment? Chapter 1 avoids saying.

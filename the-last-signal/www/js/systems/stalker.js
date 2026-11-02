@@ -57,7 +57,7 @@ export function installStalker(ctx) {
   const roomWord = (id) => rooms[id].shortName || rooms[id].name.toLowerCase();
 
   const PAN = { north: 0, south: 0, east: 0.8, west: -0.8 };
-  const dirWord = (d) => ({ north: 'ahead of you, to the north', south: 'behind you, to the south', east: 'on your right, to the east', west: 'on your left, to the west' })[d] || d;
+  const dirWord = (d) => ({ north: 'ahead of you, to the north', south: 'behind you, to the south', east: 'on your right, to the east', west: 'on your left, to the west', up: 'above you, up the lift shaft', down: 'below you' })[d] || d;
 
   function recharging() {
     const st = s();
