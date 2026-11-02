@@ -24,7 +24,7 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 
 ## What is in this build
 
-**Part One is complete: seven chapters, six endings.** Part Two has begun, inside this same game.
+**Part One (seven chapters, six endings) and Part Two (five chapters, four endings) are complete**, in one game.
 
 **Chapter 1: The Signal.** Patrol car, front gate, reception, security office, main corridor, Daniel's office, and the elevator to the sublevels.
 
@@ -63,6 +63,8 @@ node tests/browser-smoke.mjs     # plays Chapter 1 in a real browser (needs Play
 **Part Two, Chapter 3: The Trial.** Cross-examine Detective Ruiz, expose the prosecution's surprise witness, call the people who stood up for you, decide whether to testify, and choose how to close. A hidden jury meter remembers everything. Ends with the jury out and a voice in the courtroom speakers.
 
 **Part Two, Chapter 4: The Verdict.** Not guilty if your trial went well; guilty if it did not, until Ruiz walks in with your stolen radio. Then the courthouse basement, and the voice: Dr. Helena Voss, the board's chair, living in the facility network, holding the master copy of Daniel's mind, and wanting a body.
+
+**Part Two, Chapter 5: Static (finale).** Separated from Sarah in the dark facility. Her real voice is only on your radio; Voss fakes hers and Daniel's through the speakers. Reach the switching room, save Daniel's last copy or burn it all, and find each other. Four new endings: Found You, Clean Line, Scorched Wire, Her Voice. Part Two is complete.
 
 **Foundation:** accessible menus, first-run setup, three speech modes, spatial sound effects and room ambience, journal, inventory, message history, autosave and 3 save slots, settings (speech, volumes, mono audio, startle reduction, trust feedback, text size, high contrast, keyboard shortcuts), and a sound glossary.
 

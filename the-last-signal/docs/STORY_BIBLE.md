@@ -209,6 +209,25 @@ The creator's idea: after Part One, the protagonist is put on trial, framed by s
 | Your old radio was modified to connect to her terminal. | The physical link. |
 | Sarah: the exchange has one physical heart, a switching room on Sublevel 2 behind monitoring. Cut it there and Voss has nowhere to go except whatever body she can reach. | Sets up Part Two's finale back at the facility. |
 
+### Part Two, Chapter 5: Static (the Part Two finale; creator's idea, built)
+
+| Detail | Why |
+|---|---|
+| Back at the facility at midnight. Ruiz guards the surface. On Sublevel 1, Voss kills the lights and drops a security shutter **between you and Sarah**. Sarah is trapped in the transfer suite with the chair, which Voss starts up: she wants Sarah's body. | Creator's idea: separated, trying to find each other. |
+| **Sarah on the radio**, terrified, keeps talking to stay calm. Romantic lines if you are warm with her: she used to listen for your footsteps; you "walk like you're apologising to the floor"; a first coffee, "not the last one in the pot". | Creator's idea: things that make the character blush. |
+| **Voss fakes voices** through the speakers: Sarah calling from the medical ward, Daniel's exact voice calling from containment. The real Sarah is only on your radio. Ask her something only she would know (the birthday card you thanked Priya for). | Horror built for listening. |
+| Following a fake voice costs time. Follow both and you are too late. | Consequences you can hear coming. |
+| In the switching room, Sarah can talk you through saving Daniel's partition before cutting Voss off, but only if you made sure it was really her. | Rewards checking the voice. |
+
+### The four endings of Part Two
+
+| Ending | How to reach it |
+|---|---|
+| **Found You** (romantic) | Make sure it is really Sarah, save Daniel's copy, and be warm with her (told her "I'm noticing now", or told her on the radio her voice keeps you sane). She kisses you at the shutter. |
+| **Clean Line** | Make sure it is really Sarah and save Daniel's copy. Coffee, someday. |
+| **Scorched Wire** | Pull the big lever without being sure of Sarah. Voss is gone, and Daniel's last copy with her. |
+| **Her Voice** (bad) | Follow both fake voices. Voss is in Sarah's body, humming three short, one long. |
+
 ## 3. Open questions for the creator
 
 1. **Timeline.** Did the protagonist leave before or after the experiment and the abandonment? Chapter 1 avoids saying.

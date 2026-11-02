@@ -59,7 +59,7 @@ export function titleScreen(app) {
     h('h1', { class: 'game-title' }, 'The Last Signal'),
     h('p', { class: 'tagline' }, 'A psychological horror investigation. Played by ear.'),
     buttonGroup('Main menu', items),
-    h('p', { class: 'fineprint' }, 'Part One complete: seven chapters, six endings. Part Two has begun.'),
+    h('p', { class: 'fineprint' }, 'Parts One and Two: twelve chapters, ten endings.'),
   );
 
   return {

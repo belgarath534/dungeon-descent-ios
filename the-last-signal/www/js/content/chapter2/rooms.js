@@ -56,7 +56,15 @@ export const rooms = {
         locked: true,
         lockedText: 'You press the call button. Nothing. The car will only come down; the emergency circuit you restored does not reach the surface call buttons.',
       },
-      { id: 'north', dir: 'north', to: 'lab_corridor', label: 'Laboratory corridor', sound: 'footsteps' },
+      {
+        id: 'north',
+        dir: 'north',
+        to: 'lab_corridor',
+        label: 'Laboratory corridor',
+        sound: 'footsteps',
+        locked: { flag: 'corridor_sealed' },
+        lockedText: 'A steel security shutter has come down across the corridor, floor to ceiling. You hit it with your fist. Somewhere on the other side, Sarah is hitting it too.',
+      },
       {
         id: 'east',
         dir: 'east',

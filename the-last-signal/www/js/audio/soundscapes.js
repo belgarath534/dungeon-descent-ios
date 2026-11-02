@@ -220,6 +220,13 @@ export const SOUNDSCAPES = {
     every(scene, 5000, 5100, () => api.noise(1.4, { freq: 600, gain: 0.015, attack: 0.6, bus })); // breathing it does not need
   },
 
+  // The heart of the network: thousands of relays, and Voss all around you.
+  switching({ api, bus, scene }) {
+    powerHum(api, bus, scene, 0.2, 60);
+    every(scene, 80, 300, () => api.noise(0.02, { filter: 'highpass', freq: 3000, gain: 0.012, bus, pan: Math.random() * 2 - 1 }));
+    every(scene, 6000, 6100, () => api.noise(1.4, { freq: 600, gain: 0.02, attack: 0.6, bus }));
+  },
+
   elevator({ api, bus, scene }) {
     powerHum(api, bus, scene, 0.3, 70);
     keep(scene, api.loopNoise({ freq: 400, gain: 0.03 }, bus));

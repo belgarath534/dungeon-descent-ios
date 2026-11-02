@@ -183,7 +183,7 @@ export function gameScreen(app) {
       ending ? h('p', {}, ending.blurb) : null,
       h('ul', { class: 'summary' }, lines.map((l) => h('li', {}, l))),
       ending
-        ? h('p', {}, `Endings found: ${seenNow.length} of ${Object.keys(content.endings).length}. Part Two continues from this ending.`)
+        ? h('p', {}, `Endings found: ${seenNow.length} of ${Object.keys(content.endings).length}. ${hasNext ? 'Part Two continues from this ending.' : 'Thank you for playing.'}`)
         : h('p', {}, hasNext ? 'Your progress is saved.' : 'This is the end of the current build. Your progress is saved, and your choices will carry into the next chapter.'),
     );
     const buttons = [];

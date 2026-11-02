@@ -11,8 +11,9 @@ import { part2chapter1 } from './part2_chapter1/index.js';
 import { part2chapter2 } from './part2_chapter2/index.js';
 import { part2chapter3 } from './part2_chapter3/index.js';
 import { part2chapter4 } from './part2_chapter4/index.js';
+import { part2chapter5 } from './part2_chapter5/index.js';
 
-const CHAPTERS = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, part2chapter1, part2chapter2, part2chapter3, part2chapter4];
+const CHAPTERS = [chapter1, chapter2, chapter3, chapter4, chapter5, chapter6, chapter7, part2chapter1, part2chapter2, part2chapter3, part2chapter4, part2chapter5];
 
 const merge = (key, tag) =>
   Object.assign(
