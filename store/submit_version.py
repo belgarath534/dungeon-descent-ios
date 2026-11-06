@@ -161,8 +161,9 @@ if rejected:
     # Empty submissions from failed tries would stand in the way: cancel them.
     for o in open_subs:
         if not call("GET", f"/reviewSubmissions/{o['id']}/items")["data"]:
-            call("PATCH", f"/reviewSubmissions/{o['id']}", json={"data": {"type": "reviewSubmissions", "id": o["id"],
-                 "attributes": {"canceled": True}}})
+            # Not every state can be canceled; one that can't is left alone.
+            S.patch(API + f"/reviewSubmissions/{o['id']}", timeout=60, json={"data": {"type": "reviewSubmissions",
+                    "id": o["id"], "attributes": {"canceled": True}}})
     open_subs = rejected
 sub = open_subs[0] if open_subs else call("POST", "/reviewSubmissions", json={"data": {"type": "reviewSubmissions",
            "attributes": {"platform": platform},
