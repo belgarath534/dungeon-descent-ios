@@ -149,9 +149,21 @@ for _ in range(30):
     print(f"Waiting for Apple to process {len(pending)} screenshot(s)…")
     time.sleep(30)
 
-# Reuse a submission left open by an earlier try, else start one.
-open_subs = call("GET", "/reviewSubmissions", params={"filter[app]": app, "filter[platform]": platform,
-                 "filter[state]": "READY_FOR_REVIEW"})["data"]
+# After a rejection the version stays in its old submission ("unresolved
+# issues"): resubmitting means sending that one again. Otherwise reuse a
+# submission left open by an earlier try, else start one.
+def subs(state):
+    return call("GET", "/reviewSubmissions", params={"filter[app]": app, "filter[platform]": platform,
+                "filter[state]": state})["data"]
+open_subs = subs("READY_FOR_REVIEW")
+rejected = subs("UNRESOLVED_ISSUES")
+if rejected:
+    # Empty submissions from failed tries would stand in the way: cancel them.
+    for o in open_subs:
+        if not call("GET", f"/reviewSubmissions/{o['id']}/items")["data"]:
+            call("PATCH", f"/reviewSubmissions/{o['id']}", json={"data": {"type": "reviewSubmissions", "id": o["id"],
+                 "attributes": {"canceled": True}}})
+    open_subs = rejected
 sub = open_subs[0] if open_subs else call("POST", "/reviewSubmissions", json={"data": {"type": "reviewSubmissions",
            "attributes": {"platform": platform},
            "relationships": {"app": {"data": {"type": "apps", "id": app}}}}})["data"]
