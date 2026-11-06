@@ -169,6 +169,13 @@ sub = open_subs[0] if open_subs else call("POST", "/reviewSubmissions", json={"d
            "attributes": {"platform": platform},
            "relationships": {"app": {"data": {"type": "apps", "id": app}}}}})["data"]
 items = call("GET", f"/reviewSubmissions/{sub['id']}/items")["data"]
+for it in items:
+    print(f"Submission {sub['id']} ({sub['attributes'].get('state')}): item {it['id']} is {it['attributes'].get('state')}")
+    # A rejected item has to be marked resolved before the submission goes back.
+    if it["attributes"].get("state") == "REJECTED":
+        call("PATCH", f"/reviewSubmissionItems/{it['id']}", json={"data": {"type": "reviewSubmissionItems",
+             "id": it["id"], "attributes": {"resolved": True}}})
+        print(f"  marked resolved")
 if not items:
     call("POST", "/reviewSubmissionItems", json={"data": {"type": "reviewSubmissionItems", "relationships": {
          "reviewSubmission": {"data": {"type": "reviewSubmissions", "id": sub["id"]}},
