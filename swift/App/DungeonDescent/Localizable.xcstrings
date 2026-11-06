@@ -4610,6 +4610,16 @@
         }
       }
     },
+    "A secret has opened. The Shadow Realm is now on the main menu.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um segredo se abriu. O Reino das Sombras agora está no menu principal."
+          }
+        }
+      }
+    },
     "A separate game mode found in the main menu. Auto-combat that runs on its own — your character fights while you watch or step away. Infinite floors with scaling enemies. Find loot, level up, earn Descent Points to spend in the AFK shop on permanent upgrades. Boss floors every 25 floors. Daily AFK Challenge for bonus points. Exclusive enemies appear on floors 20 and beyond that only exist in Endless Descent.": {
       "extractionState": "manual",
       "localizations": {
@@ -5985,6 +5995,16 @@
         }
       }
     },
+    "Active July 1st through July 7th. All gold and XP drops are increased by 76 percent as a nod to 1776. Redcoat enemies invade all dungeons during the event. Enemies have a 15 percent chance to drop a Firework item — use it in combat for 80 plus level times 5 unblockable AoE damage. Every 3rd attack triggers the Sparkler buff dealing bonus fire damage equal to your level times 2.5. Eagle's Cry skill reduces enemy attack by 30 percent for 3 turns. The Fireworks Corner appears at Home — launch fireworks to earn bonus XP. The Independence Tournament sets a personal score target — reach it for first place gold and trophies.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ativo de 1 a 7 de julho. Todo ouro e XP obtidos são aumentados em 76 por cento em homenagem a 1776. Inimigos Casaca Vermelha invadem todas as masmorras durante o evento. Inimigos têm 15 por cento de chance de soltar um item Fogo de Artifício — use em combate para causar 80 mais o nível vezes 5 de dano em área imbloqueável. Cada 3º ataque ativa o bônus Vela Luminosa causando dano de fogo bônus igual ao seu nível vezes 2,5. A habilidade Grito da Águia reduz o ataque do inimigo em 30 por cento por 3 turnos. O Canto dos Fogos aparece na Casa — solte fogos de artifício para ganhar XP bônus. O Torneio da Independência define uma meta de pontuação pessoal — alcance-a para ouro e troféus de primeiro lugar."
+          }
+        }
+      }
+    },
     "Active July 1st through July 7th. All gold and XP drops are increased by 76 percent as a nod to 1776. Redcoat enemies invade all dungeons during the event. Enemies have a 15 percent chance to drop a Firework item — use it in combat for 80 plus level times 5 unblockable AoE damage. Every 3rd attack triggers the Sparkler buff dealing bonus fire damage equal to your level times 2.5. Eagle's Cry skill reduces enemy attack by 30 percent for 3 turns. The Fireworks Corner appears at Home — launch fireworks to earn bonus XP. The Independence Tournament sets a personal score target — reach it for first place gold and trophies. Type the number 4 in the Redeem Code box for a secret exclusive patriot minion only available during this event.": {
       "extractionState": "manual",
       "localizations": {
@@ -6817,6 +6837,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Você já comprou o elixir de hoje. Volte amanhã."
+          }
+        }
+      }
+    },
+    "Already claimed this year. Come back next birthday.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Já resgatado este ano. Volte no próximo aniversário."
           }
         }
       }
@@ -14088,6 +14118,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reivindique Sua Casa"
+          }
+        }
+      }
+    },
+    "Claim birthday reward — 1500 gold, The Golden Sword and a Blacksmith discount": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resgatar presente de aniversário — 1500 de ouro, A Espada Dourada e um desconto no Ferreiro"
           }
         }
       }
@@ -25825,6 +25865,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Cinco ondas de heróis estão vindo para derrotar você. Eles trazem tochas e esperança. Não encontrarão nenhuma das duas. Como Comandante do Vazio você tem 500 de HP e quatro habilidades. Sobreviva às cinco ondas e sua lenda será gravada em um código de recompensa compartilhável — e todos os seus personagens sobem 3 níveis."
+          }
+        }
+      }
+    },
+    "Five waves of heroes are coming to defeat you. They carry torches and hope. They will find neither. As the Void Commander you have 500 HP and four abilities. Survive all five waves to win a prize — gold, Mystery Coins, a Blacksmith discount or double XP — and every one of your characters goes up 3 levels.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cinco ondas de heróis estão vindo para te derrotar. Eles carregam tochas e esperança. Não encontrarão nenhuma das duas. Como Comandante do Vazio você tem 500 de HP e quatro habilidades. Sobreviva às cinco ondas para ganhar um prêmio — ouro, Moedas Misteriosas, um desconto no Ferreiro ou XP em dobro — e todos os seus personagens sobem 3 níveis."
           }
         }
       }
@@ -50458,6 +50508,16 @@
         }
       }
     },
+    "Shadow Realm, the secret endless wave survival mode": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reino das Sombras, o modo secreto de sobrevivência em ondas infinitas"
+          }
+        }
+      }
+    },
     "Shadow Realm. Choose your champion. Swipe through your characters, then press Begin.": {
       "extractionState": "manual",
       "localizations": {
@@ -70324,6 +70384,16 @@
         }
       }
     },
+    "YOUR PRIZE": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SEU PRÊMIO"
+          }
+        }
+      }
+    },
     "YOUR REWARD CODE": {
       "extractionState": "manual",
       "localizations": {
@@ -79850,6 +79920,16 @@
         }
       }
     },
+    "🌑 Shadow Realm": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌑 Reino das Sombras"
+          }
+        }
+      }
+    },
     "🌑 Shadow Realm Strategies": {
       "extractionState": "manual",
       "localizations": {
@@ -79989,6 +80069,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "🌑 O Eco se dissolve... mas algo mais se move na escuridão."
+          }
+        }
+      }
+    },
+    "🌑 The Shadow Realm has opened. Find it on the main menu.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌑 O Reino das Sombras se abriu. Encontre-o no menu principal."
           }
         }
       }

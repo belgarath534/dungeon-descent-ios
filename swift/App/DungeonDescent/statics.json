@@ -132,7 +132,7 @@
      },
      {
       "title": "Shadow Realm",
-      "body": "The Shadow Realm is a hidden secret mode. To access it go to Settings, tap Redeem Code, and type SHADOW. A dramatic intro screen will appear and then character selection. The Shadow Realm is an endless wave survival mode — each wave spawns shadow entities that grow stronger over time. Every 10 waves a boss wave appears. Your score is tracked on a local leaderboard so you can compete against your own best runs. Void Reaper music plays throughout. The Shadow Realm does not save progress — each run starts fresh."
+      "body": "The Shadow Realm is a hidden secret mode. It opens once you clear the Shadow World, and then it is on the main menu. A dramatic intro screen will appear and then character selection. The Shadow Realm is an endless wave survival mode — each wave spawns shadow entities that grow stronger over time. Every 10 waves a boss wave appears. Your score is tracked on a local leaderboard so you can compete against your own best runs. Void Reaper music plays throughout. The Shadow Realm does not save progress — each run starts fresh."
      }
     ]
    },
@@ -268,7 +268,7 @@
      },
      {
       "title": "Fourth of July Event",
-      "body": "Active July 1st through July 7th. All gold and XP drops are increased by 76 percent as a nod to 1776. Redcoat enemies invade all dungeons during the event. Enemies have a 15 percent chance to drop a Firework item — use it in combat for 80 plus level times 5 unblockable AoE damage. Every 3rd attack triggers the Sparkler buff dealing bonus fire damage equal to your level times 2.5. Eagle's Cry skill reduces enemy attack by 30 percent for 3 turns. The Fireworks Corner appears at Home — launch fireworks to earn bonus XP. The Independence Tournament sets a personal score target — reach it for first place gold and trophies. Type the number 4 in the Redeem Code box for a secret exclusive patriot minion only available during this event."
+      "body": "Active July 1st through July 7th. All gold and XP drops are increased by 76 percent as a nod to 1776. Redcoat enemies invade all dungeons during the event. Enemies have a 15 percent chance to drop a Firework item — use it in combat for 80 plus level times 5 unblockable AoE damage. Every 3rd attack triggers the Sparkler buff dealing bonus fire damage equal to your level times 2.5. Eagle's Cry skill reduces enemy attack by 30 percent for 3 turns. The Fireworks Corner appears at Home — launch fireworks to earn bonus XP. The Independence Tournament sets a personal score target — reach it for first place gold and trophies."
      },
      {
       "title": "The Siege",
@@ -1037,7 +1037,7 @@
     "🏹 Hunter Mode — a relentless hunter now stalks you through the dungeon. Enable it at character creation (Step 9) or toggle it anytime from the pause menu. Every move you make, it moves too. Every turn you waste, it gets closer.",
     "🎵 Hunter Audio — embedded audio system. At 5 rooms away the heartbeat begins and speeds up as the hunter closes in. At 3 rooms the music switches to a dark tension track. When caught — a real jump scare sound and full red screen flash.",
     "⚔ Fight or Run — when the hunter reaches 2 rooms away, a choice appears. Fight it (scales with your level) or sprint away and buy one more turn. Kill the hunter and it is gone for the rest of the run. Hunter's Trophy item drops on kill.",
-    "🌑 Shadow Realm — new secret mode accessed via Settings → Redeem Code → type SHADOW. Endless wave survival with escalating enemies and boss waves every 10 waves. Local leaderboard tracks your best runs. Void Reaper music plays throughout.",
+    "🌑 Shadow Realm — new secret mode that opens when you clear the Shadow World. Endless wave survival with escalating enemies and boss waves every 10 waves. Local leaderboard tracks your best runs. Void Reaper music plays throughout.",
     "💙 Low HP Heartbeat — drop below 10% HP anywhere in the dungeon and the heartbeat sound kicks in as a warning.",
     "🎒 Inventory Search Bar — type any item name and the inventory filters instantly. JAWS announces how many results are showing.",
     "📖 Item Descriptions — every inventory item now has a Details button. Tap to hear what the item does. Fully screen reader accessible.",
@@ -1048,8 +1048,7 @@
     "🐛 Fixed soul trap button not appearing — global inventory now syncs into DS.inventory at combat start, not just when opening the inventory panel.",
     "🐛 Fixed in-dungeon wandering merchant showing no items — rawCost fallback prevents NaN cost breaking the shop.",
     "🐛 Fixed Blacksmith discount codes not applying in getUpgradeCost — plain-number discount format now handled alongside object format.",
-    "🐛 Fixed Blacksmith weapons not showing attack range — atkBase range now displayed inline on every weapon.",
-    "🐛 Fixed Redeem Code button missing from Settings — button restored to the settings menu."
+    "🐛 Fixed Blacksmith weapons not showing attack range — atkBase range now displayed inline on every weapon."
    ]
   },
   {
@@ -1062,7 +1061,6 @@
     "🌲 The Hunting Grounds — AFK forest hunt with Brian AI narrator via ElevenLabs. Bounty Rank system with 10 ranks. Items and gold earned while you rest.",
     "📋 The Bounty Board — 28 bounties across 6 categories. 5 refreshes per day. Active bounty tracks progress in dungeon automatically.",
     "⚔️ Subclass System — at level 5 choose one of 2 subclasses per class. 36 subclasses total with unique passives. Toggle in Beta Features settings.",
-    "🖥️ Secret Console — Alt+F5 on PC or Redeem Code on mobile. 9 secret codes including IAMLEO, UUDDLRLRBA Konami code, CHAOS mode, and more.",
     "🧠 6 Stat System — STR, STA, DEF, INT, AGI, LCK. Each stat has meaningful combat effects including crit chance, gold drops, and flee chance.",
     "🏆 27 new achievements across dungeon completions, Spire floors, minions, forge, deaths, speed runs, class variety, and kills.",
     "🔍 Examine Enemy — new combat button. Press to hear full enemy stats, weaknesses, special abilities, and threat level.",

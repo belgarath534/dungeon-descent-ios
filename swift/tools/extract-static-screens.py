@@ -73,6 +73,25 @@ for v in find(wn, "version-block"):
 
 out = {"help": {"intro": intro, "tabs": tabs}, "credits": credits, "whatsnew": versions}
 dest = os.path.join(ROOT, "swift", "App", "DungeonDescent", "statics.json")
+# The Apple versions have no reward codes (App Store guideline 3.1.1): the
+# Shadow Realm opens by clearing the Shadow World, so the text says that.
+APPLE_TEXT = [
+    ("To access it go to Settings, tap Redeem Code, and type SHADOW.",
+     "It opens once you clear the Shadow World, and then it is on the main menu."),
+    ("new secret mode accessed via Settings → Redeem Code → type SHADOW.",
+     "new secret mode that opens when you clear the Shadow World."),
+    (" Type the number 4 in the Redeem Code box for a secret exclusive patriot minion only available during this event.", ""),
+]
+DROP_LINES = ["Fixed Redeem Code button missing", "Secret Console — Alt+F5"]
+
+def apple(o):
+    if isinstance(o, dict): return {k: apple(v) for k, v in o.items()}
+    if isinstance(o, list): return [apple(v) for v in o if not (isinstance(v, str) and any(d in v for d in DROP_LINES))]
+    if isinstance(o, str):
+        for a, b in APPLE_TEXT: o = o.replace(a, b)
+    return o
+
+out = apple(out)
 json.dump(out, open(dest, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 print("help tabs", len(tabs), "entries", sum(len(t["entries"]) for t in tabs), "| credits sections", len(sections),
       "| versions", len(versions), "->", os.path.relpath(dest, ROOT))

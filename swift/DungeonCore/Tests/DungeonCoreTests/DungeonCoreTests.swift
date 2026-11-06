@@ -2724,23 +2724,35 @@ final class VoidModeTests: XCTestCase {
         XCTAssertFalse(v.act(.blast, dice: &dice).acted, "blast is on cooldown")
     }
 
-    func testCodes() {
+    func testRewardsWithoutCodes() {
         let store = MemoryStore()
-        var dice = SeededDice(seed: 1)
-        let code = VoidMode.newCode(store: store, dice: &dice)
-        XCTAssertNotNil(VoidMode.prize(for: code))
-        let r = RewardCodes.redeem(code, store: store)
-        XCTAssertTrue(r.ok)
-        XCTAssertFalse(RewardCodes.redeem(code, store: store).ok)
-        XCTAssertFalse(RewardCodes.redeem("NOPE", store: store).ok)
-        let b = RewardCodes.redeem("ddbd26", store: store)
-        XCTAssertEqual(b.gold, 1000)
+        let b = RewardCodes.birthday(year: 2026, store: store)
+        XCTAssertTrue(b.ok)
+        XCTAssertEqual(b.gold, 1500)
         XCTAssertTrue(b.sword)
         XCTAssertEqual(Blacksmith.discount(store).pct, 0.15)
-        // Every prize is reachable and the 2x XP one sets up the next run.
+        XCTAssertFalse(RewardCodes.birthday(year: 2026, store: store).ok, "once a year")
+        XCTAssertTrue(RewardCodes.birthday(year: 2027, store: store).ok)
+        // Claimed the 500 gold on an older build: the rest is still owed, once.
+        store.setItem("dd_birthday_claimed_2028", "true")
+        XCTAssertEqual(RewardCodes.birthday(year: 2028, store: store).gold, 1000)
+        XCTAssertFalse(RewardCodes.birthday(year: 2028, store: store).ok)
+        // Every Void Mode prize can come up, and each one pays out.
+        var dice = SeededDice(seed: 1)
         var seen = Set<VoidMode.Prize>()
-        for _ in 0..<300 { if let p = VoidMode.prize(for: VoidMode.newCode(store: store, dice: &dice)) { seen.insert(p) } }
+        for _ in 0..<300 { seen.insert(VoidMode.victoryPrize(dice: &dice)) }
         XCTAssertEqual(seen.count, VoidMode.Prize.allCases.count)
+        XCTAssertEqual(RewardCodes.give(.gold750, store: store).gold, 750)
+        XCTAssertEqual(RewardCodes.give(.coins10, store: store).coins, 10)
+    }
+
+    func testShadowRealmOpensWhenTheShadowWorldIsCleared() {
+        let store = MemoryStore()
+        XCTAssertFalse(ShadowRealm.unlock(after: "Crypt of Malachar", store: store))
+        XCTAssertFalse(ShadowRealm.unlocked(store))
+        XCTAssertTrue(ShadowRealm.unlock(after: ShadowWorld.name, store: store))
+        XCTAssertTrue(ShadowRealm.unlocked(store))
+        XCTAssertFalse(ShadowRealm.unlock(after: ShadowWorld.name, store: store), "only the first time")
     }
 }
 
@@ -3859,10 +3871,6 @@ final class DevToolsTests: XCTestCase {
         XCTAssertEqual(Guns.owned(store).count, Guns.all.count)
         DevTools.giveAllGunParts(store)
         XCTAssertTrue(Guns.parts.allSatisfy { Guns.partCounts(store)[$0.id] == 99 })
-        var d = SeededDice(seed: 9)
-        for p in VoidMode.Prize.allCases {
-            XCTAssertEqual(VoidMode.prize(for: DevTools.rewardCode(for: p, dice: &d)), p)
-        }
     }
 }
 
@@ -4045,13 +4053,6 @@ final class BatchFiveTests: XCTestCase {
         XCTAssertNil(DungeonUnlockNews.next(unlocked: ["Crypt of Malachar"], store: store))
         XCTAssertEqual(DungeonUnlockNews.next(unlocked: ["Crypt of Malachar", "The Hollow"], store: store)?.dungeon, "The Hollow")
         XCTAssertNil(DungeonUnlockNews.next(unlocked: ["Crypt of Malachar", "The Hollow"], store: store))
-    }
-
-    func testLaterBirthdayCodes() {
-        let store = MemoryStore()
-        let y2030 = Calendar.current.date(from: DateComponents(year: 2030, month: 3, day: 23))!
-        XCTAssertTrue(RewardCodes.redeem("DDBD30", store: store, now: y2030).ok)
-        XCTAssertFalse(RewardCodes.redeem("DDBD31", store: store, now: y2030).ok)
     }
 }
 
@@ -4285,7 +4286,7 @@ final class CommandCenterTests: XCTestCase {
         XCTAssertEqual(cc.run("gold", account: acct, scheduled: false).spoken, "You have 120 gold.")
         if case .go(let d)? = cc.run("go hall of records", account: acct, scheduled: false).action { XCTAssertEqual(d, "hall of records") } else { XCTFail() }
         XCTAssertNil(cc.run("go nowhere", account: acct, scheduled: false).action)
-        if case .redeem(let c)? = cc.run("redeem ddbd26", account: acct, scheduled: false).action { XCTAssertEqual(c, "DDBD26") } else { XCTFail() }
+        XCTAssertNil(cc.run("redeem ddbd26", account: acct, scheduled: false).action, "no codes on Apple devices")
         XCTAssertNil(cc.run("cancel schedule", account: acct, scheduled: false).action)
         XCTAssertEqual(cc.run("blah", account: acct, scheduled: false).lines.last?.kind, .err)
     }

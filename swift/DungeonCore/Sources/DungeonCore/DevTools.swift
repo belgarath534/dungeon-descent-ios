@@ -43,16 +43,4 @@ public enum DevTools {
         for part in Guns.parts { p[part.id, default: 0] += 99 }
         Guns.savePartCounts(p, store)
     }
-
-    /// devGenerateCode: a VOID-XXXX-XXXX code that redeems for the chosen prize.
-    public static func rewardCode(for prize: VoidMode.Prize, dice: inout some Dice) -> String {
-        let chars = Array("ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
-        func part() -> String { String((0..<4).map { _ in chars[dice.roll(0...(chars.count - 1))] }) }
-        var code = ""
-        for _ in 0..<1000 {
-            code = "VOID-\(part())-\(part())"
-            if VoidMode.prize(for: code) == prize { return code }
-        }
-        return code
-    }
 }

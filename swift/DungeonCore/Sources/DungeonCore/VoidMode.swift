@@ -172,21 +172,7 @@ public struct VoidMode: Equatable, Sendable {
         return "Wave \(wave + 1) of 5. " + heroes.map(\.name).joined(separator: ", ") + "."
     }
 
-    // MARK: Reward codes
-
-    static let codeChars = Array("ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
-
-    /// generateVoidCode: VOID-XXXX-XXXX, kept in dd_void_codes (last 10).
-    public static func newCode(store: GameStore, dice: inout some Dice, now: Date = Date()) -> String {
-        func part() -> String { String((0..<4).map { _ in codeChars[dice.roll(0...(codeChars.count - 1))] }) }
-        let code = "VOID-\(part())-\(part())"
-        var codes: [JSONValue] = []
-        if let s = store.getItem("dd_void_codes"), let d = s.data(using: .utf8), let a = try? JSONDecoder().decode([JSONValue].self, from: d) { codes = a }
-        codes.append(.object(["code": .string(code), "created": .number((now.timeIntervalSince1970 * 1000).rounded())]))
-        if codes.count > 10 { codes = Array(codes.suffix(10)) }
-        if let d = try? JSONEncoder().encode(codes), let s = String(data: d, encoding: .utf8) { store.setItem("dd_void_codes", s) }
-        return code
-    }
+    // MARK: The victory prize
 
     public enum Prize: String, CaseIterable, Sendable {
         case gold500, gold250, coins5, discount10, xpBoost, gold750, coins10
@@ -204,34 +190,18 @@ public struct VoidMode: Equatable, Sendable {
         }
     }
 
-    /// REWARD_CODE_PRIZES: which prize a code gives (the same for everyone).
-    public static func prize(for code: String) -> Prize? {
-        let c = code.uppercased()
-        guard c.range(of: #"^VOID-[A-Z0-9]{4}-[A-Z0-9]{4}$"#, options: .regularExpression) != nil else { return nil }
-        var seed = 0
-        for u in c.unicodeScalars { seed = (seed * 31 + Int(u.value)) & 0xffff }
-        return Prize.allCases[seed % Prize.allCases.count]
-    }
-
-    public static func redeemed(_ store: GameStore) -> [String] {
-        guard let s = store.getItem("dd_redeemed_codes"), let d = s.data(using: .utf8),
-              let a = try? JSONDecoder().decode([String].self, from: d) else { return [] }
-        return a
-    }
-
-    public static func markRedeemed(_ code: String, store: GameStore) {
-        let a = redeemed(store) + [code.uppercased()]
-        if let d = try? JSONEncoder().encode(a), let s = String(data: d, encoding: .utf8) { store.setItem("dd_redeemed_codes", s) }
+    /// The victory prize. The web version handed out a VOID code for it;
+    /// the App Store doesn't allow codes that unlock things, so on Apple
+    /// devices the prize is given straight away.
+    public static func victoryPrize(dice: inout some Dice) -> Prize {
+        Prize.allCases[dice.roll(0...(Prize.allCases.count - 1))]
     }
 }
 
-/// Settings → General → Enter Code (enterRewardCode): birthday codes and
-/// Void Mode reward codes, each once per device.
+/// Rewards that the web version gave out as codes (Void Mode's VOID codes
+/// and the yearly birthday codes). App Store guideline 3.1.1 doesn't allow
+/// codes that unlock things, so the Swift version gives them directly.
 public enum RewardCodes {
-    public static let birthday: [String: (year: Int, gold: Int, discount: Double)] = [
-        "DDBD26": (2026, 1000, 0.15), "DDBD27": (2027, 1000, 0.15), "DDBD28": (2028, 1000, 0.15),
-    ]
-
     public static let goldenSword: Item = {
         var it = Item(id: "golden-sword", name: "The Golden Sword", icon: "🗡️", type: "weapon",
                       desc: "Forged on the first birthday of Dungeon Descent. Exists in only one copy per player.",
@@ -239,14 +209,6 @@ public enum RewardCodes {
         it.extra["birthdayExclusive"] = .bool(true)
         return it
     }()
-
-    /// Codes for birthdays after 2028 (DDBD29 …), once that birthday has come.
-    static func laterBirthday(_ code: String, now: Date) -> (year: Int, gold: Int, discount: Double)? {
-        guard code.count == 6, code.hasPrefix("DDBD"), let yy = Int(code.suffix(2)), yy > 28 else { return nil }
-        let year = 2000 + yy
-        guard year <= Calendar.current.component(.year, from: now) else { return nil }
-        return (year, 1000, 0.15)
-    }
 
     public struct Outcome: Equatable, Sendable {
         public var ok: Bool
@@ -257,24 +219,25 @@ public enum RewardCodes {
         public var sword = false
     }
 
-    /// Applies what can be applied to the store; returns gold, coins and the
-    /// sword for the caller.
-    public static func redeem(_ raw: String, store: GameStore, now: Date = Date()) -> Outcome {
-        let code = raw.trimmingCharacters(in: .whitespaces).uppercased()
-        guard !code.isEmpty else { return Outcome(ok: false, message: "No code entered.") }
-        if let b = birthday[code] ?? laterBirthday(code, now: now) {
-            if store.getItem("dd_redeemed_" + code) != nil { return Outcome(ok: false, message: "Already redeemed on this device.") }
-            store.setItem("dd_redeemed_" + code, "true")
-            store.setItem("dd_blacksmith_discount", #"{"pct":\#(b.discount),"source":"Birthday \#(b.year)"}"#)
-            return Outcome(ok: true, message: "🎂 Birthday code redeemed! +\(b.gold) gold · The Golden Sword · \(Int(b.discount * 100))% Blacksmith discount!",
-                           gold: b.gold, sword: true)
+    /// The birthday package, once a year: 1,500 gold (the web version's 500
+    /// plus its code's 1,000), The Golden Sword and 15% off at the Blacksmith.
+    public static func birthday(year: Int, store: GameStore) -> Outcome {
+        let key = "dd_birthday_claimed_\(year)", codeKey = "dd_redeemed_DDBD\(year % 100)"
+        guard store.getItem(codeKey) == nil else {
+            return Outcome(ok: false, message: "Already claimed this year. Come back next birthday.")
         }
-        if VoidMode.redeemed(store).contains(code) { return Outcome(ok: false, message: "Already redeemed.") }
-        guard let prize = VoidMode.prize(for: code) else {
-            return Outcome(ok: false, message: "Invalid code. Birthday codes look like DDBD26. Void Mode codes look like VOID-XXXX-XXXX.")
-        }
-        VoidMode.markRedeemed(code, store: store)
-        var out = Outcome(ok: true, message: "Code redeemed! You received: \(prize.label).")
+        // Claimed the 500 gold before codes were taken out: the rest is still owed.
+        let gold = store.getItem(key) == nil ? 1500 : 1000
+        store.setItem(key, "true")
+        store.setItem(codeKey, "true")
+        store.setItem("dd_blacksmith_discount", #"{"pct":0.15,"source":"Birthday \#(year)"}"#)
+        return Outcome(ok: true, message: "🎂 Birthday reward claimed! +\(gold) gold · The Golden Sword · 15% Blacksmith discount!",
+                       gold: gold, sword: true)
+    }
+
+    /// Applies a prize to the store; returns gold and coins for the caller.
+    public static func give(_ prize: VoidMode.Prize, store: GameStore, now: Date = Date()) -> Outcome {
+        var out = Outcome(ok: true, message: "You received: \(prize.label).")
         switch prize {
         case .gold500: out.gold = 500
         case .gold250: out.gold = 250
@@ -283,7 +246,7 @@ public enum RewardCodes {
         case .coins10: out.coins = 10
         case .discount10:
             let exp = ((now.timeIntervalSince1970 + 3600) * 1000).rounded()
-            store.setItem("dd_blacksmith_discount", #"{"pct":0.1,"expires":\#(Int(exp)),"source":"Reward Code"}"#)
+            store.setItem("dd_blacksmith_discount", #"{"pct":0.1,"expires":\#(Int(exp)),"source":"Void Mode"}"#)
         case .xpBoost:
             // The web version saved a flag nothing ever read; Swift doubles XP
             // for the next run like the seasonal XP boosts.

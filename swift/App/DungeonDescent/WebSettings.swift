@@ -58,8 +58,6 @@ struct WebSettingsView: View {
                  label: "Beta Features — experimental features you can test", tag: "BETA"),
         Category(id: "3dmode", icon: "🧊", name: "3D Settings", desc: "Graphics and performance options for 3D Mode",
                  label: "3D Settings — adjust graphics and performance for 3D Mode"),
-        Category(id: "redeem", icon: "🎁", name: "Redeem Code", desc: "Enter a promo code, birthday code, or secret code",
-                 label: "Redeem Code — enter promo or birthday codes"),
         Category(id: "support", icon: "🆘", name: "Support", desc: "Get help, report a bug, or contact us",
                  label: "Support — get help, report a bug, or contact us"),
         Category(id: "feedback", icon: "💬", name: "Send Feedback", desc: "Report a bug or suggest a feature",
@@ -68,7 +66,7 @@ struct WebSettingsView: View {
 
     static let panelNames = ["audio": "Audio", "language": "Language", "accessibility": "Accessibility", "gameplay": "Gameplay",
                              "account": "Account", "chat": "Chat", "dev": "Developer Tools", "general": "General",
-                             "beta": "Beta Features", "3dmode": "3D", "notifications": "Notification", "redeem": "Redeem Code",
+                             "beta": "Beta Features", "3dmode": "3D", "notifications": "Notification",
                              "feedback": "Send Feedback", "hidemenu": "Hide Menu Items"]
 
     var body: some View {
@@ -146,7 +144,7 @@ struct WebSettingsView: View {
             return
         }
         guard ["audio", "accessibility", "gameplay", "general", "account", "chat", "beta", "3dmode",
-               "notifications", "redeem", "feedback", "hidemenu", "dev", "language"].contains(id) else {
+               "notifications", "feedback", "hidemenu", "dev", "language"].contains(id) else {
             Sound.sfx("sfx-select")
             let name = Self.categories.first { $0.id == id }?.name ?? id
             Feedback.announce("\(name) settings aren't in the Swift version yet. Coming soon.")
@@ -174,7 +172,6 @@ struct WebSettingsView: View {
         case "beta": beta
         case "3dmode": settings3D
         case "notifications": NotificationsPanel()
-        case "redeem": RedeemPanel()
         case "feedback": FeedbackPanel()
         case "hidemenu": HideMenuPanel()
         case "dev":
@@ -426,7 +423,6 @@ struct WebSettingsView: View {
                 .buttonStyle(WebButtonStyle(kind: .ghost))
                 .disabled(webImport.checking)
             }
-            RewardCodeBox()
             SaveCodeBox()
             // Not from the dungeon: the run in progress would outlive its character.
             if run == nil {

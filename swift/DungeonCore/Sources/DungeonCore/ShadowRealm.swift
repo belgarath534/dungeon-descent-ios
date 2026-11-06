@@ -1,12 +1,22 @@
 import Foundation
 
 /// The Shadow Realm (SR, getShadowEnemies, startShadowRealm, shadowAttack,
-/// shadowEnemyAttack, shadowDie): the secret mode behind the code SHADOW in
-/// Redeem Code. Endless waves, one shadow at a time, stronger every 5 waves
+/// shadowEnemyAttack, shadowDie): the secret mode that opens once you clear
+/// the Shadow World (the web version opened it with the code SHADOW, which
+/// the App Store doesn't allow). Endless waves, one shadow at a time, stronger every 5 waves
 /// and a Shadow Sovereign every 10. Three potions, a little HP back after each
 /// wave, and the ten best runs kept in "dd_shadow_leaderboard".
 public enum ShadowRealm {
-    public static let code = "SHADOW"
+    static let unlockKey = "dd_shadow_realm_unlocked"
+
+    public static func unlocked(_ store: GameStore) -> Bool { store.getItem(unlockKey) == "true" }
+
+    /// Clearing the Shadow World opens it. True the first time.
+    public static func unlock(after dungeon: String, store: GameStore) -> Bool {
+        guard dungeon == ShadowWorld.name, !unlocked(store) else { return false }
+        store.setItem(unlockKey, "true")
+        return true
+    }
 
     public struct State: Sendable {
         public var name: String

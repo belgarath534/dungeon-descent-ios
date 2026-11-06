@@ -46,7 +46,7 @@ final class Router: ObservableObject {
         case seasonalshop
         case whatsnew
         case quit
-        /// The secret Shadow Realm (Redeem Code → SHADOW).
+        /// The secret Shadow Realm, open once the Shadow World is cleared.
         case shadowRealm
         case commandCenter
         case enemyCreator

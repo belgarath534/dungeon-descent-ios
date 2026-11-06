@@ -2423,6 +2423,10 @@ final class RunModel: ObservableObject {
         game.globalInventory.keep(from: run)
         game.checkLegends(run)
         game.recordFirstClear(run)
+        if ShadowRealm.unlock(after: run.dungeon, store: game.store) {
+            add("🌑 The Shadow Realm has opened. Find it on the main menu.")
+            Feedback.announce("A secret has opened. The Shadow Realm is now on the main menu.", after: 2.5)
+        }
         if TrueEnding.record(run.dungeon, store: game.store) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in self?.showTrueEnding() }
         }

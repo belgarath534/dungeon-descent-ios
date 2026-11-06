@@ -29,9 +29,6 @@ struct DevToolsPanel: View {
     @State private var sendStatus = ""
     @State private var sendOK = false
     @State private var sending = false
-    @State private var prize = VoidMode.Prize.gold500
-    @State private var codeLabel = ""
-    @State private var code: String?
     @FocusState private var focused: Bool
 
     var body: some View {
@@ -140,7 +137,6 @@ struct DevToolsPanel: View {
                 inRun { $0.showTrueEnding() }
             }
             sendCoins
-            generator
         }
     }
 
@@ -236,41 +232,6 @@ struct DevToolsPanel: View {
             .accessibilityLabel("Send coins to player")
             if !sendStatus.isEmpty {
                 Text(sendStatus).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: sendOK ? 0x44ff88 : 0xff4444))
-            }
-        }
-        .padding(.top, 20)
-    }
-
-    private var generator: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("🌑 GENERATE REWARD CODE").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
-                .accessibilityAddTraits(.isHeader)
-            Text("Generate a shareable VOID code with a specific reward. Share it on YouTube, Discord, or anywhere.")
-                .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
-            Picker("Select reward for generated code", selection: $prize) {
-                ForEach(VoidMode.Prize.allCases, id: \.self) { Text($0.label.prefix(1).uppercased() + $0.label.dropFirst()).tag($0) }
-            }
-            .pickerStyle(.menu).tint(Theme.gold)
-            field("e.g. Happy Birthday, Dungeon Descent!", $codeLabel, label: "Optional code label")
-                .onChange(of: codeLabel) { codeLabel = String($0.prefix(30)) }
-            Button("🌑 Generate Code") {
-                var d = SystemDice()
-                let c = DevTools.rewardCode(for: prize, dice: &d)
-                code = c
-                Feedback.announce("Code generated: \(c). Reward: \(prize.label). Press Copy Code to copy it.")
-            }
-            .buttonStyle(WebButtonStyle(kind: .gold))
-            .accessibilityLabel("Generate reward code")
-            if let code {
-                Text("Your code:").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
-                Text(code).font(Theme.cinzel(18, weight: .bold)).foregroundStyle(Color(hex: 0xa0a0ff)).textSelection(.enabled)
-                Text("Reward: \(prize.label)\(codeLabel.isEmpty ? "" : " — \(codeLabel)")").font(Theme.cinzel(11)).foregroundStyle(Theme.textSecondary)
-                Button("📋 Copy Code") {
-                    UIPasteboard.general.string = code
-                    Feedback.announce("Code copied: \(code)")
-                }
-                .buttonStyle(WebButtonStyle(kind: .ghost))
-                .accessibilityLabel("Copy generated code to clipboard")
             }
         }
         .padding(.top, 20)

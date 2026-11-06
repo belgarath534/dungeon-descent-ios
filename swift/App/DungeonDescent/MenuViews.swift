@@ -57,6 +57,8 @@ struct MainMenuView: View {
         Entry(id: "afk", text: "⬇ Endless Descent", label: "Endless Descent, AFK mode", action: .go(.afk)),
         Entry(id: "spire", text: "🗼 The Spire", label: "The Spire, climb 1800 floors to face The Time Eater", action: .go(.spire)),
         Entry(id: "void", text: "🌑 Void Mode", label: "Void Mode, become the Void Commander and survive five waves of heroes", action: .go(.voidmode)),
+        Entry(id: "shadowrealm", text: "🌑 Shadow Realm", label: "Shadow Realm, the secret endless wave survival mode",
+              color: Color(hex: 0xaa88ff), border: Color(hex: 0x553388), action: .go(.shadowRealm)),
         Entry(id: "command", text: "⌨️ Command Center", label: "Command Center — type or speak commands to control the game", action: .go(.commandCenter)),
         Entry(id: "spellbook", text: "📖 Spell Book", label: "Spell Book — view your learned spells", color: purple, border: purpleBorder, action: .go(.spellbook)),
         Entry(id: "arcane", text: "✨ Arcane Shop", label: "Arcane Shop — buy spell scrolls and the spell book", color: purple, border: purpleBorder, action: .go(.arcane)),
@@ -94,6 +96,8 @@ struct MainMenuView: View {
         var h = MenuPrefs.hidden(game.store)
         // toggleCommandCenter (Settings → Accessibility).
         if game.store.getItem("dd_command_center") == "off" { h.insert("command") }
+        // Opens once the Shadow World is cleared.
+        if !ShadowRealm.unlocked(game.store) { h.insert("shadowrealm") }
         return h
     }
 
@@ -706,16 +710,16 @@ struct TrophyOverlay: View {
     }
 }
 
-/// #ov-birthday (openBirthdayScreen, claimBirthdayReward): 500 gold once a
-/// year and the year's code (DDBD26, DDBD27 …) for the full birthday package
-/// in Redeem Code. The web version only knew 2026; Swift counts the years.
+/// #ov-birthday (openBirthdayScreen, claimBirthdayReward): the birthday
+/// package once a year. The web version gave 500 gold and a code (DDBD26 …)
+/// for the rest; the App Store doesn't allow codes that unlock things, so the
+/// whole package comes with the claim.
 struct BirthdayOverlay: View {
     @EnvironmentObject var game: GameModel
     let close: () -> Void
-    @State private var showCode = false
+    @State private var result = ""
 
     private var year: Int { Calendar.current.component(.year, from: Date()) }
-    private var code: String { "DDBD\(year % 100)" }
     private var ordinal: String {
         let n = year - 2025
         return ["", "ONE", "TWO", "THREE", "FOUR", "FIVE"].indices.contains(n) ? ["", "ONE", "TWO", "THREE", "FOUR", "FIVE"][n] : "\(n)"
@@ -731,38 +735,26 @@ struct BirthdayOverlay: View {
             Text("Built by Leo Productions").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
             Button("🎁 Claim Birthday Reward") { claim() }
                 .buttonStyle(WebButtonStyle(kind: .gold))
-                .accessibilityLabel("Claim birthday reward — 500 gold plus unlock code")
+                .accessibilityLabel("Claim birthday reward — 1500 gold, The Golden Sword and a Blacksmith discount")
+            if !result.isEmpty { OverlayText(text: result) }
             Button("← Back to Menu") { Sound.track("menu"); close() }
                 .buttonStyle(WebButtonStyle(kind: .ghost))
                 .accessibilityLabel("Close birthday screen")
-            if showCode {
-                Text("YOUR BIRTHDAY CODE").font(Theme.cinzel(10)).tracking(2).foregroundStyle(Theme.goldDim)
-                Text(code).font(Theme.decorative(22)).foregroundStyle(Color(hex: 0xffd700)).textSelection(.enabled)
-                OverlayText(text: "Go to Settings → Redeem Code and paste this to unlock your full birthday rewards.")
-                Button("📋 Copy Code") {
-                    UIPasteboard.general.string = code
-                    Feedback.announce("Code copied. Go to Settings then Redeem Code and paste it.")
-                }
-                .buttonStyle(WebButtonStyle(kind: .ghost))
-                .accessibilityLabel("Copy birthday code to clipboard")
-            }
         }
         .onAppear { Sound.track("menu-birthday") }
     }
 
-    private var spelled: String { code.map(String.init).joined(separator: " ") }
-
     private func claim() {
-        let key = "dd_birthday_claimed_\(year)"
-        showCode = true
-        if game.store.getItem(key) != nil {
-            Feedback.announce("Already claimed. Here is your code again. \(spelled).")
-            return
+        let out = RewardCodes.birthday(year: year, store: game.store)
+        result = out.message
+        if out.ok {
+            game.wallet.addGold(out.gold)
+            if out.sword && !game.globalInventory.items.contains(where: { $0.id == "golden-sword" }) {
+                game.globalInventory.add(RewardCodes.goldenSword)
+            }
+            Sound.sfx("sfx-unlock")
         }
-        game.wallet.addGold(500)
-        game.store.setItem(key, "true")
-        Sound.sfx("sfx-unlock")
-        Feedback.announce("Birthday reward claimed! 500 gold added. Your code is \(spelled). Go to Settings, Redeem Code, enter it for the full birthday package.")
+        Feedback.announce(out.ok ? "Birthday reward claimed! \(out.gold) gold, The Golden Sword, and 15 percent off at the Blacksmith." : out.message)
     }
 }
 

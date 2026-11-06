@@ -2,13 +2,13 @@ import SwiftUI
 import UIKit
 import DungeonCore
 
-/// #screen-void-mode: before, during, the victory with its reward code, and defeat.
+/// #screen-void-mode: before, during, the victory with its prize, and defeat.
 struct VoidModeView: View {
     @EnvironmentObject var game: GameModel
     @EnvironmentObject var router: Router
     @State private var v: VoidMode?
     @State private var log: [String] = []
-    @State private var code = ""
+    @State private var prize = ""
     @State private var leveled = 0
     @State private var dice = SystemDice()
     private let purple = Color(hex: 0xaa44ff)
@@ -31,7 +31,7 @@ struct VoidModeView: View {
     private var intro: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("You Are The Darkness").font(Theme.cinzel(13)).foregroundStyle(purple)
-            Text("Five waves of heroes are coming to defeat you. They carry torches and hope. They will find neither. As the Void Commander you have 500 HP and four abilities. Survive all five waves and your legend will be encoded into a shareable reward code — and every one of your characters goes up 3 levels.")
+            Text("Five waves of heroes are coming to defeat you. They carry torches and hope. They will find neither. As the Void Commander you have 500 HP and four abilities. Survive all five waves to win a prize — gold, Mystery Coins, a Blacksmith discount or double XP — and every one of your characters goes up 3 levels.")
                 .font(Theme.crimson(14)).foregroundStyle(Theme.textSecondary)
             VStack(alignment: .leading, spacing: 5) {
                 Text("YOUR ABILITIES").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Theme.textDim)
@@ -157,7 +157,9 @@ struct VoidModeView: View {
 
     // MARK: The end
 
-    /// voidVictory: every character +3 levels (up to 50) and a reward code.
+    /// voidVictory: every character +3 levels (up to 50) and a prize. The web
+    /// version gave a shareable code for the prize; the App Store doesn't
+    /// allow codes that unlock things, so the prize is given here.
     private func win() {
         var n = 0
         for i in game.characters.indices {
@@ -165,12 +167,15 @@ struct VoidModeView: View {
             n += 1
         }
         leveled = n
-        code = VoidMode.newCode(store: game.store, dice: &dice)
+        let won = RewardCodes.give(VoidMode.victoryPrize(dice: &dice), store: game.store)
+        if won.gold > 0 { game.wallet.addGold(won.gold) }
+        if won.coins > 0 { game.addMysteryCoins(won.coins) }
+        prize = won.message
         game.achievements.setMax("voidConqueror", 1)
         _ = game.achievements.check()
         Sound.sfx("sfx-victory")
         Feedback.success()
-        Feedback.announce("THE VOID PREVAILS! All five waves defeated. All \(n) characters leveled up by 3. Your reward code is \(code.map(String.init).joined(separator: " ")). Share it with anyone. Press Copy Code to copy it.")
+        Feedback.announce("THE VOID PREVAILS! All five waves defeated. All \(n) characters leveled up by 3. \(prize)")
     }
 
     private var victory: some View {
@@ -178,17 +183,10 @@ struct VoidModeView: View {
             Text("🌑 THE VOID PREVAILS").font(Theme.decorative(20)).foregroundStyle(Color(hex: 0xcc88ff)).accessibilityAddTraits(.isHeader)
             Text("Five waves defeated. All heroes broken. The dungeons remember this.").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
             VStack(spacing: 6) {
-                Text("YOUR REWARD CODE").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Theme.textDim)
-                Text(code).font(.system(size: 20, weight: .bold, design: .monospaced)).foregroundStyle(Color(hex: 0xcc88ff))
-                    .accessibilityLabel("Reward code: " + code.map(String.init).joined(separator: " "))
-                Text("Share this code. Anyone who enters it gets a reward (Settings → General → Enter Code).")
-                    .font(Theme.crimson(12)).foregroundStyle(Theme.textDim).multilineTextAlignment(.center)
-                Button("📋 Copy Code") {
-                    UIPasteboard.general.string = code
-                    Feedback.announce("Code copied: \(code.map(String.init).joined(separator: " ")). Share it with anyone.")
-                }
-                .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Copy reward code")
+                Text("YOUR PRIZE").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Theme.textDim)
+                Text(prize).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xcc88ff)).multilineTextAlignment(.center)
             }
+            .accessibilityElement(children: .combine)
             .padding(14).overlay(Rectangle().stroke(purple))
             Text("\(leveled) character\(leveled == 1 ? "" : "s") leveled up by 3!").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x44ff88))
             Button("← Return to Menu") { Sound.track("menu"); router.goTo(.menu) }.buttonStyle(WebButtonStyle(kind: .ghost))
@@ -203,51 +201,5 @@ struct VoidModeView: View {
             Button("↩ Try Again") { start() }.buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Try Void Mode again")
             Button("← Menu") { Sound.track("menu"); router.goTo(.menu) }.buttonStyle(WebButtonStyle(kind: .ghost))
         }
-    }
-}
-
-/// Settings → General → Enter Reward Code.
-struct RewardCodeBox: View {
-    @EnvironmentObject var game: GameModel
-    @EnvironmentObject var router: Router
-    @State private var text = ""
-    @State private var result = ""
-    @State private var ok = false
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("Enter Reward Code").font(Theme.cinzel(11.2)).tracking(2).foregroundStyle(Theme.goldDim)
-            Text("Have a VOID code from someone who beat Void Mode, or a birthday code? Enter it here for a reward.")
-                .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textDim)
-            TextField("VOID-XXXX-XXXX", text: $text)
-                .textInputAutocapitalization(.characters).autocorrectionDisabled()
-                .font(.system(size: 15, design: .monospaced)).foregroundStyle(Color(hex: 0xcc88ff))
-                .padding(10).background(Color(hex: 0x0a0a0a)).overlay(Rectangle().stroke(Color(hex: 0x333333)))
-                .accessibilityLabel("Enter reward code")
-            Button("🌑 Redeem Code") { redeem() }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Redeem reward code")
-            if !result.isEmpty {
-                Text(result).font(Theme.cinzel(10.4)).foregroundStyle(ok ? Color(hex: 0x44ff88) : Color(hex: 0xff4444))
-            }
-        }
-    }
-
-    private func redeem() {
-        // SHADOW opens the secret Shadow Realm.
-        if text.trimmingCharacters(in: .whitespaces).uppercased() == ShadowRealm.code {
-            text = ""
-            result = ""
-            router.goTo(.shadowRealm)
-            return
-        }
-        let out = RewardCodes.redeem(text, store: game.store)
-        if out.gold > 0 { game.wallet.addGold(out.gold) }
-        if out.coins > 0 { game.addMysteryCoins(out.coins) }
-        if out.sword && !game.globalInventory.items.contains(where: { $0.id == "golden-sword" }) {
-            game.globalInventory.add(RewardCodes.goldenSword)
-        }
-        ok = out.ok
-        result = out.message
-        if out.ok { text = ""; Sound.sfx("sfx-unlock") } else { Sound.sfx("sfx-select") }
-        Feedback.announce(out.message)
     }
 }

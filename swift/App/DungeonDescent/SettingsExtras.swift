@@ -178,19 +178,7 @@ struct NotificationsPanel: View {
     }
 }
 
-// MARK: - Redeem Code and Send Feedback
-
-/// #settings-panel-redeem
-struct RedeemPanel: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("🎁 Redeem Code").font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
-            Text("Enter a promo code or birthday code to unlock exclusive rewards. Each code can only be redeemed once per device.")
-                .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textDim)
-            RewardCodeBox()
-        }
-    }
-}
+// MARK: - Send Feedback
 
 /// #settings-panel-feedback: straight to the developer (the same Formspree form).
 struct FeedbackPanel: View {

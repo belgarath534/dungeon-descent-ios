@@ -133,7 +133,6 @@ struct CommandCenterView: View {
             router.goTo(.menu)
         case .play(let track): Sound.track(track)
         case .stopMusic: Sound.stopMusic()
-        case .redeem(let code): redeem(code)
         case .create(let ch, let afk):
             guard game.create(ch) else {
                 lines.append(.init(text: "You already have \(GameData.maxCharacters) characters. Delete one first.", kind: .err))
@@ -149,23 +148,6 @@ struct CommandCenterView: View {
                 Feedback.announce("\(ch.name) created and saved. You can find them in your character list.")
             }
         }
-    }
-
-    /// The same as Redeem Code in Void Mode.
-    private func redeem(_ code: String) {
-        if code == ShadowRealm.code {
-            router.goTo(.shadowRealm)
-            return
-        }
-        let out = RewardCodes.redeem(code, store: game.store)
-        if out.gold > 0 { game.wallet.addGold(out.gold) }
-        if out.coins > 0 { game.addMysteryCoins(out.coins) }
-        if out.sword && !game.globalInventory.items.contains(where: { $0.id == "golden-sword" }) {
-            game.globalInventory.add(RewardCodes.goldenSword)
-        }
-        lines.append(.init(text: out.message, kind: out.ok ? .ok : .err))
-        Sound.sfx(out.ok ? "sfx-unlock" : "sfx-select")
-        Feedback.announce(out.message)
     }
 }
 

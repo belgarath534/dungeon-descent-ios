@@ -2,7 +2,7 @@ import Foundation
 
 /// The Command Center (executeCommand, ccHandleInput): play by typing or
 /// speaking commands — go places, start or schedule Endless Descent, claim the
-/// Daily Descent, check gold and stats, redeem codes, play music, and build a
+/// Daily Descent, check gold and stats, play music, and build a
 /// character step by step. This works out what a line means; the app carries
 /// out the action.
 public struct CommandCenter: Sendable {
@@ -23,7 +23,6 @@ public struct CommandCenter: Sendable {
         case daily
         case play(String)
         case stopMusic
-        case redeem(String)
         /// A finished character; launch Endless Descent with it or not.
         case create(PlayerCharacter, afk: Bool)
     }
@@ -162,10 +161,6 @@ public struct CommandCenter: Sendable {
             r.spoken = "The time is \(t)."
             return r
         }
-        if verb == "redeem" || verb == "code", !args.isEmpty {
-            r.action = .redeem(args.uppercased())
-            return r
-        }
         if ["help", "?", "commands"].contains(cmd) {
             let help = [
                 "── NAVIGATION ──────────────────",
@@ -189,7 +184,6 @@ public struct CommandCenter: Sendable {
                 "claim daily           → Claim Daily Descent reward",
                 "gold                  → Check your gold",
                 "stats                 → Full account stats",
-                "redeem DDBD26         → Redeem a code",
                 "── MUSIC ───────────────────────",
                 "play [track]          → Play a music track",
                 "stop music            → Stop music",
