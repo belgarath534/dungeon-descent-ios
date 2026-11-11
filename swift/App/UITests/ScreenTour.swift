@@ -12,6 +12,8 @@ final class ScreenTour: XCTestCase {
     override func setUp() {
         continueAfterFailure = true
         app = XCUIApplication()
+        // Straight to the menu: no five-second loading screen in the screenshots.
+        app.launchArguments = ["-skipLoading"]
         // System alerts (notifications, Game Center) are answered "not now".
         addUIInterruptionMonitor(withDescription: "System alert") { alert in
             for label in ["Don’t Allow", "Don't Allow", "Not Now", "Cancel", "OK"] where alert.buttons[label].exists {

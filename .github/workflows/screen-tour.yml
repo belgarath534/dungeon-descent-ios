@@ -156,7 +156,7 @@ jobs:
           OUT=results/vision; mkdir -p "$OUT"
           for S in menu charlist afk events whatsnew help; do
             xcrun simctl terminate "$SIM_UDID" com.dungeon.descent 2>/dev/null || true
-            if [ "$S" = menu ]; then xcrun simctl launch "$SIM_UDID" com.dungeon.descent
+            if [ "$S" = menu ]; then xcrun simctl launch "$SIM_UDID" com.dungeon.descent -skipLoading
             else xcrun simctl launch "$SIM_UDID" com.dungeon.descent -startScreen "$S"; fi
             sleep 12
             xcrun simctl io "$SIM_UDID" screenshot "$OUT/store-$S.png" || true

@@ -91,8 +91,18 @@ extension Router {
 struct RootView: View {
     @EnvironmentObject var router: Router
     @EnvironmentObject var game: GameModel
+    /// The loading screen first; the game appears when it fades.
+    @State private var loading = !LoadingScreen.skipped
 
     var body: some View {
+        if loading {
+            LoadingScreen { loading = false }.preferredColorScheme(.dark)
+        } else {
+            content
+        }
+    }
+
+    private var content: some View {
         Group {
             switch router.screen {
             case .menu: MainMenuView()

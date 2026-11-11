@@ -21084,6 +21084,16 @@
         }
       }
     },
+    "Dungeon\nDescent": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dungeon\nDescent"
+          }
+        }
+      }
+    },
     "Dungeon Descent Command Center v1.0": {
       "extractionState": "manual",
       "localizations": {
@@ -21146,6 +21156,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dungeon Descent foi construído especificamente para usuários de JAWS, NVDA e VoiceOver. Cada ação de combate, descrição de sala, ataque de inimigo, subida de nível, item encontrado, desbloqueio de conquista e evento é anunciado automaticamente. Você nunca precisa ler a tela manualmente — o jogo se lê para você."
+          }
+        }
+      }
+    },
+    "Dungeon Descent. Created by Leo Productions. Loading.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dungeon Descent. Criado por Leo Productions. Carregando."
           }
         }
       }
@@ -63366,6 +63386,26 @@
         }
       }
     },
+    "Tip: Ambush Day hits 4 times a year — all battles become multi-enemy.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: O Dia da Emboscada acontece 4 vezes por ano — todas as batalhas têm vários inimigos."
+          }
+        }
+      }
+    },
+    "Tip: Claim your Daily Descent reward every day to build your streak.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: Resgate sua recompensa da Descida Diária todo dia para manter sua sequência."
+          }
+        }
+      }
+    },
     "Tip: Defend before attacking to reduce melody damage.": {
       "extractionState": "manual",
       "localizations": {
@@ -63373,6 +63413,86 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dica: Defenda antes de atacar para reduzir o dano da melodia."
+          }
+        }
+      }
+    },
+    "Tip: Elite enemies have a 30% chance to drop rare spirits on death.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: Inimigos de elite têm 30% de chance de deixar espíritos raros ao morrer."
+          }
+        }
+      }
+    },
+    "Tip: Equip weapons and armor from your inventory between runs.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: Equipe armas e armaduras pelo seu inventário entre as partidas."
+          }
+        }
+      }
+    },
+    "Tip: Legacy Mode carries your level between runs. Build one legend.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: O Modo Legado mantém seu nível entre as partidas. Construa uma lenda."
+          }
+        }
+      }
+    },
+    "Tip: Soul Fragments drop from enemies. Collect 25 to build a custom spirit.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: Inimigos deixam cair Fragmentos de Alma. Junte 25 para criar um espírito personalizado."
+          }
+        }
+      }
+    },
+    "Tip: The Last Blade starts at Level 10 but degrades each floor.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: A Última Lâmina começa no Nível 10, mas se desgasta a cada andar."
+          }
+        }
+      }
+    },
+    "Tip: The Void Anchor prevents fleeing. Kill it or die trying.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: A Âncora do Vazio impede a fuga. Mate-a ou morra tentando."
+          }
+        }
+      }
+    },
+    "Tip: The Wandering Merchant appears every few floors. Always check the sell tab.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: O Mercador Errante aparece a cada poucos andares. Sempre confira a aba de venda."
+          }
+        }
+      }
+    },
+    "Tip: Thornmail reflects 20% of damage back at attackers.": {
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: A Cota de Espinhos reflete 20% do dano de volta aos atacantes."
           }
         }
       }
