@@ -4,8 +4,8 @@ import UIKit
 /// #loading-screen: "A Leo Productions Game", the title, the version, a gold
 /// bar that fills in stages and a tip that changes every 2.5 seconds, for five
 /// seconds at launch. VoiceOver hears the studio, "Loading" and the tips.
-/// The game appears behind it only when it fades, so the menu's own music and
-/// pop-ups start after it, as in the web version.
+/// The menu music starts with it; the menu itself, with its pop-ups and
+/// announcements, appears only when it fades.
 struct LoadingScreen: View {
     let done: () -> Void
     @State private var progress = 0.0
@@ -85,6 +85,9 @@ struct LoadingScreen: View {
 
     private func run() {
         func after(_ s: Double, _ f: @escaping () -> Void) { DispatchQueue.main.asyncAfter(deadline: .now() + s, execute: f) }
+        // The menu music starts with the loading screen and carries on into
+        // the menu (the same track isn't restarted).
+        Sound.track("menu")
         // The bar fills in stages, like the web version's.
         after(0.2) { withAnimation(.easeOut(duration: 1.8)) { progress = 0.30 } }
         after(1.5) { withAnimation(.easeOut(duration: 1.8)) { progress = 0.65 } }
