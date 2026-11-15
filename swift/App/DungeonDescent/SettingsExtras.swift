@@ -184,6 +184,7 @@ struct NotificationsPanel: View {
 struct FeedbackPanel: View {
     @State private var kind = "Bug report"
     @State private var message = ""
+    @State private var email = Auth.auth().currentUser?.email ?? ""
     @State private var status = ""
     @State private var sending = false
 
@@ -206,6 +207,13 @@ struct FeedbackPanel: View {
                 .font(Theme.crimson(15)).foregroundStyle(Theme.textPrimary)
                 .padding(10).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
                 .accessibilityLabel("Feedback message")
+            Text("YOUR EMAIL (OPTIONAL)").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
+            TextField("", text: $email, prompt: Text("So the developer can write back to you").foregroundColor(Theme.textDim))
+                .keyboardType(.emailAddress).textContentType(.emailAddress)
+                .textInputAutocapitalization(.never).autocorrectionDisabled()
+                .font(Theme.crimson(15)).foregroundStyle(Theme.textPrimary)
+                .padding(10).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
+                .accessibilityLabel("Your email, optional, so the developer can write back to you")
             Button(sending ? "Sending..." : "📨 Send") { send() }
                 .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
                 .disabled(sending)
@@ -224,7 +232,10 @@ struct FeedbackPanel: View {
             return
         }
         sending = true
-        let email = Auth.auth().currentUser?.email ?? "no-reply@dungen-descent.org"
+        // Without an email the developer can't answer, so the one typed here
+        // (or the signed-in account's) goes with the message.
+        let typed = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        let email = typed.contains("@") && typed.contains(".") ? typed : "no-reply@dungen-descent.org"
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "unknown"
         let body: [String: String] = ["type": kind, "message": text, "email": email, "platform": "ios-swift",
                                       "gameVersion": version, "_replyto": email]

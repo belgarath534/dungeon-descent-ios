@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 import FirebaseAuth
+import FirebaseCore
 import DungeonCore
 
 #if targetEnvironment(macCatalyst) || os(visionOS)
@@ -43,7 +44,7 @@ enum LiveActivityPush {
 
     /// Leaving the app (or waking in the background): send the next fights.
     static func planAndSend() {
-        guard #available(iOS 16.2, *), let token, Auth.auth().currentUser != nil else { return }
+        guard #available(iOS 16.2, *), let token else { return }
         let fights = GameModel.shared.afk.plannedFights(horizon)
         guard !fights.isEmpty else { return }
         let enc = JSONEncoder()
@@ -59,8 +60,28 @@ enum LiveActivityPush {
 
     /// Back in the app: the app updates the Live Activity itself again.
     static func cancel() {
-        guard Auth.auth().currentUser != nil else { return }
         send(token: token ?? "", states: [])
+    }
+
+    /// Who the plan belongs to. Players who aren't signed in get a guest
+    /// identity of their own (Firebase anonymous sign-in, kept in a separate
+    /// Firebase app so it never signs them in to the game), so their Lock Screen
+    /// keeps moving too. It needs Anonymous sign-in on in the Firebase console;
+    /// without it, a signed-in player's own account is used, as before.
+    private static func idToken() async -> String? {
+        if let id = try? await guestAuth()?.currentUser?.getIDToken() { return id }
+        return try? await Auth.auth().currentUser?.getIDToken()
+    }
+
+    private static func guestAuth() async -> Auth? {
+        let name = "liveActivity"
+        if FirebaseApp.app(name: name) == nil, let options = FirebaseApp.app()?.options {
+            FirebaseApp.configure(name: name, options: options)
+        }
+        guard let app = FirebaseApp.app(name: name) else { return nil }
+        let auth = Auth.auth(app: app)
+        if auth.currentUser == nil { _ = try? await auth.signInAnonymously() }
+        return auth
     }
 
     private static func send(token: String, states: [[String: Any]]) {
@@ -68,7 +89,7 @@ enum LiveActivityPush {
         let bg = BackgroundTime()
         Task {
             defer { bg.end() }
-            guard let id = try? await Auth.auth().currentUser?.getIDToken() else { return }
+            guard let id = await idToken() else { return }
             #if DEBUG
             let sandbox = true
             #else

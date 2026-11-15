@@ -223,14 +223,16 @@ final class GameModel: ObservableObject {
 @MainActor
 enum Feedback {
     /// Queues a VoiceOver announcement so it doesn't cut off the button's own sound.
-    static func announce(_ english: String, after delay: Double = 0) {
+    /// `latest`: for modes that play themselves (Spire Auto Mode), lines not
+    /// yet read are dropped so VoiceOver reads what is happening now.
+    static func announce(_ english: String, after delay: Double = 0, latest: Bool = false) {
         guard UIAccessibility.isVoiceOverRunning, !english.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         let text = Language.t(english)
         guard delay > 0 else {
-            Announcer.shared.say(text)
+            Announcer.shared.say(text, latest: latest)
             return
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { Announcer.shared.say(text) }
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { Announcer.shared.say(text, latest: latest) }
     }
 
     static func hit(heavy: Bool = false) {
@@ -305,10 +307,16 @@ final class Announcer {
         }
     }
 
-    func say(_ text: String) {
+    /// Lines waiting their turn, at most. Anything older is dropped, so
+    /// VoiceOver can never fall far behind the game.
+    static let maxWaiting = 4
+
+    func say(_ text: String, latest: Bool = false) {
         // The same line twice in a row would only repeat itself.
         if text == current || queue.last == text { return }
+        if latest { queue.removeAll() }
         queue.append(text)
+        if queue.count > Self.maxWaiting { queue.removeFirst(queue.count - Self.maxWaiting) }
         if current == nil { next() }
     }
 

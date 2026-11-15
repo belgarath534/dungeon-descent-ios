@@ -102,8 +102,9 @@ final class SpireModel: ObservableObject {
         let lines = Spire.turn(&r, a, store: game.store, wallet: game.wallet, dice: &dice, gun: gun)
         run = r
         add(lines)
-        if spoken || !AppSettings.combatAnnouncements { Feedback.announce(lines.joined(separator: " ") + status(r)) }
-        else { Feedback.announce(lines.joined(separator: " ")) }
+        // In Auto Mode only the newest step is read, so VoiceOver keeps up with the climb.
+        if spoken || !AppSettings.combatAnnouncements { Feedback.announce(lines.joined(separator: " ") + status(r), latest: autoMode) }
+        else { Feedback.announce(lines.joined(separator: " "), latest: autoMode) }
         Sound.sfx(a == .heavy ? "sfx-heavy-hit" : "sfx-attack")
         afterStep()
     }
@@ -126,7 +127,7 @@ final class SpireModel: ObservableObject {
         run = r
         add(lines)
         Sound.track(spireTrack)
-        Feedback.announce(lines.joined(separator: " "))
+        Feedback.announce(lines.joined(separator: " "), latest: autoMode)
         afterStep()
     }
 
@@ -196,7 +197,6 @@ final class SpireModel: ObservableObject {
         stopTimer()
         guard autoMode, stage == .climbing, blacksmith == nil, let r = run else { return }
         if r.cleared {
-            Feedback.announce("Auto Mode — advancing to floor \(r.floor + 1).")
             next()
         } else {
             step(.attack, spoken: false)

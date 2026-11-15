@@ -1,4 +1,5 @@
 import AVFoundation
+import UIKit
 import DungeonCore
 
 /// What the game asks for: music by track name, ambience by key, sound effects
@@ -38,6 +39,13 @@ final class AudioEngine {
         try? session.setActive(true)
     }
 
+    /// iOS can start the app in the background (Background App Refresh for
+    /// Endless Descent, a Live Activity, the watch) without it ever being
+    /// opened. Nothing plays then: the music the game asked for starts when
+    /// the app is really opened.
+    private var hidden: Bool { UIApplication.shared.applicationState == .background }
+    private var startWhenOpened = false
+
     private func url(_ file: String) -> URL? {
         Bundle.main.url(forResource: file, withExtension: nil, subdirectory: "audio")
     }
@@ -52,6 +60,10 @@ final class AudioEngine {
         guard AppSettings.musicOn, customLabel == nil else { musicName = name; return }
         if name == musicName, music?.isPlaying == true { return }
         musicName = name
+        if hidden {
+            startWhenOpened = true
+            return
+        }
         guard let file = Soundtrack.file(forTrack: name), let u = url(file),
               let next = Self.player(u) else { return }
         fadeOut(music)
@@ -71,6 +83,10 @@ final class AudioEngine {
         }
         if key == ambientKey, ambient?.isPlaying == true { return }
         ambientKey = key
+        if hidden {
+            startWhenOpened = true
+            return
+        }
         guard let file = Soundtrack.file(forAmbient: key), let u = url(file),
               let next = Self.player(u) else { return }
         fadeOut(ambient)
@@ -82,7 +98,7 @@ final class AudioEngine {
     }
 
     func playEffect(_ id: String) {
-        guard AppSettings.effectsOn else { return }
+        guard AppSettings.effectsOn, !hidden else { return }
         let player: AVAudioPlayer
         if let p = effects[id] {
             player = p
@@ -189,6 +205,17 @@ final class AudioEngine {
     }
 
     func enterForeground() {
+        if startWhenOpened {
+            // Started in the background: begin what the game asked for.
+            startWhenOpened = false
+            pausedForBackground = false
+            let track = musicName, key = ambientKey
+            musicName = nil
+            ambientKey = nil
+            if let track, music?.isPlaying != true { playTrack(track) }
+            if let key, ambient?.isPlaying != true { playAmbient(key) }
+            return
+        }
         guard pausedForBackground else { return }
         pausedForBackground = false
         if AppSettings.musicOn { music?.play() }
