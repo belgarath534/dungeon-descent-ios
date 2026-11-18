@@ -204,14 +204,9 @@ struct WebSettingsView: View {
             divider
             toggleRow("Shake to Attack", isOn: $shakeAttack, label: "Shake to attack toggle. In a fight, shake to attack; shake hard to use a skill.")
                 .padding(.bottom, 18)
-            VStack(alignment: .leading, spacing: 8) {
-                Text("🎵 CUSTOM TRACK").font(Theme.cinzel(11.2)).tracking(2).foregroundStyle(Color(hex: 0xaa88dd))
-                Text("Play your own music instead of the game soundtrack. Use a file for testing or a URL to save it permanently.")
-                    .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
-                Button("📁 Choose Audio File") { notYet("Custom tracks") }.buttonStyle(WebButtonStyle(kind: .ghost))
-                    .accessibilityLabel("Choose audio file from your device")
-            }
-            .padding(14).background(Color(hex: 0x0a0814)).overlay(Rectangle().stroke(Color(hex: 0x332255)))
+            // The same My Tracks as the music player: files, links, YouTube, Apple Music.
+            MyTracksSection()
+                .padding(14).background(Color(hex: 0x0a0814)).overlay(Rectangle().stroke(Color(hex: 0x332255)))
         }
         .onChange(of: musicOn) { _ in Sound.settingsChanged() }
         .onChange(of: ambientOn) { _ in Sound.settingsChanged() }
