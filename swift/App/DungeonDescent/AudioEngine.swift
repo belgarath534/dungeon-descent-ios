@@ -245,6 +245,18 @@ final class AudioEngine {
         customLabel = label
     }
 
+    /// Music played by something else (Apple Music, a YouTube link) in place
+    /// of the game's: the game's music stops, and `stop` ends it later.
+    private var externalStop: (() -> Void)?
+
+    func playExternal(label: String, stop: @escaping () -> Void) {
+        stopCustomPlayer()
+        fadeOut(music)
+        music = nil
+        externalStop = stop
+        customLabel = label
+    }
+
     /// Back to the game's music.
     func stopCustom() {
         stopCustomPlayer()
@@ -254,6 +266,8 @@ final class AudioEngine {
     }
 
     private func stopCustomPlayer() {
+        externalStop?()
+        externalStop = nil
         custom?.pause()
         custom = nil
         customLabel = nil
