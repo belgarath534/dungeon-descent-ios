@@ -1,9 +1,8 @@
-Thanks for testing Dungeon Descent 11.8!
+Thanks for testing Dungeon Descent 11.9!
 
 Please try:
-• Endless Descent: sign in, start a run, then lock your phone. The Lock Screen and Dynamic Island should update every fight. Open the game again and check it shows the same floor.
-• Apple Watch app: install it from the iPhone's Watch app (Available Apps). Pick a character, start a run, use a potion and end the run from your wrist.
-• The nine new events and the parts of the game you usually play.
-• VoiceOver: tell us anything that reads wrong, is missing a label or is hard to reach.
-
-Report problems with a screenshot from TestFlight, or in the Discord.
+• The loading screen: it shows for five seconds at launch with the menu music, then the menu opens.
+• The Spire's Auto Mode with VoiceOver: it should read the floor you're on, not one from minutes ago.
+• Endless Descent without signing in: start a run and lock your phone. The Lock Screen should keep moving.
+• Leave the app for a while: no music should start on its own while the app isn't open.
+• Settings, Send Feedback: there's a box for your email so we can write back.
