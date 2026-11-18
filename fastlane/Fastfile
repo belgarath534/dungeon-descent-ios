@@ -155,12 +155,19 @@ platform :mac do
     File.write(pbx, File.read(pbx).gsub("Dungeon Descent Mac App Store", profile))
     build_number = next_build_number(api_key)
 
-    build_mac_app(
+    # The Mac Installer certificate match put in the keychain signs the package.
+    installer = sh("security find-identity -v -p basic | grep -i installer | head -1 | sed -E 's/.*\"(.*)\".*/\\1/'").strip
+    UI.user_error!("No Mac Installer certificate in the keychain") if installer.empty?
+    UI.message("Installer certificate: #{installer}")
+
+    build_app(
       project: PROJECT,
       scheme: "DungeonDescent",
       configuration: "Release",
       catalyst_platform: "macos",
+      destination: "generic/platform=macOS,variant=Mac Catalyst",
       export_method: "app-store",
+      installer_cert_name: installer,
       output_directory: "build/mac",
       xcargs: "CURRENT_PROJECT_VERSION=#{build_number}",
       export_options: { teamID: team_id, provisioningProfiles: { MAIN_ID => profile } }
