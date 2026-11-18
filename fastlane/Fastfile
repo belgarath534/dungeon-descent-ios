@@ -7,6 +7,7 @@ SIGNED = {
   "DungeonDescent" => "com.dungeon.descent",
   "DDLiveActivity" => "com.dungeon.descent.DDLiveActivity",
   "DungeonWatch" => "com.dungeon.descent.watchkitapp",
+  "DungeonWatchWidget" => "com.dungeon.descent.watchkitapp.widget",
 }.freeze
 MAIN_ID = SIGNED["DungeonDescent"]
 PROJECT = File.expand_path("../swift/App/DungeonDescent.xcodeproj", __dir__)
@@ -21,6 +22,16 @@ def api_key!
     duration: 1200,
     in_house: false
   )
+end
+
+# Registers an App ID on Apple's developer site if it isn't there yet (the
+# watch complications' ID was new in 11.9), so match can make its profile.
+def ensure_bundle_id(id, name)
+  return if Spaceship::ConnectAPI::BundleId.find(id)
+  Spaceship::ConnectAPI::BundleId.create(name: name, platform: "IOS", identifier: id)
+  UI.success("Registered #{id}")
+rescue StandardError => e
+  UI.important("Couldn't check or register #{id}: #{e.message}")
 end
 
 # The shared certificate and the profiles, kept encrypted in the private
@@ -72,6 +83,7 @@ platform :ios do
   lane :beta do
     setup_ci
     api_key = api_key!
+    ensure_bundle_id(SIGNED["DungeonWatchWidget"], "Dungeon Descent Watch Complications")
     signing!(api_key, SIGNED.values)
     team_id = ENV.fetch("sigh_#{MAIN_ID}_appstore_team-id")
     profiles = SIGNED.values.to_h { |id| [id, ENV.fetch("sigh_#{id}_appstore_profile-name")] }

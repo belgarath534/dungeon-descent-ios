@@ -188,6 +188,9 @@ targets:
     sources:
       - path: DungeonWatch
       - path: WatchShared
+    dependencies:
+      # The complications (today's World Boss), inside the watch app.
+      - target: DungeonWatchWidget
     info:
       path: DungeonWatch/Info.plist
       properties:
@@ -210,6 +213,31 @@ targets:
         SWIFT_VERSION: "5.0"
         CODE_SIGN_STYLE: Automatic
         SKIP_INSTALL: YES
+  # The Apple Watch complications: today's Daily World Boss and the hours
+  # until the next one, worked out from the date (no data from the iPhone).
+  DungeonWatchWidget:
+    type: app-extension
+    platform: watchOS
+    deploymentTarget: "9.0"
+    sources:
+      - path: DungeonWatchWidget
+    info:
+      path: DungeonWatchWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Dungeon Descent
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.watchkitapp.widget
+        PRODUCT_NAME: DungeonWatchWidget
+        TARGETED_DEVICE_FAMILY: "4"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
   # Opens the game, visits a few screens, saves screenshots and runs Apple's
   # accessibility audit (the "Screen tour" GitHub workflow). Not in the App Store build.
   DungeonDescentUITests:

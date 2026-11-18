@@ -19,6 +19,8 @@ public enum WorldBoss {
         public let taunts: [String]
     }
 
+    /// The watch complication (DungeonWatchWidget.swift) lists these names in
+    /// the same order; change both together.
     public static let bosses: [Boss] = [
         Boss(name: "The Bone Colossus", intro: "A mountain of bones rises, older than the dungeon itself.",
              taunts: ["Its ribs grind together.", "Dust pours from its skull.", "It shrugs off a rib and grows another."]),
