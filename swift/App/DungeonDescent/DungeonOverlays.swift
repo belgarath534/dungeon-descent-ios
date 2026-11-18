@@ -637,3 +637,36 @@ struct BossRiddleOverlay: View {
         }
     }
 }
+
+// MARK: Music Box tutorial (#musicbox-tutorial)
+
+/// The first time you meet the Music Box: how its melody works.
+struct MusicBoxTutorial: View {
+    let close: () -> Void
+
+    var body: some View {
+        WebOverlay {
+            Text("✦ NEW ENEMY ENCOUNTERED ✦").font(Theme.cinzel(10.4)).tracking(4).foregroundStyle(Theme.goldDim)
+            OverlayTitle(text: "🎵 The Music Box")
+            OverlayText(text: "This enemy fights differently.")
+            VStack(alignment: .leading, spacing: 6) {
+                Text("HOW IT WORKS:").font(Theme.cinzel(11.2)).foregroundStyle(Theme.goldDim)
+                Text("⚔ Your turn: Attack or use skills normally.")
+                Text("🎵 After you attack: The melody plays. You cannot act.")
+                Text("💀 3 damage ticks: Each note deals damage. Defending reduces this by 50%.")
+                Text("✦ Then: Melody ends. Your turn returns. Repeat.")
+            }
+            .font(Theme.crimson(13)).foregroundStyle(Theme.textSecondary)
+            .multilineTextAlignment(.leading)
+            .accessibilityElement(children: .combine)
+            Text("Tip: Defend before attacking to reduce melody damage.")
+                .font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
+            Button("I understand — Begin the Fight ⚔", action: close)
+                .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                .accessibilityLabel("I understand. Start the fight.")
+        }
+        .onAppear {
+            Feedback.announce("New enemy. The Music Box. Listen carefully. After each attack you make, the melody plays and deals damage 3 times before your turn returns. Defending reduces melody damage by 50 percent. Press I understand to begin the fight.", after: 0.8)
+        }
+    }
+}

@@ -609,6 +609,10 @@ final class RunModel: ObservableObject {
                 return
             }
             Combat.begin(&r, against: enemy).forEach { add($0) }
+            if enemy.name == "The Music Box" && game.store.getItem("dd_mb_tutorial") != "1" {
+                game.store.setItem("dd_mb_tutorial", "1")
+                musicBoxTutorial = true
+            }
             let ability = Self.sentence(enemy.desc ?? "A powerful foe.")
             if let stirs = CommunityEnemies.announcement(enemy) {
                 // A player-made enemy, with its creator's name and theme.
@@ -1081,6 +1085,7 @@ final class RunModel: ObservableObject {
         if let a = result.announcement, result.bossPhaseMessage == nil { spoken += " " + a }
         // Combat Announcements off: an ordinary exchange isn't read out.
         if !AppSettings.combatAnnouncements && result.bossPhaseMessage == nil { spoken = questLine }
+        else if AppSettings.briefCombat && result.bossPhaseMessage == nil { spoken = Self.brief(action, result, r) + questLine }
         let riddle = action == .attack || action == .heavy ? BossRiddles.roll(&r, dice: &d) : nil
         finish(r, d, phase: .fighting, spoken: spoken)
         checkBossTimer()
@@ -2026,6 +2031,16 @@ final class RunModel: ObservableObject {
 
     /// The weapon on the anvil, waiting to be kept or rerolled.
     @Published var forged: Item?
+    /// "What just happened": the last 5 log lines, oldest first, read at once
+    /// (VoiceOver's two-finger double tap, or the Actions rotor).
+    func recap() {
+        let last = log.prefix(5).reversed().map(\.text)
+        guard !last.isEmpty else { Feedback.announce("Nothing has happened yet."); return }
+        Feedback.announce("What just happened: " + last.joined(separator: " "), latest: true)
+    }
+
+    /// showMusicBoxTutorial: the first Music Box fight explains itself first.
+    @Published var musicBoxTutorial = false
 
     func forgeCraft(_ id: String) -> String {
         var d = dice
@@ -3382,7 +3397,26 @@ final class RunModel: ObservableObject {
 
     // MARK: Helpers
 
+    /// Short Combat Lines: the exchange in a few words.
+    static func brief(_ action: PlayerAction, _ result: TurnResult, _ r: Run) -> String {
+        var parts: [String] = []
+        if result.missed { parts.append("Miss.") }
+        else if result.playerDamage > 0 { parts.append("\(result.crit ? "Crit" : "Hit") \(result.playerDamage).") }
+        else if action == .defend { parts.append("Defend.") }
+        if let t = result.enemyDamage { parts.append(t > 0 ? "Took \(t)." : "No damage.") }
+        parts.append("HP \(r.hp) of \(r.maxHp).")
+        if let e = r.enemy, !e.isDead { parts.append("\(e.name) \(e.hp).") }
+        return parts.joined(separator: " ")
+    }
+
     private func finish(_ r: Run, _ d: SystemDice, phase newPhase: Phase, spoken: String) {
+        // Earcons: a sound before VoiceOver speaks, for dropping to a quarter
+        // of your health and for an elite stepping in.
+        if AppSettings.earcons {
+            if r.hp > 0 && r.hp * 4 <= r.maxHp && run.hp * 4 > run.maxHp { Sound.sfx("sfx-sanity-warning") }
+            if newPhase == .fighting, let e = r.enemy, e.isElite, !e.isBoss,
+               !(run.inCombat && run.enemy?.name == e.name) { Sound.sfx("sfx-ach-silver") }
+        }
         // When the screen changes (a fight starts, a floor ends …) the button
         // you pressed disappears and VoiceOver moves to a new one, which cut
         // this announcement off after its first words. Wait for that move.

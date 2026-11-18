@@ -285,6 +285,10 @@ enum AppSettings {
     // Accessibility panel
     static var verboseRooms: Bool { flag("swift_verbose_rooms") }
     static var combatAnnouncements: Bool { flag("swift_combat_announcements") }
+    /// Combat read as "Hit 12. Took 5. HP 40 of 90. Skeleton 22." instead of sentences.
+    static var briefCombat: Bool { flag("swift_brief_combat", false) }
+    /// Short sounds for low HP and an elite appearing, heard before VoiceOver speaks.
+    static var earcons: Bool { flag("swift_earcons") }
 }
 
 /// Says VoiceOver lines one at a time and makes sure each is heard. iOS drops

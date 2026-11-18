@@ -25,6 +25,7 @@ struct DungeonDescentApp: App {
                 .onReceive(Language.changed) { locale = Language.locale }
                 .onAppear {
                     GameCenter.signIn()
+                    PlaytimeClock.shared.start(game)
                     CloudAccount.shared.start(game: game)
                     // An Endless Descent run left going picks up where it is.
                     if AFKModel.isRunning(game.store) { router.goTo(.afk) }
@@ -60,8 +61,8 @@ struct DungeonDescentApp: App {
                 } else { AFKBackground.cancel() }
             }
             if phase == .active && AFKModel.isRunning(game.store) { LiveActivityPush.cancel() }
-            if phase == .background { AudioEngine.shared.enterBackground() }
-            if phase == .active { AudioEngine.shared.enterForeground() }
+            if phase == .background { AudioEngine.shared.enterBackground(); PlaytimeClock.shared.stop() }
+            if phase == .active { AudioEngine.shared.enterForeground(); PlaytimeClock.shared.start(game) }
             if phase != .active {
                 game.saveNow()
                 CloudAccount.shared.autoSync()

@@ -76,10 +76,12 @@ struct DungeonView: View {
             overlays
         }
         .foregroundStyle(Theme.textPrimary)
-        // 3D Mode: VoiceOver's two-finger double tap is Echo-Location.
+        // VoiceOver's two-finger double tap: Echo-Location while exploring in
+        // 3D Mode, otherwise "what just happened" (the last 5 log lines).
         .accessibilityAction(.magicTap) {
-            if model.threeD && model.phase == .exploring && run.stalker == nil { model.echoLocate() }
+            if model.threeD && model.phase == .exploring && run.stalker == nil { model.echoLocate() } else { model.recap() }
         }
+        .accessibilityAction(named: "What just happened") { model.recap() }
         .onAppear {
             let m = model
             ShakeDetector.shared.onShake = { [weak m] hard in m?.shakeAttack(hard: hard) }
@@ -125,6 +127,7 @@ struct DungeonView: View {
         if showSpirits { SpiritsOverlay(model: model) { showSpirits = false } }
         if askingFlee { fleeOverlay }
         if paused { pauseOverlay }
+        if model.musicBoxTutorial { MusicBoxTutorial { model.musicBoxTutorial = false; Feedback.announce("The fight begins.") } }
         if showStats {
             StatsOverlay(run: run, deaths: game.characters.first { $0.name == run.name }?.deaths ?? []) { showStats = false }
         }
@@ -1048,7 +1051,7 @@ struct DungeonView: View {
     private func openPause() {
         if fighting { Feedback.announce("Cannot pause during combat. Finish the fight first."); return }
         paused = true
-        Feedback.announce("Game paused. \(run.name). Floor \(run.floor).\(run.hunter.map { " Hunter is \($0.dist) rooms away." } ?? "") Options: Resume, Save, Settings, Quests, Main Menu.")
+        Feedback.announce("Game paused. \(run.name). Floor \(run.floor).\(run.hunter.map { " Hunter is \($0.dist) rooms away." } ?? "") Total playtime: \(Playtime.spoken(ms: PlaytimeClock.shared.totalMs)). Options: Resume, Save, Settings, Quests, Main Menu.")
     }
 
     private var pauseOverlay: some View {
@@ -1057,6 +1060,9 @@ struct DungeonView: View {
             VStack(spacing: 2) {
                 Text(run.name).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe0c080))
                 Text("Floor \(run.floor) · \(run.dungeon) · \(run.hp) HP").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
+                Text("🕐 Total playtime: \(Playtime.format(ms: PlaytimeClock.shared.totalMs))")
+                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                    .accessibilityLabel("Total playtime: \(Playtime.spoken(ms: PlaytimeClock.shared.totalMs))")
             }
             .accessibilityElement(children: .combine)
             VStack(spacing: 8) {
