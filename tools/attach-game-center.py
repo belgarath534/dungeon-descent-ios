@@ -94,7 +94,8 @@ for ch in chs:
                 "relationships": {"version": rel("gameCenterChallengeVersions", v["id"])}}}):
             print(f"   {locale} name set")
     if call("POST", "/gameCenterChallengeVersionReleases", {"data": {"type": "gameCenterChallengeVersionReleases",
-            "relationships": {"version": rel("gameCenterChallengeVersions", v["id"])}}}):
+            "relationships": {"gameCenterDetail": rel("gameCenterDetails", detail),
+                              "version": rel("gameCenterChallengeVersions", v["id"])}}}):
         print(f"✅ {name} released")
 
 if problems:
