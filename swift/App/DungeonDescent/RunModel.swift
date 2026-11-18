@@ -92,7 +92,7 @@ final class RunModel: ObservableObject {
     /// A fresh run for the character: start bonuses, saved items and gear,
     /// starting skill and the first floor's plan (initDungeon).
     /// A Challenge to start instead of a normal run (set by the Challenges screen).
-    enum Challenge { case gauntlet, daily }
+    enum Challenge { case gauntlet, daily, weekly }
     static var pendingChallenge: Challenge? = nil
 
     private static func newRun(_ game: GameModel, _ index: Int) -> Run {
@@ -122,6 +122,14 @@ final class RunModel: ObservableObject {
             r.dailyMods = daily.mods.map(\.id)
             r.dailyKey = daily.key
             r.dailyStart = Date().timeIntervalSince1970
+        case .weekly:
+            // The Weekly Ladder: this week's dungeon and modifiers, one life.
+            let week = Challenges.weekly()
+            r.dungeon = week.dungeon
+            r.dailyMods = week.mods.map(\.id)
+            r.weeklyKey = week.key
+            r.lives = 1
+            r.maxLives = 1
         case nil: break
         }
         pendingChallenge = nil
@@ -335,7 +343,7 @@ final class RunModel: ObservableObject {
     }
 
     var isBossFloor: Bool { run.floor >= Challenges.bossFloor(run) && run.difficulty != .endless }
-    var isChallenge: Bool { run.gauntletStage != nil || run.dailyKey != nil }
+    var isChallenge: Bool { run.gauntletStage != nil || run.dailyKey != nil || run.weeklyKey != nil }
     var bossRoomNext: Bool { isBossFloor && run.roomsOnFloor == run.floorRoomsNeeded - 1 }
     var canWander: Bool { run.floor < 9 }
     var hour: Int { Calendar.current.component(.hour, from: Date()) }
@@ -2365,8 +2373,25 @@ final class RunModel: ObservableObject {
     }
 
     /// All lives gone (showDefeat), or the character itself in Hardcore.
+    /// The Weekly Ladder's score, kept if it's your best this week and put on the ladder.
+    @discardableResult
+    private func weeklyDone(_ r: Run, cleared: Bool) -> String? {
+        guard let key = r.weeklyKey else { return nil }
+        let week = Challenges.weekly()
+        let score = Challenges.weeklyScore(floor: r.floor, kills: r.kills, cleared: cleared)
+        let best = Challenges.recordWeekly(score, key: key, store: game.store)
+        if best && key == week.key {
+            let name = r.name
+            Task { await CloudAccount.shared.uploadLadder(score: score, season: week.season, name: name) }
+        }
+        let msg = "📆 Weekly Ladder score: \(score)." + (best ? " Your best this week!" : " Your best this week is \(Challenges.weeklyBest(game.store)).")
+        add(msg)
+        return msg
+    }
+
     private func runOver(_ r: Run, killedBy: String, spoken: String) {
         stopHeartbeat()
+        if let line = weeklyDone(r, cleared: false) { Feedback.announce(line, after: 2) }
         medusaStillLooking(r)
         // homeCreateSkillOrbs: the fallen character's upgrades become Skill Orbs.
         if Home.makeSkillOrbs(fromChar: r.name, store: game.store) > 0 {
@@ -2795,6 +2820,7 @@ final class RunModel: ObservableObject {
             game.store.setItem("dd_gauntlet_best", String(Int(Date().timeIntervalSince1970 * 1000)))
             return "THE GAUNTLET IS COMPLETE! All \(Challenges.gauntlet.count) dungeons cleared. You are the Gauntlet Champion."
         }
+        if run.weeklyKey != nil { return weeklyDone(run, cleared: true) }
         if let key = run.dailyKey {
             let time = Challenges.time(Date().timeIntervalSince1970 - run.dailyStart)
             guard game.store.getItem(key) == nil else { return "Daily Dungeon cleared again in \(time). Your first time today stands." }

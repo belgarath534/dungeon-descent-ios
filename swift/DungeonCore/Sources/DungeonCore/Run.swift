@@ -146,6 +146,8 @@ public struct Run: Codable, Sendable {
     public var weather: Weather? = nil
     /// This run's Run Modifier, if one rolled.
     public var modifier: String? = nil
+    /// The Weekly Ladder week this run counts for (its score key).
+    public var weeklyKey: String? = nil
     /// Alchemy potion effects (Bloodfire, Shadow Cloak, Rage Tonic …).
     public var brews = Alchemy.Brews()
     /// The race's ability is on (Races.start, with Class Traits on).

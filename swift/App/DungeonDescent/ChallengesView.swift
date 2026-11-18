@@ -1,13 +1,16 @@
 import SwiftUI
 import DungeonCore
 
-/// #screen-challenges: The Gauntlet and the Daily Dungeon.
+/// #screen-challenges: The Gauntlet, the Daily Dungeon and the Weekly Ladder.
 struct ChallengesView: View {
     @EnvironmentObject var game: GameModel
     @EnvironmentObject var router: Router
     @State private var tab = "gauntlet"
     @State private var gauntletChar = 0
     @State private var dailyChar = 0
+    @State private var weeklyChar = 0
+    @State private var ladder: [CloudAccount.LeaderboardEntry]?
+    private let week = Challenges.weekly()
     private let gold = Color(hex: 0xffdd44)
     private let daily = Challenges.daily()
 
@@ -21,8 +24,13 @@ struct ChallengesView: View {
                 HStack(spacing: 0) {
                     tabButton("gauntlet", "⚔ THE GAUNTLET", "The Gauntlet tab — all 6 dungeons back to back")
                     tabButton("daily", "📅 DAILY DUNGEON", "Daily Dungeon tab — one dungeon per day with special modifiers")
+                    tabButton("weekly", "📆 WEEKLY LADDER", "Weekly Ladder tab — one dungeon all week, one life, a leaderboard")
                 }
-                if tab == "gauntlet" { gauntletPanel } else { dailyPanel }
+                switch tab {
+                case "gauntlet": gauntletPanel
+                case "daily": dailyPanel
+                default: weeklyPanel
+                }
             }
         }
         .onAppear { Feedback.announce("Challenges. Only the strongest survive. The Gauntlet tab is selected.") }
@@ -35,7 +43,9 @@ struct ChallengesView: View {
             if id == "daily", let best = Challenges.todaysBest(game.store) {
                 Feedback.announce("Daily Dungeon. Already completed today. Best time: \(best).")
             } else {
-                Feedback.announce(id == "gauntlet" ? "The Gauntlet. All 6 dungeons, one life." : "Daily Dungeon. One special dungeon per day.")
+                Feedback.announce(id == "gauntlet" ? "The Gauntlet. All 6 dungeons, one life."
+                                  : id == "daily" ? "Daily Dungeon. One special dungeon per day."
+                                  : "Weekly Ladder. \(week.name). \(week.dungeon), one life. Your best this week: \(Challenges.weeklyBest(game.store)).")
             }
         } label: {
             Text(text).font(Theme.cinzel(10.4)).tracking(1.5)
@@ -112,6 +122,45 @@ struct ChallengesView: View {
         }
     }
 
+    private var weeklyPanel: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            box {
+                Text("This Week's Dungeon — \(week.name)").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xe0c080))
+                Text(week.dungeon).font(Theme.cinzel(13.6)).foregroundStyle(.white)
+                ForEach(week.mods, id: \.id) { m in
+                    Text("⚡ \(m.name) — \(m.desc)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaaaaaa))
+                }
+                Text("One life. Score: 100 a floor, 5 a kill, 2000 for the boss. Starts over every Monday.")
+                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+            }
+            Text("Your best this week: \(Challenges.weeklyBest(game.store))")
+                .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xaaaaaa))
+            VStack(alignment: .leading, spacing: 6) {
+                Text("🏆 TOP 10 THIS WEEK").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
+                    .accessibilityAddTraits(.isHeader)
+                if let ladder {
+                    if ladder.isEmpty { Text("No scores yet this week. Be the first.").font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textDim) }
+                    ForEach(ladder.indices, id: \.self) { i in
+                        Text("\(i + 1). \(ladder[i].username) — \(ladder[i].score)")
+                            .font(Theme.cinzel(11)).foregroundStyle(i == 0 ? gold : Color(hex: 0xaaaaaa))
+                    }
+                } else {
+                    Text("Loading the ladder...").font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textDim)
+                }
+                if CloudAccount.shared.user == nil {
+                    Text("Sign in (Settings → Account) to put your score on the ladder.")
+                        .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
+                }
+            }
+            characters($weeklyChar, label: "Select a character for the Weekly Ladder")
+            Button("📆 Enter the Weekly Ladder") { start(.weekly, weeklyChar) }
+                .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                .disabled(game.characters.isEmpty)
+                .accessibilityLabel("Begin this week's ladder run, \(week.dungeon), one life")
+        }
+        .task { ladder = await CloudAccount.shared.ladder(week.season) }
+    }
+
     private func start(_ c: RunModel.Challenge, _ index: Int) {
         guard game.characters.indices.contains(index) else { Feedback.announce("Please select a character."); return }
         let ch = game.characters[index]
@@ -122,6 +171,8 @@ struct ChallengesView: View {
         router.goTo(.dungeon(ch.created, resume: false))
         Feedback.announce(c == .gauntlet
             ? "The Gauntlet begins. \(ch.name) enters \(Challenges.gauntlet[0]). Survive all 6 dungeons. One life."
+            : c == .weekly
+            ? "Weekly Ladder begins. \(ch.name) enters \(week.dungeon). One life. Active modifiers: \(week.mods.map(\.name).joined(separator: ", "))."
             : "Daily Dungeon begins. \(ch.name) enters \(daily.dungeon). Active modifiers: \(daily.mods.map(\.name).joined(separator: ", ")).", after: 1.5)
     }
 }

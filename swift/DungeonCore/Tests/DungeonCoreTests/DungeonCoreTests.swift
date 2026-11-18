@@ -4764,3 +4764,21 @@ final class OfflineRestTests: XCTestCase {
     }
 }
 
+final class WeeklyLadderTests: XCTestCase {
+    func testSameWeekSameLadder() {
+        let mon = Calendar(identifier: .iso8601).date(from: DateComponents(year: 2026, month: 11, day: 16, hour: 12))!
+        let sun = mon.addingTimeInterval(6 * 86400)
+        let next = mon.addingTimeInterval(7 * 86400)
+        XCTAssertEqual(Challenges.weekly(mon), Challenges.weekly(sun))
+        XCTAssertNotEqual(Challenges.weekly(mon).key, Challenges.weekly(next).key)
+        XCTAssertEqual(Challenges.weekly(mon).season, "weekly-2026-W47")
+        XCTAssertEqual(Challenges.weekly(mon).mods.count, 2)
+        XCTAssertNotEqual(Challenges.weekly(mon).mods[0], Challenges.weekly(mon).mods[1])
+        XCTAssertEqual(Challenges.weeklyScore(floor: 10, kills: 40, cleared: true), 3200)
+        let store = MemoryStore()
+        XCTAssertTrue(Challenges.recordWeekly(900, key: "k", store: store))
+        XCTAssertFalse(Challenges.recordWeekly(500, key: "k", store: store))
+        XCTAssertEqual(store.getItem("k"), "900")
+    }
+}
+

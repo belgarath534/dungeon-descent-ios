@@ -56,6 +56,53 @@ public enum Challenges {
         return Daily(dungeon: gauntlet[min(d, gauntlet.count - 1)], mods: [modifiers[m1], modifiers[m2]], key: "dd_daily_\(s)")
     }
 
+    // MARK: The Weekly Ladder
+
+    /// One dungeon and two modifiers for the whole week (Monday to Sunday),
+    /// one life, and a shared leaderboard that starts over every Monday.
+    public struct Weekly: Sendable, Equatable {
+        public let dungeon: String
+        public let mods: [Modifier]
+        /// Your best score this week ("dd_weekly_2026w47").
+        public let key: String
+        /// Its leaderboard ("weekly-2026-W47", kept with the Tournament's).
+        public let season: String
+        /// "Week 47"
+        public let name: String
+    }
+
+    public static func weekly(_ date: Date = Date()) -> Weekly {
+        var cal = Calendar(identifier: .iso8601)
+        cal.timeZone = .current
+        let c = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: date)
+        let y = c.yearForWeekOfYear ?? 2026, w = c.weekOfYear ?? 1
+        let s = y * 100 + w + 7_000_000
+        let d = Int(seeded(s) * Double(gauntlet.count))
+        let m1 = Int(seeded(s + 1) * Double(modifiers.count))
+        var m2 = Int(seeded(s + 2) * Double(modifiers.count))
+        if m2 == m1 { m2 = (m2 + 1) % modifiers.count }
+        return Weekly(dungeon: gauntlet[min(d, gauntlet.count - 1)], mods: [modifiers[m1], modifiers[m2]],
+                      key: "dd_weekly_\(y)w\(w)", season: String(format: "weekly-%d-W%02d", y, w), name: "Week \(w)")
+    }
+
+    /// A Weekly Ladder run's score: 100 a floor reached, 5 a kill, and 2000
+    /// for beating the boss.
+    public static func weeklyScore(floor: Int, kills: Int, cleared: Bool) -> Int {
+        max(0, floor) * 100 + max(0, kills) * 5 + (cleared ? 2000 : 0)
+    }
+
+    public static func weeklyBest(_ store: GameStore, date: Date = Date()) -> Int {
+        Int(store.getItem(weekly(date).key) ?? "") ?? 0
+    }
+
+    /// Keeps the better score. True when it's a new best.
+    @discardableResult
+    public static func recordWeekly(_ score: Int, key: String, store: GameStore) -> Bool {
+        guard score > (Int(store.getItem(key) ?? "") ?? 0) else { return false }
+        store.setItem(key, String(score))
+        return true
+    }
+
     /// Today's best time, once cleared.
     public static func todaysBest(_ store: GameStore, date: Date = Date()) -> String? { store.getItem(daily(date).key) }
 

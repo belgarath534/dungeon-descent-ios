@@ -550,6 +550,27 @@ final class CloudAccount: NSObject, ObservableObject {
         ])
     }
 
+    /// The Weekly Ladder: one score per player per week, kept with the
+    /// Tournament's scores (the same Firestore rules cover it).
+    func uploadLadder(score: Int, season: String, name: String) async {
+        guard let u = Auth.auth().currentUser else { return }
+        try? await db.collection("tournament").document(season).collection("scores").document(u.uid).setData([
+            "uid": u.uid, "email": displayName, "score": score, "updatedAt": Self.now, "seasonName": season, "character": name,
+        ])
+    }
+
+    func ladder(_ season: String) async -> [LeaderboardEntry] {
+        guard let snap = try? await db.collection("tournament").document(season).collection("scores")
+            .order(by: "score", descending: true).limit(to: 10).getDocuments() else { return [] }
+        return snap.documents.map { d in
+            let x = d.data()
+            var name = (x["email"] as? String) ?? "Anonymous"
+            if name.contains("@") { name = Self.fallbackName(email: name, uid: (x["uid"] as? String) ?? d.documentID) }
+            return LeaderboardEntry(id: (x["uid"] as? String) ?? d.documentID, username: name,
+                                    score: (x["score"] as? NSNumber)?.intValue ?? 0)
+        }
+    }
+
     /// loadTournamentLeaderboard: the season's top 10.
     func tournamentLeaderboard(_ season: Tournament.Season) async -> [LeaderboardEntry] {
         guard let snap = try? await db.collection("tournament").document(season.key).collection("scores")
