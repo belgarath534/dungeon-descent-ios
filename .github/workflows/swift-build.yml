@@ -17,15 +17,15 @@ concurrency:
 
 jobs:
   build:
-    runs-on: macos-15
+    # The same Xcode 27 image as the TestFlight builds.
+    runs-on: xcode-27
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
 
-      - name: Pick the newest Xcode
+      - name: Use Xcode 27
         run: |
-          XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
-          sudo xcode-select -s "$XCODE"
+          sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
 
       - name: Run the game rules tests

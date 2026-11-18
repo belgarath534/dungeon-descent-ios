@@ -2,18 +2,21 @@
 
 For when Codemagic's build minutes run out. This repository is public, so
 GitHub's Mac runners are free. The **TestFlight (GitHub)** workflow
-(`.github/workflows/testflight.yml`) builds the Swift version for iPhone, with
-its Live Activity and Apple Watch app, signs it and uploads it to TestFlight.
-It only runs when you start it by hand.
+(`.github/workflows/testflight.yml`) builds the Swift version three times, side
+by side, signs each and uploads it to TestFlight: **iPhone** (with its Live
+Activity and Apple Watch app), **Apple Vision Pro** and **Mac** (Mac Catalyst).
+It runs on GitHub's `xcode-27` image, since Apple wants the newest SDK. If one
+platform fails, the others still go up.
 
 It works the same way as the truck and RPG games: **fastlane match** keeps the
 shared App Store certificate, and a profile for each of the three parts
 (`com.dungeon.descent`, `com.dungeon.descent.DDLiveActivity`,
-`com.dungeon.descent.watchkitapp`), encrypted in the private
+`com.dungeon.descent.watchkitapp`, plus a Mac Catalyst profile and a Mac
+Installer certificate for the Mac package), encrypted in the private
 **ios-certificates** repository. The first run makes the three profiles there.
 The App Store Connect key comes from that repository too: every
 `AuthKey_<KEY ID>.p8` in it is tried until Apple accepts one. Each build is
-numbered one higher than the newest build on TestFlight.
+numbered one higher than the newest build on TestFlight for any of the three platforms.
 
 ## One-time setup: repository secrets
 

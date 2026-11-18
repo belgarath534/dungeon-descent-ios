@@ -1,5 +1,5 @@
-# Sends the Swift version (iPhone, with its Live Activity and Apple Watch app)
-# to TestFlight from GitHub's free Mac runners, for when Codemagic minutes run
+# Sends the Swift version to TestFlight for iPhone (with its Live Activity and
+# Apple Watch app), Apple Vision Pro and Mac, from GitHub's free Mac runners, for when Codemagic minutes run
 # out. The same setup as the truck and RPG games: fastlane match with the
 # shared certificate in the private ios-certificates repo. Start it by hand:
 # push the code to the "testflight" branch (git push origin swift-rewrite:testflight),
@@ -18,9 +18,20 @@ concurrency:
 
 jobs:
   testflight:
-    name: Build and upload to TestFlight
-    runs-on: macos-15
-    timeout-minutes: 90
+    name: TestFlight (${{ matrix.name }})
+    # Apple wants apps built with the newest SDK: the Xcode 27 image.
+    runs-on: xcode-27
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: iPhone and Apple Watch
+            lane: ios beta
+          - name: Apple Vision Pro
+            lane: ios vision
+          - name: Mac
+            lane: mac beta
     env:
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
@@ -72,10 +83,9 @@ jobs:
       - name: Find the key Apple accepts
         run: ruby scripts/check_asc_key.rb
 
-      - name: Pick the newest Xcode
+      - name: Use Xcode 27
         run: |
-          XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
-          sudo xcode-select -s "$XCODE"
+          sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
 
       - name: Run the game rules tests
@@ -89,7 +99,7 @@ jobs:
           xcodegen generate
 
       - name: Build, sign and upload to TestFlight
-        run: bundle exec fastlane ios beta
+        run: bundle exec fastlane ${{ matrix.lane }}
 
       - name: Remove keys
         if: always()
