@@ -41,6 +41,8 @@ struct DungeonDescentApp: App {
                     Task { _ = await GameNotifications.apply(game.store, ask: false) }
                 }
                 // Tapping the Live Activity opens its run.
+                // Siri / Shortcuts: "Start Endless Descent".
+                .onReceive(NotificationCenter.default.publisher(for: .openEndlessDescent)) { _ in router.goTo(.afk) }
                 .onOpenURL { url in
                     #if canImport(GoogleSignIn)
                     if GIDSignIn.sharedInstance.handle(url) { return }
