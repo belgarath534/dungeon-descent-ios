@@ -8,7 +8,8 @@ name: New App Store version
 
 on:
   push:
-    branches: [store-version]
+    # store-submit: the same, and then sends all three to App Review.
+    branches: [store-version, store-submit]
   workflow_dispatch:
 
 jobs:
@@ -51,9 +52,10 @@ jobs:
           pip install --quiet pyjwt cryptography requests
           python3 tools/new-version.py
 
-      - name: Pick the builds (not submitted)
+      - name: Pick the builds (and submit, from store-submit)
         env:
           VERSION: "11.9"
+          SUBMIT: ${{ github.ref_name == 'store-submit' && 'yes' || '' }}
         run: |
           export APP_STORE_CONNECT_PRIVATE_KEY="@file:$ASC_KEY_PATH"
           export APP_STORE_CONNECT_ISSUER_ID="$ASC_ISSUER_ID"

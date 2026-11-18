@@ -69,7 +69,8 @@ if not target:
     sys.exit(f"No {platform} {version} version")
 state = target["attributes"].get("appStoreState") or target["attributes"].get("appVersionState")
 print(f"{platform} {version}: {state}")
-if state not in ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED"):
+# READY_FOR_REVIEW: in a submission that hasn't been sent yet.
+if state not in ("PREPARE_FOR_SUBMISSION", "READY_FOR_REVIEW", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED"):
     sys.exit(f"It's {state}, nothing to do.")
 source = version_of("IOS")
 
