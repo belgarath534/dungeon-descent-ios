@@ -4782,3 +4782,32 @@ final class WeeklyLadderTests: XCTestCase {
     }
 }
 
+
+final class WorldBossTests: XCTestCase {
+    func testSameBossAllDayAndStrikes() {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "UTC")!
+        let morning = cal.date(from: DateComponents(year: 2026, month: 11, day: 18, hour: 1))!
+        let night = morning.addingTimeInterval(22 * 3600)
+        let day = WorldBoss.day(morning)
+        XCTAssertEqual(day, WorldBoss.day(night))
+        XCTAssertEqual(day.season, "worldboss-2026-11-18")
+        XCTAssertNotEqual(day.boss, WorldBoss.day(morning.addingTimeInterval(86400)).boss)
+        XCTAssertEqual(WorldBoss.hoursLeft(morning), 23)
+
+        let store = MemoryStore()
+        var dice = LoadedDice(rolls: [200, 0], chances: [true])
+        let s = WorldBoss.strike(day, level: 10, store: store, dice: &dice)!
+        XCTAssertEqual(s.damage, 400)
+        XCTAssertTrue(s.crit)
+        XCTAssertEqual(WorldBoss.strikesLeft(day, store: store), 9)
+        for _ in 0..<9 { XCTAssertNotNil(WorldBoss.strike(day, level: 10, store: store, dice: &dice)) }
+        XCTAssertNil(WorldBoss.strike(day, level: 10, store: store, dice: &dice))
+
+        let wallet = Wallet(store: store)
+        XCTAssertNil(WorldBoss.claim(day, totalDamage: 29_000, store: store, wallet: wallet))
+        XCTAssertNotNil(WorldBoss.claim(day, totalDamage: 30_000, store: store, wallet: wallet))
+        XCTAssertNil(WorldBoss.claim(day, totalDamage: 30_000, store: store, wallet: wallet))
+        XCTAssertEqual(store.getItem("dd_soul_fragments"), "2")
+    }
+}

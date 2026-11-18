@@ -64,6 +64,8 @@ struct MainMenuView: View {
         Entry(id: "arcane", text: "✨ Arcane Shop", label: "Arcane Shop — buy spell scrolls and the spell book", color: purple, border: purpleBorder, action: .go(.arcane)),
         Entry(id: "graveyard", text: "⚰️ The Graveyard", label: "The Graveyard, memorial for your fallen and deleted characters", action: .go(.graveyard)),
         Entry(id: "obituary", text: "☠️ Obituary", label: "Obituary, see recent deaths from players around the world", action: .go(.obituary)),
+        Entry(id: "worldboss", text: "🐉 World Boss", label: "Daily World Boss, one boss a day that every player fights together",
+              color: Color(hex: 0xff8866), border: Color(hex: 0x883322), action: .go(.worldBoss)),
         Entry(id: "challenges", text: "🔥 Challenges", label: "Challenges — The Gauntlet and Daily Dungeon", action: .go(.challenges)),
         Entry(id: "blacksmith", text: "⚒ Blacksmith", label: "Blacksmith — upgrade and buy weapons using your global gold", action: .go(.blacksmith)),
         Entry(id: "mine", text: "⛏ The Mine", label: "The Mine — dig for diamonds, gun parts, and rare loot",

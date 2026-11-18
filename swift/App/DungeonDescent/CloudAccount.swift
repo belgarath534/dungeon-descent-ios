@@ -571,6 +571,14 @@ final class CloudAccount: NSObject, ObservableObject {
         }
     }
 
+    /// The Daily World Boss: everyone's damage today, added up (nil when the
+    /// database can't be reached).
+    func worldBossDamage(_ season: String) async -> Int? {
+        guard let snap = try? await db.collection("tournament").document(season).collection("scores").getDocuments()
+        else { return nil }
+        return snap.documents.reduce(0) { $0 + ((($1.data()["score"]) as? NSNumber)?.intValue ?? 0) }
+    }
+
     /// loadTournamentLeaderboard: the season's top 10.
     func tournamentLeaderboard(_ season: Tournament.Season) async -> [LeaderboardEntry] {
         guard let snap = try? await db.collection("tournament").document(season.key).collection("scores")
