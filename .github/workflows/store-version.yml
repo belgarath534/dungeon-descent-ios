@@ -67,7 +67,7 @@ jobs:
 
       - name: Attach Game Center to the iPhone version
         if: always()
-        run: python3 tools/attach-game-center.py
+        run: PROBE=${{ vars.PROBE || '1' }} python3 tools/attach-game-center.py
 
       - name: Remove keys
         if: always()

@@ -43,6 +43,29 @@ version = call("GET", f"/apps/{app}/appStoreVersions",
                params={"filter[platform]": PLATFORM, "filter[versionString]": VERSION})["data"][0]
 detail = call("GET", f"/apps/{app}/gameCenterDetail")["data"]["id"]
 
+
+if os.environ.get("PROBE"):
+    def keys(path):
+        d = call("GET", path)
+        if d:
+            x = d["data"][0] if isinstance(d["data"], list) and d["data"] else d["data"]
+            print(path, "->", x.get("type") if x else None, sorted((x or {}).get("relationships", {}).keys()),
+                  {k: v for k, v in (x or {}).get("attributes", {}).items() if k in ("state", "live", "archived", "appStoreState")})
+    lbs = call("GET", f"/gameCenterDetails/{detail}/gameCenterLeaderboards")["data"]
+    chs = (call("GET", f"/gameCenterDetails/{detail}/gameCenterChallenges") or {"data": []})["data"]
+    keys(f"/gameCenterDetails/{detail}")
+    keys(f"/gameCenterLeaderboards/{lbs[0]['id']}")
+    if chs:
+        keys(f"/gameCenterChallenges/{chs[0]['id']}")
+        for r in ("versions", "challengeVersions", "gameCenterChallengeVersions"):
+            keys(f"/gameCenterChallenges/{chs[0]['id']}/{r}")
+    keys(f"/appStoreVersions/{version['id']}")
+    keys(f"/appStoreVersions/{version['id']}/gameCenterAppVersion")
+    keys(f"/gameCenterDetails/{detail}/gameCenterAppVersions")
+    keys(f"/gameCenterDetails/{detail}/leaderboardReleases")
+    keys(f"/gameCenterDetails/{detail}/challengeReleases")
+    sys.exit(0)
+
 # The newest version of each leaderboard and challenge.
 parts = []
 for kind, path, item_rel, vtype in (
