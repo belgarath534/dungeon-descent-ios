@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import DungeonCore
 
 /// One screen at a time, like the web version's goTo(id): no page stack and
 /// no swipe back, each screen has its own back buttons.
