@@ -2383,6 +2383,7 @@ final class RunModel: ObservableObject {
         if best && key == week.key {
             let name = r.name
             Task { await CloudAccount.shared.uploadLadder(score: score, season: week.season, name: name) }
+            GameCenter.submit(score, to: .weeklyLadder)
         }
         let msg = "📆 Weekly Ladder score: \(score)." + (best ? " Your best this week!" : " Your best this week is \(Challenges.weeklyBest(game.store)).")
         add(msg)

@@ -31,9 +31,26 @@ struct ChallengesView: View {
                 case "daily": dailyPanel
                 default: weeklyPanel
                 }
+                gameCenterPanel
             }
         }
         .onAppear { Feedback.announce("Challenges. Only the strongest survive. The Gauntlet tab is selected.") }
+    }
+
+    /// Game Center: friends' scores and the Challenge button for each leaderboard.
+    private var gameCenterPanel: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("🎮 CHALLENGE A FRIEND").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
+                .accessibilityAddTraits(.isHeader)
+            Text("Opens Game Center: see your friends' scores and send them a challenge to beat yours.")
+                .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
+            ForEach(GameCenter.Board.allCases, id: \.self) { b in
+                Button("🏆 " + b.title) { GameCenter.show(b) }
+                    .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+                    .accessibilityLabel("Game Center leaderboard and challenges: \(b.title)")
+            }
+        }
+        .padding(.top, 10)
     }
 
     private func tabButton(_ id: String, _ text: String, _ label: String) -> some View {

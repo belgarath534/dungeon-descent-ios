@@ -135,6 +135,7 @@ final class SpireModel: ObservableObject {
     private func afterStep() {
         guard let r = run else { return }
         game.achievements.setGlobalMax("spireBestFloor", Double(Spire.bestFloor(game.store)))
+        GameCenter.submit(Spire.bestFloor(game.store), to: .spireFloor)
         if r.won {
             stopTimer()
             stage = .won
