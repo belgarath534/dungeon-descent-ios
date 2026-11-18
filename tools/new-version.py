@@ -23,7 +23,7 @@ WHATS_NEW = {
 • A Welcome back reward after time away.
 • "What just happened": two-finger double-tap in a run reads the last few lines.
 • Short combat lines and warning sounds (Settings, Accessibility).
-• My Tracks: songs from Apple Music or YouTube.
+• My Tracks: play songs from your Apple Music library.
 • Much more of the game in Portuguese.
 • A loading screen, the Music Box tutorial and your total playtime.
 • Fixes: VoiceOver keeps up in The Spire's Auto Mode, the Lock Screen keeps moving in Endless Descent, and music no longer starts while the app is closed.""",
@@ -37,15 +37,15 @@ WHATS_NEW = {
 • Recompensa de Bem-vindo de volta depois de um tempo fora.
 • "O que aconteceu": toque duplo com dois dedos numa jornada lê as últimas linhas.
 • Linhas de combate curtas e sons de aviso (Ajustes, Acessibilidade).
-• Minhas Músicas: músicas do Apple Music ou do YouTube.
+• Minhas Músicas: toque músicas da sua biblioteca do Apple Music.
 • Muito mais do jogo em português.
 • Tela de carregamento, tutorial da Caixa de Música e seu tempo total de jogo.
 • Correções: o VoiceOver acompanha o Modo Automático da Torre, a Tela Bloqueada continua atualizando na Descida Sem Fim e a música não toca mais com o app fechado.""",
 }
 # The Mac and Vision Pro have no watch, Lock Screen or Apple Music picker.
 SKIP = {
-    "MAC_OS": ("Lock Screen", "Apple Watch", "Siri", "two-finger", "Tela Bloqueada", "dois dedos"),
-    "VISION_OS": ("Lock Screen", "Apple Watch", "Tela Bloqueada", "two-finger", "dois dedos"),
+    "MAC_OS": ("Lock Screen", "Apple Watch", "Siri", "two-finger", "Tela Bloqueada", "dois dedos", "Apple Music"),
+    "VISION_OS": ("Lock Screen", "Apple Watch", "Tela Bloqueada", "two-finger", "dois dedos", "Apple Music"),
 }
 
 
@@ -75,8 +75,6 @@ def notes(platform, locale):
     lines = WHATS_NEW[locale].split("\n")
     skip = SKIP.get(platform, ())
     lines = [l for l in lines if not any(s in l for s in skip)]
-    if platform != "IOS":
-        lines = [l.replace(" Apple Music or", "").replace(" Apple Music ou do", "") for l in lines]
     return "\n".join(lines)
 
 

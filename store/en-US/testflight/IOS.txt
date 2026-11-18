@@ -9,7 +9,7 @@ New, please try:
 • Siri and Shortcuts: "Start Endless Descent", "How's my run" and "Use a potion".
 • Welcome back: after an hour or more away, your first character comes back with gold and Soul Fragments.
 • In a run: two-finger double-tap (Magic Tap) or the "What just happened" action reads the last few lines. Settings, Accessibility: short combat lines and warning sounds.
-• My Tracks: add songs from Apple Music or a YouTube link.
+• My Tracks: add songs from your Apple Music library.
 • Portuguese: much more of the combat and events is now in Portuguese.
 • The loading screen at launch, the Music Box tutorial, and your total playtime in the pause menu.
 

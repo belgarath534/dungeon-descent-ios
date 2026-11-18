@@ -57,6 +57,9 @@ final class MyTracks: ObservableObject {
         return t
     }
 
+    /// YouTube links (YouTubeTrack in MyTracksSources.swift); off for now.
+    static let youTube = false
+
     /// loadCustomTrackURL: a direct audio link. Nil and a reason when it can't be used.
     func add(link raw: String) -> (Track?, String?) {
         let s = raw.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -65,6 +68,11 @@ final class MyTracks: ObservableObject {
         }
         let id = "track-\(Int(Date().timeIntervalSince1970 * 1000))"
         if let yt = TrackLinks.youTubeID(u) {
+            // Off for now: playing YouTube's audio without its video is
+            // against YouTube's terms, and App Review can reject it (5.2.3).
+            guard Self.youTube else {
+                return (nil, "YouTube links can't be played. Use an audio file, a song from Apple Music, or a direct audio link.")
+            }
             let t = Track(id: id, name: "YouTube \(yt)", file: nil, url: s, kind: "youtube")
             tracks.append(t)
             save()
@@ -128,7 +136,7 @@ struct MyTracksSection: View {
             Text("MY TRACKS").font(Theme.cinzel(9.9)).tracking(2.5).foregroundStyle(Theme.goldDim)
                 .padding(.bottom, 4).accessibilityAddTraits(.isHeader)
             Rectangle().fill(Theme.borderDim).frame(height: 1)
-            Text("Play your own music instead of the game soundtrack: a file, a song from Apple Music, or a link (audio, YouTube, Dropbox or Google Drive). They're saved here.")
+            Text("Play your own music instead of the game soundtrack: a file, a song from Apple Music, or a link (audio, Dropbox or Google Drive). They're saved here.")
                 .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
             if my.tracks.isEmpty {
                 Text("No saved tracks yet.").font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim).padding(.vertical, 4)
@@ -158,7 +166,7 @@ struct MyTracksSection: View {
                 TextField("Paste an audio link...", text: $link)
                     .textInputAutocapitalization(.never).autocorrectionDisabled().keyboardType(.URL)
                     .font(Theme.cinzel(11)).padding(8).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
-                    .accessibilityLabel("Paste an audio, YouTube, Dropbox or Google Drive link")
+                    .accessibilityLabel("Paste an audio, Dropbox or Google Drive link")
                 Button("🔗 Load") { loadLink() }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Load audio from link")
             }
             if !status.isEmpty { Text(status).font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.gold) }
@@ -208,6 +216,11 @@ struct MyTracksSection: View {
     private func play(_ t: MyTracks.Track) {
         switch t.kind {
         case "youtube":
+            guard MyTracks.youTube else {
+                status = "✕ YouTube links can't be played anymore. Delete this one and add a file or an Apple Music song."
+                Feedback.announce("YouTube links can't be played anymore. Delete this one and add a file or an Apple Music song.")
+                return
+            }
             guard let s = t.url, let u = URL(string: s), let id = TrackLinks.youTubeID(u) else { return }
             YouTubeTrack.shared.play(id: id, label: t.name)
         case "applemusic":

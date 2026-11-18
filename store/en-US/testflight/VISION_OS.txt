@@ -1,6 +1,6 @@
 Thanks for testing Dungeon Descent on Apple Vision Pro!
 
-New in 11.9: the daily World Boss (main menu), the Weekly Ladder (Challenges), Game Center leaderboards and friend challenges, Siri and Shortcuts, the Welcome back reward, "What just happened" (two-finger double-tap in a run), My Tracks from a YouTube link, and much more Portuguese.
+New in 11.9: the daily World Boss (main menu), the Weekly Ladder (Challenges), Game Center leaderboards and friend challenges, Siri and Shortcuts, the Welcome back reward, "What just happened" (two-finger double-tap in a run), and much more Portuguese.
 
 Please try:
 • Moving around the menus and a dungeon run with look and pinch, and with VoiceOver.
