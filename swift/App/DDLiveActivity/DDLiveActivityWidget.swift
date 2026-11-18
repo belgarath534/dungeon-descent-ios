@@ -40,6 +40,10 @@ struct DDLiveActivityWidget: Widget {
                         HPBar(state: s)
                         NextFight(state: s, stale: context.isStale)
                         Text(s.status).font(.system(size: 11, design: .serif)).foregroundStyle(Color(white: 0.6)).lineLimit(2)
+                        if let r = s.rival {
+                            Text("🏁 " + r).font(.system(size: 11, design: .serif)).foregroundStyle(DDLiveActivityWidget.gold).lineLimit(1)
+                                .accessibilityLabel(r)
+                        }
                     }
                 }
             } compactLeading: {
@@ -149,6 +153,10 @@ struct LockScreenView: View {
 
             NextFight(state: s, stale: context.isStale)
             Text(s.status).font(.system(size: 12, design: .serif)).foregroundStyle(Color(white: 0.6)).lineLimit(2)
+            if let r = s.rival {
+                Text("🏁 " + r).font(.system(size: 12, design: .serif)).foregroundStyle(DDLiveActivityWidget.gold).lineLimit(2)
+                    .accessibilityLabel(r)
+            }
         }
         .padding(16)
     }

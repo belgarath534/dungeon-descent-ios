@@ -78,6 +78,9 @@ final class AFKModel: ObservableObject {
             Feedback.announce("Endless Descent started. \(ch.name). Floor 1. HP: \(r.hp). Auto-combat every \(Int(r.fightSeconds)) seconds.")
         }
         AFKLiveActivity.start(r)
+        AFKLiveActivity.loadRivals(best: save.bestFloor, name: ch.name) { [weak self] in
+            if let r = self?.run, r.running { AFKLiveActivity.update(r) }
+        }
         startTimer()
     }
 
@@ -218,6 +221,7 @@ final class AFKModel: ObservableObject {
         game.store.removeItem(Self.saveKey)
         game.saveNow()
         AFKLiveActivity.end(r)
+        AFKLiveActivity.loadRivals(best: s.bestFloor, name: r.charName) {}
         WatchBridge.shared.push()
 
         let learned = Set(r.skills)

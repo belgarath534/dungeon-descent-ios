@@ -9,6 +9,7 @@ enum AFKLiveActivity {
     static func update(_ run: AFKRun, alert: String? = nil) {}
     static func end(_ run: AFKRun) {}
     static func endAll() {}
+    static func loadRivals(best: Int, name: String, then: @escaping () -> Void) {}
 }
 #else
 import ActivityKit
@@ -23,12 +24,25 @@ enum AFKLiveActivity {
         Activity<DDLiveActivityAttributes>.activities.first
     }
 
+    /// Other players' best floors, loaded when a run starts.
+    static var rivals: [AFKRivals.Rival] = []
+
+    /// Puts your best floor on the rivals ladder and loads everyone else's.
+    static func loadRivals(best: Int, name: String, then: @escaping () -> Void) {
+        Task { @MainActor in
+            await CloudAccount.shared.uploadLadder(score: best, season: AFKRivals.season, name: name)
+            rivals = await CloudAccount.shared.afkRivals()
+            then()
+        }
+    }
+
     @available(iOS 16.2, *)
     static func state(_ run: AFKRun, status: String) -> DDLiveActivityAttributes.ContentState {
         DDLiveActivityAttributes.ContentState(
             floor: run.floor, hp: run.hp, maxHp: run.maxHp, points: run.points, level: run.level,
             potions: run.potions, nextFight: Date(timeIntervalSince1970: run.lastFightAt + run.fightSeconds),
-            status: status, ended: !run.running)
+            status: status, ended: !run.running,
+            rival: AFKRivals.line(floor: run.floor, rivals: rivals))
     }
 
     /// A run is stale once a fight is overdue: the app wasn't running to fight it.

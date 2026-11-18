@@ -4811,3 +4811,14 @@ final class WorldBossTests: XCTestCase {
         XCTAssertEqual(store.getItem("dd_soul_fragments"), "2")
     }
 }
+
+final class AFKRivalsTests: XCTestCase {
+    func testNextAndPassed() {
+        let r = [AFKRivals.Rival(name: "Mira", floor: 57), AFKRivals.Rival(name: "Kai", floor: 51), AFKRivals.Rival(name: "Bo", floor: 12)]
+        XCTAssertNil(AFKRivals.line(floor: 3, rivals: []))
+        XCTAssertEqual(AFKRivals.line(floor: 40, rivals: r), "Next rival: Kai, floor 51, 11 to go.")
+        XCTAssertEqual(AFKRivals.line(floor: 52, rivals: r), "Passed Kai (floor 51)! Next rival: Mira, floor 57, 5 to go.")
+        XCTAssertEqual(AFKRivals.line(floor: 57, rivals: r), "Next rival: Mira, floor 57, level with you.")
+        XCTAssertEqual(AFKRivals.line(floor: 90, rivals: r), "You're deeper than every rival on the board!")
+    }
+}

@@ -571,6 +571,20 @@ final class CloudAccount: NSObject, ObservableObject {
         }
     }
 
+    /// Endless Descent rivals: the 50 best floors, without your own.
+    func afkRivals() async -> [AFKRivals.Rival] {
+        guard let snap = try? await db.collection("tournament").document(AFKRivals.season).collection("scores")
+            .order(by: "score", descending: true).limit(to: 51).getDocuments() else { return [] }
+        let me = Auth.auth().currentUser?.uid
+        return snap.documents.compactMap { d in
+            let x = d.data()
+            guard d.documentID != me, let floor = (x["score"] as? NSNumber)?.intValue, floor > 0 else { return nil }
+            var name = (x["character"] as? String) ?? (x["email"] as? String) ?? "A rival"
+            if name.contains("@") { name = Self.fallbackName(email: name, uid: d.documentID) }
+            return AFKRivals.Rival(name: name, floor: floor)
+        }
+    }
+
     /// The Daily World Boss: everyone's damage today, added up (nil when the
     /// database can't be reached).
     func worldBossDamage(_ season: String) async -> Int? {

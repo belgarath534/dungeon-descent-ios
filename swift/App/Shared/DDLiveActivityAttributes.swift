@@ -19,6 +19,9 @@ struct DDLiveActivityAttributes: ActivityAttributes {
         /// The latest thing that happened, as the combat log says it.
         var status: String
         var ended: Bool
+        /// The next player above you in Endless Descent (AFKRivals), if any.
+        /// Optional, so plans sent before it existed still show.
+        var rival: String? = nil
     }
 
     var name: String
