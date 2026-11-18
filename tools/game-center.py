@@ -17,7 +17,7 @@ BUNDLE = "com.dungeon.descent"
 BOARDS = [
     {"id": "DD_ENDLESS_BEST_FLOOR", "ref": "Endless Descent deepest floor",
      "en": ("Endless Descent: Deepest Floor", " floor", " floors"),
-     "pt": ("Descida Sem Fim: Andar Mais Fundo", " andar", " andares"),
+     "pt": ("Descida Sem Fim: Mais Fundo", " andar", " andares"),
      "challenge": ("Endless Descent Race", "Get deeper in Endless Descent than your friends.",
                    "Corrida da Descida Sem Fim", "Desça mais fundo na Descida Sem Fim do que seus amigos.")},
     {"id": "DD_WEEKLY_LADDER", "ref": "Weekly Ladder score",
@@ -98,14 +98,17 @@ for b in BOARDS:
         if not made:
             continue
         lb = made["data"]["id"]
-        for locale, (name, one, many) in (("en-US", b["en"]), ("pt-BR", b["pt"])):
+        print(f"✅ Leaderboard {b['id']}")
+    else:
+        print(f"• Leaderboard {b['id']} is already there")
+    # Its name in each language (Apple allows 30 characters), if missing.
+    have = {l["attributes"]["locale"] for l in all_pages(f"/gameCenterLeaderboards/{lb}/localizations")}
+    for locale, (name, one, many) in (("en-US", b["en"]), ("pt-BR", b["pt"])):
+        if locale not in have:
             call("POST", "/gameCenterLeaderboardLocalizations", {"data": {
                 "type": "gameCenterLeaderboardLocalizations",
                 "attributes": {"locale": locale, "name": name, "formatterSuffixSingular": one, "formatterSuffix": many},
                 "relationships": {"gameCenterLeaderboard": rel("gameCenterLeaderboards", lb)}}}, soft=True)
-        print(f"✅ Leaderboard {b['id']}")
-    else:
-        print(f"• Leaderboard {b['id']} is already there")
 
     cid = "DD_CHALLENGE_" + b["id"][3:]
     if cid in challenges:
