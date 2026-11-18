@@ -4739,3 +4739,28 @@ final class AFKPlanTests: XCTestCase {
         XCTAssertEqual(planned.diceState, later.diceState)
     }
 }
+
+final class OfflineRestTests: XCTestCase {
+    func testRestedRewardAfterAnHourAway() {
+        let store = MemoryStore()
+        let w = Wallet(store: store) { _ in }
+        var ch = PlayerCharacter(name: "Rest", cls: "Warrior", race: "Human", prof: "Mercenary",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = 5
+        let t0 = Date(timeIntervalSince1970: 1_800_000_000)
+        XCTAssertNil(OfflineRest.check(store, wallet: w, character: ch, now: t0), "first time: nothing to compare")
+        XCTAssertNil(OfflineRest.check(store, wallet: w, character: ch, now: t0.addingTimeInterval(1800)), "half an hour")
+        // Left the app (background), back 3 hours later: counts from when you left.
+        OfflineRest.seen(store, now: t0.addingTimeInterval(3600))
+        let r = OfflineRest.check(store, wallet: w, character: ch, now: t0.addingTimeInterval(3600 + 3 * 3600))
+        XCTAssertEqual(r?.gold, 165, "(35 + 5 x 4) x 3 hours")
+        XCTAssertEqual(r?.fragments, 1)
+        XCTAssertEqual(r?.hoursText, "3 hours")
+        XCTAssertEqual(w.gold, 165)
+        XCTAssertEqual(CustomSpirits.fragments(store), 1)
+        // Capped at 8 hours.
+        let far = OfflineRest.check(store, wallet: w, character: ch, now: t0.addingTimeInterval(3600 + 3 * 3600 + 48 * 3600))
+        XCTAssertEqual(far?.gold, 440)
+    }
+}
+

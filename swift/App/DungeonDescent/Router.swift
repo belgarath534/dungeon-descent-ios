@@ -93,12 +93,30 @@ struct RootView: View {
     @EnvironmentObject var game: GameModel
     /// The loading screen first; the game appears when it fades.
     @State private var loading = !LoadingScreen.skipped
+    @State private var rested: OfflineRest.Reward?
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         if loading {
-            LoadingScreen { loading = false }.preferredColorScheme(.dark)
+            LoadingScreen { loading = false; checkRest(after: 1.5) }.preferredColorScheme(.dark)
         } else {
             content
+                .overlay { if let r = rested { OfflineRestOverlay(reward: r) { rested = nil } } }
+                .onChange(of: scenePhase) { phase in
+                    // Away time counts from when you leave the app, not only between launches.
+                    if phase == .background { OfflineRest.seen(game.store) }
+                    if phase == .active { checkRest(after: 1.0) }
+                }
+        }
+    }
+
+    /// checkOfflineProgress, shortly after the game appears or you come back.
+    private func checkRest(after delay: Double) {
+        guard !LoadingScreen.skipped else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            // Not while iOS has the app running in the background (Background App Refresh).
+            guard rested == nil, UIApplication.shared.applicationState != .background else { return }
+            if let r = OfflineRest.check(game.store, wallet: game.wallet, character: game.characters.first) { rested = r }
         }
     }
 

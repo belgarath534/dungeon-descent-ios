@@ -172,6 +172,7 @@ Status: ✅ ported · 🟡 partly ported · ⬜ not started
 | True Ending | checkTrueEnding, showTrueEnding (dd_cleared_dungeons, dd_true_ending_seen) | ✅ clear all eight main dungeons and, 3 seconds after the last victory, the black screen reads its nine lines (each spoken), then DUNGEON MASTER, with View Credits and Return Home. Shown once; Developer Tools has Reset True Ending and Show True Ending Now |
 | Trophies screen | openTrophyOverlay | ✅ the menu's 🏆 opens your trophies and every achievement unlocked. The spinning 3D trophy isn't ported |
 | Music Player item | useMusicPlayerItem, the shop's Music Player (dd_mp_owned) | ✅ the floor shop sells it for 50 gold until you've owned one; from the bag it opens the music player over the dungeon. The player is shared with the Chronicles |
+| Welcome back (offline rest) | checkOfflineProgress (dd_last_seen) | ✅ after an hour or more away, your first character rested: 35 + 4 per level gold an hour (up to 8 hours), a Soul Fragment every two hours, and the WELCOME BACK pop-up with Continue |
 | Birthday | initBirthdayEvent, openBirthdayScreen, claimBirthdayReward | ✅ on March 23 the menu badge opens the birthday screen, and claiming gives the whole package once a year: 1,500 gold, The Golden Sword and 15% off at the Blacksmith (the web version gave 500 gold and a DDBD code for the rest; a player who claimed the 500 on an older build gets the rest) |
 | Titles | TITLE_TAGS, TITLE_COSTS, openTitlePicker, selectTitle, buyTitle (dd_title, dd_owned_titles) | ✅ Settings → Account → Change Title: ten free, twenty for Mystery Coins, and the three seasonal titles once bought. Web bugs fixed: buying a title threw an error halfway, and the seasonal titles went to the selected character, which from the menu was none |
 | Boss timer | startBossTimer, checkBossTimerThreshold, bossTimerEnrage | ✅ when a dungeon boss appears: 5 minutes (3 in The Hollow, one less in Insane) to bring it below half its HP, shown on the boss bar with the one-minute, 30 and 10 second warnings. Beat it for Beat The Clock; miss it and the boss's attack grows 25% and a minion joins. Web bug fixed: the minion was announced but never added; in Swift it fights, and falls with its boss |
@@ -607,3 +608,7 @@ Where an item's description and the web code disagree, Swift follows the descrip
   anywhere (Settings, the Command Center, Developer Tools): Void Mode's prize and the
   birthday package are given directly, and the Shadow Realm opens when you clear the
   Shadow World. The web version keeps its codes.
+- **"Welcome back" only counted time between launches.** checkOfflineProgress compared
+  the time with the last launch of the game, so leaving it open in the background and
+  coming back never counted. Swift also remembers when you leave the app, and checks when
+  you come back as well as at launch.
