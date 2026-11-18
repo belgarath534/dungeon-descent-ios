@@ -1,6 +1,9 @@
 # Makes the next App Store version for iPhone, Mac and Apple Vision Pro
 # (tools/new-version.py). Run it by pushing to the "store-version" branch
-# (git push origin swift-rewrite:store-version). Safe to run again.
+# (git push origin swift-rewrite:store-version). Safe to run again. Then it
+# picks each platform's newest processed build and fills in the App Review
+# details (store/submit_version.py, without submitting), and puts the Game
+# Center leaderboards and challenges with the iPhone version.
 name: New App Store version
 
 on:
@@ -47,6 +50,24 @@ jobs:
         run: |
           pip install --quiet pyjwt cryptography requests
           python3 tools/new-version.py
+
+      - name: Pick the builds (not submitted)
+        env:
+          VERSION: "11.9"
+        run: |
+          export APP_STORE_CONNECT_PRIVATE_KEY="@file:$ASC_KEY_PATH"
+          export APP_STORE_CONNECT_ISSUER_ID="$ASC_ISSUER_ID"
+          export APP_STORE_CONNECT_KEY_IDENTIFIER="$GOOD_KEY_ID"
+          status=0
+          for P in IOS MAC_OS VISION_OS; do
+            echo "== $P"
+            PLATFORM=$P python3 store/submit_version.py || status=1
+          done
+          exit $status
+
+      - name: Attach Game Center to the iPhone version
+        if: always()
+        run: python3 tools/attach-game-center.py
 
       - name: Remove keys
         if: always()
