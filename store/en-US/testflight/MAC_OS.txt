@@ -1,5 +1,7 @@
 Thanks for testing Dungeon Descent on Mac!
 
+New in 11.9: the daily World Boss (main menu), the Weekly Ladder (Challenges), Game Center leaderboards and friend challenges, the Welcome back reward, "What just happened", My Tracks from a YouTube link, and much more Portuguese.
+
 Please try:
 • Playing with the keyboard: Ctrl+Shift+letter opens screens (H menu, P characters, B bestiary, Q quests, S settings), and in combat Option+A attack, H heavy, D defend, P potion, F flee, S spells, E examine, 1–3 skills, R status. I opens the inventory and Backspace the pause menu.
 • Resizing the window, VoiceOver on Mac, and signing in with Apple or email so your cloud save comes with you.

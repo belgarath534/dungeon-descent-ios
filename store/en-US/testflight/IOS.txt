@@ -1,8 +1,19 @@
 Thanks for testing Dungeon Descent 11.9!
 
-Please try:
-• The loading screen: it shows for five seconds at launch with the menu music, then the menu opens.
-• The Spire's Auto Mode with VoiceOver: it should read the floor you're on, not one from minutes ago.
-• Endless Descent without signing in: start a run and lock your phone. The Lock Screen should keep moving.
-• Leave the app for a while: no music should start on its own while the app isn't open.
-• Settings, Send Feedback: there's a box for your email so we can write back.
+New, please try:
+• World Boss (main menu): one boss a day that every player fights together, 10 strikes each. If it falls, everyone who struck gets gold and Soul Fragments. Sign in so your damage counts for everyone.
+• Weekly Ladder (Challenges, third tab): one dungeon all week, one life, a top 10 that resets every Monday.
+• Challenges, "Challenge a friend": Game Center leaderboards for Endless Descent, the Weekly Ladder and The Spire, with Game Center's Challenge button.
+• Endless Descent rivals: the Lock Screen shows the next player above your floor, and who you just passed.
+• Apple Watch: a Daily World Boss complication for your watch face.
+• Siri and Shortcuts: "Start Endless Descent", "How's my run" and "Use a potion".
+• Welcome back: after an hour or more away, your first character comes back with gold and Soul Fragments.
+• In a run: two-finger double-tap (Magic Tap) or the "What just happened" action reads the last few lines. Settings, Accessibility: short combat lines and warning sounds.
+• My Tracks: add songs from Apple Music or a YouTube link.
+• Portuguese: much more of the combat and events is now in Portuguese.
+• The loading screen at launch, the Music Box tutorial, and your total playtime in the pause menu.
+
+Fixed:
+• The Spire's Auto Mode with VoiceOver reads the floor you're on, not one from minutes ago.
+• The Lock Screen keeps moving in Endless Descent even when you aren't signed in.
+• No music starts on its own while the app isn't open.
