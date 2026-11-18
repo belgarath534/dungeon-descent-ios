@@ -1,7 +1,7 @@
-"""Puts the Game Center leaderboards and challenges (tools/game-center.py)
-into the iPhone 11.9 review submission next to the app version, like the Game
-Center section on the version page, so they go live with it. Doesn't submit:
-store/submit_version.py does that, reusing this submission. Safe to run again.
+"""Makes the Game Center leaderboards and challenges (tools/game-center.py)
+ready to go live: each leaderboard gets a release, and each challenge a
+version with its English and Portuguese name and description, then a
+release. Nothing goes to App Review here. Safe to run again.
 """
 import os, sys, time
 import jwt, requests
@@ -44,74 +44,60 @@ version = call("GET", f"/apps/{app}/appStoreVersions",
 detail = call("GET", f"/apps/{app}/gameCenterDetail")["data"]["id"]
 
 
-if os.environ.get("PROBE"):
-    def keys(path):
-        d = call("GET", path)
-        if d:
-            x = d["data"][0] if isinstance(d["data"], list) and d["data"] else d["data"]
-            print(path, "->", x.get("type") if x else None, sorted((x or {}).get("relationships", {}).keys()),
-                  {k: v for k, v in (x or {}).get("attributes", {}).items() if k in ("state", "live", "archived", "appStoreState")})
-    lbs = call("GET", f"/gameCenterDetails/{detail}/gameCenterLeaderboards")["data"]
-    chs = (call("GET", f"/gameCenterDetails/{detail}/gameCenterChallenges") or {"data": []})["data"]
-    keys(f"/gameCenterDetails/{detail}")
-    keys(f"/gameCenterLeaderboards/{lbs[0]['id']}")
-    if chs:
-        keys(f"/gameCenterChallenges/{chs[0]['id']}")
-        for r in ("versions", "challengeVersions", "gameCenterChallengeVersions"):
-            keys(f"/gameCenterChallenges/{chs[0]['id']}/{r}")
-    keys(f"/appStoreVersions/{version['id']}")
-    keys(f"/appStoreVersions/{version['id']}/gameCenterAppVersion")
-    keys(f"/gameCenterDetails/{detail}/gameCenterAppVersions")
-    keys(f"/gameCenterDetails/{detail}/leaderboardReleases")
-    keys(f"/gameCenterDetails/{detail}/challengeReleases")
-    sys.exit(0)
 
-# The newest version of each leaderboard and challenge.
-parts = []
-for kind, path, item_rel, vtype in (
-        ("leaderboard", "gameCenterLeaderboards", "gameCenterLeaderboardVersion", "gameCenterLeaderboardVersions"),
-        ("challenge", "gameCenterChallenges", "gameCenterChallengeVersion", "gameCenterChallengeVersions")):
-    things = (call("GET", f"/gameCenterDetails/{detail}/{path}", params={"limit": 200}) or {"data": []})["data"]
-    for t in things:
-        name = t["attributes"].get("vendorIdentifier") or t["id"]
-        if not name.startswith("DD_"):
-            continue
-        vs = (call("GET", f"/{path}/{t['id']}/versions") or {"data": []})["data"]
-        if not vs:
-            print(f"⚠️ {name} has no version to add")
-            problems.append(name)
-            continue
-        parts.append((name, item_rel, vtype, vs[-1]["id"], vs[-1]["attributes"].get("state")))
-print("To add:", [(p[0], p[4]) for p in parts])
+CHALLENGE_TEXT = {
+    "DD_CHALLENGE_ENDLESS_BEST_FLOOR": ("Endless Descent Race", "Get deeper in Endless Descent than your friends.",
+                                        "Corrida da Descida Sem Fim", "Desça mais fundo na Descida Sem Fim do que seus amigos."),
+    "DD_CHALLENGE_WEEKLY_LADDER": ("Weekly Ladder Showdown", "Beat your friends' score in this week's one-life dungeon.",
+                                   "Duelo da Escada Semanal", "Supere a pontuação dos seus amigos na masmorra de uma vida desta semana."),
+    "DD_CHALLENGE_SPIRE_BEST_FLOOR": ("Spire Climb", "Climb higher in The Spire than your friends.",
+                                      "Escalada da Torre", "Suba mais alto na Torre do que seus amigos."),
+}
 
-# The open submission for this platform, or a new one (not submitted).
-subs = call("GET", "/reviewSubmissions", params={"filter[app]": app, "filter[platform]": PLATFORM,
-            "filter[state]": "READY_FOR_REVIEW"})["data"]
-sub = subs[0] if subs else call("POST", "/reviewSubmissions", {"data": {"type": "reviewSubmissions",
-      "attributes": {"platform": PLATFORM}, "relationships": {"app": rel("apps", app)}}})["data"]
-items = call("GET", f"/reviewSubmissions/{sub['id']}/items",
-             params={"include": "appStoreVersion,gameCenterLeaderboardVersion,gameCenterChallengeVersion"}) or {"data": []}
-have = set()
-for it in items["data"]:
-    for r in it.get("relationships", {}).values():
-        d = (r or {}).get("data")
-        if d:
-            have.add(d["id"])
-
-if version["id"] not in have:
-    if call("POST", "/reviewSubmissionItems", {"data": {"type": "reviewSubmissionItems", "relationships": {
-            "reviewSubmission": rel("reviewSubmissions", sub["id"]),
-            "appStoreVersion": rel("appStoreVersions", version["id"])}}}):
-        print(f"✅ {PLATFORM} {VERSION} added to the submission")
-for name, item_rel, vtype, vid, state in parts:
-    if vid in have:
-        print(f"• {name} is already in it")
+lbs = call("GET", f"/gameCenterDetails/{detail}/gameCenterLeaderboards", params={"limit": 200})["data"]
+for lb in lbs:
+    name = lb["attributes"]["vendorIdentifier"]
+    if not name.startswith("DD_"):
         continue
-    if call("POST", "/reviewSubmissionItems", {"data": {"type": "reviewSubmissionItems", "relationships": {
-            "reviewSubmission": rel("reviewSubmissions", sub["id"]), item_rel: rel(vtype, vid)}}}):
-        print(f"✅ {name} added")
+    if (call("GET", f"/gameCenterLeaderboards/{lb['id']}/releases") or {"data": []})["data"]:
+        print(f"• {name} already has a release")
+        continue
+    if call("POST", "/gameCenterLeaderboardReleases", {"data": {"type": "gameCenterLeaderboardReleases",
+            "relationships": {"gameCenterDetail": rel("gameCenterDetails", detail),
+                              "gameCenterLeaderboard": rel("gameCenterLeaderboards", lb["id"])}}}):
+        print(f"✅ {name} released")
+
+chs = (call("GET", f"/gameCenterDetails/{detail}/gameCenterChallenges", params={"limit": 200}) or {"data": []})["data"]
+for ch in chs:
+    name = ch["attributes"].get("vendorIdentifier")
+    if name not in CHALLENGE_TEXT:
+        continue
+    vs = (call("GET", f"/gameCenterChallenges/{ch['id']}/versions") or {"data": []})["data"]
+    if vs:
+        v = vs[-1]
+        print(f"• {name} has a version ({v['attributes']})")
+    else:
+        made = call("POST", "/gameCenterChallengeVersions", {"data": {"type": "gameCenterChallengeVersions",
+                    "relationships": {"challenge": rel("gameCenterChallenges", ch["id"])}}})
+        if not made:
+            continue
+        v = made["data"]
+        print(f"✅ {name}: version made")
+    have = {l["attributes"]["locale"] for l in
+            (call("GET", f"/gameCenterChallengeVersions/{v['id']}/localizations") or {"data": []})["data"]}
+    en_name, en_desc, pt_name, pt_desc = CHALLENGE_TEXT[name]
+    for locale, n, d in (("en-US", en_name, en_desc), ("pt-BR", pt_name, pt_desc)):
+        if locale in have:
+            continue
+        if call("POST", "/gameCenterChallengeLocalizations", {"data": {"type": "gameCenterChallengeLocalizations",
+                "attributes": {"locale": locale, "name": n, "description": d},
+                "relationships": {"version": rel("gameCenterChallengeVersions", v["id"])}}}):
+            print(f"   {locale} name set")
+    if call("POST", "/gameCenterChallengeVersionReleases", {"data": {"type": "gameCenterChallengeVersionReleases",
+            "relationships": {"version": rel("gameCenterChallengeVersions", v["id"])}}}):
+        print(f"✅ {name} released")
 
 if problems:
     print(f"\n{len(problems)} step(s) didn't go through; see the ⚠️ lines above.")
     sys.exit(1)
-print("\nGame Center is attached to the version (not submitted yet).")
+print("\nGame Center leaderboards and challenges are released.")

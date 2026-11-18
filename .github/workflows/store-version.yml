@@ -2,8 +2,8 @@
 # (tools/new-version.py). Run it by pushing to the "store-version" branch
 # (git push origin swift-rewrite:store-version). Safe to run again. Then it
 # picks each platform's newest processed build and fills in the App Review
-# details (store/submit_version.py, without submitting), and puts the Game
-# Center leaderboards and challenges with the iPhone version.
+# details (store/submit_version.py, without submitting), and releases the
+# Game Center leaderboards and challenges.
 name: New App Store version
 
 on:
@@ -65,9 +65,9 @@ jobs:
           done
           exit $status
 
-      - name: Attach Game Center to the iPhone version
+      - name: Release the Game Center leaderboards and challenges
         if: always()
-        run: PROBE=${{ vars.PROBE || '1' }} python3 tools/attach-game-center.py
+        run: python3 tools/attach-game-center.py
 
       - name: Remove keys
         if: always()
