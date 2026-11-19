@@ -83,6 +83,17 @@ enum GameCenter {
         topViewController()?.present(vc, animated: true)
     }
 
+    /// Game Center's own home: leaderboards, achievements and challenges.
+    static func showDashboard() {
+        guard isSignedIn else {
+            Feedback.announce("Sign in to Game Center in the Settings app to see leaderboards and challenge friends.")
+            return
+        }
+        let vc = GKGameCenterViewController(state: .default)
+        vc.gameCenterDelegate = Dismisser.shared
+        topViewController()?.present(vc, animated: true)
+    }
+
     private final class Dismisser: NSObject, GKGameCenterControllerDelegate {
         static let shared = Dismisser()
         func gameCenterViewControllerDidFinish(_ vc: GKGameCenterViewController) {

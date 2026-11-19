@@ -7,6 +7,8 @@ import DungeonCore
 struct MainMenuView: View {
     /// The Command Center's claim daily: open the reward when the menu shows.
     static var openDailyOnAppear = false
+    /// One tab of the tab menu (MainTabs.swift), or nil for the classic menu.
+    var tab: MainTab? = nil
     @EnvironmentObject var game: GameModel
     @EnvironmentObject var router: Router
     @Environment(\.openURL) private var openURL
@@ -130,10 +132,17 @@ struct MainMenuView: View {
             .accessibilitySortPriority(2)
             ScrollView {
                 VStack(spacing: 0) {
-                    header
-                    Ornament()
+                    if tab == nil || tab == .play {
+                        header
+                        Ornament()
+                    } else if let t = tab {
+                        Text(t.title)
+                            .font(Theme.decorative(26)).foregroundStyle(Theme.gold)
+                            .accessibilityAddTraits(.isHeader)
+                            .padding(.bottom, 14)
+                    }
                     nav
-                    footer
+                    if tab == nil || tab == .play { footer }
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, 36)
@@ -175,6 +184,10 @@ struct MainMenuView: View {
         .onAppear {
             Sound.track("menu")
             Sound.ambient(nil)
+            trophies = game.achievements.trophies
+            familiar = game.familiarBadge
+            // The pop-ups and checks below belong to the first page only.
+            guard tab == nil || tab == .play else { return }
             // showWhatsNewPopup: once after each update
             if game.store.getItem(WhatsNewPopup.seenKey) != WhatsNewPopup.version { whatsNewOpen = true }
             trophies = game.achievements.trophies
@@ -325,30 +338,50 @@ struct MainMenuView: View {
         }
     }
 
+    /// The buttons on this page: every entry for the classic menu, or this
+    /// tab's, in the tab's order.
+    private var shownEntries: [Entry] {
+        let hidden = hiddenEntries
+        guard let tab else { return Self.entries.filter { !hidden.contains($0.id) } }
+        return tab.ids.compactMap { id in Self.entries.first { $0.id == id } }.filter { !hidden.contains($0.id) }
+    }
+
     private var nav: some View {
         VStack(spacing: 3) {
-            Button {
-                router.goTo(.charlist)
-            } label: {
-                Text("⚔ Play ⚔")
+            if tab == nil || tab == .play {
+                Button {
+                    router.goTo(.charlist)
+                } label: {
+                    Text("⚔ Play ⚔")
+                }
+                .buttonStyle(MenuButtonStyle(primary: true))
+                .accessibilityLabel("Play, choose or create your character")
             }
-            .buttonStyle(MenuButtonStyle(primary: true))
-            .accessibilityLabel("Play, choose or create your character")
+            if tab == .multiplayer {
+                Button { GameCenter.showDashboard() } label: { Text("🎮 Game Center") }
+                    .buttonStyle(MenuButtonStyle(color: Color(hex: 0x88ddff), border: Color(hex: 0x336688)))
+                    .accessibilityLabel("Game Center: leaderboards, achievements and friend challenges")
+            }
+            if tab == .more, let cur = Events.current()?.currency {
+                Button { router.goTo(.seasonalshop) } label: { Text(cur.shop) }
+                    .buttonStyle(MenuButtonStyle(color: Color(hex: 0xffaa44), border: Color(hex: 0xaa6600)))
+                    .accessibilityLabel("Open seasonal shop, \(cur.shop)")
+            }
 
-            ForEach(Self.entries.filter { !hiddenEntries.contains($0.id) }) { e in
-                if e.separatorBefore { MenuSeparator() }
+            ForEach(shownEntries) { e in
+                if e.separatorBefore && tab == nil { MenuSeparator() }
                 Button {
                     run(e)
                 } label: {
                     HStack(spacing: 6) {
-                        Text(e.text)
+                        Text(tab != nil && e.id == "multiplayer" ? "⚔️ PVP Arena" : e.text)
                         if e.beta { Text("BETA").font(Theme.cinzel(9.6)).opacity(0.7) }
                     }
                 }
                 .buttonStyle(MenuButtonStyle(color: e.color, border: e.border))
                 .accessibilityLabel(e.label)
                 // #menu-btn-seasonal-shop: only while an event has a shop.
-                if e.id == "command", let cur = Events.current()?.currency {
+                if tab == nil, e.id == "command", let cur = Events.current()?.currency {
                     Button { router.goTo(.seasonalshop) } label: { Text(cur.shop) }
                         .buttonStyle(MenuButtonStyle(color: Color(hex: 0xffaa44), border: Color(hex: 0xaa6600)))
                         .accessibilityLabel("Open seasonal shop, \(cur.shop)")
@@ -356,7 +389,7 @@ struct MainMenuView: View {
             }
         }
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("Main menu")
+        .accessibilityLabel(tab.map { "\($0.title) menu" } ?? "Main menu")
     }
 
     private var footer: some View {

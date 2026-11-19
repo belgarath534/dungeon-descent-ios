@@ -28,6 +28,7 @@ struct WebSettingsView: View {
     @AppStorage("swift_verbose_rooms") private var verboseRooms = true
     @AppStorage("swift_combat_announcements") private var combatAnnouncements = true
     @AppStorage("swift_brief_combat") private var briefCombat = false
+    @AppStorage("swift_classic_menu") private var classicMenu = false
     @AppStorage("swift_earcons") private var earcons = true
     @State private var refreshCommandCenter = false
     @State private var threeD = false
@@ -319,6 +320,8 @@ struct WebSettingsView: View {
     private var gameplay: some View {
         VStack(alignment: .leading, spacing: 0) {
             title("🎮 Gameplay")
+            option("📜 Classic Menu", "One long main menu instead of the tabs at the bottom of the screen (Play, Modes, Multiplayer, More, Settings).",
+                   isOn: $classicMenu, label: "Classic menu")
             option("⚔️ Class Traits", "Unique passive abilities per class. Toggle off for a classic experience.",
                    isOn: $classTraits, label: "Class traits")
             HStack(alignment: .top) {

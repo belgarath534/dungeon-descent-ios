@@ -136,7 +136,9 @@ struct RootView: View {
     private var content: some View {
         Group {
             switch router.screen {
-            case .menu: MainMenuView()
+            // The tab menu, or the single list with Settings → Classic menu.
+            case .menu:
+                if UserDefaults.standard.bool(forKey: "swift_classic_menu") { MainMenuView() } else { MainTabsView() }
             case .charlist: CharacterListView()
             case .deathlog: DeathLogView()
             case .creation:
