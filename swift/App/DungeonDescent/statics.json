@@ -674,7 +674,29 @@
  },
  "whatsnew": [
   {
-   "num": "v11.8 — Latest",
+   "num": "v11.9 — Latest",
+   "date": "The Together Update",
+   "label": "Version 11.9",
+   "changes": [
+    "🐉 Daily World Boss — a new boss every day that every player fights together. 30,000 shared HP and 10 strikes each a day. If it falls, everyone who struck it gets 750 gold and 2 Soul Fragments. Find it on the main menu.",
+    "📆 Weekly Ladder — the third tab in Challenges. One dungeon all week, one life, and a top 10 that starts over every Monday.",
+    "🏆 Challenge a friend — Game Center leaderboards for Endless Descent, the Weekly Ladder and The Spire, with Game Center's Challenge button. In Challenges.",
+    "🏁 Endless Descent rivals — on iPhone, the Lock Screen and Dynamic Island show the next player above your floor and who you just passed.",
+    "⌚ Apple Watch complication — today's World Boss and the hours until the next one, right on your watch face.",
+    "🗣 Siri and Shortcuts — \"Start Endless Descent\", \"How's my run\" and \"Use a potion\".",
+    "🌙 Welcome back — after an hour or more away, your first character comes back with gold and Soul Fragments.",
+    "❓ What just happened — in a run, a two-finger double-tap (or the VoiceOver action) reads the last few lines again.",
+    "♿ Settings, Accessibility: short combat lines, and warning sounds when your HP drops low or an elite appears.",
+    "🎧 My Tracks — play songs from your Apple Music library in place of the game music, as well as your own audio files.",
+    "🇧🇷 Much more of the game is now in Portuguese: combat, loot, events, waves and spells.",
+    "⏳ A loading screen at launch, a tutorial the first time you meet The Music Box, and your total playtime in the pause menu.",
+    "🔧 Fixed: VoiceOver keeps up with The Spire's Auto Mode instead of reading floors from minutes ago.",
+    "🔧 Fixed: the Lock Screen keeps moving in Endless Descent, even when you aren't signed in.",
+    "🔧 Fixed: the game's music no longer starts on its own while the app is closed."
+   ]
+  },
+  {
+   "num": "v11.8",
    "date": "The Festival Update",
    "label": "Version 11.8",
    "changes": [
