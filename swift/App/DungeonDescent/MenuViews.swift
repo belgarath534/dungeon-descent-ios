@@ -64,6 +64,8 @@ struct MainMenuView: View {
         Entry(id: "arcane", text: "✨ Arcane Shop", label: "Arcane Shop — buy spell scrolls and the spell book", color: purple, border: purpleBorder, action: .go(.arcane)),
         Entry(id: "graveyard", text: "⚰️ The Graveyard", label: "The Graveyard, memorial for your fallen and deleted characters", action: .go(.graveyard)),
         Entry(id: "obituary", text: "☠️ Obituary", label: "Obituary, see recent deaths from players around the world", action: .go(.obituary)),
+        Entry(id: "battlepass", text: "🏆 Battle Pass", label: "Battle Pass, a season of 50 tiers and weekly quests, earned by playing",
+              color: Color(hex: 0xffdd44), border: Color(hex: 0x886600), action: .go(.battlePass)),
         Entry(id: "worldboss", text: "🐉 World Boss", label: "Daily World Boss, one boss a day that every player fights together",
               color: Color(hex: 0xff8866), border: Color(hex: 0x883322), action: .go(.worldBoss)),
         Entry(id: "challenges", text: "🔥 Challenges", label: "Challenges — The Gauntlet and Daily Dungeon", action: .go(.challenges)),

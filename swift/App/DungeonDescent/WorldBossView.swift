@@ -134,6 +134,7 @@ struct WorldBossView: View {
             return
         }
         Sound.sfx(s.crit ? "sfx-heavy-hit" : "sfx-attack")
+        game.pass(.worldBossStrike)
         let line = (s.crit ? "💥 Critical! " : "⚔ ") + "\(ch.name) deals \(s.damage) damage. \(s.taunt)"
         log.insert(line, at: 0)
         if signedIn { shared = (shared ?? 0) + s.damage }

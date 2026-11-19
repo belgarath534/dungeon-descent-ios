@@ -140,6 +140,8 @@ final class AFKModel: ObservableObject {
         s.save(game.store)
         run = r
         persist()
+        // Battle Pass: each new floor of the descent.
+        if r.floor > floor0 { game.pass(.endlessFloor, times: r.floor - floor0) }
         if fought == 1 {
             awayReport = nil
             if inForeground { Feedback.announce(spoken.joined(separator: " ")) }

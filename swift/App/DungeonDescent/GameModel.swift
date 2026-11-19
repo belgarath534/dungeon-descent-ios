@@ -36,8 +36,34 @@ final class GameModel: ObservableObject {
             HighScore.add("achievements", 250 * list.count, store: store)
             GameModel.announce(list)
         }
+        // The Battle Pass hears everything the achievements do.
+        achievements.onEvent = { [weak self] e in
+            switch e {
+            case .enemyKilled(let enemy, _): self?.pass(.kill(elite: enemy.isElite, boss: enemy.isBoss))
+            case .floorReached: self?.pass(.floor)
+            case .runWon: self?.pass(.dungeonCleared)
+            case .dailyQuestCompleted: self?.pass(.dailyQuest)
+            default: break
+            }
+        }
         achievements.payOutstandingRewards()
         refresh()
+    }
+
+    /// THE BATTLE PASS (BattlePass.swift): Pass XP for something that
+    /// happened, with its chime and words for a finished quest or new tier.
+    func pass(_ e: BattlePass.Event, times: Int = 1) {
+        var out = BattlePass.Outcome()
+        for _ in 0..<max(0, min(times, 500)) {
+            let o = BattlePass.record(e, store: store)
+            out.lines += o.lines
+            out.newTier = out.newTier || o.newTier
+        }
+        guard !out.lines.isEmpty else { return }
+        Sound.sfx(out.newTier ? "sfx-pass-tier" : "sfx-pass-quest")
+        Feedback.success()
+        Feedback.announce(out.lines.joined(separator: " "), after: 0.6)
+        if out.newTier { refresh() }
     }
 
     func refresh() {

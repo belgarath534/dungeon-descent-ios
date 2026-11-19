@@ -123,8 +123,10 @@ final class SpireModel: ObservableObject {
 
     func next() {
         guard var r = run, r.cleared else { return }
+        let floor0 = r.floor
         let lines = Spire.next(&r, store: game.store, wallet: game.wallet, dice: &dice)
         run = r
+        if r.floor > floor0 { game.pass(.spireFloor, times: r.floor - floor0) }
         add(lines)
         Sound.track(spireTrack)
         Feedback.announce(lines.joined(separator: " "), latest: autoMode)

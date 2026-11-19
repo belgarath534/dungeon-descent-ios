@@ -4891,3 +4891,35 @@ final class PrestigeTests: XCTestCase {
         XCTAssertNotNil(Prestige.blocker(ch))
     }
 }
+
+final class BattlePassTests: XCTestCase {
+    func testSeasonsQuestsAndTiers() {
+        let mon = Date(timeIntervalSince1970: 1_795_392_000)
+        XCTAssertEqual(BattlePass.season(mon).number, 1)
+        XCTAssertEqual(BattlePass.season(mon.addingTimeInterval(55 * 86400)).number, 1)
+        XCTAssertEqual(BattlePass.season(mon.addingTimeInterval(56 * 86400)).number, 2)
+        XCTAssertEqual(BattlePass.season(mon.addingTimeInterval(-86400)).number, 1)
+        let q = BattlePass.quests(mon)
+        XCTAssertEqual(q.quests.count, 5)
+        XCTAssertEqual(Set(q.quests.map(\.id)).count, 5)
+        XCTAssertEqual(q.week, BattlePass.quests(mon.addingTimeInterval(6 * 86400)).week)
+
+        let store = MemoryStore()
+        // 100 kills: 500 XP, so tier 1 (gold) is paid.
+        var last = BattlePass.Outcome()
+        for _ in 0..<100 { last = BattlePass.record(.kill(elite: false, boss: false), store: store, now: mon) }
+        let p = BattlePass.load(store, now: mon)
+        let killQuest = q.quests.contains { $0.id == "kills" }
+        XCTAssertEqual(p.xp, 500 + (killQuest ? BattlePass.questXP : 0))
+        XCTAssertGreaterThanOrEqual(p.paid, 1)
+        XCTAssertEqual(Wallet(store: store).gold, 175)
+        _ = last
+        // Tier 5 pays coins and fragments; 25 a title.
+        XCTAssertEqual(BattlePass.reward(tier: 5, season: 1), [.coinsAndFragments(coins: 3, fragments: 2)])
+        XCTAssertEqual(BattlePass.reward(tier: 25, season: 1).first, .title("S1Veteran"))
+        // A new week starts the quests over, not the XP.
+        let next = BattlePass.load(store, now: mon.addingTimeInterval(7 * 86400))
+        XCTAssertTrue(next.questsDone.isEmpty)
+        XCTAssertEqual(next.xp, p.xp)
+    }
+}

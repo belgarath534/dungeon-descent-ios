@@ -46,6 +46,8 @@ public final class AchievementBook {
     private let wallet: Wallet
     /// Called with achievements as they unlock (for the popup and Game Center).
     public var onUnlock: ([Achievement]) -> Void = { _ in }
+    /// Called with everything recorded (the Battle Pass listens).
+    public var onEvent: (GameEvent) -> Void = { _ in }
 
     public init(store: GameStore, wallet: Wallet) {
         self.store = store
@@ -139,6 +141,7 @@ public final class AchievementBook {
     /// Records what happened, updates stats the way the web version does, and
     /// unlocks whatever is now earned.
     public func record(_ event: GameEvent) {
+        onEvent(event)
         switch event {
         case .enemyKilled(let e, let run):
             // The web version added 2 per kill (incrementAchievementStat ran twice).
