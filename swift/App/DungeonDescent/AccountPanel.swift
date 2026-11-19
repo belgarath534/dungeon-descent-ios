@@ -53,7 +53,6 @@ struct AccountPanel: View {
             .environmentObject(game)
         }
     }
-    }
 
     private func field(_ placeholder: String, text: Binding<String>, secure: Bool) -> some View {
         Group {
