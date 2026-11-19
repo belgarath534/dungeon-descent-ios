@@ -26,8 +26,8 @@ problems = []
 
 def call(method, path, body=None, params=None):
     r = S.request(method, path if path.startswith("http") else API + path, json=body, params=params, timeout=60)
-    if r.status_code == 409 and "RELEASE_DUPLICATE" in r.text:
-        print(f"• already released")
+    if r.status_code == 409 and ("RELEASE_DUPLICATE" in r.text or "IMAGE_ALREADY_EXISTS" in r.text):
+        print("• already there")
         return {}
     if r.status_code >= 400:
         msg = f"{method} {path} -> {r.status_code}: {r.text[:900]}"
