@@ -129538,17 +129538,6 @@
         }
       }
     },
-    "🧭 New main menu — tabs along the bottom of the screen: Play, Modes, Multiplayer, More and Settings, so everything is a swipe or two away. Prefer the old long menu? Settings, Accessibility, Classic Menu.": {
-      "extractionState": "manual",
-      "localizations": {
-        "pt-BR": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "🧭 Novo menu principal — abas na parte de baixo da tela: Jogar, Modos, Multijogador, Mais e Ajustes, então tudo fica a um ou dois toques. Prefere o menu longo antigo? Ajustes, Acessibilidade, Menu Clássico."
-          }
-        }
-      }
-    },
     "🤝 Co-op Dungeon — fight through ten floors with up to three friends, on the web and the iPhone, Mac and Apple Vision Pro apps together. Host a room and share its 4-letter code, or join a friend's. In the Multiplayer tab.": {
       "extractionState": "manual",
       "localizations": {
@@ -129677,6 +129666,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "⌚ Apple Watch: uma nova tela inicial com golpes no Chefe Mundial pelo pulso, o Passe de Batalha e as missões da semana, sua recompensa diária e o Luta Rápida, um joguinho que você joga com a Digital Crown. Os Alertas no Pulso avisam com um toque quando o HP está baixo, quando aparece um elite, quando o caçador chega perto e quando é sua vez no cooperativo, enquanto você joga no iPhone. A Siri no relógio (\"Strike the World Boss in Dungeon Descent\", \"Claim my daily reward…\") e uma complicação da temporada do Passe de Batalha."
+          }
+        }
+      }
+    },
+    "🧭 New main menu — tabs along the bottom of the screen: Play, Modes, Multiplayer, More and Settings, so everything is a swipe or two away. Prefer the old long menu? Settings, Gameplay, Classic Menu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🧭 Novo menu principal — abas na parte de baixo da tela: Jogar, Modos, Multijogador, Mais e Ajustes, então tudo fica a um ou dois toques. Prefere o menu longo antigo? Ajustes, Jogabilidade, Menu Clássico."
           }
         }
       }
