@@ -65,8 +65,8 @@ struct BestiaryView: View {
                 Button("🔮 Spirit Builder — Craft Your Own Companion") { building = true }
                     .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
                     .accessibilityLabel("Spirit Builder — craft your own spirit using Soul Fragments")
-                (Text("Enemies revealed: ") + Text("\(revealed)").foregroundColor(Theme.gold) + Text(" of ")
-                 + Text("\(list.count)").foregroundColor(Theme.gold))
+                (Text("Enemies revealed: ") + Text("\(revealed)" as String).foregroundColor(Theme.gold) + Text(" of ")
+                 + Text("\(list.count)" as String).foregroundColor(Theme.gold))
                     .font(Theme.cinzel(10.9)).tracking(1).foregroundStyle(Theme.textDim)
                 HStack(spacing: 6) {
                     TextField("", text: $search, prompt: Text("Search enemies...").foregroundColor(Theme.textDim))
@@ -104,10 +104,10 @@ struct BestiaryView: View {
                 .padding(.top, 8)
                 if list.count > visible {
                     let left = list.count - visible
-                    Button("Load More (\(left) remaining)") { visible += 40 }
+                    Button("Load More (\(left) remaining)" as String) { visible += 40 }
                         .buttonStyle(WebButtonStyle(kind: .ghost))
                         .frame(maxWidth: .infinity)
-                        .accessibilityLabel("Load \(min(40, left)) more entries. \(left) remaining.")
+                        .accessibilityLabel("Load \(min(40, left)) more entries. \(left) remaining." as String)
                 }
                 if list.isEmpty {
                     Text("No enemies match.").font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textDim)

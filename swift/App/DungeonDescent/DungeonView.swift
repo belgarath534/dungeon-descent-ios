@@ -183,24 +183,24 @@ struct DungeonView: View {
                 }
                 VStack(alignment: .leading, spacing: 1) {
                     Text(run.name).font(Theme.cinzel(13.6, weight: .semibold)).foregroundStyle(Theme.ashLight)
-                    Text("\(run.race) \(run.cls)\(Subclasses.current(run).map { " · \($0.icon) \($0.name)" } ?? "") · \(run.dungeon == "The Ashbound Wastes" ? "Ashbound Wastes" : run.dungeon)")
+                    Text("\(run.race) \(run.cls)\(Subclasses.current(run).map { " · \($0.icon) \($0.name)" } ?? "") · \(run.dungeon == "The Ashbound Wastes" ? "Ashbound Wastes" : run.dungeon)" as String)
                         .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
                 }
                 .lineLimit(2).minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             VStack(spacing: 0) {
-                Text("\(run.floor)").font(Theme.decorative(22)).foregroundStyle(Theme.gold)
+                Text("\(run.floor)" as String).font(Theme.decorative(22)).foregroundStyle(Theme.gold)
                     .shadow(color: Theme.gold.opacity(0.3), radius: 6)
                 Text("Floor").font(Theme.cinzel(8.8)).tracking(2.6).textCase(.uppercase).foregroundStyle(Theme.goldDim)
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("Floor \(run.floor)")
+            .accessibilityLabel("Floor \(run.floor)" as String)
             VStack(alignment: .trailing, spacing: 3) {
                 FlowRow(spacing: 10) {
-                    Text("❤️×\(run.lives)")
-                    Text("💪\(run.hp)/\(run.maxHp)")
-                    Text("💰\(run.gold)g")
+                    Text("❤️×\(run.lives)" as String)
+                    Text("💪\(run.hp)/\(run.maxHp)" as String)
+                    Text("💰\(run.gold)g" as String)
                 }
                 if run.hardcore {
                     Text("💀 HC").font(Theme.cinzel(8.8)).tracking(0.9).foregroundStyle(Color(hex: 0xcc0000))
@@ -212,7 +212,7 @@ struct DungeonView: View {
             .font(Theme.cinzel(11.2)).foregroundStyle(Theme.ashLight)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Lives: \(run.lives). Health: \(run.hp) of \(run.maxHp). Gold: \(run.gold) gold.\(run.hardcore ? " HARDCORE MODE ACTIVE." : "")")
+            .accessibilityLabel("Lives: \(run.lives). Health: \(run.hp) of \(run.maxHp). Gold: \(run.gold) gold.\(run.hardcore ? " HARDCORE MODE ACTIVE." : "")" as String)
         }
         .padding(.vertical, 10).padding(.horizontal, 16)
         .background(Theme.bgPanel)
@@ -246,7 +246,7 @@ struct DungeonView: View {
         .padding(.vertical, 6).padding(.horizontal, 12)
         .background(Theme.bgDeep).overlay(Rectangle().stroke(Theme.borderDim))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Daily quest: \(q.desc). Progress: \(dq.progress) of \(q.target)\(done ? ". Complete!" : ".")")
+        .accessibilityLabel("Daily quest: \(q.desc). Progress: \(dq.progress) of \(q.target)\(done ? ". Complete!" : ".")" as String)
     }
 
     /// #dg-event-banner: the event running this run, and its currency.
@@ -254,7 +254,7 @@ struct DungeonView: View {
     private var eventBanner: some View {
         if let ev = Events.bonuses(run.event) {
             let cur = ev.currency.map { c in " · \(c.icon) \(Events.currency(c.key, store: game.store)) \(c.name)" } ?? ""
-            Text("\(ev.label) active\(cur)")
+            Text("\(ev.label) active\(cur)" as String)
                 .font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(Theme.gold)
                 .frame(maxWidth: .infinity).padding(.vertical, 5)
                 .overlay(Rectangle().stroke(Theme.goldDim))
@@ -267,14 +267,14 @@ struct DungeonView: View {
             Text("🌑 The Darkness Swallower").font(Theme.decorative(14.4)).foregroundStyle(Color(hex: 0xcc88ff))
                 .accessibilityAddTraits(.isHeader)
             Text(s.status).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc88ff)).multilineTextAlignment(.center)
-                .accessibilityLabel("Darkness Swallower \(s.distance) steps away to the \(s.direction). Escapes: \(s.escapes) of \(StalkerFloor.escapesNeeded).")
+                .accessibilityLabel("Darkness Swallower \(s.distance) steps away to the \(s.direction). Escapes: \(s.escapes) of \(StalkerFloor.escapesNeeded)." as String)
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                 ForEach([("north", "↑ North"), ("south", "↓ South"), ("west", "← West"), ("east", "→ East")], id: \.0) { d in
                     Button(d.1) { model.stalkerMove(d.0) }
                         .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xcc88ff))
                         .frame(maxWidth: .infinity).padding(10)
                         .background(Color(hex: 0x0a0008)).overlay(Rectangle().stroke(Color(hex: 0x9966cc)))
-                        .accessibilityLabel("Move \(d.0)")
+                        .accessibilityLabel("Move \(d.0)" as String)
                 }
             }
             if s.distance <= 1 {
@@ -297,7 +297,7 @@ struct DungeonView: View {
             HStack(spacing: 12) {
                 Text(sp.icon).font(.system(size: 21))
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("\(sp.name) · \(sp.passive)").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xc080f0))
+                    Text("\(sp.name) · \(sp.passive)" as String).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xc080f0))
                     Text(asleep ? "Dormant — wakes at level \(sp.minLevel)" : sp.rarity == "rare" ? "★ Rare Spirit" : sp.rarity == "elite" ? "★ Elite Spirit" : "Starter Spirit")
                         .font(Theme.crimson(10.4, italic: true)).foregroundStyle(Color(hex: 0x8040c0))
                 }
@@ -306,32 +306,32 @@ struct DungeonView: View {
             .padding(.vertical, 8).padding(.horizontal, 16)
             .background(Color(hex: 0x0a0616)).overlay(Rectangle().stroke(Color(hex: 0x3a1060)))
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Spirit companion: \(sp.name). \(sp.ability)\(asleep ? " Dormant until level \(sp.minLevel)." : "")")
+            .accessibilityLabel("Spirit companion: \(sp.name). \(sp.ability)\(asleep ? " Dormant until level \(sp.minLevel)." : "")" as String)
         }
     }
 
     private var xpRow: some View {
         let needed = Progression.xpNeeded(atLevel: run.level)
         return FlowRow(spacing: 10) {
-            Text("Lv \(run.level)").font(Theme.decorative(13.6)).foregroundStyle(Theme.gold)
+            Text("Lv \(run.level)" as String).font(Theme.decorative(13.6)).foregroundStyle(Theme.gold)
             HStack(spacing: 6) {
                 Text("XP").font(Theme.cinzel(9.6)).tracking(1.4).foregroundStyle(Theme.textDim)
                 Bar(value: Double(run.xp) / Double(max(needed, 1)), colors: [Theme.goldDim, Theme.gold],
                     track: Theme.gold.opacity(0.1), height: 6).frame(width: 90)
-                Text("\(run.xp)/\(needed)").font(Theme.cinzel(9.9)).foregroundStyle(Theme.goldDim)
+                Text("\(run.xp)/\(needed)" as String).font(Theme.cinzel(9.9)).foregroundStyle(Theme.goldDim)
             }
             HStack(spacing: 6) {
                 Text("SP").font(Theme.cinzel(9.6)).tracking(1.4).foregroundStyle(Color(hex: 0x7090c0))
                 Bar(value: Double(run.sp) / Double(max(run.maxSp, 1)), colors: [Color(hex: 0x3060a0), Color(hex: 0x6090d0)],
                     track: Color(red: 80 / 255, green: 120 / 255, blue: 200 / 255).opacity(0.15), height: 5).frame(width: 70)
-                Text("\(run.sp)/\(run.maxSp)").font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x7090c0))
+                Text("\(run.sp)/\(run.maxSp)" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x7090c0))
             }
         }
         .padding(.vertical, 8).padding(.horizontal, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Theme.bgDeep).overlay(Rectangle().stroke(Theme.borderDim))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Level \(run.level). XP \(run.xp) of \(needed). SP \(run.sp) of \(run.maxSp).")
+        .accessibilityLabel("Level \(run.level). XP \(run.xp) of \(needed). SP \(run.sp) of \(run.maxSp)." as String)
     }
 
     private var roomTracker: some View {
@@ -340,7 +340,7 @@ struct DungeonView: View {
         let right = bossFloor ? "⚠ Boss Floor" : left <= 2 ? "Next floor soon" : "\(left) rooms on this floor"
         let color = bossFloor ? Color(hex: 0xcc4444) : left <= 2 ? Color(hex: 0xcc9944) : Color(hex: 0x555555)
         return HStack {
-            Text("Room \(run.roomsOnFloor + 1) · Floor \(run.floor)").foregroundStyle(Color(hex: 0x888888))
+            Text("Room \(run.roomsOnFloor + 1) · Floor \(run.floor)" as String).foregroundStyle(Color(hex: 0x888888))
             Spacer()
             Text(right).foregroundStyle(color)
         }
@@ -348,19 +348,19 @@ struct DungeonView: View {
         .padding(.vertical, 6).padding(.horizontal, 12)
         .background(Color(hex: 0x080808)).overlay(Rectangle().stroke(Color(hex: 0x1a1a1a)))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Room \(run.roomsOnFloor + 1), floor \(run.floor). \(right).")
+        .accessibilityLabel("Room \(run.roomsOnFloor + 1), floor \(run.floor). \(right)." as String)
     }
 
     private func bossPhaseBar(_ e: Enemy) -> some View {
         let phases = e.flag("fourPhase") || e.flag("isShapeshifter") ? 4 : 3
         return VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text("Phase \(run.bossPhase) of \(phases)").font(Theme.cinzel(10.4)).tracking(2).textCase(.uppercase)
+                Text("Phase \(run.bossPhase) of \(phases)" as String).font(Theme.cinzel(10.4)).tracking(2).textCase(.uppercase)
                     .foregroundStyle(Theme.bloodBright)
                 Spacer()
                 // #boss-timer-wrap
                 if let t = model.bossTimerLeft {
-                    Text("⏱ \(t / 60):\(String(format: "%02d", t % 60))").font(Theme.cinzel(11.5, weight: .bold))
+                    Text("⏱ \(t / 60):\(String(format: "%02d", t % 60))" as String).font(Theme.cinzel(11.5, weight: .bold))
                         .foregroundStyle(Color(hex: t <= 30 ? 0xff4444 : t <= 60 ? 0xffaa00 : 0xa0e0ff))
                 }
             }
@@ -386,7 +386,7 @@ struct DungeonView: View {
             HStack(alignment: .firstTextBaseline, spacing: 12) {
                 Text(model.roomTitle.isEmpty ? "Chamber" : model.roomTitle)
                     .font(Theme.cinzel(12)).tracking(3.6).textCase(.uppercase).foregroundStyle(Theme.goldDim)
-                Text("Floor \(run.floor) · Room \(run.roomsOnFloor)").font(Theme.cinzel(9.6)).foregroundStyle(Theme.textDim)
+                Text("Floor \(run.floor) · Room \(run.roomsOnFloor)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Theme.textDim)
                 if run.searched { Text("🔍 Searched").font(Theme.cinzel(9.6)).foregroundStyle(Theme.textDim) }
             }
             .accessibilityElement(children: .combine)
@@ -442,11 +442,11 @@ struct DungeonView: View {
                         Text(e.name).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xd4a0a0))
                         Bar(value: Double(e.hp) / Double(max(e.maxHp, 1)), colors: [Theme.bloodBright, Theme.bloodBright],
                             track: .black.opacity(0.3), height: 6)
-                        Text("HP: \(e.hp)/\(e.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.blood)
-                            .accessibilityLabel("\(e.name) health: \(e.hp) of \(e.maxHp)")
+                        Text("HP: \(e.hp)/\(e.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.blood)
+                            .accessibilityLabel("\(e.name) health: \(e.hp) of \(e.maxHp)" as String)
                         if !enemyStatus(e).isEmpty {
                             Text(enemyStatus(e)).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0xcc8866))
-                                .accessibilityLabel("Enemy status effects: \(enemyStatus(e))")
+                                .accessibilityLabel("Enemy status effects: \(enemyStatus(e))" as String)
                         }
                     }
                 }
@@ -459,14 +459,14 @@ struct DungeonView: View {
                     Text("ALSO ATTACKING").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Theme.textDim)
                     ForEach(Array(run.foes.enumerated()), id: \.offset) { i, f in
                         HStack(spacing: 10) {
-                            Text("\(f.icon) \(f.name)").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xff8844))
+                            Text("\(f.icon) \(f.name)" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xff8844))
                             Spacer()
-                            Text("\(f.hp)/\(f.maxHp) HP").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
+                            Text("\(f.hp)/\(f.maxHp) HP" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
                             Button("🎯 Target") { model.target(i) }
                                 .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xff8844))
                                 .padding(.vertical, 5).padding(.horizontal, 10)
                                 .background(Color(hex: 0x1a0800)).overlay(Rectangle().stroke(Color(hex: 0xff6622)))
-                                .accessibilityLabel("Target \(f.name) with \(f.hp) HP")
+                                .accessibilityLabel("Target \(f.name) with \(f.hp) HP" as String)
                         }
                         .padding(.vertical, 6).padding(.horizontal, 10)
                         .background(Color(hex: 0x0a0500)).overlay(Rectangle().stroke(Color(hex: 0x331100)))
@@ -480,13 +480,13 @@ struct DungeonView: View {
                     .accessibilityHidden(true)
                 Bar(value: Double(run.hp) / Double(max(run.maxHp, 1)), colors: [Color(hex: 0x8b2020), Color(hex: 0xc03030)],
                     track: .black.opacity(0.3), height: 6)
-                Text("HP: \(run.hp) / \(run.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.blood)
-                    .accessibilityLabel("Your health: \(run.hp) of \(run.maxHp)")
+                Text("HP: \(run.hp) / \(run.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.blood)
+                    .accessibilityLabel("Your health: \(run.hp) of \(run.maxHp)" as String)
                 // #dg-shadow-corruption
                 if run.dungeon == ShadowWorld.name && run.shadowCorruption > 0 {
                     let n = run.shadowCorruption
-                    Text("🌑 Corruption: \(n)\(n >= 3 ? " — HALF DAMAGE" : "")").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaa66ff))
-                        .accessibilityLabel("Shadow corruption \(n) stack\(n != 1 ? "s" : "")\(n >= 3 ? ". Your attacks deal half damage." : ".")")
+                    Text("🌑 Corruption: \(n)\(n >= 3 ? " — HALF DAMAGE" : "")" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaa66ff))
+                        .accessibilityLabel("Shadow corruption \(n) stack\(n != 1 ? "s" : "")\(n >= 3 ? ". Your attacks deal half damage." : ".")" as String)
                 }
             }
             combatLog
@@ -516,8 +516,8 @@ struct DungeonView: View {
                     .accessibilityLabel(run.spellCooldown > 0 ? "Spells, on cooldown, \(run.spellCooldown) turns" : "Cast a spell from your spell book")
                 }
                 if model.canPurge {
-                    Button("✨ Purge (\(ShadowWorld.purgeCost) SP)") { model.purge() }.buttonStyle(DungeonButtonStyle(kind: .skill))
-                        .accessibilityLabel("Purge shadow corruption for \(ShadowWorld.purgeCost) SP. \(run.shadowCorruption) stacks.")
+                    Button("✨ Purge (\(ShadowWorld.purgeCost) SP)" as String) { model.purge() }.buttonStyle(DungeonButtonStyle(kind: .skill))
+                        .accessibilityLabel("Purge shadow corruption for \(ShadowWorld.purgeCost) SP. \(run.shadowCorruption) stacks." as String)
                 }
                 if model.canGrito {
                     Button("🇲🇽 ¡El Grito!") { model.grito() }.buttonStyle(DungeonButtonStyle(kind: .skill))
@@ -541,11 +541,11 @@ struct DungeonView: View {
                     .accessibilityLabel("Open inventory during combat")
                 ForEach(Array(model.skills.enumerated()), id: \.element.effect) { i, s in
                     let cost = model.skillCost(s)
-                    Button("\(s.icon) \(s.name) (\(cost))") { model.useSkill(s.effect) }
+                    Button("\(s.icon) \(s.name) (\(cost))" as String) { model.useSkill(s.effect) }
                         .buttonStyle(DungeonButtonStyle(kind: .skill))
                         .modifier(SkillKey(index: i))
                         .disabled(cost > run.sp)
-                        .accessibilityLabel("\(s.name). \(s.desc) Costs \(cost) SP.\(cost > run.sp ? " Not enough SP." : "")")
+                        .accessibilityLabel("\(s.name). \(s.desc) Costs \(cost) SP.\(cost > run.sp ? " Not enough SP." : "")" as String)
                 }
             }
             .accessibilityElement(children: .contain)
@@ -781,7 +781,7 @@ struct DungeonView: View {
                         .padding(.vertical, 5).padding(.horizontal, 8).frame(minHeight: 32)
                         .background(sel ? Color(hex: 0x1a1000) : Color(hex: 0x080808))
                         .overlay(Rectangle().stroke(sel ? Color(hex: 0xcc9944) : Color(hex: 0x333333)))
-                        .accessibilityLabel("\(label) tab")
+                        .accessibilityLabel("\(label) tab" as String)
                         .accessibilityAddTraits(sel ? .isSelected : [])
                 }
             }
@@ -803,7 +803,7 @@ struct DungeonView: View {
                 Text("INVENTORY").font(Theme.cinzel(9.6)).tracking(3).foregroundStyle(Theme.goldDim)
             }
             if !invSearch.isEmpty {
-                Text("\(stacks.count) item\(stacks.count == 1 ? "" : "s") found for \"\(invSearch)\"")
+                Text("\(stacks.count) item\(stacks.count == 1 ? "" : "s") found for \"\(invSearch)\"" as String)
                     .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x666666))
             }
             if run.inventory.isEmpty {
@@ -844,7 +844,7 @@ struct DungeonView: View {
             HStack(spacing: 6) {
                 Text(shown).font(Theme.cinzel(11.5)).foregroundStyle(item.rarityColor.flatMap(webColor) ?? Theme.textSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityLabel("\(item.name)\(stat)\(count > 1 ? " You have \(count)." : ""). \(item.desc)\(action)")
+                    .accessibilityLabel("\(item.name)\(stat)\(count > 1 ? " You have \(count)." : ""). \(item.desc)\(action)" as String)
                 if !item.desc.isEmpty {
                     Button(openDetails.contains(key) ? "▲" : "?") {
                         if openDetails.contains(key) { openDetails.remove(key) } else {
@@ -853,20 +853,20 @@ struct DungeonView: View {
                         }
                     }
                     .buttonStyle(SmallGhostStyle(color: Color(hex: 0x666666)))
-                    .accessibilityLabel("Details for \(item.name): \(item.desc)")
+                    .accessibilityLabel("Details for \(item.name): \(item.desc)" as String)
                 }
                 if item.isWeapon || item.isArmor {
                     Button("Equip") { model.useItem(at: index) }.buttonStyle(SmallGhostStyle(color: Theme.goldDim))
-                        .accessibilityLabel("Equip \(item.name)")
+                        .accessibilityLabel("Equip \(item.name)" as String)
                 } else if usable {
                     Button("Use") { model.useItem(at: index) }.buttonStyle(SmallGoldStyle())
-                        .accessibilityLabel("Use \(item.name)")
+                        .accessibilityLabel("Use \(item.name)" as String)
                 } else if item.type == "relic" {
                     Text("Passive").font(Theme.cinzel(10.4)).foregroundStyle(Theme.ash).opacity(0.6)
-                        .accessibilityLabel("\(item.name) — passive relic, always active")
+                        .accessibilityLabel("\(item.name) — passive relic, always active" as String)
                 } else {
                     Button("Drop") { model.drop(at: index) }.buttonStyle(SmallGhostStyle())
-                        .accessibilityLabel("Drop \(item.name)")
+                        .accessibilityLabel("Drop \(item.name)" as String)
                 }
                 Button(fav ? "★" : "☆") { toggleFavorite(item.name) }
                     .font(.system(size: 12)).foregroundStyle(fav ? Color(hex: 0xffcc00) : Color(hex: 0x444444))
@@ -896,7 +896,7 @@ struct DungeonView: View {
         return ZStack {
             Color.black.opacity(0.94).ignoresSafeArea().accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 0) {
-                Text("FLOOR \(run.floor) COMPLETE").font(Theme.cinzel(9.6)).tracking(3.8).foregroundStyle(Color(hex: 0x446688))
+                Text("FLOOR \(run.floor) COMPLETE" as String).font(Theme.cinzel(9.6)).tracking(3.8).foregroundStyle(Color(hex: 0x446688))
                     .padding(.bottom, 6)
                 Text(model.roomTitle.isEmpty ? "Floor \(run.floor)" : model.roomTitle).font(Theme.cinzel(16)).foregroundStyle(Color(hex: 0x88aacc))
                     .padding(.bottom, 16)
@@ -912,11 +912,11 @@ struct DungeonView: View {
                 .padding(.bottom, 20)
                 VStack(spacing: 10) {
                     Button { model.descend() } label: {
-                        Text("⬇ Descend to Floor \(run.floor + 1)").font(Theme.cinzel(12.5)).foregroundStyle(Color(hex: 0x88aacc))
+                        Text("⬇ Descend to Floor \(run.floor + 1)" as String).font(Theme.cinzel(12.5)).foregroundStyle(Color(hex: 0x88aacc))
                             .frame(maxWidth: .infinity).padding(14)
                             .background(Color(hex: 0x0a0a12)).overlay(Rectangle().stroke(Color(hex: 0x446688), lineWidth: 2))
                     }
-                    .accessibilityLabel("Descend to floor \(run.floor + 1)")
+                    .accessibilityLabel("Descend to floor \(run.floor + 1)" as String)
                     if model.canWander {
                         Button { model.wander() } label: {
                             Text("🗺 Wander This Floor").font(Theme.cinzel(12.5)).foregroundStyle(Color(hex: 0x888888))
@@ -933,7 +933,7 @@ struct DungeonView: View {
             .padding(20)
             .accessibilityElement(children: .contain)
             .accessibilityAddTraits(.isModal)
-            .accessibilityLabel("Floor \(run.floor) complete")
+            .accessibilityLabel("Floor \(run.floor) complete" as String)
         }
     }
 
@@ -950,33 +950,33 @@ struct DungeonView: View {
     private func hunterBar(_ dist: Int) -> some View {
         let color = Color(hex: dist >= 6 ? 0xcc4400 : dist >= 3 ? 0xff6600 : 0xff0000)
         return VStack(alignment: .leading, spacing: 4) {
-            Text("🏹 Hunter: \(dist) room\(dist == 1 ? "" : "s") away").font(Theme.cinzel(10.4)).foregroundStyle(color)
+            Text("🏹 Hunter: \(dist) room\(dist == 1 ? "" : "s") away" as String).font(Theme.cinzel(10.4)).foregroundStyle(color)
             Bar(value: Double(dist) / 10, colors: [color, color], track: color.opacity(0.15), height: 4)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Hunter: \(dist) room\(dist == 1 ? "" : "s") away.")
+        .accessibilityLabel("Hunter: \(dist) room\(dist == 1 ? "" : "s") away." as String)
     }
 
     /// #dg-corruption-row
     private func corruptionBar(_ c: Int) -> some View {
         let color = Color(hex: 0x7a207a)
         return VStack(alignment: .leading, spacing: 4) {
-            Text("☠ Corruption: \(c)%").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xb060b0))
+            Text("☠ Corruption: \(c)%" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xb060b0))
             Bar(value: Double(c) / 100, colors: [color, Color(hex: 0xb040b0)], track: color.opacity(0.15), height: 4)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Corruption: \(c) percent.")
+        .accessibilityLabel("Corruption: \(c) percent." as String)
     }
 
     /// #corruption-bar-wrap: the Whispering Forest's meter.
     private func forestBar(_ c: Int) -> some View {
         let color = Color(hex: c < 50 ? 0x2d8a2d : c < 75 ? 0xa07000 : 0x8a0000)
         return VStack(alignment: .leading, spacing: 4) {
-            Text("🌲 Forest Corruption: \(c)%").font(Theme.cinzel(10.4)).foregroundStyle(color)
+            Text("🌲 Forest Corruption: \(c)%" as String).font(Theme.cinzel(10.4)).foregroundStyle(color)
             Bar(value: Double(c) / 100, colors: [color, color.opacity(0.7)], track: color.opacity(0.15), height: 4)
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Forest corruption: \(c) percent.")
+        .accessibilityLabel("Forest corruption: \(c) percent." as String)
     }
 
     /// #ov-medusa-choice
@@ -1059,10 +1059,10 @@ struct DungeonView: View {
             OverlayTitle(text: "⏸ Paused")
             VStack(spacing: 2) {
                 Text(run.name).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe0c080))
-                Text("Floor \(run.floor) · \(run.dungeon) · \(run.hp) HP").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
-                Text("🕐 Total playtime: \(Playtime.format(ms: PlaytimeClock.shared.totalMs))")
+                Text("Floor \(run.floor) · \(run.dungeon) · \(run.hp) HP" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
+                Text("🕐 Total playtime: \(Playtime.format(ms: PlaytimeClock.shared.totalMs))" as String)
                     .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
-                    .accessibilityLabel("Total playtime: \(Playtime.spoken(ms: PlaytimeClock.shared.totalMs))")
+                    .accessibilityLabel("Total playtime: \(Playtime.spoken(ms: PlaytimeClock.shared.totalMs))" as String)
             }
             .accessibilityElement(children: .combine)
             VStack(spacing: 8) {
@@ -1072,12 +1072,12 @@ struct DungeonView: View {
                 Button("⚙ Settings") { paused = false; showSettings = true }.buttonStyle(WebButtonStyle(kind: .ghost))
                 Button("✨ Spirits") { paused = false; showSpirits = true }.buttonStyle(WebButtonStyle(kind: .ghost))
                     .accessibilityLabel("Your spirits — switch your spirit companion")
-                Button("💬 Guide: \(run.guide == nil ? "OFF" : "ON")") { model.toggleGuide() }
+                Button("💬 Guide: \(run.guide == nil ? "OFF" : "ON")" as String) { model.toggleGuide() }
                     .buttonStyle(WebButtonStyle(kind: .ghost))
-                    .accessibilityLabel("Guide, \(model.guideName): \(run.guide == nil ? "off" : "on"). Double tap to turn \(run.guide == nil ? "on" : "off").")
-                Button("🏹 Hunter: \(run.hunter == nil ? "OFF" : "ON")") { model.toggleHunter() }
+                    .accessibilityLabel("Guide, \(model.guideName): \(run.guide == nil ? "off" : "on"). Double tap to turn \(run.guide == nil ? "on" : "off")." as String)
+                Button("🏹 Hunter: \(run.hunter == nil ? "OFF" : "ON")" as String) { model.toggleHunter() }
                     .buttonStyle(WebButtonStyle(kind: .ghost))
-                    .accessibilityLabel("Hunter Mode: \(run.hunter == nil ? "off" : "on"). Double tap to turn \(run.hunter == nil ? "on" : "off").")
+                    .accessibilityLabel("Hunter Mode: \(run.hunter == nil ? "off" : "on"). Double tap to turn \(run.hunter == nil ? "on" : "off")." as String)
                 Button("📜 Quests") { paused = false; model.fleeDungeon(); router.goTo(.quests) }.buttonStyle(WebButtonStyle(kind: .ghost))
                 Button("🏠 Main Menu") {
                     paused = false

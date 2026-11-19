@@ -42,12 +42,12 @@ struct RaidView: View {
             Text("Survive five waves of enemies. Complete the raid without dying to earn gold and a Mystery Coin.")
                 .font(Theme.crimson(15, italic: true)).foregroundStyle(Theme.textSecondary)
             if save.doneToday() {
-                Text("You have already completed today's raid.\nCome back tomorrow.\n\nMystery Coins: \(game.mysteryCoins)")
+                Text("You have already completed today's raid.\nCome back tomorrow.\n\nMystery Coins: \(game.mysteryCoins)" as String)
                     .font(Theme.cinzel(12)).foregroundStyle(Theme.ash).multilineTextAlignment(.center)
                     .padding(16).frame(maxWidth: .infinity)
                     .background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
             } else {
-                Text("Mystery Coins: \(game.mysteryCoins)").font(Theme.cinzel(11.5)).tracking(1.2).foregroundStyle(Theme.goldDim)
+                Text("Mystery Coins: \(game.mysteryCoins)" as String).font(Theme.cinzel(11.5)).tracking(1.2).foregroundStyle(Theme.goldDim)
             }
             Text("Choose Your Champion").font(Theme.cinzel(12)).tracking(2).foregroundStyle(Theme.goldDim)
             if game.characters.isEmpty {
@@ -63,11 +63,11 @@ struct RaidView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             HStack(spacing: 8) {
                                 Text(ch.name).font(Theme.cinzel(16, weight: .semibold)).foregroundStyle(Theme.ashLight)
-                                Text("Lv \(ch.persistLevel ?? 1)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffaa00))
+                                Text("Lv \(ch.persistLevel ?? 1)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffaa00))
                                     .padding(.horizontal, 7).padding(.vertical, 1)
                                     .background(Color(hex: 0x1a1000)).overlay(Rectangle().stroke(Color(hex: 0xffaa00)))
                             }
-                            Text("\(ch.race) \(ch.cls) · \(ch.prof) · \(ch.difficulty)").font(Theme.crimson(12.8, italic: true))
+                            Text("\(ch.race) \(ch.cls) · \(ch.prof) · \(ch.difficulty)" as String).font(Theme.crimson(12.8, italic: true))
                                 .foregroundStyle(Theme.textSecondary)
                         }
                         Spacer()
@@ -77,7 +77,7 @@ struct RaidView: View {
                     .overlay(Rectangle().stroke(picked == i ? Theme.gold : Theme.borderDim))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("\(ch.name), \(ch.race) \(ch.cls), Level \(ch.persistLevel ?? 1), \(ch.difficulty). Press to select for raid.")
+                .accessibilityLabel("\(ch.name), \(ch.race) \(ch.cls), Level \(ch.persistLevel ?? 1), \(ch.difficulty). Press to select for raid." as String)
                 .accessibilityAddTraits(picked == i ? [.isButton, .isSelected] : .isButton)
             }
             Text("Raid Difficulty").font(Theme.cinzel(12)).tracking(2).foregroundStyle(Theme.goldDim).padding(.top, 6)
@@ -124,13 +124,13 @@ struct RaidView: View {
     private func active(_ r: Raid) -> some View {
         VStack(spacing: 12) {
             HStack {
-                Text("Wave \(r.wave) of 5").font(Theme.decorative(17)).foregroundStyle(Theme.bloodBright)
+                Text("Wave \(r.wave) of 5" as String).font(Theme.decorative(17)).foregroundStyle(Theme.bloodBright)
                 Spacer()
                 HStack(spacing: 12) {
-                    Text("\(r.remaining) remaining").tracking(1.5).textCase(.uppercase).foregroundStyle(Theme.gold)
-                    Text("HP: \(r.hp)/\(r.maxHp)").foregroundStyle(Color(hex: 0xe05555))
-                    Text("Gold: \(r.gold)").foregroundStyle(Theme.gold)
-                    Text("Potions: \(r.potions)")
+                    Text("\(r.remaining) remaining" as String).tracking(1.5).textCase(.uppercase).foregroundStyle(Theme.gold)
+                    Text("HP: \(r.hp)/\(r.maxHp)" as String).foregroundStyle(Color(hex: 0xe05555))
+                    Text("Gold: \(r.gold)" as String).foregroundStyle(Theme.gold)
+                    Text("Potions: \(r.potions)" as String)
                 }
                 .font(Theme.cinzel(11.2))
             }
@@ -138,21 +138,21 @@ struct RaidView: View {
             .background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
             .overlay(alignment: .top) { Rectangle().fill(Theme.bloodBright).frame(height: 2) }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("Wave \(r.wave) of 5. \(r.remaining) enemies remaining. HP \(r.hp) of \(r.maxHp). \(r.gold) gold. \(r.potions) potions. SP \(r.sp) of \(r.maxSp).")
+            .accessibilityLabel("Wave \(r.wave) of 5. \(r.remaining) enemies remaining. HP \(r.hp) of \(r.maxHp). \(r.gold) gold. \(r.potions) potions. SP \(r.sp) of \(r.maxSp)." as String)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("Your Health").font(Theme.cinzel(9.9)).tracking(2).textCase(.uppercase).foregroundStyle(Theme.textDim)
                 Bar(value: Double(r.hp) / Double(max(r.maxHp, 1)), colors: [Color(hex: 0x8b2020), Color(hex: 0xc03030)],
                     track: Color(red: 60 / 255, green: 20 / 255, blue: 20 / 255).opacity(0.5), height: 7)
-                Text("HP: \(r.hp) / \(r.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xe05555))
+                Text("HP: \(r.hp) / \(r.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xe05555))
             }
             .padding(.vertical, 10).padding(.horizontal, 18)
             .background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Your health: \(r.hp) of \(r.maxHp)")
+            .accessibilityLabel("Your health: \(r.hp) of \(r.maxHp)" as String)
 
             VStack(alignment: .leading, spacing: 10) {
-                Text("Wave \(r.wave) of 5 — \(r.enemies.count) enemies").font(Theme.cinzel(9.9)).tracking(3).textCase(.uppercase)
+                Text("Wave \(r.wave) of 5 — \(r.enemies.count) enemies" as String).font(Theme.cinzel(9.9)).tracking(3).textCase(.uppercase)
                     .foregroundStyle(Theme.blood)
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 7)], spacing: 7) {
                     ForEach(Array(r.enemies.enumerated()), id: \.offset) { _, e in
@@ -189,15 +189,15 @@ struct RaidView: View {
                     action("🧪 Potion", "Use a health potion. \(r.potions) left.") { fight(.potion) }
                     ForEach(Array(r.skills.enumerated()), id: \.offset) { i, s in
                         let can = r.sp >= s.spCost
-                        Button("\(s.icon) \(s.name) (\(s.spCost)SP)") { skill(i) }
+                        Button("\(s.icon) \(s.name) (\(s.spCost)SP)" as String) { skill(i) }
                             .buttonStyle(DungeonButtonStyle(kind: .combat))
                             .disabled(!can)
-                            .accessibilityLabel("\(s.name). \(s.desc) Costs \(s.spCost) SP.\(can ? "" : " Not enough SP.")")
+                            .accessibilityLabel("\(s.name). \(s.desc) Costs \(s.spCost) SP.\(can ? "" : " Not enough SP.")" as String)
                     }
                 }
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Combat actions")
-                Text("SP: \(r.sp)/\(r.maxSp)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x7090c0)).accessibilityHidden(true)
+                Text("SP: \(r.sp)/\(r.maxSp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x7090c0)).accessibilityHidden(true)
             }
             .padding(.vertical, 18).padding(.horizontal, 20)
             .background(Color(hex: 0x120a0a)).overlay(Rectangle().stroke(Theme.blood))

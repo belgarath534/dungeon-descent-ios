@@ -138,7 +138,7 @@ struct ICloudBackupSection: View {
                     backup.setEnabled(on, game: game)
                 }
                 .buttonStyle(ToggleButtonStyle(on: on))
-                .accessibilityLabel("Automatic iCloud backup, currently \(on ? "on" : "off")")
+                .accessibilityLabel("Automatic iCloud backup, currently \(on ? "on" : "off")" as String)
             }
             Text("Backs your whole save up to your own iCloud account automatically — no sign-in needed, separate from the account system. Off by default.")
                 .font(Theme.crimson(12, italic: true)).foregroundStyle(Color(hex: 0x888888))

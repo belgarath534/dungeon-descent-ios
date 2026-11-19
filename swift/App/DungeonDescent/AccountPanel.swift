@@ -116,7 +116,7 @@ struct AccountPanel: View {
             }
             .frame(maxWidth: .infinity).padding(.bottom, 16)
             .accessibilityElement(children: .combine)
-            Text("Leaderboard name: \(cloud.displayName) · \(cloud.title)")
+            Text("Leaderboard name: \(cloud.displayName) · \(cloud.title)" as String)
                 .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xffdd44))
                 .frame(maxWidth: .infinity).padding(6)
                 .background(Color(hex: 0x1a1400)).overlay(Rectangle().stroke(Color(hex: 0x333333)))
@@ -177,8 +177,8 @@ struct TitlePicker: View {
                 Spacer()
                 Button("← Back", action: close).buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Close")
             }
-            Text("Currently: \(name) the \(current)").font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)
-            Text("🪙 \(coins) Mystery Coins available").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xffdd44))
+            Text("Currently: \(name) the \(current)" as String).font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)
+            Text("🪙 \(coins) Mystery Coins available" as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xffdd44))
             ScrollView {
                 VStack(spacing: 4) {
                     ForEach(Titles.listed(store), id: \.tag) { t in row(t.tag, t.cost, current: current, coins: coins) }
@@ -192,19 +192,19 @@ struct TitlePicker: View {
         let owned = Titles.isOwned(tag, game.store)
         let isCurrent = tag == current
         return HStack {
-            Text("\(name) the \(tag)\(isCurrent ? " ✓" : "")").font(Theme.cinzel(12)).foregroundStyle(isCurrent ? Theme.gold : Color(hex: 0xaaaaaa))
+            Text("\(name) the \(tag)\(isCurrent ? " ✓" : "")" as String).font(Theme.cinzel(12)).foregroundStyle(isCurrent ? Theme.gold : Color(hex: 0xaaaaaa))
             Spacer()
             if isCurrent {
                 Text("Active").font(Theme.cinzel(10.4)).foregroundStyle(Theme.gold)
             } else if owned {
                 Button("Select") { pick(tag) }.buttonStyle(SmallGhostStyle(color: Color(hex: 0xaaffaa)))
-                    .accessibilityLabel("Select title \(name) the \(tag)")
+                    .accessibilityLabel("Select title \(name) the \(tag)" as String)
             } else if coins >= cost {
-                Button("🪙 \(cost)") { buy(tag, cost) }.buttonStyle(SmallGhostStyle(color: Color(hex: 0xffdd44)))
-                    .accessibilityLabel("Buy title \(tag) for \(cost) mystery coins")
+                Button("🪙 \(cost)" as String) { buy(tag, cost) }.buttonStyle(SmallGhostStyle(color: Color(hex: 0xffdd44)))
+                    .accessibilityLabel("Buy title \(tag) for \(cost) mystery coins" as String)
             } else {
-                Text("🪙 \(cost)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x444444))
-                    .accessibilityLabel("\(tag) costs \(cost) mystery coins, not enough coins")
+                Text("🪙 \(cost)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x444444))
+                    .accessibilityLabel("\(tag) costs \(cost) mystery coins, not enough coins" as String)
             }
         }
         .padding(.vertical, 8).padding(.horizontal, 12)

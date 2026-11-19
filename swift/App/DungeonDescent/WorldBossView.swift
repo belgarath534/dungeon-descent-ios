@@ -32,23 +32,23 @@ struct WorldBossView: View {
             Text(day.boss.intro).font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
             bossInfo
             if let total, WorldBoss.remaining(totalDamage: total) == 0 {
-                Text("It has fallen. Everyone who struck it collects \(WorldBoss.goldReward) gold and \(WorldBoss.fragmentReward) Soul Fragments. A new boss comes at midnight UTC.")
+                Text("It has fallen. Everyone who struck it collects \(WorldBoss.goldReward) gold and \(WorldBoss.fragmentReward) Soul Fragments. A new boss comes at midnight UTC." as String)
                     .font(Theme.crimson(14)).foregroundStyle(Color(hex: 0x44cc88))
             } else if left > 0 {
                 Text("Choose your champion").font(Theme.cinzel(12)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
                 ForEach(Array(game.characters.enumerated()), id: \.offset) { i, ch in
-                    Button("\(ch.name) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))") {
+                    Button("\(ch.name) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))" as String) {
                         charIndex = i
                         Feedback.announce("\(ch.name) selected.")
                     }
                     .buttonStyle(WebButtonStyle(kind: i == charIndex ? .gold : .ghost))
                     .accessibilityAddTraits(i == charIndex ? .isSelected : [])
                 }
-                Button("⚔ Strike (\(left) left today)") { strike() }
+                Button("⚔ Strike (\(left) left today)" as String) { strike() }
                     .buttonStyle(WebButtonStyle(kind: .red)).disabled(game.characters.isEmpty)
-                    .accessibilityLabel("Strike \(day.boss.name). \(left) strikes left today.")
+                    .accessibilityLabel("Strike \(day.boss.name). \(left) strikes left today." as String)
             } else {
-                Text("You've used all \(WorldBoss.strikesPerDay) strikes today. Come back tomorrow for a new boss.")
+                Text("You've used all \(WorldBoss.strikesPerDay) strikes today. Come back tomorrow for a new boss." as String)
                     .font(Theme.crimson(14)).foregroundStyle(Theme.textSecondary)
             }
             if !signedIn {
@@ -68,7 +68,7 @@ struct WorldBossView: View {
                     Text("🏆 TODAY'S TOP DAMAGE").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
                         .accessibilityAddTraits(.isHeader)
                     ForEach(top.indices, id: \.self) { i in
-                        Text("\(i + 1). \(top[i].username) — \(top[i].score.formatted())")
+                        Text("\(i + 1). \(top[i].username) — \(top[i].score.formatted())" as String)
                             .font(Theme.cinzel(11)).foregroundStyle(i == 0 ? Theme.gold : Color(hex: 0xaaaaaa))
                     }
                 }
@@ -92,9 +92,9 @@ struct WorldBossView: View {
             .frame(height: 12)
             Text(loaded ? (total == nil ? "HP can't be reached right now" : "\(hp.formatted()) / \(WorldBoss.hp.formatted()) HP") : "Loading...")
                 .font(Theme.cinzel(12)).foregroundStyle(red)
-            Text("Your damage today: \(mine.formatted()) · \(left) of \(WorldBoss.strikesPerDay) strikes left · \(WorldBoss.hoursLeft())h until the next boss")
+            Text("Your damage today: \(mine.formatted()) · \(left) of \(WorldBoss.strikesPerDay) strikes left · \(WorldBoss.hoursLeft())h until the next boss" as String)
                 .font(Theme.crimson(12)).foregroundStyle(Color(hex: 0x888888))
-            Text("Kill reward: \(WorldBoss.goldReward) gold + \(WorldBoss.fragmentReward) Soul Fragments for everyone who struck")
+            Text("Kill reward: \(WorldBoss.goldReward) gold + \(WorldBoss.fragmentReward) Soul Fragments for everyone who struck" as String)
                 .font(Theme.crimson(12)).foregroundStyle(Color(hex: 0x44cc88))
         }
         .padding(12).overlay(Rectangle().stroke(Color(hex: 0x4a1a1a)))

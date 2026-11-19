@@ -32,7 +32,7 @@ struct PvPView: View {
                 }
                 .frame(maxWidth: .infinity)
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Room code \(c.map(String.init).joined(separator: " "))")
+                .accessibilityLabel("Room code \(c.map(String.init).joined(separator: " "))" as String)
             }
 
             if !arena.fighters.isEmpty && arena.stage != .lobby { players }
@@ -80,11 +80,11 @@ struct PvPView: View {
                 let hp = GameData.classInfo(ch.cls).maxHp
                 let chosen = arena.character?.created == ch.created
                 Button { arena.select(ch) } label: {
-                    Text("\(chosen ? "✓ " : "")\(ch.name) — \(ch.race) \(ch.cls) · Lv \(ch.persistLevel ?? 1) · HP \(hp)")
+                    Text("\(chosen ? "✓ " : "")\(ch.name) — \(ch.race) \(ch.cls) · Lv \(ch.persistLevel ?? 1) · HP \(hp)" as String)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(WebButtonStyle(kind: chosen ? .gold : .ghost))
-                .accessibilityLabel("Select \(ch.name) for PVP battle")
+                .accessibilityLabel("Select \(ch.name) for PVP battle" as String)
                 .accessibilityAddTraits(chosen ? .isSelected : [])
             }
             Button("🏟️ Create Room") { arena.create() }
@@ -118,10 +118,10 @@ struct PvPView: View {
                 let pct = p.maxHp > 0 ? Double(p.hp) / Double(p.maxHp) : 0
                 VStack(spacing: 6) {
                     HStack {
-                        Text("\(p.alive ? "⚔️" : "💀") \(p.name) · \(p.cls)\(p.isMe ? " (you)" : "")\(p.defending ? " 🛡️" : "")")
+                        Text("\(p.alive ? "⚔️" : "💀") \(p.name) · \(p.cls)\(p.isMe ? " (you)" : "")\(p.defending ? " 🛡️" : "")" as String)
                             .foregroundStyle(Color(hex: p.alive ? (p.isMe ? 0xc8a832 : 0x88aacc) : 0xcc4444))
                         Spacer()
-                        Text("\(p.hp)/\(p.maxHp) HP").foregroundStyle(Color(hex: 0x888888))
+                        Text("\(p.hp)/\(p.maxHp) HP" as String).foregroundStyle(Color(hex: 0x888888))
                     }
                     .font(Theme.cinzel(10.4))
                     GeometryReader { g in
@@ -136,7 +136,7 @@ struct PvPView: View {
                 .padding(.vertical, 10).padding(.horizontal, 12)
                 .overlay(Rectangle().stroke(Color(hex: p.alive ? 0x333333 : 0x662222)))
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("\(p.name) HP \(p.hp) of \(p.maxHp)\(p.isMe ? " (you)" : " (opponent)")\(p.defending ? " defending" : "")")
+                .accessibilityLabel("\(p.name) HP \(p.hp) of \(p.maxHp)\(p.isMe ? " (you)" : " (opponent)")\(p.defending ? " defending" : "")" as String)
             }
         }
     }
@@ -164,8 +164,8 @@ struct PvPView: View {
                     .accessibilityLabel("Attack your opponent")
                 Button("💥 Heavy Attack") { arena.act(.heavy) }.buttonStyle(WebButtonStyle(kind: .red))
                     .accessibilityLabel("Heavy attack — more damage")
-                Button("✨ Skill (\(arena.mySp) SP)") { arena.act(.skill) }.buttonStyle(WebButtonStyle(kind: .gold))
-                    .accessibilityLabel("Use a skill attack — costs 5 SP, you have \(arena.mySp)")
+                Button("✨ Skill (\(arena.mySp) SP)" as String) { arena.act(.skill) }.buttonStyle(WebButtonStyle(kind: .gold))
+                    .accessibilityLabel("Use a skill attack — costs 5 SP, you have \(arena.mySp)" as String)
                 Button("🛡️ Defend") { arena.act(.defend) }.buttonStyle(WebButtonStyle(kind: .ghost))
                     .accessibilityLabel("Defend — reduce next incoming hit by 60%")
                 Button("😤 Taunt") { arena.act(.taunt) }.buttonStyle(WebButtonStyle(kind: .ghost))

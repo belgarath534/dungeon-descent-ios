@@ -79,18 +79,18 @@ struct HideSeekView: View {
     private func play(_ h: HideAndSeek) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
-                Text("Move \(h.moves)").font(Theme.cinzel(9.9)).tracking(1.5).foregroundStyle(.white.opacity(0.4))
+                Text("Move \(h.moves)" as String).font(Theme.cinzel(9.9)).tracking(1.5).foregroundStyle(.white.opacity(0.4))
                 Spacer()
                 if h.items > 0 {
-                    Text("🫥 \(h.items)").font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x88cc88))
+                    Text("🫥 \(h.items)" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x88cc88))
                         .padding(.vertical, 3).padding(.horizontal, 9).overlay(Rectangle().stroke(Color(hex: 0x446633)))
-                        .accessibilityLabel("\(h.items) hiding \(h.items == 1 ? "spot" : "spots") found")
+                        .accessibilityLabel("\(h.items) hiding \(h.items == 1 ? "spot" : "spots") found" as String)
                 }
-                Text("\(h.distance) \(h.distance == 1 ? "room" : "rooms") away").font(Theme.cinzel(9.9))
+                Text("\(h.distance) \(h.distance == 1 ? "room" : "rooms") away" as String).font(Theme.cinzel(9.9))
                     .foregroundStyle(Color(hex: h.chasing ? 0xff8888 : 0xcc8888))
                     .padding(.vertical, 3).padding(.horizontal, 9)
                     .overlay(Rectangle().stroke(Color(hex: h.chasing ? 0xcc3333 : 0x663333)))
-                    .accessibilityLabel("It is \(h.distance) \(h.distance == 1 ? "room" : "rooms") away")
+                    .accessibilityLabel("It is \(h.distance) \(h.distance == 1 ? "room" : "rooms") away" as String)
             }
             VStack(alignment: .leading, spacing: 8) {
                 Text(desc).font(Theme.crimson(16, italic: true)).foregroundStyle(Theme.textPrimary)
@@ -101,7 +101,7 @@ struct HideSeekView: View {
             .padding(16).frame(maxWidth: .infinity, alignment: .leading)
             .background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("Current room. \(desc) \(event)")
+            .accessibilityLabel("Current room. \(desc) \(event)" as String)
 
             VStack(spacing: 8) {
                 moveButton("▲ North", "Move north", .north)
@@ -249,10 +249,10 @@ struct HideSeekView: View {
                         Sound.sfx("sfx-select")
                         Feedback.announce("\(ch.name) selected.")
                     } label: {
-                        Text("\(chosen ? "✓ " : "")\(ch.name) — \(ch.race) \(ch.cls)").frame(maxWidth: .infinity, alignment: .leading)
+                        Text("\(chosen ? "✓ " : "")\(ch.name) — \(ch.race) \(ch.cls)" as String).frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .buttonStyle(WebButtonStyle(kind: chosen ? .gold : .ghost))
-                    .accessibilityLabel("Play as \(ch.name)")
+                    .accessibilityLabel("Play as \(ch.name)" as String)
                     .accessibilityAddTraits(chosen ? .isSelected : [])
                 }
             }
@@ -285,12 +285,12 @@ struct HideSeekView: View {
             if let c = mp.code {
                 Text("YOUR ROOM CODE").font(Theme.cinzel(8.8)).tracking(2.6).foregroundStyle(.white.opacity(0.3))
                 Text(c).font(Theme.cinzel(28.8)).tracking(11).foregroundStyle(Color(hex: 0xe0c080))
-                    .accessibilityLabel("Room code \(c.map(String.init).joined(separator: " "))")
+                    .accessibilityLabel("Room code \(c.map(String.init).joined(separator: " "))" as String)
             }
             VStack(alignment: .leading, spacing: 4) {
                 ForEach(mp.lobby, id: \.id) { p in
-                    Text("\(p.ready ? "✓" : "…") \(p.name)\(p.id == mp.myId ? " (you)" : "")")
-                        .accessibilityLabel("\(p.name)\(p.id == mp.myId ? ", you" : ""), \(p.ready ? "ready" : "not ready")")
+                    Text("\(p.ready ? "✓" : "…") \(p.name)\(p.id == mp.myId ? " (you)" : "")" as String)
+                        .accessibilityLabel("\(p.name)\(p.id == mp.myId ? ", you" : ""), \(p.ready ? "ready" : "not ready")" as String)
                 }
             }
             .font(Theme.cinzel(10.9)).foregroundStyle(.white.opacity(0.6))
@@ -317,7 +317,7 @@ struct HideSeekView: View {
         let me = mp.me
         return VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("🫥 \(mp.items) shared hiding spot\(mp.items == 1 ? "" : "s")").foregroundStyle(Color(hex: 0x88cc88))
+                Text("🫥 \(mp.items) shared hiding spot\(mp.items == 1 ? "" : "s")" as String).foregroundStyle(Color(hex: 0x88cc88))
                 Spacer()
                 Text(me?.caught == true ? "caught — wait for rescue" : me?.escaped == true ? "escaped"
                      : "\(mp.distance) \(mp.distance == 1 ? "room" : "rooms") away")
@@ -326,7 +326,7 @@ struct HideSeekView: View {
             .font(Theme.cinzel(9.9))
             VStack(alignment: .leading, spacing: 2) {
                 ForEach(mp.players) { p in
-                    Text("\(p.name)\(p.id == mp.myId ? " (you)" : "") — \(p.escaped ? "🚪 escaped" : p.caught ? "⛓️ caught" : "🚶 exploring")")
+                    Text("\(p.name)\(p.id == mp.myId ? " (you)" : "") — \(p.escaped ? "🚪 escaped" : p.caught ? "⛓️ caught" : "🚶 exploring")" as String)
                 }
             }
             .font(Theme.cinzel(9.9)).foregroundStyle(.white.opacity(0.6))
@@ -376,7 +376,7 @@ struct HideSeekView: View {
                 .font(Theme.cinzel(12)).foregroundStyle(.white.opacity(0.6)).multilineTextAlignment(.center)
             VStack(alignment: .leading, spacing: 2) {
                 ForEach(mp.players) { p in
-                    Text("\(p.escaped ? "🚪" : "⛓️") \(p.name)\(p.id == mp.myId ? " (you)" : "") — \(p.escaped ? "escaped" : "caught")")
+                    Text("\(p.escaped ? "🚪" : "⛓️") \(p.name)\(p.id == mp.myId ? " (you)" : "") — \(p.escaped ? "escaped" : "caught")" as String)
                 }
             }
             .font(Theme.cinzel(10.9)).foregroundStyle(.white.opacity(0.6))

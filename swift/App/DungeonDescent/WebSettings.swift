@@ -231,13 +231,13 @@ struct WebSettingsView: View {
                     Feedback.announce("\(name) \(on.wrappedValue ? "on" : "off").")
                 }
                 .buttonStyle(ToggleButtonStyle(on: on.wrappedValue))
-                .accessibilityLabel("\(toggleLabel) currently \(on.wrappedValue ? "on" : "off")")
+                .accessibilityLabel("\(toggleLabel) currently \(on.wrappedValue ? "on" : "off")" as String)
             }
             HStack(spacing: 12) {
                 Text("VOL").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim).accessibilityHidden(true)
                 VolumeSlider(label: volumeLabel, value: volume)
                     .tint(Theme.gold)
-                Text("\(Int((volume.wrappedValue * 100).rounded()))").font(Theme.cinzel(11.2)).foregroundStyle(Theme.ash)
+                Text("\(Int((volume.wrappedValue * 100).rounded()))" as String).font(Theme.cinzel(11.2)).foregroundStyle(Theme.ash)
                     .frame(width: 30, alignment: .trailing).accessibilityHidden(true)
             }
         }
@@ -254,7 +254,7 @@ struct WebSettingsView: View {
                 Feedback.announce("\(name) \(isOn.wrappedValue ? "on" : "off").")
             }
             .buttonStyle(ToggleButtonStyle(on: isOn.wrappedValue))
-            .accessibilityLabel("\(label) currently \(isOn.wrappedValue ? "on" : "off")")
+            .accessibilityLabel("\(label) currently \(isOn.wrappedValue ? "on" : "off")" as String)
         }
     }
 
@@ -271,7 +271,7 @@ struct WebSettingsView: View {
                 Feedback.announce("\(name) \(isOn.wrappedValue ? "on" : "off").")
             }
             .buttonStyle(ToggleButtonStyle(on: isOn.wrappedValue))
-            .accessibilityLabel("\(label) currently \(isOn.wrappedValue ? "on" : "off")")
+            .accessibilityLabel("\(label) currently \(isOn.wrappedValue ? "on" : "off")" as String)
             .accessibilityHint(desc)
         }
         .padding(.vertical, 10)
@@ -338,7 +338,7 @@ struct WebSettingsView: View {
                     Feedback.announce("Run modifiers \(runModifiers ? "enabled" : "disabled").")
                 }
                 .buttonStyle(ToggleButtonStyle(on: runModifiers))
-                .accessibilityLabel("Run modifiers currently \(runModifiers ? "on" : "off"). Each run gets a random modifier.")
+                .accessibilityLabel("Run modifiers currently \(runModifiers ? "on" : "off"). Each run gets a random modifier." as String)
             }
             .padding(.vertical, 12)
             .onAppear { runModifiers = RunModifiers.enabled(game.store) }
@@ -379,7 +379,7 @@ struct WebSettingsView: View {
                         Feedback.announce("3D Mode \(threeD ? "enabled. Every dungeon will load in 3D next time you enter it, and the run you're on switches over on your next step. Moving north, south, east or west now walks through real doors. Bump a wall and you'll hear it. Use the Echo-Location button, or a two-finger double tap, to hear the room." : "disabled. Normal dungeon navigation.")")
                     }
                     .buttonStyle(ToggleButtonStyle(on: threeD))
-                    .accessibilityLabel("3D Mode, currently \(threeD ? "on" : "off")")
+                    .accessibilityLabel("3D Mode, currently \(threeD ? "on" : "off")" as String)
                     .accessibilityHint("Real walls and doors with 3D sound. Use headphones.")
                 }
                 Text(threeD ? "3D Mode active — every dungeon will load in 3D next time you enter it." : "Disabled — normal dungeon navigation.")
@@ -416,7 +416,7 @@ struct WebSettingsView: View {
             title("⚙️ General")
             VStack(alignment: .leading, spacing: 4) {
                 Text("Game Version").font(Theme.cinzel(11.2)).tracking(2).foregroundStyle(Theme.goldDim)
-                Text("Dungeon Descent v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") · Build \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")")
+                Text("Dungeon Descent v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "") · Build \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")" as String)
                     .font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)
             }
             .accessibilityElement(children: .combine)

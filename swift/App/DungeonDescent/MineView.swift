@@ -248,7 +248,7 @@ private struct MineScreens: View {
             }
             Button("Stay in mine", role: .cancel) {}
         } message: {
-            Text("You still have \(model.leaveLoses) item\(model.leaveLoses == 1 ? "" : "s") in your hands and chest. Leave now and lose them, or surface first to keep them.")
+            Text("You still have \(model.leaveLoses) item\(model.leaveLoses == 1 ? "" : "s") in your hands and chest. Leave now and lose them, or surface first to keep them." as String)
         }
     }
 
@@ -273,11 +273,11 @@ private struct MineScreens: View {
 
     private var status: some View {
         HStack(spacing: 14) {
-            Text("💰 \(model.game.wallet.gold)g")
-            Text("💎 \(model.game.wallet.diamonds)")
-            Text("🪙 \(model.game.mysteryCoins)")
+            Text("💰 \(model.game.wallet.gold)g" as String)
+            Text("💎 \(model.game.wallet.diamonds)" as String)
+            Text("🪙 \(model.game.mysteryCoins)" as String)
             Spacer()
-            Text("⛏ Depth: \(model.run?.depth ?? 1)")
+            Text("⛏ Depth: \(model.run?.depth ?? 1)" as String)
         }
         .font(Theme.cinzel(11)).foregroundStyle(gold)
         .padding(10).background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Color(hex: 0x443300)))
@@ -296,9 +296,9 @@ private struct MineScreens: View {
                 Text("No characters yet. Create one first from the main menu.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x555555))
             }
             ForEach(Array(model.game.characters.enumerated()), id: \.offset) { i, ch in
-                Button("⚔ \(ch.name) — \(ch.cls) · \(ch.race)") { model.start(i) }
+                Button("⚔ \(ch.name) — \(ch.cls) · \(ch.race)" as String) { model.start(i) }
                     .buttonStyle(WebButtonStyle(kind: .ghost))
-                    .accessibilityLabel("Send \(ch.name) the \(ch.cls) into the mine")
+                    .accessibilityLabel("Send \(ch.name) the \(ch.cls) into the mine" as String)
             }
         }
     }
@@ -323,9 +323,9 @@ private struct MineScreens: View {
             header
             status
             VStack(alignment: .leading, spacing: 4) {
-                Text("🎒 Hands: \(m.hand.count) / \(Mine.maxCarry) items").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
+                Text("🎒 Hands: \(m.hand.count) / \(Mine.maxCarry) items" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
                 bar(Double(m.hand.count) / Double(Mine.maxCarry), m.handsFull ? Color(hex: 0xcc2222) : m.hand.count * 10 >= Mine.maxCarry * 7 ? Color(hex: 0xcc8800) : gold)
-                Text("❤️ HP: \(m.hp) / \(m.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
+                Text("❤️ HP: \(m.hp) / \(m.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
                 bar(Double(m.hp) / Double(max(1, m.maxHp)), m.hp * 4 < m.maxHp ? Color(hex: 0xcc2222) : m.hp * 2 < m.maxHp ? Color(hex: 0xcc8800) : Color(hex: 0x44cc44))
             }
             .accessibilityElement(children: .combine)
@@ -389,8 +389,8 @@ private struct MineScreens: View {
 
     private func combat(_ m: MineRun, _ e: MineFoe) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("\(e.icon) \(e.name)").font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xcc4444)).accessibilityAddTraits(.isHeader)
-            Text("\(e.name) HP: \(e.hp)/\(e.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
+            Text("\(e.icon) \(e.name)" as String).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xcc4444)).accessibilityAddTraits(.isHeader)
+            Text("\(e.name) HP: \(e.hp)/\(e.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
             bar(Double(e.hp) / Double(max(1, e.maxHp)), Color(hex: 0xcc2222))
             VStack(alignment: .leading, spacing: 3) {
                 ForEach(Array(model.fightLog.suffix(10).enumerated()), id: \.offset) { _, line in
@@ -401,9 +401,9 @@ private struct MineScreens: View {
             if model.choosingSkill {
                 let skills = Mine.skills(m)
                 ForEach(skills, id: \.effect) { s in
-                    Button("\(s.icon) \(s.name) — \(s.desc)") { model.skill(s.effect) }
+                    Button("\(s.icon) \(s.name) — \(s.desc)" as String) { model.skill(s.effect) }
                         .buttonStyle(WebButtonStyle(kind: .ghost))
-                        .accessibilityLabel("Use skill \(s.name). \(s.desc)")
+                        .accessibilityLabel("Use skill \(s.name). \(s.desc)" as String)
                 }
                 Button("Cancel") { model.choosingSkill = false }.buttonStyle(WebButtonStyle(kind: .ghost))
             } else {
@@ -420,7 +420,7 @@ private struct MineScreens: View {
                             .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Shoot with equipped gun")
                     }
                     Button("🧪 Potion") { model.act(.potion) }.buttonStyle(WebButtonStyle(kind: .ghost))
-                        .accessibilityLabel("Use a health potion from your hand. \(m.hand.filter { $0.type == "mine-potion" }.count) in hand")
+                        .accessibilityLabel("Use a health potion from your hand. \(m.hand.filter { $0.type == "mine-potion" }.count) in hand" as String)
                     Button("✨ Skill") {
                         if Mine.skills(m).isEmpty {
                             Feedback.announce("No skills unlocked yet.")
@@ -444,7 +444,7 @@ private struct MineScreens: View {
             Text(h.defeated ? "💀" : "⛏").font(.system(size: 48)).accessibilityHidden(true)
             Text(h.defeated ? "You Were Defeated" : "Surfaced Safely").font(Theme.decorative(22))
                 .foregroundStyle(h.defeated ? Color(hex: 0xaa4444) : gold).accessibilityAddTraits(.isHeader)
-            Text("DEPTH REACHED: \(h.depth)").font(Theme.cinzel(11)).tracking(2).foregroundStyle(Theme.textDim)
+            Text("DEPTH REACHED: \(h.depth)" as String).font(Theme.cinzel(11)).tracking(2).foregroundStyle(Theme.textDim)
             VStack(alignment: .leading, spacing: 6) {
                 if h.gold > 0 { row("💰 Gold", "+\(h.gold)") }
                 if h.diamonds > 0 { row("💎 Diamonds", "+\(h.diamonds)") }

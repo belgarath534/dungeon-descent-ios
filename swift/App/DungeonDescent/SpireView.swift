@@ -61,13 +61,13 @@ private struct SpireScreens: View {
             .frame(maxWidth: .infinity).padding(.vertical, 12)
             VStack(spacing: 6) {
                 Text("YOUR HIGHEST FLOOR").font(Theme.cinzel(9.6)).tracking(2.6).foregroundStyle(Theme.goldDim)
-                Text("\(best)").font(Theme.decorative(36)).foregroundStyle(Theme.gold)
-                Text("Floor \(best) of 1800").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
+                Text("\(best)" as String).font(Theme.decorative(36)).foregroundStyle(Theme.gold)
+                Text("Floor \(best) of 1800" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
                 bar(Double(best) / Double(Spire.top), Theme.gold)
             }
             .padding(14).background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Your highest floor: \(best) of 1800.")
+            .accessibilityLabel("Your highest floor: \(best) of 1800." as String)
             Text("Choose Your Champion").font(Theme.cinzel(12)).foregroundStyle(Theme.gold).padding(.top, 14)
                 .accessibilityAddTraits(.isHeader)
             if model.game.characters.isEmpty {
@@ -79,10 +79,10 @@ private struct SpireScreens: View {
                     model.characterIndex = i
                     Feedback.announce("\(ch.name) selected for The Spire.")
                 } label: {
-                    Text("\(ch.name) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))").frame(maxWidth: .infinity, alignment: .leading)
+                    Text("\(ch.name) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))" as String).frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(WebButtonStyle(kind: on ? .gold : .ghost))
-                .accessibilityLabel("\(ch.name), \(ch.cls), Level \(ch.persistLevel ?? 1)")
+                .accessibilityLabel("\(ch.name), \(ch.cls), Level \(ch.persistLevel ?? 1)" as String)
                 .accessibilityAddTraits(on ? .isSelected : [])
             }
             HStack(spacing: 12) {
@@ -125,26 +125,26 @@ private struct SpireScreens: View {
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("🗼 The Spire").font(Theme.cinzel(12)).foregroundStyle(Theme.gold)
-                        Text("Floor \(r.floor) of 1800").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
+                        Text("Floor \(r.floor) of 1800" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
                     }
                     Spacer()
                     VStack(alignment: .trailing, spacing: 2) {
-                        Text("HP: \(r.hp)/\(r.maxHp)").font(Theme.cinzel(11.2)).foregroundStyle(Theme.blood)
-                        Text("\(r.gold)g").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffdd44))
+                        Text("HP: \(r.hp)/\(r.maxHp)" as String).font(Theme.cinzel(11.2)).foregroundStyle(Theme.blood)
+                        Text("\(r.gold)g" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffdd44))
                     }
                 }
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Floor \(r.floor) of 1800. HP \(r.hp) of \(r.maxHp). Gold \(r.gold).")
+                .accessibilityLabel("Floor \(r.floor) of 1800. HP \(r.hp) of \(r.maxHp). Gold \(r.gold)." as String)
                 bar(Double(r.hp) / Double(max(1, r.maxHp)), Theme.blood).accessibilityHidden(true)
                 if let e = r.enemy, !r.cleared {
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("\(e.icon) \(e.name)\(e.isBoss ? " ⚡ BOSS" : "")").font(Theme.cinzel(13)).foregroundStyle(Color(hex: e.isBoss ? 0xffaa44 : 0xe0c080))
-                        Text("HP: \(e.hp) / \(e.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
+                        Text("\(e.icon) \(e.name)\(e.isBoss ? " ⚡ BOSS" : "")" as String).font(Theme.cinzel(13)).foregroundStyle(Color(hex: e.isBoss ? 0xffaa44 : 0xe0c080))
+                        Text("HP: \(e.hp) / \(e.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
                         bar(Double(e.hp) / Double(max(1, e.maxHp)), Color(hex: 0xcc4444))
                     }
                     .padding(14).background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("Fighting \(e.name)\(e.isBoss ? ", boss" : ""). Enemy HP \(e.hp) of \(e.maxHp).")
+                    .accessibilityLabel("Fighting \(e.name)\(e.isBoss ? ", boss" : ""). Enemy HP \(e.hp) of \(e.maxHp)." as String)
                 }
                 if model.autoMode {
                     VStack(alignment: .leading, spacing: 4) {
@@ -165,8 +165,8 @@ private struct SpireScreens: View {
                             .accessibilityLabel("Heavy strike, more damage but may miss")
                         Button("🛡 Defend") { model.act(.defend) }.buttonStyle(WebButtonStyle(kind: .ghost))
                             .accessibilityLabel("Defend and counterattack")
-                        Button("🧪 Potion (\(r.potions))") { model.potion() }.buttonStyle(WebButtonStyle(kind: .ghost))
-                            .accessibilityLabel("Use health potion, \(r.potions) left")
+                        Button("🧪 Potion (\(r.potions))" as String) { model.potion() }.buttonStyle(WebButtonStyle(kind: .ghost))
+                            .accessibilityLabel("Use health potion, \(r.potions) left" as String)
                         if let g = Guns.equipped(model.game.store) {
                             GunButton(gun: g) { model.shoot(g) }
                         }
@@ -198,10 +198,10 @@ private struct SpireScreens: View {
             VStack(spacing: 12) {
                 Text("💀").font(.system(size: 44)).accessibilityHidden(true)
                 Text("You Have Fallen").font(Theme.decorative(22)).foregroundStyle(Theme.bloodBright).accessibilityAddTraits(.isHeader)
-                Text("Fell on Floor \(model.run?.floor ?? 1)").font(Theme.cinzel(13)).foregroundStyle(Theme.textSecondary)
+                Text("Fell on Floor \(model.run?.floor ?? 1)" as String).font(Theme.cinzel(13)).foregroundStyle(Theme.textSecondary)
                 Text(model.deathLine).font(Theme.crimson(15, italic: true)).foregroundStyle(Theme.textDim).multilineTextAlignment(.center)
                 Text("YOUR BEST FLOOR THIS ATTEMPT").font(Theme.cinzel(9.6)).tracking(2.6).foregroundStyle(Theme.goldDim)
-                Text("Floor \(Spire.bestFloor(model.game.store))").font(Theme.cinzel(16)).foregroundStyle(Theme.gold)
+                Text("Floor \(Spire.bestFloor(model.game.store))" as String).font(Theme.cinzel(16)).foregroundStyle(Theme.gold)
                 Button("🗼 Ascend Again") { model.start() }.buttonStyle(WebButtonStyle(kind: .gold))
                     .accessibilityLabel("Ascend again from your saved floor")
                 Button("← Main Menu") { model.leave(); menu() }.buttonStyle(WebButtonStyle(kind: .ghost))

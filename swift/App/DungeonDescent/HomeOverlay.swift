@@ -64,7 +64,7 @@ struct HomeOverlay: View {
                     case "alchemy": alchemyTab
                     case "elixirs": vendorTab
                     case "gunshop": GunWorkshop(mode: .craft, store: game.store, wallet: game.wallet)
-                    default: comingSoon("The " + (tabs.first { $0.id == tab }?.label.replacingOccurrences(of: " tab", with: "") ?? ""))
+                    default: comingSoon((tabs.first { $0.id == tab }?.label.replacingOccurrences(of: " tab", with: "") ?? ""))
                     }
                 }
                 .id(refresh)
@@ -141,8 +141,8 @@ struct HomeOverlay: View {
 
     private var safe: some View {
         section("🏦 THE SAFE") {
-            (Text("Stored: ") + Text("\(Home.safe(game.store))g").bold().foregroundColor(Color(hex: 0xffaa44))
-             + Text("  ·  On hand: ") + Text("\(game.wallet.gold)g").bold().foregroundColor(Color(hex: 0xffdd44)))
+            (Text("Stored: ") + Text("\(Home.safe(game.store))g" as String).bold().foregroundColor(Color(hex: 0xffaa44))
+             + Text("  ·  On hand: ") + Text("\(game.wallet.gold)g" as String).bold().foregroundColor(Color(hex: 0xffdd44)))
                 .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x888888))
             HStack(spacing: 6) {
                 TextField("Amount...", text: $safeDraft)
@@ -180,8 +180,8 @@ struct HomeOverlay: View {
                 let can = !maxed && cooldown == 0 && game.wallet.gold >= cost
                 HStack(spacing: 8) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("\(s.icon) \(s.name)").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaaaaaa))
-                        Text("Lv \(level) / \(Home.maxSkillLevel)\(maxed ? " — MAXED" : "")").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                        Text("\(s.icon) \(s.name)" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaaaaaa))
+                        Text("Lv \(level) / \(Home.maxSkillLevel)\(maxed ? " — MAXED" : "")" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
                     }
                     .accessibilityHidden(true)
                     Spacer()
@@ -196,7 +196,7 @@ struct HomeOverlay: View {
                 .padding(8).background(Color(hex: 0x050505)).overlay(Rectangle().stroke(Color(hex: 0x111111)))
             }
             if cooldown > 0 {
-                Text("⏳ Cooldown — \(Int((Double(cooldown) / 60).rounded(.up))) min remaining.")
+                Text("⏳ Cooldown — \(Int((Double(cooldown) / 60).rounded(.up))) min remaining." as String)
                     .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x555555)).frame(maxWidth: .infinity)
             }
             message(skillMsg, Color(hex: 0x44aaff))
@@ -209,8 +209,8 @@ struct HomeOverlay: View {
                     let mine = o.className == model.run.cls
                     HStack(spacing: 8) {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("✨ \(o.skillName) — Lv \(o.level)").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaaaaaa))
-                            Text("\(o.className) · from \(o.fromChar)").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                            Text("✨ \(o.skillName) — Lv \(o.level)" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaaaaaa))
+                            Text("\(o.className) · from \(o.fromChar)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
                         }
                         .accessibilityHidden(true)
                         Spacer()
@@ -264,22 +264,22 @@ struct HomeOverlay: View {
                             if on { Text("[ACTIVE]").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x44aa44)) }
                         }
                         .font(Theme.cinzel(11.5))
-                        Text("ATK: \(m.atk) per round").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                        Text("ATK: \(m.atk) per round" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
                     }
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("\(m.tier == "elite" ? "Elite " : "")\(m.name)\(on ? ", active" : ""). Attack \(m.atk) per round.")
+                    .accessibilityLabel("\(m.tier == "elite" ? "Elite " : "")\(m.name)\(on ? ", active" : ""). Attack \(m.atk) per round." as String)
                     Spacer()
                     Button(on ? "Deactivate" : "Activate") { minionMsg = model.toggleMinion(m); refreshed() }
                         .font(Theme.cinzel(9.9)).foregroundStyle(on ? Color(hex: 0x44ff88) : Color(hex: 0x888888))
                         .padding(.vertical, 6).padding(.horizontal, 10)
                         .background(on ? Color(hex: 0x0a1a0a) : Color(hex: 0x0a0a0a))
                         .overlay(Rectangle().stroke(on ? Color(hex: 0x44aa44) : Color(hex: 0x444444)))
-                        .accessibilityLabel("\(on ? "Deactivate" : "Activate") \(m.name)")
+                        .accessibilityLabel("\(on ? "Deactivate" : "Activate") \(m.name)" as String)
                     Button("✕") { model.releaseMinion(m); refreshed() }
                         .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x884444))
                         .padding(.vertical, 6).padding(.horizontal, 8)
                         .background(Color(hex: 0x0a0808)).overlay(Rectangle().stroke(Color(hex: 0x330000)))
-                        .accessibilityLabel("Release \(m.name)")
+                        .accessibilityLabel("Release \(m.name)" as String)
                 }
                 .padding(.vertical, 10).padding(.horizontal, 12)
                 .background(on ? Color(hex: 0x0a1a0a) : Color(hex: 0x080808))
@@ -305,7 +305,7 @@ struct HomeOverlay: View {
                 } else {
                     FlowRow(spacing: 10) {
                         ForEach(have.indices, id: \.self) { i in
-                            Text("\(have[i].icon) \(have[i].name) x\(stash[have[i].id] ?? 0)")
+                            Text("\(have[i].icon) \(have[i].name) x\(stash[have[i].id] ?? 0)" as String)
                                 .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xaaaaaa))
                         }
                     }
@@ -318,7 +318,7 @@ struct HomeOverlay: View {
                     let can = WeaponForge.canCraft(r, stash) && model.forged == nil
                     HStack(spacing: 8) {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("\(r.icon) \(r.name) — ATK \(r.atk.lowerBound)-\(r.atk.upperBound)")
+                            Text("\(r.icon) \(r.name) — ATK \(r.atk.lowerBound)-\(r.atk.upperBound)" as String)
                                 .font(Theme.cinzel(11.2)).foregroundStyle(can ? Color(hex: 0x44ff88) : Color(hex: 0x888888))
                             Text(WeaponForge.needs(r)).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
                         }
@@ -330,7 +330,7 @@ struct HomeOverlay: View {
                             .background(can ? Color(hex: 0x0a1a0a) : Color(hex: 0x0a0a0a))
                             .overlay(Rectangle().stroke(can ? Color(hex: 0x44aa44) : Color(hex: 0x333333)))
                             .disabled(!can)
-                            .accessibilityLabel("Craft \(r.name). Attack \(r.atk.lowerBound) to \(r.atk.upperBound). Needs \(WeaponForge.needs(r))."
+                            .accessibilityLabel("Craft \(r.name). Attack \(r.atk.lowerBound) to \(r.atk.upperBound). Needs \(WeaponForge.needs(r))." as String
                                                 + (model.forged != nil ? " Keep the weapon on the anvil first." : can ? "" : " Not enough materials."))
                     }
                     .padding(.vertical, 10).padding(.horizontal, 12)
@@ -339,7 +339,7 @@ struct HomeOverlay: View {
                 }
             }
             message(forgeMsg, Color(hex: 0x44ff88))
-            Text("Forged so far: \(WeaponForge.count(game.store))").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+            Text("Forged so far: \(WeaponForge.count(game.store))" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
         }
     }
 
@@ -347,20 +347,20 @@ struct HomeOverlay: View {
         let fx = w.forgeEffect.flatMap(WeaponForge.effect)
         let atk = w.weaponAttack
         return VStack(alignment: .leading, spacing: 8) {
-            Text("\(w.icon) \(w.name)").font(Theme.cinzel(12)).bold().foregroundStyle(Color(hex: 0xffdd44))
+            Text("\(w.icon) \(w.name)" as String).font(Theme.cinzel(12)).bold().foregroundStyle(Color(hex: 0xffdd44))
                 .accessibilityAddTraits(.isHeader)
-            Text("ATK: \(atk.lowerBound) – \(atk.upperBound)").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xaaaaaa))
+            Text("ATK: \(atk.lowerBound) – \(atk.upperBound)" as String).font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xaaaaaa))
             if let fx {
-                (Text("✨ Effect: ") + Text(fx.name).bold().foregroundColor(Color(hex: 0xaa88ff)) + Text(" — \(fx.desc)"))
+                (Text("✨ Effect: ") + Text(fx.name).bold().foregroundColor(Color(hex: 0xaa88ff)) + Text(" — \(fx.desc)" as String))
                     .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x888888))
             }
             HStack(spacing: 8) {
                 Button("✓ Keep") { forgeMsg = model.forgeKeep(); refreshed() }
                     .buttonStyle(WebButtonStyle(kind: .gold))
-                    .accessibilityLabel("Keep \(w.name)")
+                    .accessibilityLabel("Keep \(w.name)" as String)
                 Button("🎲 Reroll Effect (2 Iron Scrap)") { forgeMsg = model.forgeReroll(); refreshed() }
                     .buttonStyle(WebButtonStyle(kind: .ghost))
-                    .accessibilityLabel("Reroll the special effect for 2 Iron Scraps. You have \(scraps).")
+                    .accessibilityLabel("Reroll the special effect for 2 Iron Scraps. You have \(scraps)." as String)
             }
         }
         .padding(12).frame(maxWidth: .infinity, alignment: .leading)
@@ -405,7 +405,7 @@ struct HomeOverlay: View {
                             ForEach(r.ingredients.indices, id: \.self) { j in
                                 let x = r.ingredients[j]
                                 let ok = (stock[x.id] ?? 0) >= x.count
-                                Text("\(Alchemy.ingredient(x.id)?.icon ?? "") \(Alchemy.ingredient(x.id)?.name ?? x.id) ×\(x.count)")
+                                Text("\(Alchemy.ingredient(x.id)?.icon ?? "") \(Alchemy.ingredient(x.id)?.name ?? x.id) ×\(x.count)" as String)
                                     .font(Theme.cinzel(9.6)).foregroundStyle(ok ? Color(hex: 0x44ff88) : Color(hex: 0xff4444))
                             }
                         }
@@ -416,29 +416,29 @@ struct HomeOverlay: View {
                             .background(can ? Color(hex: 0x1a001a) : Color(hex: 0x080808))
                             .overlay(Rectangle().stroke(can ? Color(hex: 0xcc88ff) : Color(hex: 0x333333)))
                             .disabled(!can)
-                            .accessibilityLabel("Craft \(r.name)\(r.alchemistOnly ? ", Alchemist only" : ""). \(r.desc) Needs \(Alchemy.needs(r, stock)).")
+                            .accessibilityLabel("Craft \(r.name)\(r.alchemistOnly ? ", Alchemist only" : ""). \(r.desc) Needs \(Alchemy.needs(r, stock))." as String)
                     }
                     .padding(10)
                     .background(Color(hex: 0x0a000a)).overlay(Rectangle().stroke(r.alchemistOnly ? Color(hex: 0x9944ff) : Color(hex: 0x2a002a)))
                 }
             }
             section("🛒 INGREDIENT SHOP") {
-                Text("Your gold: \(game.wallet.gold)g").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffdd44))
+                Text("Your gold: \(game.wallet.gold)g" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffdd44))
                 ForEach(Alchemy.ingredients.indices, id: \.self) { i in
                     let ing = Alchemy.ingredients[i]
                     HStack(spacing: 8) {
                         Text(ing.icon).font(.system(size: 17)).accessibilityHidden(true)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("\(ing.name) ×\(stock[ing.id] ?? 0)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xcc88ff))
+                            Text("\(ing.name) ×\(stock[ing.id] ?? 0)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xcc88ff))
                             Text(ing.desc).font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x555555))
                         }
                         .accessibilityHidden(true)
                         Spacer()
-                        Button("\(ing.cost)g") { shopMsg = model.buyIngredient(ing.id); refreshed() }
+                        Button("\(ing.cost)g" as String) { shopMsg = model.buyIngredient(ing.id); refreshed() }
                             .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xcc88ff))
                             .padding(.vertical, 4).padding(.horizontal, 10)
                             .background(Color(hex: 0x1a001a)).overlay(Rectangle().stroke(Color(hex: 0xcc88ff)))
-                            .accessibilityLabel("Buy \(ing.name) for \(ing.cost) gold. You have \(stock[ing.id] ?? 0). \(ing.desc)")
+                            .accessibilityLabel("Buy \(ing.name) for \(ing.cost) gold. You have \(stock[ing.id] ?? 0). \(ing.desc)" as String)
                     }
                     .padding(6).background(Color(hex: 0x0a000a)).overlay(Rectangle().stroke(Color(hex: 0x2a002a)))
                 }
@@ -484,14 +484,14 @@ struct HomeOverlay: View {
                     let e = spares[i]
                     HStack(spacing: 8) {
                         Text(e.icon).font(.system(size: 17)).accessibilityHidden(true)
-                        Text("\(e.name) ×\(e.count)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffcc66))
+                        Text("\(e.name) ×\(e.count)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffcc66))
                             .accessibilityHidden(true)
                         Spacer()
                         Button("Sell") { model.sellElixir(e.name); refreshed() }
                             .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xffcc66))
                             .padding(.vertical, 4).padding(.horizontal, 10)
                             .background(Color(hex: 0x1a1000)).overlay(Rectangle().stroke(Color(hex: 0xffcc66)))
-                            .accessibilityLabel("Sell \(e.name) for \(ElixirVendor.sellPrice) gold. You have \(e.count).")
+                            .accessibilityLabel("Sell \(e.name) for \(ElixirVendor.sellPrice) gold. You have \(e.count)." as String)
                     }
                     .padding(6).background(Color(hex: 0x0a000a)).overlay(Rectangle().stroke(Color(hex: 0x2a002a)))
                 }
@@ -548,7 +548,7 @@ struct HomeOverlay: View {
     }
 
     private func comingSoon(_ what: String) -> some View {
-        Text("\(what.isEmpty ? "This" : what) isn't in the Swift version yet. Coming soon.")
+        Text("\(what.isEmpty ? "This" : what) isn't in the Swift version yet. Coming soon." as String)
             .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x666666))
             .frame(maxWidth: .infinity).padding(.vertical, 20)
     }

@@ -65,7 +65,7 @@ struct CodexView: View {
                 }
                 .frame(height: 6)
                 .accessibilityHidden(true)
-                Text("\(unlocked) / \(all.count) entries unlocked (\(pct)%)")
+                Text("\(unlocked) / \(all.count) entries unlocked (\(pct)%)" as String)
                     .font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x555555))
                     .frame(maxWidth: .infinity)
             }
@@ -96,14 +96,14 @@ struct CodexView: View {
         let open = isUnlocked(e.id)
         VStack(alignment: .leading, spacing: 8) {
             if open {
-                Text("\(e.icon) \(e.title)").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xc8a832))
+                Text("\(e.icon) \(e.title)" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xc8a832))
                     .accessibilityAddTraits(.isHeader)
                 Text(e.body).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xaaaaaa)).lineSpacing(5)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                Text("🔒 \(e.unlockHint)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x444444))
+                Text("🔒 \(e.unlockHint)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x444444))
                     .frame(maxWidth: .infinity).multilineTextAlignment(.center).padding(8)
-                    .accessibilityLabel("Locked entry. \(e.unlockHint)")
+                    .accessibilityLabel("Locked entry. \(e.unlockHint)" as String)
             }
         }
         .padding(14)

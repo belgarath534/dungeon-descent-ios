@@ -89,7 +89,7 @@ struct CharacterListView: View {
                     }
                     .accessibilityLabel("Create a new character")
                 } else {
-                    Text("Maximum of \(GameData.maxCharacters) characters. Delete one to create a new legend.")
+                    Text("Maximum of \(GameData.maxCharacters) characters. Delete one to create a new legend." as String)
                         .font(Theme.crimson(12, italic: true))
                         .foregroundStyle(Theme.textDim)
                         .frame(maxWidth: .infinity)
@@ -150,8 +150,8 @@ struct CharacterListView: View {
             Button { step(-1) } label: { sliderButton("◀", Color(hex: 0xaaaaaa), Color(hex: 0x555555)) }
                 .accessibilityLabel("Previous character")
             VStack(spacing: 2) {
-                Text("\(ch.name) — \(ch.cls)").font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0xe0c080))
-                Text("Level \(ch.persistLevel ?? 1) · \(ch.race) · \(ch.dungeon)").font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x666666))
+                Text("\(ch.name) — \(ch.cls)" as String).font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0xe0c080))
+                Text("Level \(ch.persistLevel ?? 1) · \(ch.race) · \(ch.dungeon)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x666666))
             }
             .frame(maxWidth: .infinity)
             .multilineTextAlignment(.center)
@@ -234,17 +234,17 @@ struct CharacterListView: View {
                         }
                     }
                     .padding(.bottom, 4)
-                    Text("\(ch.race) · \(ch.prof) · \(ch.dungeon)\(ch.endlessBestText)")
+                    Text("\(ch.race) · \(ch.prof) · \(ch.dungeon)\(ch.endlessBestText)" as String)
                         .font(Theme.crimson(12.8, italic: true))
                         .foregroundStyle(Theme.textSecondary)
                         .padding(.bottom, 6)
                     HStack(spacing: 8) {
                         if ch.completed {
-                            Text("✦ Completed — \(ch.dungeon)").foregroundStyle(Color(hex: 0x7aaa7a))
+                            Text("✦ Completed — \(ch.dungeon)" as String).foregroundStyle(Color(hex: 0x7aaa7a))
                         } else if ch.floor == 0 {
                             Text("Ready to descend.").italic().foregroundStyle(Theme.textDim)
                         } else {
-                            Text("Floor \(ch.floor) / 10")
+                            Text("Floor \(ch.floor) / 10" as String)
                         }
                         Text(ch.difficulty).font(Theme.cinzel(9.9)).foregroundStyle(diffColor)
                             .padding(.vertical, 2).padding(.horizontal, 8)
@@ -259,7 +259,7 @@ struct CharacterListView: View {
                     }
                     .padding(.top, 6)
                     if ch.spiritsEarned > 0 {
-                        Text("✦ \(ch.spiritsEarned) Spirit\(ch.spiritsEarned > 1 ? "s" : "") Earned")
+                        Text("✦ \(ch.spiritsEarned) Spirit\(ch.spiritsEarned > 1 ? "s" : "") Earned" as String)
                             .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xc080f0))
                             .padding(.vertical, 2).padding(.horizontal, 8)
                             .overlay(Rectangle().stroke(Color(hex: 0x5a20a0)))
@@ -270,7 +270,7 @@ struct CharacterListView: View {
                             ForEach(Array(deaths.suffix(2).enumerated()), id: \.offset) { _, d in
                                 HStack(alignment: .firstTextBaseline, spacing: 8) {
                                     Text("☠").font(.system(size: 11)).foregroundStyle(Theme.blood)
-                                    Text("Floor \(d.floor) — \(d.killedBy)").italic().foregroundStyle(Theme.textSecondary)
+                                    Text("Floor \(d.floor) — \(d.killedBy)" as String).italic().foregroundStyle(Theme.textSecondary)
                                 }
                                 .font(Theme.crimson(11.5))
                                 .padding(.vertical, 4)
@@ -281,16 +281,16 @@ struct CharacterListView: View {
                 }
                 // The card's own label, read before its buttons.
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("\(ch.name) the \(ch.race) \(ch.cls). Level \(level).\(Prestige.stars(ch) > 0 ? " Prestige \(Prestige.stars(ch)) stars." : "") \(ch.dungeon). \(ch.difficulty).\(origin)")
+                .accessibilityLabel("\(ch.name) the \(ch.race) \(ch.cls). Level \(level).\(Prestige.stars(ch) > 0 ? " Prestige \(Prestige.stars(ch)) stars." : "") \(ch.dungeon). \(ch.difficulty).\(origin)" as String)
                 .accessibilityAddTraits(.isStaticText)
 
                 FlowRow(spacing: 6) {
                     charButton(playLabel, Theme.gold, Theme.goldDim) { play(i) }
-                        .accessibilityLabel("\(playLabel) \(ch.name) Level \(level) \(ch.cls)")
+                        .accessibilityLabel("\(playLabel) \(ch.name) Level \(level) \(ch.cls)" as String)
                     charButton("📊 Stats", Theme.textSecondary, Theme.borderDim) { statsFor = i }
-                        .accessibilityLabel("View stats for \(ch.name)")
+                        .accessibilityLabel("View stats for \(ch.name)" as String)
                     charButton("📤 Export", Theme.textSecondary, Theme.borderDim) { showExport(i) }
-                        .accessibilityLabel("Export \(ch.name)")
+                        .accessibilityLabel("Export \(ch.name)" as String)
                     if Prestige.stars(ch) < Prestige.maxStars {
                         charButton("⭐ Prestige", Color(hex: 0xffdd44), Color(hex: 0xaa8800)) { askPrestige(i) }
                             .accessibilityLabel(Prestige.blocker(ch) == nil
@@ -298,7 +298,7 @@ struct CharacterListView: View {
                                 : "Prestige \(ch.name), at level \(ch.levelCap)")
                     }
                     charButton("🗑 Delete", Color(hex: 0xc06060), Color(hex: 0x6a2020)) { pendingDelete = i }
-                        .accessibilityLabel("Delete \(ch.name)")
+                        .accessibilityLabel("Delete \(ch.name)" as String)
                 }
                 .padding(.top, 10)
             }
@@ -454,7 +454,7 @@ struct CharacterListView: View {
                 Text(code).font(.system(size: 11, design: .monospaced)).foregroundStyle(Color(hex: 0xcccccc))
                     .lineLimit(5).truncationMode(.middle).textSelection(.enabled)
                     .padding(10).frame(maxWidth: .infinity).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
-                    .accessibilityLabel("Export code for \(game.characters[i].name)")
+                    .accessibilityLabel("Export code for \(game.characters[i].name)" as String)
                 OverlayText(text: "Copy this code and paste it on another device to import this character.")
                 Button("📋 Copy Code") {
                     UIPasteboard.general.string = code
@@ -463,8 +463,8 @@ struct CharacterListView: View {
                 .buttonStyle(WebButtonStyle(kind: .gold))
             } else {
                 ForEach(Array(game.characters.enumerated()), id: \.offset) { i, ch in
-                    Button("\(ch.name) — \(ch.race) \(ch.cls)") { showExport(i) }.buttonStyle(WebButtonStyle(kind: .ghost))
-                        .accessibilityLabel("Export \(ch.name)")
+                    Button("\(ch.name) — \(ch.race) \(ch.cls)" as String) { showExport(i) }.buttonStyle(WebButtonStyle(kind: .ghost))
+                        .accessibilityLabel("Export \(ch.name)" as String)
                 }
             }
             Button("Close") { exporting = false }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Close export overlay")
@@ -521,7 +521,7 @@ struct DeathLogView: View {
                 let total = game.characters.reduce(0) { $0 + $1.deaths.count }
                 VStack(spacing: 4) {
                     Text("Total across all characters").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555))
-                    Text("☠ \(total) death\(total != 1 ? "s" : "")").font(Theme.cinzel(16)).foregroundStyle(Color(hex: 0xff6666))
+                    Text("☠ \(total) death\(total != 1 ? "s" : "")" as String).font(Theme.cinzel(16)).foregroundStyle(Color(hex: 0xff6666))
                 }
                 .frame(maxWidth: .infinity)
                 .padding(14)
@@ -529,7 +529,7 @@ struct DeathLogView: View {
                 .overlay(Rectangle().stroke(Color(hex: 0x222222)))
                 .padding(.top, 8)
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Total: \(total) deaths across \(game.characters.count) characters.")
+                .accessibilityLabel("Total: \(total) deaths across \(game.characters.count) characters." as String)
             }
         }
         .onAppear {
@@ -546,21 +546,21 @@ struct DeathLogView: View {
         let level = ch.persistLevel ?? 1
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text("\(CharacterListView.classIcons[ch.cls] ?? "⚔️") \(ch.name)").font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0xe0c080))
+                Text("\(CharacterListView.classIcons[ch.cls] ?? "⚔️") \(ch.name)" as String).font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0xe0c080))
                 Spacer()
-                Text("Lv \(level) \(ch.cls)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffaa00))
+                Text("Lv \(level) \(ch.cls)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffaa00))
             }
-            Text("☠ \(deaths.count) death\(deaths.count != 1 ? "s" : "")").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555))
+            Text("☠ \(deaths.count) death\(deaths.count != 1 ? "s" : "")" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555))
         }
         .padding(14)
         .background(Color(hex: 0x0a0800))
         .overlay(Rectangle().stroke(Color(hex: 0x2a2010)))
         .overlay(alignment: .top) { Rectangle().fill(Color(hex: 0xe0c080)).frame(height: 2) }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(ch.name) the \(ch.cls). Level \(level). \(deaths.count) deaths.")
+        .accessibilityLabel("\(ch.name) the \(ch.cls). Level \(level). \(deaths.count) deaths." as String)
 
         if deaths.isEmpty {
-            Text("\(ch.name) still lives. No deaths recorded.")
+            Text("\(ch.name) still lives. No deaths recorded." as String)
                 .font(Theme.cinzel(10.9)).italic().foregroundStyle(Color(hex: 0x444444))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 10).padding(.horizontal, 14)
@@ -572,16 +572,16 @@ struct DeathLogView: View {
                 ForEach(Array(deaths.enumerated()), id: \.offset) { n, d in
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
-                            Text("☠ Floor \(d.floor) — \(d.killedBy)").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xff6666))
+                            Text("☠ Floor \(d.floor) — \(d.killedBy)" as String).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xff6666))
                             Spacer()
                             Text(d.date).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444))
                         }
-                        Text("\(d.dungeon)\(d.diff.isEmpty ? "" : " · " + d.diff) · Lv \(max(d.level, 1))")
+                        Text("\(d.dungeon)\(d.diff.isEmpty ? "" : " · " + d.diff) · Lv \(max(d.level, 1))" as String)
                             .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666))
                         HStack(spacing: 12) {
-                            Text("⚔ \(d.kills) kills")
-                            Text("💰 \(d.gold)g")
-                            if d.bestDmg > 0 { Text("💥 \(d.bestDmg) best") }
+                            Text("⚔ \(d.kills) kills" as String)
+                            Text("💰 \(d.gold)g" as String)
+                            if d.bestDmg > 0 { Text("💥 \(d.bestDmg) best" as String) }
                         }
                         .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555))
                         Text(d.flavor).font(Theme.cinzel(9.9)).italic().foregroundStyle(Color(hex: 0x333333)).padding(.top, 2)
@@ -592,7 +592,7 @@ struct DeathLogView: View {
                     .overlay(Rectangle().stroke(Color(hex: 0x1a1a1a)))
                     .overlay(alignment: .leading) { Rectangle().fill(Color(hex: 0x441111)).frame(width: 2) }
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("Death \(n + 1). \(d.dungeon.isEmpty ? "Unknown" : d.dungeon). Floor \(d.floor). Killed by \(d.killedBy). Level \(max(d.level, 1)). \(d.kills) kills. \(d.date).")
+                    .accessibilityLabel("Death \(n + 1). \(d.dungeon.isEmpty ? "Unknown" : d.dungeon). Floor \(d.floor). Killed by \(d.killedBy). Level \(max(d.level, 1)). \(d.kills) kills. \(d.date)." as String)
                 }
             }
             .padding(.bottom, 16)

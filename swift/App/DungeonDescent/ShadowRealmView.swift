@@ -77,12 +77,12 @@ struct ShadowRealmView: View {
                     Button("◀") { pick = (pick - 1 + chars.count) % chars.count; sayPick() }.accessibilityLabel("Previous character")
                     VStack(spacing: 4) {
                         Text(ch.name).font(Theme.decorative(15)).foregroundStyle(Self.purple)
-                        Text("Lv\(lvl) \(ch.race) \(ch.cls)").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x888888))
-                        Text("\(pick + 1) / \(chars.count)").font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x555555))
+                        Text("Lv\(lvl) \(ch.race) \(ch.cls)" as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x888888))
+                        Text("\(pick + 1) / \(chars.count)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x555555))
                     }
                     .frame(maxWidth: .infinity)
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("\(ch.name), level \(lvl) \(ch.race) \(ch.cls). Character \(pick + 1) of \(chars.count)")
+                    .accessibilityLabel("\(ch.name), level \(lvl) \(ch.race) \(ch.cls). Character \(pick + 1) of \(chars.count)" as String)
                     Button("▶") { pick = (pick + 1) % chars.count; sayPick() }.accessibilityLabel("Next character")
                 }
                 .font(Theme.cinzel(18)).foregroundStyle(Self.purple)
@@ -120,22 +120,22 @@ struct ShadowRealmView: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text("🌑 SHADOW REALM").font(Theme.decorative(12)).foregroundStyle(Self.purple)
-                    Text("\(st.name) the \(st.cls)").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x888888))
+                    Text("\(st.name) the \(st.cls)" as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x888888))
                 }
                 Spacer()
                 VStack(alignment: .trailing) {
-                    Text("Wave \(st.wave)").font(Theme.decorative(14)).foregroundStyle(Self.purple)
-                    Text("Kills: \(st.kills)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
+                    Text("Wave \(st.wave)" as String).font(Theme.decorative(14)).foregroundStyle(Self.purple)
+                    Text("Kills: \(st.kills)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
                 }
             }
             .accessibilityElement(children: .combine)
-            Text("HP: \(st.hp) / \(st.maxHp)").font(Theme.cinzel(11.5)).foregroundStyle(Theme.ashLight)
+            Text("HP: \(st.hp) / \(st.maxHp)" as String).font(Theme.cinzel(11.5)).foregroundStyle(Theme.ashLight)
             Bar(value: Double(st.hp) / Double(max(1, st.maxHp)), colors: [Color(hex: 0x6a0dad), Self.purple], track: Color(hex: 0x1a0028), height: 8)
                 .accessibilityHidden(true)
             if let e = st.enemy {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("\(e.icon) \(e.name)\(e.isBoss ? " 👑" : "")").font(Theme.cinzel(13)).foregroundStyle(Theme.ashLight)
-                    Text("HP: \(e.hp) / \(e.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
+                    Text("\(e.icon) \(e.name)\(e.isBoss ? " 👑" : "")" as String).font(Theme.cinzel(13)).foregroundStyle(Theme.ashLight)
+                    Text("HP: \(e.hp) / \(e.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
                     Bar(value: Double(e.hp) / Double(max(1, e.maxHp)), colors: [Theme.blood, Theme.bloodBright], track: Color(hex: 0x1a0808), height: 6)
                         .accessibilityHidden(true)
                 }
@@ -156,7 +156,7 @@ struct ShadowRealmView: View {
                     Button("⚔ Attack") { act(.attack) }.buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Attack the shadow entity")
                     Button("💥 Heavy") { act(.heavy) }.buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Heavy strike — more damage, may miss")
                     Button("🛡 Defend") { act(.defend) }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Defend and counterattack")
-                    Button("🧪 Potion (\(st.potions))") { potion() }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Use health potion")
+                    Button("🧪 Potion (\(st.potions))" as String) { potion() }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Use health potion")
                 }
             }
             Button("← Retreat") { retreat() }.buttonStyle(MenuButtonStyle()).accessibilityLabel("Retreat to main menu — your score will be saved")
@@ -215,8 +215,8 @@ struct ShadowRealmView: View {
             Text("🌑").font(.system(size: 52)).accessibilityHidden(true)
             Text("Consumed by Shadow").font(Theme.decorative(20)).foregroundStyle(Self.purple).accessibilityAddTraits(.isHeader)
             if let st = s {
-                Text("Fell on Wave \(st.wave)").font(Theme.cinzel(14)).foregroundStyle(Theme.ashLight)
-                Text("\(st.kills) shadow entit\(st.kills == 1 ? "y" : "ies") destroyed.").font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textSecondary)
+                Text("Fell on Wave \(st.wave)" as String).font(Theme.cinzel(14)).foregroundStyle(Theme.ashLight)
+                Text("\(st.kills) shadow entit\(st.kills == 1 ? "y" : "ies") destroyed." as String).font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textSecondary)
             }
             VStack(alignment: .leading, spacing: 4) {
                 Text("🏆 Shadow Realm — Best Runs").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xffd700)).accessibilityAddTraits(.isHeader)
@@ -224,13 +224,13 @@ struct ShadowRealmView: View {
                 ForEach(Array(board.enumerated()), id: \.offset) { i, r in
                     let mine = r.name == s?.name && r.wave == s?.wave && r.kills == s?.kills
                     HStack {
-                        Text("\(i == 0 ? "🥇" : i == 1 ? "🥈" : i == 2 ? "🥉" : "\(i + 1).") \(r.name) (\(r.cls))")
+                        Text("\(i == 0 ? "🥇" : i == 1 ? "🥈" : i == 2 ? "🥉" : "\(i + 1).") \(r.name) (\(r.cls))" as String)
                         Spacer()
-                        Text("Wave \(r.wave) · \(r.kills) kills")
+                        Text("Wave \(r.wave) · \(r.kills) kills" as String)
                     }
                     .font(Theme.cinzel(11)).foregroundStyle(mine ? Self.purple : i == 0 ? Color(hex: 0xffd700) : Color(hex: 0x888888))
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("\(i + 1). \(r.name), wave \(r.wave), \(r.kills) kills")
+                    .accessibilityLabel("\(i + 1). \(r.name), wave \(r.wave), \(r.kills) kills" as String)
                 }
             }
             .padding(12).frame(maxWidth: .infinity).background(Color(hex: 0x0a0010)).overlay(Rectangle().stroke(Self.purpleBorder))

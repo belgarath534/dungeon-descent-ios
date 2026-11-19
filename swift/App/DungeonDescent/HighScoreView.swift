@@ -34,10 +34,10 @@ struct HighScoreView: View {
                 Text(s.total.formatted())
                     .font(Theme.decorative(40)).foregroundStyle(Theme.gold)
                     .frame(maxWidth: .infinity).padding(.top, 20)
-                Text("RANK: \(rank.label)")
+                Text("RANK: \(rank.label)" as String)
                     .font(Theme.cinzel(11.5)).tracking(3.5).foregroundStyle(Color(hex: rank.color))
                     .frame(maxWidth: .infinity).padding(.bottom, 12)
-                Text("💰 Global Gold: \(game.wallet.gold.formatted())g  |  🏆 Trophies: \(game.achievements.trophies)")
+                Text("💰 Global Gold: \(game.wallet.gold.formatted())g  |  🏆 Trophies: \(game.achievements.trophies)" as String)
                     .font(Theme.cinzel(11.2)).tracking(1.1).foregroundStyle(Color(hex: 0x888888))
                     .frame(maxWidth: .infinity)
                 Text("Every kill, every achievement, every dungeon cleared earns points. This is your legacy.")
@@ -58,16 +58,16 @@ struct HighScoreView: View {
                         ForEach(shown, id: \.key) { cat in
                             let pts = s.breakdown[cat.key] ?? 0
                             HStack {
-                                Text("\(cat.icon) \(cat.label)").font(Theme.cinzel(12.5)).foregroundStyle(Theme.textSecondary)
+                                Text("\(cat.icon) \(cat.label)" as String).font(Theme.cinzel(12.5)).foregroundStyle(Theme.textSecondary)
                                 Spacer()
-                                Text("\(pts.formatted()) pts").font(Theme.cinzel(14.4)).foregroundStyle(Theme.gold)
+                                Text("\(pts.formatted()) pts" as String).font(Theme.cinzel(14.4)).foregroundStyle(Theme.gold)
                             }
                             .padding(.vertical, 14).padding(.horizontal, 18)
                             .background(Theme.bgPanel)
                             .overlay(Rectangle().stroke(Theme.borderDim))
                             .overlay(alignment: .leading) { Rectangle().fill(Theme.goldDim).frame(width: 2) }
                             .accessibilityElement(children: .ignore)
-                            .accessibilityLabel("\(cat.label): \(pts.formatted()) points")
+                            .accessibilityLabel("\(cat.label): \(pts.formatted()) points" as String)
                         }
                     }
                 }
@@ -121,17 +121,17 @@ struct HighScoreView: View {
                     let mine = s.id == me
                     let medal = i == 0 ? "🥇" : i == 1 ? "🥈" : i == 2 ? "🥉" : "#\(i + 1)"
                     HStack {
-                        Text("\(medal) \(s.username)\(mine ? " 👈" : "")")
+                        Text("\(medal) \(s.username)\(mine ? " 👈" : "")" as String)
                             .foregroundStyle(Color(hex: i < 3 ? [0xffdd44, 0xaaaaaa, 0xcc8844][i] : 0x666666))
                         Spacer()
-                        Text("\(s.score.formatted()) pts").foregroundStyle(Color(hex: 0xffdd44))
+                        Text("\(s.score.formatted()) pts" as String).foregroundStyle(Color(hex: 0xffdd44))
                     }
                     .font(Theme.cinzel(12))
                     .padding(.vertical, 8).padding(.horizontal, 4)
                     .background(mine ? Color(hex: 0x0a1a0a) : .clear)
                     .overlay(alignment: .bottom) { Rectangle().fill(Color(hex: 0x1a1a1a)).frame(height: 1) }
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("\(i + 1): \(s.username) — \(s.score) points\(mine ? ", this is you" : "")")
+                    .accessibilityLabel("\(i + 1): \(s.username) — \(s.score) points\(mine ? ", this is you" : "")" as String)
                 }
                 if let me, !list.contains(where: { $0.id == me }) {
                     note("You are not on the leaderboard yet. Upload your score!")
@@ -191,16 +191,16 @@ struct HighScoreView: View {
             VStack(spacing: 8) {
                 ForEach(list) { m in
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("✉ \(m.from)").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffdd44))
+                        Text("✉ \(m.from)" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffdd44))
                         if !m.message.isEmpty {
                             Text(m.message).font(Theme.crimson(13.5, italic: true)).foregroundStyle(Theme.textSecondary)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         if m.coins > 0 {
                             if m.claimed {
-                                Text("✓ \(m.coins) Mystery Coins claimed").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x44ff88))
+                                Text("✓ \(m.coins) Mystery Coins claimed" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x44ff88))
                             } else {
-                                Button("🪙 Claim \(m.coins) Mystery Coins") {
+                                Button("🪙 Claim \(m.coins) Mystery Coins" as String) {
                                     Task {
                                         if await cloud.claim(m) {
                                             Sound.sfx("sfx-unlock")
@@ -209,7 +209,7 @@ struct HighScoreView: View {
                                     }
                                 }
                                 .buttonStyle(WebButtonStyle(kind: .gold))
-                                .accessibilityLabel("Claim \(m.coins) Mystery Coins from \(m.from)")
+                                .accessibilityLabel("Claim \(m.coins) Mystery Coins from \(m.from)" as String)
                             }
                         }
                     }

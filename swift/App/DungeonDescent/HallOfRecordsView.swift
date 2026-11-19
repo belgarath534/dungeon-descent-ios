@@ -122,7 +122,7 @@ struct HallOfRecordsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Theme.bgStone).overlay(Rectangle().stroke(Theme.borderDim))
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("\(row.0): \(row.1)")
+                    .accessibilityLabel("\(row.0): \(row.1)" as String)
                 }
             }
         }
@@ -141,16 +141,16 @@ struct HallOfRecordsView: View {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(a.name).font(Theme.cinzel(13.1)).foregroundStyle(Theme.ashLight)
                         Text(a.desc).font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textSecondary)
-                        Text("\(cur) / \(a.target)\(isClaimed ? " — Reward: \(a.reward)" : "")").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
+                        Text("\(cur) / \(a.target)\(isClaimed ? " — Reward: \(a.reward)" : "")" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
                         Bar(value: Double(cur) / Double(a.target), colors: [Theme.goldDim, Theme.goldDim], track: Theme.gold.opacity(0.1), height: 3)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("\(a.name). \(a.desc) Progress: \(cur) of \(a.target). \(isClaimed ? "Claimed." : claimable ? "Ready to claim! Reward: \(a.reward)." : "Reward: \(a.reward).")")
+                    .accessibilityLabel("\(a.name). \(a.desc) Progress: \(cur) of \(a.target). \(isClaimed ? "Claimed." : claimable ? "Ready to claim! Reward: \(a.reward)." : "Reward: \(a.reward).")" as String)
                     if claimable {
                         Button("✦ Claim") { claim(a) }
                             .buttonStyle(WebButtonStyle(kind: .gold))
-                            .accessibilityLabel("Claim reward: \(a.reward)")
+                            .accessibilityLabel("Claim reward: \(a.reward)" as String)
                     } else if isClaimed {
                         Text("✦ Claimed").font(Theme.cinzel(10.4)).tracking(1).foregroundStyle(Color(hex: 0x7aaa7a))
                     }
@@ -215,7 +215,7 @@ struct HallOfRecordsView: View {
 
     private func legendRow(_ r: (String, String, String, String)) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("\(r.0) \(r.1)").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
+            Text("\(r.0) \(r.1)" as String).font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
             Text(r.2).font(Theme.decorative(17.6)).foregroundStyle(Theme.gold)
             if !r.3.isEmpty { Text(r.3).font(Theme.crimson(11.5)).foregroundStyle(Theme.textDim) }
         }
@@ -224,6 +224,6 @@ struct HallOfRecordsView: View {
         .background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
         .overlay(alignment: .leading) { Rectangle().fill(Theme.goldDim).frame(width: 3) }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(r.1.capitalized): \(r.2). \(r.3)")
+        .accessibilityLabel("\(r.1.capitalized): \(r.2). \(r.3)" as String)
     }
 }

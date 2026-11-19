@@ -73,28 +73,28 @@ struct VoidModeView: View {
     private func fight(_ v: VoidMode) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Wave \(v.wave + 1) of 5")
+                Text("Wave \(v.wave + 1) of 5" as String)
                 Spacer()
-                Text("Turn \(v.turn)")
+                Text("Turn \(v.turn)" as String)
             }
             .font(Theme.cinzel(10.4)).foregroundStyle(purple)
             VStack(alignment: .leading, spacing: 4) {
                 Text("Void Commander").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xcc88ff))
                 bar(Double(v.hp) / Double(VoidMode.maxHp), purple)
-                Text("\(v.hp) / \(VoidMode.maxHp) HP").font(Theme.cinzel(10)).foregroundStyle(Theme.textSecondary)
+                Text("\(v.hp) / \(VoidMode.maxHp) HP" as String).font(Theme.cinzel(10)).foregroundStyle(Theme.textSecondary)
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Void Commander, \(v.hp) of \(VoidMode.maxHp) HP")
+            .accessibilityLabel("Void Commander, \(v.hp) of \(VoidMode.maxHp) HP" as String)
             if let e = v.hero, !v.waveCleared {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(e.title).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xff6644))
                     bar(Double(e.hp) / Double(e.maxHp), Color(hex: 0xcc3322))
-                    Text("\(e.hp) / \(e.maxHp) HP").font(Theme.cinzel(10)).foregroundStyle(Theme.textSecondary)
+                    Text("\(e.hp) / \(e.maxHp) HP" as String).font(Theme.cinzel(10)).foregroundStyle(Theme.textSecondary)
                     Text(e.desc).font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
                 }
                 .padding(10).overlay(Rectangle().stroke(Color(hex: 0x442222)))
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("\(e.title), \(e.hp) of \(e.maxHp) HP. \(e.desc)")
+                .accessibilityLabel("\(e.title), \(e.hp) of \(e.maxHp) HP. \(e.desc)" as String)
             }
             if v.waveCleared {
                 Button("Continue → Next Wave") { next() }
@@ -188,7 +188,7 @@ struct VoidModeView: View {
             }
             .accessibilityElement(children: .combine)
             .padding(14).overlay(Rectangle().stroke(purple))
-            Text("\(leveled) character\(leveled == 1 ? "" : "s") leveled up by 3!").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x44ff88))
+            Text("\(leveled) character\(leveled == 1 ? "" : "s") leveled up by 3!" as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x44ff88))
             Button("← Return to Menu") { Sound.track("menu"); router.goTo(.menu) }.buttonStyle(WebButtonStyle(kind: .ghost))
         }
     }
@@ -196,7 +196,7 @@ struct VoidModeView: View {
     private func defeat(_ cur: VoidMode) -> some View {
         VStack(spacing: 12) {
             Text("THE VOID HAS FALLEN").font(Theme.decorative(20)).foregroundStyle(Color(hex: 0xaa4444)).accessibilityAddTraits(.isHeader)
-            Text("\(cur.hero?.name ?? "The heroes") ended your reign on wave \(cur.wave + 1). The Void retreats — for now.")
+            Text("\(cur.hero?.name ?? "The heroes") ended your reign on wave \(cur.wave + 1). The Void retreats — for now." as String)
                 .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary).multilineTextAlignment(.center)
             Button("↩ Try Again") { start() }.buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Try Void Mode again")
             Button("← Menu") { Sound.track("menu"); router.goTo(.menu) }.buttonStyle(WebButtonStyle(kind: .ghost))

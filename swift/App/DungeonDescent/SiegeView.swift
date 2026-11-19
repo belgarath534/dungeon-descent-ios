@@ -61,7 +61,7 @@ struct SiegeView: View {
                 let can = game.wallet.gold >= u.gold && fortress.wavePoints >= u.wavePoints
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("\(u.icon) \(u.name)").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xffdd44))
+                        Text("\(u.icon) \(u.name)" as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xffdd44))
                         Text(u.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
                     }
                     Spacer()
@@ -80,7 +80,7 @@ struct SiegeView: View {
                         Feedback.announce("Difficulty set to \(d.rawValue). \(d.blurb)")
                     }
                     .buttonStyle(WebButtonStyle(kind: fortress.difficulty == d ? .gold : .ghost))
-                    .accessibilityLabel("\(d.rawValue.capitalized) difficulty — \(d.blurb)")
+                    .accessibilityLabel("\(d.rawValue.capitalized) difficulty — \(d.blurb)" as String)
                     .accessibilityAddTraits(fortress.difficulty == d ? .isSelected : [])
                 }
             }
@@ -94,7 +94,7 @@ struct SiegeView: View {
                     Feedback.announce("\(c.name) selected for The Siege.")
                 }
                 .buttonStyle(WebButtonStyle(kind: i == charIndex ? .gold : .ghost))
-                .accessibilityLabel("\(c.name), \(c.cls), level \(c.persistLevel ?? 1)")
+                .accessibilityLabel("\(c.name), \(c.cls), level \(c.persistLevel ?? 1)" as String)
                 .accessibilityAddTraits(i == charIndex ? .isSelected : [])
             }
             Button("⚔️ Begin The Siege") { start() }
@@ -138,11 +138,11 @@ struct SiegeView: View {
     private func battleView(_ b: Siege.Battle) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Text("Wave \(b.wave) / \(Siege.maxWaves)")
+                Text("Wave \(b.wave) / \(Siege.maxWaves)" as String)
                 Spacer()
-                Text("Gold: \(b.gold)")
+                Text("Gold: \(b.gold)" as String)
                 Spacer()
-                Text("WP: \(b.fortress.wavePoints)")
+                Text("WP: \(b.fortress.wavePoints)" as String)
             }
             .font(Theme.cinzel(10.4)).foregroundStyle(gold)
             .accessibilityElement(children: .combine)
@@ -150,14 +150,14 @@ struct SiegeView: View {
                 Text("🏰 Base Durability: \(Int(b.fortress.durability))%" + (b.baseUnderAttack ? "  ⚠️ BASE UNDER ATTACK" : ""))
                     .font(Theme.cinzel(10.4)).foregroundStyle(b.baseUnderAttack ? Color(hex: 0xff6644) : Theme.textSecondary)
                 bar(b.fortress.durability / 100, b.fortress.durability < 25 ? Color(hex: 0xcc4444) : gold)
-                Text("❤️ \(b.name): \(b.hp) / \(b.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
+                Text("❤️ \(b.name): \(b.hp) / \(b.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
                 bar(Double(b.hp) / Double(b.maxHp), Color(hex: 0x44aa44))
             }
             .accessibilityElement(children: .combine)
             VStack(alignment: .leading, spacing: 4) {
-                Text("WAVE \(b.wave) ENEMY").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Theme.textDim)
+                Text("WAVE \(b.wave) ENEMY" as String).font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Theme.textDim)
                 Text(b.enemy.name).font(Theme.cinzel(13)).foregroundStyle(Color(hex: 0xff6644))
-                Text("❤️ \(b.enemy.hp) / \(b.enemy.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
+                Text("❤️ \(b.enemy.hp) / \(b.enemy.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
                 bar(Double(b.enemy.hp) / Double(b.enemy.maxHp), Color(hex: 0xcc3322))
             }
             .padding(10).overlay(Rectangle().stroke(Color(hex: 0x442222)))
@@ -166,8 +166,8 @@ struct SiegeView: View {
                 Button("⚔️ Attack") { act(.attack) }.buttonStyle(WebButtonStyle(kind: .red)).accessibilityLabel("Attack the enemy")
                 Button("💥 Heavy Strike") { act(.heavy) }.buttonStyle(WebButtonStyle(kind: .red))
                     .accessibilityLabel("Heavy Strike — hits harder but 30 percent chance to miss")
-                Button("🧪 Potion (\(b.potions))") { drink() }.buttonStyle(WebButtonStyle(kind: .ghost))
-                    .disabled(b.potions == 0).accessibilityLabel("Use a health potion to restore HP. \(b.potions) left")
+                Button("🧪 Potion (\(b.potions))" as String) { drink() }.buttonStyle(WebButtonStyle(kind: .ghost))
+                    .disabled(b.potions == 0).accessibilityLabel("Use a health potion to restore HP. \(b.potions) left" as String)
                 Button("👾 Minion Attack") { act(.minion) }.buttonStyle(WebButtonStyle(kind: .ghost))
                     .disabled(b.fortress.stationed.isEmpty)
                     .accessibilityLabel(b.fortress.stationed.isEmpty ? "Minion attack. No minions stationed" : "Call your stationed minions to attack. Takes your turn")

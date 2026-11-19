@@ -143,15 +143,15 @@ struct MyTracksSection: View {
             }
             ForEach(my.tracks) { t in
                 HStack(spacing: 8) {
-                    Button("🎵 \(t.name)") { play(t) }
+                    Button("🎵 \(t.name)" as String) { play(t) }
                         .font(Theme.cinzel(11)).foregroundStyle(playing == t.name ? Theme.gold : Theme.textSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 6).padding(.horizontal, 10)
                         .overlay(Rectangle().stroke(Theme.borderDim))
-                        .accessibilityLabel("Play \(t.name)")
+                        .accessibilityLabel("Play \(t.name)" as String)
                     Button("✕") { my.delete(t); if playing == t.name { playing = nil } ; Feedback.announce("\(t.name) deleted.") }
                         .font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0xc06060))
                         .padding(.vertical, 4).padding(.horizontal, 8).overlay(Rectangle().stroke(Color(hex: 0x6a2020)))
-                        .accessibilityLabel("Delete \(t.name)")
+                        .accessibilityLabel("Delete \(t.name)" as String)
                 }
             }
             Button("📁 Choose Audio File") { picking = true }

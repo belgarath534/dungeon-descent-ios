@@ -107,17 +107,17 @@ struct HuntingGroundsView: View {
 
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
-                        Text("🏹 Bounty Rank \(rank.rank)").font(Theme.cinzel(11.2)).foregroundStyle(green)
+                        Text("🏹 Bounty Rank \(rank.rank)" as String).font(Theme.cinzel(11.2)).foregroundStyle(green)
                         Spacer()
-                        Text("\(xp) / \(next.xpNeeded) XP").font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x555555))
+                        Text("\(xp) / \(next.xpNeeded) XP" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x555555))
                     }
                     Bar(value: next.xpNeeded > rank.xpNeeded ? Double(xp - rank.xpNeeded) / Double(next.xpNeeded - rank.xpNeeded) : 1,
                         colors: [green, Color(hex: 0x44ff88)], track: green.opacity(0.15), height: 4)
-                    Text("\(rank.name) — \(rank.desc)").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                    Text("\(rank.name) — \(rank.desc)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
                 }
                 .padding(12).background(Color(hex: 0x030803)).overlay(Rectangle().stroke(Color(hex: 0x0a1a0a)))
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Bounty Rank \(rank.rank), \(rank.name). \(rank.desc) \(xp) of \(next.xpNeeded) XP.")
+                .accessibilityLabel("Bounty Rank \(rank.rank), \(rank.name). \(rank.desc) \(xp) of \(next.xpNeeded) XP." as String)
 
                 VStack(spacing: 4) {
                     stat("Hunter", hunt.hunter?.name ?? (game.characters.indices.contains(hunt.charIndex) ? game.characters[hunt.charIndex].name : "None selected"))
@@ -140,7 +140,7 @@ struct HuntingGroundsView: View {
                             Feedback.announce("\(c.name) selected.")
                         }
                         .buttonStyle(WebButtonStyle(kind: i == hunt.charIndex ? .gold : .ghost))
-                        .accessibilityLabel("\(c.name) \(c.cls) level \(c.persistLevel ?? 1)")
+                        .accessibilityLabel("\(c.name) \(c.cls) level \(c.persistLevel ?? 1)" as String)
                         .accessibilityAddTraits(i == hunt.charIndex ? .isSelected : [])
                     }
                 }

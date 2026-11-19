@@ -107,7 +107,7 @@ private struct AFKScreens: View {
                     Sound.sfx("sfx-select")
                     Feedback.announce("\(ch.name) selected.")
                 } label: {
-                    Text("\(ch.name) — \(ch.cls) (Lv \(lvl))")
+                    Text("\(ch.name) — \(ch.cls) (Lv \(lvl))" as String)
                         .font(Theme.cinzel(12)).foregroundStyle(model.picked == i ? Theme.gold : Theme.ashLight)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 12).padding(.horizontal, 14)
@@ -115,7 +115,7 @@ private struct AFKScreens: View {
                         .overlay(Rectangle().stroke(model.picked == i ? Theme.gold : Theme.borderDim))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("\(ch.name), \(ch.cls), Level \(lvl)")
+                .accessibilityLabel("\(ch.name), \(ch.cls), Level \(lvl)" as String)
                 .accessibilityAddTraits(model.picked == i ? [.isButton, .isSelected] : .isButton)
             }
             box {
@@ -160,19 +160,19 @@ private struct AFKScreens: View {
         return VStack(alignment: .leading, spacing: 10) {
             VStack(spacing: 4) {
                 label("ENDLESS DESCENT", size: 8.8, tracking: 3.5)
-                Text("\(r?.floor ?? 1)").font(Theme.decorative(32)).foregroundStyle(Self.violet)
+                Text("\(r?.floor ?? 1)" as String).font(Theme.decorative(32)).foregroundStyle(Self.violet)
                 label("FLOOR", size: 10.4, tracking: 2)
             }
             .frame(maxWidth: .infinity)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Floor \(r?.floor ?? 1)")
+            .accessibilityLabel("Floor \(r?.floor ?? 1)" as String)
             .accessibilityAddTraits(.isHeader)
 
             VStack(spacing: 3) {
                 HStack {
                     Text("HP")
                     Spacer()
-                    Text("\(hp) / \(maxHp)")
+                    Text("\(hp) / \(maxHp)" as String)
                 }
                 .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaaaaaa))
                 bar(Double(pct) / 100, height: 8,
@@ -180,7 +180,7 @@ private struct AFKScreens: View {
                     border: 0x222222)
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Health \(hp) of \(maxHp), \(pct) percent")
+            .accessibilityLabel("Health \(hp) of \(maxHp), \(pct) percent" as String)
 
             HStack(spacing: 8) {
                 stat("⬆ Level", "\(level)", Color(hex: 0xffdd44), Color(hex: 0xffdd44))
@@ -191,7 +191,7 @@ private struct AFKScreens: View {
                 HStack {
                     Text("XP")
                     Spacer()
-                    Text("\(r?.xp ?? 0) / \(level >= 10 || need == nil ? "MAX" : "\(need!)")")
+                    Text("\(r?.xp ?? 0) / \(level >= 10 || need == nil ? "MAX" : "\(need!)")" as String)
                 }
                 .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
                 bar(level >= 10 || need == nil ? 1 : min(1, Double(r?.xp ?? 0) / Double(need!)), height: 5,
@@ -235,11 +235,11 @@ private struct AFKScreens: View {
             .accessibilityHidden(true)
 
             HStack(spacing: 8) {
-                Button { model.usePotion() } label: { Text("🧪 Potion (\(r?.potions ?? 0))").frame(maxWidth: .infinity) }
+                Button { model.usePotion() } label: { Text("🧪 Potion (\(r?.potions ?? 0))" as String).frame(maxWidth: .infinity) }
                     .buttonStyle(MenuButtonStyle())
                     .disabled((r?.potions ?? 0) <= 0)
                     .opacity((r?.potions ?? 0) <= 0 ? 0.4 : 1)
-                    .accessibilityLabel("Use health potion in AFK mode, \(r?.potions ?? 0) left")
+                    .accessibilityLabel("Use health potion in AFK mode, \(r?.potions ?? 0) left" as String)
                 Button { model.endRun() } label: { Text("■ End Run").frame(maxWidth: .infinity) }
                     .buttonStyle(MenuButtonStyle(primary: true))
                     .accessibilityLabel("End AFK run and return to menu")
@@ -257,7 +257,7 @@ private struct AFKScreens: View {
         .background(Color(hex: 0x0a0a0a))
         .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color(hex: 0x1a1a2a)))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(name.dropFirst(2)) \(value)")
+        .accessibilityLabel("\(name.dropFirst(2)) \(value)" as String)
     }
 
     private func bar(_ fraction: Double, height: CGFloat, colors: [UInt32], border: UInt32) -> some View {
@@ -281,17 +281,17 @@ private struct AFKScreens: View {
             Color.black.opacity(0.92).ignoresSafeArea().accessibilityHidden(true)
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("\(n) level\(n > 1 ? "s" : "") gained. Choose \(model.skillsToChoose) skill\(model.skillsToChoose > 1 ? "s" : "").")
+                    Text("\(n) level\(n > 1 ? "s" : "") gained. Choose \(model.skillsToChoose) skill\(model.skillsToChoose > 1 ? "s" : "")." as String)
                         .font(Theme.decorative(14.4)).foregroundStyle(Color(hex: 0xffdd44))
                         .accessibilityAddTraits(.isHeader)
                     ForEach(model.skillChoices, id: \.effect) { sk in
                         let chosen = model.skillsChosen.contains(sk.effect)
                         Button { model.pickSkill(sk) } label: {
                             VStack(alignment: .leading, spacing: 3) {
-                                Text("\(sk.icon) \(sk.name)").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffdd44))
+                                Text("\(sk.icon) \(sk.name)" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffdd44))
                                 Text(sk.desc).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x888888))
                                     .multilineTextAlignment(.leading).lineSpacing(3)
-                                Text("\(sk.spCost) SP · \(sk.tier)").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                                Text("\(sk.spCost) SP · \(sk.tier)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
                                     .padding(.top, 2)
                             }
                             .padding(10).frame(maxWidth: .infinity, alignment: .leading)
@@ -301,7 +301,7 @@ private struct AFKScreens: View {
                         }
                         .buttonStyle(.plain)
                         .disabled(chosen)
-                        .accessibilityLabel("\(sk.name). \(sk.desc). Cost \(sk.spCost) SP.\(chosen ? " Selected." : "")")
+                        .accessibilityLabel("\(sk.name). \(sk.desc). Cost \(sk.spCost) SP.\(chosen ? " Selected." : "")" as String)
                     }
                 }
                 .padding(20)
@@ -400,10 +400,10 @@ private struct AFKScreens: View {
                 let afford = s.totalPoints >= item.cost
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("\(item.icon) \(item.name)").font(Theme.cinzel(11.5)).foregroundStyle(maxed ? Color(hex: 0xffdd44) : Color(hex: 0xaaaaaa))
+                        Text("\(item.icon) \(item.name)" as String).font(Theme.cinzel(11.5)).foregroundStyle(maxed ? Color(hex: 0xffdd44) : Color(hex: 0xaaaaaa))
                         Text(item.desc).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x555555)).lineSpacing(3)
                         if owned > 0 && item.max > 1 {
-                            Text("Owned: \(owned)\(item.max < 99 ? " / \(item.max)" : "")").font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x888888))
+                            Text("Owned: \(owned)\(item.max < 99 ? " / \(item.max)" : "")" as String).font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x888888))
                         }
                     }
                     Spacer(minLength: 0)
@@ -415,7 +415,7 @@ private struct AFKScreens: View {
                         .overlay(RoundedRectangle(cornerRadius: 3).stroke(maxed ? Color(hex: 0x333333) : afford ? Color(hex: 0xffdd44) : Color(hex: 0x222222)))
                         .disabled(maxed || !afford)
                         .fixedSize()
-                        .accessibilityLabel("\(item.name). \(item.desc). Cost: \(item.cost) points.\(maxed ? " Already maxed." : afford ? "" : " Not enough points.")")
+                        .accessibilityLabel("\(item.name). \(item.desc). Cost: \(item.cost) points.\(maxed ? " Already maxed." : afford ? "" : " Not enough points.")" as String)
                 }
                 .padding(12)
                 .background(Color(hex: 0x0a0a0a))

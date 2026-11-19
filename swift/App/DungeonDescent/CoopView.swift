@@ -45,7 +45,7 @@ struct CoopView: View {
         } else {
             header("YOUR CHARACTER")
             ForEach(Array(game.characters.enumerated()), id: \.offset) { i, ch in
-                Button("\(Prestige.label(ch)) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))") {
+                Button("\(Prestige.label(ch)) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))" as String) {
                     charIndex = i
                     Feedback.announce("\(ch.name) selected.")
                 }
@@ -63,7 +63,7 @@ struct CoopView: View {
             }
             Button("🤝 Host a Room") { model.host(game.characters[charIndex], dungeon: dungeons[dungeonIndex]) }
                 .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
-                .accessibilityLabel("Host a co-op room in \(dungeons[dungeonIndex])")
+                .accessibilityLabel("Host a co-op room in \(dungeons[dungeonIndex])" as String)
             header("JOIN A FRIEND")
             HStack {
                 TextField("Room code", text: $joinCode)
@@ -80,12 +80,12 @@ struct CoopView: View {
     // MARK: Lobby
 
     @ViewBuilder private var lobby: some View {
-        Text("Room code: \(model.code ?? "")").font(Theme.cinzel(18)).foregroundStyle(teal)
-            .accessibilityLabel("Room code: \((model.code ?? "").map(String.init).joined(separator: " "))")
-        Text("\(model.dungeon) · up to \(Coop.maxPlayers) players").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
+        Text("Room code: \(model.code ?? "")" as String).font(Theme.cinzel(18)).foregroundStyle(teal)
+            .accessibilityLabel("Room code: \((model.code ?? "").map(String.init).joined(separator: " "))" as String)
+        Text("\(model.dungeon) · up to \(Coop.maxPlayers) players" as String).font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
         header("THE PARTY")
         ForEach(model.party, id: \.id) { p in
-            Text("\(p.ready || (model.isHost && p.id == model.myId) ? "✓" : "…") \(p.name) — \(p.cls), Lv \(p.level), \(p.maxHp) HP\(p.id == model.myId ? " (you)" : "")")
+            Text("\(p.ready || (model.isHost && p.id == model.myId) ? "✓" : "…") \(p.name) — \(p.cls), Lv \(p.level), \(p.maxHp) HP\(p.id == model.myId ? " (you)" : "")" as String)
                 .font(Theme.crimson(15)).foregroundStyle(Theme.textSecondary)
         }
         if model.isHost {
@@ -102,21 +102,21 @@ struct CoopView: View {
     // MARK: The fight
 
     @ViewBuilder private var fight: some View {
-        Text("Floor \(model.floor) of \(Coop.floors) · \(model.dungeon)").font(Theme.cinzel(12)).foregroundStyle(Theme.gold)
+        Text("Floor \(model.floor) of \(Coop.floors) · \(model.dungeon)" as String).font(Theme.cinzel(12)).foregroundStyle(Theme.gold)
         if let f = model.foe {
             VStack(alignment: .leading, spacing: 4) {
-                Text("\(f.icon) \(f.name)\(f.boss ? " — BOSS" : "")").font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe08080))
+                Text("\(f.icon) \(f.name)\(f.boss ? " — BOSS" : "")" as String).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe08080))
                 bar(Double(f.hp) / Double(f.maxHp), Color(hex: 0xcc3333))
-                Text("\(f.hp) / \(f.maxHp) HP").font(Theme.cinzel(11)).foregroundStyle(Theme.textSecondary)
+                Text("\(f.hp) / \(f.maxHp) HP" as String).font(Theme.cinzel(11)).foregroundStyle(Theme.textSecondary)
             }
             .padding(10).overlay(Rectangle().stroke(Color(hex: 0x5a2020)))
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(f.name)\(f.boss ? ", the boss" : ""). \(f.hp) of \(f.maxHp) HP.")
+            .accessibilityLabel("\(f.name)\(f.boss ? ", the boss" : ""). \(f.hp) of \(f.maxHp) HP." as String)
         }
         header("THE PARTY")
         ForEach(model.party, id: \.id) { p in
             VStack(alignment: .leading, spacing: 2) {
-                Text("\(p.name)\(p.id == model.myId ? " (you)" : "")\(p.alive ? "" : " — DOWN")").font(Theme.cinzel(12))
+                Text("\(p.name)\(p.id == model.myId ? " (you)" : "")\(p.alive ? "" : " — DOWN")" as String).font(Theme.cinzel(12))
                     .foregroundStyle(p.alive ? Theme.ashLight : Color(hex: 0x885555))
                 bar(Double(p.hp) / Double(p.maxHp), Color(hex: 0x44cc44))
             }
@@ -125,7 +125,7 @@ struct CoopView: View {
         }
         if let m = model.me, m.alive {
             if let a = model.myAction {
-                Text("You chose \(a.label.dropFirst(2)). Waiting for \(model.waitingOn.isEmpty ? "the round" : model.waitingOn.joined(separator: ", ")).")
+                Text("You chose \(a.label.dropFirst(2)). Waiting for \(model.waitingOn.isEmpty ? "the round" : model.waitingOn.joined(separator: ", "))." as String)
                     .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
             } else {
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {

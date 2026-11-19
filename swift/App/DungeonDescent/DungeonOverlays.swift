@@ -58,12 +58,12 @@ struct ShopOverlay: View {
                 .padding(.bottom, 2).accessibilityAddTraits(.isHeader)
             Text("A hooded figure crouches in the stairwell, wares spread on a ragged cloth.")
                 .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Color(hex: 0x555555)).padding(.bottom, 10)
-            Text("💰 \(run.gold)g\(night ? "  🌙 Night Discount Active" : "")")
+            Text("💰 \(run.gold)g\(night ? "  🌙 Night Discount Active" : "")" as String)
                 .font(Theme.cinzel(12.8)).tracking(1.3).foregroundStyle(Color(hex: 0xffdd44))
                 .padding(.vertical, 8).padding(.horizontal, 14)
                 .background(Color(hex: 0x0d0a00)).overlay(Rectangle().stroke(Color(hex: 0x332200)))
                 .padding(.bottom, 14)
-                .accessibilityLabel("Your gold: \(run.gold).\(night ? " Night discount active." : "")")
+                .accessibilityLabel("Your gold: \(run.gold).\(night ? " Night discount active." : "")" as String)
             VStack(spacing: 8) {
                 ForEach(model.shop) { entry in row(entry, gold: run.gold, night: night) }
             }
@@ -83,9 +83,9 @@ struct ShopOverlay: View {
             HStack {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 8) {
-                    Button("🔄 Refresh Items (\(Inventory.refreshCost)g)") { model.refreshShop() }
+                    Button("🔄 Refresh Items (\(Inventory.refreshCost)g)" as String) { model.refreshShop() }
                         .buttonStyle(WebButtonStyle(kind: .ghost))
-                        .accessibilityLabel("Refresh shop items for \(Inventory.refreshCost) gold — get a new set of items")
+                        .accessibilityLabel("Refresh shop items for \(Inventory.refreshCost) gold — get a new set of items" as String)
                     Button("Continue Descent ↓") { model.leaveShop() }
                         .buttonStyle(WebButtonStyle(kind: .ghost))
                         .accessibilityLabel("Leave the shop and continue descending")
@@ -114,10 +114,10 @@ struct ShopOverlay: View {
                     if entry.sold {
                         Text("—")
                     } else if night, let full = item.cost, full != price {
-                        Text("\(full)g").strikethrough().foregroundColor(Color(hex: 0x555555)).font(Theme.cinzel(10.4))
-                            + Text(" 🌙\(price)g").foregroundColor(Color(hex: 0x6ab0f0))
+                        Text("\(full)g" as String).strikethrough().foregroundColor(Color(hex: 0x555555)).font(Theme.cinzel(10.4))
+                            + Text(" 🌙\(price)g" as String).foregroundColor(Color(hex: 0x6ab0f0))
                     } else {
-                        Text("\(price)g")
+                        Text("\(price)g" as String)
                     }
                 }
                 .font(Theme.cinzel(12.5, weight: .bold))
@@ -130,7 +130,7 @@ struct ShopOverlay: View {
                         .background(Color(hex: 0x0d0900)).overlay(Rectangle().stroke(Color(hex: 0x886622)))
                         .opacity(afford ? 1 : 0.3)
                         .disabled(!afford)
-                        .accessibilityLabel("\(item.name). \(item.desc). Cost: \(price) gold.\(afford ? " Press to buy." : " Cannot afford.")")
+                        .accessibilityLabel("\(item.name). \(item.desc). Cost: \(price) gold.\(afford ? " Press to buy." : " Cannot afford.")" as String)
                 }
             }
         }
@@ -151,13 +151,13 @@ struct ShopOverlay: View {
             ForEach(Array(run.inventory.enumerated()), id: \.offset) { i, item in
                 let price = Inventory.sellPrice(item)
                 HStack(spacing: 8) {
-                    Text("\(item.icon) \(item.name)").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xcc9944))
+                    Text("\(item.icon) \(item.name)" as String).font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xcc9944))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Button("\(price)g") { model.sell(at: i) }
+                    Button("\(price)g" as String) { model.sell(at: i) }
                         .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xcc8844))
                         .padding(.vertical, 4).padding(.horizontal, 10)
                         .background(Color(hex: 0x1a0800)).overlay(Rectangle().stroke(Color(hex: 0xaa6622)))
-                        .accessibilityLabel("Sell \(item.name) for \(price) gold")
+                        .accessibilityLabel("Sell \(item.name) for \(price) gold" as String)
                 }
                 .padding(.vertical, 6)
                 .overlay(alignment: .bottom) { Rectangle().fill(Color(hex: 0x1a1a00)).frame(height: 1) }
@@ -177,12 +177,12 @@ struct LevelUpOverlay: View {
     var body: some View {
         let lp = model.run.levelPoints
         DungeonDialog(maxWidth: 420, background: Color(hex: 0x0a0a06), border: Theme.goldDim) {
-            Text("⬆ Level \(level)!").font(Theme.decorative(22)).foregroundStyle(Theme.gold)
+            Text("⬆ Level \(level)!" as String).font(Theme.decorative(22)).foregroundStyle(Theme.gold)
                 .frame(maxWidth: .infinity).accessibilityAddTraits(.isHeader)
-            Text("\(model.run.name) grows stronger. You have \(lp) Level Point\(lp != 1 ? "s" : "") to spend.")
+            Text("\(model.run.name) grows stronger. You have \(lp) Level Point\(lp != 1 ? "s" : "") to spend." as String)
                 .font(Theme.crimson(14.4, italic: true)).foregroundStyle(Theme.textSecondary)
                 .multilineTextAlignment(.center).frame(maxWidth: .infinity).padding(.vertical, 10)
-            (Text("ALLOCATE LEVEL POINTS — \(lp) remaining ") + Text("(unspent points carry over)").foregroundColor(Color(hex: 0x666666)))
+            (Text("ALLOCATE LEVEL POINTS — \(lp) remaining " as String) + Text("(unspent points carry over)").foregroundColor(Color(hex: 0x666666)))
                 .font(Theme.cinzel(10.4)).tracking(1).foregroundStyle(Color(hex: 0xffaa44)).padding(.bottom, 8)
             VStack(spacing: 6) {
                 ForEach(Progression.Stat.allCases, id: \.self) { stat in
@@ -192,7 +192,7 @@ struct LevelUpOverlay: View {
                         Sound.sfx("sfx-confirm")
                     } label: {
                         HStack(spacing: 8) {
-                            Text("\(Self.icon(stat)) \(stat.label)")
+                            Text("\(Self.icon(stat)) \(stat.label)" as String)
                             Text(stat.summary).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x888888))
                             Spacer()
                         }
@@ -201,7 +201,7 @@ struct LevelUpOverlay: View {
                         .background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(lp > 0 ? Color(hex: 0xffaa44) : Color(hex: 0x333333)))
                     }
                     .disabled(lp <= 0)
-                    .accessibilityLabel("\(Self.icon(stat)) \(stat.label). \(stat.summary). Tap to spend 1 Level Point.")
+                    .accessibilityLabel("\(Self.icon(stat)) \(stat.label). \(stat.summary). Tap to spend 1 Level Point." as String)
                 }
             }
             .padding(.bottom, 16)
@@ -233,14 +233,14 @@ struct SkillChoiceOverlay: View {
         DungeonDialog(maxWidth: 520, background: Color(hex: 0x0a0a14), border: Theme.goldDim) {
             Text("✨ Choose Your Skill").font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).padding(.bottom, 6)
                 .accessibilityAddTraits(.isHeader)
-            Text("Level \(run.level) reached. Choose one skill to unlock. The others are gone.")
+            Text("Level \(run.level) reached. Choose one skill to unlock. The others are gone." as String)
                 .font(Theme.crimson(13.6, italic: true)).foregroundStyle(Theme.textSecondary).lineSpacing(3).padding(.bottom, 20)
             VStack(spacing: 10) {
                 ForEach(run.skillChoices, id: \.self) { effect in
                     if let s = Skills.skill(effect, cls: run.cls) {
                         Button { model.pickSkill(effect) } label: { card(s) }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("\(s.name). \(s.tier). \(s.desc) Costs \(s.spCost) SP.")
+                            .accessibilityLabel("\(s.name). \(s.tier). \(s.desc) Costs \(s.spCost) SP." as String)
                     }
                 }
             }
@@ -251,13 +251,13 @@ struct SkillChoiceOverlay: View {
         let tierColor: Color = s.tier == "legendary" ? Theme.gold : s.tier == "rare" ? Color(hex: 0x4a80d0) : Theme.ash
         return VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 8) {
-                Text("\(s.icon) \(s.name)").font(Theme.cinzel(14)).foregroundStyle(Theme.ashLight)
+                Text("\(s.icon) \(s.name)" as String).font(Theme.cinzel(14)).foregroundStyle(Theme.ashLight)
                 Text(s.tier).font(Theme.cinzel(9.3)).tracking(0.8).textCase(.uppercase).foregroundStyle(tierColor)
                     .padding(.vertical, 2).padding(.horizontal, 7)
                     .overlay(Rectangle().stroke(s.tier == "legendary" ? Theme.goldDim : s.tier == "rare" ? Color(hex: 0x2a5090) : Theme.borderDim))
             }
             Text(s.desc).font(Theme.crimson(13)).foregroundStyle(Theme.textSecondary)
-            Text("Cost: \(s.spCost) SP").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x7090c0))
+            Text("Cost: \(s.spCost) SP" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x7090c0))
         }
         .multilineTextAlignment(.leading)
         .padding(.vertical, 14).padding(.horizontal, 18)
@@ -281,7 +281,7 @@ struct StatsOverlay: View {
         let all = Skills.all(for: run.cls)
         let needed = run.level < run.levelCap ? "\(Progression.xpNeeded(atLevel: run.level))" : "MAX"
         DungeonDialog(maxWidth: 520, background: Color(hex: 0x0a0806), border: Theme.borderDim) {
-            Text("📊 \(run.name)").font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).padding(.bottom, 12)
+            Text("📊 \(run.name)" as String).font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).padding(.bottom, 12)
                 .accessibilityAddTraits(.isHeader)
             section("Character")
             grid(2, [("Class", "\(run.race) \(run.cls)"), ("Profession", run.prof),
@@ -301,9 +301,9 @@ struct StatsOverlay: View {
                 VStack(spacing: 5) {
                     ForEach(skills, id: \.effect) { s in
                         HStack {
-                            Text("\(s.icon) \(s.name) ") + Text(s.tier).font(Theme.cinzel(9.3)).foregroundColor(Theme.textDim)
+                            Text("\(s.icon) \(s.name) " as String) + Text(s.tier).font(Theme.cinzel(9.3)).foregroundColor(Theme.textDim)
                             Spacer()
-                            Text("\(s.spCost) SP").foregroundStyle(Color(hex: 0x7090c0))
+                            Text("\(s.spCost) SP" as String).foregroundStyle(Color(hex: 0x7090c0))
                         }
                         .font(Theme.cinzel(11.5)).foregroundStyle(Theme.ashLight)
                         .accessibilityElement(children: .combine)
@@ -317,7 +317,7 @@ struct StatsOverlay: View {
             } else {
                 FlowRow(spacing: 6) {
                     ForEach(Array(run.inventory.enumerated()), id: \.offset) { _, i in
-                        Text("\(i.icon) \(i.name)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.ash)
+                        Text("\(i.icon) \(i.name)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.ash)
                             .padding(.vertical, 4).padding(.horizontal, 10)
                             .background(Theme.bgStone).overlay(Rectangle().stroke(Theme.borderDim))
                     }
@@ -328,8 +328,8 @@ struct StatsOverlay: View {
                 section("Death Log")
                 ForEach(Array(deaths.enumerated()), id: \.offset) { _, d in
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("☠ Floor \(d.floor) · Lv \(d.level > 0 ? "\(d.level)" : "?") · \(d.date)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.bloodBright)
-                        Text("Slain by \(d.killedBy) — \(d.kills) kills, \(d.gold)g\(d.bestDmg > 0 ? ", best hit: \(d.bestDmg)" : "")")
+                        Text("☠ Floor \(d.floor) · Lv \(d.level > 0 ? "\(d.level)" : "?") · \(d.date)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.bloodBright)
+                        Text("Slain by \(d.killedBy) — \(d.kills) kills, \(d.gold)g\(d.bestDmg > 0 ? ", best hit: \(d.bestDmg)" : "")" as String)
                             .font(Theme.crimson(12.5)).foregroundStyle(Theme.textSecondary)
                         Text(d.flavor).font(Theme.crimson(11.2, italic: true)).foregroundStyle(Theme.textDim)
                     }
@@ -363,7 +363,7 @@ struct StatsOverlay: View {
                 .padding(.vertical, 8).padding(.horizontal, 4)
                 .background(Theme.bgDeep).overlay(Rectangle().stroke(Theme.borderDim))
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("\(kv.0): \(kv.1)")
+                .accessibilityLabel("\(kv.0): \(kv.1)" as String)
             }
         }
     }
@@ -381,12 +381,12 @@ struct DeathCinematic: View {
         ZStack {
             Color.black.ignoresSafeArea()
             VStack(spacing: 18) {
-                Text("\(r.dungeon.uppercased()) · FLOOR \(r.floor)").font(Theme.cinzel(10.4)).tracking(3.5)
+                Text("\(r.dungeon.uppercased()) · FLOOR \(r.floor)" as String).font(Theme.cinzel(10.4)).tracking(3.5)
                     .foregroundStyle(Color(hex: 0x664444))
                 Text(line).font(Theme.crimson(20, italic: true)).foregroundStyle(Color(hex: 0xd4a0a0))
                     .multilineTextAlignment(.center).lineSpacing(5)
-                Text("\(r.name) — \(r.race) \(r.cls)").font(Theme.cinzel(13)).foregroundStyle(Theme.ashLight)
-                Text("Slain by \(model.killer) · \(r.kills) enemies defeated").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666))
+                Text("\(r.name) — \(r.race) \(r.cls)" as String).font(Theme.cinzel(13)).foregroundStyle(Theme.ashLight)
+                Text("Slain by \(model.killer) · \(r.kills) enemies defeated" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666))
                 Text("· TAP TO CONTINUE ·").font(Theme.cinzel(8.8)).tracking(3.5).foregroundStyle(.white.opacity(0.3))
                     .padding(.top, 32)
             }
@@ -436,7 +436,7 @@ struct RunSummaryView: View {
                         Text(victory ? "Dungeon Cleared" : "The Dark Claims You").font(Theme.decorative(26))
                             .foregroundStyle(victory ? Theme.gold : Theme.bloodBright)
                             .accessibilityAddTraits(.isHeader)
-                        Text("\(r.name) · \(r.race) \(r.cls) · \(r.difficulty.rawValue)").font(Theme.cinzel(11.5)).foregroundStyle(Theme.ash)
+                        Text("\(r.name) · \(r.race) \(r.cls) · \(r.difficulty.rawValue)" as String).font(Theme.cinzel(11.5)).foregroundStyle(Theme.ash)
                     }
                     .multilineTextAlignment(.center)
                     Text(victory ? UIText.shared.closingLine(dungeon: r.dungeon, cls: r.cls)
@@ -463,9 +463,9 @@ struct RunSummaryView: View {
                             Text("SKILLS USED THIS RUN").font(Theme.cinzel(10.4)).tracking(3).foregroundStyle(Theme.goldDim)
                             ForEach(skills, id: \.effect) { s in
                                 HStack {
-                                    Text("\(s.icon) \(s.name)").foregroundStyle(Theme.ashLight)
+                                    Text("\(s.icon) \(s.name)" as String).foregroundStyle(Theme.ashLight)
                                     Spacer()
-                                    Text("\(s.tier) · \(s.spCost) SP").font(Theme.cinzel(11.5)).foregroundStyle(Theme.textDim)
+                                    Text("\(s.tier) · \(s.spCost) SP" as String).font(Theme.cinzel(11.5)).foregroundStyle(Theme.textDim)
                                 }
                                 .font(Theme.cinzel(12.5))
                                 .accessibilityElement(children: .combine)
@@ -507,7 +507,7 @@ struct RunSummaryView: View {
         .padding(.vertical, 10)
         .background(Theme.bgDeep).overlay(Rectangle().stroke(Theme.borderDim))
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(label): \(v)")
+        .accessibilityLabel("\(label): \(v)" as String)
     }
 }
 
@@ -521,12 +521,12 @@ struct GambleOverlay: View {
         DungeonDialog(maxWidth: 420) {
             Text("🎲 Gambler's Spirit — Choose Your Fate").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
                 .padding(.bottom, 8).accessibilityAddTraits(.isHeader)
-            Text("Double your gold (\(gold) → \(gold * 2)g) or halve it (\(gold) → \(gold / 2)g). No refunds.")
+            Text("Double your gold (\(gold) → \(gold * 2)g) or halve it (\(gold) → \(gold / 2)g). No refunds." as String)
                 .font(Theme.crimson(14)).foregroundStyle(Theme.textSecondary).padding(.bottom, 16)
             HStack(spacing: 10) {
-                Button("Double (\(gold * 2)g)") { model.gamble(double: true) }
+                Button("Double (\(gold * 2)g)" as String) { model.gamble(double: true) }
                     .buttonStyle(WebButtonStyle(kind: .gold))
-                Button("Halve (\(gold / 2)g)") { model.gamble(double: false) }
+                Button("Halve (\(gold / 2)g)" as String) { model.gamble(double: false) }
                     .buttonStyle(WebButtonStyle(kind: .ghost))
             }
         }
@@ -546,7 +546,7 @@ struct SubclassOverlay: View {
         DungeonDialog(dim: 0.97, maxWidth: 480) {
             Text("Choose Your Subclass").font(Theme.decorative(16)).foregroundStyle(Theme.gold)
                 .frame(maxWidth: .infinity).padding(.bottom, 6).accessibilityAddTraits(.isHeader)
-            Text("You are a \(run.cls). Your training diverges at level 5. This choice is permanent for this run.")
+            Text("You are a \(run.cls). Your training diverges at level 5. This choice is permanent for this run." as String)
                 .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity).padding(.bottom, 20)
             VStack(spacing: 12) {
@@ -567,7 +567,7 @@ struct SubclassOverlay: View {
                         .background(Color(hex: 0x080808)).overlay(Rectangle().stroke(Color(hex: 0x333333)))
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("\(sub.name). \(sub.desc). Passive: \(sub.passive). Press to choose this subclass.")
+                    .accessibilityLabel("\(sub.name). \(sub.desc). Passive: \(sub.passive). Press to choose this subclass." as String)
                 }
             }
         }
@@ -595,7 +595,7 @@ struct SpiritsOverlay: View {
                 let active = model.run.spirit == sp.id
                 HStack(spacing: 8) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("\(sp.icon) \(sp.name)\(active ? " ✓" : "")").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xe0c080))
+                        Text("\(sp.icon) \(sp.name)\(active ? " ✓" : "")" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xe0c080))
                         Text(sp.ability).font(Theme.crimson(12)).foregroundStyle(Theme.textSecondary)
                     }
                     .accessibilityHidden(true)
@@ -630,10 +630,10 @@ struct BossRiddleOverlay: View {
             ForEach(Array(riddle.answers.enumerated()), id: \.offset) { i, a in
                 Button(a) { model.answerRiddle(i) }
                     .buttonStyle(WebButtonStyle(kind: .ghost))
-                    .accessibilityLabel("Answer \(i + 1): \(a)")
+                    .accessibilityLabel("Answer \(i + 1): \(a)" as String)
             }
-            Text("\(model.riddleSeconds)").font(Theme.decorative(22)).foregroundStyle(Theme.gold)
-                .accessibilityLabel("\(model.riddleSeconds) seconds left")
+            Text("\(model.riddleSeconds)" as String).font(Theme.decorative(22)).foregroundStyle(Theme.gold)
+                .accessibilityLabel("\(model.riddleSeconds) seconds left" as String)
         }
     }
 }

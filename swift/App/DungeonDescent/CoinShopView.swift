@@ -16,7 +16,7 @@ struct CoinShopView: View {
             HStack(spacing: 14) {
                 Text("🪙").font(.system(size: 28)).accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("\(coins) Mystery Coin\(coins != 1 ? "s" : "")")
+                    Text("\(coins) Mystery Coin\(coins != 1 ? "s" : "")" as String)
                         .font(Theme.cinzel(14)).foregroundStyle(Theme.gold)
                     Text("Earned by completing daily raids. Permanent upgrades apply to all future runs.")
                         .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textSecondary)
@@ -29,7 +29,7 @@ struct CoinShopView: View {
             .overlay(alignment: .leading) { Rectangle().fill(Theme.gold).frame(width: 3) }
             .padding(.bottom, 6)
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("Your Mystery Coins: \(coins).")
+            .accessibilityLabel("Your Mystery Coins: \(coins)." as String)
 
             VStack(spacing: 10) {
                 ForEach(CoinShop.upgrades) { row($0) }
@@ -72,7 +72,7 @@ struct CoinShopView: View {
                 if isOwned {
                     Text("✦ Owned").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0x7aaa7a))
                 } else {
-                    Text("\(u.cost) 🪙").font(Theme.cinzel(13)).foregroundStyle(Theme.gold).fixedSize()
+                    Text("\(u.cost) 🪙" as String).font(Theme.cinzel(13)).foregroundStyle(Theme.gold).fixedSize()
                 }
             }
             .padding(.vertical, 18).padding(.horizontal, 20)

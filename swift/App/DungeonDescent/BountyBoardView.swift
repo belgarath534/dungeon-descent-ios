@@ -17,10 +17,10 @@ struct BountyBoardView: View {
                 Button("← Menu") { router.goTo(.menu) }
                     .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Back to main menu")
                 Text("The Bounty Board").font(Theme.decorative(22)).foregroundStyle(Color(hex: 0xe0c080)).accessibilityAddTraits(.isHeader)
-                Text("\(refreshes) refreshes remaining today").font(Theme.cinzel(10.4)).tracking(1.5)
+                Text("\(refreshes) refreshes remaining today" as String).font(Theme.cinzel(10.4)).tracking(1.5)
                     .foregroundStyle(Color(hex: 0x555555)).frame(maxWidth: .infinity)
                 if let a = active {
-                    Text("📋 Active: \(a.title) — \(progress) / \(a.count) \(a.progressLabel)")
+                    Text("📋 Active: \(a.title) — \(progress) / \(a.count) \(a.progressLabel)" as String)
                         .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x44ff88))
                         .padding(12).frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color(hex: 0x0a1a0a)).overlay(Rectangle().stroke(Color(hex: 0x44aa44)))
@@ -33,7 +33,7 @@ struct BountyBoardView: View {
                 Button("🔄 Refresh Bounties") { refresh() }
                     .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
                     .disabled(refreshes <= 0).opacity(refreshes <= 0 ? 0.4 : 1)
-                    .accessibilityLabel("Refresh bounties. \(refreshes) refreshes remaining today.")
+                    .accessibilityLabel("Refresh bounties. \(refreshes) refreshes remaining today." as String)
                 Text("Completing a bounty rewards gold and trophies. Only one active bounty at a time.")
                     .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x333333)).multilineTextAlignment(.center).frame(maxWidth: .infinity)
                 Divider().background(Color(hex: 0x1a1a1a))
@@ -54,22 +54,22 @@ struct BountyBoardView: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text("\(b.icon) \(b.title)" + (isActive ? "  ● ACTIVE" : "")).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xe0c080))
                 Text(b.desc).font(Theme.crimson(14)).foregroundStyle(Theme.textSecondary)
-                Text("📍 \(b.dungeon)").font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x888888))
-                Text("Reward: \(b.gold)g + \(b.trophies) 🏆").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffdd44))
+                Text("📍 \(b.dungeon)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x888888))
+                Text("Reward: \(b.gold)g + \(b.trophies) 🏆" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffdd44))
                 if isActive {
-                    Text("Progress: \(progress) / \(b.count) \(b.progressLabel)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x44ff88))
+                    Text("Progress: \(progress) / \(b.count) \(b.progressLabel)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x44ff88))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(b.title). \(b.desc) \(b.dungeon). Reward: \(b.gold) gold and \(b.trophies) \(b.trophies == 1 ? "trophy" : "trophies")."
+            .accessibilityLabel("\(b.title). \(b.desc) \(b.dungeon). Reward: \(b.gold) gold and \(b.trophies) \(b.trophies == 1 ? "trophy" : "trophies")." as String
                                 + (isActive ? " Active. Progress \(progress) of \(b.count) \(b.progressLabel)." : ""))
             if isActive {
                 Button("Abandon Bounty") { abandon() }
-                    .buttonStyle(WebButtonStyle(kind: .red)).accessibilityLabel("Abandon \(b.title)")
+                    .buttonStyle(WebButtonStyle(kind: .red)).accessibilityLabel("Abandon \(b.title)" as String)
             } else if active == nil {
                 Button("📋 Register") { register(b) }
-                    .buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Register for \(b.title)")
+                    .buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Register for \(b.title)" as String)
             }
         }
         .padding(12)

@@ -103,7 +103,7 @@ struct GunWorkshop: View {
         VStack(alignment: .leading, spacing: 10) {
             Text(mode == .craft ? "🔫 Gun Workshop" : "🔫 Gun Shop").font(Theme.cinzel(12)).foregroundStyle(Theme.gold)
                 .accessibilityAddTraits(.isHeader)
-            Text("💎 Diamonds: \(wallet.diamonds)").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x88ddff))
+            Text("💎 Diamonds: \(wallet.diamonds)" as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x88ddff))
             if mode == .craft {
                 if Guns.parts.allSatisfy({ parts[$0.id, default: 0] == 0 }) {
                     Text("No parts yet. Defeat enemies in dungeons (8% drop chance) or dig in the Mine to find gun parts.")
@@ -121,7 +121,7 @@ struct GunWorkshop: View {
                 if let g = Guns.gun(id) {
                     let on = equipped?.id == id
                     HStack {
-                        Text("\(g.icon) \(g.name)\(on ? " ✓" : "")").font(Theme.cinzel(11)).foregroundStyle(on ? Color(hex: 0xff6622) : Color(hex: 0xffaa00))
+                        Text("\(g.icon) \(g.name)\(on ? " ✓" : "")" as String).font(Theme.cinzel(11)).foregroundStyle(on ? Color(hex: 0xff6622) : Color(hex: 0xffaa00))
                         Spacer()
                         Button(on ? "Unequip" : "Equip") {
                             Guns.equip(on ? nil : id, store: store)
@@ -138,9 +138,9 @@ struct GunWorkshop: View {
             Text(mode == .craft ? "CRAFT" : "BUY MORE GUNS").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Theme.textDim).padding(.top, 6)
             ForEach(Guns.all.filter { !owned.contains($0.id) }, id: \.id) { g in
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("\(g.icon) \(g.name)").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xffaa00))
+                    Text("\(g.icon) \(g.name)" as String).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xffaa00))
                     Text(g.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x888888))
-                    Text("⚔ Damage: \(g.damage.lowerBound)-\(g.damage.upperBound)  |  🔫 Shots: \(g.shots)  |  ⏱ Reload: \(g.cooldown)s")
+                    Text("⚔ Damage: \(g.damage.lowerBound)-\(g.damage.upperBound)  |  🔫 Shots: \(g.shots)  |  ⏱ Reload: \(g.cooldown)s" as String)
                         .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0xaaaaaa))
                     if mode == .craft {
                         let need = g.partCounts.sorted { $0.key < $1.key }

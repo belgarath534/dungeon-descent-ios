@@ -61,9 +61,9 @@ struct BossRushView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack(spacing: 8) {
                                     Text(ch.name).font(Theme.cinzel(16, weight: .semibold)).foregroundStyle(Theme.ashLight)
-                                    Text("\(ch.race) \(ch.cls)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.goldDim)
+                                    Text("\(ch.race) \(ch.cls)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.goldDim)
                                         .padding(.horizontal, 7).padding(.vertical, 1).overlay(Rectangle().stroke(Theme.borderDim))
-                                    Text("Lv \(ch.persistLevel ?? 1)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffaa00))
+                                    Text("Lv \(ch.persistLevel ?? 1)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffaa00))
                                         .padding(.horizontal, 7).padding(.vertical, 1)
                                         .background(Color(hex: 0x1a1000)).overlay(Rectangle().stroke(Color(hex: 0xffaa00)))
                                 }
@@ -76,7 +76,7 @@ struct BossRushView: View {
                         .overlay(Rectangle().stroke(picked == i ? Self.purple : Theme.borderDim))
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("\(ch.name), \(ch.race) \(ch.cls), Level \(ch.persistLevel ?? 1). Press to select.")
+                    .accessibilityLabel("\(ch.name), \(ch.race) \(ch.cls), Level \(ch.persistLevel ?? 1). Press to select." as String)
                     .accessibilityAddTraits(picked == i ? [.isButton, .isSelected] : .isButton)
                 }
                 Button("⚔ Begin Boss Rush") { begin() }
@@ -112,12 +112,12 @@ struct BossRushView: View {
     private func active(_ b: BossRush) -> some View {
         VStack(spacing: 12) {
             HStack {
-                Text("Boss \(b.bossIndex + 1) of 9").font(Theme.decorative(17)).foregroundStyle(Self.lilac)
+                Text("Boss \(b.bossIndex + 1) of 9" as String).font(Theme.decorative(17)).foregroundStyle(Self.lilac)
                 Spacer()
                 HStack(spacing: 10) {
-                    Text("HP: \(b.hp)/\(b.maxHp)").foregroundStyle(Color(hex: 0xd4a0a0))
-                    Text("SP: \(b.sp)/\(b.maxSp)").foregroundStyle(Color(hex: 0x7090c0))
-                    Text("Coins: \(b.coinsEarned)").foregroundStyle(Theme.gold)
+                    Text("HP: \(b.hp)/\(b.maxHp)" as String).foregroundStyle(Color(hex: 0xd4a0a0))
+                    Text("SP: \(b.sp)/\(b.maxSp)" as String).foregroundStyle(Color(hex: 0x7090c0))
+                    Text("Coins: \(b.coinsEarned)" as String).foregroundStyle(Theme.gold)
                 }
                 .font(Theme.cinzel(11.5))
             }
@@ -125,18 +125,18 @@ struct BossRushView: View {
             .background(Color(hex: 0x0a0510)).overlay(Rectangle().stroke(Self.purpleDark))
             .overlay(alignment: .top) { Rectangle().fill(Self.purple).frame(height: 2) }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("Boss \(b.bossIndex + 1) of 9. HP \(b.hp) of \(b.maxHp). SP \(b.sp) of \(b.maxSp). \(b.coinsEarned) coins. \(b.potions) potions.")
+            .accessibilityLabel("Boss \(b.bossIndex + 1) of 9. HP \(b.hp) of \(b.maxHp). SP \(b.sp) of \(b.maxSp). \(b.coinsEarned) coins. \(b.potions) potions." as String)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("Your Health").font(Theme.cinzel(9.9)).tracking(2).textCase(.uppercase).foregroundStyle(Theme.textDim)
                 Bar(value: Double(b.hp) / Double(max(b.maxHp, 1)), colors: [Color(hex: 0x8b2020), Color(hex: 0xc03030)],
                     track: .black.opacity(0.3), height: 8)
-                Text("HP: \(b.hp)/\(b.maxHp)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.blood)
+                Text("HP: \(b.hp)/\(b.maxHp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.blood)
             }
             .padding(.vertical, 10).padding(.horizontal, 18)
             .background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Your health: \(b.hp) of \(b.maxHp)")
+            .accessibilityLabel("Your health: \(b.hp) of \(b.maxHp)" as String)
 
             HStack(spacing: 6) {
                 ForEach(0..<BossRush.bosses.count, id: \.self) { i in
@@ -148,7 +148,7 @@ struct BossRushView: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Boss progress: \(b.bossIndex) of 9 defeated.")
+            .accessibilityLabel("Boss progress: \(b.bossIndex) of 9 defeated." as String)
 
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 14) {
@@ -157,13 +157,13 @@ struct BossRushView: View {
                         Text(b.boss.name).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe0c0f0))
                         Bar(value: Double(b.bossHp) / Double(max(b.boss.hp, 1)), colors: [Self.purple, Self.purple],
                             track: .black.opacity(0.3), height: 6)
-                        Text("HP: \(b.bossHp)/\(b.boss.hp)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xa070c0))
+                        Text("HP: \(b.bossHp)/\(b.boss.hp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xa070c0))
                     }
                 }
                 .padding(.vertical, 12).padding(.horizontal, 16)
                 .background(Self.purpleDark.opacity(0.15)).overlay(Rectangle().stroke(Self.purple.opacity(0.3)))
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Current boss: \(b.boss.name). HP \(b.bossHp) of \(b.boss.hp).")
+                .accessibilityLabel("Current boss: \(b.boss.name). HP \(b.bossHp) of \(b.boss.hp)." as String)
 
                 VStack(alignment: .leading, spacing: 2) {
                     ForEach(Array(log.suffix(4).enumerated()), id: \.offset) { _, l in
@@ -183,15 +183,15 @@ struct BossRushView: View {
                     action("🧪 Potion (\(b.potions))", "Use potion. \(b.potions) left.") { fight(.potion) }
                     ForEach(Array(b.skills.enumerated()), id: \.offset) { i, s in
                         let can = b.sp >= s.spCost
-                        Button("\(s.icon) \(s.name) (\(s.spCost)SP)") { skill(i) }
+                        Button("\(s.icon) \(s.name) (\(s.spCost)SP)" as String) { skill(i) }
                             .buttonStyle(BossRushButtonStyle())
                             .disabled(!can || busy)
-                            .accessibilityLabel("\(s.name). Costs \(s.spCost) SP.\(can ? "" : " Not enough SP.")")
+                            .accessibilityLabel("\(s.name). Costs \(s.spCost) SP.\(can ? "" : " Not enough SP.")" as String)
                     }
                 }
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Combat actions")
-                Text("SP: \(b.sp)/\(b.maxSp)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x7090c0))
+                Text("SP: \(b.sp)/\(b.maxSp)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x7090c0))
                     .accessibilityHidden(true)
             }
             .padding(.vertical, 18).padding(.horizontal, 20)
@@ -305,9 +305,9 @@ struct BossRushView: View {
                     Text("PERSONAL BEST RUNS").font(Theme.cinzel(11.5)).tracking(2.3).foregroundStyle(Theme.goldDim).padding(.top, 8)
                     ForEach(Array(scores.prefix(5).enumerated()), id: \.offset) { i, s in
                         HStack {
-                            Text("\(i + 1). \(s.cls)").foregroundStyle(Theme.goldDim)
+                            Text("\(i + 1). \(s.cls)" as String).foregroundStyle(Theme.goldDim)
                             Spacer()
-                            Text("\(s.bosses)/9 bosses")
+                            Text("\(s.bosses)/9 bosses" as String)
                             Spacer()
                             Text(s.timeStr).foregroundStyle(Theme.textDim)
                         }

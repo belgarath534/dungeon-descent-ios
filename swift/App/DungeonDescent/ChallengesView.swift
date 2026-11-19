@@ -47,7 +47,7 @@ struct ChallengesView: View {
             ForEach(GameCenter.Board.allCases, id: \.self) { b in
                 Button("🏆 " + b.title) { GameCenter.show(b) }
                     .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
-                    .accessibilityLabel("Game Center leaderboard and challenges: \(b.title)")
+                    .accessibilityLabel("Game Center leaderboard and challenges: \(b.title)" as String)
             }
         }
         .padding(.top, 10)
@@ -88,13 +88,13 @@ struct ChallengesView: View {
                 Text("No characters. Create one first.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x555555))
             }
             ForEach(Array(game.characters.enumerated()), id: \.offset) { i, c in
-                Button("\(c.name) — \(c.cls) (Lv \(c.persistLevel ?? 1))") {
+                Button("\(c.name) — \(c.cls) (Lv \(c.persistLevel ?? 1))" as String) {
                     selected.wrappedValue = i
                     Sound.sfx("sfx-select")
                     Feedback.announce("\(c.name) selected.")
                 }
                 .buttonStyle(WebButtonStyle(kind: i == selected.wrappedValue ? .gold : .ghost))
-                .accessibilityLabel("\(c.name), \(c.cls), Level \(c.persistLevel ?? 1).")
+                .accessibilityLabel("\(c.name), \(c.cls), Level \(c.persistLevel ?? 1)." as String)
                 .accessibilityAddTraits(i == selected.wrappedValue ? .isSelected : [])
             }
         }
@@ -125,7 +125,7 @@ struct ChallengesView: View {
                 Text("Today's Dungeon").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xe0c080))
                 Text(daily.dungeon).font(Theme.cinzel(13.6)).foregroundStyle(.white)
                 ForEach(daily.mods, id: \.id) { m in
-                    Text("⚡ \(m.name) — \(m.desc)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaaaaaa))
+                    Text("⚡ \(m.name) — \(m.desc)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaaaaaa))
                 }
                 Text("Resets at midnight.").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444))
             }
@@ -135,22 +135,22 @@ struct ChallengesView: View {
             Button("📅 Enter the Daily Dungeon") { start(.daily, dailyChar) }
                 .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
                 .disabled(game.characters.isEmpty)
-                .accessibilityLabel("Begin today's Daily Dungeon, \(daily.dungeon)")
+                .accessibilityLabel("Begin today's Daily Dungeon, \(daily.dungeon)" as String)
         }
     }
 
     private var weeklyPanel: some View {
         VStack(alignment: .leading, spacing: 14) {
             box {
-                Text("This Week's Dungeon — \(week.name)").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xe0c080))
+                Text("This Week's Dungeon — \(week.name)" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xe0c080))
                 Text(week.dungeon).font(Theme.cinzel(13.6)).foregroundStyle(.white)
                 ForEach(week.mods, id: \.id) { m in
-                    Text("⚡ \(m.name) — \(m.desc)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaaaaaa))
+                    Text("⚡ \(m.name) — \(m.desc)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaaaaaa))
                 }
                 Text("One life. Score: 100 a floor, 5 a kill, 2000 for the boss. Starts over every Monday.")
                     .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
             }
-            Text("Your best this week: \(Challenges.weeklyBest(game.store))")
+            Text("Your best this week: \(Challenges.weeklyBest(game.store))" as String)
                 .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xaaaaaa))
             VStack(alignment: .leading, spacing: 6) {
                 Text("🏆 TOP 10 THIS WEEK").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
@@ -158,7 +158,7 @@ struct ChallengesView: View {
                 if let ladder {
                     if ladder.isEmpty { Text("No scores yet this week. Be the first.").font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textDim) }
                     ForEach(ladder.indices, id: \.self) { i in
-                        Text("\(i + 1). \(ladder[i].username) — \(ladder[i].score)")
+                        Text("\(i + 1). \(ladder[i].username) — \(ladder[i].score)" as String)
                             .font(Theme.cinzel(11)).foregroundStyle(i == 0 ? gold : Color(hex: 0xaaaaaa))
                     }
                 } else {
@@ -173,7 +173,7 @@ struct ChallengesView: View {
             Button("📆 Enter the Weekly Ladder") { start(.weekly, weeklyChar) }
                 .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
                 .disabled(game.characters.isEmpty)
-                .accessibilityLabel("Begin this week's ladder run, \(week.dungeon), one life")
+                .accessibilityLabel("Begin this week's ladder run, \(week.dungeon), one life" as String)
         }
         .task { ladder = await CloudAccount.shared.ladder(week.season) }
     }

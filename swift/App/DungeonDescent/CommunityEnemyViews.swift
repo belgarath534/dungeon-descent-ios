@@ -191,7 +191,7 @@ struct EnemyCreatorView: View {
     private func stat(_ t: String, _ v: Int) -> some View {
         VStack(spacing: 2) {
             Text(t).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
-            Text("\(v)").font(Theme.decorative(18)).foregroundStyle(Self.violet)
+            Text("\(v)" as String).font(Theme.decorative(18)).foregroundStyle(Self.violet)
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
@@ -304,13 +304,13 @@ struct CommunityBestiary: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(e.icon).font(.system(size: 28)).accessibilityHidden(true)
                 Text(e.name).font(Theme.cinzel(13)).foregroundStyle(Theme.textPrimary)
-                Text("Created by \(e.creator)").font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0xaa88ff))
+                Text("Created by \(e.creator)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0xaa88ff))
                 if !e.desc.isEmpty { Text(e.desc).font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textSecondary) }
-                Text("\(e.dungeon == "all" ? "All Dungeons" : e.dungeon) · \(e.type) · HP \(e.hp) · ATK \(e.atk) · ⚔ \(e.kills) kills")
+                Text("\(e.dungeon == "all" ? "All Dungeons" : e.dungeon) · \(e.type) · HP \(e.hp) · ATK \(e.atk) · ⚔ \(e.kills) kills" as String)
                     .font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x555555))
             }
             .accessibilityElement(children: .combine)
-            .accessibilityLabel("\(e.name), created by \(e.creator), \(e.kills) kills. \(e.desc)")
+            .accessibilityLabel("\(e.name), created by \(e.creator), \(e.kills) kills. \(e.desc)" as String)
             HStack(spacing: 6) {
                 ugc("Report", "Report enemy by \(e.creator)") { reason = ""; reporting = e }
                 ugc("Block", "Block \(e.creator)") { blocking = e }

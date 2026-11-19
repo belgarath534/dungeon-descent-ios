@@ -28,7 +28,7 @@ struct BlacksmithView: View {
                     .padding(.bottom, 12)
                 Text("⚒ Blacksmith").font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
                 Text("Forge, upgrade, and buy weapons.").font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textSecondary)
-                Text("💰 Gold: \(f.gold)g").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffdd44)).padding(.vertical, 8)
+                Text("💰 Gold: \(f.gold)g" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffdd44)).padding(.vertical, 8)
                 FlowRow(spacing: 4) {
                     ForEach(tabs, id: \.id) { t in
                         Button(t.title) { select(t.id) }
@@ -92,12 +92,12 @@ struct BlacksmithView: View {
                 if d >= Blacksmith.maxDurability {
                     Text("✅ Weapon durability: Perfect (100/100)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x44cc44))
                 } else {
-                    Text("⚠ Durability: \(Blacksmith.durabilityLabel(d)) (\(d)/100)").font(Theme.cinzel(10.4))
+                    Text("⚠ Durability: \(Blacksmith.durabilityLabel(d)) (\(d)/100)" as String).font(Theme.cinzel(10.4))
                         .foregroundStyle(Color(hex: d >= 40 ? 0xccaa00 : d >= 20 ? 0xcc6600 : 0xcc2200))
                     let cost = Blacksmith.repairCost(w)
-                    Button("🔧 Repair — \(cost)g") { model.repair() }
+                    Button("🔧 Repair — \(cost)g" as String) { model.repair() }
                         .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
-                        .accessibilityLabel("Repair weapon for \(cost) gold")
+                        .accessibilityLabel("Repair weapon for \(cost) gold" as String)
                 }
             }
         }
@@ -112,8 +112,8 @@ struct BlacksmithView: View {
         let stat = slot == .weapon ? "ATK \(item.weaponAttack.lowerBound)-\(item.weaponAttack.upperBound)" : "DEF +\(item.armorDefense)"
         let color = slot == .weapon ? Theme.gold : Color(hex: 0x88aaff)
         return VStack(alignment: .leading, spacing: 8) {
-            Text("\(item.icon) \(item.name) — Level \(lvl)\(maxed ? "  MAX" : "")").font(Theme.cinzel(11.2)).foregroundStyle(color)
-            Text("\(item.desc) \(stat)").font(Theme.crimson(12.5, italic: true)).foregroundStyle(Color(hex: 0x888888))
+            Text("\(item.icon) \(item.name) — Level \(lvl)\(maxed ? "  MAX" : "")" as String).font(Theme.cinzel(11.2)).foregroundStyle(color)
+            Text("\(item.desc) \(stat)" as String).font(Theme.crimson(12.5, italic: true)).foregroundStyle(Color(hex: 0x888888))
             HStack {
                 Text(maxed ? "✦ Maximum Level Reached" : enchanter ? "🪄 Enchanter Active — Free Upgrade!"
                      : "Upgrade to Level \(lvl + 1) — \(cost)g\(isSmith ? " (10% off)" : "")")
@@ -125,7 +125,7 @@ struct BlacksmithView: View {
                         .padding(.vertical, 6).padding(.horizontal, 14)
                         .overlay(Rectangle().stroke(can ? color : Color(hex: 0x333333)))
                         .disabled(!can)
-                        .accessibilityLabel("Upgrade \(slot == .weapon ? "weapon" : "armor") to level \(lvl + 1) for \(enchanter ? "free with the Enchanter" : "\(cost) gold")")
+                        .accessibilityLabel("Upgrade \(slot == .weapon ? "weapon" : "armor") to level \(lvl + 1) for \(enchanter ? "free with the Enchanter" : "\(cost) gold")" as String)
                 }
             }
         }
@@ -146,7 +146,7 @@ struct BlacksmithView: View {
         let label = d.pct > 0 && isSmith ? " (10% Blacksmith + \(Int((d.pct * 100).rounded()))% \(d.source) discount!)"
             : isSmith ? " (10% Blacksmith discount)" : d.pct > 0 ? " (\(Int((d.pct * 100).rounded()))% \(d.source) discount!)" : ""
         return VStack(alignment: .leading, spacing: 8) {
-            Text("💰 \(f.gold) gold available\(label)").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xffdd44))
+            Text("💰 \(f.gold) gold available\(label)" as String).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xffdd44))
             ForEach(Blacksmith.weapons, id: \.id) { w in
                 let free = (w.cost ?? 0) == 0
                 let claimed = free && Blacksmith.starterClaimed(model.game.store)
@@ -163,7 +163,7 @@ struct BlacksmithView: View {
 
     private var armorTab: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Buy Armor — \(f.gold)g available").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
+            Text("Buy Armor — \(f.gold)g available" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
             ForEach(Blacksmith.armors, id: \.id) { a in
                 let owned = Blacksmith.owns(a, f)
                 let cost = a.cost ?? 0
@@ -176,7 +176,7 @@ struct BlacksmithView: View {
     private func shopRow(_ item: Item, extra: String, button: String, enabled: Bool, label: String, action: @escaping () -> Void) -> some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                Text("\(item.icon) \(item.name)\((item.level ?? 1) > 1 ? " Lv\(item.level ?? 1)" : "") \(extra)")
+                Text("\(item.icon) \(item.name)\((item.level ?? 1) > 1 ? " Lv\(item.level ?? 1)" : "") \(extra)" as String)
                     .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xe0c080))
                 Text(item.desc).font(Theme.crimson(12, italic: true)).foregroundStyle(Color(hex: 0x666666))
             }
@@ -188,7 +188,7 @@ struct BlacksmithView: View {
                 .background(enabled ? Color(hex: 0x1a1000) : Color(hex: 0x0a0a0a))
                 .overlay(Rectangle().stroke(enabled ? Color(hex: 0xffaa00) : Color(hex: 0x333333)))
                 .disabled(!enabled)
-                .accessibilityLabel("\(label). \(item.desc)")
+                .accessibilityLabel("\(label). \(item.desc)" as String)
         }
         .padding(12).background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Color(hex: 0x2a2010)))
     }
@@ -200,7 +200,7 @@ struct BlacksmithView: View {
             if f.bag.isEmpty {
                 empty("Inventory empty. Find items in dungeons or buy from the shop.")
             } else {
-                Text("\(f.bag.count) items — tap to sell").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
+                Text("\(f.bag.count) items — tap to sell" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
                 ForEach(Array(f.bag.enumerated()), id: \.offset) { i, item in
                     let price = Inventory.sellPrice(item)
                     itemRow(item, button: "💰 \(price)g", label: "Sell \(item.name) for \(price) gold") { model.sell(i) }
@@ -219,7 +219,7 @@ struct BlacksmithView: View {
                     empty("No \(slot == .weapon ? "weapon" : "armor") equipped")
                 }
             }
-            Text("INVENTORY (\(f.bag.count) items)").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim).padding(.top, 6)
+            Text("INVENTORY (\(f.bag.count) items)" as String).font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim).padding(.top, 6)
             if f.bag.isEmpty { empty("Inventory empty. Buy weapons and armor from the other tabs.") }
             ForEach(Array(f.bag.enumerated()), id: \.offset) { i, item in
                 if item.isWeapon || item.isArmor {
@@ -233,9 +233,9 @@ struct BlacksmithView: View {
 
     private func itemRow(_ item: Item, button: String?, label: String, action: @escaping () -> Void) -> some View {
         HStack(spacing: 8) {
-            Text("\(item.icon) \(item.name)\((item.level ?? 1) > 1 ? " Lv\(item.level ?? 1)" : "")")
+            Text("\(item.icon) \(item.name)\((item.level ?? 1) > 1 ? " Lv\(item.level ?? 1)" : "")" as String)
                 .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc9944))
-                .accessibilityLabel("\(item.name)\((item.level ?? 1) > 1 ? " Level \(item.level ?? 1)" : ""). \(item.desc)")
+                .accessibilityLabel("\(item.name)\((item.level ?? 1) > 1 ? " Level \(item.level ?? 1)" : ""). \(item.desc)" as String)
             Spacer()
             if let button {
                 Button(button, action: action)
@@ -261,17 +261,17 @@ struct BlacksmithView: View {
                 .accessibilityLabel("View every rarity effect for weapons and armor")
             if let w = f.weapon {
                 let tier = Rarity.tiers[Blacksmith.rarityIndex(w)]
-                Text("\(w.icon) \(w.name)").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xe0c080))
-                Text("Current rarity: \(tier.symbol) \(tier.label)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
+                Text("\(w.icon) \(w.name)" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xe0c080))
+                Text("Current rarity: \(tier.symbol) \(tier.label)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
                 let cost = Blacksmith.reforgeCost(w)
-                Button("🎲 Reforge — \(cost)g (Random rarity)") { model.reforge() }
+                Button("🎲 Reforge — \(cost)g (Random rarity)" as String) { model.reforge() }
                     .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
-                    .accessibilityLabel("Reforge weapon for \(cost) gold — random new rarity")
+                    .accessibilityLabel("Reforge weapon for \(cost) gold — random new rarity" as String)
                 if let up = Blacksmith.rarityUpCost(w) {
                     let next = Rarity.tiers[Blacksmith.rarityIndex(w) + 1]
-                    Button("⬆ Upgrade to \(next.label) — \(up)g") { model.raiseRarity() }
+                    Button("⬆ Upgrade to \(next.label) — \(up)g" as String) { model.raiseRarity() }
                         .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
-                        .accessibilityLabel("Upgrade to \(next.label) for \(up) gold")
+                        .accessibilityLabel("Upgrade to \(next.label) for \(up) gold" as String)
                 }
             } else {
                 empty("No weapon equipped. Equip a weapon from the Inventory tab first.")
@@ -293,9 +293,9 @@ struct BlacksmithView: View {
                 .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textSecondary).padding(.bottom, 10)
             ForEach(Rarity.tiers.dropFirst(), id: \.id) { t in
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("\(t.symbol) \(t.label)").font(Theme.cinzel(12.5)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
-                    ForEach(Rarity.effects(for: t, weapon: true), id: \.id) { e in Text("⚔ \(e.name) — \(e.desc)") }
-                    ForEach(Rarity.effects(for: t, weapon: false), id: \.id) { e in Text("🛡 \(e.name) — \(e.desc)") }
+                    Text("\(t.symbol) \(t.label)" as String).font(Theme.cinzel(12.5)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
+                    ForEach(Rarity.effects(for: t, weapon: true), id: \.id) { e in Text("⚔ \(e.name) — \(e.desc)" as String) }
+                    ForEach(Rarity.effects(for: t, weapon: false), id: \.id) { e in Text("🛡 \(e.name) — \(e.desc)" as String) }
                 }
                 .font(Theme.crimson(12.5)).foregroundStyle(Color(hex: 0xdddddd))
                 .padding(.bottom, 14)

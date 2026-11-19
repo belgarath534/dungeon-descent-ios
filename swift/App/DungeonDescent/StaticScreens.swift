@@ -86,10 +86,10 @@ struct GraveyardView: View {
         return VStack(spacing: 4) {
             Text("⚰").font(.system(size: 24)).padding(.bottom, 4)
             Text(e.name).font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0x888888))
-            Text("\(e.race) \(e.cls) Level \(e.level)").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).padding(.bottom, 4)
-            Text("\(e.dungeon)\(e.difficulty.isEmpty ? "" : " " + e.difficulty)").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444))
+            Text("\(e.race) \(e.cls) Level \(e.level)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).padding(.bottom, 4)
+            Text("\(e.dungeon)\(e.difficulty.isEmpty ? "" : " " + e.difficulty)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444))
             if fell {
-                Text("Fell to \(e.killedBy)\(e.topFloor > 0 ? " on floor \(e.topFloor)" : "")").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666))
+                Text("Fell to \(e.killedBy)\(e.topFloor > 0 ? " on floor \(e.topFloor)" : "")" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666))
             } else {
                 Text("Removed from the roster.").font(Theme.cinzel(10.4)).italic().foregroundStyle(Color(hex: 0x444444))
             }
@@ -107,7 +107,7 @@ struct GraveyardView: View {
         .overlay(Rectangle().stroke(Color(hex: 0x1a1a1a)))
         .overlay(alignment: .top) { Rectangle().fill(Color(hex: 0x444444)).frame(height: 2) }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(e.name) the \(e.race) \(e.cls). Level \(e.level). \(fell ? "Fell to \(e.killedBy)." : "Deleted.")\(e.topFloor > 0 ? " Reached floor \(e.topFloor)." : "")\(e.journal.isEmpty ? "" : " " + e.journal)")
+        .accessibilityLabel("\(e.name) the \(e.race) \(e.cls). Level \(e.level). \(fell ? "Fell to \(e.killedBy)." : "Deleted.")\(e.topFloor > 0 ? " Reached floor \(e.topFloor)." : "")\(e.journal.isEmpty ? "" : " " + e.journal)" as String)
     }
 }
 
@@ -228,7 +228,7 @@ struct WhatsNewView: View {
                 .overlay(alignment: .leading) { Rectangle().fill(i == 0 ? Theme.gold : Theme.borderGlow).frame(width: 3) }
             }
             if versions.count > visible {
-                Button("Load More (\(versions.count - visible) remaining)") { visible += 10 }
+                Button("Load More (\(versions.count - visible) remaining)" as String) { visible += 10 }
                     .buttonStyle(WebButtonStyle(kind: .ghost))
                     .frame(maxWidth: .infinity)
             }
@@ -251,7 +251,7 @@ struct WhatsNewPopup: View {
             VStack(spacing: 0) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("🎉 v\(Self.version)").font(Theme.decorative(20)).foregroundStyle(Theme.gold)
+                        Text("🎉 v\(Self.version)" as String).font(Theme.decorative(20)).foregroundStyle(Theme.gold)
                             .frame(maxWidth: .infinity).accessibilityAddTraits(.isHeader)
                             .accessibilityFocused($focus)
                         if let d = v?.date, !d.isEmpty {

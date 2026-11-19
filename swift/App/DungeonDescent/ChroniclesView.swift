@@ -304,14 +304,14 @@ struct ChroniclesView: View {
                         .foregroundStyle(i == idx ? Theme.gold : Theme.textSecondary)
                         .padding(.vertical, 6).padding(.horizontal, 14)
                         .overlay(Rectangle().stroke(i == idx ? Theme.gold : Theme.borderDim))
-                        .accessibilityLabel("\(chars[i].name) journal")
+                        .accessibilityLabel("\(chars[i].name) journal" as String)
                         .accessibilityAddTraits(i == idx ? [.isSelected] : [])
                     }
                 }
                 .padding(.bottom, 8)
                 let list = entries(chars[idx])
                 if list.isEmpty {
-                    Text("\(chars[idx].name) has not yet descended. Enter the dungeon to begin the journal.")
+                    Text("\(chars[idx].name) has not yet descended. Enter the dungeon to begin the journal." as String)
                         .font(Theme.crimson(13.6, italic: true)).foregroundStyle(Theme.textDim)
                         .frame(maxWidth: .infinity).multilineTextAlignment(.center).padding(20)
                 } else {
@@ -327,7 +327,7 @@ struct ChroniclesView: View {
                         .overlay(Rectangle().stroke(Theme.borderDim))
                         .overlay(alignment: .leading) { Rectangle().fill(Theme.goldDim).frame(width: 3) }
                         .accessibilityElement(children: .ignore)
-                        .accessibilityLabel("\(list[i].time). \(list[i].text)")
+                        .accessibilityLabel("\(list[i].time). \(list[i].text)" as String)
                     }
                 }
             }

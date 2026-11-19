@@ -54,15 +54,15 @@ struct ObituaryView: View {
     private func row(_ d: CloudAccount.Obituary) -> some View {
         let time = d.isLocal ? "Local" : Self.ago(d.timestamp)
         return VStack(alignment: .leading, spacing: 2) {
-            Text("☠ \(d.name)").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc4444))
-            Text("Floor \(d.floor) · \(d.dungeon)").font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x888888))
-            Text("Slain by \(d.killedBy) · \(time)").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+            Text("☠ \(d.name)" as String).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc4444))
+            Text("Floor \(d.floor) · \(d.dungeon)" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x888888))
+            Text("Slain by \(d.killedBy) · \(time)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
         }
         .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
         .overlay(alignment: .bottom) { Rectangle().fill(Color(hex: 0x111111)).frame(height: 1) }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(d.name) fell on Floor \(d.floor) of \(d.dungeon), slain by \(d.killedBy). \(time)")
+        .accessibilityLabel("\(d.name) fell on Floor \(d.floor) of \(d.dungeon), slain by \(d.killedBy). \(time)" as String)
     }
 
     /// _formatObituaryTime

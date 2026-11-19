@@ -270,7 +270,7 @@ struct MainMenuView: View {
                 .accessibilityLabel("Happy Birthday Dungeon Descent! Tap to celebrate")
             }
 
-            Button("🏆 \(trophies)") { openTrophies() }
+            Button("🏆 \(trophies)" as String) { openTrophies() }
                 .font(Theme.cinzel(12.8, weight: .bold))
                 .tracking(1.3)
                 .foregroundStyle(Color(hex: 0xffdd44))
@@ -295,14 +295,14 @@ struct MainMenuView: View {
                 .accessibilityLabel("Your familiar — press to view its bond level")
                 .accessibilityValue(familiar)
             // Your wealth, near the top so it's never out of reach.
-            Text("💰 \(game.gold)   💎 \(game.diamonds)   🪙 \(game.mysteryCoins)")
+            Text("💰 \(game.gold)   💎 \(game.diamonds)   🪙 \(game.mysteryCoins)" as String)
                 .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xffdd44))
                 .padding(.vertical, 4)
-                .accessibilityLabel("Your gold, \(game.gold). Diamonds, \(game.diamonds). Mystery Coins, \(game.mysteryCoins).")
+                .accessibilityLabel("Your gold, \(game.gold). Diamonds, \(game.diamonds). Mystery Coins, \(game.mysteryCoins)." as String)
             // #seasonal-currency-display
             if let cur = Events.current()?.currency {
                 let n = Events.currency(cur.key, store: game.store)
-                Text("\(cur.icon) \(n) \(cur.name)")
+                Text("\(cur.icon) \(n) \(cur.name)" as String)
                     .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xe0c080))
                     .padding(.vertical, 4)
             }
@@ -365,7 +365,7 @@ struct MainMenuView: View {
             if tab == .more, let cur = Events.current()?.currency {
                 Button { router.goTo(.seasonalshop) } label: { Text(cur.shop) }
                     .buttonStyle(MenuButtonStyle(color: Color(hex: 0xffaa44), border: Color(hex: 0xaa6600)))
-                    .accessibilityLabel("Open seasonal shop, \(cur.shop)")
+                    .accessibilityLabel("Open seasonal shop, \(cur.shop)" as String)
             }
 
             ForEach(shownEntries) { e in
@@ -384,7 +384,7 @@ struct MainMenuView: View {
                 if tab == nil, e.id == "command", let cur = Events.current()?.currency {
                     Button { router.goTo(.seasonalshop) } label: { Text(cur.shop) }
                         .buttonStyle(MenuButtonStyle(color: Color(hex: 0xffaa44), border: Color(hex: 0xaa6600)))
-                        .accessibilityLabel("Open seasonal shop, \(cur.shop)")
+                        .accessibilityLabel("Open seasonal shop, \(cur.shop)" as String)
                 }
             }
         }
@@ -394,18 +394,18 @@ struct MainMenuView: View {
 
     private var footer: some View {
         VStack(spacing: 6) {
-            Text("v\(version) · Release")
+            Text("v\(version) · Release" as String)
                 .font(Theme.cinzel(9.3))
                 .tracking(2.8)
                 .textCase(.uppercase)
                 .foregroundStyle(Theme.textDim)
                 .padding(.top, 28)
-                .accessibilityLabel("Version \(version.replacingOccurrences(of: ".", with: " point ")), Release")
+                .accessibilityLabel("Version \(version.replacingOccurrences(of: ".", with: " point ")), Release" as String)
             OnlineCount()
-            Text("💰 \(game.gold)")
-                .accessibilityLabel("Your global gold, \(game.gold)")
-            Text("💎 \(game.diamonds)")
-                .accessibilityLabel("Your diamonds, \(game.diamonds)")
+            Text("💰 \(game.gold)" as String)
+                .accessibilityLabel("Your global gold, \(game.gold)" as String)
+            Text("💎 \(game.diamonds)" as String)
+                .accessibilityLabel("Your diamonds, \(game.diamonds)" as String)
         }
         .font(Theme.crimson())
         .foregroundStyle(Theme.textPrimary)
@@ -466,7 +466,7 @@ struct MainMenuView: View {
             Text("DAILY DESCENT").font(Theme.cinzel(10.4)).tracking(4).foregroundStyle(Color(hex: 0x888888))
                 .accessibilityHidden(true)
             OverlayTitle(text: "Today's Offering")
-            Text("🔥 Day \(r.day) Streak").font(Theme.cinzel(12.8)).foregroundStyle(Color(hex: 0xcc8844))
+            Text("🔥 Day \(r.day) Streak" as String).font(Theme.cinzel(12.8)).foregroundStyle(Color(hex: 0xcc8844))
             Text(r.icon).font(.system(size: 48)).accessibilityHidden(true)
             Text(r.name).font(Theme.decorative(16)).foregroundStyle(Color(hex: 0xe0c080))
             OverlayText(text: r.desc)
@@ -497,7 +497,7 @@ struct MainMenuView: View {
                 }
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Weekly streak progress: day \(pos) of 7")
+            .accessibilityLabel("Weekly streak progress: day \(pos) of 7" as String)
         }
     }
 
@@ -604,7 +604,7 @@ extension View {
                     flow.found = nil
                 }
             } message: {
-                Text("Found on this iPhone: \(flow.summary()) Importing replaces what's in the Swift version. You can do it later from Settings.")
+                Text("Found on this iPhone: \(flow.summary()) Importing replaces what's in the Swift version. You can do it later from Settings." as String)
             }
             .alert("No web version save found", isPresented: Binding(
                 get: { flow.nothingFound },
@@ -720,7 +720,7 @@ struct TrophyOverlay: View {
                 Spacer()
                 Button("✕ Close", action: close).buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Close trophies")
             }
-            Text("\(game.achievements.trophies)").font(Theme.decorative(40)).foregroundStyle(Color(hex: 0xffdd44))
+            Text("\(game.achievements.trophies)" as String).font(Theme.decorative(40)).foregroundStyle(Color(hex: 0xffdd44))
             Text("Total Trophies Earned").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
             Text("UNLOCKED ACHIEVEMENTS").font(Theme.cinzel(9.9)).tracking(1.5).foregroundStyle(Color(hex: 0x888888))
             ScrollView {
@@ -736,7 +736,7 @@ struct TrophyOverlay: View {
                                 Text(a.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x777777))
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            Text("+\(a.trophies) 🏆").font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x887700))
+                            Text("+\(a.trophies) 🏆" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x887700))
                         }
                         .padding(.vertical, 8).padding(.horizontal, 12)
                         .background(Color(hex: 0x080808)).overlay(Rectangle().stroke(Color(hex: 0x222222)))
@@ -767,10 +767,10 @@ struct BirthdayOverlay: View {
     var body: some View {
         WebOverlay {
             Text("🎂").font(.system(size: 52)).accessibilityHidden(true)
-            Text("YEAR \(ordinal)").font(Theme.cinzel(11)).tracking(4).foregroundStyle(Color(hex: 0xffd700))
+            Text("YEAR \(ordinal)" as String).font(Theme.cinzel(11)).tracking(4).foregroundStyle(Color(hex: 0xffd700))
             OverlayTitle(text: "Dungeon Descent")
             Text("Born March 23, 2025").font(Theme.cinzel(11.5)).foregroundStyle(Theme.textSecondary)
-            Text("Still Descending — March 23, \(String(year))").font(Theme.cinzel(11.5)).foregroundStyle(Theme.textSecondary)
+            Text("Still Descending — March 23, \(String(year))" as String).font(Theme.cinzel(11.5)).foregroundStyle(Theme.textSecondary)
             Text("Built by Leo Productions").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
             Button("🎁 Claim Birthday Reward") { claim() }
                 .buttonStyle(WebButtonStyle(kind: .gold))
@@ -807,7 +807,7 @@ struct OnlineCount: View {
         let n = presence.online
         Text(n > 0 ? "⚔ \(n) player\(n == 1 ? "" : "s") online" : " ")
             .font(Theme.cinzel(8.8)).tracking(1).foregroundStyle(Color(hex: 0x444444))
-            .accessibilityLabel("\(n) players currently online")
+            .accessibilityLabel("\(n) players currently online" as String)
             .accessibilityHidden(n == 0)
     }
 }

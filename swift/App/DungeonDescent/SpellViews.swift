@@ -16,7 +16,7 @@ struct ArcaneShopList: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("💰 \(gold) gold").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffdd44))
+            Text("💰 \(gold) gold" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffdd44))
             Text(status).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0xaa66ff))
             Button("📖 View Spell Book", action: openBook)
                 .buttonStyle(WebButtonStyle(kind: .ghost))
@@ -32,7 +32,7 @@ struct ArcaneShopList: View {
                     HStack(alignment: .top, spacing: 12) {
                         Text(item.icon).font(.system(size: 22)).accessibilityHidden(true)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("\(item.name)  [\(item.rarity.uppercased())]").font(Theme.cinzel(11.5)).foregroundStyle(rarityColor(item.rarity))
+                            Text("\(item.name)  [\(item.rarity.uppercased())]" as String).font(Theme.cinzel(11.5)).foregroundStyle(rarityColor(item.rarity))
                             Text(item.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x888888))
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -75,7 +75,7 @@ struct SpellBookList: View {
                     HStack(alignment: .top, spacing: 12) {
                         Text(s.icon).font(.system(size: 22))
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("\(s.name)  [\(s.rarity.uppercased())]").font(Theme.cinzel(11.5)).foregroundStyle(rarityColor(s.rarity))
+                            Text("\(s.name)  [\(s.rarity.uppercased())]" as String).font(Theme.cinzel(11.5)).foregroundStyle(rarityColor(s.rarity))
                             Text(s.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x888888))
                             Text(powerful ? "⚡ Powerful — 6 turn cooldown" : "· 3 turn cooldown").font(Theme.cinzel(8.8)).foregroundStyle(Color(hex: 0x555555))
                         }
@@ -83,7 +83,7 @@ struct SpellBookList: View {
                     }
                     .padding(14).background(Color(hex: 0x0a0010)).overlay(Rectangle().stroke(rarityColor(s.rarity)))
                     .accessibilityElement(children: .ignore)
-                    .accessibilityLabel("\(s.name). \(s.desc) \(s.rarity). \(powerful ? "6-turn cooldown" : "3-turn cooldown").")
+                    .accessibilityLabel("\(s.name). \(s.desc) \(s.rarity). \(powerful ? "6-turn cooldown" : "3-turn cooldown")." as String)
                 }
             }
         }
@@ -113,7 +113,7 @@ struct MenuSpellsScreen: View {
                 } else {
                     Text("Character").font(Theme.cinzel(10)).foregroundStyle(Theme.goldDim)
                     ForEach(Array(game.characters.enumerated()), id: \.offset) { i, ch in
-                        Button("\(ch.name) — \(ch.cls)") {
+                        Button("\(ch.name) — \(ch.cls)" as String) {
                             index = i
                             Feedback.announce("\(ch.name) selected.")
                         }

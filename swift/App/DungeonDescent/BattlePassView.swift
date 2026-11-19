@@ -17,11 +17,11 @@ struct BattlePassView: View {
             Button("← Menu") { router.goTo(.menu) }
                 .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Back to main menu")
             Text("🏆 Battle Pass").font(Theme.decorative(22)).foregroundStyle(gold).accessibilityAddTraits(.isHeader)
-            Text("Season \(season.number) · \(season.daysLeft()) days left · earned by playing, never bought")
+            Text("Season \(season.number) · \(season.daysLeft()) days left · earned by playing, never bought" as String)
                 .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
 
             VStack(alignment: .leading, spacing: 6) {
-                Text("TIER \(p.tier) OF \(BattlePass.tiers)").font(Theme.cinzel(12)).tracking(2).foregroundStyle(gold)
+                Text("TIER \(p.tier) OF \(BattlePass.tiers)" as String).font(Theme.cinzel(12)).tracking(2).foregroundStyle(gold)
                 GeometryReader { g in
                     ZStack(alignment: .leading) {
                         Rectangle().fill(Color(hex: 0x111111))
@@ -43,7 +43,7 @@ struct BattlePassView: View {
 
             Text("📜 THIS WEEK'S QUESTS").font(Theme.cinzel(11)).tracking(2).foregroundStyle(Theme.goldDim)
                 .accessibilityAddTraits(.isHeader).padding(.top, 6)
-            Text("+\(BattlePass.questXP) Pass XP each. New quests every Monday.")
+            Text("+\(BattlePass.questXP) Pass XP each. New quests every Monday." as String)
                 .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)
             ForEach(week.quests, id: \.id) { q in
                 let done = p.questsDone.contains(q.id)
@@ -70,9 +70,9 @@ struct BattlePassView: View {
             if showAll {
                 ForEach(1...BattlePass.tiers, id: \.self) { t in
                     let r = BattlePass.reward(tier: t, season: season.number).map(\.text).joined(separator: " and ")
-                    Text("\(t <= p.paid ? "✓" : "○") Tier \(t): \(r)")
+                    Text("\(t <= p.paid ? "✓" : "○") Tier \(t): \(r)" as String)
                         .font(Theme.crimson(13)).foregroundStyle(t <= p.paid ? Color(hex: 0x44cc88) : Theme.textSecondary)
-                        .accessibilityLabel("Tier \(t), \(t <= p.paid ? "earned" : "not yet"): \(r)")
+                        .accessibilityLabel("Tier \(t), \(t <= p.paid ? "earned" : "not yet"): \(r)" as String)
                 }
             }
         }

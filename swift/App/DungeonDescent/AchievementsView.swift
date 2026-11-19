@@ -76,10 +76,10 @@ struct AchievementsView: View {
                     if done { badge("COMPLETE", Color(hex: 0x7aaa7a), Color(hex: 0x3a6a3a)) } else { badge("DAILY", Theme.gold, Theme.goldDim) }
                 }
                 Text(q.desc).font(Theme.crimson(12.8, italic: true)).foregroundStyle(Theme.textSecondary)
-                Text("Progress: \(dq.progress) / \(q.target)\(done ? " — Done!" : "")").font(Theme.cinzel(11.2)).foregroundStyle(Theme.goldDim)
+                Text("Progress: \(dq.progress) / \(q.target)\(done ? " — Done!" : "")" as String).font(Theme.cinzel(11.2)).foregroundStyle(Theme.goldDim)
                 Bar(value: Double(dq.progress) / Double(max(q.target, 1)), colors: [Theme.goldDim, Theme.goldDim],
                     track: Theme.gold.opacity(0.1), height: 4)
-                Text("Reward: \(q.reward)").font(Theme.cinzel(10.4)).tracking(1).foregroundStyle(Theme.ash)
+                Text("Reward: \(q.reward)" as String).font(Theme.cinzel(10.4)).tracking(1).foregroundStyle(Theme.ash)
             }
         }
     }
@@ -118,7 +118,7 @@ struct AchievementsView: View {
                 Spacer()
                 Text(status).font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(statusColor)
                     .padding(.vertical, 3).padding(.horizontal, 10).overlay(Rectangle().stroke(statusBorder))
-                    .accessibilityLabel("Status: \(status)")
+                    .accessibilityLabel("Status: \(status)" as String)
             }
             .padding(.bottom, 12)
             Text(dc.name).font(Theme.decorative(17.6)).foregroundStyle(Theme.gold).padding(.bottom, 6)
@@ -198,9 +198,9 @@ struct AchievementsView: View {
         let pct = all.isEmpty ? 0 : Int((Double(count) / Double(all.count) * 100).rounded())
         return VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("ACHIEVEMENTS — \(count) / \(all.count) UNLOCKED").font(Theme.cinzel(11.5)).foregroundStyle(Theme.goldDim)
+                Text("ACHIEVEMENTS — \(count) / \(all.count) UNLOCKED" as String).font(Theme.cinzel(11.5)).foregroundStyle(Theme.goldDim)
                 Bar(value: Double(pct) / 100, colors: [Theme.goldDim, Theme.goldDim], track: Theme.gold.opacity(0.1), height: 4)
-                Text("\(pct)% complete").font(Theme.crimson(11.2, italic: true)).foregroundStyle(Theme.textDim)
+                Text("\(pct)% complete" as String).font(Theme.crimson(11.2, italic: true)).foregroundStyle(Theme.textDim)
             }
             .padding(.vertical, 12).padding(.horizontal, 16)
             .background(Theme.gold.opacity(0.06)).overlay(Rectangle().stroke(Theme.borderDim))
@@ -212,12 +212,12 @@ struct AchievementsView: View {
             }
             if all.count > visible {
                 let left = all.count - visible
-                Button("Load More (\(left) remaining)") {
+                Button("Load More (\(left) remaining)" as String) {
                     visible += 30
                 }
                 .buttonStyle(WebButtonStyle(kind: .ghost))
                 .frame(maxWidth: .infinity)
-                .accessibilityLabel("Load \(min(30, left)) more achievements. \(left) remaining.")
+                .accessibilityLabel("Load \(min(30, left)) more achievements. \(left) remaining." as String)
             }
         }
     }
@@ -229,7 +229,7 @@ struct AchievementsView: View {
                 .font(Theme.cinzel(12.5)).foregroundStyle(earned ? Theme.ashLight : Theme.textDim)
             Text(a.desc).font(Theme.crimson(11.5, italic: true)).foregroundStyle(earned ? Theme.textSecondary : Theme.textDim)
             if !earned {
-                Text("🔓 \(a.hint)").font(Theme.crimson(10, italic: true)).foregroundStyle(Color(hex: 0x888888)).padding(.top, 4)
+                Text("🔓 \(a.hint)" as String).font(Theme.crimson(10, italic: true)).foregroundStyle(Color(hex: 0x888888)).padding(.top, 4)
             }
         }
         .padding(14)
@@ -239,7 +239,7 @@ struct AchievementsView: View {
         .overlay(alignment: .leading) { if earned { Rectangle().fill(Theme.gold).frame(width: 3) } }
         .opacity(earned ? 1 : 0.45)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(a.name). \(a.desc)\(earned ? " Unlocked." : " Locked. To unlock: \(a.hint)")")
+        .accessibilityLabel("\(a.name). \(a.desc)\(earned ? " Unlocked." : " Locked. To unlock: \(a.hint)")" as String)
     }
 
     private func announceAchievements() {

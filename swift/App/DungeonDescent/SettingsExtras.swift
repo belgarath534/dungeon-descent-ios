@@ -161,7 +161,7 @@ struct NotificationsPanel: View {
                         Feedback.announce("\(p.name) notifications \(on ? "disabled" : "enabled").")
                     }
                     .buttonStyle(ToggleButtonStyle(on: on))
-                    .accessibilityLabel("\(p.name), currently \(on ? "on" : "off"). \(p.desc)")
+                    .accessibilityLabel("\(p.name), currently \(on ? "on" : "off"). \(p.desc)" as String)
                 }
             }
             Button("Save & Apply Changes") {
@@ -300,7 +300,7 @@ struct HideMenuPanel: View {
                 let item = MenuPrefs.items[i]
                 let on = !hidden.contains(item.entry)
                 HStack {
-                    Text("\(item.icon) \(item.label)").font(Theme.cinzel(12.5)).foregroundStyle(Theme.ashLight).accessibilityHidden(true)
+                    Text("\(item.icon) \(item.label)" as String).font(Theme.cinzel(12.5)).foregroundStyle(Theme.ashLight).accessibilityHidden(true)
                     Spacer()
                     Button(on ? "Show" : "Hide") {
                         MenuPrefs.set(item.id, shown: !on, game.store)
@@ -308,7 +308,7 @@ struct HideMenuPanel: View {
                         Feedback.announce(item.label + (on ? " hidden." : " shown."))
                     }
                     .buttonStyle(ToggleButtonStyle(on: on))
-                    .accessibilityLabel("\(item.label), currently \(on ? "visible" : "hidden")")
+                    .accessibilityLabel("\(item.label), currently \(on ? "visible" : "hidden")" as String)
                 }
                 .padding(.vertical, 10).padding(.horizontal, 14)
                 .background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
@@ -346,7 +346,7 @@ struct AchievementSoundPicker: View {
                 HStack {
                     Button("▶ Preview") { Sound.sfx(opt.0); Feedback.announce("Previewing \(opt.1).") }
                         .buttonStyle(ToggleButtonStyle(on: false))
-                        .accessibilityLabel("Preview \(opt.1)")
+                        .accessibilityLabel("Preview \(opt.1)" as String)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(opt.1).font(Theme.cinzel(11.5)).foregroundStyle(Theme.ashLight)
                         Text(opt.2).font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)

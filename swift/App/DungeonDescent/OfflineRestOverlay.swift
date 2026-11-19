@@ -10,13 +10,13 @@ struct OfflineRestOverlay: View {
     var body: some View {
         WebOverlay {
             Text("WELCOME BACK").font(Theme.cinzel(10.4)).tracking(3.2).foregroundStyle(Theme.goldDim)
-            Text("\(reward.name) rested for \(reward.hoursText).")
+            Text("\(reward.name) rested for \(reward.hoursText)." as String)
                 .font(Theme.cinzel(13)).foregroundStyle(Theme.gold)
                 .accessibilityAddTraits(.isHeader)
             VStack(spacing: 6) {
-                Text("💰 +\(reward.gold) gold earned")
-                Text("☠ ~\(reward.kills) enemies defeated")
-                if reward.fragments > 0 { Text("✨ +\(reward.fragments) soul fragments") }
+                Text("💰 +\(reward.gold) gold earned" as String)
+                Text("☠ ~\(reward.kills) enemies defeated" as String)
+                if reward.fragments > 0 { Text("✨ +\(reward.fragments) soul fragments" as String) }
             }
             .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
             Button("Continue →", action: close)

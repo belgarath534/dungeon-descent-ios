@@ -67,9 +67,9 @@ struct SeasonalShopView: View {
         WebScreen {
             if let cur = Events.current()?.currency {
                 ScreenHeader(title: cur.shop)
-                Text("\(cur.icon) \(coins) \(cur.name)").font(Theme.cinzel(14)).foregroundStyle(Theme.gold)
+                Text("\(cur.icon) \(coins) \(cur.name)" as String).font(Theme.cinzel(14)).foregroundStyle(Theme.gold)
                     .frame(maxWidth: .infinity).padding(.bottom, 10)
-                    .accessibilityLabel("You have \(coins) \(cur.name).")
+                    .accessibilityLabel("You have \(coins) \(cur.name)." as String)
                 VStack(spacing: 10) {
                     ForEach(Events.shop(cur.key), id: \.id) { row($0, cur) }
                 }
@@ -77,7 +77,7 @@ struct SeasonalShopView: View {
                     Text(message).font(Theme.cinzel(12)).italic().foregroundStyle(Color(hex: 0xa0d4a0))
                         .frame(maxWidth: .infinity).multilineTextAlignment(.center).padding(.top, 12)
                 }
-                Text("Earn \(cur.name) by defeating enemies during the event: 30% of kills drop one.")
+                Text("Earn \(cur.name) by defeating enemies during the event: 30% of kills drop one." as String)
                     .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textDim).padding(.top, 12)
             } else {
                 ScreenHeader(title: "Seasonal Shop")
@@ -105,7 +105,7 @@ struct SeasonalShopView: View {
                         .multilineTextAlignment(.leading)
                 }
                 Spacer(minLength: 0)
-                Text("\(item.cost)\(cur.icon)").font(Theme.cinzel(13)).foregroundStyle(Theme.gold).fixedSize()
+                Text("\(item.cost)\(cur.icon)" as String).font(Theme.cinzel(13)).foregroundStyle(Theme.gold).fixedSize()
             }
             .padding(.vertical, 14).padding(.horizontal, 16)
             .frame(maxWidth: .infinity, alignment: .leading)

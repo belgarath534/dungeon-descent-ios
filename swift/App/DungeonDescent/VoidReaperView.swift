@@ -235,11 +235,11 @@ struct VoidReaperView: View {
         VStack(alignment: .leading, spacing: 4) {
             Text("WORLD BOSS — ALL PLAYERS").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Color(hex: 0x555555))
             bar(Double(s.currentHp) / Double(s.totalHp), Color(hex: 0x6666ff))
-            Text("\(s.currentHp.formatted()) / \(s.totalHp.formatted()) HP").font(Theme.cinzel(12)).foregroundStyle(blue)
-            Text("\(s.hoursLeft(now: VoidReaperLive.now))h remaining · \(s.killCount) strikes · each strike deals \(VoidReaper.playerDamage) damage")
+            Text("\(s.currentHp.formatted()) / \(s.totalHp.formatted()) HP" as String).font(Theme.cinzel(12)).foregroundStyle(blue)
+            Text("\(s.hoursLeft(now: VoidReaperLive.now))h remaining · \(s.killCount) strikes · each strike deals \(VoidReaper.playerDamage) damage" as String)
                 .font(Theme.crimson(12)).foregroundStyle(Color(hex: 0x888888))
-            if let k = s.lastKiller { Text("Last strike by: \(k)").font(Theme.crimson(12, italic: true)).foregroundStyle(Color(hex: 0xcc8844)) }
-            Text("Kill reward: \(VoidReaper.goldReward.formatted()) gold + \(VoidReaper.coinReward) Mystery Coins for everyone who struck")
+            if let k = s.lastKiller { Text("Last strike by: \(k)" as String).font(Theme.crimson(12, italic: true)).foregroundStyle(Color(hex: 0xcc8844)) }
+            Text("Kill reward: \(VoidReaper.goldReward.formatted()) gold + \(VoidReaper.coinReward) Mystery Coins for everyone who struck" as String)
                 .font(Theme.crimson(12)).foregroundStyle(Color(hex: 0x44cc88))
         }
         .padding(12).overlay(Rectangle().stroke(Color(hex: 0x2a1a4a)))
@@ -254,7 +254,7 @@ struct VoidReaperView: View {
             bossInfo(s)
             Text("Choose your champion").font(Theme.cinzel(12)).foregroundStyle(Theme.gold).accessibilityAddTraits(.isHeader)
             ForEach(Array(game.characters.enumerated()), id: \.offset) { i, ch in
-                Button("\(ch.name) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))") {
+                Button("\(ch.name) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))" as String) {
                     charIndex = i
                     Feedback.announce("\(ch.name) selected.")
                 }
@@ -289,21 +289,21 @@ struct VoidReaperView: View {
                 .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xff8844))
             bossInfo(s)
             VStack(alignment: .leading, spacing: 4) {
-                Text("\(f.name)").font(Theme.cinzel(11)).foregroundStyle(Theme.gold)
+                Text("\(f.name)" as String).font(Theme.cinzel(11)).foregroundStyle(Theme.gold)
                 bar(Double(f.hp) / Double(f.maxHp), Color(hex: 0x44cc44))
-                Text("\(f.hp) / \(f.maxHp) HP · 🧪 \(f.potions)").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
+                Text("\(f.hp) / \(f.maxHp) HP · 🧪 \(f.potions)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textSecondary)
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("Your HP \(f.hp) of \(f.maxHp). \(f.potions) potions.")
+            .accessibilityLabel("Your HP \(f.hp) of \(f.maxHp). \(f.potions) potions." as String)
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                 Button("⚔ Attack") { swing(.attack) }.buttonStyle(WebButtonStyle(kind: .red)).disabled(busy)
-                    .accessibilityLabel("Attack, \(VoidReaper.playerDamage) damage to the shared boss")
+                    .accessibilityLabel("Attack, \(VoidReaper.playerDamage) damage to the shared boss" as String)
                 Button("💥 Heavy") { swing(.heavy) }.buttonStyle(WebButtonStyle(kind: .red)).disabled(busy)
-                    .accessibilityLabel("Heavy strike, \(VoidReaper.globalDamage(heavy: true)) damage to the shared boss")
+                    .accessibilityLabel("Heavy strike, \(VoidReaper.globalDamage(heavy: true)) damage to the shared boss" as String)
                 Button("🛡 Defend") { swing(.defend) }.buttonStyle(WebButtonStyle(kind: .ghost)).disabled(busy)
-                    .accessibilityLabel("Defend and strike back, \(VoidReaper.playerDamage) damage, take far less")
-                Button("🧪 Potion (\(f.potions))") { drink() }.buttonStyle(WebButtonStyle(kind: .ghost)).disabled(busy)
-                    .accessibilityLabel("Use a health potion. \(f.potions) remaining.")
+                    .accessibilityLabel("Defend and strike back, \(VoidReaper.playerDamage) damage, take far less" as String)
+                Button("🧪 Potion (\(f.potions))" as String) { drink() }.buttonStyle(WebButtonStyle(kind: .ghost)).disabled(busy)
+                    .accessibilityLabel("Use a health potion. \(f.potions) remaining." as String)
             }
             VStack(alignment: .leading, spacing: 3) {
                 ForEach(Array(log.prefix(12).enumerated()), id: \.offset) { _, l in
@@ -385,7 +385,7 @@ struct VoidReaperView: View {
     private var victory: some View {
         VStack(spacing: 12) {
             Text("🌑 THE VOID REAPER IS DEFEATED").font(Theme.decorative(18)).foregroundStyle(Color(hex: 0x44ff88)).accessibilityAddTraits(.isHeader)
-            Text("+\(VoidReaper.goldReward.formatted()) gold and +\(VoidReaper.coinReward) Mystery Coins for you and everyone who struck.")
+            Text("+\(VoidReaper.goldReward.formatted()) gold and +\(VoidReaper.coinReward) Mystery Coins for you and everyone who struck." as String)
                 .font(Theme.crimson(14)).foregroundStyle(Theme.textSecondary).multilineTextAlignment(.center)
             Button("← Main Menu") { Sound.track("menu"); router.goTo(.menu) }.buttonStyle(WebButtonStyle(kind: .gold))
         }

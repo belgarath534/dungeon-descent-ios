@@ -596,11 +596,11 @@ struct CreateCharacterView: View {
                 } label: {
                     VStack(alignment: .leading, spacing: 3) {
                         HStack(spacing: 6) {
-                            Text("\(sp.icon) \(sp.name)").font(Theme.cinzel(12.5)).foregroundStyle(sel ? Theme.gold : Color(hex: 0xe0c080))
+                            Text("\(sp.icon) \(sp.name)" as String).font(Theme.cinzel(12.5)).foregroundStyle(sel ? Theme.gold : Color(hex: 0xe0c080))
                             if sp.rarity == "rare" { tag("RARE", Theme.gold, Theme.goldDim) }
                             if sp.rarity == "elite" { tag("ELITE", Color(hex: 0xcc88ff), Color(hex: 0x884499)) }
                         }
-                        Text("✦ \(sp.ability ?? "")").font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x666666))
+                        Text("✦ \(sp.ability ?? "")" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x666666))
                     }
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -609,7 +609,7 @@ struct CreateCharacterView: View {
                     .overlay(Rectangle().stroke(sel ? Theme.gold : Color(hex: 0x333333)))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("\(sp.name). \(sp.ability ?? "")")
+                .accessibilityLabel("\(sp.name). \(sp.ability ?? "")" as String)
                 .accessibilityAddTraits(sel ? .isSelected : [])
             }
         }
@@ -647,7 +647,7 @@ struct CreateCharacterView: View {
             .accessibilityLabel("Enter your guide name")
             .onChange(of: companionName) { v in if v.count > 20 { companionName = String(v.prefix(20)) } }
         if !companionName.isEmpty {
-            Text("\(companionName) will guide you through the dungeon.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xaa88dd))
+            Text("\(companionName) will guide you through the dungeon." as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xaa88dd))
                 .padding(.top, 6)
         }
         Text("Her Personality").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xaa88dd)).padding(.top, 14).padding(.bottom, 8)
@@ -718,7 +718,7 @@ struct CreateCharacterView: View {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(b.name).font(Theme.cinzel(12.5)).foregroundStyle(Theme.goldDim)
                         Text(b.desc).font(Theme.crimson(10.9)).foregroundStyle(Theme.textDim)
-                        Text("✦ \(b.bonus)").font(Theme.crimson(10.4, italic: true)).foregroundStyle(Theme.gold).padding(.top, 2)
+                        Text("✦ \(b.bonus)" as String).font(Theme.crimson(10.4, italic: true)).foregroundStyle(Theme.gold).padding(.top, 2)
                     }
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -727,7 +727,7 @@ struct CreateCharacterView: View {
                     .overlay(Rectangle().stroke(sel ? Theme.gold : Theme.borderDim))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("\(b.name). \(b.desc). Bonus: \(b.bonus)")
+                .accessibilityLabel("\(b.name). \(b.desc). Bonus: \(b.bonus)" as String)
                 .accessibilityAddTraits(sel ? .isSelected : [])
             }
         }

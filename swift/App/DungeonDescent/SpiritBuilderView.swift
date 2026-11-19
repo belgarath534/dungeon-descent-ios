@@ -19,7 +19,7 @@ struct SpiritBuilderView: View {
                 Spacer()
                 Button("✕ Close") { onClose() }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Close spirit builder")
             }
-            Text("\(frags) of \(CustomSpirits.cost) Soul Fragments collected.")
+            Text("\(frags) of \(CustomSpirits.cost) Soul Fragments collected." as String)
                 .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xaa88ff))
             if let built {
                 Text(built).font(Theme.crimson(15, italic: true)).foregroundStyle(Theme.textSecondary)
@@ -49,7 +49,7 @@ struct SpiritBuilderView: View {
             }
             .frame(height: 10)
             .accessibilityHidden(true)
-            Text("\(frags) of 25. \(CustomSpirits.cost - frags) more needed.").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
+            Text("\(frags) of 25. \(CustomSpirits.cost - frags) more needed." as String).font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
         }
     }
 
@@ -68,7 +68,7 @@ struct SpiritBuilderView: View {
                         .font(.system(size: 26)).padding(8)
                         .background(i == icon ? Theme.gold.opacity(0.15) : .clear)
                         .overlay(RoundedRectangle(cornerRadius: 4).stroke(i == icon ? Theme.gold : Theme.borderDim, lineWidth: 2))
-                        .accessibilityLabel("Select icon \(i)")
+                        .accessibilityLabel("Select icon \(i)" as String)
                         .accessibilityAddTraits(i == icon ? .isSelected : [])
                 }
             }
@@ -84,7 +84,7 @@ struct SpiritBuilderView: View {
                     .background(on ? Theme.gold.opacity(0.08) : .clear)
                     .overlay(Rectangle().stroke(on ? Theme.gold : Theme.borderDim))
                 }
-                .accessibilityLabel("\(a.label). \(a.desc)")
+                .accessibilityLabel("\(a.label). \(a.desc)" as String)
                 .accessibilityAddTraits(on ? .isSelected : [])
             }
             if !error.isEmpty { Text(error).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xff5555)) }

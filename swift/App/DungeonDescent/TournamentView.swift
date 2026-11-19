@@ -62,11 +62,11 @@ struct TournamentView: View {
             Group {
                 if season.active {
                     VStack(spacing: 2) {
-                        Text("🏆 \(season.name) Tournament — ACTIVE").foregroundStyle(Self.yellow)
-                        Text("\(season.hoursLeft) hours remaining").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
+                        Text("🏆 \(season.name) Tournament — ACTIVE" as String).foregroundStyle(Self.yellow)
+                        Text("\(season.hoursLeft) hours remaining" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
                     }
                 } else {
-                    Text("Next tournament in \(season.daysUntil) days").foregroundStyle(Color(hex: 0x888888))
+                    Text("Next tournament in \(season.daysUntil) days" as String).foregroundStyle(Color(hex: 0x888888))
                 }
             }
             .font(Theme.cinzel(12.8)).multilineTextAlignment(.center).frame(maxWidth: .infinity)
@@ -76,7 +76,7 @@ struct TournamentView: View {
                 Text(season.boss.icon).font(.system(size: 32)).accessibilityHidden(true)
                 Text(season.boss.name).font(Theme.cinzel(14)).foregroundStyle(Self.yellow)
                 Text(season.boss.desc).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888)).multilineTextAlignment(.center)
-                Text("HP: \(season.boss.hp)").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaaaaaa))
+                Text("HP: \(season.boss.hp)" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaaaaaa))
             }
             .padding(16).frame(maxWidth: .infinity)
             .background(Color(hex: 0x0a0a0a)).overlay(RoundedRectangle(cornerRadius: 4).stroke(Color(hex: 0x333333)))
@@ -89,7 +89,7 @@ struct TournamentView: View {
                     Sound.sfx("sfx-select")
                     Feedback.announce("\(ch.name) selected.")
                 } label: {
-                    Text("\(ch.name) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))")
+                    Text("\(ch.name) — \(ch.cls) (Lv \(ch.persistLevel ?? 1))" as String)
                         .font(Theme.cinzel(12)).foregroundStyle(picked == i ? Theme.gold : Theme.ashLight)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 12).padding(.horizontal, 14)
@@ -97,7 +97,7 @@ struct TournamentView: View {
                         .overlay(Rectangle().stroke(picked == i ? Theme.gold : Theme.borderDim))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("\(ch.name), \(ch.cls), Level \(ch.persistLevel ?? 1)")
+                .accessibilityLabel("\(ch.name), \(ch.cls), Level \(ch.persistLevel ?? 1)" as String)
                 .accessibilityAddTraits(picked == i ? [.isButton, .isSelected] : .isButton)
             }
             Button(action: start) {
@@ -115,17 +115,17 @@ struct TournamentView: View {
                     .padding(.top, 8)
                 ForEach(Array(board.enumerated()), id: \.element.id) { i, s in
                     HStack {
-                        Text("\(i == 0 ? "🥇" : i == 1 ? "🥈" : i == 2 ? "🥉" : "#\(i + 1)") \(s.username)")
+                        Text("\(i == 0 ? "🥇" : i == 1 ? "🥈" : i == 2 ? "🥉" : "#\(i + 1)") \(s.username)" as String)
                             .foregroundStyle(Color(hex: i < 3 ? [0xffdd44, 0xaaaaaa, 0xcc8844][i] : 0x666666))
                         Spacer()
-                        Text("\(s.score) pts").foregroundStyle(Self.yellow)
+                        Text("\(s.score) pts" as String).foregroundStyle(Self.yellow)
                     }
                     .font(Theme.cinzel(11.2)).padding(.vertical, 4)
                     .overlay(alignment: .bottom) { Rectangle().fill(Color(hex: 0x1a1a1a)).frame(height: 1) }
                     .accessibilityElement(children: .combine)
                 }
             } else if best > 0 {
-                Text("Your best this season: \(best) pts").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
+                Text("Your best this season: \(best) pts" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
             }
         }
     }
@@ -162,11 +162,11 @@ struct TournamentView: View {
         VStack(spacing: 8) {
             Text(f.phase == 1 ? "PHASE 1" : f.phase == 2 ? "PHASE 2" : "FINAL PHASE")
                 .font(Theme.cinzel(9.6)).tracking(3).foregroundStyle(Self.yellow)
-            Text("\(f.boss.icon) \(f.boss.name)").font(Theme.decorative(16)).foregroundStyle(Self.yellow)
+            Text("\(f.boss.icon) \(f.boss.name)" as String).font(Theme.decorative(16)).foregroundStyle(Self.yellow)
                 .accessibilityAddTraits(.isHeader)
-            Text("\(f.bossHp) / \(f.boss.hp) HP").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x888888))
+            Text("\(f.bossHp) / \(f.boss.hp) HP" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x888888))
             bar(Double(f.bossHp) / Double(f.boss.hp), [0x885500, 0xffdd44], height: 10)
-            Text("Damage: \(f.damageDealt)").font(Theme.cinzel(12.8)).foregroundStyle(Self.yellow)
+            Text("Damage: \(f.damageDealt)" as String).font(Theme.cinzel(12.8)).foregroundStyle(Self.yellow)
             ScrollView {
                 VStack(alignment: .leading, spacing: 2) {
                     ForEach(Array(log.enumerated()), id: \.offset) { _, l in
@@ -180,7 +180,7 @@ struct TournamentView: View {
             .frame(minHeight: 80, maxHeight: 140)
             .background(Color(hex: 0x0a0a0a)).overlay(Rectangle().stroke(Color(hex: 0x1a1a1a)))
             .accessibilityLabel("Tournament log")
-            Text("\(f.hp) / \(f.maxHp) HP").font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaaaaaa))
+            Text("\(f.hp) / \(f.maxHp) HP" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaaaaaa))
                 .frame(maxWidth: .infinity, alignment: .trailing)
             bar(Double(f.hp) / Double(f.maxHp), [0x228822, 0x44ff44], height: 8)
             HStack(spacing: 8) {
@@ -236,16 +236,16 @@ struct TournamentView: View {
             Text("🏆").font(.system(size: 32)).accessibilityHidden(true)
             Text(f.won ? "👑 Boss Defeated!" : "💀 Defeated").font(Theme.decorative(17.6)).foregroundStyle(Self.yellow)
                 .accessibilityAddTraits(.isHeader)
-            Text("\(f.score) pts").font(Theme.cinzel(24)).foregroundStyle(Self.yellow)
+            Text("\(f.score) pts" as String).font(Theme.cinzel(24)).foregroundStyle(Self.yellow)
             Group {
                 if f.won {
-                    Text("Damage: \(f.damageDealt) pts\nSpeed bonus: \(f.speedBonus) pts\nSurvival bonus: \(f.survivalBonus) pts")
+                    Text("Damage: \(f.damageDealt) pts\nSpeed bonus: \(f.speedBonus) pts\nSurvival bonus: \(f.survivalBonus) pts" as String)
                 } else {
-                    Text("Damage dealt: \(f.damageDealt) pts\nNo speed or survival bonus.")
+                    Text("Damage dealt: \(f.damageDealt) pts\nNo speed or survival bonus." as String)
                 }
             }
             .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0x888888)).multilineTextAlignment(.center).lineSpacing(6)
-            Text("Your best this season: \(Tournament.best(season, store: game.store)) pts")
+            Text("Your best this season: \(Tournament.best(season, store: game.store)) pts" as String)
                 .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x666666)).padding(.bottom, 16)
             Button {
                 fight = nil

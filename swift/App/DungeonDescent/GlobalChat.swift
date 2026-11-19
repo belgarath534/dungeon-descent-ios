@@ -285,7 +285,7 @@ struct GlobalChatView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("\(m.username) said \(m.message). \(m.timestamp > 0 ? GlobalChat.ago(m.timestamp) : "")")
+                .accessibilityLabel("\(m.username) said \(m.message). \(m.timestamp > 0 ? GlobalChat.ago(m.timestamp) : "")" as String)
                 if !mine && !m.system {
                     HStack(spacing: 6) {
                         ugcButton("Report", label: "Report message by \(m.username)") { reportReason = ""; reporting = m }
@@ -360,7 +360,7 @@ struct GlobalChatView: View {
                     .background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Theme.gold))
                     .accessibilityLabel("Send message")
             }
-            Text("\(draft.count) / 200").font(Theme.cinzel(8.8)).foregroundStyle(Color(hex: 0x333333))
+            Text("\(draft.count) / 200" as String).font(Theme.cinzel(8.8)).foregroundStyle(Color(hex: 0x333333))
                 .accessibilityHidden(true)
         }
     }
@@ -414,7 +414,7 @@ struct ChatSettingsPanel: View {
             TextField(chat.username ?? "Your username", text: $name)
                 .font(Theme.cinzel(12)).foregroundStyle(.white)
                 .padding(10).background(Color(hex: 0x0a0a0a)).overlay(Rectangle().stroke(Color(hex: 0x333333)))
-                .accessibilityLabel("Chat username\(chat.username.map { ", currently \($0)" } ?? "")")
+                .accessibilityLabel("Chat username\(chat.username.map { ", currently \($0)" } ?? "")" as String)
             Button("Save Username") {
                 if let e = chat.setUsername(name) { status = e; Feedback.announce(e) }
                 else { status = "Username saved: \(name)" }
