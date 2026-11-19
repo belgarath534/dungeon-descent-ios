@@ -101,14 +101,20 @@ for ch in chs:
     # picture whose upload never finished is removed and sent again.
     art = os.path.join(os.path.dirname(__file__), f"../store/game-center/{name}.png")
     img_id = None
-    for path in (f"/gameCenterChallengeVersions/{v['id']}/relationships/image",
-                 f"/gameCenterChallengeVersions/{v['id']}/image"):
-        vv = S.get(API + path, timeout=60)
-        if vv.ok:
-            d = vv.json().get("data")
+    vv = S.get(API + f"/gameCenterChallengeVersions/{v['id']}", timeout=60)
+    rels = vv.json()["data"].get("relationships", {}) if vv.ok else {}
+    for key, r in rels.items():
+        if "image" not in key.lower():
+            continue
+        link = (r.get("links") or {}).get("related")
+        got = S.get(link, timeout=60) if link else None
+        if got is not None and got.ok:
+            d = got.json().get("data")
+            d = d[0] if isinstance(d, list) and d else d
             img_id = d and d.get("id")
-            break
-        print(f"   ({path}: {vv.status_code} {vv.text[:300]})")
+        print(f"   picture link '{key}': {img_id}")
+    if not any("image" in k.lower() for k in rels):
+        print(f"   (no picture link on the version: {sorted(rels)})")
     if img_id:
         im = call("GET", f"/gameCenterChallengeImages/{img_id}")
         state = ((im or {}).get("data", {}).get("attributes", {}).get("assetDeliveryState") or {}).get("state")
