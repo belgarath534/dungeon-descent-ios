@@ -131,7 +131,7 @@ def interpolations_to_x(s):
     return out.replace('\\"', '"').replace("\\n", "\n")
 
 # Names, keys and the moderation report (which goes to the developer, in English).
-NOT_SHOWN = {"Gerald", "Mr. Bones Jr.", "Mira", "dd.filestore", "phase4Reached", "Chat username◊"}
+NOT_SHOWN = {"yyyy-MM-dd", "Gerald", "Mr. Bones Jr.", "Mira", "dd.filestore", "phase4Reached", "Chat username◊"}
 
 def visible(t):
     if t.strip() in NOT_SHOWN or t.startswith("REPORTED ◊"): return False

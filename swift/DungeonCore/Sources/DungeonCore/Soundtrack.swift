@@ -27,7 +27,8 @@ public enum Soundtrack {
         }
     }
 
-    public static func file(forAmbient key: String) -> String? { tables.ambient[key] }
+    /// "hunt-forest": the Hunting Grounds (12.0, made by tools/hunt-sounds.py).
+    public static func file(forAmbient key: String) -> String? { key == "hunt-forest" ? "hunt-forest.mp3" : tables.ambient[key] }
 
     private static let prefixes: [String: String] = [
         "The Ashbound Wastes": "ash", "Frosthold Abyss": "frost", "The Sunken Archives": "sunken",

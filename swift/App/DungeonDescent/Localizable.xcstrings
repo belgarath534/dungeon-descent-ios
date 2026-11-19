@@ -117477,7 +117477,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Perseguidor Noturno"
+            "value": "Espreitador Noturno"
           }
         }
       }
@@ -129677,6 +129677,534 @@
           "stringUnit": {
             "state": "translated",
             "value": "🧭 Novo menu principal — abas na parte de baixo da tela: Jogar, Modos, Multijogador, Mais e Ajustes, então tudo fica a um ou dois toques. Prefere o menu longo antigo? Ajustes, Jogabilidade, Menu Clássico."
+          }
+        }
+      }
+    },
+    "Defend: strike for half and take a quarter": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defender: golpeia com metade e recebe um quarto"
+          }
+        }
+      }
+    },
+    "Stand still and listen. Its call comes from where it is. Best with headphones.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fique parado e escute. O chamado vem de onde a fera está. Melhor com fones de ouvido."
+          }
+        }
+      }
+    },
+    "Switches between sneaking and walking.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alterna entre avançar em silêncio e andar."
+          }
+        }
+      }
+    },
+    "🐾 Search for Tracks": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🐾 Procurar Pegadas"
+          }
+        }
+      }
+    },
+    "👂 Listen": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "👂 Escutar"
+          }
+        }
+      }
+    },
+    "🔨 Heavy": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🔨 Pesado"
+          }
+        }
+      }
+    },
+    "🗡 Ambush": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🗡 Emboscada"
+          }
+        }
+      }
+    },
+    "🪤 Set a Trap": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🪤 Armar uma Armadilha"
+          }
+        }
+      }
+    },
+    "🏳 Give Up the Hunt": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🏳 Desistir da Caçada"
+          }
+        }
+      }
+    },
+    "🌲 Back to the Hunting Grounds": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌲 Voltar ao Campo de Caça"
+          }
+        }
+      }
+    },
+    "Strike from hiding for huge damage, if it hasn't noticed you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ataque do esconderijo com dano enorme, se ela não tiver notado você."
+          }
+        }
+      }
+    },
+    "Catch it for two turns. It might slip away.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prenda-a por dois turnos. Ela pode escapar."
+          }
+        }
+      }
+    },
+    "Hunt by sound: listen for its call, read its tracks, sneak up and strike. Best with headphones.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cace pelo som: escute o chamado, leia as pegadas, chegue em silêncio e ataque. Melhor com fones de ouvido."
+          }
+        }
+      }
+    },
+    "Legends": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lendas"
+          }
+        }
+      }
+    },
+    "Today's bounties (double gold)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caçadas de hoje (ouro em dobro)"
+          }
+        }
+      }
+    },
+    "🌙 RELAXING HUNT": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌙 CAÇADA RELAXANTE"
+          }
+        }
+      }
+    },
+    "🌲 Free Hunt (a random beast)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌲 Caçada Livre (uma fera aleatória)"
+          }
+        }
+      }
+    },
+    "🎯 TRACK A BEAST": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎯 RASTREIE UMA FERA"
+          }
+        }
+      }
+    },
+    "Your hunter wanders the forest on their own while Lewis narrates. Keep playing anywhere in the game.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu caçador anda pela floresta sozinho enquanto o narrador conta tudo. Continue jogando em qualquer lugar do jogo."
+          }
+        }
+      }
+    },
+    "Walking. Fast, but loud. It may hear you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Andando. Rápido, mas barulhento. A fera pode ouvir você."
+          }
+        }
+      }
+    },
+    "Sneaking. Quiet, but the beast moves more.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Em silêncio. Quieto, mas a fera se move mais."
+          }
+        }
+      }
+    },
+    "🚶 Walking (fast, loud)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🚶 Andando (rápido, barulhento)"
+          }
+        }
+      }
+    },
+    "🤫 Sneaking (quiet, slower)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🤫 Em silêncio (quieto, mais lento)"
+          }
+        }
+      }
+    },
+    "Choose a hunter, then track today's bounties or a legend, or send your hunter on a relaxing hunt.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha um caçador, depois rastreie as caçadas de hoje ou uma lenda, ou mande seu caçador numa caçada relaxante."
+          }
+        }
+      }
+    },
+    "Hunt started. Lewis will narrate. Your hunter keeps fighting while you look around.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caçada iniciada. O narrador vai contar tudo. Seu caçador continua lutando enquanto você explora."
+          }
+        }
+      }
+    },
+    "What the narrator said, newest first": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O que o narrador disse, mais recente primeiro"
+          }
+        }
+      }
+    },
+    "Grey Wolf": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lobo Cinzento"
+          }
+        }
+      }
+    },
+    "Wild Boar": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javali Selvagem"
+          }
+        }
+      }
+    },
+    "Shadow Owl": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coruja das Sombras"
+          }
+        }
+      }
+    },
+    "Vine Serpent": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serpente das Vinhas"
+          }
+        }
+      }
+    },
+    "Cave Bear": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urso das Cavernas"
+          }
+        }
+      }
+    },
+    "The Grey Fang": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Presa Cinzenta"
+          }
+        }
+      }
+    },
+    "The White Stag": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Cervo Branco"
+          }
+        }
+      }
+    },
+    "The Swamp King": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Rei do Pântano"
+          }
+        }
+      }
+    },
+    "The Night Mother": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Mãe da Noite"
+          }
+        }
+      }
+    },
+    "The Forest Itself": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Própria Floresta"
+          }
+        }
+      }
+    },
+    "Wolf Pelt": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pele de Lobo"
+          }
+        }
+      }
+    },
+    "Boar Tusk": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presa de Javali"
+          }
+        }
+      }
+    },
+    "Night Feather": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pena Noturna"
+          }
+        }
+      }
+    },
+    "Serpent Scale": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escama de Serpente"
+          }
+        }
+      }
+    },
+    "Stalker Fang": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presa de Espreitador"
+          }
+        }
+      }
+    },
+    "Bear Claw": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garra de Urso"
+          }
+        }
+      }
+    },
+    "The Grey Fang's Crown": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coroa do Presa Cinzenta"
+          }
+        }
+      }
+    },
+    "White Antler": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chifre Branco"
+          }
+        }
+      }
+    },
+    "The Swamp King's Eye": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Olho do Rei do Pântano"
+          }
+        }
+      }
+    },
+    "Moonlit Wing": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asa de Luar"
+          }
+        }
+      }
+    },
+    "The Heartwood": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cerne da Floresta"
+          }
+        }
+      }
+    },
+    "🌲 Hunting Grounds, remade — track a beast by sound: listen for its call (it comes from where the beast really is), read its tracks, walk or sneak toward it, then ambush it, trap it or fight. Three bounties a day pay double, and five legends wait from Bounty Rank 2 to 10, from the Grey Fang to The Forest Itself. A new narrator, Lewis (Alex in Portuguese), speaks every line, with no account needed. The relaxing auto-hunt is still there too.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌲 Campo de Caça, refeito — rastreie uma fera pelo som: escute o chamado (ele vem de onde a fera realmente está), leia as pegadas, ande ou avance em silêncio até ela, depois embosque, arme uma armadilha ou lute. Três caçadas por dia pagam o dobro, e cinco lendas esperam do Nível de Caçador 2 ao 10, do Presa Cinzenta à Própria Floresta. Um novo narrador, Lewis (Alex em português), fala cada frase, sem precisar de conta. A caçada relaxante automática continua lá."
           }
         }
       }

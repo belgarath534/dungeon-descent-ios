@@ -23,14 +23,14 @@ final class HuntModel: ObservableObject {
         hunter = h
         active = true
         log = ["🌲 \(h.name) enters the Hunting Grounds."]
-        Sound.ambient("whisper")
-        Feedback.announce("Hunt started. Brian will narrate. Your hunter keeps fighting while you look around.")
-        // The forest's sound first, then Brian, then the first moment.
+        Sound.ambient("hunt-forest")
+        Feedback.announce("Hunt started. Lewis will narrate. Your hunter keeps fighting while you look around.")
+        // The forest's sound first, then the narrator, then the first moment.
         let enter = Hunt.say("enter", dice: &dice)
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
             guard let self, self.active else { return }
             self.log.append(enter)
-            Brian.shared.say(enter)
+            Narrator.shared.say(enter)
         }
         schedule(after: 8)
     }
@@ -44,7 +44,7 @@ final class HuntModel: ObservableObject {
         Sound.ambient(nil)
         if !died, let h = hunter {
             log.append("📯 Hunt ended. \(h.kills) enemies slain, \(h.items) items found, \(h.gold)g earned.")
-            Brian.shared.say(Hunt.say("return", dice: &dice) + " You slew \(h.kills) enemies and found \(h.items) items.")
+            Narrator.shared.say(Hunt.say("return", dice: &dice) + " You slew \(h.kills) enemies and found \(h.items) items.")
         }
     }
 
@@ -64,11 +64,12 @@ final class HuntModel: ObservableObject {
         if log.count > 120 { log.removeFirst(log.count - 120) }
         if m.gold > 0 { game.wallet.addGold(m.gold) }
         if let item = m.item { game.globalInventory.add(item) }
-        m.brian.forEach { Brian.shared.say($0) }
+        m.brian.forEach { Narrator.shared.say($0) }
         if m.xp > 0, let up = Hunt.addXP(m.xp, store: game.store) {
             log.append("🏹 RANK UP! You are now a \(up.name)!")
             Sound.sfx("sfx-levelup")
-            Brian.shared.say("Rank up. You are now \(up.name). \(up.desc)")
+            Narrator.shared.say(ids: ["rank_up"])
+            Feedback.announce("\(up.name). \(up.desc)", after: 2)
         }
         if let name = m.killed, let done = Bounties.record(.kill(name: name, elite: false, boss: false, dungeon: "Hunting Grounds"), store: game.store) {
             Bounties.complete(done, store: game.store, wallet: game.wallet)
@@ -90,6 +91,7 @@ struct HuntingGroundsView: View {
     @EnvironmentObject var game: GameModel
     @EnvironmentObject var router: Router
     @ObservedObject private var hunt = HuntModel.shared
+    @ObservedObject private var track = TrackModel.shared
     private let green = Color(hex: 0x44aa44)
 
     var body: some View {
@@ -97,6 +99,9 @@ struct HuntingGroundsView: View {
         let rank = Hunt.rank(xp: xp)
         let next = Hunt.next(after: rank)
         WebScreen {
+          if track.hunt != nil {
+            HuntTrackView(model: track)
+          } else {
             VStack(alignment: .leading, spacing: 12) {
                 Button("← Leave") {
                     if hunt.active { Feedback.announce("You step away. The hunt continues without you.") }
@@ -119,18 +124,9 @@ struct HuntingGroundsView: View {
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel("Bounty Rank \(rank.rank), \(rank.name). \(rank.desc) \(xp) of \(next.xpNeeded) XP." as String)
 
-                VStack(spacing: 4) {
-                    stat("Hunter", hunt.hunter?.name ?? (game.characters.indices.contains(hunt.charIndex) ? game.characters[hunt.charIndex].name : "None selected"))
-                    stat("Status", hunt.active ? "Hunting..." : "Idle")
-                    stat("HP", hunt.active ? "\(hunt.hunter?.hp ?? 0) / \(hunt.hunter?.maxHp ?? 0)" : "—")
-                    stat("Enemies Slain", "\(hunt.hunter?.kills ?? 0)")
-                    stat("Items Found", "\(hunt.hunter?.items ?? 0)")
-                    stat("Gold Earned", "\(hunt.hunter?.gold ?? 0)g")
-                }
-                .padding(12).background(Color(hex: 0x030803)).overlay(Rectangle().stroke(Color(hex: 0x0a1a0a)))
-
                 if !hunt.active {
                     Text("SELECT HUNTER").font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(Color(hex: 0x555555))
+                        .accessibilityAddTraits(.isHeader)
                     if game.characters.isEmpty {
                         Text("No characters. Create one first.").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555))
                     }
@@ -143,7 +139,22 @@ struct HuntingGroundsView: View {
                         .accessibilityLabel("\(c.name) \(c.cls) level \(c.persistLevel ?? 1)" as String)
                         .accessibilityAddTraits(i == hunt.charIndex ? .isSelected : [])
                     }
+                    trackSection(rank)
                 }
+
+                Text("🌙 RELAXING HUNT").font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(Color(hex: 0x555555))
+                    .accessibilityAddTraits(.isHeader).padding(.top, 8)
+                Text("Your hunter wanders the forest on their own while Lewis narrates. Keep playing anywhere in the game.")
+                    .font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textDim)
+                VStack(spacing: 4) {
+                    stat("Hunter", hunt.hunter?.name ?? (game.characters.indices.contains(hunt.charIndex) ? game.characters[hunt.charIndex].name : "None selected"))
+                    stat("Status", hunt.active ? "Hunting..." : "Idle")
+                    stat("HP", hunt.active ? "\(hunt.hunter?.hp ?? 0) / \(hunt.hunter?.maxHp ?? 0)" : "—")
+                    stat("Enemies Slain", "\(hunt.hunter?.kills ?? 0)")
+                    stat("Items Found", "\(hunt.hunter?.items ?? 0)")
+                    stat("Gold Earned", "\(hunt.hunter?.gold ?? 0)g")
+                }
+                .padding(12).background(Color(hex: 0x030803)).overlay(Rectangle().stroke(Color(hex: 0x0a1a0a)))
 
                 VStack(alignment: .leading, spacing: 4) {
                     ForEach(Array(hunt.log.suffix(30).reversed().enumerated()), id: \.offset) { _, line in
@@ -164,12 +175,59 @@ struct HuntingGroundsView: View {
                         .disabled(game.characters.isEmpty)
                         .accessibilityLabel("Send hunter into the forest")
                 }
-                Text("Brian narrates your hunt. Your hunter keeps fighting while you look around the game.")
-                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444)).multilineTextAlignment(.center).frame(maxWidth: .infinity)
             }
+          }
         }
         .onAppear {
-            Feedback.announce("The Hunting Grounds. Bounty Rank \(rank.rank). " + (hunt.active ? "Your hunter is active in the forest." : "Select a character and enter the forest."))
+            guard track.hunt == nil else { return }
+            Feedback.announce("The Hunting Grounds. Bounty Rank \(rank.rank). " + (hunt.active ? "Your hunter is active in the forest." : "Choose a hunter, then track today's bounties or a legend, or send your hunter on a relaxing hunt."))
+        }
+    }
+
+    // MARK: 12.0: track a beast
+
+    private var hunterCharacter: PlayerCharacter? {
+        game.characters.indices.contains(hunt.charIndex) ? game.characters[hunt.charIndex] : nil
+    }
+
+    private func go(_ p: Tracking.Prey, bounty: Bool) {
+        guard let ch = hunterCharacter else { Feedback.announce("Select a character first."); return }
+        track.begin(p.id, character: ch, bounty: bounty, game: game)
+    }
+
+    @ViewBuilder private func trackSection(_ rank: Hunt.Rank) -> some View {
+        let done = Tracking.bountyState(game.store).done
+        let slain = Tracking.legendsSlain(game.store)
+        let trophies = Tracking.trophies(game.store)
+        Text("🎯 TRACK A BEAST").font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(green)
+            .accessibilityAddTraits(.isHeader).padding(.top, 8)
+        Text("Hunt by sound: listen for its call, read its tracks, sneak up and strike. Best with headphones.")
+            .font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textDim)
+        Text("Today's bounties (double gold)").font(Theme.cinzel(10)).foregroundStyle(Theme.goldDim)
+        ForEach(Tracking.bounties(rank: rank.rank), id: \.id) { p in
+            let isDone = done.contains(p.id)
+            Button("\(isDone ? "✓" : p.icon) \(p.name) — \(isDone ? "done" : "\(p.gold * 2) gold")" as String) { go(p, bounty: true) }
+                .buttonStyle(WebButtonStyle(kind: isDone ? .ghost : .gold)).frame(maxWidth: .infinity)
+                .disabled(isDone || hunterCharacter == nil)
+                .accessibilityLabel(isDone ? "\(p.name) bounty, done today" : "Bounty: \(p.name), \(p.gold * 2) gold" as String)
+        }
+        let free = Tracking.common.filter { $0.rank <= rank.rank }
+        Button("🌲 Free Hunt (a random beast)") {
+            if let p = free.randomElement() { go(p, bounty: false) }
+        }
+        .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity).disabled(hunterCharacter == nil)
+        Text("Legends").font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0xffcc44)).padding(.top, 4)
+        ForEach(Tracking.legends, id: \.id) { p in
+            let open = rank.rank >= p.rank
+            let killed = slain.contains(p.id)
+            Button("\(killed ? "✓" : open ? p.icon : "🔒") \(p.name) — \(open ? "\(p.gold) gold" : "Rank \(p.rank)")" as String) { go(p, bounty: false) }
+                .buttonStyle(WebButtonStyle(kind: open ? .red : .ghost)).frame(maxWidth: .infinity)
+                .disabled(!open || hunterCharacter == nil)
+                .accessibilityLabel(open ? "Legend: \(p.name), \(p.gold) gold\(killed ? ", slain before" : "")" : "\(p.name), locked until Bounty Rank \(p.rank)" as String)
+        }
+        if !trophies.isEmpty {
+            let list = Tracking.prey.compactMap { p in trophies[p.id].map { "\(p.trophy) ×\($0)" } }.joined(separator: ", ")
+            Text("🏆 Trophies: \(list)" as String).font(Theme.crimson(13)).foregroundStyle(Theme.textSecondary)
         }
     }
 

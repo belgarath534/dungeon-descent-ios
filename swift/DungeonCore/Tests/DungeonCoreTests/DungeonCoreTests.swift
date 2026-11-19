@@ -5023,3 +5023,124 @@ final class AudioMapTests: XCTestCase {
         XCTAssertLessThanOrEqual(m.cues.count, AudioMap.maxCues)
     }
 }
+
+final class TrackingTests: XCTestCase {
+    func hunter(_ level: Int = 10) -> PlayerCharacter {
+        var c = PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        c.persistLevel = level
+        return c
+    }
+
+    func testEveryLineIdHasALine() {
+        // Every id the rules can say is in hunt-lines.json, in both languages.
+        var ids = ["tree", "heard_flee", "heard_charge", "noise_warn", "cold", "ambush", "ambush_seen", "trap_ok", "trap_fail", "fight",
+                   "hit", "hit_hard", "miss", "defend", "bandage", "no_bandage", "its_hit", "its_hit_hard", "its_stuck", "blocked",
+                   "hurt", "badly_hurt", "prey_weak", "prey_dying", "legend_flee", "lost", "bounty_done", "legend_done", "tracks_none"]
+        for p in Tracking.prey { ids += ["intro_\(p.id)", "found_\(p.id)", "win_\(p.id)"] }
+        for c in ["howl", "snort", "wings", "hiss", "growl"] {
+            for d in ["north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"] {
+                for k in ["close", "near", "far"] { ids.append("hear_\(c)_\(d)_\(k)") }
+                ids += ["tracks_\(d)_fresh", "tracks_\(d)_old"]
+            }
+        }
+        for d in Compass.allCases { ids += ["walk_\(d.rawValue)", "sneak_\(d.rawValue)"] }
+        for id in ids {
+            XCTAssertNotNil(HuntLines.all[id]?["en"], id)
+            XCTAssertNotNil(HuntLines.all[id]?["pt"], id)
+        }
+    }
+
+    func testDirections() {
+        XCTAssertEqual(Tracking.direction(0, -3), "north")
+        XCTAssertEqual(Tracking.direction(2, -2), "northeast")
+        XCTAssertEqual(Tracking.direction(3, 0), "east")
+        XCTAssertEqual(Tracking.direction(-1, 3), "south")
+        XCTAssertEqual(Tracking.direction(-3, -1), "west")
+        XCTAssertEqual(Tracking.distanceWord(1), "close")
+        XCTAssertEqual(Tracking.distanceWord(3), "near")
+        XCTAssertEqual(Tracking.distanceWord(5), "far")
+    }
+
+    func testCreepingUpForAnAmbush() {
+        var dice = SeededDice(seed: 11)
+        var h = Tracking.start("wolf", character: hunter(), dice: &dice)
+        XCTAssertGreaterThanOrEqual(h.distance, 2)
+        // Pin the wolf so the path is known.
+        h.px = 0; h.py = -3
+        var still = SeededDice(seed: 1)
+        var said: [String] = []
+        for _ in 0..<3 where h.phase == .tracking {
+            let p = h.prey
+            _ = p
+            h.px = 0; h.py = -3   // it holds still for this test
+            said += Tracking.move(&h, .north, sneak: true, dice: &still)
+        }
+        XCTAssertEqual(h.phase, .found, said.joined(separator: ","))
+        XCTAssertTrue(said.contains("found_wolf"))
+        XCTAssertFalse(h.seen)
+        let hit = Tracking.ambush(&h, dice: &still)
+        XCTAssertEqual(hit.first, "ambush")
+        XCTAssertLessThan(h.preyHp, h.preyMax)
+    }
+
+    func testWalkingLoudScaresItAway() {
+        var dice = SeededDice(seed: 3)
+        var h = Tracking.start("owl", character: hunter(), dice: &dice)
+        h.px = 0; h.py = -3
+        var said: [String] = []
+        for _ in 0..<2 { said += Tracking.move(&h, .north, sneak: false, dice: &dice) }
+        XCTAssertTrue(said.contains("heard_flee") || said.contains("noise_warn"), said.joined(separator: ","))
+    }
+
+    func testAnAngryBeastCharges() {
+        var dice = SeededDice(seed: 5)
+        var h = Tracking.start("bear", character: hunter(), dice: &dice)
+        h.px = 0; h.py = -3
+        var said: [String] = []
+        for _ in 0..<2 where h.phase == .tracking { said += Tracking.move(&h, .north, sneak: false, dice: &dice) }
+        XCTAssertEqual(h.phase, .fight, said.joined(separator: ","))
+        XCTAssertTrue(said.contains("heard_charge"))
+        XCTAssertLessThan(h.hp, h.maxHp)
+    }
+
+    func testFightToTheEndAndCollect() {
+        let store = MemoryStore()
+        let wallet = Wallet(store: store)
+        var dice = SeededDice(seed: 9)
+        var h = Tracking.start("boar", character: hunter(30), bounty: true, dice: &dice)
+        h.phase = .found
+        _ = Tracking.face(&h)
+        var n = 0
+        while h.phase == .fight && n < 100 { _ = Tracking.strike(&h, .attack, dice: &dice); n += 1 }
+        XCTAssertEqual(h.phase, .won)
+        let gold = wallet.gold
+        let got = Tracking.collect(h, store: store, wallet: wallet)
+        XCTAssertEqual(got?.reward.gold, 110)   // a bounty pays double
+        XCTAssertEqual(wallet.gold, gold + 110)
+        XCTAssertEqual(Tracking.trophies(store)["boar"], 1)
+        XCTAssertEqual(Tracking.bountyState(store).done, ["boar"])
+        XCTAssertGreaterThan(Hunt.xp(store), 0)
+    }
+
+    func testALegendBreaksAwayOnce() {
+        var dice = SeededDice(seed: 21)
+        var h = Tracking.start("greyfang", character: hunter(40), dice: &dice)
+        h.phase = .fight
+        var said: [String] = []
+        var n = 0
+        while h.phase == .fight && n < 100 { said += Tracking.strike(&h, .attack, dice: &dice); n += 1 }
+        XCTAssertTrue(said.contains("legend_flee"), said.joined(separator: ","))
+        XCTAssertEqual(h.phase, .tracking)
+        XCTAssertTrue(h.fledOnce)
+        XCTAssertGreaterThan(h.distance, 0)
+    }
+
+    func testDailyBounties() {
+        let day = Date(timeIntervalSince1970: 1_795_392_000)
+        let a = Tracking.bounties(rank: 10, now: day)
+        XCTAssertEqual(a.count, 3)
+        XCTAssertEqual(Set(a.map(\.id)).count, 3)
+        XCTAssertEqual(a.map(\.id), Tracking.bounties(rank: 10, now: day.addingTimeInterval(3600)).map(\.id))
+        XCTAssertTrue(Tracking.bounties(rank: 1, now: day).allSatisfy { $0.rank <= 1 })
+    }
+}
