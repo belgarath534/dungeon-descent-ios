@@ -118,7 +118,7 @@ for ch in chs:
     if img_id:
         im = call("GET", f"/gameCenterChallengeImages/{img_id}")
         state = ((im or {}).get("data", {}).get("attributes", {}).get("assetDeliveryState") or {}).get("state")
-        print(f"   picture {img_id}: {state}")
+        print(f"   picture {img_id}: {state} {(im or {}).get('data', {}).get('attributes')}")
         if state in ("COMPLETE", None) and im:
             pass
         else:
@@ -140,8 +140,7 @@ for ch in chs:
                 if r.status_code >= 400:
                     problems.append(f"upload {name}: {r.status_code}")
             if call("PATCH", f"/gameCenterChallengeImages/{im['id']}", {"data": {"type": "gameCenterChallengeImages",
-                    "id": im["id"], "attributes": {"uploaded": True,
-                                                   "sourceFileChecksum": hashlib.md5(data).hexdigest()}}}):
+                    "id": im["id"], "attributes": {"uploaded": True}}}):
                 print("   picture uploaded")
                 fresh.append(im["id"])
     releases = S.get(API + f"/gameCenterChallengeVersions/{v['id']}/releases", timeout=60)
@@ -160,7 +159,10 @@ for _ in range(20):
     for iid in fresh:
         im = S.get(API + f"/gameCenterChallengeImages/{iid}", timeout=60)
         st = ((im.json().get("data", {}).get("attributes", {}).get("assetDeliveryState") or {}).get("state")) if im.ok else "?"
-        if st != "COMPLETE":
+        if st == "FAILED":
+            print(f"⚠️ Apple couldn't use picture {iid}: {im.json()['data']['attributes']}")
+            problems.append(iid)
+        elif st != "COMPLETE":
             waiting.append(st)
     if not waiting:
         break
