@@ -175,6 +175,8 @@ public struct Run: Codable, Sendable {
     public var maskUsed = false
     /// Legacy Mode's Dungeon Tier for this run (1 = none).
     public var legacyTier = 1
+    /// Prestige stars (Prestige.swift); optional so older saved runs still load.
+    public var prestige: Int? = nil
     /// The floor the Warden last shrugged off a debuff on.
     public var wardenFloor = 0
     /// The floor a forged spirit's Floor Blessing last healed on.

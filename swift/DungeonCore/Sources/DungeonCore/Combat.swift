@@ -109,7 +109,7 @@ public enum Combat {
             return nm
         }
         if !elite, var ce = CommunityEnemies.spawn(for: run, dice: &dice) {
-            Legacy.shape(&ce, run)
+            Legacy.shape(&ce, run); Prestige.shape(&ce, run)
             return ce
         }
         if !elite, var seasonal = Events.seasonalEnemy(run, dice: &dice) {
@@ -136,7 +136,7 @@ public enum Combat {
         if !elite { DailyChallenge.shape(&e, run) }
         if run.worldCurse { cursed(&e) }
         Challenges.shape(&e, run)
-        Legacy.shape(&e, run)
+        Legacy.shape(&e, run); Prestige.shape(&e, run)
         return HollowAbyssal.prepare(e, for: run)
     }
 
@@ -163,7 +163,7 @@ public enum Combat {
         e.isElite = true
         e.mechanics["guardian"] = .bool(true)
         Challenges.shape(&e, run)
-        Legacy.shape(&e, run)
+        Legacy.shape(&e, run); Prestige.shape(&e, run)
         return e
     }
 

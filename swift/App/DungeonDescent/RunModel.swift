@@ -138,6 +138,7 @@ final class RunModel: ObservableObject {
         game.globalInventory.load(into: &r)
         r.applyStartBonuses(wallet: game.wallet)
         r.startNotes += Legacy.start(&r, game.characters[index])
+        r.startNotes += Prestige.start(&r, game.characters[index])
         r.startNotes += Professions.start(&r, prof: r.prof)
         BossRelics.start(&r)
         r.startNotes += Races.start(&r, classTraits: AppSettings.classTraits, wallet: game.wallet)

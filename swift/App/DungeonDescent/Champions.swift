@@ -225,6 +225,9 @@ struct CharacterListView: View {
                         Text(ch.name).font(Theme.cinzel(16, weight: .semibold)).foregroundStyle(Theme.ashLight)
                         badge(ch.cls, Theme.goldDim, Theme.borderDim)
                         badge("Lv \(level)", Color(hex: 0xffaa00), Color(hex: 0xffaa00), bg: Color(hex: 0x1a1000))
+                        if Prestige.stars(ch) > 0 {
+                            badge("★ Prestige \(Prestige.stars(ch))", Color(hex: 0xffdd44), Color(hex: 0xaa8800), bg: Color(hex: 0x1a1400))
+                        }
                         if ch.runMode == "legacy" {
                             badge("🌑 Legacy · Tier \(ch.dungeonTier ?? 1)", Color(hex: 0xaa66ff), Color(hex: 0x6644aa),
                                   bg: Color(red: 100 / 255, green: 50 / 255, blue: 200 / 255).opacity(0.15))
@@ -278,7 +281,7 @@ struct CharacterListView: View {
                 }
                 // The card's own label, read before its buttons.
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("\(ch.name) the \(ch.race) \(ch.cls). Level \(level). \(ch.dungeon). \(ch.difficulty).\(origin)")
+                .accessibilityLabel("\(ch.name) the \(ch.race) \(ch.cls). Level \(level).\(Prestige.stars(ch) > 0 ? " Prestige \(Prestige.stars(ch)) stars." : "") \(ch.dungeon). \(ch.difficulty).\(origin)")
                 .accessibilityAddTraits(.isStaticText)
 
                 FlowRow(spacing: 6) {
@@ -288,6 +291,12 @@ struct CharacterListView: View {
                         .accessibilityLabel("View stats for \(ch.name)")
                     charButton("📤 Export", Theme.textSecondary, Theme.borderDim) { showExport(i) }
                         .accessibilityLabel("Export \(ch.name)")
+                    if Prestige.stars(ch) < Prestige.maxStars {
+                        charButton("⭐ Prestige", Color(hex: 0xffdd44), Color(hex: 0xaa8800)) { askPrestige(i) }
+                            .accessibilityLabel(Prestige.blocker(ch) == nil
+                                ? "Prestige \(ch.name): back to level 1 for a permanent star"
+                                : "Prestige \(ch.name), at level \(ch.levelCap)")
+                    }
                     charButton("🗑 Delete", Color(hex: 0xc06060), Color(hex: 0x6a2020)) { pendingDelete = i }
                         .accessibilityLabel("Delete \(ch.name)")
                 }
@@ -372,6 +381,32 @@ struct CharacterListView: View {
                     .buttonStyle(WebButtonStyle(kind: .ghost))
             }
         }
+    }
+
+    /// PRESTIGE: at the level cap, back to level 1 for a permanent star.
+    private func askPrestige(_ i: Int) {
+        guard game.characters.indices.contains(i) else { return }
+        let ch = game.characters[i]
+        if let why = Prestige.blocker(ch) { Feedback.announce(why); return }
+        let next = Prestige.stars(ch) + 1
+        let pct = { (x: Double) in Int((x * Double(next) * 100).rounded()) }
+        dialog = Dialog(
+            title: "⭐ Prestige \(ch.name)?",
+            text: "\(ch.name) goes back to level 1: level, experience, skills\(ch.dungeonTier != nil ? " and the Legacy tier" : ""). In return, star \(next) of \(Prestige.maxStars): \(pct(Prestige.hpPerStar))% more health, \(pct(Prestige.atkPerStar))% more attack and \(pct(Prestige.goldPerStar))% more gold in every run, forever, plus \(1000 * next) gold and a Mystery Coin now.",
+            ok: "⭐ Prestige", cancel: "Not yet",
+            onOK: {
+                dialog = nil
+                var result: Prestige.Result?
+                game.updateCharacter(i) { result = Prestige.prestige(&$0, wallet: game.wallet, store: game.store) }
+                game.refresh()
+                if let r = result {
+                    Sound.sfx("sfx-ach-gold")
+                    Feedback.success()
+                    Feedback.announce(r.spoken)
+                }
+            },
+            onCancel: { dialog = nil })
+        Feedback.announce("Prestige \(ch.name)? Back to level 1 for star \(next).", after: 0.3)
     }
 
     private func deleteOverlay(_ i: Int) -> some View {

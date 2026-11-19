@@ -4857,3 +4857,37 @@ final class CloudSyncTests: XCTestCase {
         XCTAssertNil(store.getItem(CloudSync.dirtyKey))
     }
 }
+
+final class PrestigeTests: XCTestCase {
+    func testPrestige() {
+        let store = MemoryStore(), wallet = Wallet(store: store)
+        var ch = PlayerCharacter(name: "Kai", cls: "Warrior", race: "Human", prof: "Mercenary",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer, runMode: "legacy")
+        ch.persistLevel = 12
+        XCTAssertNotNil(Prestige.blocker(ch))
+        XCTAssertNil(Prestige.prestige(&ch, wallet: wallet, store: store))
+        ch.persistLevel = 25
+        ch.dungeonTier = 4
+        let r = Prestige.prestige(&ch, wallet: wallet, store: store)!
+        XCTAssertEqual(r.stars, 1)
+        XCTAssertEqual(r.gold, 1000)
+        XCTAssertEqual(ch.persistLevel, 1)
+        XCTAssertEqual(ch.dungeonTier, 1)
+        XCTAssertEqual(Prestige.label(ch), "Kai ★1")
+        XCTAssertEqual(wallet.gold, 1000)
+        XCTAssertEqual(store.getItem("dd_mystery_coins"), "1")
+
+        // Three stars: +15% health and attack, +30% gold.
+        ch.extra["prestige"] = .number(3)
+        var run = Run(character: ch)
+        let hp = run.maxHp, atk = run.atk
+        XCTAssertEqual(Prestige.start(&run, ch).count, 1)
+        XCTAssertEqual(run.maxHp, jsRound(Double(hp) * 1.15))
+        XCTAssertEqual(run.atk.upperBound, jsRound(Double(atk.upperBound) * 1.15))
+        XCTAssertEqual(run.prestige, 3)
+
+        ch.extra["prestige"] = .number(10)
+        ch.persistLevel = 25
+        XCTAssertNotNil(Prestige.blocker(ch))
+    }
+}
