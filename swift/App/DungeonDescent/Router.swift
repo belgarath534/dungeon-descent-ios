@@ -41,6 +41,7 @@ final class Router: ObservableObject {
         case voidreaper
         case worldBoss
         case battlePass
+        case coop
         case siege
         case challenges
         case bounty
@@ -178,6 +179,7 @@ struct RootView: View {
             case .voidreaper: VoidReaperView()
             case .worldBoss: WorldBossView()
             case .battlePass: BattlePassView()
+            case .coop: CoopView()
             case .siege: SiegeView()
             case .challenges: ChallengesView()
             case .bounty: BountyBoardView()

@@ -4923,3 +4923,45 @@ final class BattlePassTests: XCTestCase {
         XCTAssertEqual(next.xp, p.xp)
     }
 }
+
+final class CoopTests: XCTestCase {
+    func testPartyRoundsAndFloors() {
+        var ch = PlayerCharacter(name: "Kai", cls: "Warrior", race: "Human", prof: "Mercenary",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = 5
+        let a = Coop.player(ch, id: "a", platform: "ios")
+        let info = GameData.classInfo("Warrior")
+        XCTAssertEqual(a.maxHp, info.maxHp + 48)
+        XCTAssertEqual(a.atkLo, info.atk.lowerBound + 4)
+        var b = a; b.id = "b"; b.name = "Mira"
+        var dice = SeededDice(seed: 7)
+        let solo = Coop.foe(dungeon: "Crypt of Malachar", floor: 1, party: [a], dice: &dice)
+        var dice2 = SeededDice(seed: 7)
+        let duo = Coop.foe(dungeon: "Crypt of Malachar", floor: 1, party: [a, b], dice: &dice2)
+        XCTAssertEqual(duo.name, solo.name)
+        XCTAssertEqual(duo.maxHp, jsRound(Double(solo.maxHp) * 1.7))
+        var boss = SeededDice(seed: 1)
+        XCTAssertTrue(Coop.foe(dungeon: "Crypt of Malachar", floor: 10, party: [a], dice: &boss).boss)
+
+        // A potion heals, a defender takes half, an enemy with 1 HP falls.
+        var hurt = a; hurt.hp = 10
+        var d = LoadedDice(rolls: [], chances: [])
+        let r = Coop.resolve(party: [hurt, b], foe: Coop.Foe(name: "Rat", icon: "🐀", hp: 1, maxHp: 30, atkLo: 5, atkHi: 5, boss: false),
+                             actions: ["a": .potion, "b": .attack], dice: &d)
+        XCTAssertTrue(r.foeDown)
+        XCTAssertEqual(r.party[0].hp, 10 + jsRound(Double(a.maxHp) * 0.4))
+        XCTAssertEqual(r.party[0].potions, Coop.potions - 1)
+
+        // Everyone down: the run is lost.
+        var weak = a; weak.hp = 1; weak.def = 0
+        var d2 = LoadedDice(rolls: [], chances: [])
+        let lost = Coop.resolve(party: [weak], foe: Coop.Foe(name: "Ogre", icon: "👹", hp: 999, maxHp: 999, atkLo: 50, atkHi: 50, boss: false),
+                                actions: [:], dice: &d2)
+        XCTAssertTrue(lost.partyDown)
+        // The downed come back with 30% next floor.
+        XCTAssertEqual(Coop.rest(lost.party)[0].hp, jsRound(Double(a.maxHp) * 0.3))
+        XCTAssertEqual(Coop.gold(floorsCleared: 10, won: true), 2000)
+        // A round-trip through the database's dictionaries.
+        XCTAssertEqual(Coop.Player(a.dict), a)
+    }
+}
