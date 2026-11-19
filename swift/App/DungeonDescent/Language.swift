@@ -2316,6 +2316,10 @@ enum Patterns {
         ("{0} · Bounty", "{0} · Caçada"),
         ("{0} · Legend", "{0} · Lenda"),
         ("{0} ×{1}", "{0} ×{1}"),
+        ("Downloading… {0}%", "Baixando… {0}%"),
+        ("Downloading the Voice Pack, {0} percent", "Baixando o Pacote de Voz, {0} por cento"),
+        ("Voice Pack {0} percent.", "Pacote de Voz {0} por cento."),
+        ("The Voice Pack download stopped: {0}", "O download do Pacote de Voz parou: {0}"),
     ]
 
     private static let compiled: [(NSRegularExpression, String, Int)] = pt.compactMap { en, out in

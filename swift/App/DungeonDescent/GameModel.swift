@@ -252,6 +252,15 @@ enum Feedback {
     /// `latest`: for modes that play themselves (Spire Auto Mode), lines not
     /// yet read are dropped so VoiceOver reads what is happening now.
     static func announce(_ english: String, after delay: Double = 0, latest: Bool = false) {
+        // The Lewis Voice Pack: Lewis reads it instead of VoiceOver's voice.
+        if VoicePack.shared.speaking, !english.trimmingCharacters(in: .whitespaces).isEmpty {
+            if delay > 0 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) { LiveVoice.shared.speak(english, latest: latest) }
+            } else {
+                LiveVoice.shared.speak(english, latest: latest)
+            }
+            return
+        }
         guard UIAccessibility.isVoiceOverRunning, !english.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         let text = Language.t(english)
         guard delay > 0 else {

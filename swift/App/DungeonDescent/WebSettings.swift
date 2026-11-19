@@ -289,6 +289,7 @@ struct WebSettingsView: View {
                    label: "Short combat lines")
             option("Earcons", "A short sound before VoiceOver speaks: a warning when your HP drops to a quarter, a chime when an elite appears.", isOn: $earcons,
                    label: "Earcons")
+            voicePack
             Text("Tip: in the dungeon, a two-finger double tap (or the Actions rotor, What just happened) reads the last 5 things that happened.")
                 .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
                 .padding(.vertical, 10)
@@ -315,6 +316,47 @@ struct WebSettingsView: View {
             }
             .padding(.vertical, 10)
         }
+    }
+
+    // MARK: 12.0: the Lewis Voice Pack
+
+    @ObservedObject private var pack = VoicePack.shared
+
+    @ViewBuilder private var voicePack: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("🎙 Lewis Voice Pack").font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)
+                .accessibilityAddTraits(.isHeader)
+            Text("Lewis, the Hunting Grounds narrator, reads the whole game to you: every fight, find and event, with the real numbers and names. The voice is made on your iPhone, so it works offline. English only; a one-time download of 327 MB.")
+                .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
+            switch pack.state {
+            case .unsupported:
+                Text("The Voice Pack needs an iPhone or iPad. On the Mac and Apple Vision Pro, VoiceOver reads the game.")
+                    .font(Theme.crimson(12)).foregroundStyle(Theme.textSecondary)
+            case .notDownloaded, .failed:
+                if case .failed(let why) = pack.state {
+                    Text(why).font(Theme.crimson(12)).foregroundStyle(Theme.bloodBright)
+                }
+                Button("⬇ Download the Voice Pack (327 MB)") { pack.download() }
+                    .buttonStyle(ToggleButtonStyle(on: true))
+                    .accessibilityHint("Best on Wi-Fi. You can keep playing while it downloads.")
+            case .downloading(let p):
+                Text("Downloading… \(Int(p * 100))%" as String).font(Theme.cinzel(11)).foregroundStyle(Theme.gold)
+                    .accessibilityLabel("Downloading the Voice Pack, \(Int(p * 100)) percent" as String)
+                Button("Cancel Download") { pack.cancel() }.buttonStyle(ToggleButtonStyle(on: false))
+            case .checking:
+                Text("Checking the download…").font(Theme.cinzel(11)).foregroundStyle(Theme.gold)
+            case .ready:
+                option("Lewis Reads the Game", "Lewis speaks every announcement in place of VoiceOver's voice. VoiceOver still reads buttons as you move around the screen. In Portuguese, VoiceOver reads the game.",
+                       isOn: $pack.narrate, label: "Lewis reads the game")
+                Button("▶ Hear Lewis") { LiveVoice.shared.speak("Hello. I'm Lewis. Every fight, every find, every step in the dark: I'll tell you about it.", latest: true) }
+                    .buttonStyle(ToggleButtonStyle(on: true))
+                Button("🗑 Delete the Voice Pack") { pack.delete() }
+                    .buttonStyle(ToggleButtonStyle(on: false))
+                    .accessibilityHint("Frees 327 MB. You can download it again any time.")
+            }
+        }
+        .padding(.vertical, 10)
+        .overlay(alignment: .bottom) { Rectangle().fill(Theme.borderDim).frame(height: 1) }
     }
 
     private var gameplay: some View {

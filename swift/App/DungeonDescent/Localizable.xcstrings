@@ -130208,6 +130208,248 @@
           }
         }
       }
+    },
+    "Best on Wi-Fi. You can keep playing while it downloads.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Melhor no Wi-Fi. Você pode continuar jogando enquanto baixa."
+          }
+        }
+      }
+    },
+    "Cancel Download": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancelar Download"
+          }
+        }
+      }
+    },
+    "Frees 327 MB. You can download it again any time.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Libera 327 MB. Você pode baixar de novo quando quiser."
+          }
+        }
+      }
+    },
+    "▶ Hear Lewis": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "▶ Ouvir o Lewis"
+          }
+        }
+      }
+    },
+    "🎙 Lewis Voice Pack": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎙 Pacote de Voz do Lewis"
+          }
+        }
+      }
+    },
+    "Lewis, the Hunting Grounds narrator, reads the whole game to you: every fight, find and event, with the real numbers and names. The voice is made on your iPhone, so it works offline. English only; a one-time download of 327 MB.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Lewis, narrador do Campo de Caça, lê o jogo inteiro para você: cada luta, achado e evento, com os números e nomes de verdade. A voz é criada no seu iPhone, então funciona offline. Só em inglês; um download único de 327 MB."
+          }
+        }
+      }
+    },
+    "The Voice Pack needs an iPhone or iPad. On the Mac and Apple Vision Pro, VoiceOver reads the game.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Pacote de Voz precisa de um iPhone ou iPad. No Mac e no Apple Vision Pro, o VoiceOver lê o jogo."
+          }
+        }
+      }
+    },
+    "⬇ Download the Voice Pack (327 MB)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⬇ Baixar o Pacote de Voz (327 MB)"
+          }
+        }
+      }
+    },
+    "Checking the download…": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verificando o download…"
+          }
+        }
+      }
+    },
+    "Lewis Reads the Game": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Lewis Lê o Jogo"
+          }
+        }
+      }
+    },
+    "Lewis reads the game": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Lewis lê o jogo"
+          }
+        }
+      }
+    },
+    "Lewis speaks every announcement in place of VoiceOver's voice. VoiceOver still reads buttons as you move around the screen. In Portuguese, VoiceOver reads the game.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Lewis fala cada anúncio no lugar da voz do VoiceOver. O VoiceOver continua lendo os botões quando você navega pela tela. Em português, o VoiceOver lê o jogo."
+          }
+        }
+      }
+    },
+    "🗑 Delete the Voice Pack": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🗑 Apagar o Pacote de Voz"
+          }
+        }
+      }
+    },
+    "Downloading the Lewis Voice Pack, 327 megabytes.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baixando o Pacote de Voz do Lewis, 327 megabytes."
+          }
+        }
+      }
+    },
+    "You can keep playing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você pode continuar jogando."
+          }
+        }
+      }
+    },
+    "Download cancelled.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download cancelado."
+          }
+        }
+      }
+    },
+    "Lewis Voice Pack deleted.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pacote de Voz do Lewis apagado."
+          }
+        }
+      }
+    },
+    "327 megabytes freed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "327 megabytes liberados."
+          }
+        }
+      }
+    },
+    "The Lewis Voice Pack is ready.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Pacote de Voz do Lewis está pronto."
+          }
+        }
+      }
+    },
+    "Lewis will now read the game to you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agora o Lewis vai ler o jogo para você."
+          }
+        }
+      }
+    },
+    "The download was damaged. Please try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O download veio danificado. Tente de novo."
+          }
+        }
+      }
+    },
+    "🎙 The Lewis Voice Pack (iPhone and iPad) — Lewis, the new narrator, can read the whole game to you: every fight, find and event, with the real numbers and names, spoken by a voice made right on your iPhone, offline. A one-time 327 MB download in Settings, Accessibility. English only for now. iPhone and iPad now need iOS 18.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎙 O Pacote de Voz do Lewis (iPhone e iPad) — o Lewis, o novo narrador, pode ler o jogo inteiro para você: cada luta, achado e evento, com os números e nomes de verdade, numa voz criada no seu iPhone, offline. Um download único de 327 MB em Ajustes, Acessibilidade. Só em inglês por enquanto. iPhone e iPad agora precisam do iOS 18."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
