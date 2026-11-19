@@ -100,13 +100,15 @@ for ch in chs:
     # Each challenge needs its picture (tools/make-challenge-art.py). A
     # picture whose upload never finished is removed and sent again.
     art = os.path.join(os.path.dirname(__file__), f"../store/game-center/{name}.png")
-    vv = S.get(API + f"/gameCenterChallengeVersions/{v['id']}", params={"include": "image"}, timeout=60)
     img_id = None
-    if vv.ok:
-        d = (vv.json()["data"].get("relationships", {}).get("image") or {}).get("data")
-        img_id = d and d["id"]
-    else:
-        print(f"   (couldn't read the version: {vv.status_code} {vv.text[:200]})")
+    for path in (f"/gameCenterChallengeVersions/{v['id']}/relationships/image",
+                 f"/gameCenterChallengeVersions/{v['id']}/image"):
+        vv = S.get(API + path, timeout=60)
+        if vv.ok:
+            d = vv.json().get("data")
+            img_id = d and d.get("id")
+            break
+        print(f"   ({path}: {vv.status_code} {vv.text[:300]})")
     if img_id:
         im = call("GET", f"/gameCenterChallengeImages/{img_id}")
         state = ((im or {}).get("data", {}).get("attributes", {}).get("assetDeliveryState") or {}).get("state")
