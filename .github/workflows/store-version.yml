@@ -52,6 +52,9 @@ jobs:
           pip install --quiet pyjwt cryptography requests
           python3 tools/new-version.py
 
+      - name: Release the Game Center leaderboards and challenges
+        run: python3 tools/attach-game-center.py
+
       - name: Pick the builds (and submit, from store-submit)
         env:
           VERSION: "11.9"
@@ -66,10 +69,6 @@ jobs:
             PLATFORM=$P python3 store/submit_version.py || status=1
           done
           exit $status
-
-      - name: Release the Game Center leaderboards and challenges
-        if: always()
-        run: python3 tools/attach-game-center.py
 
       - name: Remove keys
         if: always()

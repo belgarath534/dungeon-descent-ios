@@ -93,6 +93,30 @@ for ch in chs:
                 "attributes": {"locale": locale, "name": n, "description": d},
                 "relationships": {"version": rel("gameCenterChallengeVersions", v["id"])}}}):
             print(f"   {locale} name set")
+    # Each challenge needs its picture (tools/make-challenge-art.py).
+    art = os.path.join(os.path.dirname(__file__), f"../store/game-center/{name}.png")
+    img = S.get(API + f"/gameCenterChallengeVersions/{v['id']}/image", timeout=60)
+    if not (img.ok and (img.json().get("data") or {}).get("id")) and os.path.exists(art):
+        data = open(art, "rb").read()
+        made = call("POST", "/gameCenterChallengeImages", {"data": {"type": "gameCenterChallengeImages",
+                    "attributes": {"fileName": os.path.basename(art), "fileSize": len(data)},
+                    "relationships": {"version": rel("gameCenterChallengeVersions", v["id"])}}})
+        if made:
+            im = made["data"]
+            for op in im["attributes"].get("uploadOperations") or []:
+                part = data[op["offset"]:op["offset"] + op["length"]]
+                headers = {h["name"]: h["value"] for h in op.get("requestHeaders") or []}
+                r = requests.request(op["method"], op["url"], data=part, headers=headers, timeout=120)
+                if r.status_code >= 400:
+                    problems.append(f"upload {name}: {r.status_code}")
+                    print(f"⚠️ upload {name}: {r.status_code} {r.text[:300]}")
+            if call("PATCH", f"/gameCenterChallengeImages/{im['id']}", {"data": {"type": "gameCenterChallengeImages",
+                    "id": im["id"], "attributes": {"uploaded": True}}}):
+                print(f"   picture uploaded")
+    releases = S.get(API + f"/gameCenterChallengeVersions/{v['id']}/releases", timeout=60)
+    if releases.ok and releases.json().get("data"):
+        print(f"• {name} already released")
+        continue
     if call("POST", "/gameCenterChallengeVersionReleases", {"data": {"type": "gameCenterChallengeVersionReleases",
             "relationships": {"gameCenterDetail": rel("gameCenterDetails", detail),
                               "version": rel("gameCenterChallengeVersions", v["id"])}}}):
