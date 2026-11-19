@@ -136,8 +136,53 @@ struct DevToolsPanel: View {
             row("🏆 Show True Ending Now", "Show the true ending screen immediately.", "Show", label: "Show true ending now") {
                 inRun { $0.showTrueEnding() }
             }
+            missingPortuguese
             sendCoins
         }
+    }
+
+    // MARK: Missing Portuguese
+
+    @State private var recording = MissingPortuguese.isOn
+    @State private var missing = MissingPortuguese.lines
+
+    private var missingPortuguese: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            row("🇧🇷 Missing Portuguese", recording
+                ? "Recording. Play in Portuguese; every line that stays in English is kept here."
+                : "Play in Portuguese and keep every line that stays in English.",
+                recording ? "Stop" : "Start", label: recording ? "Stop recording missing Portuguese" : "Start recording missing Portuguese") {
+                recording.toggle()
+                MissingPortuguese.isOn = recording
+                missing = MissingPortuguese.lines
+                Feedback.announce(recording
+                    ? "Recording missing Portuguese. Switch the language to Português in Settings and play. \(missing.count) lines so far."
+                    : "Recording stopped. \(missing.count) lines kept.")
+            }
+            HStack(spacing: 8) {
+                Button("Read the list (\(missing.count))" as String) {
+                    missing = MissingPortuguese.lines
+                    Feedback.announce(missing.isEmpty ? "No missing lines yet." : "\(missing.count) missing lines. They're listed below, newest first.")
+                }
+                .buttonStyle(WebButtonStyle(kind: .ghost))
+                Button("Copy") {
+                    missing = MissingPortuguese.lines
+                    UIPasteboard.general.string = missing.joined(separator: "\n")
+                    Feedback.announce("\(missing.count) lines copied. Paste them to Claude to translate.")
+                }
+                .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Copy the missing lines")
+                Button("Clear") {
+                    MissingPortuguese.clear()
+                    missing = []
+                    Feedback.announce("Missing Portuguese list cleared.")
+                }
+                .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Clear the missing lines")
+            }
+            ForEach(Array(missing.prefix(50).enumerated()), id: \.offset) { _, l in
+                Text(verbatim: l).font(Theme.crimson(12)).foregroundStyle(Theme.textDim)
+            }
+        }
+        .padding(.vertical, 6)
     }
 
     private func inRun(_ act: (RunModel) -> Void) {

@@ -129240,6 +129240,204 @@
           }
         }
       }
+    },
+    "🇧🇷 Missing Portuguese": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🇧🇷 Português Faltando"
+          }
+        }
+      }
+    },
+    "Recording. Play in Portuguese; every line that stays in English is kept here.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gravando. Jogue em português; toda frase que ficar em inglês é guardada aqui."
+          }
+        }
+      }
+    },
+    "Play in Portuguese and keep every line that stays in English.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jogue em português e guarde toda frase que ficar em inglês."
+          }
+        }
+      }
+    },
+    "Stop": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parar"
+          }
+        }
+      }
+    },
+    "Start": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Começar"
+          }
+        }
+      }
+    },
+    "Stop recording missing Portuguese": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parar de gravar o português faltando"
+          }
+        }
+      }
+    },
+    "Start recording missing Portuguese": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Começar a gravar o português faltando"
+          }
+        }
+      }
+    },
+    "Recording missing Portuguese.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gravando o português faltando."
+          }
+        }
+      }
+    },
+    "Switch the language to Português in Settings and play.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mude o idioma para Português nos Ajustes e jogue."
+          }
+        }
+      }
+    },
+    "Recording stopped.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gravação parada."
+          }
+        }
+      }
+    },
+    "No missing lines yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma frase faltando ainda."
+          }
+        }
+      }
+    },
+    "They're listed below, newest first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elas estão listadas abaixo, as mais novas primeiro."
+          }
+        }
+      }
+    },
+    "Paste them to Claude to translate.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cole para o Claude traduzir."
+          }
+        }
+      }
+    },
+    "Copy": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar"
+          }
+        }
+      }
+    },
+    "Clear": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar"
+          }
+        }
+      }
+    },
+    "Copy the missing lines": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copiar as frases faltando"
+          }
+        }
+      }
+    },
+    "Clear the missing lines": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limpar as frases faltando"
+          }
+        }
+      }
+    },
+    "Missing Portuguese list cleared.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lista de português faltando limpa."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

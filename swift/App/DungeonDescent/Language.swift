@@ -38,6 +38,7 @@ enum Language {
         guard code == "en" ? false : !s.isEmpty else { return s }
         if let hit = memo[s] { return hit }
         let out = translate(s)
+        if out == s { MissingPortuguese.note(s) }
         if memo.count > 4000 { memo.removeAll() }
         memo[s] = out
         return out
@@ -74,7 +75,11 @@ enum Language {
             }
             return s
         }
-        return parts.map { p in exact(p) ?? Patterns.apply(p, part: { exact($0) ?? $0 }) ?? p }.joined(separator: " ")
+        return parts.map { p in
+            if let v = exact(p) ?? Patterns.apply(p, part: { exact($0) ?? $0 }) { return v }
+            MissingPortuguese.note(p)
+            return p
+        }.joined(separator: " ")
     }
 
     /// Picks a language. Screens switch at once; the save keeps dd_lang like the web version.
@@ -2275,6 +2280,11 @@ enum Patterns {
         ("{0} Wave Points total", "{0} Pontos de Onda no total"),
         ("Lv.{0}", "Nv.{0}"),
         ("🌑 {0} step{1} away — {2}.  Escapes: {3} / {4}", "🌑 A {0} passo(s) — {2}.  Fugas: {3} / {4}"),
+        ("Read the list ({0})", "Ler a lista ({0})"),
+        ("{0} lines so far.", "{0} frases até agora."),
+        ("{0} lines kept.", "{0} frases guardadas."),
+        ("{0} missing lines.", "{0} frases faltando."),
+        ("{0} lines copied.", "{0} frases copiadas."),
     ]
 
     private static let compiled: [(NSRegularExpression, String, Int)] = pt.compactMap { en, out in
@@ -2301,5 +2311,35 @@ enum Patterns {
             return line
         }
         return nil
+    }
+}
+
+/// Developer Tools → Missing Portuguese: while it's on, every English line
+/// Language.t couldn't translate is kept (newest first, up to 500), so a
+/// play session in Portuguese shows exactly what still needs translating.
+enum MissingPortuguese {
+    static let onKey = "swift_pt_recorder"
+    static let listKey = "swift_pt_missing"
+    static let limit = 500
+
+    static var isOn: Bool {
+        get { UserDefaults.standard.bool(forKey: onKey) }
+        set { UserDefaults.standard.set(newValue, forKey: onKey) }
+    }
+
+    static var lines: [String] { UserDefaults.standard.stringArray(forKey: listKey) ?? [] }
+
+    static func clear() { UserDefaults.standard.removeObject(forKey: listKey) }
+
+    /// Keeps `s` if it has words in it (not just numbers, icons or a name on its own).
+    static func note(_ s: String) {
+        guard isOn, Language.code != "en" else { return }
+        let line = s.trimmingCharacters(in: .whitespacesAndNewlines)
+        let words = line.split { !$0.isLetter }.filter { $0.count > 1 }
+        guard words.count >= 2 || (words.count == 1 && line.contains(" ")) else { return }
+        var list = lines
+        if list.contains(line) { return }
+        list.insert(line, at: 0)
+        UserDefaults.standard.set(Array(list.prefix(limit)), forKey: listKey)
     }
 }
