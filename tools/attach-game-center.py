@@ -3,7 +3,7 @@ ready to go live: each leaderboard gets a release, and each challenge a
 version with its English and Portuguese name and description, then a
 release. Nothing goes to App Review here. Safe to run again.
 """
-import os, sys, time
+import hashlib, os, sys, time
 import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
@@ -70,6 +70,7 @@ for lb in lbs:
                               "gameCenterLeaderboard": rel("gameCenterLeaderboards", lb["id"])}}}):
         print(f"✅ {name} released")
 
+fresh = []
 chs = (call("GET", f"/gameCenterDetails/{detail}/gameCenterChallenges", params={"limit": 200}) or {"data": []})["data"]
 for ch in chs:
     name = ch["attributes"].get("vendorIdentifier")
@@ -96,10 +97,27 @@ for ch in chs:
                 "attributes": {"locale": locale, "name": n, "description": d},
                 "relationships": {"version": rel("gameCenterChallengeVersions", v["id"])}}}):
             print(f"   {locale} name set")
-    # Each challenge needs its picture (tools/make-challenge-art.py).
+    # Each challenge needs its picture (tools/make-challenge-art.py). A
+    # picture whose upload never finished is removed and sent again.
     art = os.path.join(os.path.dirname(__file__), f"../store/game-center/{name}.png")
-    img = S.get(API + f"/gameCenterChallengeVersions/{v['id']}/image", timeout=60)
-    if not (img.ok and (img.json().get("data") or {}).get("id")) and os.path.exists(art):
+    vv = S.get(API + f"/gameCenterChallengeVersions/{v['id']}", params={"include": "image"}, timeout=60)
+    img_id = None
+    if vv.ok:
+        d = (vv.json()["data"].get("relationships", {}).get("image") or {}).get("data")
+        img_id = d and d["id"]
+    else:
+        print(f"   (couldn't read the version: {vv.status_code} {vv.text[:200]})")
+    if img_id:
+        im = call("GET", f"/gameCenterChallengeImages/{img_id}")
+        state = ((im or {}).get("data", {}).get("attributes", {}).get("assetDeliveryState") or {}).get("state")
+        print(f"   picture {img_id}: {state}")
+        if state in ("COMPLETE", None) and im:
+            pass
+        else:
+            S.delete(API + f"/gameCenterChallengeImages/{img_id}", timeout=60)
+            print("   removed the unfinished picture")
+            img_id = None
+    if not img_id and os.path.exists(art):
         data = open(art, "rb").read()
         made = call("POST", "/gameCenterChallengeImages", {"data": {"type": "gameCenterChallengeImages",
                     "attributes": {"fileName": os.path.basename(art), "fileSize": len(data)},
@@ -110,12 +128,14 @@ for ch in chs:
                 part = data[op["offset"]:op["offset"] + op["length"]]
                 headers = {h["name"]: h["value"] for h in op.get("requestHeaders") or []}
                 r = requests.request(op["method"], op["url"], data=part, headers=headers, timeout=120)
+                print(f"   uploaded part: {r.status_code}")
                 if r.status_code >= 400:
                     problems.append(f"upload {name}: {r.status_code}")
-                    print(f"⚠️ upload {name}: {r.status_code} {r.text[:300]}")
             if call("PATCH", f"/gameCenterChallengeImages/{im['id']}", {"data": {"type": "gameCenterChallengeImages",
-                    "id": im["id"], "attributes": {"uploaded": True}}}):
-                print(f"   picture uploaded")
+                    "id": im["id"], "attributes": {"uploaded": True,
+                                                   "sourceFileChecksum": hashlib.md5(data).hexdigest()}}}):
+                print("   picture uploaded")
+                fresh.append(im["id"])
     releases = S.get(API + f"/gameCenterChallengeVersions/{v['id']}/releases", timeout=60)
     if releases.ok and releases.json().get("data"):
         print(f"• {name} already released")
@@ -124,6 +144,20 @@ for ch in chs:
             "relationships": {"gameCenterDetail": rel("gameCenterDetails", detail),
                               "version": rel("gameCenterChallengeVersions", v["id"])}}}):
         print(f"✅ {name} released")
+
+# Apple processes new pictures for a minute or two; the version can't be
+# submitted until it has.
+for _ in range(20):
+    waiting = []
+    for iid in fresh:
+        im = S.get(API + f"/gameCenterChallengeImages/{iid}", timeout=60)
+        st = ((im.json().get("data", {}).get("attributes", {}).get("assetDeliveryState") or {}).get("state")) if im.ok else "?"
+        if st != "COMPLETE":
+            waiting.append(st)
+    if not waiting:
+        break
+    print(f"Waiting for Apple to process {len(waiting)} picture(s): {waiting}")
+    time.sleep(20)
 
 if problems:
     print(f"\n{len(problems)} step(s) didn't go through; see the ⚠️ lines above.")
