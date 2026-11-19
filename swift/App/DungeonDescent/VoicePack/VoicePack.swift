@@ -21,9 +21,9 @@ final class VoicePack: NSObject, ObservableObject {
     static let shared = VoicePack()
 
     /// Pinned to one revision of the model repository, so the file never changes under us.
-    static let modelURL = URL(string: "https://huggingface.co/prince-canuma/Kokoro-82M/resolve/e02c9eada7ce7416798af36b190a8a2dd2ecd566/kokoro-v1_0.safetensors")!
-    static let modelSHA256 = "4e9ecdf03b8b6cf906070390237feda473dc13327cb8d56a43deaa374c02acd8"
-    static let modelBytes: Int64 = 327_115_152
+    nonisolated static let modelURL = URL(string: "https://huggingface.co/prince-canuma/Kokoro-82M/resolve/e02c9eada7ce7416798af36b190a8a2dd2ecd566/kokoro-v1_0.safetensors")!
+    nonisolated static let modelSHA256 = "4e9ecdf03b8b6cf906070390237feda473dc13327cb8d56a43deaa374c02acd8"
+    nonisolated static let modelBytes: Int64 = 327_115_152
     static let narrateKey = "swift_voice_narrate"
 
     enum State: Equatable {
@@ -43,7 +43,7 @@ final class VoicePack: NSObject, ObservableObject {
     private var session: URLSession?
     private var lastAnnounced = 0
 
-    static var supported: Bool {
+    nonisolated static var supported: Bool {
         #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
         return true
         #else
@@ -51,7 +51,7 @@ final class VoicePack: NSObject, ObservableObject {
         #endif
     }
 
-    static var modelFile: URL {
+    nonisolated static var modelFile: URL {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("VoicePack", isDirectory: true)
         return dir.appendingPathComponent("kokoro-v1_0.safetensors")
     }
