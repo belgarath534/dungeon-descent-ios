@@ -1,19 +1,11 @@
-Thanks for testing Dungeon Descent 11.9!
+Thanks for testing Dungeon Descent 12.0!
 
 New, please try:
-• World Boss (main menu): one boss a day that every player fights together, 10 strikes each. If it falls, everyone who struck gets gold and Soul Fragments. Sign in so your damage counts for everyone.
-• Weekly Ladder (Challenges, third tab): one dungeon all week, one life, a top 10 that resets every Monday.
-• Challenges, "Challenge a friend": Game Center leaderboards for Endless Descent, the Weekly Ladder and The Spire, with Game Center's Challenge button.
-• Endless Descent rivals: the Lock Screen shows the next player above your floor, and who you just passed.
-• Apple Watch: a Daily World Boss complication for your watch face.
-• Siri and Shortcuts: "Start Endless Descent", "How's my run" and "Use a potion".
-• Welcome back: after an hour or more away, your first character comes back with gold and Soul Fragments.
-• In a run: two-finger double-tap (Magic Tap) or the "What just happened" action reads the last few lines. Settings, Accessibility: short combat lines and warning sounds.
-• My Tracks: add songs from your Apple Music library.
-• Portuguese: much more of the combat and events is now in Portuguese.
-• The loading screen at launch, the Music Box tutorial, and your total playtime in the pause menu.
-
-Fixed:
-• The Spire's Auto Mode with VoiceOver reads the floor you're on, not one from minutes ago.
-• The Lock Screen keeps moving in Endless Descent even when you aren't signed in.
-• No music starts on its own while the app isn't open.
+• The new main menu: tabs along the bottom (Play, Modes, Multiplayer, More, Settings). Settings, Gameplay, Classic Menu brings back the old list.
+• Co-op Dungeon (Multiplayer tab): ten floors with up to three friends, on the web and the apps together. Share the 4-letter room code.
+• Battle Pass: 50 tiers earned by playing, never bought, with five new quests every Monday.
+• Prestige: a character at their level cap can start over for a permanent star (on the character's card).
+• Cloud sync: your whole save travels between the web and the apps. Sign in on both and play on one, then open the other.
+• Audio Map (in the dungeon): plays the floor as sounds around you. Best with headphones; try it in 3D Mode too.
+• Portuguese: the whole game should now be in Portuguese. Developer Tools, Missing Portuguese records anything still in English.
+• Apple Watch: a new home screen with World Boss strikes, the Battle Pass, the daily reward and Quick Fight (turn the Digital Crown to pick a move). Wrist Alerts tap you for low HP, elites, the hunter and your co-op turn while you play on the iPhone with the watch app open. Siri on the watch, and new complications: Endless Descent, Daily Streak and the Battle Pass.

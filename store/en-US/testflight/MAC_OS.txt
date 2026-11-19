@@ -1,10 +1,10 @@
-Thanks for testing Dungeon Descent on Mac!
+Thanks for testing Dungeon Descent 12.0!
 
-New in 11.9: the daily World Boss (main menu), the Weekly Ladder (Challenges), Game Center leaderboards and friend challenges, the Welcome back reward, "What just happened", and much more Portuguese.
-
-Please try:
-• Playing with the keyboard: Ctrl+Shift+letter opens screens (H menu, P characters, B bestiary, Q quests, S settings), and in combat Option+A attack, H heavy, D defend, P potion, F flee, S spells, E examine, 1–3 skills, R status. I opens the inventory and Backspace the pause menu.
-• Resizing the window, VoiceOver on Mac, and signing in with Apple or email so your cloud save comes with you.
-• A full run through a dungeon, plus Endless Descent.
-
-Report problems with a screenshot from TestFlight, or in the Discord.
+New, please try:
+• The new main menu: tabs along the bottom (Play, Modes, Multiplayer, More, Settings). Settings, Gameplay, Classic Menu brings back the old list.
+• Co-op Dungeon (Multiplayer tab): ten floors with up to three friends, on the web and the apps together. Share the 4-letter room code.
+• Battle Pass: 50 tiers earned by playing, never bought, with five new quests every Monday.
+• Prestige: a character at their level cap can start over for a permanent star (on the character's card).
+• Cloud sync: your whole save travels between the web and the apps. Sign in on both and play on one, then open the other.
+• Audio Map (in the dungeon): plays the floor as sounds around you. Best with headphones; try it in 3D Mode too.
+• Portuguese: the whole game should now be in Portuguese. Developer Tools, Missing Portuguese records anything still in English.

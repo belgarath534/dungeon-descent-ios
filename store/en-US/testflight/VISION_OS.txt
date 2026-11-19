@@ -1,11 +1,10 @@
-Thanks for testing Dungeon Descent on Apple Vision Pro!
+Thanks for testing Dungeon Descent 12.0!
 
-New in 11.9: the daily World Boss (main menu), the Weekly Ladder (Challenges), Game Center leaderboards and friend challenges, Siri and Shortcuts, the Welcome back reward, "What just happened" (two-finger double-tap in a run), and much more Portuguese.
-
-Please try:
-• Moving around the menus and a dungeon run with look and pinch, and with VoiceOver.
-• Whether text is easy to read and the window is a comfortable size.
-• Sound: music, effects and the dungeon ambience.
-• Signing in with Apple or email so your cloud save comes with you.
-
-Report problems with a screenshot from TestFlight, or in the Discord.
+New, please try:
+• The new main menu: tabs along the bottom (Play, Modes, Multiplayer, More, Settings). Settings, Gameplay, Classic Menu brings back the old list.
+• Co-op Dungeon (Multiplayer tab): ten floors with up to three friends, on the web and the apps together. Share the 4-letter room code.
+• Battle Pass: 50 tiers earned by playing, never bought, with five new quests every Monday.
+• Prestige: a character at their level cap can start over for a permanent star (on the character's card).
+• Cloud sync: your whole save travels between the web and the apps. Sign in on both and play on one, then open the other.
+• Audio Map (in the dungeon): plays the floor as sounds around you. Best with headphones; try it in 3D Mode too.
+• Portuguese: the whole game should now be in Portuguese. Developer Tools, Missing Portuguese records anything still in English.
