@@ -204,6 +204,8 @@ targets:
       path: DungeonWatch/DungeonWatch.entitlements
       properties:
         com.apple.developer.game-center: true
+        # 12.0: shared with the complications (your floor, streak and tier).
+        com.apple.security.application-groups: [group.com.dungeon.descent]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.watchkitapp
@@ -221,6 +223,7 @@ targets:
     deploymentTarget: "9.0"
     sources:
       - path: DungeonWatchWidget
+      - path: WatchShared/ComplicationData.swift
     info:
       path: DungeonWatchWidget/Info.plist
       properties:
@@ -229,6 +232,11 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    # 12.0: reads what the watch app saves for the complications.
+    entitlements:
+      path: DungeonWatchWidget/DungeonWatchWidget.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.dungeon.descent]
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.watchkitapp.widget

@@ -96,6 +96,8 @@ struct PassEntry: TimelineEntry {
     let season: Int
     let daysLeft: Int
     let questDays: Int
+    /// Your tier, from the watch app (nil before it has heard from the phone).
+    var tier: Int? = ComplicationData.load()?.passTier
 }
 
 enum PassSeason {
@@ -131,7 +133,8 @@ struct PassComplicationView: View {
     let entry: PassEntry
 
     private var spoken: String {
-        "Battle Pass season \(entry.season): \(entry.daysLeft) days left. New quests in \(entry.questDays) day\(entry.questDays == 1 ? "" : "s")."
+        (entry.tier.map { "Battle Pass tier \($0). " } ?? "")
+            + "Season \(entry.season): \(entry.daysLeft) days left. New quests in \(entry.questDays) day\(entry.questDays == 1 ? "" : "s")."
     }
 
     var body: some View {
@@ -140,16 +143,16 @@ struct PassComplicationView: View {
             case .accessoryCircular:
                 VStack(spacing: 0) {
                     Text("🏆").font(.system(size: 16))
-                    Text("\(entry.daysLeft)d").font(.system(size: 13, weight: .semibold))
+                    Text(entry.tier.map { "T\($0)" } ?? "\(entry.daysLeft)d").font(.system(size: 13, weight: .semibold))
                 }
             case .accessoryInline:
-                Text("🏆 Season \(entry.season) · \(entry.daysLeft)d")
+                Text("🏆 " + (entry.tier.map { "Tier \($0) · " } ?? "") + "\(entry.daysLeft)d left")
             case .accessoryCorner:
                 Text("🏆").font(.system(size: 20))
                     .widgetLabel("Season \(entry.season) · \(entry.daysLeft)d")
             default:
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("🏆 Battle Pass").font(.system(size: 13, weight: .semibold))
+                    Text("🏆 Battle Pass" + (entry.tier.map { " · Tier \($0)" } ?? "")).font(.system(size: 13, weight: .semibold))
                     Text("Season \(entry.season) · \(entry.daysLeft) days left").font(.system(size: 14))
                     Text("New quests in \(entry.questDays)d").font(.system(size: 12)).foregroundStyle(.secondary)
                 }
@@ -173,11 +176,156 @@ struct PassSeasonWidget: Widget {
     }
 }
 
+// MARK: 12.0: your Endless Descent run and daily streak (App Group)
+
+struct DataEntry: TimelineEntry {
+    let date: Date
+    let data: ComplicationData?
+}
+
+struct DataProvider: TimelineProvider {
+    func placeholder(in context: Context) -> DataEntry {
+        var d = ComplicationData()
+        d.charName = "Seraphine"; d.running = true; d.floor = 27; d.hp = 640; d.maxHp = 1000; d.bestFloor = 41; d.streak = 6
+        return DataEntry(date: Date(), data: d)
+    }
+    func getSnapshot(in context: Context, completion: @escaping (DataEntry) -> Void) {
+        completion(context.isPreview ? placeholder(in: context) : DataEntry(date: Date(), data: ComplicationData.load()))
+    }
+    /// The watch app redraws these when something changes; midnight, for the
+    /// daily reward, and every half hour as a fallback.
+    func getTimeline(in context: Context, completion: @escaping (Timeline<DataEntry>) -> Void) {
+        let now = Date()
+        let data = ComplicationData.load()
+        var entries = [DataEntry(date: now, data: data)]
+        if let midnight = Calendar.current.nextDate(after: now, matching: DateComponents(hour: 0, minute: 0), matchingPolicy: .nextTime) {
+            entries.append(DataEntry(date: midnight, data: data))
+        }
+        completion(Timeline(entries: entries, policy: .after(now.addingTimeInterval(1800))))
+    }
+}
+
+struct EndlessComplicationView: View {
+    @Environment(\.widgetFamily) private var family
+    let entry: DataEntry
+
+    private var running: Bool { entry.data?.running == true }
+    private var floor: Int { running ? entry.data?.floor ?? 0 : entry.data?.bestFloor ?? 0 }
+    private var spoken: String {
+        guard let d = entry.data else { return "Endless Descent. Open the watch app to connect." }
+        return running ? "Endless Descent: \(d.charName ?? "your character") on floor \(d.floor), \(d.hp) of \(d.maxHp) HP."
+                       : "Endless Descent: no run going. Best floor \(d.bestFloor)."
+    }
+
+    var body: some View {
+        Group {
+            switch family {
+            case .accessoryCircular:
+                if running, let d = entry.data, d.maxHp > 0 {
+                    Gauge(value: Double(max(0, d.hp)), in: 0...Double(d.maxHp)) {
+                        Text("⬇")
+                    } currentValueLabel: {
+                        Text("\(d.floor)")
+                    }
+                    .gaugeStyle(.accessoryCircular)
+                } else {
+                    VStack(spacing: 0) {
+                        Text("⬇").font(.system(size: 16))
+                        Text("\(floor)").font(.system(size: 13, weight: .semibold))
+                    }
+                }
+            case .accessoryInline:
+                Text(running ? "⬇ Floor \(floor) · \(entry.data?.hp ?? 0) HP" : "⬇ Best floor \(floor)")
+            case .accessoryCorner:
+                Text("⬇").font(.system(size: 20))
+                    .widgetLabel(running ? "Floor \(floor)" : "Best \(floor)")
+            default:
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("⬇ Endless Descent").font(.system(size: 13, weight: .semibold))
+                    if running, let d = entry.data {
+                        Text("\(d.charName ?? "") · floor \(d.floor)").font(.system(size: 14))
+                        Text("HP \(d.hp) / \(d.maxHp)").font(.system(size: 12)).foregroundStyle(.secondary)
+                    } else {
+                        Text("No run going").font(.system(size: 14))
+                        Text("Best floor \(floor)").font(.system(size: 12)).foregroundStyle(.secondary)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(spoken)
+        .widgetBackgroundIfAvailable()
+    }
+}
+
+struct StreakComplicationView: View {
+    @Environment(\.widgetFamily) private var family
+    let entry: DataEntry
+
+    private var ready: Bool { entry.data?.dailyReady(entry.date) ?? true }
+    private var streak: Int { entry.data?.streak ?? 0 }
+    private var spoken: String {
+        "Daily reward: \(ready ? "ready to claim" : "claimed"). \(streak)-day streak."
+    }
+
+    var body: some View {
+        Group {
+            switch family {
+            case .accessoryCircular:
+                VStack(spacing: 0) {
+                    Text(ready ? "🎁" : "🔥").font(.system(size: 16))
+                    Text("\(streak)").font(.system(size: 13, weight: .semibold))
+                }
+            case .accessoryInline:
+                Text(ready ? "🎁 Reward ready · \(streak)-day streak" : "🔥 \(streak)-day streak")
+            case .accessoryCorner:
+                Text(ready ? "🎁" : "🔥").font(.system(size: 20))
+                    .widgetLabel(ready ? "Claim! · \(streak)" : "Streak \(streak)")
+            default:
+                VStack(alignment: .leading, spacing: 1) {
+                    Text("🔥 \(streak)-day streak").font(.system(size: 13, weight: .semibold))
+                    Text(ready ? "Your reward is ready!" : "Claimed today").font(.system(size: 14))
+                    Text(ready ? "Claim it to keep the streak" : "Come back tomorrow").font(.system(size: 12)).foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(spoken)
+        .widgetBackgroundIfAvailable()
+    }
+}
+
+struct EndlessWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: "EndlessDescent", provider: DataProvider()) { entry in
+            EndlessComplicationView(entry: entry)
+        }
+        .configurationDisplayName("Endless Descent")
+        .description("Your Endless Descent floor and HP, or your best floor.")
+        .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline, .accessoryCorner])
+    }
+}
+
+struct StreakWidget: Widget {
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: "DailyStreak", provider: DataProvider()) { entry in
+            StreakComplicationView(entry: entry)
+        }
+        .configurationDisplayName("Daily Streak")
+        .description("Your daily reward streak, and whether today's reward is waiting.")
+        .supportedFamilies([.accessoryCircular, .accessoryRectangular, .accessoryInline, .accessoryCorner])
+    }
+}
+
 @main
 struct DungeonWatchWidgets: WidgetBundle {
     var body: some Widget {
         DungeonWatchWidget()
         PassSeasonWidget()
+        EndlessWidget()
+        StreakWidget()
     }
 }
 

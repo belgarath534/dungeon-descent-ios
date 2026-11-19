@@ -2,6 +2,7 @@ import Foundation
 import WatchConnectivity
 import WatchKit
 import SwiftUI
+import WidgetKit
 
 /// The watch's view of the game: whatever the iPhone last sent, plus the
 /// commands it sends back. The phone keeps the save; nothing is stored here
@@ -75,6 +76,33 @@ final class WatchStore: NSObject, ObservableObject {
     }
     /// The last alert's words, shown on the home screen.
     @Published var lastAlert: String?
+
+    /// The complications' copy (App Group); they redraw only when it changed.
+    private func saveForComplications(_ snap: WatchLink.Snapshot) {
+        let old = ComplicationData.load()
+        var c = ComplicationData()
+        c.charName = snap.run?.charName
+        c.running = snap.run?.running == true
+        c.floor = snap.run?.floor ?? 0
+        c.hp = snap.run?.hp ?? 0
+        c.maxHp = snap.run?.maxHp ?? 0
+        c.bestFloor = snap.bestFloor
+        if let d = snap.daily {
+            c.streak = d.streak
+            c.claimedDay = d.claimed ? ComplicationData.today() : nil
+        } else {
+            c.streak = old?.streak ?? 0
+            c.claimedDay = old?.claimedDay
+        }
+        c.passTier = snap.pass?.tier ?? old?.passTier
+        c.passTiers = snap.pass?.tiers ?? 50
+        var cmp = c
+        cmp.savedAt = old?.savedAt ?? 0
+        guard cmp != old else { return }
+        c.savedAt = Date().timeIntervalSince1970
+        c.save()
+        WidgetCenter.shared.reloadAllTimelines()
+    }
 
     /// VoiceOver reads it now (watchOS 10 and later; on 9 it's on screen).
     static func speak(_ text: String) {
@@ -162,6 +190,7 @@ final class WatchStore: NSObject, ObservableObject {
         let oldLevel = snapshot?.run?.level ?? 0
         snapshot = snap
         if let d = try? JSONEncoder().encode(snap) { UserDefaults.standard.set(d, forKey: cacheKey) }
+        saveForComplications(snap)
         if let r = snap.run {
             if wasRunning && !r.running { WKInterfaceDevice.current().play(r.hp <= 0 ? .failure : .success) }
             else if r.running && oldLevel > 0 && r.level > oldLevel { WKInterfaceDevice.current().play(.notification) }
