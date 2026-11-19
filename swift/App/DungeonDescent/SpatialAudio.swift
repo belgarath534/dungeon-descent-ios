@@ -33,7 +33,7 @@ final class SpatialAudio {
         env.reverbParameters.enable = true
         env.reverbParameters.loadFactoryReverbPreset(.mediumChamber)
         env.reverbParameters.level = -8
-        for _ in 0..<16 { voices.append(makeVoice()) }
+        for _ in 0..<32 { voices.append(makeVoice()) }
         NotificationCenter.default.addObserver(forName: .AVAudioEngineConfigurationChange, object: engine, queue: .main) { [weak self] _ in
             Task { @MainActor in self?.restart() }
         }
@@ -232,6 +232,40 @@ final class SpatialAudio {
                 if let a = o.ahead { ahead(a, at: Self.point(d, 4), delay: delay + 0.36) }
             } else {
                 play(tone(.square, 950 * pitch, seconds: 0.07, peak: 0.22), at: Self.point(d, 1), delay: delay)
+            }
+        }
+    }
+
+    /// 12.0 Audio Map: every cue from where it is, one after another. Far
+    /// rooms are pulled in a little so the whole floor stays audible.
+    func audioMap(_ m: AudioMap.Map) {
+        for c in m.cues {
+            let d = (c.x * c.x + c.z * c.z).squareRoot()
+            let r = d > 0 ? (1 + 0.45 * d) / d : 0
+            let p = AVAudio3DPoint(x: Float(c.x * r), y: 0, z: Float(c.z * r))
+            let vol = Float(min(1, 0.55 + 0.12 * d * r))
+            // In front a little higher, behind a little lower, like the door cues.
+            let lift = c.z < -0.5 ? 1.12 : c.z > 0.5 ? 0.88 : 1
+            let t = c.delay
+            switch c.kind {
+            case .you:
+                play(tone(.sine, 660, seconds: 0.16, peak: 0.45), at: p, volume: vol, delay: t)
+                play(tone(.sine, 990, seconds: 0.12, peak: 0.25), at: p, volume: vol, delay: t + 0.06)
+            case .explored:
+                play(tone(.sine, 294 * lift, seconds: 0.18, peak: 0.4), at: p, volume: vol, delay: t)
+            case .unexplored:
+                play(tone(.square, 740 * lift, seconds: 0.07, peak: 0.2), at: p, volume: vol, delay: t)
+            case .stairs:
+                for (i, f) in [784.0, 587, 392].enumerated() {
+                    play(tone(.sine, f, seconds: 0.12, peak: 0.35), at: p, volume: vol, delay: t + Double(i) * 0.09)
+                }
+            case .boss:
+                play(tone(.sawtooth, 62, seconds: 0.6, peak: 0.45), at: p, volume: vol, delay: t)
+                play(tone(.sawtooth, 93, seconds: 0.5, peak: 0.25), at: p, volume: vol, delay: t + 0.05)
+            case .enemy:
+                play(tone(.sawtooth, 165, seconds: 0.28, peak: 0.3), at: p, volume: vol, delay: t)
+            case .hunter:
+                play(tone(.sine, 70, seconds: 0.35, peak: 0.6), at: p, volume: vol, delay: t)
             }
         }
     }

@@ -436,6 +436,23 @@ final class RunModel: ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.3) { Feedback.announce(e.summary) }
     }
 
+    /// 12.0 Audio Map: the floor as sounds placed around you, then what it
+    /// means. The first time, it also says which sound is which.
+    func audioMap() {
+        guard Date() >= echoCooldown else { return }
+        let m = AudioMap.build(run, bossFloor: Challenges.bossFloor(run), hunterFrom: hunterFrom)
+        let length = Double(m.cues.count) * AudioMap.gap + 0.5
+        echoCooldown = Date().addingTimeInterval(length)
+        SpatialAudio.shared.setRoom(dungeon: run.dungeon)
+        SpatialAudio.shared.audioMap(m)
+        Feedback.tap()
+        let first = !UserDefaults.standard.bool(forKey: "swift_audio_map_heard")
+        UserDefaults.standard.set(true, forKey: "swift_audio_map_heard")
+        DispatchQueue.main.asyncAfter(deadline: .now() + length) {
+            Feedback.announce(m.summary + (first ? " " + AudioMap.legend : ""))
+        }
+    }
+
     private func move3DSetup() {
         var r = run
         var dc = dice

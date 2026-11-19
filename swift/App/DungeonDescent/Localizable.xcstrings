@@ -129438,6 +129438,215 @@
           }
         }
       }
+    },
+    "Audio map": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mapa sonoro"
+          }
+        }
+      }
+    },
+    "🗺 Audio Map": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🗺 Mapa Sonoro"
+          }
+        }
+      }
+    },
+    "The boss is here.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O chefe está aqui."
+          }
+        }
+      }
+    },
+    "The floor is done: the stairs are open.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O andar acabou: a escada está aberta."
+          }
+        }
+      }
+    },
+    "the boss": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "o chefe"
+          }
+        }
+      }
+    },
+    "the stairs": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "a escada"
+          }
+        }
+      }
+    },
+    "Plays this floor as sounds around you, best with headphones.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca este andar como sons ao seu redor, melhor com fones de ouvido."
+          }
+        }
+      }
+    },
+    "A soft low note is a room you've been in, a brighter blip is a room you haven't entered, falling notes are the stairs and a deep growl is the boss.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma nota grave e suave é uma sala onde você já esteve, um bipe mais agudo é uma sala onde você ainda não entrou, notas descendo são a escada e um rosnado grave é o chefe."
+          }
+        }
+      }
+    },
+    "Audio map.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mapa sonoro."
+          }
+        }
+      }
+    },
+    "🧭 New main menu — tabs along the bottom of the screen: Play, Modes, Multiplayer, More and Settings, so everything is a swipe or two away. Prefer the old long menu? Settings, Accessibility, Classic Menu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🧭 Novo menu principal — abas na parte de baixo da tela: Jogar, Modos, Multijogador, Mais e Ajustes, então tudo fica a um ou dois toques. Prefere o menu longo antigo? Ajustes, Acessibilidade, Menu Clássico."
+          }
+        }
+      }
+    },
+    "🤝 Co-op Dungeon — fight through ten floors with up to three friends, on the web and the iPhone, Mac and Apple Vision Pro apps together. Host a room and share its 4-letter code, or join a friend's. In the Multiplayer tab.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🤝 Masmorra Cooperativa — atravesse dez andares com até três amigos, na web e nos apps de iPhone, Mac e Apple Vision Pro juntos. Crie uma sala e compartilhe o código de 4 letras, ou entre na de um amigo. Na aba Multijogador."
+          }
+        }
+      }
+    },
+    "🏆 Battle Pass — an 8-week season of 50 tiers, earned by playing, never bought. Everything you do gives Pass XP, five weekly quests give a lot more, and every tier pays as you reach it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🏆 Passe de Batalha — uma temporada de 8 semanas com 50 níveis, ganhos jogando, nunca comprados. Tudo o que você faz dá XP do Passe, cinco missões semanais dão muito mais, e cada nível paga assim que você chega nele."
+          }
+        }
+      }
+    },
+    "⭐ Prestige — a character at their level cap can start over at level 1 for a permanent star, up to 10. Each star is +5% health, +5% attack and +10% gold in every run. Find it on the character's card.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⭐ Prestígio — um personagem no nível máximo pode recomeçar do nível 1 em troca de uma estrela permanente, até 10. Cada estrela dá +5% de vida, +5% de ataque e +10% de ouro em toda jornada. Fica no cartão do personagem."
+          }
+        }
+      }
+    },
+    "☁️ Cloud sync — your whole save now travels between the web and the apps: gold, Endless Descent, your inventory, spells, guns, prestige stars and the Battle Pass. Opening the game loads a newer save from another device by itself, and asks only when you played on both.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "☁️ Sincronização na nuvem — seu salvamento inteiro agora viaja entre a web e os apps: ouro, Descida Infinita, inventário, feitiços, armas, estrelas de prestígio e o Passe de Batalha. Ao abrir o jogo, um salvamento mais novo de outro aparelho é carregado sozinho, e ele só pergunta quando você jogou nos dois."
+          }
+        }
+      }
+    },
+    "🗺 Audio Map — a new button in the dungeon plays the whole floor as sounds around you: the rooms you've been in, the ones you haven't, the stairs or the boss, and the hunter if it's after you. In 3D Mode every room sounds from where it really is. Best with headphones.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🗺 Mapa Sonoro — um novo botão na masmorra toca o andar inteiro como sons ao seu redor: as salas onde você já esteve, as que ainda não, a escada ou o chefe, e o caçador se ele estiver atrás de você. No Modo 3D cada sala soa de onde ela realmente está. Melhor com fones de ouvido."
+          }
+        }
+      }
+    },
+    "🇧🇷 The whole game is now in Portuguese — every screen, button and line VoiceOver reads.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🇧🇷 O jogo inteiro agora está em português — cada tela, botão e frase que o VoiceOver lê."
+          }
+        }
+      }
+    },
+    "🎮 Game Center is in the Multiplayer tab.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎮 O Game Center está na aba Multijogador."
+          }
+        }
+      }
+    },
+    "The Legends Update": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Atualização das Lendas"
+          }
+        }
+      }
+    },
+    "Version 12.0": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versão 12.0"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

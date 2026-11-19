@@ -2285,6 +2285,11 @@ enum Patterns {
         ("{0} lines kept.", "{0} frases guardadas."),
         ("{0} missing lines.", "{0} frases faltando."),
         ("{0} lines copied.", "{0} frases copiadas."),
+        ("{0} more room{1} to find before {2}.", "Faltam {0} sala(s) para encontrar; depois, {2}."),
+        ("{0} room{1} behind you, {2} ahead, then {3}.", "{0} sala(s) atrás de você, {2} à frente, e depois {3}."),
+        ("{0} room{1} explored, {2} you haven't entered yet.", "{0} sala(s) exploradas, {2} onde você ainda não entrou."),
+        ("Audio map. Floor {0}.", "Mapa sonoro. Andar {0}."),
+        ("{0} is in front of you.", "{0} está na sua frente."),
     ]
 
     private static let compiled: [(NSRegularExpression, String, Int)] = pt.compactMap { en, out in

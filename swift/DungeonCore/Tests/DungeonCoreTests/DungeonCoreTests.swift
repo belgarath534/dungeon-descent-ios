@@ -4965,3 +4965,61 @@ final class CoopTests: XCTestCase {
         XCTAssertEqual(Coop.Player(a.dict), a)
     }
 }
+
+final class AudioMapTests: XCTestCase {
+    func makeRun(_ cls: String) -> Run {
+        var r = Run(character: PlayerCharacter(name: "T", cls: cls, race: "Human", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.spirit = nil
+        r.hunter = nil
+        return r
+    }
+
+    func testAudioMap() {
+        // The line: 2 rooms done of 6, then you, then 4 ahead, then the stairs.
+        var r = makeRun("Warrior")
+        r.floor = 3; r.floorRoomsNeeded = 6; r.roomsOnFloor = 2
+        var m = AudioMap.build(r)
+        XCTAssertEqual(m.cues.map(\.kind), [.explored, .explored, .you, .unexplored, .unexplored, .unexplored, .unexplored, .stairs])
+        XCTAssertEqual(m.cues.first?.x, -4)
+        XCTAssertEqual(m.cues.last?.x, 4)
+        XCTAssertEqual(m.cues.map(\.x), m.cues.map(\.x).sorted())
+        XCTAssertEqual(m.cues[1].delay, AudioMap.gap, accuracy: 0.0001)
+        XCTAssertTrue(m.summary.contains("2 rooms behind you, 4 ahead, then the stairs."), m.summary)
+        // The boss floor ends in the boss.
+        r.floor = 10; r.floorRoomsNeeded = 1; r.roomsOnFloor = 0
+        m = AudioMap.build(r)
+        XCTAssertEqual(m.cues.map(\.kind), [.you, .unexplored, .boss])
+        XCTAssertTrue(m.summary.contains("then the boss"), m.summary)
+        // A fight puts the enemy in front of you.
+        r.enemy = Enemy(name: "Skeleton", icon: "💀", hp: 20, maxHp: 20, atk: 3...5, gold: 1...1)
+        m = AudioMap.build(r)
+        XCTAssertEqual(m.cues.last?.kind, .enemy)
+        XCTAssertEqual(m.cues.last?.z, -2)
+        XCTAssertTrue(m.summary.contains("Skeleton is in front of you."))
+    }
+
+    func testAudioMapThreeD() {
+        var dice = SeededDice(seed: 7)
+        var r = makeRun("Mage")
+        r.floorRoomsNeeded = 6
+        var g = RoomGraph(roomsNeeded: 6, dice: &dice)
+        let d = g.here.doors[0]
+        _ = g.move(d)
+        r.roomGraph = g
+        r.roomsOnFloor = 1
+        let m = AudioMap.build(r)
+        // You, the start room behind the door you came through, and the doors ahead.
+        XCTAssertEqual(m.cues.first?.kind, .you)
+        let back = m.cues.first { $0.kind == .explored }
+        XCTAssertNotNil(back)
+        XCTAssertEqual(back?.x, Double(-d.dx) * 2)
+        XCTAssertEqual(back?.z, Double(-d.dy) * 2)
+        let cells = Array(g.cells.values)
+        let known = cells.filter { c in c.visited || cells.contains { v in v.visited && v.doors.contains { e in v.gx + e.dx == c.gx && v.gy + e.dy == c.gy } } }
+        XCTAssertEqual(m.cues.filter { $0.kind == .explored || $0.kind == .unexplored }.count, known.count - 1)
+        XCTAssertFalse(m.cues.contains { $0.kind == .stairs })
+        XCTAssertTrue(m.summary.contains("5 more rooms to find before the stairs."), m.summary)
+        XCTAssertLessThanOrEqual(m.cues.count, AudioMap.maxCues)
+    }
+}

@@ -654,6 +654,10 @@ struct DungeonView: View {
                     .accessibilityLabel("Echo-location")
                     .accessibilityHint("Sends out a sonar pulse. Each direction answers: a long tone down open doorways, a sharp click off walls. Also works with a two-finger double tap.")
             }
+            Button("🗺 Audio Map") { model.audioMap() }
+                .buttonStyle(DungeonButtonStyle(kind: .compassAccent))
+                .accessibilityLabel("Audio map")
+                .accessibilityHint("Plays this floor as sounds around you, best with headphones. " + AudioMap.legend)
             FlowRow(spacing: 8) {
                 act("🎒 Inventory", "Toggle inventory") { toggleInventory() }
                 act("📊 Stats", "View character stats") { showStats = true; Feedback.announce(statsSpoken) }
