@@ -4822,3 +4822,38 @@ final class AFKRivalsTests: XCTestCase {
         XCTAssertEqual(AFKRivals.line(floor: 90, rivals: r), "You're deeper than every rival on the board!")
     }
 }
+
+final class CloudSyncTests: XCTestCase {
+    func testDecisions() {
+        XCTAssertEqual(CloudSync.decide(cloudSavedAt: 200, lastSync: 100, dirtyAt: 50), .pull)
+        XCTAssertEqual(CloudSync.decide(cloudSavedAt: 200, lastSync: 100, dirtyAt: 150), .ask)
+        XCTAssertEqual(CloudSync.decide(cloudSavedAt: 100, lastSync: 100, dirtyAt: 150), .push)
+        XCTAssertEqual(CloudSync.decide(cloudSavedAt: 100, lastSync: 100, dirtyAt: 90), .nothing)
+        // A device that never synced, with progress, and a cloud save: ask.
+        XCTAssertEqual(CloudSync.decide(cloudSavedAt: 100, lastSync: 0, dirtyAt: 5), .ask)
+        // A fresh device: load the cloud save.
+        XCTAssertEqual(CloudSync.decide(cloudSavedAt: 100, lastSync: 0, dirtyAt: 0), .pull)
+        // No full save in the cloud yet (old versions): send this one.
+        XCTAssertEqual(CloudSync.decide(cloudSavedAt: 0, lastSync: 0, dirtyAt: 5), .push)
+    }
+
+    func testWhatTravels() {
+        let snap = ["dd_chars": "[]", "dd_global_gold": "5", "dd_lang": "pt-BR", "dd_sync_last": "1", "swift_x": "1"]
+        XCTAssertEqual(Set(CloudSync.full(snap).keys), ["dd_chars", "dd_global_gold"])
+        let s = CloudSync.encode(CloudSync.full(snap))!
+        XCTAssertEqual(CloudSync.decode(s), ["dd_chars": "[]", "dd_global_gold": "5"])
+    }
+
+    func testFileStoreNotesProgressOnly() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("sync-\(UUID()).json")
+        let store = FileStore(url: url)
+        store.setItem("dd_lang", "en")
+        XCTAssertNil(store.getItem(CloudSync.dirtyKey))
+        store.setItem("dd_global_gold", "10")
+        let first = store.getItem(CloudSync.dirtyKey)
+        XCTAssertNotNil(first)
+        store.removeItem(CloudSync.dirtyKey)
+        store.setItem("dd_global_gold", "10")  // the same value: no change
+        XCTAssertNil(store.getItem(CloudSync.dirtyKey))
+    }
+}

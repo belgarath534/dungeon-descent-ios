@@ -61,6 +61,8 @@ final class CloudAccount: NSObject, ObservableObject {
         authHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
             Task { @MainActor in self?.user = user }
         }
+        // Opening the game: a newer save from another device comes down.
+        if user != nil { Task { await checkCloud(launch: true) } }
     }
 
     var signedIn: Bool { user != nil }
@@ -259,6 +261,17 @@ final class CloudAccount: NSObject, ObservableObject {
 
     private static var now: Double { (Date().timeIntervalSince1970 * 1000).rounded() }
 
+    /// Which kind of device wrote the cloud save.
+    static var platform: String {
+        #if targetEnvironment(macCatalyst)
+        return "mac"
+        #elseif os(visionOS)
+        return "vision"
+        #else
+        return "ios"
+        #endif
+    }
+
     private func cloudSave() async throws -> [String: Any]? {
         guard let uid = user?.uid ?? Auth.auth().currentUser?.uid else { return nil }
         let snap = try await db.collection("saves").document(uid).getDocument()
@@ -270,20 +283,48 @@ final class CloudAccount: NSObject, ObservableObject {
     /// chooses, so a Swift save isn't silently replaced by an older one.
     private func afterSignIn() async {
         user = Auth.auth().currentUser
-        guard let game else { return }
+        await checkCloud(launch: true)
+    }
+
+    private var lastCheck = Date.distantPast
+
+    /// CLOUD SYNC (CloudSync in DungeonCore): a newer save from another device
+    /// comes down by itself, this device's progress goes up, and only when
+    /// both changed does the player choose. Coming back to the app, a newer
+    /// save is only loaded when nothing changed here (never mid-run).
+    func checkCloud(launch: Bool) async {
+        guard let game, signedIn else { return }
+        if !launch && Date().timeIntervalSince(lastCheck) < 300 { return }
+        lastCheck = Date()
         do {
-            guard let cloud = try await cloudSave(), cloud["chars"] != nil else {
-                await sync(silent: false)
+            guard let cloud = try await cloudSave(), cloud["chars"] != nil || cloud["full"] != nil else {
+                await sync(silent: true)
                 return
             }
-            if game.characters.isEmpty {
-                restore(cloud)
-            } else {
-                choosingSave = true
-                Feedback.announce("This device and your cloud account both have a save. Choose which one to keep.")
+            let store = game.store
+            let savedAt = (cloud["savedAt"] as? NSNumber)?.doubleValue ?? 0
+            let last = CloudSync.number(store.getItem(CloudSync.lastKey))
+            var dirty = CloudSync.number(store.getItem(CloudSync.dirtyKey))
+            // Nothing played here yet: there's nothing to lose.
+            if game.characters.isEmpty && last == 0 { dirty = 0 }
+            // An old cloud save (no savedAt) and a device that never synced.
+            let cloudAt = savedAt > 0 ? savedAt : (last == 0 ? 1 : 0)
+            switch CloudSync.decide(cloudSavedAt: cloudAt, lastSync: last, dirtyAt: dirty) {
+            case .pull:
+                restore(cloud, quiet: !launch)
+                Feedback.announce("Loaded your newer save from your other device.", after: 1)
+            case .ask:
+                if launch {
+                    choosingSave = true
+                    Feedback.announce("This device and your cloud account both have newer progress. Choose which one to keep.")
+                }
+            case .push:
+                await sync(silent: true)
+            case .nothing:
+                break
             }
         } catch {
-            say("Load failed. Check your connection.")
+            if launch { message = "Couldn't reach your cloud save." }
         }
     }
 
@@ -316,14 +357,21 @@ final class CloudAccount: NSObject, ObservableObject {
         }
     }
 
-    private func restore(_ cloud: [String: Any]) {
-        var data: [String: String] = [:]
+    private func restore(_ cloud: [String: Any], quiet: Bool = false) {
+        // The whole save (12.0), then the old fields on top: they're written
+        // together, and an older app may have written only the old ones since.
+        var data = CloudSync.decode(cloud["full"] as? String) ?? [:]
         for (field, key) in Self.fields {
             if let s = cloud[field] as? String, !s.isEmpty { data[key] = s }
         }
-        game?.importWebSave(data)
+        game?.importWebSave(data, keepSwiftRuns: true)
+        // Loading isn't progress: this device now matches the cloud.
+        let savedAt = (cloud["savedAt"] as? NSNumber)?.doubleValue ?? 0
+        let mark = String(Int(savedAt))
+        game?.store.setItem(CloudSync.lastKey, mark)
+        game?.store.setItem(CloudSync.dirtyKey, mark)
         game?.saveNow()
-        say("Load complete. Your save data has been restored from the cloud.", color: 0x44ff88)
+        if !quiet { say("Load complete. Your save data has been restored from the cloud.", color: 0x44ff88) }
     }
 
     /// syncToCloud. Silent syncs don't speak (the web version's auto-sync).
@@ -340,8 +388,15 @@ final class CloudAccount: NSObject, ObservableObject {
         }
         var data: [String: Any] = [:]
         for (field, key) in Self.fields { data[field] = store.getItem(key).map { $0 as Any } ?? NSNull() }
+        let savedAt = Self.now
+        if let snapshot = game?.snapshot(), let full = CloudSync.encode(CloudSync.full(snapshot)) {
+            data["full"] = full
+            data["savedAt"] = savedAt
+            data["savedBy"] = Self.platform
+        }
         do {
             try await db.collection("saves").document(uid).setData(data, merge: true)
+            if data["full"] != nil { store.setItem(CloudSync.lastKey, String(Int(savedAt))) }
             lastAutoSync = Date()
             if !silent { say("✓ Synced to cloud! Your save data is backed up.", color: 0x44ff88) }
         } catch {
@@ -352,6 +407,8 @@ final class CloudAccount: NSObject, ObservableObject {
     /// The silent background sync, at most every 2 minutes (initAccountSync).
     func autoSync() {
         guard signedIn, Date().timeIntervalSince(lastAutoSync) >= 120 else { return }
+        if let store = game?.store,
+           CloudSync.number(store.getItem(CloudSync.dirtyKey)) <= CloudSync.number(store.getItem(CloudSync.lastKey)) { return }
         lastAutoSync = Date()
         Task { await sync(silent: true) }
     }

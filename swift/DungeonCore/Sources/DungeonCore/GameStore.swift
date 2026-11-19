@@ -68,18 +68,34 @@ public final class FileStore: GameStore {
     }
 
     public func setItem(_ key: String, _ value: String) {
-        lock.lock(); values[key] = value; lock.unlock()
+        lock.lock()
+        if values[key] != value { values[key] = value; markDirty([key]) }
+        lock.unlock()
         scheduleWrite()
     }
 
     public func removeItem(_ key: String) {
-        lock.lock(); values[key] = nil; lock.unlock()
+        lock.lock()
+        if values[key] != nil { values[key] = nil; markDirty([key]) }
+        lock.unlock()
         scheduleWrite()
     }
 
     public func setItems(_ items: [String: String]) {
-        lock.lock(); values.merge(items) { _, new in new }; lock.unlock()
+        lock.lock()
+        let changed = items.filter { values[$0.key] != $0.value }.map(\.key)
+        values.merge(items) { _, new in new }
+        markDirty(changed)
+        lock.unlock()
         scheduleWrite()
+    }
+
+    /// Notes when the save last changed, for cloud sync (CloudSync). Called
+    /// with the lock held. Loading a save from the cloud sets the time back
+    /// afterwards (CloudSync.lastKey), so that doesn't count as progress.
+    private func markDirty(_ keys: [String]) {
+        guard keys.contains(where: CloudSync.synced) else { return }
+        values[CloudSync.dirtyKey] = String(Int(Date().timeIntervalSince1970 * 1000))
     }
 
     /// Every key and value, for a full backup.

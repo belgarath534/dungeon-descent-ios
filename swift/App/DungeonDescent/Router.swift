@@ -98,12 +98,21 @@ struct RootView: View {
     @State private var rested: OfflineRest.Reward?
     @Environment(\.scenePhase) private var scenePhase
 
+    @ObservedObject private var cloud = CloudAccount.shared
+
     var body: some View {
         if loading {
             LoadingScreen { loading = false; checkRest(after: 1.5) }.preferredColorScheme(.dark)
         } else {
             content
                 .overlay { if let r = rested { OfflineRestOverlay(reward: r) { rested = nil } } }
+                // Cloud sync: both this device and another one have newer progress.
+                .alert("Choose a save", isPresented: $cloud.choosingSave) {
+                    Button("Use the cloud save") { Task { await cloud.keepCloudSave() } }
+                    Button("Keep this device's save") { Task { await cloud.keepDeviceSave() } }
+                } message: {
+                    Text("You played on this device and on another one since they last matched. The cloud save replaces what's on this device. Keeping this device's save uploads it over the cloud one.")
+                }
                 .onChange(of: scenePhase) { phase in
                     // Away time counts from when you leave the app, not only between launches.
                     if phase == .background { OfflineRest.seen(game.store) }

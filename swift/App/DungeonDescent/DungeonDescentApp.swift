@@ -65,6 +65,8 @@ struct DungeonDescentApp: App {
             if phase == .active && AFKModel.isRunning(game.store) { LiveActivityPush.cancel() }
             if phase == .background { AudioEngine.shared.enterBackground(); PlaytimeClock.shared.stop() }
             if phase == .active { AudioEngine.shared.enterForeground(); PlaytimeClock.shared.start(game) }
+            // Back in the app: a newer save from another device, if nothing changed here.
+            if phase == .active { Task { await CloudAccount.shared.checkCloud(launch: false) } }
             if phase != .active {
                 game.saveNow()
                 CloudAccount.shared.autoSync()

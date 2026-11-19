@@ -52,12 +52,7 @@ struct AccountPanel: View {
             }
             .environmentObject(game)
         }
-        .alert("Choose a save", isPresented: $cloud.choosingSave) {
-            Button("Use the cloud save") { Task { await cloud.keepCloudSave() } }
-            Button("Keep this device's save") { Task { await cloud.keepDeviceSave() } }
-        } message: {
-            Text("This device and your cloud account both have a save. The cloud save replaces the characters on this device. Keeping this device's save uploads it over the cloud one.")
-        }
+    }
     }
 
     private func field(_ placeholder: String, text: Binding<String>, secure: Bool) -> some View {
