@@ -1,12 +1,16 @@
 import Foundation
 import WatchConnectivity
 import WatchKit
+import SwiftUI
 
 /// The watch's view of the game: whatever the iPhone last sent, plus the
 /// commands it sends back. The phone keeps the save; nothing is stored here
 /// but the last state, so the app opens on it even with the phone away.
 @MainActor
 final class WatchStore: NSObject, ObservableObject {
+    /// The one store: the app's screens and Siri share it.
+    static let shared = WatchStore()
+
     @Published private(set) var snapshot: WatchLink.Snapshot?
     @Published private(set) var reachable = false
     @Published private(set) var busy = false
@@ -55,6 +59,64 @@ final class WatchStore: NSObject, ObservableObject {
     func start(_ c: WatchLink.Character) { send(.start, index: c.index) }
     func potion() { send(.potion) }
     func end() { send(.end) }
+    func strike(_ c: WatchLink.Character) { send(.strike, index: c.index) }
+    func claimDaily() { send(.claimDaily) }
+
+    var boss: WatchLink.Boss? { snapshot?.boss }
+    var pass: WatchLink.Pass? { snapshot?.pass }
+    var daily: WatchLink.Daily? { snapshot?.daily }
+
+    // MARK: Wrist alerts
+
+    static let alertsKey = "dd_watch_alerts"
+    /// Taps for danger in a run and your co-op turn (on unless turned off).
+    @Published var alertsOn = UserDefaults.standard.object(forKey: WatchStore.alertsKey) as? Bool ?? true {
+        didSet { UserDefaults.standard.set(alertsOn, forKey: Self.alertsKey) }
+    }
+    /// The last alert's words, shown on the home screen.
+    @Published var lastAlert: String?
+
+    /// VoiceOver reads it now (watchOS 10 and later; on 9 it's on screen).
+    static func speak(_ text: String) {
+        if #available(watchOS 10.0, *) { AccessibilityNotification.Announcement(text).post() }
+    }
+
+    /// A different feel for each: you can tell them apart without looking.
+    func receive(_ kind: WatchLink.Alert, _ text: String) {
+        guard alertsOn else { return }
+        lastAlert = text
+        Self.speak(text)
+        let d = WKInterfaceDevice.current()
+        switch kind {
+        case .lowHp: d.play(.failure)
+        case .elite: d.play(.notification)
+        case .hunter:
+            d.play(.directionDown)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { d.play(.directionDown) }
+        case .coopTurn: d.play(.start)
+        case .reward: d.play(.success)
+        }
+    }
+
+    /// Siri: send a command and wait for the phone's answer (or say why not).
+    func ask(_ cmd: WatchLink.Command, index: Int? = nil) async -> String {
+        let s = WCSession.default
+        if s.activationState != .activated {
+            s.delegate = self
+            s.activate()
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+        }
+        var msg: [String: Any] = [WatchLink.commandKey: cmd.rawValue]
+        if let index { msg[WatchLink.indexKey] = index }
+        let reply: [String: Any]? = await withCheckedContinuation { cont in
+            s.sendMessage(msg, replyHandler: { cont.resume(returning: $0) }, errorHandler: { _ in cont.resume(returning: nil) })
+        }
+        guard let reply, let snap = WatchLink.decode(reply) else {
+            return "I couldn't reach Dungeon Descent on your iPhone. Open it there and try again."
+        }
+        apply(snap)
+        return snap.message ?? ""
+    }
 
     private func send(_ cmd: WatchLink.Command, index: Int? = nil) {
         let s = WCSession.default
@@ -73,7 +135,10 @@ final class WatchStore: NSObject, ObservableObject {
                 self.busy = false
                 if let snap = WatchLink.decode(reply) {
                     self.apply(snap)
-                    if let m = snap.message { self.message = m }
+                    if let m = snap.message {
+                        self.message = m
+                        if cmd != .status { Self.speak(m) }
+                    }
                     if cmd != .status { WKInterfaceDevice.current().play(.click) }
                 }
             }
@@ -119,6 +184,13 @@ extension WatchStore: WCSessionDelegate {
         Task { @MainActor in
             if let snap = WatchLink.decode(applicationContext), snap.sentAt > (self.snapshot?.sentAt ?? 0) { self.apply(snap) }
         }
+    }
+
+    /// An alert from the phone (danger in a run, your co-op turn).
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
+        guard let raw = message[WatchLink.alertKey] as? String, let kind = WatchLink.Alert(rawValue: raw) else { return }
+        let text = message[WatchLink.alertTextKey] as? String ?? ""
+        Task { @MainActor in self.receive(kind, text) }
     }
 
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {

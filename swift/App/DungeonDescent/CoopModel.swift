@@ -183,7 +183,10 @@ final class CoopModel: ObservableObject {
         }
         floor = newFloor
         let newRound = (r["round"] as? NSNumber)?.intValue ?? 0
-        if newRound != round { round = newRound; myAction = nil }
+        if newRound != round {
+            round = newRound; myAction = nil
+            if stage == .playing, me?.alive == true { WatchBridge.shared.alert(.coopTurn, "Your move in co-op — floor \(floor).") }
+        }
         roundStart = (r["roundStart"] as? NSNumber)?.doubleValue ?? roundStart
         let players = (r["players"] as? [String: Any] ?? [:]).compactMap { (_, v) -> (Coop.Player, Double)? in
             guard let d = v as? [String: Any], let p = Coop.Player(d) else { return nil }

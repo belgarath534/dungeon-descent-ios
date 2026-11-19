@@ -1487,6 +1487,7 @@ final class RunModel: ObservableObject {
 
     private func hunterSounds(_ dist: Int) {
         SpatialAudio.shared.hunterPulse(dist, from: hunterFrom)
+        if dist <= 2 { WatchBridge.shared.alert(.hunter, "The hunter is \(dist) room\(dist == 1 ? "" : "s") away!") }
         if dist <= 2 { Feedback.warning() } else { Feedback.tap() }
         startHeartbeat(dist)
         if dist <= 3 && phase != .fighting { Sound.track("hunter-theme") }
@@ -3456,6 +3457,13 @@ final class RunModel: ObservableObject {
     }
 
     private func finish(_ r: Run, _ d: SystemDice, phase newPhase: Phase, spoken: String) {
+        // Apple Watch: a tap on the wrist for the same two moments.
+        if r.hp > 0 && r.hp * 4 <= r.maxHp && run.hp * 4 > run.maxHp {
+            WatchBridge.shared.alert(.lowHp, "Low HP: \(r.hp) of \(r.maxHp).")
+        }
+        if newPhase == .fighting, let e = r.enemy, e.isElite, !e.isBoss, !(run.inCombat && run.enemy?.name == e.name) {
+            WatchBridge.shared.alert(.elite, "Elite: \(e.name)!")
+        }
         // Earcons: a sound before VoiceOver speaks, for dropping to a quarter
         // of your health and for an elite stepping in.
         if AppSettings.earcons {

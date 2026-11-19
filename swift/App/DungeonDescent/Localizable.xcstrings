@@ -129647,6 +129647,39 @@
           }
         }
       }
+    },
+    "No strikes left today. A new boss comes at midnight UTC.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum golpe restante hoje. Um novo chefe chega à meia-noite UTC."
+          }
+        }
+      }
+    },
+    "Already claimed today. Come back tomorrow.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Já resgatado hoje. Volte amanhã."
+          }
+        }
+      }
+    },
+    "⌚ Apple Watch: a new home screen with World Boss strikes from your wrist, the Battle Pass and this week's quests, your daily reward, and Quick Fight, a little game you play with the Digital Crown. Wrist Alerts tap you for low HP, elites, the hunter and your co-op turn while you play on your iPhone. Siri on the watch (\"Strike the World Boss in Dungeon Descent\", \"Claim my daily reward…\"), and a Battle Pass season complication.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⌚ Apple Watch: uma nova tela inicial com golpes no Chefe Mundial pelo pulso, o Passe de Batalha e as missões da semana, sua recompensa diária e o Luta Rápida, um joguinho que você joga com a Digital Crown. Os Alertas no Pulso avisam com um toque quando o HP está baixo, quando aparece um elite, quando o caçador chega perto e quando é sua vez no cooperativo, enquanto você joga no iPhone. A Siri no relógio (\"Strike the World Boss in Dungeon Descent\", \"Claim my daily reward…\") e uma complicação da temporada do Passe de Batalha."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

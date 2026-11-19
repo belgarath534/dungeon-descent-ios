@@ -2,7 +2,7 @@ import SwiftUI
 
 @main
 struct DungeonWatchApp: App {
-    @StateObject private var store = WatchStore()
+    @StateObject private var store = WatchStore.shared
 
     var body: some Scene {
         WindowGroup {
@@ -12,10 +12,10 @@ struct DungeonWatchApp: App {
     }
 }
 
-private let gold = Color(red: 0.79, green: 0.64, blue: 0.15)
+let gold = Color(red: 0.79, green: 0.64, blue: 0.15)
 
-/// The run going now, the one that just ended, or the character list.
-struct HomeView: View {
+/// Endless Descent: the run going now, the one that just ended, or the character list.
+struct EndlessView: View {
     @EnvironmentObject var store: WatchStore
     /// The ended run's summary was closed.
     @State private var dismissedEnd: Double = 0
@@ -30,14 +30,7 @@ struct HomeView: View {
                 CharacterListView()
             }
         }
-        .navigationTitle("Descent")
-        .task {
-            // Keep the run current while the app is open.
-            while !Task.isCancelled {
-                store.refresh()
-                try? await Task.sleep(nanoseconds: 15_000_000_000)
-            }
-        }
+        .navigationTitle("Endless")
     }
 }
 

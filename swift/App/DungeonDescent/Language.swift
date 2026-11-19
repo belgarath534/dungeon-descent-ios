@@ -2290,6 +2290,13 @@ enum Patterns {
         ("{0} room{1} explored, {2} you haven't entered yet.", "{0} sala(s) exploradas, {2} onde você ainda não entrou."),
         ("Audio map. Floor {0}.", "Mapa sonoro. Andar {0}."),
         ("{0} is in front of you.", "{0} está na sua frente."),
+        ("Your move in co-op — floor {0}.", "Sua vez no cooperativo — andar {0}."),
+        ("Elite: {0}!", "Elite: {0}!"),
+        ("The hunter is {0} room{1} away!", "O caçador está a {0} sala(s)!"),
+        ("Claimed! {0} gold{1}. Come back tomorrow to keep your streak.", "Resgatado! {0} de ouro. Volte amanhã para manter sua sequência."),
+        ("Day {0}:", "Dia {0}:"),
+        ("{0} deals {1} damage. {2} strike{3} left.", "{0} causa {1} de dano. {2} golpe(s) restante(s)."),
+        ("Low HP: {0} of {1}.", "HP baixo: {0} de {1}."),
     ]
 
     private static let compiled: [(NSRegularExpression, String, Int)] = pt.compactMap { en, out in
