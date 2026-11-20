@@ -353,7 +353,7 @@ struct WebSettingsView: View {
                        isOn: $pack.narrate, label: "Lewis reads the game")
                 Button("▶ Hear Lewis") { LiveVoice.shared.speak("Hello. I'm Lewis. Every fight, every find, every step in the dark, I'll tell you about it.", latest: true, test: true) }
                     .buttonStyle(ToggleButtonStyle(on: true))
-                    .accessibilityHint("Plays a sample, then says how it went.")
+                    .accessibilityHint("Plays a sample of his voice.")
                 if let r = pack.report {
                     Text(verbatim: r).font(Theme.crimson(11.5)).foregroundStyle(Theme.textSecondary)
                 }

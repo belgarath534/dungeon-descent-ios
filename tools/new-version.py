@@ -17,6 +17,7 @@ WHATS_NEW = {
 • Co-op Dungeon: fight through ten floors with up to three friends, on iPhone, Mac, Apple Vision Pro and the web together. Share a 4-letter room code.
 • A new main menu with tabs along the bottom: Play, Modes, Multiplayer, More and Settings. Prefer the old list? Settings, Gameplay, Classic Menu.
 • Hunting Grounds, remade: track a beast by sound. Listen for its call, read its tracks, sneak up, then ambush or trap it. Three bounties a day and five legends to hunt, narrated by Lewis, a new recorded narrator.
+• Lewis Voice Pack (iPhone and iPad): Lewis can read the whole game to you in place of VoiceOver's voice. A free download in Settings, Voice Pack; he speaks on your device, no internet needed after that. English only for now.
 • Battle Pass: 50 tiers a season, earned by playing, never bought, with five new quests every Monday.
 • Prestige: start a max-level character over for a permanent star, up to 10.
 • Cloud sync: your whole save travels between your devices and the web.
@@ -28,6 +29,7 @@ WHATS_NEW = {
 • Masmorra Cooperativa: atravesse dez andares com até três amigos, no iPhone, Mac, Apple Vision Pro e na web juntos. Compartilhe um código de sala de 4 letras.
 • Um novo menu principal com abas na parte de baixo: Jogar, Modos, Multijogador, Mais e Ajustes. Prefere a lista antiga? Ajustes, Jogabilidade, Menu Clássico.
 • Campo de Caça, refeito: rastreie uma fera pelo som. Escute o chamado, leia as pegadas, chegue em silêncio e embosque ou arme uma armadilha. Três caçadas por dia e cinco lendas, narradas por Alex, um novo narrador gravado.
+• Pacote de Voz Lewis (iPhone e iPad): Lewis pode ler o jogo inteiro para você no lugar da voz do VoiceOver. Download grátis em Ajustes, Pacote de Voz; ele fala no próprio aparelho, sem internet depois disso. Por enquanto só em inglês.
 • Passe de Batalha: 50 níveis por temporada, ganhos jogando, nunca comprados, com cinco missões novas toda segunda.
 • Prestígio: recomece um personagem no nível máximo em troca de uma estrela permanente, até 10.
 • Sincronização na nuvem: seu salvamento inteiro viaja entre seus aparelhos e a web.

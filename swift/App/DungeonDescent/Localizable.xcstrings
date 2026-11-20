@@ -130461,6 +130461,28 @@
           }
         }
       }
+    },
+    "Plays a sample of his voice.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca uma amostra da voz dele."
+          }
+        }
+      }
+    },
+    "🎙 Lewis Voice Pack — on iPhone and iPad, Lewis can read the whole game to you in place of VoiceOver's voice: every fight, find and event. A free 327 MB download in Settings, Voice Pack; he speaks right on your device, no account or internet needed once it's downloaded. English only for now (VoiceOver still reads the game in Portuguese).": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎙 Pacote de Voz Lewis — no iPhone e no iPad, o Lewis pode ler o jogo inteiro para você no lugar da voz do VoiceOver: cada luta, cada achado, cada evento. Um download grátis de 327 MB em Ajustes, Pacote de Voz; ele fala no próprio aparelho, sem conta nem internet depois do download. Por enquanto só em inglês (em português, o VoiceOver continua lendo o jogo)."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

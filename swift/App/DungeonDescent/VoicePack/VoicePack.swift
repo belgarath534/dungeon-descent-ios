@@ -58,12 +58,8 @@ final class VoicePack: NSObject, ObservableObject {
         #endif
     }
 
-    /// 12.0: the Voice Pack is still being tested, so it only shows in
-    /// TestFlight builds (their receipt is the sandbox one); App Store players
-    /// don't see it until it's proven (12.1).
-    nonisolated static var available: Bool {
-        supported && Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
-    }
+    /// Everyone on iPhone and iPad (it was TestFlight-only while it was tested).
+    nonisolated static var available: Bool { supported }
 
     nonisolated static var modelFile: URL {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("VoicePack", isDirectory: true)
@@ -86,11 +82,9 @@ final class VoicePack: NSObject, ObservableObject {
         let old = Self.modelFile.deletingLastPathComponent().appendingPathComponent("kokoro-v1_0.safetensors")
         if FileManager.default.fileExists(atPath: old.path) { try? FileManager.default.removeItem(at: old) }
         refresh()
-        if UserDefaults.standard.bool(forKey: Self.busyKey) {
-            UserDefaults.standard.set(false, forKey: Self.busyKey)
-            narrate = false
-            notice = "Lewis stopped the game last time, so he's turned off. Turn him on again to retry, or delete the Voice Pack."
-        }
+        // The test builds' crash guard: it also tripped when the game was
+        // simply closed while Lewis was talking, and turned him off.
+        UserDefaults.standard.removeObject(forKey: Self.busyKey)
         // Lewis on: load him in the background once the game is up.
         if narrate && state == .ready {
             DispatchQueue.main.asyncAfter(deadline: .now() + 6) { LiveVoice.shared.preload() }
@@ -274,18 +268,14 @@ final class LiveVoice {
                 let (samples, report) = self.render(p)
                 DispatchQueue.main.async {
                     self.pending -= 1
-                    VoicePack.shared.report = (samples == nil ? "Lewis couldn't speak: " : "Lewis made ") + report + "."
+                    // Shown in Settings only when something went wrong.
+                    VoicePack.shared.report = samples == nil ? "Lewis couldn't speak: " + report + "." : nil
                     guard gen == self.generation else { return }
                     guard let samples, !samples.isEmpty else {
                         Announcer.shared.say(test ? "Lewis couldn't speak: \(report)." : p, latest: false)
                         return
                     }
                     self.play(samples, volume: vol)
-                    if test {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + Double(samples.count) / 24000 + 0.5) {
-                            Announcer.shared.say("Lewis made \(report).", latest: false)
-                        }
-                    }
                 }
             }
         }
@@ -350,9 +340,6 @@ final class LiveVoice {
     /// engine, loaded once (on the voice thread); nil, or why not.
     nonisolated private func loadIfNeeded() -> String? {
         if session == nil {
-            UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
-            UserDefaults.standard.synchronize()
-            defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
             let file = VoicePack.modelFile
             guard FileManager.default.fileExists(atPath: file.path) else { return "the Voice Pack file is missing; download it again" }
             guard let vurl = Bundle.main.url(forResource: "bm_lewis", withExtension: "voice"),
@@ -391,9 +378,6 @@ final class LiveVoice {
         let loaded = Date().timeIntervalSince(loadStart)
         let began = Date()
         guard let session, let g2p else { return (nil, "the voice engine didn't start") }
-        UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
-        UserDefaults.standard.synchronize()
-        defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
         // Text to phonemes (MisakiSwift), phonemes to Kokoro's numbers, one
         // symbol at a time (a combining accent is its own symbol).
         let phonemes = Device.withDefaultDevice(.cpu) { g2p.phonemize(text: text).0 }

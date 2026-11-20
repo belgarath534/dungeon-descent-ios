@@ -109,7 +109,7 @@ def literals(src):
     return out
 
 UI_CALL = re.compile(r'(?:\bText|\bButton|\bLabel|\bToggle|\.accessibilityLabel|\.accessibilityHint|\.navigationTitle|\bSection)\(\s*$')
-SKIP_LINE = re.compile(r'\b(print|debugPrint|NSLog|fatalError|assert|precondition|Logger|os_log)\(|getItem\(|setItem\(|removeItem\(|forKey:|UserDefaults|systemImage:|Image\(|Sound\.(sfx|track|ambient)\(|\.child\(|collection\(|document\(|reference\(withPath|URL\(string|forResource|NotificationCenter|identifier:|\bcase\s+"|kind:\s*"|rawValue|\bid:\s*"|\.tag\(')
+SKIP_LINE = re.compile(r'\b(print|debugPrint|NSLog|fatalError|assert|precondition|Logger|os_log)\(|getItem\(|setItem\(|removeItem\(|forKey:|UserDefaults|systemImage:|Image\(|Sound\.(sfx|track|ambient)\(|\.child\(|collection\(|document\(|reference\(withPath|URL\(string|forResource|NotificationCenter|identifier:|\bcase\s+"|kind:\s*"|rawValue|\bid:\s*"|\.tag\(|beginBackgroundTask\(')
 SKIP_TEXT = re.compile(r'^(dd_|swift_|sfx-|music-|ambient-|http|com\.|tournament|worldboss-|weekly-|afk-rivals|DD_|DD-|DD2-|DD[A-Z]|[a-z]+[A-Z][A-Za-z0-9]*$|[a-z_]+$|%|#|--|\^'
                        r'|[a-z0-9]+(-[a-z0-9]+)+-?(◊)?$|[A-Za-z]+/[a-z0-9-]+$|[A-Za-z◊/]+/[a-z]+$'
                        r'|[a-z0-9.-]+\.(mp3|wav|json|com|be|org|fill|circle|vial|square)$'
