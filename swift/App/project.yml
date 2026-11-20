@@ -34,9 +34,10 @@ packages:
   # The Lewis Voice Pack: Kokoro run by ONNX Runtime (fast on the iPhone's
   # CPU), with MisakiSwift for pronunciation. MLX (MisakiSwift's fallback for
   # unknown words) stays on the CPU; on the GPU it made static and crashed.
-  ONNXRuntime:
-    url: https://github.com/microsoft/onnxruntime-swift-package-manager
-    from: 1.24.2
+  # ONNX Runtime from Microsoft's download server, checksum-locked (their
+  # Swift package's GitHub repository was taken down): ../Vendor/OnnxRuntimeC.
+  OnnxRuntimeC:
+    path: ../Vendor/OnnxRuntimeC
   MLXSwift:
     url: https://github.com/ml-explore/mlx-swift
     exactVersion: 0.29.1
@@ -71,8 +72,8 @@ targets:
         # Google's library doesn't build for Apple Vision Pro; Apple and email sign-in do.
         destinationFilters: [iOS]
       # The Lewis Voice Pack's engine needs iOS 18 and runs on iPhone and iPad only.
-      - package: ONNXRuntime
-        product: onnxruntime
+      - package: OnnxRuntimeC
+        product: OnnxRuntimeC
         destinationFilters: [iOS]
       - package: MLXSwift
         product: MLX

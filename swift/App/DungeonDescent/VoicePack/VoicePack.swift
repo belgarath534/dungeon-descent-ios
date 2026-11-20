@@ -2,12 +2,7 @@ import Foundation
 import AVFoundation
 import CryptoKit
 import SwiftUI
-#if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
-#if canImport(OnnxRuntimeBindings)
-import OnnxRuntimeBindings
-#else
-import onnxruntime_objc
-#endif
+#if canImport(OnnxRuntimeC) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
 import MisakiSwift
 import MLX
 #endif
@@ -56,7 +51,7 @@ final class VoicePack: NSObject, ObservableObject {
     private var lastAnnounced = 0
 
     nonisolated static var supported: Bool {
-        #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+        #if canImport(OnnxRuntimeC) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
         return true
         #else
         return false
@@ -239,9 +234,8 @@ final class LiveVoice {
     private var pending = 0
     private var started = false
 
-    #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
-    nonisolated(unsafe) private var session: ORTSession?
-    nonisolated(unsafe) private var env: ORTEnv?
+    #if canImport(OnnxRuntimeC) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+    nonisolated(unsafe) private var session: OrtRunner?
     nonisolated(unsafe) private var g2p: EnglishG2P?
     /// Lewis's voice: 510 rows of 256, one per phoneme count.
     nonisolated(unsafe) private var voice: [Float] = []
@@ -308,9 +302,8 @@ final class LiveVoice {
     /// Frees the model's memory (about 330 MB) when Lewis is turned off.
     func unload() {
         worker.run {
-            #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+            #if canImport(OnnxRuntimeC) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
             self.session = nil
-            self.env = nil
             self.g2p = nil
             MLX.GPU.clearCache()
             #endif
@@ -352,7 +345,7 @@ final class LiveVoice {
         return d
     }
 
-    #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+    #if canImport(OnnxRuntimeC) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
     /// The model, Lewis's voice, the phoneme alphabet and the pronunciation
     /// engine, loaded once (on the voice thread); nil, or why not.
     nonisolated private func loadIfNeeded() -> String? {
@@ -374,12 +367,8 @@ final class LiveVoice {
             Device.setDefault(device: .cpu)
             MLX.GPU.set(cacheLimit: 0)
             do {
-                let e = try ORTEnv(loggingLevel: ORTLoggingLevel.warning)
-                let opts = try ORTSessionOptions()
-                try opts.setIntraOpNumThreads(Int32(max(2, min(6, ProcessInfo.processInfo.activeProcessorCount))))
-                try opts.setGraphOptimizationLevel(ORTGraphOptimizationLevel.all)
-                session = try ORTSession(env: e, modelPath: file.path, sessionOptions: opts)
-                env = e
+                session = try OrtRunner(modelPath: file.path,
+                                        threads: Int32(max(2, min(6, ProcessInfo.processInfo.activeProcessorCount))))
             } catch {
                 return "the voice model didn't open: \(String(describing: error).prefix(160))"
             }
@@ -396,7 +385,7 @@ final class LiveVoice {
     /// One sentence of speech (24 kHz), made on the voice thread, and a report
     /// of what happened (for Hear Lewis): the speech, or nil and why not.
     nonisolated private func render(_ text: String) -> ([Float]?, String) {
-        #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+        #if canImport(OnnxRuntimeC) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
         let loadStart = Date()
         if let problem = loadIfNeeded() { return (nil, problem) }
         let loaded = Date().timeIntervalSince(loadStart)
@@ -413,22 +402,10 @@ final class LiveVoice {
         guard !tokens.isEmpty else { return (nil, "no sounds to say for this line (phonemes: \(phonemes.prefix(40)))") }
         // Lewis's style for this many phonemes: row n - 1.
         let row = min(tokens.count, 510) - 1
-        var style = Array(voice[(row * 256)..<(row * 256 + 256)])
-        var ids: [Int64] = [0] + tokens + [0]
-        var speed: Float = 1.0
+        let style = Array(voice[(row * 256)..<(row * 256 + 256)])
         let raw: [Float]
         do {
-            let idsValue = try ORTValue(tensorData: NSMutableData(bytes: &ids, length: ids.count * 8),
-                                        elementType: ORTTensorElementDataType.int64, shape: [1, NSNumber(value: ids.count)])
-            let styleValue = try ORTValue(tensorData: NSMutableData(bytes: &style, length: 256 * 4),
-                                          elementType: ORTTensorElementDataType.float, shape: [1, 256])
-            let speedValue = try ORTValue(tensorData: NSMutableData(bytes: &speed, length: 4),
-                                          elementType: ORTTensorElementDataType.float, shape: [1])
-            let out = try session.run(withInputs: ["tokens": idsValue, "style": styleValue, "speed": speedValue],
-                                      outputNames: ["audio"], runOptions: nil)
-            guard let audio = out["audio"] else { return (nil, "the engine gave no audio back") }
-            let d = try audio.tensorData() as Data
-            raw = d.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
+            raw = try session.speak(ids: [0] + tokens + [0], style: style, speed: 1.0)
         } catch {
             MLX.GPU.clearCache()
             return (nil, "the engine stopped with an error: \(String(describing: error).prefix(160))")
