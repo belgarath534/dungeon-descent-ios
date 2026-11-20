@@ -94,7 +94,7 @@ public final class FileStore: GameStore {
     /// with the lock held. Loading a save from the cloud sets the time back
     /// afterwards (CloudSync.lastKey), so that doesn't count as progress.
     private func markDirty(_ keys: [String]) {
-        guard keys.contains(where: CloudSync.synced) else { return }
+        guard keys.contains(where: CloudSync.progress) else { return }
         values[CloudSync.dirtyKey] = String(Int(Date().timeIntervalSince1970 * 1000))
     }
 

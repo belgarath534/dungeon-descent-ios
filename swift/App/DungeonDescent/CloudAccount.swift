@@ -404,6 +404,27 @@ final class CloudAccount: NSObject, ObservableObject {
         }
     }
 
+    /// Leaving the app: send any progress now, whatever the 2-minute limit,
+    /// and ask iOS for the time to finish before the app is frozen. (The end
+    /// of a run often never reached the cloud, so the next launch, or another
+    /// device, found two different saves and asked which to keep.)
+    func syncOnLeave() {
+        guard signedIn, let store = game?.store,
+              CloudSync.number(store.getItem(CloudSync.dirtyKey)) > CloudSync.number(store.getItem(CloudSync.lastKey)) else { return }
+        #if os(iOS) || os(visionOS)
+        var bg = UIBackgroundTaskIdentifier.invalid
+        bg = UIApplication.shared.beginBackgroundTask(withName: "dd.cloudsync") {
+            UIApplication.shared.endBackgroundTask(bg); bg = .invalid
+        }
+        Task { @MainActor in
+            await sync(silent: true)
+            if bg != .invalid { UIApplication.shared.endBackgroundTask(bg); bg = .invalid }
+        }
+        #else
+        Task { await sync(silent: true) }
+        #endif
+    }
+
     /// The silent background sync, at most every 2 minutes (initAccountSync).
     func autoSync() {
         guard signedIn, Date().timeIntervalSince(lastAutoSync) >= 120 else { return }

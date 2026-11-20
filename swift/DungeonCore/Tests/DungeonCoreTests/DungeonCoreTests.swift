@@ -5144,3 +5144,24 @@ final class TrackingTests: XCTestCase {
         XCTAssertTrue(Tracking.bounties(rank: 1, now: day).allSatisfy { $0.rank <= 1 })
     }
 }
+
+final class CloudSyncPassiveTests: XCTestCase {
+    func testPlaytimeIsSyncedButNotProgress() {
+        XCTAssertTrue(CloudSync.synced("dd_total_playtime"))
+        XCTAssertFalse(CloudSync.progress("dd_total_playtime"))
+        XCTAssertTrue(CloudSync.progress("dd_chars"))
+        XCTAssertFalse(CloudSync.progress("dd_sync_last"))
+    }
+
+    func testClosingTheAppIsntProgress() throws {
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("dd-passive-\(UUID().uuidString).json")
+        defer { try? FileManager.default.removeItem(at: url) }
+        let store = FileStore(url: url, delay: 0)
+        store.setItem(CloudSync.lastKey, "100")
+        store.setItem(CloudSync.dirtyKey, "100")
+        store.setItem("dd_total_playtime", "123456")
+        XCTAssertEqual(store.getItem(CloudSync.dirtyKey), "100")
+        store.setItem("dd_global_gold", "500")
+        XCTAssertGreaterThan(CloudSync.number(store.getItem(CloudSync.dirtyKey)), 100)
+    }
+}

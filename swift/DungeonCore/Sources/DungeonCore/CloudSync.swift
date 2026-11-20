@@ -22,10 +22,19 @@ public enum CloudSync {
         "dd_last_seen", "dd_version_seen", "dd_shake", "dd_music_loop",
     ]
 
-    /// Whether a key travels with the save (and changing it counts as progress).
+    /// Saved by just having the game open, not by playing: they travel with
+    /// the save but don't count as progress. (Total playtime is written every
+    /// time the app closes, so every device looked changed and the game kept
+    /// asking which save to keep.)
+    public static let passive: Set<String> = ["dd_total_playtime"]
+
+    /// Whether a key travels with the save.
     public static func synced(_ key: String) -> Bool {
         key.hasPrefix("dd_") && !key.hasPrefix("dd_sync_") && !deviceOnly.contains(key)
     }
+
+    /// Whether changing a key is progress (this device has something the cloud doesn't).
+    public static func progress(_ key: String) -> Bool { synced(key) && !passive.contains(key) }
 
     /// The part of a save that goes to the cloud.
     public static func full(_ snapshot: [String: String]) -> [String: String] {
