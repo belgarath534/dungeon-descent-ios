@@ -57,6 +57,23 @@ submit = os.environ.get("SUBMIT", "") == "yes"
 
 app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
 
+# CANCEL=yes: take this platform's version back out of App Review (to add
+# something before it's reviewed), then stop. Submitting again later works
+# as usual (the version goes back to "Developer Rejected").
+if os.environ.get("CANCEL") == "yes":
+    found = False
+    for st in ("WAITING_FOR_REVIEW", "IN_REVIEW", "READY_FOR_REVIEW"):
+        for o in call("GET", "/reviewSubmissions", params={"filter[app]": app, "filter[platform]": platform,
+                      "filter[state]": st})["data"]:
+            found = True
+            r = S.patch(API + f"/reviewSubmissions/{o['id']}", timeout=60, json={"data": {"type": "reviewSubmissions",
+                        "id": o["id"], "attributes": {"canceled": True}}})
+            print(f"{platform}: submission {o['id']} ({st}) -> {'canceled' if r.ok else f'{r.status_code}: {r.text[:300]}'}")
+            if not r.ok:
+                sys.exit(1)
+    print(f"{platform}: " + ("taken out of review." if found else "nothing in review."))
+    sys.exit(0)
+
 
 def version_of(p):
     v = call("GET", f"/apps/{app}/appStoreVersions",
