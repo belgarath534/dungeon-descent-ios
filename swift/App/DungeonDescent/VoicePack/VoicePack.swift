@@ -33,6 +33,8 @@ final class VoicePack: NSObject, ObservableObject {
     @Published private(set) var state: State = .notDownloaded
     /// Why Lewis was turned off on his own, for Settings.
     @Published var notice: String?
+    /// What happened the last time Lewis tried to speak (shown under Hear Lewis).
+    @Published var report: String?
     /// Lewis reads the game's announcements in place of VoiceOver's voice.
     @Published var narrate = UserDefaults.standard.bool(forKey: VoicePack.narrateKey) {
         didSet {
@@ -232,7 +234,7 @@ final class LiveVoice {
     }
 
     /// Says `text`. `latest`: drop what hasn't been said yet and say this now.
-    func speak(_ text: String, latest: Bool = false) {
+    func speak(_ text: String, latest: Bool = false, test: Bool = false) {
         let clean = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !clean.isEmpty else { return }
         if latest { stop() }
@@ -243,12 +245,21 @@ final class LiveVoice {
         worker.run { [weak self] in
             for p in parts {
                 guard let self else { return }
-                let samples = self.render(p)
+                let (samples, report) = self.render(p)
                 DispatchQueue.main.async {
                     self.pending -= 1
+                    VoicePack.shared.report = (samples == nil ? "Lewis couldn't speak: " : "Lewis made ") + report + "."
                     guard gen == self.generation else { return }
-                    guard let samples, !samples.isEmpty else { Announcer.shared.say(p, latest: false); return }
+                    guard let samples, !samples.isEmpty else {
+                        Announcer.shared.say(test ? "Lewis couldn't speak: \(report)." : p, latest: false)
+                        return
+                    }
                     self.play(samples, volume: vol)
+                    if test {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + Double(samples.count) / 24000 + 0.5) {
+                            Announcer.shared.say("Lewis made \(report).", latest: false)
+                        }
+                    }
                 }
             }
         }
@@ -281,36 +292,52 @@ final class LiveVoice {
         if !player.isPlaying { player.play() }
     }
 
-    /// One sentence of speech (24 kHz), made on the voice queue; nil when it can't.
-    nonisolated private func render(_ text: String) -> [Float]? {
+    /// One sentence of speech (24 kHz), made on the voice thread, and a report
+    /// of what happened (for Hear Lewis): the speech, or nil and why not.
+    nonisolated private func render(_ text: String) -> ([Float]?, String) {
         #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+        let began = Date()
         if tts == nil {
             UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
             UserDefaults.standard.synchronize()
             defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
             let file = VoicePack.modelFile
-            guard FileManager.default.fileExists(atPath: file.path),
-                  let vurl = Bundle.main.url(forResource: "bm_lewis", withExtension: "voice"),
-                  let data = try? Data(contentsOf: vurl) else { return nil }
+            guard FileManager.default.fileExists(atPath: file.path) else { return (nil, "the Voice Pack file is missing; download it again") }
+            guard let vurl = Bundle.main.url(forResource: "bm_lewis", withExtension: "voice"),
+                  let data = try? Data(contentsOf: vurl) else { return (nil, "Lewis's voice file is missing from the app") }
             let floats = data.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
-            guard floats.count == 510 * 256 else { return nil }
+            guard floats.count == 510 * 256 else { return (nil, "Lewis's voice file is the wrong size, \(floats.count) numbers") }
             // Keep MLX's spare GPU memory small: the phone's memory is shared with the game.
             MLX.Memory.cacheLimit = 64 * 1024 * 1024
             voice = MLXArray(floats, [510, 1, 256])
             tts = KokoroTTS(modelPath: file, g2p: .misaki)
         }
-        guard let tts, let voice else { return nil }
+        guard let tts, let voice else { return (nil, "the voice engine didn't start") }
         UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
         UserDefaults.standard.synchronize()
         defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
-        let samples = try? tts.generateAudio(voice: voice, language: .enGB, text: text, speed: 1.0).0
+        let raw: [Float]
+        do {
+            raw = try tts.generateAudio(voice: voice, language: .enGB, text: text, speed: 1.0).0
+        } catch {
+            MLX.Memory.clearCache()
+            return (nil, "the engine stopped with an error: \(String(describing: error).prefix(160))")
+        }
         MLX.Memory.clearCache()
-        // Silence or garbage (no sound, or values far outside -1…1): VoiceOver says it instead.
-        guard let samples, !samples.isEmpty, samples.allSatisfy({ $0.isFinite }),
-              (samples.map { abs($0) }.max() ?? 0) < 4 else { return nil }
-        return samples.map { max(-1, min(1, $0)) }
+        let took = Date().timeIntervalSince(began)
+        guard !raw.isEmpty else { return (nil, "the engine made no sound at all") }
+        let bad = raw.filter { !$0.isFinite }.count
+        guard bad * 10 < raw.count else { return (nil, "the engine made broken sound, \(bad) of \(raw.count) samples invalid") }
+        var samples = raw.map { $0.isFinite ? $0 : 0 }
+        let peak = samples.map { abs($0) }.max() ?? 0
+        guard peak > 0.0001 else { return (nil, "the engine made only silence") }
+        // Speech louder than full scale: bring it down to normal speech level
+        // instead of playing it distorted (the first build's "weird audio").
+        if peak > 1 { let k = 0.9 / peak; samples = samples.map { $0 * k } }
+        let secs = Double(samples.count) / 24000
+        return (samples, String(format: "%.1f seconds of speech in %.1f seconds, peak %.2f%@", secs, took, peak, peak > 1 ? ", turned down to normal level" : ""))
         #else
-        return nil
+        return (nil, "the Voice Pack only runs on iPhone and iPad")
         #endif
     }
 

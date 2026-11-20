@@ -351,8 +351,12 @@ struct WebSettingsView: View {
                 }
                 option("Lewis Reads the Game", "Lewis speaks every announcement in place of VoiceOver's voice. VoiceOver still reads buttons as you move around the screen. In Portuguese, VoiceOver reads the game.",
                        isOn: $pack.narrate, label: "Lewis reads the game")
-                Button("▶ Hear Lewis") { LiveVoice.shared.speak("Hello. I'm Lewis. Every fight, every find, every step in the dark: I'll tell you about it.", latest: true) }
+                Button("▶ Hear Lewis") { LiveVoice.shared.speak("Hello. I'm Lewis. Every fight, every find, every step in the dark, I'll tell you about it.", latest: true, test: true) }
                     .buttonStyle(ToggleButtonStyle(on: true))
+                    .accessibilityHint("Plays a sample, then says how it went.")
+                if let r = pack.report {
+                    Text(verbatim: r).font(Theme.crimson(11.5)).foregroundStyle(Theme.textSecondary)
+                }
                 Button("🗑 Delete the Voice Pack") { pack.delete() }
                     .buttonStyle(ToggleButtonStyle(on: false))
                     .accessibilityHint("Frees 327 MB. You can download it again any time.")
