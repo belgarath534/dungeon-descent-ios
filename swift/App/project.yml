@@ -83,6 +83,8 @@ targets:
       - package: MisakiSwift
         product: MisakiSwift
         destinationFilters: [iOS]
+        # Also a dynamic library: copied into the app, or it can't start.
+        embed: true
       - target: DDLiveActivity
         destinationFilters: [iOS]
       # The Apple Watch app, embedded in the iPhone app like every watch app.
