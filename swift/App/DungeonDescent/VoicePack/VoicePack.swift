@@ -240,9 +240,18 @@ final class LiveVoice {
     }
 
     /// Says `text`. `latest`: drop what hasn't been said yet and say this now.
+    /// Lewis waits until the game has been open a few seconds: the crash
+    /// report showed him starting 1.6 seconds after launch, while the first
+    /// screen was still being drawn.
+    private let openedAt = Date()
+
     func speak(_ text: String, latest: Bool = false, test: Bool = false) {
         let clean = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !clean.isEmpty else { return }
+        guard test || (Date().timeIntervalSince(openedAt) > 5 && UIApplication.shared.applicationState == .active) else {
+            Announcer.shared.say(Language.t(clean), latest: latest)
+            return
+        }
         if latest { stop() }
         let gen = generation
         let parts = Self.sentences(clean)
@@ -313,10 +322,13 @@ final class LiveVoice {
                   let data = try? Data(contentsOf: vurl) else { return (nil, "Lewis's voice file is missing from the app") }
             let floats = data.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
             guard floats.count == 510 * 256 else { return (nil, "Lewis's voice file is the wrong size, \(floats.count) numbers") }
-            // Keep MLX's spare GPU memory small: the phone's memory is shared with the game.
-            MLX.GPU.set(cacheLimit: 64 * 1024 * 1024)
+            // The CPU, never the GPU: on iPhone the GPU rejected the engine's
+            // work (a Metal command buffer error, which MLX answers by stopping
+            // the app) and made static. The CPU is fast enough for Kokoro.
+            Device.setDefault(device: .cpu)
+            MLX.GPU.set(cacheLimit: 0)
             voice = MLXArray(floats, [510, 1, 256])
-            tts = KokoroTTS(modelPath: file, g2p: .misaki)
+            tts = Device.withDefaultDevice(.cpu) { KokoroTTS(modelPath: file, g2p: .misaki) }
         }
         guard let tts, let voice else { return (nil, "the voice engine didn't start") }
         UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
@@ -324,7 +336,7 @@ final class LiveVoice {
         defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
         let raw: [Float]
         do {
-            raw = try tts.generateAudio(voice: voice, language: .enGB, text: text, speed: 1.0).0
+            raw = try Device.withDefaultDevice(.cpu) { try tts.generateAudio(voice: voice, language: .enGB, text: text, speed: 1.0).0 }
         } catch {
             MLX.GPU.clearCache()
             return (nil, "the engine stopped with an error: \(String(describing: error).prefix(160))")
