@@ -59,6 +59,15 @@ targets:
       - path: ../../www/audio
         type: folder
         buildPhase: resources
+    postBuildScripts:
+      # ONNX Runtime (Voice Pack) is a static library, already linked into the
+      # app itself, but Xcode also copies its framework folder into the app,
+      # and the App Store refuses that copy (ITMS-90208). Removed before the
+      # app is signed.
+      - name: Remove ONNX Runtime's framework copy
+        basedOnDependencyAnalysis: false
+        script: |
+          rm -rf "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/onnxruntime.framework"
     dependencies:
       - package: DungeonCore
       - package: Firebase

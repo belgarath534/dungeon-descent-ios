@@ -114,6 +114,15 @@ jobs:
             done
           done
           [ $missing = 0 ] || { echo "::error::A library the app needs at launch isn't inside it"; exit 1; }
+          # A static library's framework folder must not be inside the app:
+          # the App Store refuses it (ITMS-90208, ONNX Runtime in 12.0).
+          for fw in "$app"/Frameworks/*.framework; do
+            [ -d "$fw" ] || continue
+            bin="$fw/$(basename "$fw" .framework)"
+            if [ -f "$bin" ] && ! file "$bin" | grep -q "dynamically linked shared library"; then
+              echo "::error::$(basename "$fw") is a static library copied into the app; the App Store refuses it"; exit 1
+            fi
+          done
           zip -qr DungeonDescent-unsigned.ipa Payload
 
       - uses: actions/upload-artifact@v4
