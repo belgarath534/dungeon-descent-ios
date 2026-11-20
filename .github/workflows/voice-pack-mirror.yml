@@ -1,0 +1,46 @@
+# Keeps our own copy of the Lewis Voice Pack's model (Kokoro v1.0, ONNX,
+# Apache 2.0) as a release file on this repository, so players' downloads
+# don't depend on someone else's GitHub page staying up. The file is taken
+# from kokoro-onnx's release and must match the app's SHA-256 exactly.
+# Run it by pushing to the "voice-pack-mirror" branch
+# (git push -f origin swift-rewrite:voice-pack-mirror).
+name: Voice Pack mirror
+
+on:
+  push:
+    branches: [voice-pack-mirror]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: voice-pack-v1
+      FILE: kokoro-v1.0.onnx
+      SOURCE: https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
+      SHA: 7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5
+    steps:
+      - name: Download and check the model
+        run: |
+          curl -fL --retry 4 -o "$FILE" "$SOURCE"
+          echo "$SHA  $FILE" | sha256sum -c -
+          ls -l "$FILE"
+      - name: Attach it to this repository's release
+        run: |
+          R=${{ github.repository }}
+          if ! gh release view "$TAG" -R "$R" >/dev/null 2>&1; then
+            gh release create "$TAG" -R "$R" --target "${{ github.sha }}" --title "Lewis Voice Pack (model files)" \
+              --notes "Kokoro v1.0 (ONNX), Apache 2.0, by hexgrad; ONNX export by thewh1teagle/kokoro-onnx. Downloaded by the app's Voice Pack, checked against SHA-256 $SHA."
+          fi
+          gh release upload "$TAG" "$FILE" -R "$R" --clobber
+      - name: Check the public link
+        run: |
+          URL="https://github.com/${{ github.repository }}/releases/download/$TAG/$FILE"
+          curl -fsL "$URL" -o check.onnx
+          echo "$SHA  check.onnx" | sha256sum -c -
+          echo "Public download works: $URL"
