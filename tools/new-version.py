@@ -10,42 +10,40 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "11.9")
+VERSION = os.environ.get("VERSION", "12.0")
 
 WHATS_NEW = {
-    "en-US": """New in 11.9:
-• Daily World Boss: one boss a day that every player fights together.
-• Weekly Ladder: one dungeon all week, one life, a new top 10 every Monday.
-• Game Center leaderboards and friend challenges for Endless Descent, the Weekly Ladder and The Spire.
-• Endless Descent rivals on the Lock Screen.
-• Apple Watch complication for the Daily World Boss.
-• Siri and Shortcuts: start Endless Descent, check your run, use a potion.
-• A Welcome back reward after time away.
-• "What just happened": two-finger double-tap in a run reads the last few lines.
-• Short combat lines and warning sounds (Settings, Accessibility).
-• My Tracks: play songs from your Apple Music library.
-• Much more of the game in Portuguese.
-• A loading screen, the Music Box tutorial and your total playtime.
-• Fixes: VoiceOver keeps up in The Spire's Auto Mode, the Lock Screen keeps moving in Endless Descent, and music no longer starts while the app is closed.""",
-    "pt-BR": """Novidades da 11.9:
-• Chefe Mundial Diário: um chefe por dia que todos os jogadores enfrentam juntos.
-• Escada Semanal: uma masmorra a semana toda, uma vida, um novo top 10 toda segunda.
-• Placares e desafios entre amigos no Game Center para a Descida Sem Fim, a Escada Semanal e a Torre.
-• Rivais da Descida Sem Fim na Tela Bloqueada.
-• Complicação do Chefe Mundial Diário no Apple Watch.
-• Siri e Atalhos: comece a Descida Sem Fim, veja sua jornada, use uma poção.
-• Recompensa de Bem-vindo de volta depois de um tempo fora.
-• "O que aconteceu": toque duplo com dois dedos numa jornada lê as últimas linhas.
-• Linhas de combate curtas e sons de aviso (Ajustes, Acessibilidade).
-• Minhas Músicas: toque músicas da sua biblioteca do Apple Music.
-• Muito mais do jogo em português.
-• Tela de carregamento, tutorial da Caixa de Música e seu tempo total de jogo.
-• Correções: o VoiceOver acompanha o Modo Automático da Torre, a Tela Bloqueada continua atualizando na Descida Sem Fim e a música não toca mais com o app fechado.""",
+    "en-US": """New in 12.0, The Legends Update:
+• Co-op Dungeon: fight through ten floors with up to three friends, on iPhone, Mac, Apple Vision Pro and the web together. Share a 4-letter room code.
+• A new main menu with tabs along the bottom: Play, Modes, Multiplayer, More and Settings. Prefer the old list? Settings, Gameplay, Classic Menu.
+• Hunting Grounds, remade: track a beast by sound. Listen for its call, read its tracks, sneak up, then ambush or trap it. Three bounties a day and five legends to hunt, narrated by Lewis, a new recorded narrator.
+• Battle Pass: 50 tiers a season, earned by playing, never bought, with five new quests every Monday.
+• Prestige: start a max-level character over for a permanent star, up to 10.
+• Cloud sync: your whole save travels between your devices and the web.
+• Audio Map: hear the whole floor as sounds around you. Best with headphones.
+• Apple Watch: World Boss strikes, the Battle Pass, your daily reward, Quick Fight with the Digital Crown, wrist alerts, Siri and new complications.
+• The whole game is now in Portuguese.
+• Game Center is in the Multiplayer tab.""",
+    "pt-BR": """Novidades da 12.0, A Atualização das Lendas:
+• Masmorra Cooperativa: atravesse dez andares com até três amigos, no iPhone, Mac, Apple Vision Pro e na web juntos. Compartilhe um código de sala de 4 letras.
+• Um novo menu principal com abas na parte de baixo: Jogar, Modos, Multijogador, Mais e Ajustes. Prefere a lista antiga? Ajustes, Jogabilidade, Menu Clássico.
+• Campo de Caça, refeito: rastreie uma fera pelo som. Escute o chamado, leia as pegadas, chegue em silêncio e embosque ou arme uma armadilha. Três caçadas por dia e cinco lendas, narradas por Alex, um novo narrador gravado.
+• Passe de Batalha: 50 níveis por temporada, ganhos jogando, nunca comprados, com cinco missões novas toda segunda.
+• Prestígio: recomece um personagem no nível máximo em troca de uma estrela permanente, até 10.
+• Sincronização na nuvem: seu salvamento inteiro viaja entre seus aparelhos e a web.
+• Mapa Sonoro: ouça o andar inteiro como sons ao seu redor. Melhor com fones de ouvido.
+• Apple Watch: golpes no Chefe Mundial, o Passe de Batalha, a recompensa diária, Luta Rápida com a Digital Crown, alertas no pulso, Siri e novas complicações.
+• O jogo inteiro agora está em português.
+• O Game Center está na aba Multijogador.""",
+}
+PROMO = {
+    "en-US": "New in 12.0: play together. Co-op dungeons with friends on iPhone, Mac, Vision Pro and the web, a Battle Pass, and hunting by sound.",
+    "pt-BR": "Novo na 12.0: jogue junto. Masmorras cooperativas com amigos no iPhone, Mac, Vision Pro e web, Passe de Batalha e caça pelo som.",
 }
 # The Mac and Vision Pro have no watch, Lock Screen or Apple Music picker.
 SKIP = {
-    "MAC_OS": ("Lock Screen", "Apple Watch", "Siri", "two-finger", "Tela Bloqueada", "dois dedos", "Apple Music"),
-    "VISION_OS": ("Lock Screen", "Apple Watch", "Tela Bloqueada", "two-finger", "dois dedos", "Apple Music"),
+    "MAC_OS": ("Apple Watch",),
+    "VISION_OS": ("Apple Watch",),
 }
 
 
@@ -101,8 +99,8 @@ for platform in ("IOS", "MAC_OS", "VISION_OS"):
         key = "pt-BR" if locale.startswith("pt") else "en-US"
         if call("PATCH", f"/appStoreVersionLocalizations/{loc['id']}", {"data": {
                 "type": "appStoreVersionLocalizations", "id": loc["id"],
-                "attributes": {"whatsNew": notes(platform, key)}}}) is not None:
-            print(f"   What's New set ({locale})")
+                "attributes": {"whatsNew": notes(platform, key), "promotionalText": PROMO[key]}}}) is not None:
+            print(f"   What's New and promotional text set ({locale})")
 
 if problems:
     print(f"\n{len(problems)} step(s) didn't go through; see the ⚠️ lines above.")

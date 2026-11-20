@@ -57,7 +57,7 @@ jobs:
 
       - name: Pick the builds (and submit, from store-submit)
         env:
-          VERSION: "11.9"
+          VERSION: "12.0"
           SUBMIT: ${{ github.ref_name == 'store-submit' && 'yes' || '' }}
         run: |
           export APP_STORE_CONNECT_PRIVATE_KEY="@file:$ASC_KEY_PATH"

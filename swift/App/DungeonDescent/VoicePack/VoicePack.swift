@@ -53,6 +53,13 @@ final class VoicePack: NSObject, ObservableObject {
         #endif
     }
 
+    /// 12.0: the Voice Pack is still being tested, so it only shows in
+    /// TestFlight builds (their receipt is the sandbox one); App Store players
+    /// don't see it until it's proven (12.1).
+    nonisolated static var available: Bool {
+        supported && Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+    }
+
     nonisolated static var modelFile: URL {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("VoicePack", isDirectory: true)
         return dir.appendingPathComponent("kokoro-v1_0.safetensors")
@@ -74,7 +81,7 @@ final class VoicePack: NSObject, ObservableObject {
     }
 
     func refresh() {
-        if !Self.supported { state = .unsupported; return }
+        if !Self.available { state = .unsupported; return }
         let size = (try? FileManager.default.attributesOfItem(atPath: Self.modelFile.path)[.size] as? Int64) ?? nil
         state = size == Self.modelBytes ? .ready : .notDownloaded
     }
@@ -85,7 +92,7 @@ final class VoicePack: NSObject, ObservableObject {
     // MARK: Download
 
     func download() {
-        guard Self.supported, task == nil else { return }
+        guard Self.available, task == nil else { return }
         state = .downloading(0)
         lastAnnounced = 0
         let s = URLSession(configuration: .default, delegate: self, delegateQueue: .main)

@@ -289,7 +289,7 @@ struct WebSettingsView: View {
                    label: "Short combat lines")
             option("Earcons", "A short sound before VoiceOver speaks: a warning when your HP drops to a quarter, a chime when an elite appears.", isOn: $earcons,
                    label: "Earcons")
-            voicePack
+            if VoicePack.available { voicePack }
             Text("Tip: in the dungeon, a two-finger double tap (or the Actions rotor, What just happened) reads the last 5 things that happened.")
                 .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
                 .padding(.vertical, 10)
