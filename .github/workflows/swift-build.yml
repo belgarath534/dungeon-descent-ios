@@ -91,6 +91,16 @@ jobs:
           cp -R build/Build/Products/Release-iphoneos/DungeonDescent.app Payload/
           # The Apple Watch app rides inside the iPhone app.
           ls Payload/DungeonDescent.app/Watch/DungeonWatch.app/DungeonWatch
+          # Every library the app loads at launch (@rpath) must be inside it,
+          # or iOS can't start the app (12.0's first TestFlight crashed at launch).
+          app=Payload/DungeonDescent.app
+          echo "Frameworks in the app:"; ls "$app/Frameworks" 2>/dev/null || echo "(none)"
+          missing=0
+          for lib in $(otool -L "$app/DungeonDescent" | awk '/@rpath\//{print $1}'); do
+            name=${lib#@rpath/}
+            if [ -e "$app/Frameworks/$name" ]; then echo "ok  $name"; else echo "MISSING  $name"; missing=1; fi
+          done
+          [ $missing = 0 ] || { echo "::error::A library the app needs at launch isn't inside it"; exit 1; }
           zip -qr DungeonDescent-unsigned.ipa Payload
 
       - uses: actions/upload-artifact@v4

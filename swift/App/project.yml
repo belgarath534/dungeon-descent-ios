@@ -70,6 +70,9 @@ targets:
       - package: KokoroSwift
         product: KokoroSwift
         destinationFilters: [iOS]
+        # A dynamic library: it must be copied into the app, or iOS can't
+        # start the app at all (the 12.0 TestFlight crash at launch).
+        embed: true
       - package: MLXSwift
         product: MLX
         destinationFilters: [iOS]
