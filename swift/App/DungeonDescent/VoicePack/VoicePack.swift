@@ -40,6 +40,7 @@ final class VoicePack: NSObject, ObservableObject {
         didSet {
             UserDefaults.standard.set(narrate, forKey: Self.narrateKey)
             if !narrate { LiveVoice.shared.stop(); LiveVoice.shared.unload() }
+            else if state == .ready { LiveVoice.shared.preload() }
         }
     }
 
@@ -84,7 +85,10 @@ final class VoicePack: NSObject, ObservableObject {
             UserDefaults.standard.set(false, forKey: Self.busyKey)
             narrate = false
             notice = "Lewis stopped the game last time, so he's turned off. Turn him on again to retry, or delete the Voice Pack."
-
+        }
+        // Lewis on: load him in the background once the game is up.
+        if narrate && state == .ready {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 6) { LiveVoice.shared.preload() }
         }
     }
 
@@ -215,9 +219,11 @@ final class LiveVoice {
     /// thread, and the model needs far more stack than a dispatch queue's 512 KB
     /// (the first Voice Pack build crashed as Lewis started to speak).
     private let worker = VoiceWorker()
-    private let engine = AVAudioEngine()
-    private let player = AVAudioPlayerNode()
-    private let format = AVAudioFormat(standardFormatWithSampleRate: 24000, channels: 1)!
+    /// Lewis plays through AVAudioPlayer, like the recorded narrator (an
+    /// AVAudioEngine of his own made speech no one heard), one clip at a time.
+    private var queue: [(Data, Float)] = []
+    private var player: AVAudioPlayer?
+    private var playing = false
     /// Bumped to drop sentences still waiting (a newer line replaces them).
     private var generation = 0
     private var pending = 0
@@ -228,15 +234,12 @@ final class LiveVoice {
     nonisolated(unsafe) private var voice: MLXArray?
     #endif
 
-    private init() {
-        engine.attach(player)
-        engine.connect(player, to: engine.mainMixerNode, format: format)
-    }
+    private init() {}
 
-    private func start() {
-        guard !engine.isRunning else { return }
-        engine.prepare()
-        try? engine.start()
+    /// Loads the model in the background (when Lewis is turned on), so his
+    /// first line doesn't wait for it.
+    func preload() {
+        worker.run { [weak self] in _ = self?.loadIfNeeded() }
     }
 
     /// Says `text`. `latest`: drop what hasn't been said yet and say this now.
@@ -282,7 +285,10 @@ final class LiveVoice {
 
     func stop() {
         generation += 1
-        player.stop()
+        queue = []
+        player?.stop()
+        player = nil
+        playing = false
     }
 
     /// Frees the model's memory (about 330 MB) when Lewis is turned off.
@@ -297,31 +303,53 @@ final class LiveVoice {
     }
 
     private func play(_ samples: [Float], volume: Float) {
-        guard let buf = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: AVAudioFrameCount(samples.count)),
-              let ch = buf.floatChannelData else { return }
-        buf.frameLength = AVAudioFrameCount(samples.count)
-        samples.withUnsafeBufferPointer { ch[0].update(from: $0.baseAddress!, count: samples.count) }
-        start()
-        player.volume = volume
-        player.scheduleBuffer(buf, completionHandler: nil)
-        if !player.isPlaying { player.play() }
+        queue.append((Self.wav(samples), volume))
+        if !playing { next() }
     }
 
-    /// One sentence of speech (24 kHz), made on the voice thread, and a report
-    /// of what happened (for Hear Lewis): the speech, or nil and why not.
-    nonisolated private func render(_ text: String) -> ([Float]?, String) {
-        #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
-        let began = Date()
+    private func next() {
+        guard !queue.isEmpty else { playing = false; return }
+        playing = true
+        let (data, vol) = queue.removeFirst()
+        guard let p = try? AVAudioPlayer(data: data) else { next(); return }
+        p.volume = vol
+        player = p
+        p.play()
+        let gen = generation
+        DispatchQueue.main.asyncAfter(deadline: .now() + p.duration + 0.12) { [weak self] in
+            guard let self, gen == self.generation else { return }
+            self.next()
+        }
+    }
+
+    /// 16-bit mono WAV at 24 kHz.
+    static func wav(_ samples: [Float]) -> Data {
+        var d = Data()
+        func u32(_ v: UInt32) { var x = v.littleEndian; d.append(Data(bytes: &x, count: 4)) }
+        func u16(_ v: UInt16) { var x = v.littleEndian; d.append(Data(bytes: &x, count: 2)) }
+        let bytes = UInt32(samples.count * 2)
+        d.append(contentsOf: Array("RIFF".utf8)); u32(36 + bytes); d.append(contentsOf: Array("WAVE".utf8))
+        d.append(contentsOf: Array("fmt ".utf8)); u32(16); u16(1); u16(1); u32(24000); u32(48000); u16(2); u16(16)
+        d.append(contentsOf: Array("data".utf8)); u32(bytes)
+        var pcm = [Int16](repeating: 0, count: samples.count)
+        for i in samples.indices { pcm[i] = Int16(max(-1, min(1, samples[i])) * 32767) }
+        pcm.withUnsafeBufferPointer { d.append(Data(buffer: $0)) }
+        return d
+    }
+
+    #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+    /// The model and Lewis's voice, loaded once (on the voice thread); nil, or why not.
+    nonisolated private func loadIfNeeded() -> String? {
         if tts == nil {
             UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
             UserDefaults.standard.synchronize()
             defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
             let file = VoicePack.modelFile
-            guard FileManager.default.fileExists(atPath: file.path) else { return (nil, "the Voice Pack file is missing; download it again") }
+            guard FileManager.default.fileExists(atPath: file.path) else { return "the Voice Pack file is missing; download it again" }
             guard let vurl = Bundle.main.url(forResource: "bm_lewis", withExtension: "voice"),
-                  let data = try? Data(contentsOf: vurl) else { return (nil, "Lewis's voice file is missing from the app") }
+                  let data = try? Data(contentsOf: vurl) else { return "Lewis's voice file is missing from the app" }
             let floats = data.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
-            guard floats.count == 510 * 256 else { return (nil, "Lewis's voice file is the wrong size, \(floats.count) numbers") }
+            guard floats.count == 510 * 256 else { return "Lewis's voice file is the wrong size, \(floats.count) numbers" }
             // The CPU, never the GPU: on iPhone the GPU rejected the engine's
             // work (a Metal command buffer error, which MLX answers by stopping
             // the app) and made static. The CPU is fast enough for Kokoro.
@@ -330,6 +358,20 @@ final class LiveVoice {
             voice = MLXArray(floats, [510, 1, 256])
             tts = Device.withDefaultDevice(.cpu) { KokoroTTS(modelPath: file, g2p: .misaki) }
         }
+        return nil
+    }
+    #else
+    nonisolated private func loadIfNeeded() -> String? { "the Voice Pack only runs on iPhone and iPad" }
+    #endif
+
+    /// One sentence of speech (24 kHz), made on the voice thread, and a report
+    /// of what happened (for Hear Lewis): the speech, or nil and why not.
+    nonisolated private func render(_ text: String) -> ([Float]?, String) {
+        #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+        let loadStart = Date()
+        if let problem = loadIfNeeded() { return (nil, problem) }
+        let loaded = Date().timeIntervalSince(loadStart)
+        let began = Date()
         guard let tts, let voice else { return (nil, "the voice engine didn't start") }
         UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
         UserDefaults.standard.synchronize()
@@ -353,7 +395,9 @@ final class LiveVoice {
         // instead of playing it distorted (the first build's "weird audio").
         if peak > 1 { let k = 0.9 / peak; samples = samples.map { $0 * k } }
         let secs = Double(samples.count) / 24000
-        return (samples, String(format: "%.1f seconds of speech in %.1f seconds, peak %.2f%@", secs, took, peak, peak > 1 ? ", turned down to normal level" : ""))
+        return (samples, String(format: "%.1f seconds of speech in %.1f seconds%@, peak %.2f%@", secs, took,
+                                loaded > 0.5 ? String(format: " (plus %.1f seconds loading the voice)", loaded) : "",
+                                peak, peak > 1 ? ", turned down to normal level" : ""))
         #else
         return (nil, "the Voice Pack only runs on iPhone and iPad")
         #endif
