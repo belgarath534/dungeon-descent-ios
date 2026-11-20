@@ -73,6 +73,12 @@ final class VoicePack: NSObject, ObservableObject {
 
     override init() {
         super.init()
+        // A build without the engine: a model downloaded by an earlier test
+        // build would only take up 327 MB, so it goes.
+        if !Self.supported, FileManager.default.fileExists(atPath: Self.modelFile.path) {
+            try? FileManager.default.removeItem(at: Self.modelFile)
+            narrate = false
+        }
         refresh()
         if UserDefaults.standard.bool(forKey: Self.busyKey) {
             UserDefaults.standard.set(false, forKey: Self.busyKey)

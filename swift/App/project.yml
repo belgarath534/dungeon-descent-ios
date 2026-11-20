@@ -30,19 +30,6 @@ packages:
   GoogleSignIn:
     url: https://github.com/google/GoogleSignIn-iOS
     from: 8.0.0
-  # 12.0: the Lewis Voice Pack, Kokoro speech on the iPhone (VoicePack/).
-  KokoroSwift:
-    url: https://github.com/mlalma/kokoro-ios
-    # The exact versions of Kokoro's own example app (KokoroTestApp), which
-    # speaks: Kokoro 1.0.10, MLX 0.29.1, MisakiSwift 1.0.5. With the newer
-    # MLX 0.30.2 the voice came out as static (peak 61).
-    exactVersion: 1.0.10
-  MLXSwift:
-    url: https://github.com/ml-explore/mlx-swift
-    exactVersion: 0.29.1
-  MisakiSwift:
-    url: https://github.com/mlalma/MisakiSwift
-    exactVersion: 1.0.5
 targets:
   DungeonDescent:
     type: application
@@ -70,19 +57,9 @@ targets:
         product: GoogleSignIn
         # Google's library doesn't build for Apple Vision Pro; Apple and email sign-in do.
         destinationFilters: [iOS]
-      # The Lewis Voice Pack's engine needs iOS 18 and runs on iPhone and iPad only.
-      - package: KokoroSwift
-        product: KokoroSwift
-        destinationFilters: [iOS]
-        # A dynamic library: it must be copied into the app, or iOS can't
-        # start the app at all (the 12.0 TestFlight crash at launch).
-        embed: true
-      - package: MLXSwift
-        product: MLX
-        destinationFilters: [iOS]
-      - package: MisakiSwift
-        product: MisakiSwift
-        destinationFilters: [iOS]
+      # The Lewis Voice Pack's engine (KokoroSwift, MLX) is out of 12.0: on
+      # iPhone it only made static, then crashed. VoicePack/ stays, switched off
+      # (it compiles without the engine), for another try later.
       - target: DDLiveActivity
         destinationFilters: [iOS]
       # The Apple Watch app, embedded in the iPhone app like every watch app.
