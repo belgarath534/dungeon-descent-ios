@@ -27,7 +27,7 @@ for s in subs["data"]:
     lines = text.splitlines()
     keep, crashed = [], False
     for l in lines:
-        if any(k in l for k in ("Exception Type", "Exception Codes", "Termination Reason", "Crashed Thread", "Triggered by Thread", "Application Specific", "Version:", "Abort", "fatal")):
+        if any(k in l for k in ("Library not loaded", "Referenced from", "Reason:", "tried:", "Library missing", "Exception Type", "Exception Codes", "Termination Reason", "Crashed Thread", "Triggered by Thread", "Application Specific", "Version:", "Abort", "fatal")):
             keep.append(l)
         if "Crashed:" in l: crashed = True; keep.append(l); continue
         if crashed:
