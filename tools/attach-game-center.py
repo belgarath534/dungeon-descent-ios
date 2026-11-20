@@ -80,6 +80,11 @@ for ch in chs:
     if vs:
         v = vs[-1]
         print(f"• {name} has a version ({v['attributes']})")
+        # Already live (released with an earlier version): nothing to change,
+        # and Apple refuses any edit or new release of a live version.
+        if (v.get("attributes") or {}).get("state") == "LIVE":
+            print(f"• {name} is live")
+            continue
     else:
         made = call("POST", "/gameCenterChallengeVersions", {"data": {"type": "gameCenterChallengeVersions",
                     "relationships": {"challenge": rel("gameCenterChallenges", ch["id"])}}})
