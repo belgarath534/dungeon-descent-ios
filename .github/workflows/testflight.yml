@@ -98,6 +98,18 @@ jobs:
           brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
           xcodegen generate
 
+      # Apple Vision Pro compiles Firestore from source (no ready-made
+      # version): reuse what the last Vision Pro build compiled.
+      - name: Reuse Apple Vision Pro's compiled packages
+        if: matrix.lane == 'ios vision'
+        uses: actions/cache@v4
+        with:
+          path: build/vision-dd
+          key: tf-vision-dd-${{ hashFiles('swift/App/project.yml') }}-${{ github.sha }}
+          restore-keys: |
+            tf-vision-dd-${{ hashFiles('swift/App/project.yml') }}-
+            tf-vision-dd-
+
       - name: Build, sign and upload to TestFlight
         run: bundle exec fastlane ${{ matrix.lane }}
 

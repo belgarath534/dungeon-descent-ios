@@ -130,6 +130,9 @@ platform :ios do
       destination: "generic/platform=visionOS",
       export_method: "app-store",
       output_directory: "build/vision",
+      # Kept between runs by the TestFlight workflow's cache, so Firestore
+      # isn't compiled from source again every time.
+      derived_data_path: File.expand_path("../build/vision-dd", __dir__),
       xcargs: "CURRENT_PROJECT_VERSION=#{build_number}",
       export_options: { provisioningProfiles: { MAIN_ID => profile } }
     )
