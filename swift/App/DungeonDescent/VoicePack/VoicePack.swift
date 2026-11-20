@@ -276,7 +276,7 @@ final class LiveVoice {
             #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
             self.tts = nil
             self.voice = nil
-            MLX.Memory.clearCache()
+            MLX.GPU.clearCache()
             #endif
         }
     }
@@ -308,7 +308,7 @@ final class LiveVoice {
             let floats = data.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
             guard floats.count == 510 * 256 else { return (nil, "Lewis's voice file is the wrong size, \(floats.count) numbers") }
             // Keep MLX's spare GPU memory small: the phone's memory is shared with the game.
-            MLX.Memory.cacheLimit = 64 * 1024 * 1024
+            MLX.GPU.set(cacheLimit: 64 * 1024 * 1024)
             voice = MLXArray(floats, [510, 1, 256])
             tts = KokoroTTS(modelPath: file, g2p: .misaki)
         }
@@ -320,10 +320,10 @@ final class LiveVoice {
         do {
             raw = try tts.generateAudio(voice: voice, language: .enGB, text: text, speed: 1.0).0
         } catch {
-            MLX.Memory.clearCache()
+            MLX.GPU.clearCache()
             return (nil, "the engine stopped with an error: \(String(describing: error).prefix(160))")
         }
-        MLX.Memory.clearCache()
+        MLX.GPU.clearCache()
         let took = Date().timeIntervalSince(began)
         guard !raw.isEmpty else { return (nil, "the engine made no sound at all") }
         let bad = raw.filter { !$0.isFinite }.count
