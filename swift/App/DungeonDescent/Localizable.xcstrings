@@ -130450,6 +130450,17 @@
           }
         }
       }
+    },
+    "Lewis stopped the game last time, so he's turned off. Turn him on again to retry, or delete the Voice Pack.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Lewis travou o jogo da última vez, então ele foi desligado. Ligue-o de novo para tentar outra vez, ou apague o Pacote de Voz."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

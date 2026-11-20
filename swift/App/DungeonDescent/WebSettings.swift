@@ -346,6 +346,9 @@ struct WebSettingsView: View {
             case .checking:
                 Text("Checking the download…").font(Theme.cinzel(11)).foregroundStyle(Theme.gold)
             case .ready:
+                if let n = pack.notice {
+                    Text(n).font(Theme.crimson(12)).foregroundStyle(Theme.bloodBright)
+                }
                 option("Lewis Reads the Game", "Lewis speaks every announcement in place of VoiceOver's voice. VoiceOver still reads buttons as you move around the screen. In Portuguese, VoiceOver reads the game.",
                        isOn: $pack.narrate, label: "Lewis reads the game")
                 Button("▶ Hear Lewis") { LiveVoice.shared.speak("Hello. I'm Lewis. Every fight, every find, every step in the dark: I'll tell you about it.", latest: true) }

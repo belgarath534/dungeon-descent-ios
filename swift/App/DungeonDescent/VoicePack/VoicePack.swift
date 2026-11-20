@@ -31,6 +31,8 @@ final class VoicePack: NSObject, ObservableObject {
     }
 
     @Published private(set) var state: State = .notDownloaded
+    /// Why Lewis was turned off on his own, for Settings.
+    @Published var notice: String?
     /// Lewis reads the game's announcements in place of VoiceOver's voice.
     @Published var narrate = UserDefaults.standard.bool(forKey: VoicePack.narrateKey) {
         didSet {
@@ -56,9 +58,19 @@ final class VoicePack: NSObject, ObservableObject {
         return dir.appendingPathComponent("kokoro-v1_0.safetensors")
     }
 
+    /// Set while Lewis is making speech; still set at launch means the game
+    /// died doing it last time, so Lewis is turned off rather than crash again.
+    nonisolated static let busyKey = "swift_voice_busy"
+
     override init() {
         super.init()
         refresh()
+        if UserDefaults.standard.bool(forKey: Self.busyKey) {
+            UserDefaults.standard.set(false, forKey: Self.busyKey)
+            narrate = false
+            notice = "Lewis stopped the game last time, so he's turned off. Turn him on again to retry, or delete the Voice Pack."
+
+        }
     }
 
     func refresh() {
@@ -184,7 +196,10 @@ extension VoicePack: URLSessionDownloadDelegate {
 final class LiveVoice {
     static let shared = LiveVoice()
 
-    private let queue = DispatchQueue(label: "dd.livevoice", qos: .userInitiated)
+    /// Every bit of the model runs on this one thread: MLX keeps its streams per
+    /// thread, and the model needs far more stack than a dispatch queue's 512 KB
+    /// (the first Voice Pack build crashed as Lewis started to speak).
+    private let worker = VoiceWorker()
     private let engine = AVAudioEngine()
     private let player = AVAudioPlayerNode()
     private let format = AVAudioFormat(standardFormatWithSampleRate: 24000, channels: 1)!
@@ -218,7 +233,7 @@ final class LiveVoice {
         let parts = Self.sentences(clean)
         pending += parts.count
         let vol = Float(min(1, AppSettings.effectsVolume * 1.2))
-        queue.async { [weak self] in
+        worker.run { [weak self] in
             for p in parts {
                 guard let self else { return }
                 let samples = self.render(p)
@@ -239,10 +254,11 @@ final class LiveVoice {
 
     /// Frees the model's memory (about 330 MB) when Lewis is turned off.
     func unload() {
-        queue.async {
+        worker.run {
             #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
             self.tts = nil
             self.voice = nil
+            MLX.Memory.clearCache()
             #endif
         }
     }
@@ -262,17 +278,30 @@ final class LiveVoice {
     nonisolated private func render(_ text: String) -> [Float]? {
         #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
         if tts == nil {
+            UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
+            UserDefaults.standard.synchronize()
+            defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
             let file = VoicePack.modelFile
             guard FileManager.default.fileExists(atPath: file.path),
                   let vurl = Bundle.main.url(forResource: "bm_lewis", withExtension: "voice"),
                   let data = try? Data(contentsOf: vurl) else { return nil }
             let floats = data.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
             guard floats.count == 510 * 256 else { return nil }
+            // Keep MLX's spare GPU memory small: the phone's memory is shared with the game.
+            MLX.Memory.cacheLimit = 64 * 1024 * 1024
             voice = MLXArray(floats, [510, 1, 256])
             tts = KokoroTTS(modelPath: file, g2p: .misaki)
         }
         guard let tts, let voice else { return nil }
-        return try? tts.generateAudio(voice: voice, language: .enGB, text: text, speed: 1.0).0
+        UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
+        UserDefaults.standard.synchronize()
+        defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
+        let samples = try? tts.generateAudio(voice: voice, language: .enGB, text: text, speed: 1.0).0
+        MLX.Memory.clearCache()
+        // Silence or garbage (no sound, or values far outside -1…1): VoiceOver says it instead.
+        guard let samples, !samples.isEmpty, samples.allSatisfy({ $0.isFinite }),
+              (samples.map { abs($0) }.max() ?? 0) < 4 else { return nil }
+        return samples.map { max(-1, min(1, $0)) }
         #else
         return nil
         #endif
@@ -290,5 +319,36 @@ final class LiveVoice {
         if !cur.trimmingCharacters(in: .whitespaces).isEmpty { out.append(cur) }
         // Very long sentences are split again: the model has a token limit.
         return out.flatMap { $0.count > 220 ? $0.split(separator: ",").map(String.init) : [$0] }
+    }
+}
+
+/// One long-lived thread with a large stack that runs jobs in order.
+final class VoiceWorker: Thread, @unchecked Sendable {
+    private let cond = NSCondition()
+    private var jobs: [() -> Void] = []
+
+    override init() {
+        super.init()
+        name = "dd.livevoice"
+        stackSize = 32 * 1024 * 1024
+        qualityOfService = .userInitiated
+        start()
+    }
+
+    func run(_ job: @escaping () -> Void) {
+        cond.lock()
+        jobs.append(job)
+        cond.signal()
+        cond.unlock()
+    }
+
+    override func main() {
+        while true {
+            cond.lock()
+            while jobs.isEmpty { cond.wait() }
+            let job = jobs.removeFirst()
+            cond.unlock()
+            autoreleasepool { job() }
+        }
     }
 }
