@@ -20,10 +20,16 @@ import MLX
 final class VoicePack: NSObject, ObservableObject {
     static let shared = VoicePack()
 
-    /// Pinned to one revision of the model repository, so the file never changes under us.
     /// Kokoro v1.0 as ONNX (the model that recorded the Hunting Grounds lines),
-    /// from kokoro-onnx's model release, checked against its SHA-256.
-    nonisolated static let modelURL = URL(string: "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx")!
+    /// checked against its SHA-256. First from our own copy (a release file on
+    /// this game's repository, made by .github/workflows/voice-pack-mirror.yml),
+    /// then, if that fails, from kokoro-onnx's own release.
+    nonisolated static let modelURLs = [
+        URL(string: "https://github.com/belgarath534/dungeon-descent-ios/releases/download/voice-pack-v1/kokoro-v1.0.onnx")!,
+        URL(string: "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx")!,
+    ]
+    /// Which of modelURLs the current download comes from.
+    private var source = 0
     nonisolated static let modelSHA256 = "7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5"
     nonisolated static let modelBytes: Int64 = 325_532_387
     static let narrateKey = "swift_voice_narrate"
@@ -106,12 +112,18 @@ final class VoicePack: NSObject, ObservableObject {
         guard Self.available, task == nil else { return }
         state = .downloading(0)
         lastAnnounced = 0
+        source = 0
+        start()
+        Feedback.announce("Downloading the Lewis Voice Pack, 326 megabytes. You can keep playing.")
+    }
+
+    private func start() {
+        session?.invalidateAndCancel()
         let s = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
         session = s
-        let t = s.downloadTask(with: Self.modelURL)
+        let t = s.downloadTask(with: Self.modelURLs[source])
         task = t
         t.resume()
-        Feedback.announce("Downloading the Lewis Voice Pack, 326 megabytes. You can keep playing.")
     }
 
     func cancel() {
@@ -179,6 +191,13 @@ final class VoicePack: NSObject, ObservableObject {
 
     fileprivate func failed(_ message: String) {
         task = nil
+        // Our copy unreachable: quietly try the other one.
+        if source + 1 < Self.modelURLs.count {
+            source += 1
+            state = .downloading(0)
+            start()
+            return
+        }
         state = .failed(message)
         Feedback.announce("The Voice Pack download stopped: \(message)")
     }
