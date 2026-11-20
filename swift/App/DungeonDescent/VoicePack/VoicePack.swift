@@ -2,8 +2,13 @@ import Foundation
 import AVFoundation
 import CryptoKit
 import SwiftUI
-#if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
-import KokoroSwift
+#if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+#if canImport(OnnxRuntimeBindings)
+import OnnxRuntimeBindings
+#else
+import onnxruntime_objc
+#endif
+import MisakiSwift
 import MLX
 #endif
 
@@ -14,16 +19,18 @@ import MLX
 /// against its SHA-256, and kept in Application Support. Lewis's voice
 /// (bm_lewis.voice, 510 × 256 floats) ships with the app. English only:
 /// in Portuguese the game keeps VoiceOver (and Alex's recordings in the hunt).
-/// iPhone only (iOS 18): the engine (KokoroSwift, MLX) isn't built for the
+/// iPhone only (iOS 18): the engine (ONNX Runtime, MisakiSwift) isn't built for the
 /// Mac or Apple Vision Pro versions.
 @MainActor
 final class VoicePack: NSObject, ObservableObject {
     static let shared = VoicePack()
 
     /// Pinned to one revision of the model repository, so the file never changes under us.
-    nonisolated static let modelURL = URL(string: "https://huggingface.co/prince-canuma/Kokoro-82M/resolve/e02c9eada7ce7416798af36b190a8a2dd2ecd566/kokoro-v1_0.safetensors")!
-    nonisolated static let modelSHA256 = "4e9ecdf03b8b6cf906070390237feda473dc13327cb8d56a43deaa374c02acd8"
-    nonisolated static let modelBytes: Int64 = 327_115_152
+    /// Kokoro v1.0 as ONNX (the model that recorded the Hunting Grounds lines),
+    /// from kokoro-onnx's model release, checked against its SHA-256.
+    nonisolated static let modelURL = URL(string: "https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx")!
+    nonisolated static let modelSHA256 = "7d5df8ecf7d4b1878015a32686053fd0eebe2bc377234608764cc0ef3636a6c5"
+    nonisolated static let modelBytes: Int64 = 325_532_387
     static let narrateKey = "swift_voice_narrate"
 
     enum State: Equatable {
@@ -49,7 +56,7 @@ final class VoicePack: NSObject, ObservableObject {
     private var lastAnnounced = 0
 
     nonisolated static var supported: Bool {
-        #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+        #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
         return true
         #else
         return false
@@ -65,7 +72,7 @@ final class VoicePack: NSObject, ObservableObject {
 
     nonisolated static var modelFile: URL {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0].appendingPathComponent("VoicePack", isDirectory: true)
-        return dir.appendingPathComponent("kokoro-v1_0.safetensors")
+        return dir.appendingPathComponent("kokoro-v1.0.onnx")
     }
 
     /// Set while Lewis is making speech; still set at launch means the game
@@ -80,6 +87,9 @@ final class VoicePack: NSObject, ObservableObject {
             try? FileManager.default.removeItem(at: Self.modelFile)
             narrate = false
         }
+        // The MLX model of the earlier test builds (327 MB) isn't used any more.
+        let old = Self.modelFile.deletingLastPathComponent().appendingPathComponent("kokoro-v1_0.safetensors")
+        if FileManager.default.fileExists(atPath: old.path) { try? FileManager.default.removeItem(at: old) }
         refresh()
         if UserDefaults.standard.bool(forKey: Self.busyKey) {
             UserDefaults.standard.set(false, forKey: Self.busyKey)
@@ -112,7 +122,7 @@ final class VoicePack: NSObject, ObservableObject {
         let t = s.downloadTask(with: Self.modelURL)
         task = t
         t.resume()
-        Feedback.announce("Downloading the Lewis Voice Pack, 327 megabytes. You can keep playing.")
+        Feedback.announce("Downloading the Lewis Voice Pack, 326 megabytes. You can keep playing.")
     }
 
     func cancel() {
@@ -127,7 +137,7 @@ final class VoicePack: NSObject, ObservableObject {
         try? FileManager.default.removeItem(at: Self.modelFile)
         narrate = false
         refresh()
-        Feedback.announce("Lewis Voice Pack deleted. 327 megabytes freed.")
+        Feedback.announce("Lewis Voice Pack deleted. 326 megabytes freed.")
     }
 
     /// Moves the download into place once its checksum matches.
@@ -229,9 +239,13 @@ final class LiveVoice {
     private var pending = 0
     private var started = false
 
-    #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
-    nonisolated(unsafe) private var tts: KokoroTTS?
-    nonisolated(unsafe) private var voice: MLXArray?
+    #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+    nonisolated(unsafe) private var session: ORTSession?
+    nonisolated(unsafe) private var env: ORTEnv?
+    nonisolated(unsafe) private var g2p: EnglishG2P?
+    /// Lewis's voice: 510 rows of 256, one per phoneme count.
+    nonisolated(unsafe) private var voice: [Float] = []
+    nonisolated(unsafe) private var vocab: [String: Int64] = [:]
     #endif
 
     private init() {}
@@ -294,9 +308,10 @@ final class LiveVoice {
     /// Frees the model's memory (about 330 MB) when Lewis is turned off.
     func unload() {
         worker.run {
-            #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
-            self.tts = nil
-            self.voice = nil
+            #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+            self.session = nil
+            self.env = nil
+            self.g2p = nil
             MLX.GPU.clearCache()
             #endif
         }
@@ -337,10 +352,11 @@ final class LiveVoice {
         return d
     }
 
-    #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
-    /// The model and Lewis's voice, loaded once (on the voice thread); nil, or why not.
+    #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+    /// The model, Lewis's voice, the phoneme alphabet and the pronunciation
+    /// engine, loaded once (on the voice thread); nil, or why not.
     nonisolated private func loadIfNeeded() -> String? {
-        if tts == nil {
+        if session == nil {
             UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
             UserDefaults.standard.synchronize()
             defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
@@ -350,13 +366,26 @@ final class LiveVoice {
                   let data = try? Data(contentsOf: vurl) else { return "Lewis's voice file is missing from the app" }
             let floats = data.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
             guard floats.count == 510 * 256 else { return "Lewis's voice file is the wrong size, \(floats.count) numbers" }
-            // The CPU, never the GPU: on iPhone the GPU rejected the engine's
-            // work (a Metal command buffer error, which MLX answers by stopping
-            // the app) and made static. The CPU is fast enough for Kokoro.
+            guard let aurl = Bundle.main.url(forResource: "kokoro-vocab", withExtension: "json"),
+                  let adata = try? Data(contentsOf: aurl),
+                  let table = try? JSONDecoder().decode([String: Int64].self, from: adata) else { return "the phoneme alphabet is missing from the app" }
+            // MisakiSwift's fallback for unknown words runs on MLX: the CPU
+            // only (the iPhone's GPU rejected MLX's work and crashed the app).
             Device.setDefault(device: .cpu)
             MLX.GPU.set(cacheLimit: 0)
-            voice = MLXArray(floats, [510, 1, 256])
-            tts = Device.withDefaultDevice(.cpu) { KokoroTTS(modelPath: file, g2p: .misaki) }
+            do {
+                let e = try ORTEnv(loggingLevel: ORTLoggingLevel.warning)
+                let opts = try ORTSessionOptions()
+                try opts.setIntraOpNumThreads(Int32(max(2, min(6, ProcessInfo.processInfo.activeProcessorCount))))
+                try opts.setGraphOptimizationLevel(ORTGraphOptimizationLevel.all)
+                session = try ORTSession(env: e, modelPath: file.path, sessionOptions: opts)
+                env = e
+            } catch {
+                return "the voice model didn't open: \(String(describing: error).prefix(160))"
+            }
+            voice = floats
+            vocab = table
+            g2p = Device.withDefaultDevice(.cpu) { EnglishG2P(british: true) }
         }
         return nil
     }
@@ -367,18 +396,39 @@ final class LiveVoice {
     /// One sentence of speech (24 kHz), made on the voice thread, and a report
     /// of what happened (for Hear Lewis): the speech, or nil and why not.
     nonisolated private func render(_ text: String) -> ([Float]?, String) {
-        #if canImport(KokoroSwift) && os(iOS) && !targetEnvironment(macCatalyst)
+        #if (canImport(OnnxRuntimeBindings) || canImport(onnxruntime_objc)) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
         let loadStart = Date()
         if let problem = loadIfNeeded() { return (nil, problem) }
         let loaded = Date().timeIntervalSince(loadStart)
         let began = Date()
-        guard let tts, let voice else { return (nil, "the voice engine didn't start") }
+        guard let session, let g2p else { return (nil, "the voice engine didn't start") }
         UserDefaults.standard.set(true, forKey: VoicePack.busyKey)
         UserDefaults.standard.synchronize()
         defer { UserDefaults.standard.set(false, forKey: VoicePack.busyKey) }
+        // Text to phonemes (MisakiSwift), phonemes to Kokoro's numbers, one
+        // symbol at a time (a combining accent is its own symbol).
+        let phonemes = Device.withDefaultDevice(.cpu) { g2p.phonemize(text: text).0 }
+        var tokens: [Int64] = phonemes.unicodeScalars.compactMap { vocab[String($0)] }
+        if tokens.count > 510 { tokens = Array(tokens.prefix(510)) }
+        guard !tokens.isEmpty else { return (nil, "no sounds to say for this line (phonemes: \(phonemes.prefix(40)))") }
+        // Lewis's style for this many phonemes: row n - 1.
+        let row = min(tokens.count, 510) - 1
+        var style = Array(voice[(row * 256)..<(row * 256 + 256)])
+        var ids: [Int64] = [0] + tokens + [0]
+        var speed: Float = 1.0
         let raw: [Float]
         do {
-            raw = try Device.withDefaultDevice(.cpu) { try tts.generateAudio(voice: voice, language: .enGB, text: text, speed: 1.0).0 }
+            let idsValue = try ORTValue(tensorData: NSMutableData(bytes: &ids, length: ids.count * 8),
+                                        elementType: ORTTensorElementDataType.int64, shape: [1, NSNumber(value: ids.count)])
+            let styleValue = try ORTValue(tensorData: NSMutableData(bytes: &style, length: 256 * 4),
+                                          elementType: ORTTensorElementDataType.float, shape: [1, 256])
+            let speedValue = try ORTValue(tensorData: NSMutableData(bytes: &speed, length: 4),
+                                          elementType: ORTTensorElementDataType.float, shape: [1])
+            let out = try session.run(withInputs: ["tokens": idsValue, "style": styleValue, "speed": speedValue],
+                                      outputNames: ["audio"], runOptions: nil)
+            guard let audio = out["audio"] else { return (nil, "the engine gave no audio back") }
+            let d = try audio.tensorData() as Data
+            raw = d.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
         } catch {
             MLX.GPU.clearCache()
             return (nil, "the engine stopped with an error: \(String(describing: error).prefix(160))")
