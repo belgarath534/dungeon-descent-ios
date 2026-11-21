@@ -2,6 +2,11 @@
 # Apache 2.0) as a release file on this repository, so players' downloads
 # don't depend on someone else's GitHub page staying up. The file is taken
 # from kokoro-onnx's release and must match the app's SHA-256 exactly.
+# It also publishes ONNX Runtime 1.24.2 (Microsoft's iOS library, MIT) as the
+# release "onnxruntime-1.24.2", from the copy kept in swift/Vendor/archives:
+# Microsoft's download server began answering with a certificate for another
+# name (Nov 2026), and Xcode rightly refused it. swift/Vendor/OnnxRuntimeC
+# builds from this release, locked to the same SHA-256.
 # Run it by pushing to the "voice-pack-mirror" branch
 # (git push -f origin swift-rewrite:voice-pack-mirror).
 name: Voice Pack mirror
@@ -44,3 +49,28 @@ jobs:
           curl -fsL "$URL" -o check.onnx
           echo "$SHA  check.onnx" | sha256sum -c -
           echo "Public download works: $URL"
+
+  onnxruntime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: onnxruntime-1.24.2
+      FILE: pod-archive-onnxruntime-c-1.24.2.zip
+      SHA: f7100a992d2a8135168c8afd831e6a58b465349101982aa58b3e11d36e600b54
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the kept copy
+        run: echo "$SHA  swift/Vendor/archives/$FILE" | sha256sum -c -
+      - name: Attach it to this repository's release
+        run: |
+          R=${{ github.repository }}
+          if ! gh release view "$TAG" -R "$R" >/dev/null 2>&1; then
+            gh release create "$TAG" -R "$R" --target "${{ github.sha }}" --title "ONNX Runtime 1.24.2 (for the Voice Pack)" \
+              --notes "Microsoft's ONNX Runtime 1.24.2 C library for iOS (MIT licence), unchanged, SHA-256 $SHA. Used by swift/Vendor/OnnxRuntimeC."
+          fi
+          gh release upload "$TAG" "swift/Vendor/archives/$FILE" -R "$R" --clobber
+      - name: Check the public link
+        run: |
+          curl -fsL "https://github.com/${{ github.repository }}/releases/download/$TAG/$FILE" -o check.zip
+          echo "$SHA  check.zip" | sha256sum -c -
