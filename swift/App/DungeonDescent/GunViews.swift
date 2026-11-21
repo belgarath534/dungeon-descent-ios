@@ -97,6 +97,9 @@ struct GunWorkshop: View {
     @State private var tick = 0
 
     var body: some View {
+        // Redrawn by reading the counter, not by .id(): a new .id rebuilt the
+        // whole section after every button press, and VoiceOver jumped away.
+        let _ = tick
         let parts = Guns.partCounts(store)
         let owned = Guns.owned(store)
         let equipped = Guns.equipped(store)
@@ -164,7 +167,6 @@ struct GunWorkshop: View {
                     .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
             }
         }
-        .id(tick)
     }
 
     private func act(_ msg: String) {

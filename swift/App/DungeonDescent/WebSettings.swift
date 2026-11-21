@@ -297,7 +297,7 @@ struct WebSettingsView: View {
                    isOn: Binding(get: { game.store.getItem("dd_command_center") != "off" },
                                  set: { game.store.setItem("dd_command_center", $0 ? "on" : "off"); refreshCommandCenter.toggle() }),
                    label: "Command Center toggle")
-                .id(refreshCommandCenter)
+            let _ = refreshCommandCenter
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Repair Dungeon Unlocks").font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)

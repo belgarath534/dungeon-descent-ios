@@ -128,7 +128,7 @@ struct MenuSpellsScreen: View {
                     } else {
                         ArcaneShopList(gold: game.wallet.gold, status: status(ch), learned: Spells.learned(ch), buy: { buy($0) },
                                        openBook: { showingBook = true; Feedback.announce("Spell Book. \(Spells.learned(ch).count) spells learned.") })
-                            .id(tick)
+                        let _ = tick
                     }
                 }
             }

@@ -66,10 +66,12 @@ final class GameModel: ObservableObject {
         if out.newTier { refresh() }
     }
 
+    /// Only what changed is set again: every set redraws every screen.
     func refresh() {
-        characters = roster.characters
-        gold = wallet.gold
-        diamonds = wallet.diamonds
+        let c = roster.characters
+        if characters != c { characters = c }
+        if gold != wallet.gold { gold = wallet.gold }
+        if diamonds != wallet.diamonds { diamonds = wallet.diamonds }
     }
 
     var isRosterFull: Bool { roster.isFull }

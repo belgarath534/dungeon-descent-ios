@@ -56,6 +56,9 @@ struct HomeOverlay: View {
                 }
                 .padding(.bottom, 14)
                 Group {
+                    // Redrawn by reading the counter, not by .id(): a new .id rebuilt the
+                    // whole section after every button press, and VoiceOver jumped away.
+                    let _ = refresh
                     switch tab {
                     case "home": homeTab
                     case "spirits": spiritsTab
@@ -67,7 +70,6 @@ struct HomeOverlay: View {
                     default: comingSoon((tabs.first { $0.id == tab }?.label.replacingOccurrences(of: " tab", with: "") ?? ""))
                     }
                 }
-                .id(refresh)
             }
             if let d = model.dream { dreamModal(d) }
         }
