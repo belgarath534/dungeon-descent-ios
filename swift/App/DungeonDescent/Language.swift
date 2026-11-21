@@ -505,6 +505,7 @@ enum Patterns {
         ("They will fight alongside you.", "Eles vão lutar ao seu lado."),
         ("Type help to see all commands.", "Digite help para ver todos os comandos."),
         ("You are the Gauntlet Champion.", "Você é o Campeão do Desafio."),
+        ("{0}. Chosen.", "{0}. Escolhido."),
         ("Title unlocked: Gauntlet Champion.", "Título desbloqueado: Campeão do Desafio."),
         ("Wear it from Account, Change Title.", "Use-o em Conta, Alterar Título."),
         ("You earned {0} experience points.", "Você ganhou {0} pontos de experiência."),

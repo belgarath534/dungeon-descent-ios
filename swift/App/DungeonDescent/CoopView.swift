@@ -124,25 +124,34 @@ struct CoopView: View {
             .accessibilityLabel("\(p.name)\(p.id == model.myId ? ", you" : ""). " + (p.alive ? "\(p.hp) of \(p.maxHp) HP. \(p.potions) potions." : "Down until the next floor."))
         }
         if let m = model.me, m.alive {
+            // The buttons stay on screen after you choose (dimmed), so
+            // VoiceOver stays on the one you pressed instead of jumping away.
+            let rows = [[Coop.Action.attack, .heavy], [.defend, .potion]]
+            VStack(spacing: 8) {
+                ForEach(0..<rows.count, id: \.self) { r in
+                    HStack(spacing: 8) {
+                        ForEach(rows[r], id: \.self) { a in
+                            let chosen = model.myAction == a
+                            Button(a == .potion ? "\(a.label) (\(m.potions))" : a.label) { model.act(a) }
+                                .buttonStyle(WebButtonStyle(kind: chosen ? .gold : a == .attack || a == .heavy ? .red : .ghost))
+                                .frame(maxWidth: .infinity)
+                                .disabled(model.myAction != nil)
+                                .accessibilityLabel(chosen ? "\(actionLabel(a, m)). Chosen." : actionLabel(a, m))
+                        }
+                    }
+                }
+            }
             if let a = model.myAction {
                 Text("You chose \(a.label.dropFirst(2)). Waiting for \(model.waitingOn.isEmpty ? "the round" : model.waitingOn.joined(separator: ", "))." as String)
                     .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
-            } else {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                    ForEach(Coop.Action.allCases, id: \.self) { a in
-                        Button(a == .potion ? "\(a.label) (\(m.potions))" : a.label) { model.act(a) }
-                            .buttonStyle(WebButtonStyle(kind: a == .attack || a == .heavy ? .red : .ghost))
-                            .accessibilityLabel(actionLabel(a, m))
-                    }
-                }
             }
         } else {
             Text("You're down. You get back up on the next floor.").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
         }
         header("WHAT HAPPENED")
         VStack(alignment: .leading, spacing: 3) {
-            ForEach(Array(model.log.prefix(12).enumerated()), id: \.offset) { _, l in
-                Text(l).font(Theme.crimson(13)).foregroundStyle(Theme.textSecondary)
+            ForEach(model.log.prefix(12), id: \.n) { l in
+                Text(l.text).font(Theme.crimson(13)).foregroundStyle(Theme.textSecondary)
             }
         }
         Button("Leave the Run") { model.leave() }.buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
