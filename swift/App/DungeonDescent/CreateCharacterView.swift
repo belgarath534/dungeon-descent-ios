@@ -579,9 +579,17 @@ struct CreateCharacterView: View {
                 for v in a { if case .string(let id) = v { earned.insert(id) } }
             }
         }
+        // Spirits built in the Spirit Forge belong to every character (like
+        // the web version's picker); they wake at level 5 in the dungeon.
+        CustomSpirits.reload(game.store)
+        let forged = CustomSpirits.loaded.map {
+            CreationData.Spirit(id: $0.id, name: $0.name, icon: $0.icon, rarity: "rare",
+                                ability: $0.ability)
+        }
         return (data.spirits["starter"] ?? [])
             + (data.spirits["rare"] ?? []).filter { earned.contains($0.id) }
             + (data.spirits["elite"] ?? []).filter { earned.contains($0.id) }
+            + forged
     }
 
     @ViewBuilder
