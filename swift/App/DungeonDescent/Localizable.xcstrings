@@ -130549,6 +130549,28 @@
           }
         }
       }
+    },
+    "The Conductor's music, from OpenGameArt.org:": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A música do Maestro, do OpenGameArt.org:"
+          }
+        }
+      }
+    },
+    "\"Witch's Dancing Doll\" by Spencer Y.K. (CC BY 4.0) and \"Goodbye Lullaby\" by Zane Little Music (CC0).": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"Witch's Dancing Doll\" de Spencer Y.K. (CC BY 4.0) e \"Goodbye Lullaby\" de Zane Little Music (CC0)."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
