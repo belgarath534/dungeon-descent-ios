@@ -63,6 +63,9 @@ if os.environ.get("STATUS") == "yes":
         a = v["attributes"]
         print(f"{platform} {a.get('versionString')}: {a.get('appStoreState') or a.get('appVersionState')}"
               f" (release: {a.get('releaseType')})")
+        b = call("GET", f"/appStoreVersions/{v['id']}/build", ok404=True)
+        if b and b.get("data"):
+            print(f"  build {b['data']['attributes'].get('version')}, uploaded {b['data']['attributes'].get('uploadedDate')}")
     for st in ("WAITING_FOR_REVIEW", "IN_REVIEW", "UNRESOLVED_ISSUES", "COMPLETE"):
         for o in call("GET", "/reviewSubmissions", params={"filter[app]": app, "filter[platform]": platform,
                       "filter[state]": st, "limit": 2})["data"]:
