@@ -1,11 +1,8 @@
-Thanks for testing Dungeon Descent 12.0!
+Thanks for testing Dungeon Descent 12.0.1!
 
-New, please try:
-• The new main menu: tabs along the bottom (Play, Modes, Multiplayer, More, Settings). Settings, Gameplay, Classic Menu brings back the old list.
-• Co-op Dungeon (Multiplayer tab): ten floors with up to three friends, on the web and the apps together. Share the 4-letter room code.
-• Battle Pass: 50 tiers earned by playing, never bought, with five new quests every Monday.
-• Prestige: a character at their level cap can start over for a permanent star (on the character's card).
-• Cloud sync: your whole save travels between the web and the apps. Sign in on both and play on one, then open the other.
-• Hunting Grounds, remade: track beasts by sound (Listen, Search for Tracks, walk or sneak), today's three bounties and five legends. The new narrator, Lewis (Alex in Portuguese), needs no account. Best with headphones.
-• Audio Map (in the dungeon): plays the floor as sounds around you. Best with headphones; try it in 3D Mode too.
-• Portuguese: the whole game should now be in Portuguese. Developer Tools, Missing Portuguese records anything still in English.
+Fixed, please try:
+• Prestige: prestiging a character crashed the game. Prestige a max-level character and check you get the star, the gold and the Mystery Coin.
+• Co-op: VoiceOver no longer jumps around during a fight. The action buttons stay on screen after you choose (the chosen one is marked) until the next round.
+• VoiceOver no longer jumps to the top after pressing buttons at Home (all its tabs), in the Gun Workshop and Gun Shop, the Arcane Shop, and the Command Center switch in Settings.
+
+Found a bug? Tell us in #dungeon-descent-testers on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.
