@@ -57,6 +57,18 @@ submit = os.environ.get("SUBMIT", "") == "yes"
 
 app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
 
+# STATUS=yes: only print where this platform's version is in review.
+if os.environ.get("STATUS") == "yes":
+    for v in call("GET", f"/apps/{app}/appStoreVersions", params={"filter[platform]": platform, "limit": 3})["data"]:
+        a = v["attributes"]
+        print(f"{platform} {a.get('versionString')}: {a.get('appStoreState') or a.get('appVersionState')}"
+              f" (release: {a.get('releaseType')})")
+    for st in ("WAITING_FOR_REVIEW", "IN_REVIEW", "UNRESOLVED_ISSUES", "COMPLETE"):
+        for o in call("GET", "/reviewSubmissions", params={"filter[app]": app, "filter[platform]": platform,
+                      "filter[state]": st, "limit": 2})["data"]:
+            print(f"  submission {o['id'][:8]}: {st}, submitted {o['attributes'].get('submittedDate')}")
+    sys.exit(0)
+
 # CANCEL=yes: take this platform's version back out of App Review (to add
 # something before it's reviewed), then stop. Submitting again later works
 # as usual (the version goes back to "Developer Rejected").

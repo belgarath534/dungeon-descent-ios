@@ -10,7 +10,8 @@ on:
   push:
     # store-submit: the same, and then sends all three to App Review.
     # store-cancel: only takes all three back out of App Review.
-    branches: [store-version, store-submit, store-cancel]
+    # store-status: only prints where each one is in review.
+    branches: [store-version, store-submit, store-cancel, store-status]
   workflow_dispatch:
 
 jobs:
@@ -49,13 +50,13 @@ jobs:
         run: ruby scripts/check_asc_key.rb
 
       - name: Make the versions
-        if: github.ref_name != 'store-cancel'
+        if: github.ref_name != 'store-cancel' && github.ref_name != 'store-status'
         run: |
           pip install --quiet pyjwt cryptography requests
           python3 tools/new-version.py
 
       - name: Release the Game Center leaderboards and challenges
-        if: github.ref_name != 'store-cancel'
+        if: github.ref_name != 'store-cancel' && github.ref_name != 'store-status'
         run: python3 tools/attach-game-center.py
 
       - name: Pick the builds (and submit, from store-submit)
@@ -63,6 +64,7 @@ jobs:
           VERSION: "12.0"
           SUBMIT: ${{ github.ref_name == 'store-submit' && 'yes' || '' }}
           CANCEL: ${{ github.ref_name == 'store-cancel' && 'yes' || '' }}
+          STATUS: ${{ github.ref_name == 'store-status' && 'yes' || '' }}
         run: |
           pip install --quiet pyjwt cryptography requests
           export APP_STORE_CONNECT_PRIVATE_KEY="@file:$ASC_KEY_PATH"
