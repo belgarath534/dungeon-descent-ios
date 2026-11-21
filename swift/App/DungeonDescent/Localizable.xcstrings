@@ -130483,6 +130483,17 @@
           }
         }
       }
+    },
+    "👥 Character slots doubled — keep up to 10 characters instead of 5, on the web and in the apps.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "👥 Vagas de personagem dobradas — tenha até 10 personagens em vez de 5, na web e nos apps."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

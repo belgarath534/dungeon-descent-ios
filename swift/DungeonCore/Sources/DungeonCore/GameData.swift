@@ -135,7 +135,7 @@ public enum GameData {
         "The Shadow World",
     ]
 
-    public static let maxCharacters = 5
+    public static let maxCharacters = 10
 
     private static func c(_ id: String, _ tag: String, _ hp: Int, _ atk: ClosedRange<Int>, _ def: Int) -> ClassInfo {
         ClassInfo(id: id, tagline: tag, maxHp: hp, atk: atk, def: def)

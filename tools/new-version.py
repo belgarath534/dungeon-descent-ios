@@ -21,6 +21,7 @@ WHATS_NEW = {
 • Battle Pass: 50 tiers a season, earned by playing, never bought, with five new quests every Monday.
 • Prestige: start a max-level character over for a permanent star, up to 10.
 • Cloud sync: your whole save travels between your devices and the web.
+• Twice the character slots: keep up to 10 characters.
 • Audio Map: hear the whole floor as sounds around you. Best with headphones.
 • Apple Watch: World Boss strikes, the Battle Pass, your daily reward, Quick Fight with the Digital Crown, wrist alerts, Siri and new complications.
 • The whole game is now in Portuguese.
@@ -33,6 +34,7 @@ WHATS_NEW = {
 • Passe de Batalha: 50 níveis por temporada, ganhos jogando, nunca comprados, com cinco missões novas toda segunda.
 • Prestígio: recomece um personagem no nível máximo em troca de uma estrela permanente, até 10.
 • Sincronização na nuvem: seu salvamento inteiro viaja entre seus aparelhos e a web.
+• O dobro de vagas de personagem: tenha até 10 personagens.
 • Mapa Sonoro: ouça o andar inteiro como sons ao seu redor. Melhor com fones de ouvido.
 • Apple Watch: golpes no Chefe Mundial, o Passe de Batalha, a recompensa diária, Luta Rápida com a Digital Crown, alertas no pulso, Siri e novas complicações.
 • O jogo inteiro agora está em português.

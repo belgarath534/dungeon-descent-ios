@@ -104,7 +104,8 @@ final class CharacterTests: XCTestCase {
         let roster = CharacterRoster(store: store)
         XCTAssertEqual(roster.unlockedDungeons(), ["Crypt of Malachar", "The Ashbound Wastes"])
         XCTAssertNotNil(store.getItem("dd_unlocks"))
-        for i in 0..<4 {
+        // The web save has one character: fill the rest of the slots.
+        for i in 0..<(GameData.maxCharacters - roster.characters.count) {
             XCTAssertNotNil(roster.add(PlayerCharacter(name: "C\(i)", cls: "Monk", race: "Orc", prof: "Thief",
                                                  dungeon: "Crypt of Malachar", difficulty: .wanderer)))
         }
@@ -3904,7 +3905,7 @@ final class CharacterCodeTests: XCTestCase {
         XCTAssertNil(CharacterCode.read("not a code"))
         let store = MemoryStore()
         let roster = CharacterRoster(store: store)
-        for _ in 0..<5 { XCTAssertNotNil(try? CharacterCode.importCode(code, into: roster).get()) }
+        for _ in 0..<GameData.maxCharacters { XCTAssertNotNil(try? CharacterCode.importCode(code, into: roster).get()) }
         XCTAssertEqual(CharacterCode.importCode(code, into: roster), .failure(.full))
     }
 }

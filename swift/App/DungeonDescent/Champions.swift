@@ -58,7 +58,7 @@ struct CharacterListView: View {
                 if !game.characters.isEmpty { slider }
                 list
                 HStack(spacing: 8) {
-                    if game.characters.count < 5 {
+                    if game.characters.count < GameData.maxCharacters {
                         Button("📥 Import") { importText = ""; importing = true; Feedback.announce("Import character. Paste your export code into the text area then press Import.", after: 0.3) }
                             .buttonStyle(WebButtonStyle(kind: .ghost))
                             .frame(maxWidth: .infinity)
