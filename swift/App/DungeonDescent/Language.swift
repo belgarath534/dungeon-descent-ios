@@ -512,6 +512,7 @@ enum Patterns {
         ("Opens {0}'s options.", "Abre as opções de {0}."),
         ("{0}. Resume is the first button.", "{0}. Continuar é o primeiro botão."),
         ("{0}. Play is the first button.", "{0}. Jogar é o primeiro botão."),
+        ("{0}. Chosen.", "{0}. Escolhido."),
         ("Title unlocked: Gauntlet Champion.", "Título desbloqueado: Campeão do Desafio."),
         ("Wear it from Account, Change Title.", "Use-o em Conta, Alterar Título."),
         ("You earned {0} experience points.", "Você ganhou {0} pontos de experiência."),

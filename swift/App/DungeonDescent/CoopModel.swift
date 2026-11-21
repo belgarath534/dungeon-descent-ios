@@ -22,7 +22,10 @@ final class CoopModel: ObservableObject {
     @Published private(set) var roomStatus = "lobby"
     @Published private(set) var myAction: Coop.Action?
     @Published private(set) var waitingOn: [String] = []
-    @Published private(set) var log: [String] = []
+    /// The newest first; each line keeps its number, so VoiceOver focus on
+    /// a line stays put when new lines arrive.
+    @Published private(set) var log: [(n: Int, text: String)] = []
+    private var logCount = 0
 
     let myId = "c" + String((0..<9).map { _ in "abcdefghijklmnopqrstuvwxyz0123456789".randomElement()! })
     private(set) var character: PlayerCharacter?
@@ -193,14 +196,19 @@ final class CoopModel: ObservableObject {
             return (p, (d["joinedAt"] as? NSNumber)?.doubleValue ?? 0)
         }.sorted { $0.1 < $1.1 }.map(\.0)
         let before = Set(party.map(\.id))
-        party = players
+        // Only what changed is set again: the room updates every few seconds
+        // (each player's heartbeat), and redrawing unchanged views made
+        // VoiceOver lose its place.
+        if party != players { party = players }
         for p in players where !before.contains(p.id) && !before.isEmpty && p.id != myId && stage == .lobby {
             Feedback.announce("\(p.name) joined the party.")
         }
-        foe = Coop.Foe(r["foe"] as? [String: Any])
+        let newFoe = Coop.Foe(r["foe"] as? [String: Any])
+        if foe != newFoe { foe = newFoe }
         actions = (r["actions"] as? [String: Any] ?? [:]).compactMapValues { $0 as? String }
-        if let a = actions[myId] { myAction = Coop.Action(rawValue: a) }
-        waitingOn = party.filter { $0.alive && actions[$0.id] == nil }.map(\.name)
+        if let a = actions[myId], myAction != Coop.Action(rawValue: a) { myAction = Coop.Action(rawValue: a) }
+        let waiting = party.filter { $0.alive && actions[$0.id] == nil }.map(\.name)
+        if waitingOn != waiting { waitingOn = waiting }
         beats = (r["beat"] as? [String: Any] ?? [:]).compactMapValues { ($0 as? NSNumber)?.doubleValue }
         // New lines, in order, read aloud.
         let entries = (r["log"] as? [String: Any] ?? [:]).sorted { $0.key < $1.key }
@@ -210,7 +218,8 @@ final class CoopModel: ObservableObject {
             if let t = (v as? [String: Any])?["text"] as? String { fresh.append(t) }
         }
         if !fresh.isEmpty {
-            log = (fresh.reversed() + log).prefix(40).map { $0 }
+            let numbered = fresh.map { t -> (n: Int, text: String) in logCount += 1; return (logCount, t) }
+            log = Array((numbered.reversed() + log).prefix(40))
             Feedback.announce(fresh.joined(separator: " "))
         }
         let st = r["status"] as? String ?? "lobby"
