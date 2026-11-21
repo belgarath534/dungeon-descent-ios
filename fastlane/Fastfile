@@ -1,0 +1,202 @@
+require "base64"
+
+default_platform(:ios)
+
+# The iPhone app and what's inside it: the Live Activity and the Apple Watch app.
+SIGNED = {
+  "DungeonDescent" => "com.dungeon.descent",
+  "DDLiveActivity" => "com.dungeon.descent.DDLiveActivity",
+  "DungeonWatch" => "com.dungeon.descent.watchkitapp",
+  "DungeonWatchWidget" => "com.dungeon.descent.watchkitapp.widget",
+}.freeze
+MAIN_ID = SIGNED["DungeonDescent"]
+PROJECT = File.expand_path("../swift/App/DungeonDescent.xcodeproj", __dir__)
+CERTS_REPO = "https://github.com/belgarath534/ios-certificates.git"
+NOTES_DIR = File.expand_path("../store/en-US/testflight", __dir__)
+
+def api_key!
+  app_store_connect_api_key(
+    key_id: ENV.fetch("GOOD_KEY_ID"),
+    issuer_id: ENV.fetch("ASC_ISSUER_ID"),
+    key_filepath: ENV.fetch("ASC_KEY_PATH"),
+    duration: 1200,
+    in_house: false
+  )
+end
+
+# Registers an App ID on Apple's developer site if it isn't there yet (the
+# watch complications' ID was new in 11.9), so match can make its profile.
+def ensure_bundle_id(id, name)
+  return if Spaceship::ConnectAPI::BundleId.find(id)
+  Spaceship::ConnectAPI::BundleId.create(name: name, platform: "IOS", identifier: id)
+  UI.success("Registered #{id}")
+rescue StandardError => e
+  UI.important("Couldn't check or register #{id}: #{e.message}")
+end
+
+# The shared certificate and the profiles, kept encrypted in the private
+# ios-certificates repo (as for the other games).
+def signing!(api_key, ids, platform: "ios", extra_certs: [])
+  match(
+    type: "appstore",
+    platform: platform,
+    app_identifier: ids,
+    additional_cert_types: extra_certs,
+    git_url: CERTS_REPO,
+    git_basic_authorization: Base64.strict_encode64("x-access-token:#{ENV.fetch('CLEAN_CERTS_TOKEN')}"),
+    api_key: api_key,
+    readonly: false
+  )
+end
+
+# One higher than the newest build on TestFlight for any of the three
+# platforms, so the numbers always go up everywhere.
+def next_build_number(api_key)
+  latest = %w[ios xros osx].map do |p|
+    latest_testflight_build_number(api_key: api_key, app_identifier: MAIN_ID, platform: p, initial_build_number: 0).to_i
+  rescue StandardError => e
+    UI.important("No #{p} build number from TestFlight (#{e.message.lines.first&.strip})")
+    0
+  end.max
+  (latest + 1).tap { |n| UI.message("Build number #{n}") }
+end
+
+def notes(name)
+  path = File.join(NOTES_DIR, "#{name}.txt")
+  File.exist?(path) ? File.read(path).strip : nil
+end
+
+def sign_target(target, id, team_id, profile)
+  update_code_signing_settings(
+    path: PROJECT,
+    targets: [target],
+    use_automatic_signing: false,
+    team_id: team_id,
+    code_sign_identity: "Apple Distribution",
+    profile_name: profile,
+    bundle_identifier: id
+  )
+end
+
+platform :ios do
+  desc "iPhone (with the Live Activity and the Apple Watch app) to TestFlight"
+  lane :beta do
+    setup_ci
+    api_key = api_key!
+    ensure_bundle_id(SIGNED["DungeonWatchWidget"], "Dungeon Descent Watch Complications")
+    signing!(api_key, SIGNED.values)
+    team_id = ENV.fetch("sigh_#{MAIN_ID}_appstore_team-id")
+    profiles = SIGNED.values.to_h { |id| [id, ENV.fetch("sigh_#{id}_appstore_profile-name")] }
+    SIGNED.each { |target, id| sign_target(target, id, team_id, profiles[id]) }
+    build_number = next_build_number(api_key)
+
+    build_app(
+      project: PROJECT,
+      scheme: "DungeonDescent",
+      configuration: "Release",
+      destination: "generic/platform=iOS",
+      export_method: "app-store",
+      output_directory: "build/ios",
+      xcargs: "CURRENT_PROJECT_VERSION=#{build_number}",
+      export_options: { provisioningProfiles: profiles }
+    )
+    upload_to_testflight(
+      api_key: api_key,
+      changelog: notes("IOS"),
+      uses_non_exempt_encryption: false,
+      distribute_external: false,
+      skip_waiting_for_build_processing: false,
+      wait_processing_timeout_duration: 2700
+    )
+    UI.success("🚀 iPhone build #{build_number} is on TestFlight")
+  end
+
+  desc "Apple Vision Pro to TestFlight (only the game itself; the watch app and Live Activity are iPhone-only)"
+  lane :vision do
+    setup_ci
+    api_key = api_key!
+    signing!(api_key, [MAIN_ID])
+    team_id = ENV.fetch("sigh_#{MAIN_ID}_appstore_team-id")
+    profile = ENV.fetch("sigh_#{MAIN_ID}_appstore_profile-name")
+    sign_target("DungeonDescent", MAIN_ID, team_id, profile)
+    build_number = next_build_number(api_key)
+
+    # Firestore has no ready-made Vision Pro library; build it from source.
+    ENV["FIREBASE_SOURCE_FIRESTORE"] = "1"
+    build_app(
+      project: PROJECT,
+      scheme: "DungeonDescent",
+      configuration: "Release",
+      destination: "generic/platform=visionOS",
+      export_method: "app-store",
+      output_directory: "build/vision",
+      # Kept between runs by the TestFlight workflow's cache, so Firestore
+      # isn't compiled from source again every time.
+      derived_data_path: File.expand_path("../build/vision-dd", __dir__),
+      xcargs: "CURRENT_PROJECT_VERSION=#{build_number}",
+      export_options: { provisioningProfiles: { MAIN_ID => profile } }
+    )
+    upload_to_testflight(
+      api_key: api_key,
+      app_platform: "xros",
+      changelog: notes("VISION_OS"),
+      uses_non_exempt_encryption: false,
+      distribute_external: false,
+      skip_waiting_for_build_processing: false,
+      wait_processing_timeout_duration: 2700
+    )
+    UI.success("🚀 Vision Pro build #{build_number} is on TestFlight")
+  end
+end
+
+platform :mac do
+  desc "Mac (Mac Catalyst) to TestFlight"
+  lane :beta do
+    setup_ci
+    api_key = api_key!
+    # The Mac App Store package also needs a Mac Installer certificate; match
+    # makes it once and keeps it with the others.
+    signing!(api_key, [MAIN_ID], platform: "catalyst", extra_certs: ["mac_installer_distribution"])
+    # match names its variables with the platform in them for Mac builds.
+    found = lambda do |what|
+      keys = ENV.keys.select { |k| k.start_with?("sigh_#{MAIN_ID}_appstore") && k.end_with?(what) }
+      ENV[keys.find { |k| k.include?("catalyst") || k.include?("macos") } || keys.first]
+    end
+    team_id = found.call("team-id") || "ZPD555RW3A"
+    profile = found.call("profile-name") or UI.user_error!("match gave no Mac profile name")
+    UI.success("✅ Mac signing ready (team #{team_id}, profile #{profile})")
+    # The project names the Codemagic Mac profile for Mac builds; use match's.
+    pbx = File.join(PROJECT, "project.pbxproj")
+    File.write(pbx, File.read(pbx).gsub("Dungeon Descent Mac App Store", profile))
+    build_number = next_build_number(api_key)
+
+    # The Mac Installer certificate match put in the keychain signs the package.
+    installer = sh("security find-identity -v -p basic | grep -i installer | head -1 | sed -E 's/.*\"(.*)\".*/\\1/'").strip
+    UI.user_error!("No Mac Installer certificate in the keychain") if installer.empty?
+    UI.message("Installer certificate: #{installer}")
+
+    build_app(
+      project: PROJECT,
+      scheme: "DungeonDescent",
+      configuration: "Release",
+      catalyst_platform: "macos",
+      destination: "generic/platform=macOS,variant=Mac Catalyst",
+      export_method: "app-store",
+      installer_cert_name: installer,
+      output_directory: "build/mac",
+      xcargs: "CURRENT_PROJECT_VERSION=#{build_number}",
+      export_options: { teamID: team_id, provisioningProfiles: { MAIN_ID => profile } }
+    )
+    upload_to_testflight(
+      api_key: api_key,
+      app_platform: "osx",
+      pkg: lane_context[SharedValues::PKG_OUTPUT_PATH],
+      changelog: notes("MAC_OS"),
+      uses_non_exempt_encryption: false,
+      distribute_external: false,
+      skip_waiting_for_build_processing: false,
+      wait_processing_timeout_duration: 2700
+    )
+    UI.success("🚀 Mac build #{build_number} is on TestFlight")
+  end
+end

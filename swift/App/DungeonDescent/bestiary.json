@@ -1,0 +1,3856 @@
+{
+ "entries": [
+  {
+   "id": "hollow-shade",
+   "enemyType": "undead",
+   "name": "Hollow Shade",
+   "icon": "👻",
+   "tier": "Floor 1-3",
+   "desc": "A wisp of cold mist that drifts silently. Its touch drains warmth from living flesh. The Crypt is full of them, remnants of those who died afraid."
+  },
+  {
+   "id": "crypt-rat",
+   "enemyType": "beast",
+   "name": "Crypt Rat",
+   "icon": "🐀",
+   "tier": "Floor 1-3",
+   "desc": "Enormous rats bred in total darkness over centuries. They have no eyes. They do not need them. They find you by the sound of your heartbeat."
+  },
+  {
+   "id": "brittle-skeleton",
+   "enemyType": "undead",
+   "name": "Brittle Skeleton",
+   "icon": "💀",
+   "tier": "Floor 1-3",
+   "desc": "The oldest dead. Their bones should have turned to dust long ago. Something in this place refuses to let them rest."
+  },
+  {
+   "id": "grave-crawler",
+   "enemyType": "beast",
+   "name": "Grave Crawler",
+   "icon": "🦂",
+   "tier": "Floor 1-3",
+   "desc": "An ancient parasite that feeds on the residue of death magic. Where the dead walk, these follow."
+  },
+  {
+   "id": "tomb-bat",
+   "enemyType": "beast",
+   "name": "Tomb Bat",
+   "icon": "🦇",
+   "tier": "Floor 1-3",
+   "desc": "Blind creatures that navigate by the screams of the dead. They are drawn to the living because silence follows them everywhere they go."
+  },
+  {
+   "id": "rotting-ghoul",
+   "enemyType": "undead",
+   "name": "Rotting Ghoul",
+   "icon": "🧟",
+   "tier": "Floor 1-3",
+   "desc": "Not fully dead, not fully alive. They hunger endlessly but cannot remember what they hungers for. They attack out of confusion as much as malice."
+  },
+  {
+   "id": "ashen-wisp",
+   "enemyType": "spirit",
+   "name": "Ashen Wisp",
+   "icon": "🌫️",
+   "tier": "Floor 1-3",
+   "desc": "The remnant of a soul that burned away in grief. It wanders the crypt searching for something it cannot name, destroying anything that reminds it of what it lost."
+  },
+  {
+   "id": "bone-shard",
+   "enemyType": "undead",
+   "name": "Bone Shard",
+   "icon": "🦴",
+   "tier": "Floor 1-3",
+   "desc": "A fragment of a greater skeleton, given its own terrible hunger. Too small to reason with. Too sharp to ignore."
+  },
+  {
+   "id": "wailing-wraith",
+   "enemyType": "undead",
+   "name": "Wailing Wraith",
+   "icon": "👁️",
+   "tier": "Floor 4-6",
+   "desc": "The echo of a violent death, given form. It does not attack you. It shares its final moments with you, over and over, until you break."
+  },
+  {
+   "id": "armored-skeleton",
+   "enemyType": "undead",
+   "name": "Armored Skeleton",
+   "icon": "🗡️",
+   "tier": "Floor 4-6",
+   "desc": "Malachar former soldiers. They remember their oath, nothing else. They will follow their last order until their bones are powder."
+  },
+  {
+   "id": "plague-hound",
+   "enemyType": "beast",
+   "name": "Plague Hound",
+   "icon": "🐺",
+   "tier": "Floor 4-6",
+   "desc": "Once loyal war hounds. The plague did not spare them. It just changed what they were loyal to."
+  },
+  {
+   "id": "crypt-banshee",
+   "enemyType": "undead",
+   "name": "Crypt Banshee",
+   "icon": "👻",
+   "tier": "Floor 4-6",
+   "desc": "A noblewoman who died in the crypt during the siege. She screams not in pain but in fury. She has been screaming for three hundred years."
+  },
+  {
+   "id": "shadow-stalker",
+   "enemyType": "spirit",
+   "name": "Shadow Stalker",
+   "icon": "🌑",
+   "tier": "Floor 4-6",
+   "desc": "It does not cast a shadow. It IS the shadow. It detaches from the walls only when it has chosen its prey, and it never chooses wrong."
+  },
+  {
+   "id": "cursed-knight",
+   "enemyType": "undead",
+   "name": "Cursed Knight",
+   "icon": "🛡️",
+   "tier": "Floor 4-6",
+   "desc": "A warrior who swore an oath on cursed ground. The oath bound him to the crypt forever. He fights not to kill you, but because fighting is the only thing that makes him forget."
+  },
+  {
+   "id": "plague-wraith",
+   "enemyType": "undead",
+   "name": "Plague Wraith",
+   "icon": "☠️",
+   "tier": "Floor 4-6",
+   "desc": "Where the Plague Hound carries the sickness in its body, the Plague Wraith IS the sickness. It spreads disease through the air around it without ever needing to touch you."
+  },
+  {
+   "id": "bone-archer",
+   "enemyType": "undead",
+   "name": "Bone Archer",
+   "icon": "🏹",
+   "tier": "Floor 4-6",
+   "desc": "It never misses. Not because it is skilled, but because it has fired the same shot one hundred thousand times and has nothing else left to learn."
+  },
+  {
+   "id": "crypt-spider",
+   "enemyType": "beast",
+   "name": "Crypt Spider",
+   "icon": "🕷️",
+   "tier": "Floor 4-6",
+   "desc": "Spiders found their way into the Crypt centuries ago. The death magic changed them. They are larger now. Quieter. They learned that the dead do not struggle, and prefer their prey the same way."
+  },
+  {
+   "id": "venom-spitter",
+   "enemyType": "beast",
+   "name": "Venom Spitter",
+   "icon": "🕸️",
+   "tier": "Floor 4-6",
+   "desc": "It does not bite. It does not need to. The venom it projects dissolves stone. What it does to flesh is not something worth describing."
+  },
+  {
+   "id": "death-knight",
+   "enemyType": "undead",
+   "name": "Death Knight",
+   "icon": "⚔️",
+   "tier": "Floor 7-9",
+   "desc": "Generals of Malachar army. Gifted with eternal life as reward. None asked for it. All wish they could die."
+  },
+  {
+   "id": "bone-colossus",
+   "enemyType": "undead",
+   "name": "Bone Colossus",
+   "icon": "🦴",
+   "tier": "Floor 7-9",
+   "desc": "Dozens of skeletons fused into one monstrous form by old death magic. The bones belong to different people. All of them scream."
+  },
+  {
+   "id": "soul-harvester",
+   "enemyType": "spirit",
+   "name": "Soul Harvester",
+   "icon": "🌑",
+   "tier": "Floor 7-9",
+   "desc": "It does not kill you. It collects the part of you that makes you yourself, and adds it to its collection."
+  },
+  {
+   "id": "void-reaper",
+   "enemyType": "demon",
+   "name": "Void Reaper",
+   "icon": "💀",
+   "tier": "Floor 7-9",
+   "desc": "Something dragged from the space between death and whatever comes after. It should not exist here. It should not exist anywhere. Yet here it is, looking at you."
+  },
+  {
+   "id": "ancient-revenant",
+   "enemyType": "undead",
+   "name": "Ancient Revenant",
+   "icon": "🧟",
+   "tier": "Floor 7-9",
+   "desc": "Older than Malachar himself. It predates the crypt. When the vault was built around it, it simply waited. It has been waiting longer than this kingdom has existed."
+  },
+  {
+   "id": "nightmare-shade",
+   "enemyType": "spirit",
+   "name": "Nightmare Shade",
+   "icon": "😱",
+   "tier": "Floor 7-9",
+   "desc": "It wears the face of your worst memory. You know it is not real. Knowing does not help."
+  },
+  {
+   "id": "blood-golem",
+   "name": "Blood Golem",
+   "icon": "🔴",
+   "tier": "Floor 7-9",
+   "desc": "Constructed from the blood of every warrior who has ever fallen in this crypt. It grows stronger with every life the dungeon claims. There have been many lives."
+  },
+  {
+   "id": "web-stalker",
+   "name": "Web Stalker",
+   "icon": "🕷️",
+   "tier": "Floor 7-9",
+   "desc": "The largest spider in the Crypt. It has been here long enough to web entire corridors. Some of the things caught in those webs are still alive. They wish they were not."
+  },
+  {
+   "id": "brood-mother",
+   "name": "Brood Mother",
+   "icon": "🕸️",
+   "tier": "Floor 7-9",
+   "desc": "The origin of every spider in the Crypt. She has been laying eggs in the dark for two hundred years. She is very protective of her children. She has a great many children."
+  },
+  {
+   "id": "malachar",
+   "name": "Malachar the Undying",
+   "icon": "👑",
+   "tier": "Boss, Floor 10",
+   "desc": "The warlord who refused death and was given something worse. He has sat in this crypt for a thousand years, perfectly still, perfectly aware, waiting for someone worth killing.",
+   "isBoss": true
+  },
+  {
+   "id": "bone-sovereign",
+   "name": "The Bone Sovereign",
+   "icon": "💀",
+   "tier": "Boss, Floor 10",
+   "desc": "Not a general but a king. He ruled the dead long before Malachar arrived. He tolerated the warlord. He does not tolerate you.",
+   "isBoss": true
+  },
+  {
+   "id": "void-walker",
+   "name": "The Void Walker",
+   "icon": "🌑",
+   "tier": "Boss, Floor 10",
+   "desc": "Something from outside the known world. It walked through a crack that opened when Malachar died and could not find the crack again. It has been looking for it ever since.",
+   "isBoss": true
+  },
+  {
+   "id": "undying-legion",
+   "name": "The Undying Legion",
+   "icon": "💀",
+   "tier": "Raid Boss",
+   "desc": "Not one creature but many — the shattered souls of every army Malachar ever destroyed, fused into a single unstoppable force. It appears only when the dead are truly restless. Defeat it once and it will return tomorrow, rebuilt from the fallen.",
+   "isBoss": true
+  },
+  {
+   "id": "cinder-wraith",
+   "enemyType": "spirit",
+   "name": "Cinder Wraith",
+   "icon": "🔥",
+   "tier": "Ashbound 1-3",
+   "desc": "A soul that was burned alive and refused to move on. It still burns. It will always burn. It shares that experience with you whether you want it to or not."
+  },
+  {
+   "id": "ash-crawler",
+   "name": "Ash Crawler",
+   "icon": "🌋",
+   "tier": "Ashbound 1-3",
+   "desc": "A creature of compressed ash given terrible life by the same force that destroyed the city. It leaves a trail of fine gray powder wherever it goes."
+  },
+  {
+   "id": "scorched-husk",
+   "enemyType": "demon",
+   "name": "Scorched Husk",
+   "icon": "💀",
+   "tier": "Ashbound 1-3",
+   "desc": "What remains of a person after the fire has taken everything worth taking. The body still moves. There is nothing inside it that remembers why."
+  },
+  {
+   "id": "ember-shade",
+   "enemyType": "spirit",
+   "name": "Ember Shade",
+   "icon": "✨",
+   "tier": "Ashbound 1-3",
+   "desc": "A dying ember given awareness. It knows it is dying. It has been dying for three hundred years. It resents anything that is not."
+  },
+  {
+   "id": "char-bat",
+   "name": "Char Bat",
+   "icon": "🦇",
+   "tier": "Ashbound 1-3",
+   "desc": "The bats of this place survived by eating ash for generations. They are not what bats should be anymore. Their wings leave burn marks on what they touch."
+  },
+  {
+   "id": "slag-crawler",
+   "name": "Slag Crawler",
+   "icon": "🪲",
+   "tier": "Ashbound 1-3",
+   "desc": "Born in the moment the city melted. It is partly metal, partly stone, partly something that has no name. It is very slow. It does not need to be fast."
+  },
+  {
+   "id": "molten-knight",
+   "name": "Molten Knight",
+   "icon": "⚔️",
+   "tier": "Ashbound 4-6",
+   "desc": "The armor and the soldier fused in the moment of the disaster. Neither survived. Both are still here. It fights because that is what soldiers do."
+  },
+  {
+   "id": "plague-of-cinders",
+   "name": "Plague of Cinders",
+   "icon": "💨",
+   "tier": "Ashbound 4-6",
+   "desc": "Not an individual creature but a colony — thousands of burning fragments moving as one. You cannot fight it so much as survive it."
+  },
+  {
+   "id": "char-stalker",
+   "name": "Char Stalker",
+   "icon": "👁️",
+   "tier": "Ashbound 4-6",
+   "desc": "It hunts by heat. Your warmth is a beacon to it in the dead gray world of the Wastes. The only way to hide from it is to become as cold as the ash."
+  },
+  {
+   "id": "blighted-overseer",
+   "name": "Blighted Overseer",
+   "icon": "👺",
+   "tier": "Ashbound 4-6",
+   "desc": "It used to give orders. It used to have people to give orders to. Now it wanders the ruins of its authority, still issuing commands to the ash."
+  },
+  {
+   "id": "ashen-revenant",
+   "name": "Ashen Revenant",
+   "icon": "🧟",
+   "tier": "Ashbound 4-6",
+   "desc": "A citizen who refused to leave when the fire came. They stayed because this was their home. It is still their home. It always will be."
+  },
+  {
+   "id": "flame-wraith",
+   "enemyType": "spirit",
+   "name": "Flame Wraith",
+   "icon": "👻",
+   "tier": "Ashbound 4-6",
+   "desc": "Like the Wailing Wraith of the Crypt, but born of fire rather than cold. It does not share its final moments. It shares the sensation of burning."
+  },
+  {
+   "id": "volcanic-revenant",
+   "name": "Volcanic Revenant",
+   "icon": "🌋",
+   "tier": "Ashbound 7-9",
+   "desc": "Not a person transformed. Something that was never a person. It was born in the eruption, made of the same force that leveled the city. It is not angry. It simply destroys."
+  },
+  {
+   "id": "infernal-colossus",
+   "name": "Infernal Colossus",
+   "icon": "💀",
+   "tier": "Ashbound 7-9",
+   "desc": "Like the Bone Colossus of the Crypt, but composed of fused slag, melted armor, and the calcified remains of an entire city block."
+  },
+  {
+   "id": "the-ashen-king",
+   "name": "The Ashen King",
+   "icon": "👑",
+   "tier": "Ashbound 7-9",
+   "desc": "He refused to flee. He died on his throne. Three hundred years later he is still on it, though the throne has fused to his body and his body has fused to the floor."
+  },
+  {
+   "id": "slag-titan",
+   "name": "Slag Titan",
+   "icon": "🔴",
+   "tier": "Ashbound 7-9",
+   "desc": "The largest thing in the Wastes. It was built from everything the fire left behind that was too dense to become ash. It is not alive. It does not need to be."
+  },
+  {
+   "id": "ember-reaper",
+   "name": "Ember Reaper",
+   "icon": "☠️",
+   "tier": "Ashbound 7-9",
+   "desc": "Death in the Ashbound Wastes does not look like the robed figure people imagine. It looks like this. It has always looked like this."
+  },
+  {
+   "id": "eternal-pyre",
+   "name": "The Eternal Pyre",
+   "icon": "🔥",
+   "tier": "Boss, Ashbound Floor 10",
+   "desc": "The fire that destroyed the city was never extinguished. Over centuries it became aware. It does not want to hurt you. It simply wants to share what it is. What it is, is burning.",
+   "isBoss": true
+  },
+  {
+   "id": "ashen-throne",
+   "name": "The Ashen Throne",
+   "icon": "👑",
+   "tier": "Boss, Ashbound Floor 10",
+   "desc": "He refused to flee when the fire came. He died on his throne. Three centuries later the throne and the ruler are one thing — a molten seat of authority with nothing left to rule.",
+   "isBoss": true
+  },
+  {
+   "id": "cinder-colossus",
+   "name": "The Cinder Colossus",
+   "icon": "🌋",
+   "tier": "Boss, Ashbound Floor 10",
+   "desc": "Built from everything the eruption left behind that was too dense to become ash. It is not a creature. It is the collapse given legs. It is still collapsing.",
+   "isBoss": true
+  },
+  {
+   "id": "frost-shade",
+   "enemyType": "spirit",
+   "name": "Frost Shade",
+   "icon": "❄️",
+   "tier": "Frosthold 1-3",
+   "desc": "A ghost that has been frozen so long it has forgotten it was ever warm. It reaches for living heat not to harm but to remember. The reaching harms anyway."
+  },
+  {
+   "id": "glacial-rat",
+   "name": "Glacial Rat",
+   "icon": "🐀",
+   "tier": "Frosthold 1-3",
+   "desc": "They have lived in the abyss long enough that warmth is foreign to them. They bite because warmth angers them. They cannot explain why."
+  },
+  {
+   "id": "ice-shard",
+   "name": "Ice Shard",
+   "icon": "🧊",
+   "tier": "Frosthold 1-3",
+   "desc": "Not a creature. A weapon the Abyss made for itself. It moves with intent. That is enough."
+  },
+  {
+   "id": "frozen-husk",
+   "name": "Frozen Husk",
+   "icon": "💀",
+   "tier": "Frosthold 1-3",
+   "desc": "A body preserved perfectly by the cold for longer than any record tracks. Whatever was inside it when it froze is gone. Something else moved in."
+  },
+  {
+   "id": "cave-bat",
+   "name": "Cave Bat",
+   "icon": "🦇",
+   "tier": "Frosthold 1-3",
+   "desc": "The darkness here is different from other darknesses. The bats that live in it have changed accordingly. They do not avoid the cold. They carry it."
+  },
+  {
+   "id": "permafrost-crawler",
+   "name": "Permafrost Crawler",
+   "icon": "🦂",
+   "tier": "Frosthold 1-3",
+   "desc": "Lives in the rock below the ice. It surfaces only when something warmer than it passes by. Nothing warmer than it lives here. Until now."
+  },
+  {
+   "id": "blizzard-wraith",
+   "enemyType": "spirit",
+   "name": "Blizzard Wraith",
+   "icon": "👻",
+   "tier": "Frosthold 4-6",
+   "desc": "Formed from snowstorms that fell so deep into the Abyss they never melted. The storm became aware. It has been searching for a way out ever since."
+  },
+  {
+   "id": "glacial-knight",
+   "name": "Glacial Knight",
+   "icon": "⚔️",
+   "tier": "Frosthold 4-6",
+   "desc": "A soldier who descended into the Abyss centuries ago and was absorbed by it. The ice did not kill him. It improved him. He does not agree."
+  },
+  {
+   "id": "frostbite-hound",
+   "enemyType": "beast",
+   "name": "Frostbite Hound",
+   "icon": "🐺",
+   "tier": "Frosthold 4-6",
+   "desc": "Its bite does not wound so much as freeze. The affected area stops belonging to you. You can watch it happen and there is nothing you can do."
+  },
+  {
+   "id": "frozen-banshee",
+   "name": "Frozen Banshee",
+   "icon": "👁️",
+   "tier": "Frosthold 4-6",
+   "desc": "Its scream does not carry sound. It carries cold. The kind of cold that reaches things sound cannot."
+  },
+  {
+   "id": "ice-stalker",
+   "name": "Ice Stalker",
+   "icon": "🌑",
+   "tier": "Frosthold 4-6",
+   "desc": "It is the same color as the ice it moves through. You will not see it coming. You will only feel the temperature change."
+  },
+  {
+   "id": "arctic-revenant",
+   "name": "Arctic Revenant",
+   "icon": "🧟",
+   "tier": "Frosthold 4-6",
+   "desc": "Died in the cold and was preserved so well that death could not take hold properly. It has been between states for so long it no longer remembers which one it prefers."
+  },
+  {
+   "id": "avalanche-colossus",
+   "name": "Avalanche Colossus",
+   "icon": "🏔️",
+   "tier": "Frosthold 7-9",
+   "desc": "Born when a section of the mountain decided it was tired of staying still. It has not stopped moving since. Everything in its path becomes part of it."
+  },
+  {
+   "id": "frost-reaper",
+   "name": "Frost Reaper",
+   "icon": "☠️",
+   "tier": "Frosthold 7-9",
+   "desc": "Death in the Frosthold Abyss wears a different face than in the warm world. Colder. More patient. More certain of the outcome."
+  },
+  {
+   "id": "glacial-sovereign",
+   "name": "The Glacial Sovereign",
+   "icon": "👑",
+   "tier": "Frosthold 7-9",
+   "desc": "It was the first thing the cold made when it became aware. It has been here since before the mountain. It will be here after."
+  },
+  {
+   "id": "frozen-titan",
+   "name": "Frozen Titan",
+   "icon": "🧊",
+   "tier": "Frosthold 7-9",
+   "desc": "Something impossibly old encased in ice so ancient it has crystallized into something that is not quite ice anymore. Breaking the ice only made it angry."
+  },
+  {
+   "id": "void-frost",
+   "name": "Void Frost",
+   "icon": "💀",
+   "tier": "Frosthold 7-9",
+   "desc": "Not from this world. Not from any world. It came through a crack in the deep ice that opened once and should have closed. It did not close."
+  },
+  {
+   "id": "eternal-winter",
+   "name": "The Eternal Winter",
+   "icon": "❄️",
+   "tier": "Boss, Frosthold Floor 10",
+   "desc": "The cold is not a temperature here. It is a living thing that has waited for something warm to arrive for a thousand years. Now something warm has arrived.",
+   "isBoss": true
+  },
+  {
+   "id": "frozen-king",
+   "name": "The Frozen King",
+   "icon": "👑",
+   "tier": "Boss, Frosthold Floor 10",
+   "desc": "He descended into the Abyss a thousand years ago believing he could conquer it. The Abyss agreed to keep him forever instead. He has been awake inside the ice the entire time.",
+   "isBoss": true
+  },
+  {
+   "id": "void-below",
+   "name": "The Void Below",
+   "icon": "🌑",
+   "tier": "Boss, Frosthold Floor 10",
+   "desc": "There is something beneath the Frosthold Abyss that is not ice, not stone, not cold. It has been pressing upward since before humans discovered fire. It is very close to the surface now.",
+   "isBoss": true,
+   "dungeon": "frost"
+  },
+  {
+   "id": "drowned-archivist",
+   "enemyType": "undead",
+   "name": "Drowned Archivist",
+   "icon": "📚",
+   "tier": "Archives 1-3",
+   "desc": "A librarian who refused to leave when the water came. Still filing. Still cataloguing. Still here.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "ink-wraith",
+   "enemyType": "spirit",
+   "name": "Ink Wraith",
+   "icon": "🖤",
+   "tier": "Archives 1-3",
+   "desc": "The concentrated will of a thousand unfinished manuscripts. It wants to be completed.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "bloated-librarian",
+   "name": "Bloated Librarian",
+   "icon": "📖",
+   "tier": "Archives 1-3",
+   "desc": "Three hundred years of submersion have not improved their disposition.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "paper-shade",
+   "enemyType": "spirit",
+   "name": "Paper Shade",
+   "icon": "📄",
+   "tier": "Archives 1-3",
+   "desc": "A creature made entirely of waterlogged pages. The text is still legible. You cannot read it fast enough.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "soggy-sentinel",
+   "name": "Soggy Sentinel",
+   "icon": "🧟",
+   "tier": "Archives 1-3",
+   "desc": "Posted here to guard a section that no longer exists. Has not received updated orders.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "deep-cartographer",
+   "name": "Deep Cartographer",
+   "icon": "🗺️",
+   "tier": "Archives 4-6",
+   "desc": "It has mapped every inch of the Archives. Including the parts that should not exist.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "tide-golem",
+   "name": "Tide Golem",
+   "icon": "🌊",
+   "tier": "Archives 4-6",
+   "desc": "Assembled from the water itself. The Archives needed better security. This was the solution.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "drowned-scholar",
+   "name": "Drowned Scholar",
+   "icon": "🎓",
+   "tier": "Archives 4-6",
+   "desc": "Knew too much. The Archives decided to keep them.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "archive-specter",
+   "name": "Archive Specter",
+   "icon": "👻",
+   "tier": "Archives 4-6",
+   "desc": "The ghost of someone who came looking for a specific book. Never found it. Never left.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "leviathan-spawn",
+   "name": "Leviathan Spawn",
+   "icon": "🦑",
+   "tier": "Archives 4-6",
+   "desc": "The main attraction is still in the deepest chamber. These are just its thoughts.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "sunken-warden",
+   "name": "The Sunken Warden",
+   "icon": "⚓",
+   "tier": "Archives 7-9",
+   "desc": "Appointed by whoever ran this place before the flooding. The appointment has not expired.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "grand-archivist",
+   "name": "Grand Archivist",
+   "icon": "📜",
+   "tier": "Archives 7-9",
+   "desc": "The most senior librarian. Has read everything. Is not at peace with what it learned.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "abyssal-colossus",
+   "name": "Abyssal Colossus",
+   "icon": "🌊",
+   "tier": "Archives 7-9",
+   "desc": "Built from the weight of three hundred years of accumulated water pressure.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "drowned-curator",
+   "name": "The Drowned Curator",
+   "icon": "📚",
+   "tier": "Boss, Archives 10",
+   "desc": "It has read every book in the Archives. The experience was not positive.",
+   "dungeon": "sunken",
+   "isBoss": true
+  },
+  {
+   "id": "leviathan-deep",
+   "name": "Leviathan of the Deep",
+   "icon": "🦑",
+   "tier": "Boss, Archives 10",
+   "desc": "The Archives were built around it. This distinction matters.",
+   "dungeon": "sunken",
+   "isBoss": true
+  },
+  {
+   "id": "last-librarian",
+   "name": "The Last Librarian",
+   "icon": "📖",
+   "tier": "Boss, Archives 10",
+   "desc": "She stayed. She has had a very long time to be angry about it.",
+   "dungeon": "sunken",
+   "isBoss": true
+  },
+  {
+   "id": "the-unnamed",
+   "name": "The Unnamed",
+   "icon": "❓",
+   "tier": "Nightmare 1-3",
+   "desc": "It had a name once. The dungeon took it. It wants it back.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "scream-without",
+   "name": "Scream Without Source",
+   "icon": "💢",
+   "tier": "Nightmare 1-3",
+   "desc": "Not an enemy. Not a creature. Just a sound that has learned to hurt people.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "the-almost",
+   "name": "The Almost",
+   "icon": "🌫️",
+   "tier": "Nightmare 1-3",
+   "desc": "Almost a person. Almost recognizable. Almost something you have seen before.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "hollow-colossus",
+   "name": "Hollow Colossus",
+   "icon": "🫙",
+   "tier": "Nightmare 4-6",
+   "desc": "An enormous emptiness that has learned to walk.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "the-unraveling",
+   "name": "The Unraveling",
+   "icon": "🌀",
+   "tier": "Nightmare 4-6",
+   "desc": "It is coming apart. It would like your help. You should not help it.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "grief-made-flesh",
+   "name": "Grief Made Flesh",
+   "icon": "💔",
+   "tier": "Nightmare 4-6",
+   "desc": "You do not want to know whose grief this was.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "crypt-brittle-skeleton",
+   "enemyType": "undead",
+   "name": "Brittle Skeleton",
+   "icon": "💀",
+   "tier": "Crypt 1-3",
+   "dungeon": "crypt",
+   "desc": "The first thing you face. Held together by something older than bone."
+  },
+  {
+   "id": "crypt-tomb-bat",
+   "name": "Tomb Bat",
+   "icon": "🦇",
+   "tier": "Crypt 1-3",
+   "dungeon": "crypt",
+   "desc": "Blind but not deaf. It finds you by the sound of your breathing."
+  },
+  {
+   "id": "crypt-crypt-rat",
+   "name": "Crypt Rat",
+   "icon": "🐀",
+   "tier": "Crypt 1-3",
+   "dungeon": "crypt",
+   "desc": "Feeds on the dead. Has been down here so long it no longer reacts to light."
+  },
+  {
+   "id": "crypt-crypt-spider",
+   "enemyType": "beast",
+   "name": "Crypt Spider",
+   "icon": "🕷️",
+   "tier": "Crypt 1-4",
+   "dungeon": "crypt",
+   "desc": "The webs are old. The spider is older. It has been waiting specifically for you."
+  },
+  {
+   "id": "crypt-rotting-ghoul",
+   "enemyType": "undead",
+   "name": "Rotting Ghoul",
+   "icon": "🧟",
+   "tier": "Crypt 2-4",
+   "dungeon": "crypt",
+   "desc": "Was someone. Now it is hunger wearing a shape."
+  },
+  {
+   "id": "crypt-grave-crawler",
+   "name": "Grave Crawler",
+   "icon": "🪱",
+   "tier": "Crypt 2-4",
+   "dungeon": "crypt",
+   "desc": "Erupts from the floor. The crypt floor is not safe to walk on."
+  },
+  {
+   "id": "crypt-bone-archer",
+   "name": "Bone Archer",
+   "icon": "🏹",
+   "tier": "Crypt 2-5",
+   "dungeon": "crypt",
+   "desc": "Fires from a distance. The arrows are its own ribs. It does not run out."
+  },
+  {
+   "id": "crypt-bone-shard",
+   "name": "Bone Shard",
+   "icon": "🦴",
+   "tier": "Crypt 2-5",
+   "dungeon": "crypt",
+   "desc": "A fragment of something larger. It is sharper than it looks."
+  },
+  {
+   "id": "crypt-wailing-wraith",
+   "enemyType": "spirit",
+   "name": "Wailing Wraith",
+   "icon": "👻",
+   "tier": "Crypt 3-6",
+   "dungeon": "crypt",
+   "desc": "The sound arrives before it does. By the time you hear it, it is already too close."
+  },
+  {
+   "id": "crypt-hollow-shade",
+   "enemyType": "spirit",
+   "name": "Hollow Shade",
+   "icon": "👤",
+   "tier": "Crypt 3-6",
+   "dungeon": "crypt",
+   "desc": "No face. No voice. It copies your movements one second behind."
+  },
+  {
+   "id": "crypt-shadow-stalker",
+   "name": "Shadow Stalker",
+   "icon": "🌑",
+   "tier": "Crypt 3-6",
+   "dungeon": "crypt",
+   "desc": "It does not attack immediately. It watches. Then it moves."
+  },
+  {
+   "id": "crypt-plague-hound",
+   "enemyType": "beast",
+   "name": "Plague Hound",
+   "icon": "🐕",
+   "tier": "Crypt 3-7",
+   "dungeon": "crypt",
+   "desc": "Loyal to death. Whatever it was bonded to has been gone a long time."
+  },
+  {
+   "id": "crypt-venom-spitter",
+   "name": "Venom Spitter",
+   "icon": "🐍",
+   "tier": "Crypt 4-7",
+   "dungeon": "crypt",
+   "desc": "The venom is not fast. It just waits inside you."
+  },
+  {
+   "id": "crypt-armored-skeleton",
+   "enemyType": "undead",
+   "name": "Armored Skeleton",
+   "icon": "🛡️",
+   "tier": "Crypt 4-7",
+   "dungeon": "crypt",
+   "desc": "Someone buried it in full armor. That was a mistake."
+  },
+  {
+   "id": "crypt-plague-wraith",
+   "enemyType": "spirit",
+   "name": "Plague Wraith",
+   "icon": "☠️",
+   "tier": "Crypt 4-8",
+   "dungeon": "crypt",
+   "desc": "It passed through the living so many times that it became something in between."
+  },
+  {
+   "id": "crypt-crypt-banshee",
+   "name": "Crypt Banshee",
+   "icon": "😱",
+   "tier": "Crypt 5-8",
+   "dungeon": "crypt",
+   "desc": "The scream does not hurt your ears. It hurts something deeper."
+  },
+  {
+   "id": "crypt-web-stalker",
+   "name": "Web Stalker",
+   "icon": "🕸️",
+   "tier": "Crypt 5-8",
+   "dungeon": "crypt",
+   "desc": "The whole ceiling is a web. You walked into it before you saw it."
+  },
+  {
+   "id": "crypt-ancient-revenant",
+   "name": "Ancient Revenant",
+   "icon": "💀",
+   "tier": "Crypt 5-9",
+   "dungeon": "crypt",
+   "desc": "Died so long ago it has forgotten it is dead. It is angry about this."
+  },
+  {
+   "id": "crypt-cursed-knight",
+   "name": "Cursed Knight",
+   "icon": "⚔️",
+   "tier": "Crypt 5-9",
+   "dungeon": "crypt",
+   "desc": "Oath-bound to guard a tomb that no longer exists. Still following orders."
+  },
+  {
+   "id": "crypt-blood-golem",
+   "name": "Blood Golem",
+   "icon": "🩸",
+   "tier": "Crypt 6-9",
+   "dungeon": "crypt",
+   "desc": "Built from the blood of those who came before you. It grows with each failure."
+  },
+  {
+   "id": "crypt-soul-harvester",
+   "name": "Soul Harvester",
+   "icon": "⚰️",
+   "tier": "Crypt 6-9",
+   "dungeon": "crypt",
+   "desc": "It does not kill you. It takes something else. You do not notice until later."
+  },
+  {
+   "id": "crypt-ashen-wisp",
+   "enemyType": "spirit",
+   "name": "Ashen Wisp",
+   "icon": "✨",
+   "tier": "Crypt 6-9",
+   "dungeon": "crypt",
+   "desc": "It used to light the crypt for the living. The living are gone. It kept working."
+  },
+  {
+   "id": "crypt-nightmare-shade",
+   "enemyType": "spirit",
+   "name": "Nightmare Shade",
+   "icon": "😨",
+   "tier": "Crypt — Elite",
+   "dungeon": "crypt",
+   "isElite": true,
+   "desc": "It is not real. It is made of what you are afraid of. That distinction stops mattering quickly."
+  },
+  {
+   "id": "crypt-void-reaper",
+   "name": "Void Reaper",
+   "icon": "🌑",
+   "tier": "Crypt — Elite",
+   "dungeon": "crypt",
+   "isElite": true,
+   "desc": "Comes from beyond the dungeon. It was not summoned. It arrived on its own."
+  },
+  {
+   "id": "crypt-brood-mother",
+   "name": "Brood Mother",
+   "icon": "🕷️",
+   "tier": "Crypt — Elite",
+   "dungeon": "crypt",
+   "isElite": true,
+   "desc": "She has been down here long enough to fill every room with her children."
+  },
+  {
+   "id": "crypt-bone-colossus",
+   "name": "Bone Colossus",
+   "icon": "💀",
+   "tier": "Crypt — Boss",
+   "dungeon": "crypt",
+   "isBoss": true,
+   "desc": "Every skeleton in the crypt eventually becomes part of it."
+  },
+  {
+   "id": "crypt-bone-sovereign",
+   "name": "The Bone Sovereign",
+   "icon": "👑",
+   "tier": "Crypt — Boss",
+   "dungeon": "crypt",
+   "isBoss": true,
+   "desc": "The last king of the crypt. Still ruling. The kingdom is gone but the throne is not."
+  },
+  {
+   "id": "crypt-void-walker-boss",
+   "name": "The Void Walker",
+   "icon": "🌑",
+   "tier": "Crypt — Boss",
+   "dungeon": "crypt",
+   "isBoss": true,
+   "desc": "It came through a door that no longer exists. It cannot find its way back. It blames you."
+  },
+  {
+   "id": "crypt-malachar",
+   "name": "Malachar the Undying",
+   "icon": "👑",
+   "tier": "Crypt — Boss",
+   "dungeon": "crypt",
+   "isBoss": true,
+   "desc": "He built the crypt. He filled it. He is still here. He has been waiting for someone worth fighting."
+  },
+  {
+   "id": "ancient-death-knight",
+   "name": "Ancient Death Knight",
+   "icon": "⚔️",
+   "tier": "Elite — Crypt",
+   "desc": "Has been a Death Knight since before the Crypt was built. Was here first.",
+   "dungeon": "crypt",
+   "isElite": true
+  },
+  {
+   "id": "eternal-warden-elite",
+   "name": "The Eternal Warden",
+   "icon": "🛡️",
+   "tier": "Elite — Crypt",
+   "desc": "Has never taken a day off. Has never been asked to.",
+   "dungeon": "crypt",
+   "isElite": true
+  },
+  {
+   "id": "ash-ash-crawler",
+   "name": "Ash Crawler",
+   "icon": "🐛",
+   "tier": "Ashbound 1-3",
+   "dungeon": "ash",
+   "desc": "Moves through the ash the way water moves through sand. You cannot hear it coming."
+  },
+  {
+   "id": "ash-char-bat",
+   "name": "Char Bat",
+   "icon": "🦇",
+   "tier": "Ashbound 1-3",
+   "dungeon": "ash",
+   "desc": "Its wings are on fire. It has adapted. This is concerning."
+  },
+  {
+   "id": "ash-ember-shard",
+   "name": "Ember Shard",
+   "icon": "🔥",
+   "tier": "Ashbound 1-4",
+   "dungeon": "ash",
+   "desc": "A fragment of something that burned completely. It is still burning."
+  },
+  {
+   "id": "ash-slag-crawler",
+   "name": "Slag Crawler",
+   "icon": "🌋",
+   "tier": "Ashbound 2-4",
+   "dungeon": "ash",
+   "desc": "Moves through molten rock. The heat does not bother it. Everything about you does."
+  },
+  {
+   "id": "ash-flame-wraith",
+   "enemyType": "spirit",
+   "name": "Flame Wraith",
+   "icon": "🔥",
+   "tier": "Ashbound 2-5",
+   "dungeon": "ash",
+   "desc": "A ghost that caught fire and never stopped burning. The fire is the ghost now."
+  },
+  {
+   "id": "ash-ember-shade",
+   "enemyType": "spirit",
+   "name": "Ember Shade",
+   "icon": "💫",
+   "tier": "Ashbound 2-5",
+   "dungeon": "ash",
+   "desc": "Moves faster in the heat. The Ashbound Wastes are always hot."
+  },
+  {
+   "id": "ash-ashen-blade",
+   "name": "Ashen Blade",
+   "icon": "⚔️",
+   "tier": "Ashbound 3-6",
+   "dungeon": "ash",
+   "desc": "Someone dropped this sword in the ash long ago. The ash got into it. Now it fights on its own."
+  },
+  {
+   "id": "ash-scorched-husk",
+   "name": "Scorched Husk",
+   "icon": "🧟",
+   "tier": "Ashbound 3-6",
+   "dungeon": "ash",
+   "desc": "Was a person. The wastes do this. It takes a long time. They are still in there somewhere."
+  },
+  {
+   "id": "ash-cinder-wraith",
+   "enemyType": "spirit",
+   "name": "Cinder Wraith",
+   "icon": "✨",
+   "tier": "Ashbound 3-7",
+   "dungeon": "ash",
+   "desc": "Feeds on heat. This dungeon has an infinite supply. It is never hungry."
+  },
+  {
+   "id": "ash-ember-reaper",
+   "name": "Ember Reaper",
+   "icon": "💀",
+   "tier": "Ashbound 4-7",
+   "dungeon": "ash",
+   "desc": "Harvests what the wastes leave behind. There is always something left behind."
+  },
+  {
+   "id": "ash-molten-knight",
+   "name": "Molten Knight",
+   "icon": "🛡️",
+   "tier": "Ashbound 4-8",
+   "dungeon": "ash",
+   "desc": "Its armor melted. Its body filled the space. It is the armor now."
+  },
+  {
+   "id": "ash-volcanic-revenant",
+   "name": "Volcanic Revenant",
+   "icon": "🌋",
+   "tier": "Ashbound 5-8",
+   "dungeon": "ash",
+   "desc": "Died in an eruption. The eruption brought it back. Gratitude was not its first feeling."
+  },
+  {
+   "id": "ash-plague-of-cinders",
+   "name": "Plague of Cinders",
+   "icon": "🔥",
+   "tier": "Ashbound 5-9",
+   "dungeon": "ash",
+   "isElite": true,
+   "desc": "Not one enemy. A swarm of burning fragments that act as one. You cannot fight fire with a sword."
+  },
+  {
+   "id": "ash-ashen-revenant",
+   "name": "Ashen Revenant",
+   "icon": "💀",
+   "tier": "Ashbound 5-9",
+   "dungeon": "ash",
+   "isElite": true,
+   "desc": "Dies and reforms from the ash. You must destroy all the ash at once."
+  },
+  {
+   "id": "ash-slag-titan",
+   "name": "Slag Titan",
+   "icon": "🌋",
+   "tier": "Ashbound — Elite",
+   "dungeon": "ash",
+   "isElite": true,
+   "desc": "Rose from the magma so long ago that the magma has cooled around its feet. It pulled free anyway."
+  },
+  {
+   "id": "ash-blighted-overseer",
+   "name": "Blighted Overseer",
+   "icon": "👁️",
+   "tier": "Ashbound — Elite",
+   "dungeon": "ash",
+   "isElite": true,
+   "desc": "Watched the wastes form from above. Has been watching ever since. It has seen everything."
+  },
+  {
+   "id": "ash-infernal-colossus",
+   "name": "Infernal Colossus",
+   "icon": "🔱",
+   "tier": "Ashbound — Elite",
+   "dungeon": "ash",
+   "isElite": true,
+   "desc": "Built from the bones of the wastes itself. The wastes needed a guardian. This is what it made."
+  },
+  {
+   "id": "ash-titan-elite",
+   "name": "Ash Titan",
+   "icon": "🔥",
+   "tier": "Elite — Ashbound",
+   "desc": "The fire did not just burn this creature. It became this creature.",
+   "dungeon": "ash",
+   "isElite": true
+  },
+  {
+   "id": "vel-ashara-chosen",
+   "name": "Vel Ashara Chosen",
+   "icon": "🌋",
+   "tier": "Elite — Ashbound",
+   "desc": "Selected by the fire itself. The honor is not reciprocated.",
+   "dungeon": "ash",
+   "isElite": true
+  },
+  {
+   "id": "ash-eternal-pyre",
+   "name": "The Eternal Pyre",
+   "icon": "🔥",
+   "tier": "Ashbound — Boss",
+   "dungeon": "ash",
+   "isBoss": true,
+   "desc": "Has been burning since before the dungeon was built. The dungeon was built around it."
+  },
+  {
+   "id": "ash-ashen-throne",
+   "name": "The Ashen Throne",
+   "icon": "👑",
+   "tier": "Ashbound — Boss",
+   "dungeon": "ash",
+   "isBoss": true,
+   "desc": "A ruler who refused to leave when the kingdom burned. The kingdom is ash. The ruler remains."
+  },
+  {
+   "id": "ash-cinder-colossus",
+   "name": "The Cinder Colossus",
+   "icon": "🌋",
+   "tier": "Ashbound — Boss",
+   "dungeon": "ash",
+   "isBoss": true,
+   "desc": "Absorbs the molten floor when it rages. Grows larger with each phase. There is no ceiling."
+  },
+  {
+   "id": "ash-ashen-king",
+   "name": "The Ashen King",
+   "icon": "👑",
+   "tier": "Ashbound — Boss",
+   "dungeon": "ash",
+   "isBoss": true,
+   "desc": "Burned his own kingdom to keep it from enemies. Burned himself last. Regrets nothing."
+  },
+  {
+   "id": "the-chimera-special",
+   "name": "The Chimera",
+   "icon": "🐉",
+   "tier": "Special",
+   "dungeon": "nightmare",
+   "desc": "Lion head. Goat body. Serpent tail. Each part fights independently. Destroy all three to win."
+  },
+  {
+   "id": "easter-bunny-enemy",
+   "name": "The Easter Bunny",
+   "icon": "🐰",
+   "tier": "Seasonal",
+   "dungeon": "crypt",
+   "desc": "A large rabbit in a bow tie. Has a basket of eggs. Appears only during Easter."
+  },
+  {
+   "id": "glacier-warden-elite",
+   "name": "Glacier Warden",
+   "icon": "🧊",
+   "tier": "Elite — Frosthold",
+   "desc": "Older than the ice. The ice grew around it like a house.",
+   "dungeon": "frost",
+   "isElite": true
+  },
+  {
+   "id": "frost-sovereign",
+   "name": "The Frost Sovereign",
+   "icon": "❄️",
+   "tier": "Elite — Frosthold",
+   "desc": "Rules the cold. The cold has not objected.",
+   "dungeon": "frost",
+   "isElite": true
+  },
+  {
+   "id": "frost-glacial-rat",
+   "name": "Glacial Rat",
+   "icon": "🐀",
+   "tier": "Frosthold 1-3",
+   "dungeon": "frost",
+   "desc": "Survived down here by eating whatever the cold left behind. There is always something left behind."
+  },
+  {
+   "id": "frost-cave-bat",
+   "name": "Cave Bat",
+   "icon": "🦇",
+   "tier": "Frosthold 1-3",
+   "dungeon": "frost",
+   "desc": "Blind in the dark, blind in the ice. It navigates by the cold itself."
+  },
+  {
+   "id": "frost-ice-shard",
+   "name": "Ice Shard",
+   "icon": "🧊",
+   "tier": "Frosthold 1-4",
+   "dungeon": "frost",
+   "desc": "A fragment of the glacier that learned to move. It is still learning."
+  },
+  {
+   "id": "frost-frost-crystal",
+   "name": "Frost Crystal",
+   "icon": "💎",
+   "tier": "Frosthold 1-4",
+   "dungeon": "frost",
+   "desc": "Grows in the dark. By the time you see it, it has already grown into you."
+  },
+  {
+   "id": "frost-permafrost-crawler",
+   "name": "Permafrost Crawler",
+   "icon": "🐛",
+   "tier": "Frosthold 2-5",
+   "dungeon": "frost",
+   "desc": "Moves through the ice the way worms move through soil. The ice is always frozen. It is always moving."
+  },
+  {
+   "id": "frost-frostbite-hound",
+   "enemyType": "beast",
+   "name": "Frostbite Hound",
+   "icon": "🐕",
+   "tier": "Frosthold 2-5",
+   "dungeon": "frost",
+   "desc": "Its bite does not hurt immediately. The cold does the work later."
+  },
+  {
+   "id": "frost-frost-shade",
+   "enemyType": "spirit",
+   "name": "Frost Shade",
+   "icon": "👤",
+   "tier": "Frosthold 2-6",
+   "dungeon": "frost",
+   "desc": "The cold preserves things. Including things that should not be preserved."
+  },
+  {
+   "id": "frost-ice-stalker",
+   "name": "Ice Stalker",
+   "icon": "🌑",
+   "tier": "Frosthold 3-6",
+   "dungeon": "frost",
+   "desc": "Follows at a distance. The distance is always exactly the same. You cannot lose it."
+  },
+  {
+   "id": "frost-frozen-husk",
+   "name": "Frozen Husk",
+   "icon": "🧟",
+   "tier": "Frosthold 3-6",
+   "dungeon": "frost",
+   "desc": "Was an explorer. The cold got into them before they got out. They are not coming out."
+  },
+  {
+   "id": "frost-glacial-knight",
+   "name": "Glacial Knight",
+   "icon": "⚔️",
+   "tier": "Frosthold 3-7",
+   "dungeon": "frost",
+   "desc": "Their armor froze to their body centuries ago. They stopped noticing."
+  },
+  {
+   "id": "frost-frozen-blade",
+   "name": "Frozen Blade",
+   "icon": "🗡️",
+   "tier": "Frosthold 4-7",
+   "dungeon": "frost",
+   "desc": "The sword froze mid-swing and kept swinging. The wielder is long gone."
+  },
+  {
+   "id": "frost-blizzard-wraith",
+   "enemyType": "spirit",
+   "name": "Blizzard Wraith",
+   "icon": "❄️",
+   "tier": "Frosthold 4-8",
+   "dungeon": "frost",
+   "desc": "Made of the storm itself. It does not have a body. The blizzard is the body."
+  },
+  {
+   "id": "frost-arctic-revenant",
+   "name": "Arctic Revenant",
+   "icon": "💀",
+   "tier": "Frosthold 4-8",
+   "dungeon": "frost",
+   "desc": "Died in the cold and came back colder. The resurrection did not warm it."
+  },
+  {
+   "id": "frost-frozen-banshee",
+   "name": "Frozen Banshee",
+   "icon": "😱",
+   "tier": "Frosthold 5-9",
+   "dungeon": "frost",
+   "isElite": true,
+   "desc": "Its scream does not carry sound. It carries cold. The kind of cold that reaches things sound cannot."
+  },
+  {
+   "id": "frost-frost-reaper",
+   "name": "Frost Reaper",
+   "icon": "💀",
+   "tier": "Frosthold 5-9",
+   "dungeon": "frost",
+   "isElite": true,
+   "desc": "Harvests the frozen dead. The abyss keeps producing them. It is never out of work."
+  },
+  {
+   "id": "frost-void-frost",
+   "name": "Void Frost",
+   "icon": "🌑",
+   "tier": "Frosthold — Elite",
+   "dungeon": "frost",
+   "isElite": true,
+   "desc": "The void and the cold found each other in the deep abyss. They are inseparable now."
+  },
+  {
+   "id": "frost-frozen-titan",
+   "name": "Frozen Titan",
+   "icon": "🏔️",
+   "tier": "Frosthold — Elite",
+   "dungeon": "frost",
+   "isElite": true,
+   "desc": "So large the ice grew around it like a mountain. Still moving. Very slowly."
+  },
+  {
+   "id": "frost-avalanche-colossus",
+   "name": "Avalanche Colossus",
+   "icon": "🌨️",
+   "tier": "Frosthold — Elite",
+   "dungeon": "frost",
+   "isElite": true,
+   "desc": "It does not attack. It falls. The difference matters less than you would hope."
+  },
+  {
+   "id": "frost-eternal-winter",
+   "name": "The Eternal Winter",
+   "icon": "❄️",
+   "tier": "Frosthold — Boss",
+   "dungeon": "frost",
+   "isBoss": true,
+   "desc": "It was not always cold in the abyss. Then the Eternal Winter arrived. Nothing else did after that."
+  },
+  {
+   "id": "frost-frozen-king",
+   "name": "The Frozen King",
+   "icon": "👑",
+   "tier": "Frosthold — Boss",
+   "dungeon": "frost",
+   "isBoss": true,
+   "desc": "The ice encasing him cracks when he is angry. He is always angry. The ice is always cracking."
+  },
+  {
+   "id": "frost-glacial-sovereign",
+   "name": "The Glacial Sovereign",
+   "icon": "👑",
+   "tier": "Frosthold — Boss",
+   "dungeon": "frost",
+   "isBoss": true,
+   "desc": "The abyss itself answers to it. The abyss has been answering for a very long time."
+  },
+  {
+   "id": "frost-void-below",
+   "name": "The Void Below",
+   "icon": "🌑",
+   "tier": "Frosthold — Boss",
+   "dungeon": "frost",
+   "isBoss": true,
+   "desc": "It came up through the ice floor. The floor did not stop it. Neither did the cold. Neither will you."
+  },
+  {
+   "id": "sunken-archive-phantom",
+   "name": "Archive Phantom",
+   "icon": "👻",
+   "tier": "Archives 2-4",
+   "dungeon": "sunken",
+   "desc": "The ghost of a researcher who cannot remember what they were researching. Still looking."
+  },
+  {
+   "id": "sunken-barnacle-armor",
+   "name": "Barnacle Armor",
+   "icon": "🦪",
+   "tier": "Archives 2-5",
+   "dungeon": "sunken",
+   "desc": "The armor was abandoned in the flooding. Something moved in. It fits perfectly."
+  },
+  {
+   "id": "sunken-drowned-paladin",
+   "name": "Drowned Paladin",
+   "icon": "🛡️",
+   "tier": "Archives 3-6",
+   "dungeon": "sunken",
+   "desc": "Died protecting an archive that no longer exists. Still protecting it."
+  },
+  {
+   "id": "sunken-abyssal-hunter",
+   "name": "Abyssal Hunter",
+   "icon": "🦑",
+   "tier": "Archives 3-6",
+   "dungeon": "sunken",
+   "desc": "Came up from below the archives. What is below the archives is not documented."
+  },
+  {
+   "id": "sunken-ink-shade",
+   "enemyType": "spirit",
+   "name": "Ink Shade",
+   "icon": "🖋️",
+   "tier": "Archives 3-7",
+   "dungeon": "sunken",
+   "desc": "Made entirely of spilled ink. The archives had a lot of ink. The flood did the rest."
+  },
+  {
+   "id": "sunken-waterlogged-blade",
+   "name": "Waterlogged Blade",
+   "icon": "⚔️",
+   "tier": "Archives 4-7",
+   "dungeon": "sunken",
+   "desc": "The sword rusted. Then it came alive. Rust and all."
+  },
+  {
+   "id": "sunken-drowned-paladin2",
+   "name": "Drowned Chancellor",
+   "icon": "📜",
+   "tier": "Archives 4-8",
+   "dungeon": "sunken",
+   "isElite": true,
+   "desc": "Ran the archives before the flooding. Now runs the underwater version. Standards have slipped."
+  },
+  {
+   "id": "sunken-abyssal-colossus2",
+   "name": "Abyssal Colossus",
+   "icon": "🌊",
+   "tier": "Archives — Elite",
+   "dungeon": "sunken",
+   "isElite": true,
+   "desc": "Rose from the deepest part of the archive basement. The basement was not supposed to have a deepest part."
+  },
+  {
+   "id": "sunken-one-that-watches2",
+   "name": "The One That Watches",
+   "icon": "👁️",
+   "tier": "Archives — Elite",
+   "dungeon": "sunken",
+   "isElite": true,
+   "desc": "Catalogued everything in the archives. Including you, the moment you arrived."
+  },
+  {
+   "id": "sunken-last-librarian",
+   "name": "The Last Librarian",
+   "icon": "📚",
+   "tier": "Archives — Boss",
+   "dungeon": "sunken",
+   "isBoss": true,
+   "desc": "Everyone else left. It stayed. It was responsible for the collection. The collection is still here."
+  },
+  {
+   "id": "sunken-drowned-curator",
+   "name": "The Drowned Curator",
+   "icon": "🌊",
+   "tier": "Archives — Boss",
+   "dungeon": "sunken",
+   "isBoss": true,
+   "desc": "The original curator refused to leave when the flooding started. The flooding started three hundred years ago."
+  },
+  {
+   "id": "head-archivist",
+   "name": "The Head Archivist",
+   "icon": "📚",
+   "tier": "Elite — Archives",
+   "desc": "Responsible for everything in the Archives. Including you, now.",
+   "dungeon": "sunken",
+   "isElite": true
+  },
+  {
+   "id": "leviathan-scout",
+   "name": "Leviathan Scout",
+   "icon": "🦑",
+   "tier": "Elite — Archives",
+   "desc": "A small piece of something very large. Relative terms.",
+   "dungeon": "sunken",
+   "isElite": true
+  },
+  {
+   "id": "first-fear",
+   "name": "The First Fear",
+   "icon": "😱",
+   "tier": "Elite — Nightmare",
+   "desc": "Not your first fear specifically. The original.",
+   "dungeon": "nightmare",
+   "isElite": true
+  },
+  {
+   "id": "void-champion-be",
+   "name": "Void Champion",
+   "icon": "🌑",
+   "tier": "Elite — Nightmare",
+   "desc": "The void has very high standards. This one met them.",
+   "dungeon": "nightmare",
+   "isElite": true
+  },
+  {
+   "id": "one-that-watches",
+   "name": "The One That Watches",
+   "icon": "👁️",
+   "tier": "Elite — Nightmare",
+   "desc": "Has been watching since before you arrived. Will continue after you leave.",
+   "dungeon": "nightmare",
+   "isElite": true
+  },
+  {
+   "id": "parlor-guest",
+   "name": "The Parlor Guest",
+   "icon": "🪑",
+   "tier": "Hollow 1-3",
+   "desc": "Has been sitting in that chair for a very long time. Will not be asked to leave.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "hollow-bride",
+   "enemyType": "spirit",
+   "name": "Hollow Bride",
+   "icon": "👰",
+   "tier": "Hollow 1-3",
+   "desc": "Still in the dress. Still waiting. The groom is somewhere in the house. She is not looking for him.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "the-portrait",
+   "name": "The Portrait",
+   "icon": "🖼️",
+   "tier": "Hollow 1-3",
+   "desc": "It was painted before the house was abandoned. The eyes in the painting were not always looking at you.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "creaking-step",
+   "name": "Creaking Step",
+   "icon": "🪜",
+   "tier": "Hollow 1-3",
+   "desc": "Not a person. Not a creature. A step that has learned to move by itself. It is looking for feet.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "the-reflection",
+   "name": "The Reflection",
+   "icon": "🪞",
+   "tier": "Hollow 1-3",
+   "desc": "It started appearing in mirrors three weeks after the family left. It is still there.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "the-risen",
+   "enemyType": "undead",
+   "name": "The Risen",
+   "icon": "🧟",
+   "tier": "Hollow 1-3",
+   "desc": "It was buried in the grounds. Something called it back. It did not come back the same.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "door-warden",
+   "name": "The Door Warden",
+   "icon": "🚪",
+   "tier": "Hollow 4-6",
+   "desc": "You have been hearing it for three floors. You have finally opened the right door.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "groundskeeper",
+   "name": "The Groundskeeper",
+   "icon": "⚰️",
+   "tier": "Hollow 4-6",
+   "desc": "Kept the grounds in perfect condition for thirty years after everyone left. Has opinions about trespassers.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "hollow-groom",
+   "name": "Hollow Groom",
+   "icon": "🤵",
+   "tier": "Hollow 4-6",
+   "desc": "Found what he was looking for. It was not the bride.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "the-bell-ringer",
+   "name": "The Bell Ringer",
+   "icon": "🔔",
+   "tier": "Hollow 4-6",
+   "desc": "The bell has not stopped ringing since the house was abandoned. Nobody is sure what it is calling.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "wall-crawler",
+   "name": "The Wall Crawler",
+   "icon": "🧱",
+   "tier": "Hollow 4-6",
+   "desc": "Has been in the walls longer than the house has been standing. Was here first. Is very patient.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "pale-guest",
+   "enemyType": "undead",
+   "name": "The Pale Guest",
+   "icon": "🧛",
+   "tier": "Hollow 4-6",
+   "desc": "Has not eaten in a long time. Has been waiting for someone to come through the door.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "oldest-guest",
+   "name": "The Oldest Guest",
+   "icon": "💀",
+   "tier": "Hollow 7-9",
+   "desc": "Was invited to a party in 1887. The party ended. The guest did not.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "hollow-matron",
+   "name": "The Hollow Matron",
+   "icon": "👵",
+   "tier": "Hollow 7-9",
+   "desc": "Ran the house for forty years. Still does. Her definition of the house has expanded considerably.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "the-caretaker",
+   "name": "The Caretaker",
+   "icon": "🗝️",
+   "tier": "Hollow 7-9",
+   "desc": "Has every key. Every room. Every secret. Has been waiting for someone to ask the right question.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "the-unfinished",
+   "enemyType": "spirit",
+   "name": "The Unfinished",
+   "icon": "👻",
+   "tier": "Hollow 7-9",
+   "desc": "Did not finish what it started before it died. Is still trying. Your attacks do not always find it.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "weeping-child",
+   "name": "The Weeping Child",
+   "icon": "😢",
+   "tier": "Hollow Special",
+   "desc": "Has been crying for a very long time. Can be soothed. Can also be fought. The first option is better for everyone.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "grieving-one",
+   "name": "The Grieving One",
+   "icon": "😭",
+   "tier": "Boss, Hollow Floor 10",
+   "desc": "What grief becomes when it has nowhere to go for long enough.",
+   "dungeon": "hollow",
+   "isBoss": true
+  },
+  {
+   "id": "house-itself",
+   "name": "The House Itself",
+   "icon": "🏚️",
+   "tier": "Boss, Hollow Floor 10",
+   "desc": "The house is not a location. It has decided you are staying.",
+   "dungeon": "hollow",
+   "isBoss": true
+  },
+  {
+   "id": "last-resident",
+   "name": "The Last Resident",
+   "icon": "🕯️",
+   "tier": "Boss, Hollow Floor 10",
+   "desc": "Has been alone here for a very long time. Does not want to be alone anymore.",
+   "dungeon": "hollow",
+   "isBoss": true
+  },
+  {
+   "id": "uninvited-guest",
+   "name": "The Uninvited Guest",
+   "icon": "🧍",
+   "tier": "Hollow 1-3",
+   "desc": "Was not in the room when you entered. Is in the room now. Has always been in the room.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "the-twin",
+   "name": "The Twin",
+   "icon": "👤",
+   "tier": "Hollow 1-3",
+   "desc": "Looks exactly like you. Has your stats. Is not you. Knows it is not you. Does not care.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "music-box",
+   "name": "The Music Box",
+   "icon": "🎵",
+   "tier": "Hollow 4-6",
+   "desc": "Plays a melody. Each note deals damage. You cannot attack while the music plays. You can only wait.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "easter-bunny-enemy",
+   "name": "The Easter Bunny",
+   "icon": "🐰",
+   "tier": "Easter Event",
+   "desc": "A large rabbit in a bow tie. Has a basket of eggs. Can be fought, adopted, or released. Appears only during Easter.",
+   "dungeon": "crypt"
+  },
+  {
+   "id": "jack-lantern",
+   "name": "Jack Lantern",
+   "icon": "🎃",
+   "tier": "Halloween",
+   "desc": "A pumpkin that learned to walk. It is very proud of this.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "the-scarecrow",
+   "name": "The Scarecrow",
+   "icon": "🧟",
+   "tier": "Halloween",
+   "desc": "It was put here to scare things away. It is now the thing that needs scaring.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "candy-wraith",
+   "enemyType": "spirit",
+   "name": "Candy Wraith",
+   "icon": "🍬",
+   "tier": "Halloween",
+   "desc": "Something went wrong at the candy factory.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "pumpkin-king",
+   "name": "The Pumpkin King",
+   "icon": "👑",
+   "tier": "Halloween",
+   "desc": "King of the pumpkins. The pumpkins did not ask for a king.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "grave-fog",
+   "name": "Grave Fog",
+   "icon": "🌫️",
+   "tier": "Halloween",
+   "desc": "The fog has opinions. This is new.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "the-scarecrow",
+   "name": "The Scarecrow",
+   "icon": "🧟",
+   "tier": "Halloween",
+   "desc": "It was put here to scare things away.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "scream-without-source",
+   "name": "Scream Without Source",
+   "icon": "😱",
+   "tier": "Nightmare",
+   "desc": "You hear it before you see it. Then you realize there is nothing to see.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "the-almost",
+   "name": "The Almost",
+   "icon": "👤",
+   "tier": "Nightmare",
+   "desc": "It almost looks like something you recognize. Almost.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "the-unnamed",
+   "name": "The Unnamed",
+   "icon": "❓",
+   "tier": "Nightmare",
+   "desc": "It has no name because naming it would mean acknowledging it exists.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "hollow-colossus",
+   "name": "Hollow Colossus",
+   "icon": "🗿",
+   "tier": "Nightmare",
+   "desc": "Big. Empty inside. Somehow that makes it worse.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "the-unraveling",
+   "name": "The Unraveling",
+   "icon": "🌀",
+   "tier": "Nightmare",
+   "desc": "Reality around it is coming undone. So are you.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "grief-made-flesh",
+   "name": "Grief Made Flesh",
+   "icon": "💔",
+   "tier": "Nightmare",
+   "desc": "Grief is not supposed to have teeth.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "void-stalker",
+   "name": "Void Stalker",
+   "icon": "🌑",
+   "tier": "Nightmare",
+   "desc": "It follows you between rooms. You cannot see it. You can feel it.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "the-damned",
+   "name": "The Damned",
+   "icon": "💀",
+   "tier": "Nightmare",
+   "desc": "They know what they did. They remember everything.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "void-reaver",
+   "name": "Void Reaver",
+   "icon": "⚫",
+   "tier": "Nightmare",
+   "desc": "It eats the parts of you that make you you.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "dread-sovereign",
+   "name": "Dread Sovereign",
+   "icon": "👁️",
+   "tier": "Nightmare Boss",
+   "desc": "It has been waiting for you specifically.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "soul-harvester-prime",
+   "name": "Soul Harvester Prime",
+   "icon": "💀",
+   "tier": "Nightmare Boss",
+   "desc": "It has collected many souls. It wants yours.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "dungeon-itself",
+   "name": "The Dungeon Itself",
+   "icon": "🏰",
+   "tier": "Nightmare Boss",
+   "desc": "The dungeon is alive. It always was.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "nightmare-sovereign",
+   "name": "The Nightmare Sovereign",
+   "icon": "👑",
+   "tier": "Nightmare Boss",
+   "desc": "King of everything you fear. Every fear. Not just yours.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "void-given-form",
+   "name": "The Void Given Form",
+   "icon": "🌌",
+   "tier": "Nightmare Boss",
+   "desc": "The void stopped being abstract.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "nightmare-colossus",
+   "name": "Nightmare Colossus",
+   "icon": "😱",
+   "tier": "Nightmare",
+   "desc": "Your nightmare got bigger.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "hollow-patriarch",
+   "name": "The Hollow Patriarch",
+   "icon": "🎩",
+   "tier": "Hollow Elite",
+   "desc": "Head of the house. The others defer to him.",
+   "dungeon": "hollow",
+   "isElite": true
+  },
+  {
+   "id": "seance-master",
+   "name": "The Séance Master",
+   "icon": "🕯️",
+   "tier": "Hollow Elite",
+   "desc": "She has been holding the séance for eleven years.",
+   "dungeon": "hollow",
+   "isElite": true
+  },
+  {
+   "id": "hollow-architect",
+   "name": "The Hollow Architect",
+   "icon": "🏚️",
+   "tier": "Hollow Elite",
+   "desc": "He designed the house. He never left.",
+   "dungeon": "hollow",
+   "isElite": true
+  },
+  {
+   "id": "lost-villager",
+   "name": "Lost Villager",
+   "icon": "🧑",
+   "tier": "Forest 1-3",
+   "desc": "They went to explore the forest. They did not come back. This is what came back instead.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "thornvine-crawler",
+   "name": "Thornvine Crawler",
+   "icon": "🌿",
+   "tier": "Forest 1-3",
+   "desc": "The vines in this forest move. You noticed too late.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "moss-specter",
+   "name": "Moss Specter",
+   "icon": "🌫️",
+   "tier": "Forest 1-3",
+   "desc": "Old moss given hunger. It has been here since before the witch.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "cursed-villager",
+   "name": "Cursed Villager",
+   "icon": "😱",
+   "tier": "Forest 1-3",
+   "desc": "They knew what the forest was. They went anyway. Now you know why that was a mistake.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "forest-wraith",
+   "enemyType": "spirit",
+   "name": "Forest Wraith",
+   "icon": "👻",
+   "tier": "Forest 1-3",
+   "desc": "Every forest has ghosts. This one has more than most.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "rotting-wanderer",
+   "name": "Rotting Wanderer",
+   "icon": "🧟",
+   "tier": "Forest 4-6",
+   "desc": "They wandered in looking for the way out. They are still looking.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "the-hollow-oak",
+   "name": "The Hollow Oak",
+   "icon": "🌳",
+   "tier": "Forest 4-6",
+   "desc": "The oldest tree in the forest. It remembers the witch. It approved of her work.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "witchs-familiar",
+   "name": "Witch's Familiar",
+   "icon": "🐈‍⬛",
+   "tier": "Forest 4-6",
+   "desc": "Seraphine's cat survived her death. It did not survive the forest.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "corrupted-knight",
+   "name": "Corrupted Knight",
+   "icon": "⚔️",
+   "tier": "Forest 4-6",
+   "desc": "He came to slay the witch. The forest made a different use of him.",
+   "dungeon": "whisper",
+   "isCorrupted": true
+  },
+  {
+   "id": "the-weeping-bark",
+   "name": "The Weeping Bark",
+   "icon": "🪵",
+   "tier": "Forest 4-6",
+   "desc": "The trees here cry. No one knows why. You will find out.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "corrupted-hollow-bride",
+   "name": "Corrupted Hollow Bride",
+   "icon": "👰",
+   "tier": "Forest 4-6",
+   "desc": "The corruption found her in the Hollow. It followed her here.",
+   "dungeon": "whisper",
+   "isCorrupted": true
+  },
+  {
+   "id": "corrupted-death-knight",
+   "name": "Corrupted Death Knight",
+   "icon": "💀",
+   "tier": "Forest 4-6",
+   "desc": "The corruption made something terrible into something worse.",
+   "dungeon": "whisper",
+   "isCorrupted": true
+  },
+  {
+   "id": "the-root-horror",
+   "name": "The Root Horror",
+   "icon": "🌱",
+   "tier": "Forest 7-9",
+   "desc": "Deep roots. Old hunger. The forest grew this specifically for you.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "corrupted-archivist",
+   "name": "Corrupted Archivist",
+   "icon": "📚",
+   "tier": "Forest 7-9",
+   "desc": "The Archives sent someone to study the forest. The forest studied them back.",
+   "dungeon": "whisper",
+   "isCorrupted": true
+  },
+  {
+   "id": "the-witchs-echo",
+   "name": "The Witch's Echo",
+   "icon": "🔮",
+   "tier": "Forest 7-9",
+   "desc": "Seraphine's voice lingers in the trees. It learned to bite.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "corrupted-bone-colossus",
+   "name": "Corrupted Bone Colossus",
+   "icon": "🗿",
+   "tier": "Forest 7-9",
+   "desc": "The corruption needed something large.",
+   "dungeon": "whisper",
+   "isCorrupted": true
+  },
+  {
+   "id": "forest-sovereign",
+   "name": "Forest Sovereign",
+   "icon": "🌲",
+   "tier": "Forest 7-9",
+   "desc": "The oldest thing in the forest. It was here before the village. It will be here after you.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "seraphine",
+   "name": "Seraphine the Undying",
+   "icon": "🧙",
+   "tier": "Forest Boss",
+   "desc": "She died three years ago. The forest refused to let her leave. She has had three years to get angry.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "the-corrupter",
+   "name": "The Corrupter",
+   "icon": "🌑",
+   "tier": "Forest Boss",
+   "desc": "The witch thought she summoned this. She did not. It was already in the forest. It has been waiting much longer than three years.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "the-thornlord",
+   "name": "The Thornlord",
+   "icon": "🌵",
+   "tier": "Forest Elite",
+   "desc": "King of the thorns. The thorns answer to it. So does everything else.",
+   "dungeon": "whisper",
+   "isElite": true
+  },
+  {
+   "id": "seraphines-shade",
+   "enemyType": "spirit",
+   "name": "Seraphine's Shade",
+   "icon": "🔮",
+   "tier": "Forest Elite",
+   "desc": "The witch's shadow learned to exist independently. It prefers it this way.",
+   "dungeon": "whisper",
+   "isElite": true
+  },
+  {
+   "id": "the-shade-elite",
+   "enemyType": "spirit",
+   "name": "The Shade",
+   "icon": "🌑",
+   "tier": "Rare — All Dungeons",
+   "desc": "289 HP. A darkness that exists in every dungeon but answers to nothing. Drains life. In Insane Mode it drains your sanity. In the Whispering Forest it spreads corruption. Sometimes strikes three times in one turn.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "corrupted-champion",
+   "name": "The Corrupted Champion",
+   "icon": "⚫",
+   "tier": "Forest Elite",
+   "desc": "The most corrupted thing in the forest that can still fight. It barely counts as a person anymore.",
+   "dungeon": "whisper",
+   "isElite": true
+  },
+  {
+   "id": "the-chimera",
+   "name": "The Chimera",
+   "icon": "🐉",
+   "tier": "Special — Any Dungeon",
+   "desc": "Lion head. Goat body. Serpent tail. Each part fights independently. Destroy all three to win.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "corrupted-chimera",
+   "name": "The Corrupted Chimera",
+   "icon": "🌑",
+   "tier": "Forest Floor 9",
+   "desc": "The forest made its own Chimera. Three parts, each wrong in a different way. Only appears on floor 9 of the Whispering Forest.",
+   "dungeon": "whisper"
+  },
+  {
+   "id": "drowned-chancellor",
+   "name": "Drowned Chancellor",
+   "icon": "📜",
+   "tier": "Sunken Boss",
+   "desc": "He ran the Archives. He still does, technically.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "soul-harvester-prime",
+   "name": "Soul Harvester Prime",
+   "icon": "💀",
+   "tier": "Nightmare Boss",
+   "desc": "It has collected many souls.",
+   "dungeon": "nightmare"
+  },
+  {
+   "id": "medusa",
+   "name": "Medusa",
+   "icon": "🐍",
+   "tier": "Hollow Special — Rare",
+   "dungeon": "hollow",
+   "desc": "A rare figure in the Hollow. Her eyes hold a terrible power. She was not always this way."
+  },
+  {
+   "id": "lord-phorcys",
+   "name": "Lord Phorcys",
+   "icon": "👴",
+   "tier": "Hollow Special — Rare",
+   "dungeon": "hollow",
+   "desc": "Her father. Has been searching the Hollow for years. Broken by grief. Do not mistake grief for weakness."
+  },
+  {
+   "id": "weeping-mother",
+   "name": "The Weeping Mother",
+   "icon": "👩",
+   "tier": "Hollow Special",
+   "desc": "She is looking for her child. If you found the child, you can end this without a fight. If you did not, you have two options. One of them is worse than the other.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "spire-rat",
+   "name": "Spire Rat",
+   "icon": "🐀",
+   "tier": "The Spire — Floors 1-50",
+   "dungeon": "spire",
+   "desc": "Something about the Spire made them larger. Faster. The ones at the bottom are almost normal. By floor thirty they are neither."
+  },
+  {
+   "id": "echo-crawler",
+   "name": "Echo Crawler",
+   "icon": "🔊",
+   "tier": "The Spire — Floors 1-50",
+   "dungeon": "spire",
+   "desc": "It calls out into the dark. The dark calls back. If you let it scream long enough, you will not be fighting one thing anymore."
+  },
+  {
+   "id": "spire-ember",
+   "name": "Spire Ember",
+   "icon": "🔥",
+   "tier": "The Spire — Floors 1-50",
+   "dungeon": "spire",
+   "desc": "A fragment of flame that found its way up from below. It burns on contact and does not stop."
+  },
+  {
+   "id": "cracked-husk",
+   "name": "Cracked Husk",
+   "icon": "💀",
+   "tier": "The Spire — Floors 1-50",
+   "dungeon": "spire",
+   "desc": "Something used to live inside it. Nothing does now. It fights anyway."
+  },
+  {
+   "id": "spire-wisp",
+   "name": "Spire Wisp",
+   "icon": "🔵",
+   "tier": "The Spire — Floors 1-50",
+   "dungeon": "spire",
+   "desc": "Harmless alone. The Spire is never alone."
+  },
+  {
+   "id": "mirror-stalker",
+   "name": "Mirror Stalker",
+   "icon": "🪞",
+   "tier": "The Spire — Floors 51-200",
+   "dungeon": "spire",
+   "desc": "Every wound you give it comes back to you, smaller but certain. Hit it hard and fast or pay every time."
+  },
+  {
+   "id": "spire-soul-eater",
+   "name": "Spire Soul Eater",
+   "icon": "😈",
+   "tier": "The Spire — Floors 51-200",
+   "dungeon": "spire",
+   "desc": "The higher it climbs, the hungrier it gets. It heals on every strike."
+  },
+  {
+   "id": "spire-phantom",
+   "name": "Spire Phantom",
+   "icon": "🌫️",
+   "tier": "The Spire — Floors 51-200",
+   "dungeon": "spire",
+   "desc": "Phases in and out. One in four attacks simply passes through it."
+  },
+  {
+   "id": "tower-stalker",
+   "name": "Tower Stalker",
+   "icon": "👁️",
+   "tier": "The Spire — Floors 51-200",
+   "dungeon": "spire",
+   "desc": "It does not rush. Every turn it waits is a turn it gets stronger."
+  },
+  {
+   "id": "spire-drainer",
+   "name": "Spire Drainer",
+   "icon": "⬛",
+   "tier": "The Spire — Floors 51-200",
+   "dungeon": "spire",
+   "desc": "Does not want your blood. Wants the energy behind your eyes."
+  },
+  {
+   "id": "spire-champion",
+   "name": "Spire Champion",
+   "icon": "⚔️",
+   "tier": "The Spire — Floors 201-500",
+   "dungeon": "spire",
+   "desc": "Strikes twice. Every turn. It has been doing this since floor twelve."
+  },
+  {
+   "id": "the-ascending",
+   "name": "The Ascending",
+   "icon": "🧗",
+   "tier": "The Spire — Floors 201-500",
+   "dungeon": "spire",
+   "desc": "The first hit does nothing. It has learned to absorb the opening blow."
+  },
+  {
+   "id": "spire-brute",
+   "name": "Spire Brute",
+   "icon": "👹",
+   "tier": "The Spire — Floors 201-500",
+   "dungeon": "spire",
+   "desc": "Devastating. Slow. It attacks every other turn. The one it lands is worth two of yours."
+  },
+  {
+   "id": "fracture-shade",
+   "name": "Fracture Shade",
+   "icon": "🌑",
+   "tier": "The Spire — Floors 201-500",
+   "dungeon": "spire",
+   "desc": "Cut it in half and you have two problems. Neither is smaller than the original."
+  },
+  {
+   "id": "the-beckoner",
+   "name": "The Beckoner",
+   "icon": "🫴",
+   "tier": "Forest 2-4",
+   "dungeon": "whisper",
+   "desc": "It reaches out. Not to attack. To invite. Three turns of patience and something worse accepts the invitation."
+  },
+  {
+   "id": "void-caller",
+   "name": "Void Caller",
+   "icon": "📯",
+   "tier": "Infernal — Tier 1",
+   "dungeon": "infernal",
+   "desc": "It does not fight you directly. It announces you. Something in the dark hears the announcement and begins moving."
+  },
+  {
+   "id": "crumbling-golem",
+   "name": "Crumbling Golem",
+   "icon": "🪨",
+   "tier": "The Spire — Floors 1-50",
+   "dungeon": "spire",
+   "desc": "Ancient guardians left to patrol the lower floors. They have been patrolling for so long that they have forgotten what they are guarding."
+  },
+  {
+   "id": "hollow-shade-spire",
+   "enemyType": "spirit",
+   "name": "Hollow Shade",
+   "icon": "👤",
+   "tier": "The Spire — Floors 1-50",
+   "dungeon": "spire",
+   "desc": "Shades follow those who climb the Spire. They are not chasing you. They are waiting for you to stop."
+  },
+  {
+   "id": "stone-sentinel",
+   "name": "Stone Sentinel",
+   "icon": "🗿",
+   "tier": "The Spire — Floors 51-200",
+   "dungeon": "spire",
+   "desc": "The Spire built these. Not in any way that can be explained. One day they were not here. Then they were."
+  },
+  {
+   "id": "ash-wraith",
+   "enemyType": "spirit",
+   "name": "Ash Wraith",
+   "icon": "💨",
+   "tier": "The Spire — Floors 51-200",
+   "dungeon": "spire",
+   "desc": "The remains of climbers who burned out before reaching the top. They drift upward still, out of habit."
+  },
+  {
+   "id": "spire-knight",
+   "name": "Spire Knight",
+   "icon": "⚔️",
+   "tier": "The Spire — Floors 51-200",
+   "dungeon": "spire",
+   "desc": "They were sent to clear the Spire decades ago. They never came back. They are still clearing it."
+  },
+  {
+   "id": "crimson-warden",
+   "name": "Crimson Warden",
+   "icon": "🔴",
+   "tier": "The Spire — Floors 201-500",
+   "dungeon": "spire",
+   "desc": "Their armor is not red. It started a different color. They have been in the Spire a very long time."
+  },
+  {
+   "id": "time-phantom",
+   "name": "Time Phantom",
+   "icon": "⏳",
+   "tier": "The Spire — Floors 201-500",
+   "dungeon": "spire",
+   "desc": "A fragment of time that got stuck. It replays the same moment of violence endlessly. You are now part of that moment."
+  },
+  {
+   "id": "rift-stalker",
+   "name": "Rift Stalker",
+   "icon": "🌀",
+   "tier": "The Spire — Floors 201-500",
+   "dungeon": "spire",
+   "desc": "It comes from the gaps between floors. The Spire has many gaps. It has many of these."
+  },
+  {
+   "id": "eternal-husk",
+   "name": "Eternal Husk",
+   "icon": "💀",
+   "tier": "The Spire — Floors 501-1000",
+   "dungeon": "spire",
+   "desc": "What the Spire leaves behind when it finishes with something. The soul is gone. The hunger is not."
+  },
+  {
+   "id": "voidborn-spire",
+   "name": "Voidborn",
+   "icon": "🌌",
+   "tier": "The Spire — Floors 501-1000",
+   "dungeon": "spire",
+   "desc": "Born in the nothing between the high floors. It does not understand what you are. This makes it more dangerous, not less."
+  },
+  {
+   "id": "time-devourer",
+   "name": "Time Devourer",
+   "icon": "⌛",
+   "tier": "The Spire — Floors 1001+",
+   "dungeon": "spire",
+   "desc": "Near the top, time moves differently. These feed on the difference. They are very well fed."
+  },
+  {
+   "id": "the-forgotten",
+   "name": "The Forgotten",
+   "icon": "🫥",
+   "tier": "The Spire — Floors 1001+",
+   "dungeon": "spire",
+   "desc": "No one remembers sending them up. They do not remember being sent. They remember nothing except the climbing."
+  },
+  {
+   "id": "gate-warden",
+   "name": "The Gate Warden",
+   "icon": "🚪",
+   "tier": "The Spire — Boss, Floor 10",
+   "dungeon": "spire",
+   "isBoss": true,
+   "desc": "The first door will not open itself. It never has."
+  },
+  {
+   "id": "iron-sovereign",
+   "name": "The Iron Sovereign",
+   "icon": "👑",
+   "tier": "The Spire — Boss, Floor 100",
+   "dungeon": "spire",
+   "isBoss": true,
+   "desc": "A king of stone and silence. It ruled the middle floors before the Spire existed. It rules them still."
+  },
+  {
+   "id": "void-throne",
+   "name": "The Void Throne",
+   "icon": "🌑",
+   "tier": "The Spire — Boss, Floor 500",
+   "dungeon": "spire",
+   "isBoss": true,
+   "desc": "Something sits on it. You cannot quite see what. You will see it clearly when it stands up."
+  },
+  {
+   "id": "the-time-eater",
+   "name": "The Time Eater",
+   "icon": "⏳",
+   "tier": "The Spire — Boss, Floor 1800",
+   "dungeon": "spire",
+   "isBoss": true,
+   "desc": "It has been at the top since before the Spire existed. It did not build the Spire. It did not need to. The Spire grew around it the way bone grows around a wound."
+  },
+  {
+   "id": "infernal-void-shadow",
+   "name": "Void Shadow",
+   "icon": "👤",
+   "tier": "Infernal — Tier 1",
+   "dungeon": "infernal",
+   "desc": "A formless shape that drains courage. It does not need your blood. It needs the part of you that keeps fighting."
+  },
+  {
+   "id": "infernal-void-wisp",
+   "enemyType": "spirit",
+   "name": "Void Wisp",
+   "icon": "🔵",
+   "tier": "Infernal — Tier 1",
+   "dungeon": "infernal",
+   "desc": "Tiny. Harmless alone. It is never alone. Kill it with heavy force and more come. It knows this. It counts on it."
+  },
+  {
+   "id": "infernal-ember",
+   "name": "Infernal Ember",
+   "icon": "🔥",
+   "tier": "Infernal — Tier 1",
+   "dungeon": "infernal",
+   "desc": "Leaves burning wounds that linger long after the fight ends. The burning is not fire. Fire is warm. This is not."
+  },
+  {
+   "id": "infernal-shadow-creep",
+   "name": "Shadow Creep",
+   "icon": "🌑",
+   "tier": "Infernal — Tier 1",
+   "dungeon": "infernal",
+   "desc": "Phases in and out of reality every few seconds. Every third strike passes through it completely. It learned this by accident."
+  },
+  {
+   "id": "infernal-void-husk",
+   "name": "Void Husk",
+   "icon": "💀",
+   "tier": "Infernal — Tier 1",
+   "dungeon": "infernal",
+   "desc": "An empty shell of something that was once alive. High endurance. Low aggression. It has been waiting a very long time. It is patient."
+  },
+  {
+   "id": "infernal-dark-tendril",
+   "name": "Dark Tendril",
+   "icon": "🪱",
+   "tier": "Infernal — Tier 1",
+   "dungeon": "infernal",
+   "desc": "Wraps around your striking arm and weakens your attacks. It does not need to kill you. It just needs you to be weaker when the others arrive."
+  },
+  {
+   "id": "infernal-void-wraith",
+   "enemyType": "spirit",
+   "name": "Void Wraith",
+   "icon": "👻",
+   "tier": "Infernal — Tier 2",
+   "dungeon": "infernal",
+   "desc": "Screams that only you can hear. The scream is not a weapon. The scream is a signal. It is calling the others."
+  },
+  {
+   "id": "infernal-void-stalker",
+   "name": "Void Stalker",
+   "icon": "👁️",
+   "tier": "Infernal — Tier 2",
+   "dungeon": "infernal",
+   "desc": "Gets stronger every turn it remains alive. It knows this. It fights defensively at first. It is waiting to become something you cannot kill."
+  },
+  {
+   "id": "infernal-brute",
+   "name": "Infernal Brute",
+   "icon": "👹",
+   "tier": "Infernal — Tier 2",
+   "dungeon": "infernal",
+   "desc": "Devastating power. Attacks every other turn only. The turn it does not attack, it is deciding exactly how to end you."
+  },
+  {
+   "id": "infernal-hollow-one",
+   "name": "The Hollow One",
+   "icon": "⬛",
+   "tier": "Infernal — Tier 2",
+   "dungeon": "infernal",
+   "desc": "Feeds on spirit energy. Does not care about your blood. Does not care about your HP. Drains your SP until you have nothing left to give."
+  },
+  {
+   "id": "infernal-soul-eater",
+   "name": "Soul Eater",
+   "icon": "😈",
+   "tier": "Infernal — Tier 2",
+   "dungeon": "infernal",
+   "desc": "Heals itself with every strike against you. The longer the fight goes, the stronger it gets. End it quickly or do not end it at all."
+  },
+  {
+   "id": "infernal-void-phantom",
+   "name": "Void Phantom",
+   "icon": "🌫️",
+   "tier": "Infernal — Tier 2",
+   "dungeon": "infernal",
+   "desc": "Thirty percent chance to phase through any attack. It does not choose when this happens. The void chooses for it. The void is generous."
+  },
+  {
+   "id": "infernal-dark-priest",
+   "name": "Dark Priest",
+   "icon": "🧙",
+   "tier": "Infernal — Tier 2",
+   "dungeon": "infernal",
+   "desc": "Empowers itself before striking. Kill it on the first turn or face something considerably worse than what arrived."
+  },
+  {
+   "id": "infernal-void-sentinel",
+   "name": "Void Sentinel",
+   "icon": "🗿",
+   "tier": "Infernal — Tier 3",
+   "dungeon": "infernal",
+   "desc": "The first blow glances off. Always. It has been hit before. It has learned from being hit. Your first strike teaches it nothing."
+  },
+  {
+   "id": "infernal-champion",
+   "name": "Infernal Champion",
+   "icon": "⚔️",
+   "tier": "Infernal — Tier 3",
+   "dungeon": "infernal",
+   "desc": "Strikes twice per turn. Has always struck twice per turn. Has never once considered striking only once."
+  },
+  {
+   "id": "infernal-nameless",
+   "name": "The Nameless",
+   "icon": "❓",
+   "tier": "Infernal — Tier 3",
+   "dungeon": "infernal",
+   "desc": "No name. No origin. No record of its existence anywhere in any dungeon documentation. Even the DDDI has no file on this one."
+  },
+  {
+   "id": "infernal-reaper-spawn",
+   "name": "Void Reaper Spawn",
+   "icon": "💀",
+   "tier": "Infernal — Tier 3",
+   "dungeon": "infernal",
+   "desc": "A fragment of the true Void Reaper. Broken off. Independent. Still terrifying. It carries a memory of what it used to be part of."
+  },
+  {
+   "id": "infernal-shadow-architect",
+   "name": "Shadow Architect",
+   "icon": "🏗️",
+   "tier": "Infernal — Tier 3",
+   "dungeon": "infernal",
+   "desc": "Splits into two at half HP. Both copies fight on with equal aggression. It did not plan this. It is simply what happens when you cut the void in half."
+  },
+  {
+   "id": "infernal-void-king",
+   "name": "The Void King",
+   "icon": "👑",
+   "tier": "Infernal — Elite",
+   "dungeon": "infernal",
+   "isElite": true,
+   "desc": "A king of nothing. Ruler of the dark between stars. Has been king longer than any dungeon has existed. Will be king long after."
+  },
+  {
+   "id": "infernal-overlord",
+   "name": "Infernal Overlord",
+   "icon": "🔱",
+   "tier": "Infernal — Elite",
+   "dungeon": "infernal",
+   "isElite": true,
+   "desc": "Ancient. Patient. Inevitable. It has defeated everyone who has ever faced it. You are aware you are the next in a long line."
+  },
+  {
+   "id": "infernal-hard-void",
+   "name": "The Hard Void",
+   "icon": "🌑",
+   "tier": "Infernal — Boss",
+   "dungeon": "infernal",
+   "isBoss": true,
+   "desc": "It is not an enemy. It is what remains when everything else is gone. Three phases. The third phase drains you. Find the weakness or fall."
+  },
+  {
+   "id": "infernal-architect-boss",
+   "name": "The Infernal Architect",
+   "icon": "🔱",
+   "tier": "Infernal — Boss",
+   "dungeon": "infernal",
+   "isBoss": true,
+   "desc": "The dungeon IS the Architect. You have been inside it the whole time. It built this place specifically for you. It has been waiting."
+  },
+  {
+   "id": "infernal-void-sovereign",
+   "name": "The Void Sovereign",
+   "icon": "👑",
+   "tier": "Infernal — Boss",
+   "dungeon": "infernal",
+   "isBoss": true,
+   "desc": "It ruled the dark long before the first dungeon was built. It remembers you from a previous life. You do not remember it. That is the difference between you."
+  },
+  {
+   "id": "mirror-shade",
+   "enemyType": "spirit",
+   "name": "Mirror Shade",
+   "icon": "🪞",
+   "tier": "Special — Any Dungeon",
+   "dungeon": "special",
+   "desc": "Reflects your own attack stat back at you. The stronger you are the harder it hits."
+  },
+  {
+   "id": "debt-collector",
+   "name": "Debt Collector",
+   "icon": "💀",
+   "tier": "Special — Any Dungeon",
+   "dungeon": "special",
+   "desc": "Steals 15 gold per turn. If it survives 5 turns you lose all your gold. Kill it fast."
+  },
+  {
+   "id": "hollow-preacher",
+   "name": "Hollow Preacher",
+   "icon": "📿",
+   "tier": "Special — Any Dungeon",
+   "dungeon": "special",
+   "desc": "Heals all allies in ambushes by 10 HP each turn. Always the first target."
+  },
+  {
+   "id": "void-anchor",
+   "name": "Void Anchor",
+   "icon": "⚓",
+   "tier": "Special — Any Dungeon",
+   "dungeon": "special",
+   "desc": "Prevents fleeing. You cannot escape this fight. There is no retreat."
+  },
+  {
+   "id": "the-lurker",
+   "name": "The Lurker",
+   "icon": "👁️",
+   "tier": "Special — Any Dungeon",
+   "dungeon": "special",
+   "desc": "Hides until you attack — immune to the first hit. Then reveals its true form and doubles its counter-attack."
+  },
+  {
+   "id": "void-wandering-warrior",
+   "name": "Wandering Warrior",
+   "icon": "⚔️",
+   "tier": "Void Mode — Wave 1",
+   "dungeon": "special",
+   "desc": "Overconfident. Undertrained. Still dangerous. The first hero to face you in Void Mode."
+  },
+  {
+   "id": "void-holy-paladin",
+   "name": "Holy Paladin",
+   "icon": "🛡️",
+   "tier": "Void Mode — Wave 2",
+   "dungeon": "special",
+   "desc": "Carries a shield of faith. Heals every 3 turns. Has never lost a fight before this one."
+  },
+  {
+   "id": "void-shadow-archer",
+   "name": "Shadow Archer",
+   "icon": "🏹",
+   "tier": "Void Mode — Wave 2",
+   "dungeon": "special",
+   "desc": "Fires from a distance. Precise. Deadly. Does not miss."
+  },
+  {
+   "id": "void-iron-warrior",
+   "name": "Iron Warrior",
+   "icon": "⚔️",
+   "tier": "Void Mode — Wave 3",
+   "dungeon": "special",
+   "desc": "Veteran fighter. Enrages below 50% HP. Has survived worse. Almost."
+  },
+  {
+   "id": "void-battle-mage",
+   "name": "Battle Mage",
+   "icon": "🔮",
+   "tier": "Void Mode — Wave 3",
+   "dungeon": "special",
+   "desc": "Channels ancient fire. Burns bright. Magical damage."
+  },
+  {
+   "id": "void-war-scout",
+   "name": "War Scout",
+   "icon": "🗡️",
+   "tier": "Void Mode — Wave 3",
+   "dungeon": "special",
+   "desc": "Fast. Crits before you can react."
+  },
+  {
+   "id": "void-elite-crusader",
+   "name": "Elite Crusader",
+   "icon": "✨",
+   "tier": "Void Mode — Wave 4",
+   "dungeon": "special",
+   "isElite": true,
+   "desc": "The chosen of a forgotten god. Enrages at 50% HP."
+  },
+  {
+   "id": "void-war-cleric",
+   "name": "War Cleric",
+   "icon": "⛪",
+   "tier": "Void Mode — Wave 4",
+   "dungeon": "special",
+   "desc": "Heals allies every 2 turns. Priority target."
+  },
+  {
+   "id": "void-rogue-assassin",
+   "name": "Rogue Assassin",
+   "icon": "🗡️",
+   "tier": "Void Mode — Wave 4",
+   "dungeon": "special",
+   "desc": "Critical hits for massive damage. Kill first."
+  },
+  {
+   "id": "void-last-hero",
+   "name": "The Last Hero",
+   "icon": "👑",
+   "tier": "Void Mode — Wave 5",
+   "dungeon": "special",
+   "isBoss": true,
+   "desc": "350 HP. Heals every 4 turns. They said one would come who could end the Void. This is that one. Probably."
+  },
+  {
+   "id": "void-ancient-paladin",
+   "name": "Ancient Paladin",
+   "icon": "🌟",
+   "tier": "Void Mode — Wave 5",
+   "dungeon": "special",
+   "isElite": true,
+   "desc": "Has fought darkness for forty years. Today is different."
+  },
+  {
+   "id": "void-void-hunter",
+   "name": "Void Hunter",
+   "icon": "🎯",
+   "tier": "Void Mode — Wave 5",
+   "dungeon": "special",
+   "isElite": true,
+   "desc": "Trained specifically to kill entities like you."
+  },
+  {
+   "id": "void-lorekeeper-mage",
+   "name": "Lorekeeper Mage",
+   "icon": "📚",
+   "tier": "Void Mode — Wave 5",
+   "dungeon": "special",
+   "isElite": true,
+   "desc": "Knows your weaknesses. Exploits them."
+  },
+  {
+   "id": "seasonal-krampus",
+   "name": "Krampus",
+   "icon": "🎄",
+   "tier": "Christmas Event",
+   "dungeon": "special",
+   "desc": "Appears in December. He is not happy. He has never been happy."
+  },
+  {
+   "id": "seasonal-krampus-imp",
+   "name": "Krampus Imp",
+   "icon": "😈",
+   "tier": "Christmas Event",
+   "dungeon": "special",
+   "desc": "Krampus brought helpers. The helpers are worse than Krampus."
+  },
+  {
+   "id": "seasonal-dark-reindeer",
+   "name": "The Dark Reindeer",
+   "icon": "🦌",
+   "tier": "Christmas Event",
+   "dungeon": "special",
+   "desc": "Krampus brought a reindeer. The reindeer has been through some things."
+  },
+  {
+   "id": "seasonal-snowman",
+   "name": "The Snowman",
+   "icon": "⛄",
+   "tier": "Christmas Event",
+   "dungeon": "special",
+   "desc": "Built by someone who did not check whether it was safe to build snowmen in a dungeon."
+  },
+  {
+   "id": "seasonal-jack-lantern",
+   "name": "Jack Lantern",
+   "icon": "🎃",
+   "tier": "Halloween Event",
+   "dungeon": "special",
+   "desc": "A pumpkin with a face. The face is angry. The pumpkin has no reason to be this angry."
+  },
+  {
+   "id": "seasonal-pumpkin-king",
+   "name": "The Pumpkin King",
+   "icon": "👑",
+   "tier": "Halloween Event",
+   "dungeon": "special",
+   "isBoss": true,
+   "desc": "Rules over all jack lanterns. Takes this responsibility extremely seriously."
+  },
+  {
+   "id": "seasonal-candy-wraith",
+   "enemyType": "spirit",
+   "name": "Candy Wraith",
+   "icon": "🍬",
+   "tier": "Halloween Event",
+   "dungeon": "special",
+   "desc": "Made of something sweet and something wrong."
+  },
+  {
+   "id": "seasonal-cursed-pumpkin",
+   "name": "Cursed Pumpkin",
+   "icon": "🎃",
+   "tier": "Halloween Event",
+   "dungeon": "special",
+   "desc": "Whatever was in this pumpkin is now out of the pumpkin and very upset about it."
+  },
+  {
+   "id": "seasonal-ghost-halloween",
+   "name": "Ghost of Halloween",
+   "icon": "👻",
+   "tier": "Halloween Event",
+   "dungeon": "special",
+   "desc": "Does not know the event is only supposed to last a month."
+  },
+  {
+   "id": "tide-wraith",
+   "enemyType": "spirit",
+   "name": "Tide Wraith",
+   "icon": "🌊",
+   "tier": "Abyssal — Tier 1",
+   "dungeon": "abyssal",
+   "desc": "Phases through your defense when you defend. It learned long ago that armor means nothing at this depth."
+  },
+  {
+   "id": "drowned-sailor",
+   "name": "Drowned Sailor",
+   "icon": "⚓",
+   "tier": "Abyssal — Tier 1",
+   "dungeon": "abyssal",
+   "desc": "A mariner who refused to surface. Every 3 turns it screams — a sound that seals your abilities in your throat."
+  },
+  {
+   "id": "ink-fiend",
+   "name": "Ink Fiend",
+   "icon": "🐙",
+   "tier": "Abyssal — Tier 1",
+   "dungeon": "abyssal",
+   "desc": "Sprays black ink when threatened. You cannot see what you cannot hit."
+  },
+  {
+   "id": "sea-slug",
+   "name": "Sea Slug",
+   "icon": "🐌",
+   "tier": "Abyssal — Tier 1",
+   "dungeon": "abyssal",
+   "desc": "Slow but relentless. Its slime carries a venom that works long after the fight ends."
+  },
+  {
+   "id": "shore-rat",
+   "name": "Shore Rat",
+   "icon": "🐀",
+   "tier": "Abyssal — Tier 1",
+   "dungeon": "abyssal",
+   "desc": "These rats followed ships down. They adapted. They attack in bursts of two strikes."
+  },
+  {
+   "id": "pale-drifter",
+   "name": "Pale Drifter",
+   "icon": "👻",
+   "tier": "Abyssal — Tier 1",
+   "dungeon": "abyssal",
+   "desc": "A ghost of someone who drowned. It does not want to fight. It wants company. That is almost worse."
+  },
+  {
+   "id": "deep-stalker",
+   "name": "Deep Stalker",
+   "icon": "🦈",
+   "tier": "Abyssal — Tier 2",
+   "dungeon": "abyssal",
+   "desc": "Spends the first turn studying you. The second turn it uses everything it learned."
+  },
+  {
+   "id": "coral-horror",
+   "name": "Coral Horror",
+   "icon": "🪸",
+   "tier": "Abyssal — Tier 2",
+   "dungeon": "abyssal",
+   "desc": "Half creature, half reef. Its calcified shell absorbs 20% of physical damage. Magic hurts it more."
+  },
+  {
+   "id": "pressure-beast",
+   "name": "Pressure Beast",
+   "icon": "💀",
+   "tier": "Abyssal — Tier 2",
+   "dungeon": "abyssal",
+   "desc": "Grows stronger every turn it survives. Kill it fast or it will become something you cannot kill."
+  },
+  {
+   "id": "kelp-strangler",
+   "name": "Kelp Strangler",
+   "icon": "🌿",
+   "tier": "Abyssal — Tier 2",
+   "dungeon": "abyssal",
+   "desc": "Wraps living kelp around your limbs. The longer the fight, the slower you get."
+  },
+  {
+   "id": "abyssal-eel",
+   "enemyType": "beast",
+   "name": "Abyssal Eel",
+   "icon": "⚡",
+   "tier": "Abyssal — Tier 2",
+   "dungeon": "abyssal",
+   "desc": "Generates a bio-electric field on strike. Reduces your attack for 2 turns each time it connects."
+  },
+  {
+   "id": "brine-golem",
+   "name": "Brine Golem",
+   "icon": "🧂",
+   "tier": "Abyssal — Tier 2",
+   "dungeon": "abyssal",
+   "desc": "Constructed from salt deposits and ocean pressure over centuries. Slow. Indestructible by anything less than focused force."
+  },
+  {
+   "id": "abyssal-eye",
+   "name": "Abyssal Eye",
+   "icon": "👁️",
+   "tier": "Abyssal — Tier 3",
+   "dungeon": "abyssal",
+   "desc": "Does not attack your body. Attacks your mind. Drains SP every turn until you have nothing left."
+  },
+  {
+   "id": "siren",
+   "name": "Siren",
+   "icon": "🧜",
+   "tier": "Abyssal — Tier 3",
+   "dungeon": "abyssal",
+   "desc": "Its voice turns your own strength against you. 30% chance your attack lands on yourself instead."
+  },
+  {
+   "id": "void-angler",
+   "name": "Void Angler",
+   "icon": "🎣",
+   "tier": "Abyssal — Tier 3",
+   "dungeon": "abyssal",
+   "desc": "Uses bioluminescent lures to draw you in close. The first strike always connects for maximum damage."
+  },
+  {
+   "id": "titan-crab",
+   "name": "Titan Crab",
+   "icon": "🦀",
+   "tier": "Abyssal — Tier 3",
+   "dungeon": "abyssal",
+   "desc": "Shell-armored for the first 3 turns. It absorbs 30% of your damage while its defenses hold. Patience is required."
+  },
+  {
+   "id": "drowned-king",
+   "name": "The Drowned King",
+   "icon": "👑",
+   "tier": "Abyssal — Elite",
+   "dungeon": "abyssal",
+   "isElite": true,
+   "desc": "Undead royalty. It has died before. It will die again. Then it will stand back up at 1 HP, furious, and remember why it never stays dead."
+  },
+  {
+   "id": "abyssal-sentinel",
+   "name": "Abyssal Sentinel",
+   "icon": "🔱",
+   "tier": "Abyssal — Elite",
+   "dungeon": "abyssal",
+   "isElite": true,
+   "desc": "Immune to debuffs, immune to stuns. It has felt every trick used against it for centuries. Nothing surprises it anymore."
+  },
+  {
+   "id": "pale-leviathan",
+   "name": "The Pale Leviathan",
+   "icon": "🤍",
+   "tier": "Abyssal — Elite",
+   "dungeon": "abyssal",
+   "isElite": true,
+   "desc": "A juvenile of its species. Still larger than anything you have faced. Calls for reinforcements every 3 turns."
+  },
+  {
+   "id": "leviathan-be",
+   "name": "The Leviathan",
+   "icon": "🐉",
+   "tier": "Abyssal — Boss",
+   "dungeon": "abyssal",
+   "isBoss": true,
+   "desc": "The apex of the ocean. Three phases — Surfacing, Rage, and the Deep Pull. In phase 3 every turn it survives it hits harder. You do not have long."
+  },
+  {
+   "id": "ancient-tide-be",
+   "name": "The Ancient Tide",
+   "icon": "🌊",
+   "tier": "Abyssal — Boss",
+   "dungeon": "abyssal",
+   "isBoss": true,
+   "desc": "Not a creature but a force. The tide itself, given ancient malice and a desire for your defeat."
+  },
+  {
+   "id": "drowned-god-be",
+   "name": "The Drowned God",
+   "icon": "🌑",
+   "tier": "Abyssal — Boss",
+   "dungeon": "abyssal",
+   "isBoss": true,
+   "desc": "It has been at the bottom of the ocean since before the ocean had a name. It opened its eyes when you entered. It has not blinked since."
+  },
+  {
+   "id": "the-witness-be",
+   "name": "The Witness",
+   "icon": "🦈",
+   "tier": "Abyssal — Special",
+   "dungeon": "abyssal",
+   "desc": "It has been watching you since you entered. Every room. Every fight. Every choice. It was never your enemy. It was waiting to see if you were worth following."
+  },
+  {
+   "id": "time-descender-be",
+   "name": "The Time Descender",
+   "icon": "⏳",
+   "tier": "Special — Floors 6+",
+   "dungeon": "special",
+   "desc": "15% chance on floor 6+. Two phases. Phase 2 locks all buttons and hits every 5 seconds. Drops Chrono Armor on first kill."
+  },
+  {
+   "id": "time-the-clock-be",
+   "name": "The Clock",
+   "icon": "🕰️",
+   "tier": "Special — Phase 2",
+   "dungeon": "special",
+   "desc": "Phase 2 of the Time Descender. Your actions are locked. It strikes for 18-28 damage every 5 seconds. One window to counter per cycle."
+  },
+  {
+   "id": "dddi-grand-overseer",
+   "name": "DDDI Grand Overseer",
+   "icon": "🏛️",
+   "tier": "Secret Boss",
+   "dungeon": "special",
+   "isBoss": true,
+   "desc": "2% chance on floor 10 of any dungeon. 280 HP. Three phases. A 47-page compliance document is involved. It has a gavel the size of a door."
+  },
+  {
+   "id": "mine-cave-rat",
+   "name": "Cave Rat",
+   "icon": "🐀",
+   "tier": "The Mine — Depth 1-2",
+   "dungeon": "mine",
+   "desc": "The mine rats are blind. They have been blind for generations. They navigate by vibration — the scrape of a pickaxe, the shift of a boot on loose stone. They find you before you find them."
+  },
+  {
+   "id": "mine-rock-beetle",
+   "name": "Rock Beetle",
+   "icon": "🪲",
+   "tier": "The Mine — Depth 1-2",
+   "dungeon": "mine",
+   "desc": "Their shells are harder than iron ore. Miners used to collect them as curiosities. Then the mines went deep enough to find the big ones."
+  },
+  {
+   "id": "mine-bat",
+   "name": "Mine Bat",
+   "icon": "🦇",
+   "tier": "The Mine — Depth 1-3",
+   "dungeon": "mine",
+   "desc": "They nest in the deepest shafts and come out only to hunt. The miners who disappeared in the lower tunnels — the bats know what happened to them."
+  },
+  {
+   "id": "mine-cave-troll",
+   "name": "Cave Troll",
+   "icon": "👹",
+   "tier": "The Mine — Depth 2-4",
+   "dungeon": "mine",
+   "desc": "Something the old miners woke up. They built walls to keep it contained. The walls are gone now. The troll remembers being walled in and has opinions about it."
+  },
+  {
+   "id": "mine-stone-golem",
+   "name": "Stone Golem",
+   "icon": "🗿",
+   "tier": "The Mine — Depth 3-5",
+   "dungeon": "mine",
+   "desc": "Not built. Grown. The mine is old enough that the magic in the ore has condensed into consciousness. It does not understand why you are here. It only knows you should not be."
+  },
+  {
+   "id": "mine-wraith",
+   "name": "Mine Wraith",
+   "icon": "👻",
+   "tier": "The Mine — Depth 3-5",
+   "dungeon": "mine",
+   "desc": "The ghost of a miner who went too deep and did not come back up. It wanders the lower tunnels carrying a pickaxe it no longer needs, looking for a way out it can never find."
+  },
+  {
+   "id": "mine-deep-crawler",
+   "name": "Deep Crawler",
+   "icon": "🕷️",
+   "tier": "The Mine — Depth 5+",
+   "dungeon": "mine",
+   "desc": "No one knows what it ate to grow that large. The webs in the deepest shafts are thick as rope. Whatever they caught down there fed something for a very long time."
+  },
+  {
+   "id": "mine-ore-demon",
+   "name": "Ore Demon",
+   "icon": "😈",
+   "tier": "The Mine — Depth 5+",
+   "dungeon": "mine",
+   "desc": "Summoned by the miners who found the wrong vein. They thought they had found a spirit of wealth. They were not entirely wrong about that."
+  },
+  {
+   "id": "mine-boss",
+   "name": "Mine Boss",
+   "icon": "💀",
+   "tier": "The Mine — Depth 5+ Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "Whatever was at the very bottom of this mine before the miners arrived. They sealed it away and never spoke of what they found. The seal has been broken for some time now."
+  },
+  {
+   "id": "mine-dust-shade",
+   "name": "Dust Shade",
+   "icon": "🌫️",
+   "tier": "The Mine — Depth 1-3",
+   "dungeon": "mine",
+   "desc": "Made of coal dust and old air. The mines have been breathing for centuries. Eventually the breath started breathing back."
+  },
+  {
+   "id": "mine-tunnel-snake",
+   "name": "Tunnel Snake",
+   "icon": "🐍",
+   "tier": "The Mine — Depth 1-3",
+   "dungeon": "mine",
+   "desc": "Long enough to fill a shaft. Old enough to remember when the mine was a mountain. Hungry in the way that only very patient things can be hungry."
+  },
+  {
+   "id": "mine-iron-sprite",
+   "name": "Iron Sprite",
+   "icon": "✨",
+   "tier": "The Mine — Depth 2-4",
+   "dungeon": "mine",
+   "desc": "A spirit of raw ore. Miners used to leave offerings for them. The offerings stopped. The sprites noticed."
+  },
+  {
+   "id": "mine-collapsed",
+   "name": "The Collapsed",
+   "icon": "🪨",
+   "tier": "The Mine — Depth 2-4",
+   "dungeon": "mine",
+   "desc": "A miner who was buried in a cave-in and kept going anyway. Technically still on shift. Technically."
+  },
+  {
+   "id": "mine-vein-horror",
+   "name": "Vein Horror",
+   "icon": "🩸",
+   "tier": "The Mine — Depth 4-6",
+   "dungeon": "mine",
+   "desc": "It lives in the ore veins like blood in a body. When you mine, you cut. When you cut, it bleeds. When it bleeds, it wakes up."
+  },
+  {
+   "id": "mine-diamond-golem",
+   "name": "Diamond Golem",
+   "icon": "💎",
+   "tier": "The Mine — Depth 5+",
+   "dungeon": "mine",
+   "desc": "Formed from the rarest deposits at the deepest levels. Every facet reflects something. None of the reflections are you."
+  },
+  {
+   "id": "mine-shaft-lurker",
+   "name": "Shaft Lurker",
+   "icon": "🌑",
+   "tier": "The Mine — Depth 4-6",
+   "dungeon": "mine",
+   "desc": "Lives in the vertical shafts between levels. Waits for something to fall. Has never had to wait long."
+  },
+  {
+   "id": "mine-pickaxe-ghost",
+   "name": "Pickaxe Ghost",
+   "icon": "⛏️",
+   "tier": "The Mine — Depth 2-4",
+   "dungeon": "mine",
+   "desc": "The ghost of a miner who loved their job too much to leave it. Still working. The sound of their pickaxe echoes through levels they no longer inhabit."
+  },
+  {
+   "id": "mine-crystal-wolf",
+   "name": "Crystal Wolf",
+   "icon": "🐺",
+   "tier": "The Mine — Depth 3-5",
+   "dungeon": "mine",
+   "desc": "A pack animal that followed something into the mine centuries ago. The something is gone. The wolf stayed. The crystals grew."
+  },
+  {
+   "id": "mine-forgotten-foreman",
+   "name": "Forgotten Foreman",
+   "icon": "👷",
+   "tier": "The Mine — Elite",
+   "dungeon": "mine",
+   "isElite": true,
+   "desc": "Was in charge when things went wrong. Has been in charge ever since. Whatever went wrong is still going wrong under his supervision."
+  },
+  {
+   "id": "mine-the-foremans-ghost",
+   "name": "The Foreman's Ghost",
+   "icon": "👻",
+   "tier": "The Mine — Depth 10 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "He ran this mine for forty years. He never left. He is still here, walking the tunnels at night, checking on workers who no longer work here, writing reports nobody will ever read."
+  },
+  {
+   "id": "mine-the-cave-king",
+   "name": "The Cave King",
+   "icon": "👑",
+   "tier": "The Mine — Depth 20 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "Something claimed the deepest tunnels as its kingdom long before you arrived. It has been ruling down here in the dark for a very long time. It is not happy about visitors."
+  },
+  {
+   "id": "mine-the-deep-hunger",
+   "name": "The Deep Hunger",
+   "icon": "🕳️",
+   "tier": "The Mine — Depth 30 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "It has been waiting in the dark since before the mine existed. It is very hungry. The mine was built around it without anyone realizing. The workers wondered why food kept disappearing."
+  },
+  {
+   "id": "mine-the-vein-titan",
+   "name": "The Vein Titan",
+   "icon": "⛰️",
+   "tier": "The Mine — Depth 50 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "The mountain itself has decided you have gone far enough. It pulled itself together into something with arms and a bad attitude. It is not a metaphor. It is literally the mountain."
+  },
+  {
+   "id": "mine-the-mines-heart",
+   "name": "The Mine's Heart",
+   "icon": "❤️",
+   "tier": "The Mine — Depth 100 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "You found it. The thing at the center of everything. It has been beating down here in the dark for longer than anyone can remember. It does not want to be found. It does not want to stop."
+  },
+  {
+   "id": "ash-cinder-hound",
+   "name": "Cinder Hound",
+   "icon": "🐕",
+   "tier": "Ashbound 1-3",
+   "dungeon": "ash",
+   "desc": "Runs on embers instead of blood. Leaves scorched pawprints on every surface it crosses. Has been running since the wastes ignited. Has not stopped."
+  },
+  {
+   "id": "ash-smoke-wraith",
+   "name": "Smoke Wraith",
+   "icon": "💨",
+   "tier": "Ashbound 1-4",
+   "dungeon": "ash",
+   "desc": "What remains of someone who burned completely. Not flesh, not bone — just the smoke of a person, still moving with the momentum of a life that ended."
+  },
+  {
+   "id": "ash-ember-knight",
+   "name": "Ember Knight",
+   "icon": "🔥",
+   "tier": "Ashbound 3-6",
+   "dungeon": "ash",
+   "desc": "A warrior who refused to retreat when the wastes burned. Their armor melted into their body. They are still standing. They are still fighting."
+  },
+  {
+   "id": "ash-pyre-sentinel",
+   "name": "Pyre Sentinel",
+   "icon": "🪔",
+   "tier": "Ashbound 4-7",
+   "dungeon": "ash",
+   "desc": "Set here to warn if the fire ever went out. The fire never went out. The sentinel has been standing at attention for three hundred years with nothing to report."
+  },
+  {
+   "id": "ash-burned-colossus",
+   "name": "Burned Colossus",
+   "icon": "🏚️",
+   "tier": "Ashbound 6-9",
+   "dungeon": "ash",
+   "desc": "Something enormous that walked into the fire and kept walking. The fire eventually gave up trying to kill it. They reached an understanding."
+  },
+  {
+   "id": "abyss-tide-caller",
+   "name": "Tide Caller",
+   "icon": "🌊",
+   "tier": "Abyssal 1-3",
+   "dungeon": "abyssal",
+   "desc": "Calls the tide from somewhere that has no tide. The tide comes anyway. The abyss has its own rules about what water does."
+  },
+  {
+   "id": "abyss-depth-shade",
+   "name": "Depth Shade",
+   "icon": "🌑",
+   "tier": "Abyssal 1-4",
+   "dungeon": "abyssal",
+   "desc": "The darkness at this depth is not an absence of light. It is a substance. This creature is made of it. It is very comfortable here."
+  },
+  {
+   "id": "abyss-sunken-titan",
+   "name": "Sunken Titan",
+   "icon": "⚓",
+   "tier": "Abyssal 4-7",
+   "dungeon": "abyssal",
+   "desc": "Something the ocean floor could not hold down anymore. It rose. The ocean floor has not recovered from the loss."
+  },
+  {
+   "id": "abyss-void-swimmer",
+   "name": "Void Swimmer",
+   "icon": "🦈",
+   "tier": "Abyssal 5-8",
+   "dungeon": "abyssal",
+   "desc": "Evolved to move through the void between the deep and the deeper. Has no natural predators. Has no natural anything. It simply is."
+  },
+  {
+   "id": "abyss-pressure-wraith",
+   "name": "Pressure Wraith",
+   "icon": "💀",
+   "tier": "Abyssal 6-9",
+   "dungeon": "abyssal",
+   "desc": "Created by the weight of the water above. Too much pressure for too long does things to matter. This is one of those things."
+  },
+  {
+   "id": "shadow-mimic",
+   "name": "The Mimic",
+   "icon": "📦",
+   "tier": "Shadow 1-3",
+   "dungeon": "shadow",
+   "desc": "It has been a chest for so long it has forgotten it is not one. The surprise when you open it is mutual."
+  },
+  {
+   "id": "shadow-pup",
+   "name": "Shadow Pup",
+   "icon": "🐾",
+   "tier": "Shadow 1-3",
+   "dungeon": "shadow",
+   "desc": "A small piece of darkness that learned to move. It never travels alone. It does not know how."
+  },
+  {
+   "id": "shadow-drifter",
+   "name": "The Drifter",
+   "icon": "🌫️",
+   "tier": "Shadow 1-3",
+   "dungeon": "shadow",
+   "desc": "Exists partially in the shadow plane. The half you can see is not the dangerous half."
+  },
+  {
+   "id": "shadow-null-frag",
+   "name": "Null Fragment",
+   "icon": "⬛",
+   "tier": "Shadow 1-4",
+   "dungeon": "shadow",
+   "desc": "A piece of something that was completely erased. It does not know what it used to be. It is angry about this."
+  },
+  {
+   "id": "shadow-smear",
+   "name": "The Smear",
+   "icon": "🖤",
+   "tier": "Shadow 1-4",
+   "dungeon": "shadow",
+   "desc": "Corruption given form. It leaves a mark on everything it touches. The mark stays long after the Smear is gone."
+  },
+  {
+   "id": "shadow-null-knight",
+   "name": "Null Knight",
+   "icon": "🗡️",
+   "tier": "Shadow 3-6",
+   "dungeon": "shadow",
+   "desc": "Someone wore this armor into the Shadow World and did not come back out. The armor did. Something else is wearing it now."
+  },
+  {
+   "id": "shadow-reflection",
+   "name": "The Reflection",
+   "icon": "🪞",
+   "tier": "Shadow 3-6",
+   "dungeon": "shadow",
+   "desc": "A mirror with opinions. It has studied you carefully. It will use what it has learned."
+  },
+  {
+   "id": "shadow-sorrow-hound",
+   "name": "Sorrow Hound",
+   "icon": "🐕",
+   "tier": "Shadow 3-6",
+   "dungeon": "shadow",
+   "desc": "A dog that has been in the dark too long. Its howl carries 3000 years of accumulated sadness. You will feel it."
+  },
+  {
+   "id": "shadow-lurker",
+   "name": "The Lurker",
+   "icon": "👁️",
+   "tier": "Shadow 3-6",
+   "dungeon": "shadow",
+   "desc": "Has been in this room longer than you have. Has been waiting longer than you have been alive. Patience is its primary weapon."
+  },
+  {
+   "id": "shadow-void-weaver",
+   "name": "Void Weaver",
+   "icon": "🕸️",
+   "tier": "Shadow 4-7",
+   "dungeon": "shadow",
+   "desc": "Spins webs from compressed shadow. The webs are not for catching prey. They are for corrupting it slowly."
+  },
+  {
+   "id": "shadow-twice-dead",
+   "name": "The Twice Dead",
+   "icon": "💀",
+   "tier": "Shadow 7-9",
+   "dungeon": "shadow",
+   "desc": "Died once and did not accept it. The Shadow World does not argue with things that refuse to stay dead. Neither should you."
+  },
+  {
+   "id": "shadow-archon",
+   "name": "Shadow Archon",
+   "icon": "👑",
+   "tier": "Shadow 7-9",
+   "dungeon": "shadow",
+   "desc": "Has ruled this section of the Shadow World for longer than recorded history. The shadows obey it. You are in its domain."
+  },
+  {
+   "id": "shadow-unborn",
+   "name": "The Unborn",
+   "icon": "🌑",
+   "tier": "Shadow 7-9",
+   "dungeon": "shadow",
+   "desc": "Never existed in the physical world. Has no frame of reference for physics. Physical laws do not apply to what was never physical."
+  },
+  {
+   "id": "shadow-remnant",
+   "name": "The Remnant",
+   "icon": "🔮",
+   "tier": "Shadow 7-9",
+   "dungeon": "shadow",
+   "desc": "What is left when something violent happens and the energy does not dissipate. It has been accumulating for 3000 years."
+  },
+  {
+   "id": "shadow-echo",
+   "name": "The Echo",
+   "icon": "🔄",
+   "tier": "Shadow Boss",
+   "dungeon": "shadow",
+   "desc": "A perfect copy of something you already killed. It remembers the fight. It remembers what you did. It will not make the same mistakes."
+  },
+  {
+   "id": "shadow-shapeshifter",
+   "name": "The Shapeshifter",
+   "icon": "🌑",
+   "tier": "Shadow Boss",
+   "dungeon": "shadow",
+   "desc": "Has waited 3000 years for someone worth copying. It wears your face now. Uses your skills. Knows every move before you make it. You are fighting yourself and yourself is very good at this."
+  },
+  {
+   "id": "whisper-root-walker",
+   "name": "Root Walker",
+   "icon": "🌿",
+   "tier": "Forest 1-3",
+   "dungeon": "whisper",
+   "desc": "The forest walks. This is one of its feet. There are others."
+  },
+  {
+   "id": "whisper-shadow-stag",
+   "name": "Shadow Stag",
+   "icon": "🦌",
+   "tier": "Forest 1-4",
+   "dungeon": "whisper",
+   "desc": "A deer that stepped into a shadow and did not come back out correctly. Still looks like a deer from certain angles. From other angles it does not."
+  },
+  {
+   "id": "whisper-bark-golem",
+   "name": "Bark Golem",
+   "icon": "🪵",
+   "tier": "Forest 3-6",
+   "dungeon": "whisper",
+   "desc": "The forest built it to deal with intruders. The forest is not subtle about what it considers an intruder."
+  },
+  {
+   "id": "whisper-night-bloom",
+   "name": "Night Bloom",
+   "icon": "🌸",
+   "tier": "Forest 3-6",
+   "dungeon": "whisper",
+   "desc": "Flowers that only open in darkness. The pollen is not good for you. The forest knows this. The forest is not concerned."
+  },
+  {
+   "id": "whisper-canopy-horror",
+   "name": "Canopy Horror",
+   "icon": "🕷️",
+   "tier": "Forest 5-8",
+   "dungeon": "whisper",
+   "desc": "Lives in the treetops where the light does not reach. Has been watching you since you entered the forest. You are only just becoming aware of it."
+  },
+  {
+   "id": "infernal-sin-eater",
+   "name": "Sin Eater",
+   "icon": "😈",
+   "tier": "Infernal 1-3",
+   "dungeon": "infernal",
+   "desc": "Feeds on guilt. The descent provides a steady supply. It has never gone hungry here. It has never gone hungry anywhere."
+  },
+  {
+   "id": "infernal-brimstone-hound",
+   "name": "Brimstone Hound",
+   "icon": "🐕",
+   "tier": "Infernal 2-5",
+   "dungeon": "infernal",
+   "desc": "The guard dogs of the descent. Bred for loyalty to whatever owns this place. Extremely loyal. Extremely hungry."
+  },
+  {
+   "id": "infernal-chain-wraith",
+   "name": "Chain Wraith",
+   "icon": "⛓️",
+   "tier": "Infernal 4-7",
+   "dungeon": "infernal",
+   "desc": "Bound here by something it cannot name. The chains are not keeping it in. They are keeping something else out. The distinction matters."
+  },
+  {
+   "id": "infernal-herald",
+   "name": "Infernal Herald",
+   "icon": "📯",
+   "tier": "Infernal 6-9",
+   "dungeon": "infernal",
+   "desc": "Announces arrivals in the descent. Has been announcing arrivals for a very long time. Its voice has gotten very loud."
+  }
+ ],
+ "nameToId": {
+  "Hollow Shade": "hollow-shade",
+  "Crypt Rat": "crypt-rat",
+  "Brittle Skeleton": "brittle-skeleton",
+  "Grave Crawler": "grave-crawler",
+  "Tomb Bat": "tomb-bat",
+  "Rotting Ghoul": "rotting-ghoul",
+  "Ashen Wisp": "ashen-wisp",
+  "Bone Shard": "bone-shard",
+  "Wailing Wraith": "wailing-wraith",
+  "Armored Skeleton": "armored-skeleton",
+  "Plague Hound": "plague-hound",
+  "Crypt Banshee": "crypt-banshee",
+  "Shadow Stalker": "shadow-stalker",
+  "Cursed Knight": "cursed-knight",
+  "Plague Wraith": "plague-wraith",
+  "Bone Archer": "bone-archer",
+  "Death Knight": "death-knight",
+  "Bone Colossus": "bone-colossus",
+  "Soul Harvester": "soul-harvester",
+  "Void Reaper": "void-reaper",
+  "Ancient Revenant": "ancient-revenant",
+  "Nightmare Shade": "nightmare-shade",
+  "Blood Golem": "blood-golem",
+  "Malachar the Undying": "malachar",
+  "Crypt Spider": "crypt-spider",
+  "Venom Spitter": "venom-spitter",
+  "Web Stalker": "web-stalker",
+  "Brood Mother": "brood-mother",
+  "The Undying Legion": "undying-legion",
+  "Cinder Wraith": "cinder-wraith",
+  "Ash Crawler": "ash-crawler",
+  "Scorched Husk": "scorched-husk",
+  "Ember Shade": "ember-shade",
+  "Char Bat": "char-bat",
+  "Slag Crawler": "slag-crawler",
+  "Molten Knight": "molten-knight",
+  "Plague of Cinders": "plague-of-cinders",
+  "Char Stalker": "char-stalker",
+  "Blighted Overseer": "blighted-overseer",
+  "Ashen Revenant": "ashen-revenant",
+  "Flame Wraith": "flame-wraith",
+  "Volcanic Revenant": "volcanic-revenant",
+  "Infernal Colossus": "infernal-colossus",
+  "The Ashen King": "the-ashen-king",
+  "Slag Titan": "slag-titan",
+  "Ember Reaper": "ember-reaper",
+  "The Eternal Pyre": "eternal-pyre",
+  "The Bone Sovereign": "bone-sovereign",
+  "The Void Walker": "void-walker",
+  "The Ashen Throne": "ashen-throne",
+  "The Cinder Colossus": "cinder-colossus",
+  "Frost Shade": "frost-shade",
+  "Glacial Rat": "glacial-rat",
+  "Ice Shard": "ice-shard",
+  "Frozen Husk": "frozen-husk",
+  "Cave Bat": "cave-bat",
+  "Permafrost Crawler": "permafrost-crawler",
+  "Blizzard Wraith": "blizzard-wraith",
+  "Glacial Knight": "glacial-knight",
+  "Frostbite Hound": "frostbite-hound",
+  "Frozen Banshee": "frozen-banshee",
+  "Ice Stalker": "ice-stalker",
+  "Arctic Revenant": "arctic-revenant",
+  "Avalanche Colossus": "avalanche-colossus",
+  "Frost Reaper": "frost-reaper",
+  "The Glacial Sovereign": "glacial-sovereign",
+  "Frozen Titan": "frozen-titan",
+  "Void Frost": "void-frost",
+  "The Eternal Winter": "eternal-winter",
+  "The Frozen King": "frozen-king",
+  "The Void Below": "void-below",
+  "The Hollow": "the-hollow",
+  "Flesh Amalgam": "flesh-amalgam",
+  "Void Spawn": "void-spawn",
+  "The Forgotten": "the-forgotten",
+  "Dread Wisp": "dread-wisp",
+  "Nightmare Rat": "nightmare-rat",
+  "Soul Eater": "soul-eater",
+  "The Watcher": "the-watcher",
+  "Dread Knight": "dread-knight",
+  "Flesh Wraith": "flesh-wraith",
+  "Void Stalker": "void-stalker",
+  "The Damned": "the-damned",
+  "Nightmare Colossus": "nightmare-colossus",
+  "The Unmaking": "the-unmaking",
+  "Void Reaver": "void-reaver",
+  "Dread Sovereign": "dread-sovereign",
+  "Soul Harvester Prime": "soul-harvester-prime",
+  "The Dungeon Itself": "dungeon-itself",
+  "The Nightmare Sovereign": "nightmare-sovereign",
+  "The Void Given Form": "void-given-form",
+  "The Parlor Guest": "parlor-guest",
+  "Hollow Bride": "hollow-bride",
+  "The Portrait": "the-portrait",
+  "Creaking Step": "creaking-step",
+  "The Reflection": "the-reflection",
+  "The Door Warden": "door-warden",
+  "The Groundskeeper": "groundskeeper",
+  "Hollow Groom": "hollow-groom",
+  "The Bell Ringer": "the-bell-ringer",
+  "The Wall Crawler": "wall-crawler",
+  "The Oldest Guest": "oldest-guest",
+  "The Hollow Matron": "hollow-matron",
+  "The Caretaker": "the-caretaker",
+  "The Weeping Child": "weeping-child",
+  "The Weeping Mother": "weeping-mother",
+  "The Music Box": "music-box",
+  "The Twin": "the-twin",
+  "The Uninvited Guest": "uninvited-guest",
+  "The Grieving One": "grieving-one",
+  "The House Itself": "house-itself",
+  "The Last Resident": "last-resident",
+  "The Easter Bunny": "easter-bunny-enemy",
+  "The Hollow Patriarch": "hollow-patriarch",
+  "The Séance Master": "seance-master",
+  "The Hollow Architect": "hollow-architect",
+  "Drowned Archivist": "drowned-archivist",
+  "Ink Wraith": "ink-wraith",
+  "Bloated Librarian": "bloated-librarian",
+  "Paper Shade": "paper-shade",
+  "Soggy Sentinel": "soggy-sentinel",
+  "Deep Cartographer": "deep-cartographer",
+  "Tide Golem": "tide-golem",
+  "Drowned Scholar": "drowned-scholar",
+  "Archive Specter": "archive-specter",
+  "Leviathan Spawn": "leviathan-spawn",
+  "The Sunken Warden": "sunken-warden",
+  "Grand Archivist": "grand-archivist",
+  "Abyssal Colossus": "abyssal-colossus",
+  "Drowned Chancellor": "drowned-chancellor",
+  "The Drowned Curator": "drowned-curator",
+  "Leviathan of the Deep": "leviathan-deep",
+  "The Last Librarian": "last-librarian",
+  "The Unnamed": "the-unnamed",
+  "Scream Without Source": "scream-without-source",
+  "The Almost": "the-almost",
+  "Hollow Colossus": "hollow-colossus",
+  "The Unraveling": "the-unraveling",
+  "Grief Made Flesh": "grief-made-flesh",
+  "Jack Lantern": "jack-lantern",
+  "The Scarecrow": "the-scarecrow",
+  "Candy Wraith": "candy-wraith",
+  "The Pumpkin King": "pumpkin-king",
+  "Grave Fog": "grave-fog",
+  "The Bat Swarm": "bat-swarm",
+  "Hollow Skeleton": "hollow-skeleton",
+  "The Black Cat": "black-cat",
+  "Cursed Pumpkin": "cursed-pumpkin",
+  "The Witch": "the-witch",
+  "Ghost of Halloween": "ghost-of-halloween",
+  "The Headless One": "headless-one",
+  "Krampus Imp": "krampus-imp",
+  "The Snowman": "the-snowman",
+  "Cursed Elf": "cursed-elf",
+  "Krampus": "krampus",
+  "Frozen Gift": "frozen-gift",
+  "The Dark Reindeer": "dark-reindeer",
+  "Ancient Death Knight": "ancient-death-knight",
+  "The Eternal Warden": "eternal-warden",
+  "Crypt Champion": "crypt-champion",
+  "Ash Titan": "ash-titan",
+  "Vel Ashara Chosen": "vel-ashara-chosen",
+  "The Undying Flame": "undying-flame",
+  "Glacier Warden": "glacier-warden",
+  "The Frost Sovereign": "frost-sovereign",
+  "Abyssal Hunter": "abyssal-hunter",
+  "The Head Archivist": "head-archivist",
+  "Leviathan Scout": "leviathan-scout",
+  "Drowned Paladin": "drowned-paladin",
+  "The First Fear": "first-fear",
+  "Void Champion": "void-champion",
+  "The One That Watches": "one-that-watches"
+ },
+ "milestones": {
+  "hollow-shade": {
+   "kills": 10,
+   "reward": "Plus 1 defense vs undead.",
+   "effect": "undeadDef"
+  },
+  "crypt-rat": {
+   "kills": 15,
+   "reward": "Plus 5% loot find chance.",
+   "effect": "lootChance"
+  },
+  "death-knight": {
+   "kills": 5,
+   "reward": "Plus 5 max HP permanently.",
+   "effect": "hpUp"
+  },
+  "malachar": {
+   "kills": 1,
+   "reward": "Plus 10 max HP permanently.",
+   "effect": "hpUpBig"
+  },
+  "plague-hound": {
+   "kills": 10,
+   "reward": "Potions heal 10% more.",
+   "effect": "potionUp"
+  },
+  "soul-harvester": {
+   "kills": 5,
+   "reward": "Plus 2 SP regen per room.",
+   "effect": "spRegen"
+  },
+  "bone-colossus": {
+   "kills": 3,
+   "reward": "Plus 3 defense permanently.",
+   "effect": "defUp"
+  },
+  "cinder-wraith": {
+   "kills": 10,
+   "reward": "Plus 1 attack vs fire enemies.",
+   "effect": "fireAtk"
+  },
+  "eternal-pyre": {
+   "kills": 1,
+   "reward": "Plus 15 max HP permanently.",
+   "effect": "hpUpBig2"
+  },
+  "frost-shade": {
+   "kills": 10,
+   "reward": "Plus 1 defense vs ice enemies.",
+   "effect": "iceRes"
+  },
+  "the-hollow": {
+   "kills": 5,
+   "reward": "Plus 5 SP max permanently.",
+   "effect": "spUp"
+  },
+  "dungeon-itself": {
+   "kills": 1,
+   "reward": "Plus 20 max HP permanently.",
+   "effect": "hpUpNM"
+  },
+  "drowned-archivist": {
+   "kills": 10,
+   "reward": "Plus 5 SP max permanently.",
+   "effect": "spUp2"
+  },
+  "tide-golem": {
+   "kills": 5,
+   "reward": "Plus 3 defense permanently.",
+   "effect": "defUp2"
+  },
+  "drowned-curator": {
+   "kills": 1,
+   "reward": "Plus 15 max HP permanently.",
+   "effect": "hpUpSunken"
+  },
+  "leviathan-deep": {
+   "kills": 1,
+   "reward": "Plus 2 attack permanently.",
+   "effect": "atkUpSunken"
+  },
+  "hollow-bride": {
+   "kills": 10,
+   "reward": "Plus 1 defense permanently.",
+   "effect": "defHollow"
+  },
+  "behind-the-door": {
+   "kills": 5,
+   "reward": "Plus 5 max HP permanently.",
+   "effect": "hpHollow"
+  },
+  "grieving-one": {
+   "kills": 1,
+   "reward": "Plus 10 max HP permanently.",
+   "effect": "hpBossHollow"
+  },
+  "weeping-child": {
+   "kills": 3,
+   "reward": "Plus 3 SP max permanently.",
+   "effect": "spHollow"
+  },
+  "grief-made-flesh": {
+   "kills": 5,
+   "reward": "Plus 2 attack permanently.",
+   "effect": "atkNM2"
+  },
+  "the-almost": {
+   "kills": 10,
+   "reward": "Potions heal 15% more.",
+   "effect": "potionNM"
+  }
+ }
+}

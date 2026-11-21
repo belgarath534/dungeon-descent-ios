@@ -1,0 +1,135 @@
+# Checks that the Swift version builds for iPhone, Mac and Apple Vision Pro on
+# every push, without signing (so it can't be installed; the TestFlight
+# workflow does the signed builds). If this fails, the log says exactly why.
+#
+# The three platforms build at the same time, as three jobs, so the check
+# takes as long as the slowest one, not all three added up. Apple Vision Pro
+# compiles Firestore from source (Google ships no ready-made Vision Pro
+# version), so its build folder is cached: Firestore and the other packages
+# are only compiled again when the project's packages change.
+name: Swift iOS build
+
+on:
+  push:
+    branches: [swift-rewrite]
+    paths:
+      - 'swift/**'
+      - '.github/workflows/swift-build.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: swift-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    # The same Xcode 27 image as the TestFlight builds.
+    runs-on: xcode-27
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: iPhone
+            id: ios
+            destination: generic/platform=iOS
+          - name: Mac
+            id: mac
+            destination: generic/platform=macOS,variant=Mac Catalyst
+          - name: Apple Vision Pro
+            id: vision
+            destination: generic/platform=visionOS
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Xcode 27
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+          xcodebuild -version
+
+      - name: Run the game rules tests
+        if: matrix.id == 'ios'
+        working-directory: swift/DungeonCore
+        run: swift test
+
+      - name: Generate the Xcode project
+        working-directory: swift/App
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          xcodegen generate
+
+      # Firestore from source takes most of the Vision Pro build: keep it.
+      - name: Reuse Apple Vision Pro's compiled packages
+        if: matrix.id == 'vision'
+        uses: actions/cache@v4
+        with:
+          path: swift/App/build-vision
+          key: vision-dd-${{ hashFiles('swift/App/project.yml') }}-${{ github.sha }}
+          restore-keys: |
+            vision-dd-${{ hashFiles('swift/App/project.yml') }}-
+            vision-dd-
+
+      - name: Build the app for ${{ matrix.name }} (unsigned)
+        working-directory: swift/App
+        run: |
+          set -o pipefail
+          if [ "${{ matrix.id }}" = vision ]; then
+            xcodebuild -showsdks | grep -qi xros || xcodebuild -downloadPlatform visionOS
+            # Firestore's ready-made library has no Vision Pro version; this
+            # builds it from source (Vision Pro only, so iPhone builds stay fast).
+            export FIREBASE_SOURCE_FIRESTORE=1
+          fi
+          xcodebuild \
+            -project DungeonDescent.xcodeproj \
+            -scheme DungeonDescent \
+            -configuration Release \
+            -destination '${{ matrix.destination }}' \
+            -derivedDataPath build-${{ matrix.id }} \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build 2>&1 | tee xcodebuild-${{ matrix.id }}.log | grep -E "error:|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" xcodebuild-${{ matrix.id }}.log
+
+      - name: Package unsigned IPA
+        if: matrix.id == 'ios'
+        working-directory: swift/App
+        run: |
+          mkdir -p Payload
+          cp -R build-ios/Build/Products/Release-iphoneos/DungeonDescent.app Payload/
+          # The Apple Watch app rides inside the iPhone app.
+          ls Payload/DungeonDescent.app/Watch/DungeonWatch.app/DungeonWatch
+          # Every library the app or its libraries load at launch (@rpath)
+          # must be inside the app, or iOS can't start it (12.0's TestFlight
+          # builds crashed at launch twice: KokoroSwift, then MisakiSwift).
+          app=Payload/DungeonDescent.app
+          echo "Frameworks in the app:"; ls "$app/Frameworks" 2>/dev/null || echo "(none)"
+          missing=0
+          for bin in "$app/DungeonDescent" "$app"/Frameworks/*.framework/*; do
+            [ -f "$bin" ] && file "$bin" | grep -q Mach-O || continue
+            for lib in $(otool -L "$bin" | awk '/@rpath\//{print $1}'); do
+              name=${lib#@rpath/}
+              [ "$name" = "$(basename "$(dirname "$bin")")/$(basename "$bin")" ] && continue
+              if [ -e "$app/Frameworks/$name" ]; then echo "ok  $name  (for $(basename "$bin"))"
+              else echo "MISSING  $name  (needed by $(basename "$bin"))"; missing=1; fi
+            done
+          done
+          [ $missing = 0 ] || { echo "::error::A library the app needs at launch isn't inside it"; exit 1; }
+          # A static library's framework folder must not be inside the app:
+          # the App Store refuses it (ITMS-90208, ONNX Runtime in 12.0).
+          for fw in "$app"/Frameworks/*.framework; do
+            [ -d "$fw" ] || continue
+            bin="$fw/$(basename "$fw" .framework)"
+            if [ -f "$bin" ] && ! file "$bin" | grep -q "dynamically linked shared library"; then
+              echo "::error::$(basename "$fw") is a static library copied into the app; the App Store refuses it"; exit 1
+            fi
+          done
+          zip -qr DungeonDescent-unsigned.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: swift-${{ matrix.id }}-build
+          path: |
+            swift/App/DungeonDescent-unsigned.ipa
+            swift/App/xcodebuild-${{ matrix.id }}.log
+          if-no-files-found: ignore

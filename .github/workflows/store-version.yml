@@ -1,0 +1,84 @@
+# Makes the next App Store version for iPhone, Mac and Apple Vision Pro
+# (tools/new-version.py). Run it by pushing to the "store-version" branch
+# (git push origin swift-rewrite:store-version). Safe to run again. Then it
+# picks each platform's newest processed build and fills in the App Review
+# details (store/submit_version.py, without submitting), and releases the
+# Game Center leaderboards and challenges.
+name: New App Store version
+
+on:
+  push:
+    # store-submit: the same, and then sends all three to App Review.
+    # store-cancel: only takes all three back out of App Review.
+    # store-status: only prints where each one is in review.
+    # store-auto-release: sets all three to release as soon as approved.
+    branches: [store-version, store-submit, store-cancel, store-status, store-auto-release]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      CLEAN_CERTS_TOKEN: ${{ secrets.CERTS_REPO_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get key files from ios-certificates
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          repository: belgarath534/ios-certificates
+          token: ${{ env.CLEAN_CERTS_TOKEN }}
+          path: .certs-repo
+
+      - name: Collect Apple API keys
+        env:
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          mkdir -p "$HOME/.asc/candidates"
+          if [ -d .certs-repo ]; then
+            find .certs-repo -name '*.p8' -not -path '*/.git/*' -exec cp {} "$HOME/.asc/candidates/" \;
+          fi
+          if [ -n "$ASC_KEY_P8" ] && [ -n "$ASC_KEY_ID" ]; then
+            printf '%s\n' "$ASC_KEY_P8" > "$HOME/.asc/candidates/secret_$(printf '%s' "$ASC_KEY_ID" | tr -d '[:space:]').p8"
+          fi
+          rm -rf .certs-repo
+
+      - name: Find the key Apple accepts
+        run: ruby scripts/check_asc_key.rb
+
+      - name: Make the versions
+        if: github.ref_name == 'store-version' || github.ref_name == 'store-submit' || github.event_name == 'workflow_dispatch'
+        run: |
+          pip install --quiet pyjwt cryptography requests
+          python3 tools/new-version.py
+
+      - name: Release the Game Center leaderboards and challenges
+        if: github.ref_name == 'store-version' || github.ref_name == 'store-submit' || github.event_name == 'workflow_dispatch'
+        run: python3 tools/attach-game-center.py
+
+      - name: Pick the builds (and submit, from store-submit)
+        env:
+          VERSION: "12.0"
+          SUBMIT: ${{ github.ref_name == 'store-submit' && 'yes' || '' }}
+          CANCEL: ${{ github.ref_name == 'store-cancel' && 'yes' || '' }}
+          STATUS: ${{ github.ref_name == 'store-status' && 'yes' || '' }}
+          AUTO_RELEASE: ${{ github.ref_name == 'store-auto-release' && 'yes' || '' }}
+        run: |
+          pip install --quiet pyjwt cryptography requests
+          export APP_STORE_CONNECT_PRIVATE_KEY="@file:$ASC_KEY_PATH"
+          export APP_STORE_CONNECT_ISSUER_ID="$ASC_ISSUER_ID"
+          export APP_STORE_CONNECT_KEY_IDENTIFIER="$GOOD_KEY_ID"
+          status=0
+          for P in IOS MAC_OS VISION_OS; do
+            echo "== $P"
+            PLATFORM=$P python3 store/submit_version.py || status=1
+          done
+          exit $status
+
+      - name: Remove keys
+        if: always()
+        run: rm -rf "$HOME/.asc"

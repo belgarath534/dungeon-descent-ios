@@ -1,0 +1,6 @@
+The Festival Update
+• Rebuilt natively in Swift: faster, smoother and better with VoiceOver
+• New Apple Watch app: start and follow Endless Descent from your wrist
+• Live Lock Screen and Dynamic Island updates every fight while you're away
+• Nine new events: Día de los Muertos, Mexican Independence (with ¡El Grito!), New Year, Lunar New Year, Chaos Day, The Longest Night, The Eclipse, Night Market and Monster Migration
+• Over 100 bugs fixed

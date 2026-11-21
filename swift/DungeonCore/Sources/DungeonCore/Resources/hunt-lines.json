@@ -1,0 +1,990 @@
+{
+"ambush": {
+"en": "You strike from the shadows. A perfect ambush!",
+"pt": "Você ataca das sombras. Uma emboscada perfeita!"
+},
+"ambush_seen": {
+"en": "It turns just in time. No surprise now.",
+"pt": "Ele se vira bem a tempo. Nada de surpresa agora."
+},
+"auto_coin": {
+"en": "An ancient coin catches the light. Worth 50 gold.",
+"pt": "Uma moeda antiga reflete a luz. Vale 50 de ouro."
+},
+"auto_enemy_0": {
+"en": "Something emerges from the shadows.",
+"pt": "Algo surge das sombras."
+},
+"auto_enemy_1": {
+"en": "A creature blocks your path.",
+"pt": "Uma criatura bloqueia seu caminho."
+},
+"auto_enemy_2": {
+"en": "You are not alone. Something approaches.",
+"pt": "Você não está sozinho. Algo se aproxima."
+},
+"auto_enemy_3": {
+"en": "The undergrowth stirs. An enemy reveals itself.",
+"pt": "A vegetação se mexe. Um inimigo se revela."
+},
+"auto_enter_0": {
+"en": "The forest swallows you whole. Something watches from the dark.",
+"pt": "A floresta engole você por inteiro. Algo observa do escuro."
+},
+"auto_enter_1": {
+"en": "Leaves crunch beneath your feet. The hunt begins.",
+"pt": "Folhas estalam sob seus pés. A caçada começa."
+},
+"auto_enter_2": {
+"en": "The trees close in. You are not alone here.",
+"pt": "As árvores se fecham. Você não está sozinho aqui."
+},
+"auto_fallen": {
+"en": "Your hunter has fallen. The forest claims another. The hunt is over.",
+"pt": "Seu caçador caiu. A floresta leva mais um. A caçada acabou."
+},
+"auto_hurt_0": {
+"en": "You take a wound. Stay focused.",
+"pt": "Você se fere. Mantenha o foco."
+},
+"auto_hurt_1": {
+"en": "The enemy draws blood. Keep moving.",
+"pt": "O inimigo tira sangue. Continue andando."
+},
+"auto_hurt_2": {
+"en": "That one hurt. You press on regardless.",
+"pt": "Essa doeu. Você segue mesmo assim."
+},
+"auto_item_0": {
+"en": "Something catches your eye in the dirt.",
+"pt": "Algo chama sua atenção na terra."
+},
+"auto_item_1": {
+"en": "A glint in the darkness. You reach down.",
+"pt": "Um brilho no escuro. Você se abaixa."
+},
+"auto_item_2": {
+"en": "Among the fallen leaves, you find something useful.",
+"pt": "Entre as folhas caídas, você encontra algo útil."
+},
+"auto_kill_0": {
+"en": "The creature falls. The forest grows quiet.",
+"pt": "A criatura cai. A floresta fica em silêncio."
+},
+"auto_kill_1": {
+"en": "Another enemy defeated. Your blade runs dark.",
+"pt": "Mais um inimigo derrotado. Sua lâmina escurece."
+},
+"auto_kill_2": {
+"en": "It is done. You press deeper into the forest.",
+"pt": "Está feito. Você avança mais fundo na floresta."
+},
+"auto_kill_3": {
+"en": "The hunt continues. Another falls before you.",
+"pt": "A caçada continua. Mais um cai diante de você."
+},
+"auto_kills_10": {
+"en": "Remarkable. 10 enemies have fallen before you.",
+"pt": "Impressionante. 10 inimigos caíram diante de você."
+},
+"auto_kills_25": {
+"en": "Remarkable. 25 enemies have fallen before you.",
+"pt": "Impressionante. 25 inimigos caíram diante de você."
+},
+"auto_kills_50": {
+"en": "Remarkable. 50 enemies have fallen before you.",
+"pt": "Impressionante. 50 inimigos caíram diante de você."
+},
+"auto_lowHp_0": {
+"en": "Your wounds are severe. The forest senses weakness.",
+"pt": "Seus ferimentos são graves. A floresta sente a fraqueza."
+},
+"auto_lowHp_1": {
+"en": "You are bleeding. The darkness grows bolder.",
+"pt": "Você está sangrando. A escuridão fica mais ousada."
+},
+"auto_lowHp_2": {
+"en": "Critical condition. One more hit could end this hunt.",
+"pt": "Estado crítico. Mais um golpe pode acabar com esta caçada."
+},
+"auto_rest_0": {
+"en": "A moment of stillness. You catch your breath.",
+"pt": "Um momento de calma. Você recupera o fôlego."
+},
+"auto_rest_1": {
+"en": "The forest is quiet for now.",
+"pt": "A floresta está quieta por enquanto."
+},
+"auto_rest_2": {
+"en": "Nothing stirs. You recover slightly.",
+"pt": "Nada se mexe. Você se recupera um pouco."
+},
+"auto_return_0": {
+"en": "You emerge from the forest. The hunt is over.",
+"pt": "Você sai da floresta. A caçada acabou."
+},
+"auto_return_1": {
+"en": "Daylight returns. You carry your spoils home.",
+"pt": "A luz do dia volta. Você leva seus espólios para casa."
+},
+"auto_return_2": {
+"en": "The forest releases you. For now.",
+"pt": "A floresta liberta você. Por enquanto."
+},
+"badly_hurt": {
+"en": "You're badly hurt. Bandage up or finish it fast.",
+"pt": "Você está muito ferido. Enfaixe-se ou acabe logo com isso."
+},
+"bandage": {
+"en": "You bind your wounds.",
+"pt": "Você enfaixa suas feridas."
+},
+"blocked": {
+"en": "You block most of it.",
+"pt": "Você bloqueia quase tudo."
+},
+"bounty_done": {
+"en": "Bounty complete. The reward is doubled!",
+"pt": "Recompensa da caçada cumprida. O prêmio é dobrado!"
+},
+"cold": {
+"en": "The trail goes cold. The beast is gone. The hunt is over.",
+"pt": "O rastro esfriou. A fera sumiu. A caçada acabou."
+},
+"defend": {
+"en": "You raise your guard and strike back.",
+"pt": "Você se protege e contra-ataca."
+},
+"fight": {
+"en": "You step out and face it.",
+"pt": "Você sai do esconderijo e o enfrenta."
+},
+"find_bone_fragment": {
+"en": "Bone Fragment.",
+"pt": "Fragmento de Osso."
+},
+"find_dark_pelt": {
+"en": "Dark Pelt.",
+"pt": "Pele Sombria."
+},
+"find_forest_herb": {
+"en": "Forest Herb.",
+"pt": "Erva da Floresta."
+},
+"find_hunters_rune": {
+"en": "Hunters Rune.",
+"pt": "Runa do Caçador."
+},
+"find_iron_scrap": {
+"en": "Iron Scrap.",
+"pt": "Sucata de Ferro."
+},
+"find_rare": {
+"en": "Something rare.",
+"pt": "Algo raro."
+},
+"find_shadow_essence": {
+"en": "Shadow Essence.",
+"pt": "Essência Sombria."
+},
+"find_void_crystal": {
+"en": "Void Crystal.",
+"pt": "Cristal do Vazio."
+},
+"found_bear": {
+"en": "There. A Cave Bear. It hasn't seen you yet.",
+"pt": "Ali. Um Urso das Cavernas. Ainda não viu você."
+},
+"found_boar": {
+"en": "There. A Wild Boar. It hasn't seen you yet.",
+"pt": "Ali. Um Javali Selvagem. Ainda não viu você."
+},
+"found_forest": {
+"en": "There. The Forest Itself. It hasn't seen you yet.",
+"pt": "Ali. A Própria Floresta. Ainda não viu você."
+},
+"found_greyfang": {
+"en": "There. The Grey Fang. It hasn't seen you yet.",
+"pt": "Ali. O Presa Cinzenta. Ainda não viu você."
+},
+"found_nightmother": {
+"en": "There. The Night Mother. It hasn't seen you yet.",
+"pt": "Ali. A Mãe da Noite. Ainda não viu você."
+},
+"found_owl": {
+"en": "There. A Shadow Owl. It hasn't seen you yet.",
+"pt": "Ali. Uma Coruja das Sombras. Ainda não viu você."
+},
+"found_serpent": {
+"en": "There. A Vine Serpent. It hasn't seen you yet.",
+"pt": "Ali. Uma Serpente das Vinhas. Ainda não viu você."
+},
+"found_stag": {
+"en": "There. The White Stag. It hasn't seen you yet.",
+"pt": "Ali. O Cervo Branco. Ainda não viu você."
+},
+"found_stalker": {
+"en": "There. A Night Stalker. It hasn't seen you yet.",
+"pt": "Ali. Um Espreitador Noturno. Ainda não viu você."
+},
+"found_swampking": {
+"en": "There. The Swamp King. It hasn't seen you yet.",
+"pt": "Ali. O Rei do Pântano. Ainda não viu você."
+},
+"found_wolf": {
+"en": "There. A Grey Wolf. It hasn't seen you yet.",
+"pt": "Ali. Um Lobo Cinzento. Ainda não viu você."
+},
+"hear_growl_east_close": {
+"en": "A growl, to your right. East. Very close.",
+"pt": "Um rosnado, à sua direita. Leste. Bem perto."
+},
+"hear_growl_east_far": {
+"en": "A growl, to your right. East. Far away.",
+"pt": "Um rosnado, à sua direita. Leste. Bem longe."
+},
+"hear_growl_east_near": {
+"en": "A growl, to your right. East. Not far.",
+"pt": "Um rosnado, à sua direita. Leste. Não muito longe."
+},
+"hear_growl_north_close": {
+"en": "A growl, ahead of you. North. Very close.",
+"pt": "Um rosnado, à sua frente. Norte. Bem perto."
+},
+"hear_growl_north_far": {
+"en": "A growl, ahead of you. North. Far away.",
+"pt": "Um rosnado, à sua frente. Norte. Bem longe."
+},
+"hear_growl_north_near": {
+"en": "A growl, ahead of you. North. Not far.",
+"pt": "Um rosnado, à sua frente. Norte. Não muito longe."
+},
+"hear_growl_northeast_close": {
+"en": "A growl, ahead and to your right. North-east. Very close.",
+"pt": "Um rosnado, à frente, à direita. Nordeste. Bem perto."
+},
+"hear_growl_northeast_far": {
+"en": "A growl, ahead and to your right. North-east. Far away.",
+"pt": "Um rosnado, à frente, à direita. Nordeste. Bem longe."
+},
+"hear_growl_northeast_near": {
+"en": "A growl, ahead and to your right. North-east. Not far.",
+"pt": "Um rosnado, à frente, à direita. Nordeste. Não muito longe."
+},
+"hear_growl_northwest_close": {
+"en": "A growl, ahead and to your left. North-west. Very close.",
+"pt": "Um rosnado, à frente, à esquerda. Noroeste. Bem perto."
+},
+"hear_growl_northwest_far": {
+"en": "A growl, ahead and to your left. North-west. Far away.",
+"pt": "Um rosnado, à frente, à esquerda. Noroeste. Bem longe."
+},
+"hear_growl_northwest_near": {
+"en": "A growl, ahead and to your left. North-west. Not far.",
+"pt": "Um rosnado, à frente, à esquerda. Noroeste. Não muito longe."
+},
+"hear_growl_south_close": {
+"en": "A growl, behind you. South. Very close.",
+"pt": "Um rosnado, atrás de você. Sul. Bem perto."
+},
+"hear_growl_south_far": {
+"en": "A growl, behind you. South. Far away.",
+"pt": "Um rosnado, atrás de você. Sul. Bem longe."
+},
+"hear_growl_south_near": {
+"en": "A growl, behind you. South. Not far.",
+"pt": "Um rosnado, atrás de você. Sul. Não muito longe."
+},
+"hear_growl_southeast_close": {
+"en": "A growl, behind you, to the right. South-east. Very close.",
+"pt": "Um rosnado, atrás de você, à direita. Sudeste. Bem perto."
+},
+"hear_growl_southeast_far": {
+"en": "A growl, behind you, to the right. South-east. Far away.",
+"pt": "Um rosnado, atrás de você, à direita. Sudeste. Bem longe."
+},
+"hear_growl_southeast_near": {
+"en": "A growl, behind you, to the right. South-east. Not far.",
+"pt": "Um rosnado, atrás de você, à direita. Sudeste. Não muito longe."
+},
+"hear_growl_southwest_close": {
+"en": "A growl, behind you, to the left. South-west. Very close.",
+"pt": "Um rosnado, atrás de você, à esquerda. Sudoeste. Bem perto."
+},
+"hear_growl_southwest_far": {
+"en": "A growl, behind you, to the left. South-west. Far away.",
+"pt": "Um rosnado, atrás de você, à esquerda. Sudoeste. Bem longe."
+},
+"hear_growl_southwest_near": {
+"en": "A growl, behind you, to the left. South-west. Not far.",
+"pt": "Um rosnado, atrás de você, à esquerda. Sudoeste. Não muito longe."
+},
+"hear_growl_west_close": {
+"en": "A growl, to your left. West. Very close.",
+"pt": "Um rosnado, à sua esquerda. Oeste. Bem perto."
+},
+"hear_growl_west_far": {
+"en": "A growl, to your left. West. Far away.",
+"pt": "Um rosnado, à sua esquerda. Oeste. Bem longe."
+},
+"hear_growl_west_near": {
+"en": "A growl, to your left. West. Not far.",
+"pt": "Um rosnado, à sua esquerda. Oeste. Não muito longe."
+},
+"hear_hiss_east_close": {
+"en": "A hiss, to your right. East. Very close.",
+"pt": "Um sibilo, à sua direita. Leste. Bem perto."
+},
+"hear_hiss_east_far": {
+"en": "A hiss, to your right. East. Far away.",
+"pt": "Um sibilo, à sua direita. Leste. Bem longe."
+},
+"hear_hiss_east_near": {
+"en": "A hiss, to your right. East. Not far.",
+"pt": "Um sibilo, à sua direita. Leste. Não muito longe."
+},
+"hear_hiss_north_close": {
+"en": "A hiss, ahead of you. North. Very close.",
+"pt": "Um sibilo, à sua frente. Norte. Bem perto."
+},
+"hear_hiss_north_far": {
+"en": "A hiss, ahead of you. North. Far away.",
+"pt": "Um sibilo, à sua frente. Norte. Bem longe."
+},
+"hear_hiss_north_near": {
+"en": "A hiss, ahead of you. North. Not far.",
+"pt": "Um sibilo, à sua frente. Norte. Não muito longe."
+},
+"hear_hiss_northeast_close": {
+"en": "A hiss, ahead and to your right. North-east. Very close.",
+"pt": "Um sibilo, à frente, à direita. Nordeste. Bem perto."
+},
+"hear_hiss_northeast_far": {
+"en": "A hiss, ahead and to your right. North-east. Far away.",
+"pt": "Um sibilo, à frente, à direita. Nordeste. Bem longe."
+},
+"hear_hiss_northeast_near": {
+"en": "A hiss, ahead and to your right. North-east. Not far.",
+"pt": "Um sibilo, à frente, à direita. Nordeste. Não muito longe."
+},
+"hear_hiss_northwest_close": {
+"en": "A hiss, ahead and to your left. North-west. Very close.",
+"pt": "Um sibilo, à frente, à esquerda. Noroeste. Bem perto."
+},
+"hear_hiss_northwest_far": {
+"en": "A hiss, ahead and to your left. North-west. Far away.",
+"pt": "Um sibilo, à frente, à esquerda. Noroeste. Bem longe."
+},
+"hear_hiss_northwest_near": {
+"en": "A hiss, ahead and to your left. North-west. Not far.",
+"pt": "Um sibilo, à frente, à esquerda. Noroeste. Não muito longe."
+},
+"hear_hiss_south_close": {
+"en": "A hiss, behind you. South. Very close.",
+"pt": "Um sibilo, atrás de você. Sul. Bem perto."
+},
+"hear_hiss_south_far": {
+"en": "A hiss, behind you. South. Far away.",
+"pt": "Um sibilo, atrás de você. Sul. Bem longe."
+},
+"hear_hiss_south_near": {
+"en": "A hiss, behind you. South. Not far.",
+"pt": "Um sibilo, atrás de você. Sul. Não muito longe."
+},
+"hear_hiss_southeast_close": {
+"en": "A hiss, behind you, to the right. South-east. Very close.",
+"pt": "Um sibilo, atrás de você, à direita. Sudeste. Bem perto."
+},
+"hear_hiss_southeast_far": {
+"en": "A hiss, behind you, to the right. South-east. Far away.",
+"pt": "Um sibilo, atrás de você, à direita. Sudeste. Bem longe."
+},
+"hear_hiss_southeast_near": {
+"en": "A hiss, behind you, to the right. South-east. Not far.",
+"pt": "Um sibilo, atrás de você, à direita. Sudeste. Não muito longe."
+},
+"hear_hiss_southwest_close": {
+"en": "A hiss, behind you, to the left. South-west. Very close.",
+"pt": "Um sibilo, atrás de você, à esquerda. Sudoeste. Bem perto."
+},
+"hear_hiss_southwest_far": {
+"en": "A hiss, behind you, to the left. South-west. Far away.",
+"pt": "Um sibilo, atrás de você, à esquerda. Sudoeste. Bem longe."
+},
+"hear_hiss_southwest_near": {
+"en": "A hiss, behind you, to the left. South-west. Not far.",
+"pt": "Um sibilo, atrás de você, à esquerda. Sudoeste. Não muito longe."
+},
+"hear_hiss_west_close": {
+"en": "A hiss, to your left. West. Very close.",
+"pt": "Um sibilo, à sua esquerda. Oeste. Bem perto."
+},
+"hear_hiss_west_far": {
+"en": "A hiss, to your left. West. Far away.",
+"pt": "Um sibilo, à sua esquerda. Oeste. Bem longe."
+},
+"hear_hiss_west_near": {
+"en": "A hiss, to your left. West. Not far.",
+"pt": "Um sibilo, à sua esquerda. Oeste. Não muito longe."
+},
+"hear_howl_east_close": {
+"en": "A howl, to your right. East. Very close.",
+"pt": "Um uivo, à sua direita. Leste. Bem perto."
+},
+"hear_howl_east_far": {
+"en": "A howl, to your right. East. Far away.",
+"pt": "Um uivo, à sua direita. Leste. Bem longe."
+},
+"hear_howl_east_near": {
+"en": "A howl, to your right. East. Not far.",
+"pt": "Um uivo, à sua direita. Leste. Não muito longe."
+},
+"hear_howl_north_close": {
+"en": "A howl, ahead of you. North. Very close.",
+"pt": "Um uivo, à sua frente. Norte. Bem perto."
+},
+"hear_howl_north_far": {
+"en": "A howl, ahead of you. North. Far away.",
+"pt": "Um uivo, à sua frente. Norte. Bem longe."
+},
+"hear_howl_north_near": {
+"en": "A howl, ahead of you. North. Not far.",
+"pt": "Um uivo, à sua frente. Norte. Não muito longe."
+},
+"hear_howl_northeast_close": {
+"en": "A howl, ahead and to your right. North-east. Very close.",
+"pt": "Um uivo, à frente, à direita. Nordeste. Bem perto."
+},
+"hear_howl_northeast_far": {
+"en": "A howl, ahead and to your right. North-east. Far away.",
+"pt": "Um uivo, à frente, à direita. Nordeste. Bem longe."
+},
+"hear_howl_northeast_near": {
+"en": "A howl, ahead and to your right. North-east. Not far.",
+"pt": "Um uivo, à frente, à direita. Nordeste. Não muito longe."
+},
+"hear_howl_northwest_close": {
+"en": "A howl, ahead and to your left. North-west. Very close.",
+"pt": "Um uivo, à frente, à esquerda. Noroeste. Bem perto."
+},
+"hear_howl_northwest_far": {
+"en": "A howl, ahead and to your left. North-west. Far away.",
+"pt": "Um uivo, à frente, à esquerda. Noroeste. Bem longe."
+},
+"hear_howl_northwest_near": {
+"en": "A howl, ahead and to your left. North-west. Not far.",
+"pt": "Um uivo, à frente, à esquerda. Noroeste. Não muito longe."
+},
+"hear_howl_south_close": {
+"en": "A howl, behind you. South. Very close.",
+"pt": "Um uivo, atrás de você. Sul. Bem perto."
+},
+"hear_howl_south_far": {
+"en": "A howl, behind you. South. Far away.",
+"pt": "Um uivo, atrás de você. Sul. Bem longe."
+},
+"hear_howl_south_near": {
+"en": "A howl, behind you. South. Not far.",
+"pt": "Um uivo, atrás de você. Sul. Não muito longe."
+},
+"hear_howl_southeast_close": {
+"en": "A howl, behind you, to the right. South-east. Very close.",
+"pt": "Um uivo, atrás de você, à direita. Sudeste. Bem perto."
+},
+"hear_howl_southeast_far": {
+"en": "A howl, behind you, to the right. South-east. Far away.",
+"pt": "Um uivo, atrás de você, à direita. Sudeste. Bem longe."
+},
+"hear_howl_southeast_near": {
+"en": "A howl, behind you, to the right. South-east. Not far.",
+"pt": "Um uivo, atrás de você, à direita. Sudeste. Não muito longe."
+},
+"hear_howl_southwest_close": {
+"en": "A howl, behind you, to the left. South-west. Very close.",
+"pt": "Um uivo, atrás de você, à esquerda. Sudoeste. Bem perto."
+},
+"hear_howl_southwest_far": {
+"en": "A howl, behind you, to the left. South-west. Far away.",
+"pt": "Um uivo, atrás de você, à esquerda. Sudoeste. Bem longe."
+},
+"hear_howl_southwest_near": {
+"en": "A howl, behind you, to the left. South-west. Not far.",
+"pt": "Um uivo, atrás de você, à esquerda. Sudoeste. Não muito longe."
+},
+"hear_howl_west_close": {
+"en": "A howl, to your left. West. Very close.",
+"pt": "Um uivo, à sua esquerda. Oeste. Bem perto."
+},
+"hear_howl_west_far": {
+"en": "A howl, to your left. West. Far away.",
+"pt": "Um uivo, à sua esquerda. Oeste. Bem longe."
+},
+"hear_howl_west_near": {
+"en": "A howl, to your left. West. Not far.",
+"pt": "Um uivo, à sua esquerda. Oeste. Não muito longe."
+},
+"hear_nothing": {
+"en": "You listen. Nothing but the wind.",
+"pt": "Você escuta. Nada além do vento."
+},
+"hear_snort_east_close": {
+"en": "Snorting, to your right. East. Very close.",
+"pt": "Um bufar, à sua direita. Leste. Bem perto."
+},
+"hear_snort_east_far": {
+"en": "Snorting, to your right. East. Far away.",
+"pt": "Um bufar, à sua direita. Leste. Bem longe."
+},
+"hear_snort_east_near": {
+"en": "Snorting, to your right. East. Not far.",
+"pt": "Um bufar, à sua direita. Leste. Não muito longe."
+},
+"hear_snort_north_close": {
+"en": "Snorting, ahead of you. North. Very close.",
+"pt": "Um bufar, à sua frente. Norte. Bem perto."
+},
+"hear_snort_north_far": {
+"en": "Snorting, ahead of you. North. Far away.",
+"pt": "Um bufar, à sua frente. Norte. Bem longe."
+},
+"hear_snort_north_near": {
+"en": "Snorting, ahead of you. North. Not far.",
+"pt": "Um bufar, à sua frente. Norte. Não muito longe."
+},
+"hear_snort_northeast_close": {
+"en": "Snorting, ahead and to your right. North-east. Very close.",
+"pt": "Um bufar, à frente, à direita. Nordeste. Bem perto."
+},
+"hear_snort_northeast_far": {
+"en": "Snorting, ahead and to your right. North-east. Far away.",
+"pt": "Um bufar, à frente, à direita. Nordeste. Bem longe."
+},
+"hear_snort_northeast_near": {
+"en": "Snorting, ahead and to your right. North-east. Not far.",
+"pt": "Um bufar, à frente, à direita. Nordeste. Não muito longe."
+},
+"hear_snort_northwest_close": {
+"en": "Snorting, ahead and to your left. North-west. Very close.",
+"pt": "Um bufar, à frente, à esquerda. Noroeste. Bem perto."
+},
+"hear_snort_northwest_far": {
+"en": "Snorting, ahead and to your left. North-west. Far away.",
+"pt": "Um bufar, à frente, à esquerda. Noroeste. Bem longe."
+},
+"hear_snort_northwest_near": {
+"en": "Snorting, ahead and to your left. North-west. Not far.",
+"pt": "Um bufar, à frente, à esquerda. Noroeste. Não muito longe."
+},
+"hear_snort_south_close": {
+"en": "Snorting, behind you. South. Very close.",
+"pt": "Um bufar, atrás de você. Sul. Bem perto."
+},
+"hear_snort_south_far": {
+"en": "Snorting, behind you. South. Far away.",
+"pt": "Um bufar, atrás de você. Sul. Bem longe."
+},
+"hear_snort_south_near": {
+"en": "Snorting, behind you. South. Not far.",
+"pt": "Um bufar, atrás de você. Sul. Não muito longe."
+},
+"hear_snort_southeast_close": {
+"en": "Snorting, behind you, to the right. South-east. Very close.",
+"pt": "Um bufar, atrás de você, à direita. Sudeste. Bem perto."
+},
+"hear_snort_southeast_far": {
+"en": "Snorting, behind you, to the right. South-east. Far away.",
+"pt": "Um bufar, atrás de você, à direita. Sudeste. Bem longe."
+},
+"hear_snort_southeast_near": {
+"en": "Snorting, behind you, to the right. South-east. Not far.",
+"pt": "Um bufar, atrás de você, à direita. Sudeste. Não muito longe."
+},
+"hear_snort_southwest_close": {
+"en": "Snorting, behind you, to the left. South-west. Very close.",
+"pt": "Um bufar, atrás de você, à esquerda. Sudoeste. Bem perto."
+},
+"hear_snort_southwest_far": {
+"en": "Snorting, behind you, to the left. South-west. Far away.",
+"pt": "Um bufar, atrás de você, à esquerda. Sudoeste. Bem longe."
+},
+"hear_snort_southwest_near": {
+"en": "Snorting, behind you, to the left. South-west. Not far.",
+"pt": "Um bufar, atrás de você, à esquerda. Sudoeste. Não muito longe."
+},
+"hear_snort_west_close": {
+"en": "Snorting, to your left. West. Very close.",
+"pt": "Um bufar, à sua esquerda. Oeste. Bem perto."
+},
+"hear_snort_west_far": {
+"en": "Snorting, to your left. West. Far away.",
+"pt": "Um bufar, à sua esquerda. Oeste. Bem longe."
+},
+"hear_snort_west_near": {
+"en": "Snorting, to your left. West. Not far.",
+"pt": "Um bufar, à sua esquerda. Oeste. Não muito longe."
+},
+"hear_wings_east_close": {
+"en": "Wings beating, to your right. East. Very close.",
+"pt": "Asas batendo, à sua direita. Leste. Bem perto."
+},
+"hear_wings_east_far": {
+"en": "Wings beating, to your right. East. Far away.",
+"pt": "Asas batendo, à sua direita. Leste. Bem longe."
+},
+"hear_wings_east_near": {
+"en": "Wings beating, to your right. East. Not far.",
+"pt": "Asas batendo, à sua direita. Leste. Não muito longe."
+},
+"hear_wings_north_close": {
+"en": "Wings beating, ahead of you. North. Very close.",
+"pt": "Asas batendo, à sua frente. Norte. Bem perto."
+},
+"hear_wings_north_far": {
+"en": "Wings beating, ahead of you. North. Far away.",
+"pt": "Asas batendo, à sua frente. Norte. Bem longe."
+},
+"hear_wings_north_near": {
+"en": "Wings beating, ahead of you. North. Not far.",
+"pt": "Asas batendo, à sua frente. Norte. Não muito longe."
+},
+"hear_wings_northeast_close": {
+"en": "Wings beating, ahead and to your right. North-east. Very close.",
+"pt": "Asas batendo, à frente, à direita. Nordeste. Bem perto."
+},
+"hear_wings_northeast_far": {
+"en": "Wings beating, ahead and to your right. North-east. Far away.",
+"pt": "Asas batendo, à frente, à direita. Nordeste. Bem longe."
+},
+"hear_wings_northeast_near": {
+"en": "Wings beating, ahead and to your right. North-east. Not far.",
+"pt": "Asas batendo, à frente, à direita. Nordeste. Não muito longe."
+},
+"hear_wings_northwest_close": {
+"en": "Wings beating, ahead and to your left. North-west. Very close.",
+"pt": "Asas batendo, à frente, à esquerda. Noroeste. Bem perto."
+},
+"hear_wings_northwest_far": {
+"en": "Wings beating, ahead and to your left. North-west. Far away.",
+"pt": "Asas batendo, à frente, à esquerda. Noroeste. Bem longe."
+},
+"hear_wings_northwest_near": {
+"en": "Wings beating, ahead and to your left. North-west. Not far.",
+"pt": "Asas batendo, à frente, à esquerda. Noroeste. Não muito longe."
+},
+"hear_wings_south_close": {
+"en": "Wings beating, behind you. South. Very close.",
+"pt": "Asas batendo, atrás de você. Sul. Bem perto."
+},
+"hear_wings_south_far": {
+"en": "Wings beating, behind you. South. Far away.",
+"pt": "Asas batendo, atrás de você. Sul. Bem longe."
+},
+"hear_wings_south_near": {
+"en": "Wings beating, behind you. South. Not far.",
+"pt": "Asas batendo, atrás de você. Sul. Não muito longe."
+},
+"hear_wings_southeast_close": {
+"en": "Wings beating, behind you, to the right. South-east. Very close.",
+"pt": "Asas batendo, atrás de você, à direita. Sudeste. Bem perto."
+},
+"hear_wings_southeast_far": {
+"en": "Wings beating, behind you, to the right. South-east. Far away.",
+"pt": "Asas batendo, atrás de você, à direita. Sudeste. Bem longe."
+},
+"hear_wings_southeast_near": {
+"en": "Wings beating, behind you, to the right. South-east. Not far.",
+"pt": "Asas batendo, atrás de você, à direita. Sudeste. Não muito longe."
+},
+"hear_wings_southwest_close": {
+"en": "Wings beating, behind you, to the left. South-west. Very close.",
+"pt": "Asas batendo, atrás de você, à esquerda. Sudoeste. Bem perto."
+},
+"hear_wings_southwest_far": {
+"en": "Wings beating, behind you, to the left. South-west. Far away.",
+"pt": "Asas batendo, atrás de você, à esquerda. Sudoeste. Bem longe."
+},
+"hear_wings_southwest_near": {
+"en": "Wings beating, behind you, to the left. South-west. Not far.",
+"pt": "Asas batendo, atrás de você, à esquerda. Sudoeste. Não muito longe."
+},
+"hear_wings_west_close": {
+"en": "Wings beating, to your left. West. Very close.",
+"pt": "Asas batendo, à sua esquerda. Oeste. Bem perto."
+},
+"hear_wings_west_far": {
+"en": "Wings beating, to your left. West. Far away.",
+"pt": "Asas batendo, à sua esquerda. Oeste. Bem longe."
+},
+"hear_wings_west_near": {
+"en": "Wings beating, to your left. West. Not far.",
+"pt": "Asas batendo, à sua esquerda. Oeste. Não muito longe."
+},
+"heard_charge": {
+"en": "It heard you, and it's coming for you!",
+"pt": "Ele ouviu você, e está vindo atrás de você!"
+},
+"heard_flee": {
+"en": "It heard you. It's running away.",
+"pt": "Ele ouviu você. Está fugindo."
+},
+"hit": {
+"en": "You hit it.",
+"pt": "Você acerta."
+},
+"hit_hard": {
+"en": "A crushing blow!",
+"pt": "Um golpe esmagador!"
+},
+"hurt": {
+"en": "You're hurt.",
+"pt": "Você está ferido."
+},
+"intro_bear": {
+"en": "You're tracking a Cave Bear. Listen for its growl. Careful. If it hears you, it charges.",
+"pt": "Você está rastreando um Urso das Cavernas. Escute o rosnado dele. Cuidado. Se ele ouvir você, ele avança."
+},
+"intro_boar": {
+"en": "You're tracking a Wild Boar. Listen for its snorting.",
+"pt": "Você está rastreando um Javali Selvagem. Escute o bufar dele."
+},
+"intro_forest": {
+"en": "The trees are moving. You are not hunting the forest. The forest is hunting you. Listen.",
+"pt": "As árvores estão se mexendo. Você não está caçando a floresta. A floresta está caçando você. Escute."
+},
+"intro_greyfang": {
+"en": "A legend walks these woods. The Grey Fang, king of wolves. Listen for his howl.",
+"pt": "Uma lenda anda por esta mata. O Presa Cinzenta, rei dos lobos. Escute o uivo dele."
+},
+"intro_nightmother": {
+"en": "A legend circles above the trees. The Night Mother. Listen for her wings.",
+"pt": "Uma lenda voa sobre as árvores. A Mãe da Noite. Escute as asas dela."
+},
+"intro_owl": {
+"en": "You're tracking a Shadow Owl. Listen for its wings.",
+"pt": "Você está rastreando uma Coruja das Sombras. Escute as asas dela."
+},
+"intro_serpent": {
+"en": "You're tracking a Vine Serpent. Listen for its hiss.",
+"pt": "Você está rastreando uma Serpente das Vinhas. Escute o sibilo dela."
+},
+"intro_stag": {
+"en": "A legend walks these woods. The White Stag. Nobody has ever caught it. Listen for its breath.",
+"pt": "Uma lenda anda por esta mata. O Cervo Branco. Ninguém nunca o pegou. Escute o fôlego dele."
+},
+"intro_stalker": {
+"en": "You're tracking a Night Stalker. Listen for its growl. Careful. It hunts back.",
+"pt": "Você está rastreando um Espreitador Noturno. Escute o rosnado dele. Cuidado. Ele caça de volta."
+},
+"intro_swampking": {
+"en": "A legend waits in the marsh. The Swamp King. Listen for his hiss.",
+"pt": "Uma lenda espera no pântano. O Rei do Pântano. Escute o sibilo dele."
+},
+"intro_wolf": {
+"en": "You're tracking a Grey Wolf. Listen for its howl.",
+"pt": "Você está rastreando um Lobo Cinzento. Escute o uivo dele."
+},
+"its_hit": {
+"en": "It hits you.",
+"pt": "Ele acerta você."
+},
+"its_hit_hard": {
+"en": "It tears into you!",
+"pt": "Ele dilacera você!"
+},
+"its_stuck": {
+"en": "It's still stuck in the trap.",
+"pt": "Ele continua preso na armadilha."
+},
+"legend_done": {
+"en": "A legend falls. The forest will remember your name.",
+"pt": "Uma lenda cai. A floresta vai lembrar o seu nome."
+},
+"legend_flee": {
+"en": "Wounded, the legend breaks away and vanishes into the trees. Track it again.",
+"pt": "Ferida, a lenda escapa e some entre as árvores. Rastreie-a de novo."
+},
+"lost": {
+"en": "You fall. The hunters carry you home. No reward this time.",
+"pt": "Você cai. Os caçadores levam você para casa. Sem recompensa desta vez."
+},
+"miss": {
+"en": "You swing and miss.",
+"pt": "Você golpeia e erra."
+},
+"no_bandage": {
+"en": "No bandages left.",
+"pt": "Sem ataduras."
+},
+"noise_warn": {
+"en": "Your footsteps are loud. Try sneaking.",
+"pt": "Seus passos estão altos. Tente avançar em silêncio."
+},
+"prey_dying": {
+"en": "It's almost finished.",
+"pt": "Ele está quase no fim."
+},
+"prey_weak": {
+"en": "It's weakening.",
+"pt": "Ele está enfraquecendo."
+},
+"rank_up": {
+"en": "Your bounty rank rises.",
+"pt": "Seu nível de caçador sobe."
+},
+"sneak_east": {
+"en": "You creep east, quietly.",
+"pt": "Você avança para o leste, em silêncio."
+},
+"sneak_north": {
+"en": "You creep north, quietly.",
+"pt": "Você avança para o norte, em silêncio."
+},
+"sneak_south": {
+"en": "You creep south, quietly.",
+"pt": "Você avança para o sul, em silêncio."
+},
+"sneak_west": {
+"en": "You creep west, quietly.",
+"pt": "Você avança para o oeste, em silêncio."
+},
+"tracks_east_fresh": {
+"en": "Fresh tracks in the mud, heading east.",
+"pt": "Pegadas frescas na lama, indo para o leste."
+},
+"tracks_east_old": {
+"en": "Old tracks, heading east. It passed here a while ago.",
+"pt": "Pegadas antigas, indo para o leste. Passou por aqui faz um tempo."
+},
+"tracks_none": {
+"en": "You search the ground. No tracks here.",
+"pt": "Você procura no chão. Nenhuma pegada aqui."
+},
+"tracks_north_fresh": {
+"en": "Fresh tracks in the mud, heading north.",
+"pt": "Pegadas frescas na lama, indo para o norte."
+},
+"tracks_north_old": {
+"en": "Old tracks, heading north. It passed here a while ago.",
+"pt": "Pegadas antigas, indo para o norte. Passou por aqui faz um tempo."
+},
+"tracks_northeast_fresh": {
+"en": "Fresh tracks in the mud, heading north-east.",
+"pt": "Pegadas frescas na lama, indo para o nordeste."
+},
+"tracks_northeast_old": {
+"en": "Old tracks, heading north-east. It passed here a while ago.",
+"pt": "Pegadas antigas, indo para o nordeste. Passou por aqui faz um tempo."
+},
+"tracks_northwest_fresh": {
+"en": "Fresh tracks in the mud, heading north-west.",
+"pt": "Pegadas frescas na lama, indo para o noroeste."
+},
+"tracks_northwest_old": {
+"en": "Old tracks, heading north-west. It passed here a while ago.",
+"pt": "Pegadas antigas, indo para o noroeste. Passou por aqui faz um tempo."
+},
+"tracks_south_fresh": {
+"en": "Fresh tracks in the mud, heading south.",
+"pt": "Pegadas frescas na lama, indo para o sul."
+},
+"tracks_south_old": {
+"en": "Old tracks, heading south. It passed here a while ago.",
+"pt": "Pegadas antigas, indo para o sul. Passou por aqui faz um tempo."
+},
+"tracks_southeast_fresh": {
+"en": "Fresh tracks in the mud, heading south-east.",
+"pt": "Pegadas frescas na lama, indo para o sudeste."
+},
+"tracks_southeast_old": {
+"en": "Old tracks, heading south-east. It passed here a while ago.",
+"pt": "Pegadas antigas, indo para o sudeste. Passou por aqui faz um tempo."
+},
+"tracks_southwest_fresh": {
+"en": "Fresh tracks in the mud, heading south-west.",
+"pt": "Pegadas frescas na lama, indo para o sudoeste."
+},
+"tracks_southwest_old": {
+"en": "Old tracks, heading south-west. It passed here a while ago.",
+"pt": "Pegadas antigas, indo para o sudoeste. Passou por aqui faz um tempo."
+},
+"tracks_west_fresh": {
+"en": "Fresh tracks in the mud, heading west.",
+"pt": "Pegadas frescas na lama, indo para o oeste."
+},
+"tracks_west_old": {
+"en": "Old tracks, heading west. It passed here a while ago.",
+"pt": "Pegadas antigas, indo para o oeste. Passou por aqui faz um tempo."
+},
+"trap_fail": {
+"en": "It sees the trap and slips away.",
+"pt": "Ele vê a armadilha e escapa."
+},
+"trap_ok": {
+"en": "The trap snaps shut. It's stuck!",
+"pt": "A armadilha fecha. Ele está preso!"
+},
+"tree": {
+"en": "Thick trees block the way. Try another direction.",
+"pt": "Árvores grossas bloqueiam o caminho. Tente outra direção."
+},
+"walk_east": {
+"en": "You walk east.",
+"pt": "Você anda para o leste."
+},
+"walk_north": {
+"en": "You walk north.",
+"pt": "Você anda para o norte."
+},
+"walk_south": {
+"en": "You walk south.",
+"pt": "Você anda para o sul."
+},
+"walk_west": {
+"en": "You walk west.",
+"pt": "Você anda para o oeste."
+},
+"win_bear": {
+"en": "The Cave Bear falls. You earn 110 gold and a Bear Claw.",
+"pt": "O Urso das Cavernas cai. Você ganha 110 de ouro e uma Garra de Urso."
+},
+"win_boar": {
+"en": "The Wild Boar falls. You earn 55 gold and a Boar Tusk.",
+"pt": "O Javali Selvagem cai. Você ganha 55 de ouro e uma Presa de Javali."
+},
+"win_forest": {
+"en": "The Forest Itself falls. You earn 3000 gold and the Heartwood.",
+"pt": "A Própria Floresta cai. Você ganha 3000 de ouro e o Cerne da Floresta."
+},
+"win_greyfang": {
+"en": "The Grey Fang falls. You earn 500 gold and the Grey Fang's Crown.",
+"pt": "O Presa Cinzenta cai. Você ganha 500 de ouro e a Coroa do Presa Cinzenta."
+},
+"win_nightmother": {
+"en": "The Night Mother falls. You earn 1500 gold and a Moonlit Wing.",
+"pt": "A Mãe da Noite cai. Você ganha 1500 de ouro e uma Asa de Luar."
+},
+"win_owl": {
+"en": "The Shadow Owl falls. You earn 65 gold and a Night Feather.",
+"pt": "A Coruja das Sombras cai. Você ganha 65 de ouro e uma Pena Noturna."
+},
+"win_serpent": {
+"en": "The Vine Serpent falls. You earn 70 gold and a Serpent Scale.",
+"pt": "A Serpente das Vinhas cai. Você ganha 70 de ouro e uma Escama de Serpente."
+},
+"win_stag": {
+"en": "The White Stag falls. You earn 750 gold and a White Antler.",
+"pt": "O Cervo Branco cai. Você ganha 750 de ouro e um Chifre Branco."
+},
+"win_stalker": {
+"en": "The Night Stalker falls. You earn 100 gold and a Stalker Fang.",
+"pt": "O Espreitador Noturno cai. Você ganha 100 de ouro e uma Presa de Espreitador."
+},
+"win_swampking": {
+"en": "The Swamp King falls. You earn 1000 gold and the Swamp King's Eye.",
+"pt": "O Rei do Pântano cai. Você ganha 1000 de ouro e o Olho do Rei do Pântano."
+},
+"win_wolf": {
+"en": "The Grey Wolf falls. You earn 60 gold and a Wolf Pelt.",
+"pt": "O Lobo Cinzento cai. Você ganha 60 de ouro e uma Pele de Lobo."
+}
+}
