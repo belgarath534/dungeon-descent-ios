@@ -34,6 +34,7 @@ struct ChroniclesData: Decodable {
 @MainActor
 struct ChroniclesView: View {
     @EnvironmentObject var game: GameModel
+    @EnvironmentObject var router: Router
     @State private var tab = "lore"
     @State private var reading: (story: ChroniclesData.Story, isVoid: Bool)?
     @State private var journalChar = 0
@@ -43,25 +44,12 @@ struct ChroniclesView: View {
     private static let audioBase = "https://pub-a22a05b8dcb64f86b6bbb814578b93e4.r2.dev/"
 
     var body: some View {
-        ZStack {
-            WebScreen {
-                ScreenHeader(title: "The Chronicles")
-                HStack(spacing: 0) {
-                    tabButton("lore", "📖 Lore", "Lore tab")
-                    tabButton("library", "📚 Library", "Library tab")
-                    tabButton("journal", "📜 Journal", "Journal tab")
-                    tabButton("music", "🎵 Music", "Music Player tab")
-                }
-                .overlay(Rectangle().stroke(Theme.borderDim))
-                .padding(.bottom, 8)
-                switch tab {
-                case "library": library
-                case "journal": journal
-                case "music": MusicPlayerPanel()
-                default: lore
-                }
-            }
-            if let r = reading { reader(r.story, isVoid: r.isVoid) }
+        ScreenTabs(items: [.init(id: "lore", title: "Lore", icon: "book.fill"),
+                           .init(id: "library", title: "Library", icon: "books.vertical.fill"),
+                           .init(id: "journal", title: "Journal", icon: "text.book.closed.fill"),
+                           .init(id: "music", title: "Music", icon: "music.note")],
+                   selection: $tab, onBack: { router.goTo(.menu) }, onSelect: announceTab) {
+            screen
         }
         .onAppear {
             Sound.track("chronicles")
@@ -73,31 +61,31 @@ struct ChroniclesView: View {
         }
     }
 
-    private func tabButton(_ id: String, _ text: String, _ label: String) -> some View {
-        let on = tab == id
-        return Button {
-            Sound.sfx("sfx-select")
-            tab = id
-            let names = ["lore": "Lore", "library": "Library — stories from the world and from players",
-                         "journal": "Character journal", "music": "Music player."]
-            if id == "library" {
-                Feedback.announce("Library. \(data.stories.count) stories available. Swipe through to find one and double tap to read.")
-            } else if id == "music" {
-                Feedback.announce("Music Player. \(data.music.count) tracks available. Select a track then press Play.")
-            } else {
-                Feedback.announce(names[id] ?? id)
+    private var screen: some View {
+        ZStack {
+            WebScreen {
+                ScreenHeader(title: "The Chronicles")
+                switch tab {
+                case "library": library
+                case "journal": journal
+                case "music": MusicPlayerPanel()
+                default: lore
+                }
             }
-        } label: {
-            Text(text.uppercased()).font(Theme.cinzel(11.5)).tracking(1.5)
-                .foregroundStyle(on ? Theme.gold : Theme.textDim)
-                .lineLimit(1).minimumScaleFactor(0.6)
-                .frame(maxWidth: .infinity).padding(10)
-                .background(on ? Color(hex: 0x1e1a10) : Color(hex: 0x12100d))
-                .overlay(alignment: .bottom) { if on { Rectangle().fill(Theme.gold).frame(height: 2) } }
+            if let r = reading { reader(r.story, isVoid: r.isVoid) }
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(label)
-        .accessibilityAddTraits(on ? [.isSelected] : [])
+    }
+
+    private func announceTab(_ id: String) {
+        let names = ["lore": "Lore", "library": "Library — stories from the world and from players",
+                     "journal": "Character journal", "music": "Music player."]
+        if id == "library" {
+            Feedback.announce("Library. \(data.stories.count) stories available. Swipe through to find one and double tap to read.")
+        } else if id == "music" {
+            Feedback.announce("Music Player. \(data.music.count) tracks available. Select a track then press Play.")
+        } else {
+            Feedback.announce(names[id] ?? id)
+        }
     }
 
     private func panel<C: View>(@ViewBuilder _ content: () -> C) -> some View {

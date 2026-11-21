@@ -6,52 +6,32 @@ import DungeonCore
 @MainActor
 struct AchievementsView: View {
     @EnvironmentObject var game: GameModel
+    @EnvironmentObject var router: Router
     @State private var tab = "quests"
     @State private var visible = 30
     /// Bumped when you register or cancel, so the Challenge tab redraws.
     @State private var dcVersion = 0
 
     var body: some View {
-        WebScreen {
-            ScreenHeader(title: "Quests & Achievements")
-                .padding(.bottom, 14)
-            tabs
-            switch tab {
-            case "quests": quests
-            case "achievements": achievements
-            default: challenge
+        ScreenTabs(items: [.init(id: "quests", title: "Quests", icon: "scroll.fill"),
+                           .init(id: "achievements", title: "Achievements", icon: "trophy.fill"),
+                           .init(id: "challenge", title: "Daily Challenge", icon: "bolt.fill")],
+                   selection: $tab, onBack: { router.goTo(.menu) },
+                   onSelect: { id in
+                       if id == "quests" { Feedback.announce("Quests.") }
+                       if id == "achievements" { announceAchievements() }
+                       if id == "challenge" { announceChallenge() }
+                   }) {
+            WebScreen {
+                ScreenHeader(title: "Quests & Achievements")
+                    .padding(.bottom, 14)
+                switch tab {
+                case "quests": quests
+                case "achievements": achievements
+                default: challenge
+                }
             }
         }
-    }
-
-    private var tabs: some View {
-        HStack(spacing: 0) {
-            tabButton("quests", "📜 Quests", "Quests tab")
-            tabButton("achievements", "🏆 Achievements", "Achievements tab")
-            tabButton("challenge", "⚡ Challenge", "Daily Challenge tab")
-        }
-        .overlay(Rectangle().stroke(Theme.borderDim))
-        .padding(.bottom, 20)
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel("Quest sections")
-    }
-
-    private func tabButton(_ id: String, _ text: String, _ label: String) -> some View {
-        let on = tab == id
-        return Button {
-            tab = id
-            if id == "achievements" { announceAchievements() }
-            if id == "challenge" { announceChallenge() }
-        } label: {
-            Text(text).font(Theme.cinzel(11.5)).tracking(1.7).textCase(.uppercase)
-                .foregroundStyle(on ? Theme.gold : Theme.textDim)
-                .lineLimit(1).minimumScaleFactor(0.6)
-                .frame(maxWidth: .infinity, minHeight: 44)
-                .background(on ? Color(hex: 0x1e1a10) : Color(hex: 0x12100d))
-                .overlay(alignment: .bottom) { if on { Rectangle().fill(Theme.gold).frame(height: 2) } }
-        }
-        .accessibilityLabel(label)
-        .accessibilityAddTraits(on ? [.isButton, .isSelected] : .isButton)
     }
 
     // MARK: Quests tab

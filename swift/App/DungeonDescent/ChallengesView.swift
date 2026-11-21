@@ -15,17 +15,22 @@ struct ChallengesView: View {
     private let daily = Challenges.daily()
 
     var body: some View {
+        ScreenTabs(items: [.init(id: "gauntlet", title: "The Gauntlet", icon: "flame.fill"),
+                           .init(id: "daily", title: "Daily Dungeon", icon: "calendar"),
+                           .init(id: "weekly", title: "Weekly Ladder", icon: "chart.bar.fill")],
+                   selection: $tab, onBack: { router.goTo(.menu) }, onSelect: announceTab) {
+            screen
+        }
+        .onAppear { Feedback.announce("Challenges. Only the strongest survive. The Gauntlet tab is selected.") }
+    }
+
+    private var screen: some View {
         WebScreen {
             VStack(alignment: .leading, spacing: 14) {
                 Button("← Menu") { router.goTo(.menu) }
                     .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Back to main menu")
                 Text("🔥 Challenges").font(Theme.decorative(22)).foregroundStyle(Color(hex: 0xe0c080)).accessibilityAddTraits(.isHeader)
                 Text("Only the strongest survive.").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
-                HStack(spacing: 0) {
-                    tabButton("gauntlet", "⚔ THE GAUNTLET", "The Gauntlet tab — all 6 dungeons back to back")
-                    tabButton("daily", "📅 DAILY DUNGEON", "Daily Dungeon tab — one dungeon per day with special modifiers")
-                    tabButton("weekly", "📆 WEEKLY LADDER", "Weekly Ladder tab — one dungeon all week, one life, a leaderboard")
-                }
                 switch tab {
                 case "gauntlet": gauntletPanel
                 case "daily": dailyPanel
@@ -34,7 +39,6 @@ struct ChallengesView: View {
                 gameCenterPanel
             }
         }
-        .onAppear { Feedback.announce("Challenges. Only the strongest survive. The Gauntlet tab is selected.") }
     }
 
     /// Game Center: friends' scores and the Challenge button for each leaderboard.
@@ -53,26 +57,14 @@ struct ChallengesView: View {
         .padding(.top, 10)
     }
 
-    private func tabButton(_ id: String, _ text: String, _ label: String) -> some View {
-        Button {
-            tab = id
-            Sound.sfx("sfx-select")
-            if id == "daily", let best = Challenges.todaysBest(game.store) {
-                Feedback.announce("Daily Dungeon. Already completed today. Best time: \(best).")
-            } else {
-                Feedback.announce(id == "gauntlet" ? "The Gauntlet. All 6 dungeons, one life."
-                                  : id == "daily" ? "Daily Dungeon. One special dungeon per day."
-                                  : "Weekly Ladder. \(week.name). \(week.dungeon), one life. Your best this week: \(Challenges.weeklyBest(game.store)).")
-            }
-        } label: {
-            Text(text).font(Theme.cinzel(10.4)).tracking(1.5)
-                .foregroundStyle(tab == id ? gold : Color(hex: 0x666666))
-                .frame(maxWidth: .infinity).padding(10)
-                .overlay(alignment: .bottom) { Rectangle().fill(tab == id ? gold : .clear).frame(height: 2) }
+    private func announceTab(_ id: String) {
+        if id == "daily", let best = Challenges.todaysBest(game.store) {
+            Feedback.announce("Daily Dungeon. Already completed today. Best time: \(best).")
+        } else {
+            Feedback.announce(id == "gauntlet" ? "The Gauntlet. All 6 dungeons, one life."
+                              : id == "daily" ? "Daily Dungeon. One special dungeon per day."
+                              : "Weekly Ladder. \(week.name). \(week.dungeon), one life. Your best this week: \(Challenges.weeklyBest(game.store)).")
         }
-        .buttonStyle(.plain)
-        .accessibilityLabel(label)
-        .accessibilityAddTraits(tab == id ? [.isSelected, .isButton] : .isButton)
     }
 
     private func box<C: View>(@ViewBuilder _ content: () -> C) -> some View {

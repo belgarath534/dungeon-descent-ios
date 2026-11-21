@@ -18,6 +18,8 @@ struct CharacterListView: View {
     @State private var importing = false
     @State private var importText = ""
     @State private var newDungeon: DungeonUnlockNews.Info?
+    /// 12.1: the character whose own page is open (nil: the list).
+    @State private var openChar: Int?
 
     /// ov-confirm, reused by Play for New Game+ and resuming.
     struct Dialog {
@@ -48,6 +50,9 @@ struct CharacterListView: View {
 
     var body: some View {
         ZStack {
+            if let i = openChar, game.characters.indices.contains(i) {
+                WebScreen { characterPage(game.characters[i], i) }
+            } else {
             WebScreen {
                 ScreenHeader(title: "Your Champions",
                              subtitle: "Choose a warrior to continue, or forge a new legend.") {
@@ -96,6 +101,7 @@ struct CharacterListView: View {
                         .multilineTextAlignment(.center)
                         .padding(.top, 10)
                 }
+            }
             }
             if let d = dialog { confirmOverlay(d) }
             if let i = pendingDelete { deleteOverlay(i) }
@@ -199,12 +205,92 @@ struct CharacterListView: View {
         } else {
             VStack(spacing: 10) {
                 ForEach(Array(game.characters.enumerated()), id: \.element.created) { i, ch in
-                    card(ch, i)
+                    row(ch, i)
                 }
             }
             .padding(.bottom, 20)
             .accessibilityElement(children: .contain)
             .accessibilityLabel("Character list")
+        }
+    }
+
+    // MARK: 12.1: one button per character, and the character's own page
+
+    /// What a character's button says: name, class, level, and where they are.
+    private func summary(_ ch: PlayerCharacter, _ i: Int) -> String {
+        let level = ch.persistLevel ?? 1
+        let stars = Prestige.stars(ch)
+        let place: String
+        if ch.completed { place = "Completed \(ch.dungeon)" }
+        else if game.savedRun(for: i) != nil { place = "Run in progress, floor \(ch.floor), \(ch.dungeon)" }
+        else if ch.floor == 0 { place = "Ready to descend, \(ch.dungeon)" }
+        else { place = "Floor \(ch.floor), \(ch.dungeon)" }
+        return "\(ch.name), level \(level) \(ch.race) \(ch.cls)\(stars > 0 ? ", \(stars) prestige star\(stars == 1 ? "" : "s")" : ""). \(place). \(ch.difficulty)."
+    }
+
+    /// One character in the list: a single button (a heading too, so the
+    /// Headings rotor jumps from character to character) that opens their page.
+    private func row(_ ch: PlayerCharacter, _ i: Int) -> some View {
+        let level = ch.persistLevel ?? 1
+        let resumable = game.savedRun(for: i) != nil && !ch.completed
+        return Button {
+            Sound.sfx("sfx-select")
+            openChar = i
+            Feedback.announce("\(ch.name). \(resumable ? "Resume" : "Play") is the first button.", after: 0.4)
+        } label: {
+            HStack(spacing: 14) {
+                Text(Self.classIcons[ch.cls] ?? "⚔️").font(.system(size: 26))
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 8) {
+                        Text(ch.name).font(Theme.cinzel(15, weight: .semibold)).foregroundStyle(Theme.ashLight)
+                        Text("Lv \(level)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffaa00))
+                        if Prestige.stars(ch) > 0 {
+                            Text("★\(Prestige.stars(ch))" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffdd44))
+                        }
+                    }
+                    Text("\(ch.race) \(ch.cls) · \(resumable ? "▶ Run in progress" : ch.completed ? "✦ Completed" : ch.dungeon)" as String)
+                        .font(Theme.crimson(12.8, italic: true)).foregroundStyle(Theme.textSecondary)
+                }
+                Spacer()
+                Text("›").font(Theme.cinzel(20)).foregroundStyle(Theme.goldDim)
+            }
+            .padding(.vertical, 14).padding(.horizontal, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Theme.bgPanel)
+            .overlay(Rectangle().stroke(Theme.borderDim))
+            .overlay(alignment: .leading) { Rectangle().fill(Theme.borderGlow).frame(width: 3) }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(summary(ch, i))
+        .accessibilityHint("Opens \(ch.name)'s options." as String)
+        .accessibilityAddTraits([.isButton, .isHeader])
+    }
+
+    /// The character's own page: everything the old card had, with its
+    /// buttons, and every death; Back returns to the list.
+    private func characterPage(_ ch: PlayerCharacter, _ i: Int) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            Button("← All Characters") {
+                openChar = nil
+                Feedback.announce("Your champions.", after: 0.3)
+            }
+            .buttonStyle(BackButtonStyle())
+            .accessibilityLabel("Back to all characters")
+            Text(ch.name).font(Theme.decorative(22)).foregroundStyle(Color(hex: 0xe0c080))
+                .accessibilityAddTraits(.isHeader)
+            card(ch, i)
+            if !ch.deaths.isEmpty {
+                Text("☠ DEATHS").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityLabel("Deaths, \(ch.deaths.count)" as String)
+                ForEach(Array(ch.deaths.reversed().enumerated()), id: \.offset) { _, d in
+                    Text("☠ Floor \(d.floor) — \(d.killedBy)" as String)
+                        .font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textSecondary)
+                        .accessibilityLabel("Floor \(d.floor), killed by \(d.killedBy)" as String)
+                }
+            }
         }
     }
 
@@ -214,7 +300,6 @@ struct CharacterListView: View {
         let resumable = game.savedRun(for: i) != nil && !ch.completed
         let playLabel = resumable ? "▶ Resume" : ch.completed ? "✦ NG+" : "⚔ Play"
         let (diffColor, diffBorder) = Self.difficultyColors(ch.difficulty)
-        let deaths = ch.deaths
         let origin: String = { if case .string(let b)? = ch.extra["backstoryName"], !b.isEmpty { return " Origin: \(b)." }; return "" }()
 
         return HStack(alignment: .center, spacing: 18) {
@@ -264,19 +349,6 @@ struct CharacterListView: View {
                             .padding(.vertical, 2).padding(.horizontal, 8)
                             .overlay(Rectangle().stroke(Color(hex: 0x5a20a0)))
                             .padding(.top, 4)
-                    }
-                    if !deaths.isEmpty {
-                        VStack(alignment: .leading, spacing: 0) {
-                            ForEach(Array(deaths.suffix(2).enumerated()), id: \.offset) { _, d in
-                                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                                    Text("☠").font(.system(size: 11)).foregroundStyle(Theme.blood)
-                                    Text("Floor \(d.floor) — \(d.killedBy)" as String).italic().foregroundStyle(Theme.textSecondary)
-                                }
-                                .font(Theme.crimson(11.5))
-                                .padding(.vertical, 4)
-                            }
-                        }
-                        .padding(.top, 10)
                     }
                 }
                 // The card's own label, read before its buttons.
@@ -417,6 +489,7 @@ struct CharacterListView: View {
             HStack(spacing: 10) {
                 Button("Delete") {
                     pendingDelete = nil
+                    openChar = nil
                     game.buryCharacter(at: i)
                     Feedback.announce("\(name) has been deleted.")
                 }
