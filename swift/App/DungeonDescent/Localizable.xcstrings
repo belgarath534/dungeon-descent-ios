@@ -130494,6 +130494,39 @@
           }
         }
       }
+    },
+    "Gauntlet Champion": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Campeão do Desafio"
+          }
+        }
+      }
+    },
+    "TheEndless": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Infinito"
+          }
+        }
+      }
+    },
+    "TheFallen": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Caído"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
