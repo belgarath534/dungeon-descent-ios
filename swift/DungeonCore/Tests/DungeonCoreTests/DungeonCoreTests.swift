@@ -5178,3 +5178,21 @@ final class EarnedTitleTests: XCTestCase {
         XCTAssertFalse(Titles.listed(MemoryStore()).map(\.tag).contains("Gauntlet Champion"))
     }
 }
+
+final class RosterReentryTests: XCTestCase {
+    /// Prestige pays gold inside the update, and the wallet's refresh reads
+    /// the roster: that used to crash (simultaneous access).
+    func testUpdateCanReadTheRosterWhileChanging() {
+        let store = MemoryStore()
+        let roster = CharacterRoster(store: store)
+        _ = roster.add(PlayerCharacter(name: "Ana", cls: "Monk", race: "Elf", prof: "Thief",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var seen = 0
+        roster.update(0) { ch in
+            ch.persistLevel = 7
+            seen = roster.characters.count
+        }
+        XCTAssertEqual(seen, 1)
+        XCTAssertEqual(roster.characters[0].persistLevel, 7)
+    }
+}
