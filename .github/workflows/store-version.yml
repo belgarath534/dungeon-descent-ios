@@ -14,7 +14,9 @@ on:
     # store-auto-release: sets all three to release as soon as approved.
     # store-submit-ios-mac: like store-submit, for iPhone and Mac only (when
     # Apple Vision Pro's build is still on its way).
-    branches: [store-version, store-submit, store-cancel, store-status, store-auto-release, store-submit-ios-mac]
+    # store-submit-vision: Apple Vision Pro only, without touching the notes
+    # (the other two may already be in review).
+    branches: [store-version, store-submit, store-cancel, store-status, store-auto-release, store-submit-ios-mac, store-submit-vision]
   workflow_dispatch:
 
 jobs:
@@ -53,20 +55,20 @@ jobs:
         run: ruby scripts/check_asc_key.rb
 
       - name: Make the versions
-        if: github.ref_name == 'store-version' || startsWith(github.ref_name, 'store-submit') || github.event_name == 'workflow_dispatch'
+        if: (github.ref_name == 'store-version' || startsWith(github.ref_name, 'store-submit') || github.event_name == 'workflow_dispatch') && github.ref_name != 'store-submit-vision'
         run: |
           pip install --quiet pyjwt cryptography requests
           python3 tools/new-version.py
 
       - name: Release the Game Center leaderboards and challenges
-        if: github.ref_name == 'store-version' || startsWith(github.ref_name, 'store-submit') || github.event_name == 'workflow_dispatch'
+        if: (github.ref_name == 'store-version' || startsWith(github.ref_name, 'store-submit') || github.event_name == 'workflow_dispatch') && github.ref_name != 'store-submit-vision'
         run: python3 tools/attach-game-center.py
 
       - name: Pick the builds (and submit, from store-submit)
         env:
           VERSION: "12.0"
           SUBMIT: ${{ startsWith(github.ref_name, 'store-submit') && 'yes' || '' }}
-          PLATFORMS: ${{ github.ref_name == 'store-submit-ios-mac' && 'IOS MAC_OS' || 'IOS MAC_OS VISION_OS' }}
+          PLATFORMS: ${{ github.ref_name == 'store-submit-ios-mac' && 'IOS MAC_OS' || github.ref_name == 'store-submit-vision' && 'VISION_OS' || 'IOS MAC_OS VISION_OS' }}
           CANCEL: ${{ github.ref_name == 'store-cancel' && 'yes' || '' }}
           STATUS: ${{ github.ref_name == 'store-status' && 'yes' || '' }}
           AUTO_RELEASE: ${{ github.ref_name == 'store-auto-release' && 'yes' || '' }}
