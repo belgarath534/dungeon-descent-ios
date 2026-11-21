@@ -9,7 +9,9 @@ name: TestFlight (GitHub)
 
 on:
   push:
-    branches: [testflight]
+    # testflight-iphone: only the iPhone (and Apple Watch) build, for a quick
+    # test while the others aren't needed.
+    branches: [testflight, testflight-iphone]
   workflow_dispatch:
 
 concurrency:
@@ -25,13 +27,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: iPhone and Apple Watch
-            lane: ios beta
-          - name: Apple Vision Pro
-            lane: ios vision
-          - name: Mac
-            lane: mac beta
+        include: ${{ fromJSON(github.ref_name == 'testflight-iphone'
+          && '[{"name":"iPhone and Apple Watch","lane":"ios beta"}]'
+          || '[{"name":"iPhone and Apple Watch","lane":"ios beta"},{"name":"Apple Vision Pro","lane":"ios vision"},{"name":"Mac","lane":"mac beta"}]') }}
     env:
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
