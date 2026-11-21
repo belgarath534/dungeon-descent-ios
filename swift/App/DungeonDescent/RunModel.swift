@@ -2839,7 +2839,7 @@ final class RunModel: ObservableObject {
             achievements.trackGlobal("gauntletClears")
             achievements.award("gauntlet_champion")
             game.store.setItem("dd_gauntlet_best", String(Int(Date().timeIntervalSince1970 * 1000)))
-            return "THE GAUNTLET IS COMPLETE! All \(Challenges.gauntlet.count) dungeons cleared. You are the Gauntlet Champion."
+            return "THE GAUNTLET IS COMPLETE! All \(Challenges.gauntlet.count) dungeons cleared. You are the Gauntlet Champion. Title unlocked: Gauntlet Champion. Wear it from Account, Change Title."
         }
         if run.weeklyKey != nil { return weeklyDone(run, cleared: true) }
         if let key = run.dailyKey {

@@ -5166,3 +5166,15 @@ final class CloudSyncPassiveTests: XCTestCase {
         XCTAssertGreaterThan(CloudSync.number(store.getItem(CloudSync.dirtyKey)), 100)
     }
 }
+
+final class EarnedTitleTests: XCTestCase {
+    func testGauntletAndShopTitlesShowInThePicker() {
+        let store = MemoryStore(["dd_achievements": #"["gauntlet_champion"]"#, "dd_unlocked_titles": #"["TheEndless"]"#])
+        let tags = Titles.listed(store).map(\.tag)
+        XCTAssertTrue(tags.contains("Gauntlet Champion"))
+        XCTAssertTrue(tags.contains("TheEndless"))
+        XCTAssertTrue(Titles.select("Gauntlet Champion", store: store))
+        XCTAssertEqual(Titles.current(store), "Gauntlet Champion")
+        XCTAssertFalse(Titles.listed(MemoryStore()).map(\.tag).contains("Gauntlet Champion"))
+    }
+}

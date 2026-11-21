@@ -188,7 +188,7 @@ public enum Titles {
     }
 
     public static func isOwned(_ tag: String, _ store: GameStore) -> Bool {
-        owned(store).contains(tag) || costs.first { $0.tag == tag }?.cost == 0
+        owned(store).contains(tag) || costs.first { $0.tag == tag }?.cost == 0 || extras(store).contains(tag)
     }
 
     static func addOwned(_ tag: String, _ store: GameStore) {
@@ -198,9 +198,29 @@ public enum Titles {
         if let d = try? JSONEncoder().encode(o), let s = String(data: d, encoding: .utf8) { store.setItem("dd_owned_titles", s) }
     }
 
-    /// Every title you can see in the picker: the thirty, then seasonal ones you own.
+    /// Titles earned by an achievement: the Gauntlet's reward (also for anyone
+    /// who cleared it before this was given).
+    public static let earnedBy: [String: String] = ["gauntlet_champion": "Gauntlet Champion"]
+
+    /// Titles owned outside the coin list: seasonal ones, the Descent Shop's
+    /// two ("dd_unlocked_titles") and the earned ones. The picker used to
+    /// list only seasonal ones, so the others never showed.
+    public static func extras(_ store: GameStore) -> [String] {
+        var out: [String] = []
+        func add(_ t: String) { if !costs.contains(where: { $0.tag == t }), !out.contains(t) { out.append(t) } }
+        owned(store).filter { $0 != "Wanderer" }.forEach(add)
+        if let s = store.getItem("dd_unlocked_titles"), let d = s.data(using: .utf8),
+           let v = try? JSONDecoder().decode([String].self, from: d) { v.forEach(add) }
+        if let s = store.getItem("dd_achievements"), let d = s.data(using: .utf8),
+           let v = try? JSONDecoder().decode([String].self, from: d) {
+            for (id, t) in earnedBy.sorted(by: { $0.key < $1.key }) where v.contains(id) { add(t) }
+        }
+        return out
+    }
+
+    /// Every title you can see in the picker: the thirty, then the others you own.
     public static func listed(_ store: GameStore) -> [(tag: String, cost: Int)] {
-        costs + seasonal.values.sorted().filter { owned(store).contains($0) }.map { ($0, 0) }
+        costs + extras(store).map { ($0, 0) }
     }
 
     @discardableResult

@@ -12764,7 +12764,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Desafios. Duas abas disponíveis: A Gangorra e Masmorra Diária. Use a tecla tab para alternar."
+            "value": "Desafios. Duas abas disponíveis: O Desafio e Masmorra Diária. Use a tecla tab para alternar."
           }
         }
       }
@@ -28017,7 +28017,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gangorra completa. Todas as ondas derrotadas. A câmara do chefe se abre. Prepare-se para a luta final."
+            "value": "Desafio completo. Todas as ondas derrotadas. A câmara do chefe se abre. Prepare-se para a luta final."
           }
         }
       }
@@ -51688,7 +51688,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Seis masmorras. Uma vida. Zero mortes. A Gangorra nunca viu nada como você."
+            "value": "Seis masmorras. Uma vida. Zero mortes. O Desafio nunca viu nada como você."
           }
         }
       }
@@ -55692,7 +55692,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "A GANGORRA ESTÁ COMPLETA! Todas as 6 masmorras concluídas. Você é o Campeão da Gangorra."
+            "value": "O DESAFIO ESTÁ COMPLETO! Todas as 6 masmorras concluídas. Você é o Campeão do Desafio."
           }
         }
       }
@@ -76845,7 +76845,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "⚔ A GANGORRA"
+            "value": "⚔ O DESAFIO"
           }
         }
       }
