@@ -57,19 +57,6 @@ submit = os.environ.get("SUBMIT", "") == "yes"
 
 app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
 
-# AUTO_RELEASE=yes: release this version as soon as it's approved, then stop.
-if os.environ.get("AUTO_RELEASE") == "yes":
-    v = version_of(platform)
-    if not v:
-        sys.exit(f"No {platform} {version} version")
-    before = v["attributes"].get("releaseType")
-    if before != "AFTER_APPROVAL":
-        call("PATCH", f"/appStoreVersions/{v['id']}", json={"data": {"type": "appStoreVersions", "id": v["id"],
-             "attributes": {"releaseType": "AFTER_APPROVAL"}}})
-    now = version_of(platform)["attributes"].get("releaseType")
-    print(f"{platform} {version}: release {before} -> {now}")
-    sys.exit(0)
-
 # STATUS=yes: only print where this platform's version is in review.
 if os.environ.get("STATUS") == "yes":
     for v in call("GET", f"/apps/{app}/appStoreVersions", params={"filter[platform]": platform, "limit": 3})["data"]:
@@ -105,6 +92,19 @@ def version_of(p):
              params={"filter[platform]": p, "filter[versionString]": version})["data"]
     return v[0] if v else None
 
+
+# AUTO_RELEASE=yes: release this version as soon as it's approved, then stop.
+if os.environ.get("AUTO_RELEASE") == "yes":
+    v = version_of(platform)
+    if not v:
+        sys.exit(f"No {platform} {version} version")
+    before = v["attributes"].get("releaseType")
+    if before != "AFTER_APPROVAL":
+        call("PATCH", f"/appStoreVersions/{v['id']}", json={"data": {"type": "appStoreVersions", "id": v["id"],
+             "attributes": {"releaseType": "AFTER_APPROVAL"}}})
+    now = version_of(platform)["attributes"].get("releaseType")
+    print(f"{platform} {version}: release {before} -> {now}")
+    sys.exit(0)
 
 target = version_of(platform)
 if not target:
