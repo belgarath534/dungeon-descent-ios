@@ -25,7 +25,8 @@ WHATS_NEW = {
 • Audio Map: hear the whole floor as sounds around you. Best with headphones.
 • Apple Watch: World Boss strikes, the Battle Pass, your daily reward, Quick Fight with the Digital Crown, wrist alerts, Siri and new complications.
 • The whole game is now in Portuguese.
-• Game Center is in the Multiplayer tab.""",
+• Game Center is in the Multiplayer tab.
+• Fixes: the VoiceOver rotor no longer jumps back to Actions in the dungeon, forged spirits show up when creating a character, and the Gauntlet Champion title is now given.""",
     "pt-BR": """Novidades da 12.0, A Atualização das Lendas:
 • Masmorra Cooperativa: atravesse dez andares com até três amigos, no iPhone, Mac, Apple Vision Pro e na web juntos. Compartilhe um código de sala de 4 letras.
 • Um novo menu principal com abas na parte de baixo: Jogar, Modos, Multijogador, Mais e Ajustes. Prefere a lista antiga? Ajustes, Jogabilidade, Menu Clássico.
@@ -38,7 +39,8 @@ WHATS_NEW = {
 • Mapa Sonoro: ouça o andar inteiro como sons ao seu redor. Melhor com fones de ouvido.
 • Apple Watch: golpes no Chefe Mundial, o Passe de Batalha, a recompensa diária, Luta Rápida com a Digital Crown, alertas no pulso, Siri e novas complicações.
 • O jogo inteiro agora está em português.
-• O Game Center está na aba Multijogador.""",
+• O Game Center está na aba Multijogador.
+• Correções: o rotor do VoiceOver não volta mais para Ações na masmorra, espíritos forjados aparecem ao criar um personagem e o título Campeão do Desafio agora é concedido.""",
 }
 PROMO = {
     "en-US": "New in 12.0: play together. Co-op dungeons with friends on iPhone, Mac, Vision Pro and the web, a Battle Pass, and hunting by sound.",

@@ -81,7 +81,6 @@ struct DungeonView: View {
         .accessibilityAction(.magicTap) {
             if model.threeD && model.phase == .exploring && run.stalker == nil { model.echoLocate() } else { model.recap() }
         }
-        .accessibilityAction(named: "What just happened") { model.recap() }
         .onAppear {
             let m = model
             ShakeDetector.shared.onShake = { [weak m] hard in m?.shakeAttack(hard: hard) }
@@ -390,6 +389,11 @@ struct DungeonView: View {
                 if run.searched { Text("🔍 Searched").font(Theme.cinzel(9.6)).foregroundStyle(Theme.textDim) }
             }
             .accessibilityElement(children: .combine)
+            // Only here, not on the whole screen: an action on the screen was
+            // on every button and line in it, and VoiceOver turns the rotor to
+            // Actions on anything with actions, so it kept leaving Containers
+            // or whatever the player had chosen.
+            .accessibilityAction(named: "What just happened") { model.recap() }
             Text(model.roomText.isEmpty ? "You stand at the entrance." : model.roomText)
                 .font(Theme.crimson(16, italic: true)).foregroundStyle(Theme.textSecondary).lineSpacing(5)
             if model.phase == .event, let ev = model.pendingEvent {

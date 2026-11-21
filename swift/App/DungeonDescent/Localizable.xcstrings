@@ -130527,6 +130527,28 @@
           }
         }
       }
+    },
+    "Tip: in the dungeon, a two-finger double tap (or the Actions rotor on the room's title, What just happened) reads the last 5 things that happened.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dica: na masmorra, um toque duplo com dois dedos (ou o rotor de Ações no título da sala, O que aconteceu) lê as últimas 5 coisas que aconteceram."
+          }
+        }
+      }
+    },
+    "🔧 Fixed: the VoiceOver rotor no longer jumps back to Actions in the dungeon; spirits you build in the Spirit Forge now show up when creating a character; the Gauntlet Champion title is now given (and earned titles like TheEndless and TheFallen show in Change Title).": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🔧 Corrigido: o rotor do VoiceOver não volta mais para Ações na masmorra; espíritos criados na Forja de Espíritos agora aparecem ao criar um personagem; o título Campeão do Desafio agora é concedido (e títulos conquistados como O Infinito e O Caído aparecem em Alterar Título)."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

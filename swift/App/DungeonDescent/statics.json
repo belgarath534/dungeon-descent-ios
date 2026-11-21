@@ -689,7 +689,8 @@
     "🗺 Audio Map — a new button in the dungeon plays the whole floor as sounds around you: the rooms you've been in, the ones you haven't, the stairs or the boss, and the hunter if it's after you. In 3D Mode every room sounds from where it really is. Best with headphones.",
     "⌚ Apple Watch: a new home screen with World Boss strikes from your wrist, the Battle Pass and this week's quests, your daily reward, and Quick Fight, a little game you play with the Digital Crown. Wrist Alerts tap you for low HP, elites, the hunter and your co-op turn while you play on your iPhone. Siri on the watch (\"Strike the World Boss in Dungeon Descent\", \"Claim my daily reward…\"), and a Battle Pass season complication.",
     "🇧🇷 The whole game is now in Portuguese — every screen, button and line VoiceOver reads.",
-    "🎮 Game Center is in the Multiplayer tab."
+    "🎮 Game Center is in the Multiplayer tab.",
+    "🔧 Fixed: the VoiceOver rotor no longer jumps back to Actions in the dungeon; spirits you build in the Spirit Forge now show up when creating a character; the Gauntlet Champion title is now given (and earned titles like TheEndless and TheFallen show in Change Title)."
    ]
   },
   {
