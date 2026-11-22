@@ -1,0 +1,49 @@
+# Checks the App Group on the iPhone app, the watch app and the complications
+# (tools/check-app-groups.py). Run it by pushing to the "app-groups-check"
+# branch (git push -f origin swift-rewrite:app-groups-check).
+name: Check App Groups
+
+on:
+  push:
+    branches: [app-groups-check]
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      CLEAN_CERTS_TOKEN: ${{ secrets.CERTS_REPO_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get key files from ios-certificates
+        continue-on-error: true
+        uses: actions/checkout@v4
+        with:
+          repository: belgarath534/ios-certificates
+          token: ${{ env.CLEAN_CERTS_TOKEN }}
+          path: .certs-repo
+
+      - name: Collect Apple API keys
+        env:
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          mkdir -p "$HOME/.asc/candidates"
+          if [ -d .certs-repo ]; then
+            find .certs-repo -name '*.p8' -not -path '*/.git/*' -exec cp {} "$HOME/.asc/candidates/" \;
+          fi
+          if [ -n "$ASC_KEY_P8" ] && [ -n "$ASC_KEY_ID" ]; then
+            printf '%s\n' "$ASC_KEY_P8" > "$HOME/.asc/candidates/secret_$(printf '%s' "$ASC_KEY_ID" | tr -d '[:space:]').p8"
+          fi
+          rm -rf .certs-repo
+
+      - name: Find the key Apple accepts
+        run: ruby scripts/check_asc_key.rb
+
+      - name: Check the App Groups
+        run: |
+          pip install --quiet pyjwt cryptography requests
+          python3 tools/check-app-groups.py

@@ -1,0 +1,8 @@
+Thanks for testing Dungeon Descent 12.0.1!
+
+Fixed, please try:
+• Prestige: prestiging a character crashed the game. Prestige a max-level character and check you get the star, the gold and the Mystery Coin.
+• Co-op: VoiceOver no longer jumps around during a fight. The action buttons stay on screen after you choose (the chosen one is marked) until the next round.
+• VoiceOver no longer jumps to the top after pressing buttons at Home (all its tabs), in the Gun Workshop and Gun Shop, the Arcane Shop, and the Command Center switch in Settings.
+
+Found a bug? Tell us in #dungeon-descent-testers on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.

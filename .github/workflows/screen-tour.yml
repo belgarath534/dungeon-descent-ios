@@ -1,0 +1,200 @@
+# Runs the game on devices we don't have in hand and takes pictures of it:
+# an iPhone simulator, and a Mac running the iPhone/iPad app (the way Apple
+# Silicon Macs run it from the App Store). Each run visits a few screens,
+# saves a screenshot of each and runs Apple's accessibility audit.
+#
+# Started by hand (Actions → Screen tour → Run workflow) because macOS
+# minutes cost more. The results go to the screen-tour-results branch, one
+# folder per device, and are also attached to the run.
+name: Screen tour
+
+on:
+  workflow_dispatch:
+    inputs:
+      device:
+        description: Which device to run on
+        type: choice
+        options: [all, iphone, mac, vision]
+        default: all
+  # Also runs when the tour itself changes on the Swift branch.
+  push:
+    branches: [swift-rewrite]
+    paths:
+      - 'swift/App/UITests/**'
+      - '.github/workflows/screen-tour.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: screen-tour
+  cancel-in-progress: false
+
+jobs:
+  tour:
+    strategy:
+      fail-fast: false
+      matrix:
+        device: ${{ fromJSON((inputs.device == '' || inputs.device == 'all' || inputs.device == null) && '["iphone","mac","vision"]' || format('["{0}"]', inputs.device)) }}
+    runs-on: macos-15
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick the newest Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: Generate the Xcode project
+        working-directory: swift/App
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          xcodegen generate
+
+      - name: Choose where it runs
+        id: dest
+        run: |
+          if [ "${{ matrix.device }}" = "iphone" ]; then
+            UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, re, sys
+          d = json.load(sys.stdin)["devices"]
+          def ver(k):
+              m = re.search(r"iOS-(\d+)-(\d+)", k)
+              return (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+          for rt in sorted((k for k in d if "iOS" in k), key=ver, reverse=True):
+              phones = [x for x in d[rt] if x["name"].startswith("iPhone")]
+              if phones:
+                  print(phones[0]["udid"]); break
+          ')
+            echo "Simulator: $UDID"
+            xcrun simctl boot "$UDID" || true
+            echo "destination=id=$UDID" >> "$GITHUB_OUTPUT"
+            echo "signing=CODE_SIGNING_ALLOWED=NO" >> "$GITHUB_OUTPUT"
+          elif [ "${{ matrix.device }}" = "vision" ]; then
+            find_vision() { xcrun simctl list devices available -j | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)["devices"]
+          for rt in sorted((k for k in d if "xrOS" in k or "visionOS" in k), reverse=True):
+              if d[rt]:
+                  print(d[rt][0]["udid"]); break
+          '; }
+            UDID=$(find_vision)
+            if [ -z "$UDID" ]; then xcodebuild -downloadPlatform visionOS; UDID=$(find_vision); fi
+            echo "Vision Pro simulator: $UDID"
+            echo "SIM_UDID=$UDID" >> "$GITHUB_ENV"
+            xcrun simctl boot "$UDID" || true
+            echo "destination=id=$UDID" >> "$GITHUB_OUTPUT"
+            echo "signing=CODE_SIGNING_ALLOWED=NO" >> "$GITHUB_OUTPUT"
+            # Firestore has no ready-made Vision Pro library; build it from source.
+            echo "FIREBASE_SOURCE_FIRESTORE=1" >> "$GITHUB_ENV"
+          else
+            # The Mac version (Mac Catalyst), signed to run on this Mac only,
+            # without the App Store entitlements, which need Apple's profile.
+            echo "destination=platform=macOS,variant=Mac Catalyst" >> "$GITHUB_OUTPUT"
+            echo "signing=CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER= CODE_SIGN_ENTITLEMENTS=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run the screen tour
+        working-directory: swift/App
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project DungeonDescent.xcodeproj \
+            -scheme DungeonDescent \
+            -destination "${{ steps.dest.outputs.destination }}" \
+            -derivedDataPath build \
+            -resultBundlePath tour.xcresult \
+            ${{ steps.dest.outputs.signing }} \
+            2>&1 | tee test.log | grep -E "error:|Test Case|\*\* TEST|Testing failed|Unable to|xcodebuild: error" || true
+          ls -d tour.xcresult
+
+      - name: Pull the screenshots out
+        if: always()
+        working-directory: swift/App
+        run: |
+          OUT="results/${{ matrix.device }}"
+          mkdir -p "$OUT" raw
+          if [ -d tour.xcresult ]; then
+            xcrun xcresulttool export attachments --path tour.xcresult --output-path raw || true
+          fi
+          python3 - "$OUT" <<'PY'
+          import json, os, shutil, sys
+          out = sys.argv[1]
+          try:
+              manifest = json.load(open("raw/manifest.json"))
+          except Exception as e:
+              print("No attachments:", e); manifest = []
+          for test in manifest:
+              for a in test.get("attachments", []):
+                  src = os.path.join("raw", a["exportedFileName"])
+                  name = a.get("suggestedHumanReadableName") or a["exportedFileName"]
+                  # "01-menu_0_UUID.png" → "01-menu.png"
+                  base, ext = os.path.splitext(name)
+                  base = base.split("_")[0]
+                  shutil.copy(src, os.path.join(out, base + ext))
+          PY
+          cp test.log "$OUT/test-log.txt" 2>/dev/null || true
+          # If the game quit on its own: its crash reports and its own log.
+          find "$HOME/Library/Logs/DiagnosticReports" -name 'DungeonDescent*' -mmin -120 2>/dev/null | while read -r F; do
+            cp "$F" "$OUT/crash-$(basename "$F").txt"; done
+          if [ -n "$SIM_UDID" ]; then
+            xcrun simctl spawn "$SIM_UDID" log show --last 60m --style compact \
+              --predicate 'process == "DungeonDescent"' 2>/dev/null | tail -400 > "$OUT/app-log.txt" || true
+          fi
+          ls -la "$OUT"
+          echo "──── Accessibility audit ────"
+          cat "$OUT"/accessibility-audit* 2>/dev/null || echo "(none)"
+
+      - name: Vision Pro screenshots from the simulator
+        # The test tool's screenshots come out blank on Apple Vision Pro, so
+        # the simulator itself takes them, with the game opened on each screen.
+        if: always() && matrix.device == 'vision' && env.SIM_UDID != ''
+        working-directory: swift/App
+        run: |
+          OUT=results/vision; mkdir -p "$OUT"
+          for S in menu charlist afk events whatsnew help; do
+            xcrun simctl terminate "$SIM_UDID" com.dungeon.descent 2>/dev/null || true
+            if [ "$S" = menu ]; then xcrun simctl launch "$SIM_UDID" com.dungeon.descent -skipLoading
+            else xcrun simctl launch "$SIM_UDID" com.dungeon.descent -startScreen "$S"; fi
+            sleep 12
+            xcrun simctl io "$SIM_UDID" screenshot "$OUT/store-$S.png" || true
+          done
+          ls -la "$OUT"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: screen-tour-${{ matrix.device }}
+          path: swift/App/results/${{ matrix.device }}
+          if-no-files-found: ignore
+
+      - name: Save to the screen-tour-results branch
+        if: always()
+        working-directory: swift/App
+        run: |
+          D=${{ matrix.device }}
+          [ -d "results/$D" ] || exit 0
+          git config user.name "Screen tour"
+          git config user.email "actions@users.noreply.github.com"
+          WT=$(mktemp -d)
+          if git fetch origin screen-tour-results 2>/dev/null; then
+            git worktree add "$WT" FETCH_HEAD
+            cd "$WT" && git checkout -B screen-tour-results
+          else
+            git worktree add --detach "$WT"
+            cd "$WT" && git checkout --orphan screen-tour-results && git rm -rqf . || true
+          fi
+          rm -rf "$WT/$D" && mkdir -p "$WT/$D"
+          # Pictures and text only: the screen recordings are far over GitHub's
+          # 100 MB file limit (they stay in the run's attachments).
+          find "$GITHUB_WORKSPACE/swift/App/results/$D" -maxdepth 1 -type f \( -name '*.png' -o -name '*.txt' \) \
+            -exec cp {} "$WT/$D/" \;
+          cd "$WT"
+          git add -A "$D"
+          git commit -qm "Screen tour: $D, $(date -u +%Y-%m-%dT%H:%MZ), ${GITHUB_SHA::7}" || exit 0
+          for i in 1 2 3; do
+            git push origin screen-tour-results && break
+            git pull --rebase origin screen-tour-results || true
+          done

@@ -1,0 +1,1 @@
+rpg,dungeon crawler,blind,voiceover,accessible,audio game,roguelike,fantasy,turn based,screen reader

@@ -1,0 +1,75 @@
+rules_version = '2';
+// Dungeon Descent's Firestore rules (both the (default) and "dungeon-descent"
+// databases). Each player reads and writes only their own data, and can delete
+// all of it (Settings → Account → Delete Account). Shared lists are readable by
+// everyone; players only add or change their own entries. ttsUsage is written by
+// the Cloud Function only.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isMe(uid) { return signedIn() && request.auth.uid == uid; }
+    // The developer's account (Developer Tools → Send Mystery Coins).
+    function isDev() { return signedIn() && request.auth.uid == 'WgqZGmnPKeYIymlMkx0aAg8G2T52'; }
+    function onlyChanges(keys) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys); }
+
+    // Profile: username, email, title. The developer can look a player up by email.
+    match /users/{uid} {
+      allow read, write: if isMe(uid);
+      allow read: if isDev();
+
+      // Gifts from the developer. Players claim and delete their own.
+      match /inbox/{msg} {
+        allow read, delete: if isMe(uid);
+        allow update: if isMe(uid) && onlyChanges(['claimed', 'claimedAt']);
+        allow create: if isDev();
+      }
+    }
+
+    // Cloud save.
+    match /saves/{uid} {
+      allow read, write: if isMe(uid);
+    }
+
+    // Older score record, read by the High Score screen.
+    match /scores/{uid} {
+      allow read, write: if isMe(uid);
+    }
+
+    // Usernames are unique: whoever holds one owns it.
+    match /usernames/{name} {
+      allow read: if true;
+      allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if signedIn() && resource.data.uid == request.auth.uid
+                            && (request.method == 'delete' || request.resource.data.uid == request.auth.uid);
+    }
+
+    // Global leaderboard: one entry per player.
+    match /leaderboard/{uid} {
+      allow read: if true;
+      allow write: if isMe(uid);
+    }
+
+    // Seasonal tournament scores: one entry per player per season.
+    match /tournament/{season}/scores/{uid} {
+      allow read: if true;
+      allow write: if isMe(uid);
+    }
+
+    // The obituary: anyone may add a death; nobody edits or removes them.
+    match /deaths/{doc} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().size() <= 20;
+      allow update, delete: if false;
+    }
+
+    // Community enemies: anyone may create one; the only change allowed is a kill (+1).
+    match /community_enemies/{doc} {
+      allow read: if true;
+      allow create: if request.resource.data.keys().size() <= 20;
+      allow update: if onlyChanges(['kills']) && request.resource.data.kills == resource.data.get('kills', 0) + 1;
+      allow delete: if false;
+    }
+
+    // Everything else (ttsUsage …) is server-only.
+  }
+}

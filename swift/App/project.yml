@@ -1,0 +1,308 @@
+# XcodeGen spec for the Swift version of Dungeon Descent.
+# Codemagic turns this into DungeonDescent.xcodeproj with `xcodegen generate`,
+# so the project file itself never has to be edited by hand or committed.
+#
+# Same bundle ID, version and entitlements as the web version's app, so it
+# installs over it on TestFlight and signs with the same profiles.
+name: DungeonDescent
+options:
+  deploymentTarget:
+    iOS: "16.0"
+    watchOS: "9.0"
+    visionOS: "1.0"
+  createIntermediateGroups: true
+  # English is the source; Localizable.xcstrings holds the Portuguese.
+  developmentLanguage: en
+# One version for the app and its Live Activity extension (the App Store
+# requires them to match); Codemagic bumps CURRENT_PROJECT_VERSION here.
+settings:
+  base:
+    MARKETING_VERSION: "12.0.1"
+    CURRENT_PROJECT_VERSION: "1"
+packages:
+  DungeonCore:
+    path: ../DungeonCore
+  # The web version's Firebase project (accounts, cloud saves and the online
+  # features), through Google's own iOS libraries.
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: 11.0.0
+  GoogleSignIn:
+    url: https://github.com/google/GoogleSignIn-iOS
+    from: 8.0.0
+  # 12.0: the Lewis Voice Pack, Kokoro speech on the iPhone (VoicePack/).
+  # The Lewis Voice Pack: Kokoro run by ONNX Runtime (fast on the iPhone's
+  # CPU), with MisakiSwift for pronunciation. MLX (MisakiSwift's fallback for
+  # unknown words) stays on the CPU; on the GPU it made static and crashed.
+  # ONNX Runtime from Microsoft's download server, checksum-locked (their
+  # Swift package's GitHub repository was taken down): ../Vendor/OnnxRuntimeC.
+  OnnxRuntimeC:
+    path: ../Vendor/OnnxRuntimeC
+  MLXSwift:
+    url: https://github.com/ml-explore/mlx-swift
+    exactVersion: 0.29.1
+  MisakiSwift:
+    url: https://github.com/mlalma/MisakiSwift
+    exactVersion: 1.0.5
+targets:
+  DungeonDescent:
+    type: application
+    # One app for iPhone, iPad and, natively, Apple Vision Pro. The watch app
+    # and the Live Activity are iPhone-only (destinationFilters below).
+    platform: auto
+    supportedDestinations: [iOS, visionOS, macCatalyst]
+    sources:
+      - path: DungeonDescent
+      - path: Shared
+      - path: WatchShared
+      # The web version's audio files, used as-is (one copy in the repo).
+      - path: ../../www/audio
+        type: folder
+        buildPhase: resources
+    postBuildScripts:
+      # ONNX Runtime (Voice Pack) is a static library, already linked into the
+      # app itself, but Xcode also copies its framework folder into the app,
+      # and the App Store refuses that copy (ITMS-90208). Removed before the
+      # app is signed.
+      - name: Remove ONNX Runtime's framework copy
+        basedOnDependencyAnalysis: false
+        script: |
+          rm -rf "${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/onnxruntime.framework"
+    dependencies:
+      - package: DungeonCore
+      - package: Firebase
+        product: FirebaseAuth
+      - package: Firebase
+        product: FirebaseFirestore
+      - package: Firebase
+        product: FirebaseDatabase
+      - package: GoogleSignIn
+        product: GoogleSignIn
+        # Google's library doesn't build for Apple Vision Pro; Apple and email sign-in do.
+        destinationFilters: [iOS]
+      # The Lewis Voice Pack's engine needs iOS 18 and runs on iPhone and iPad only.
+      - package: OnnxRuntimeC
+        product: OnnxRuntimeC
+        destinationFilters: [iOS]
+      - package: MLXSwift
+        product: MLX
+        destinationFilters: [iOS]
+      - package: MisakiSwift
+        product: MisakiSwift
+        destinationFilters: [iOS]
+        # Also a dynamic library: copied into the app, or it can't start.
+        embed: true
+      - target: DDLiveActivity
+        destinationFilters: [iOS]
+      # The Apple Watch app, embedded in the iPhone app like every watch app.
+      - target: DungeonWatch
+        destinationFilters: [iOS]
+    scheme:
+      # The screen tour (UITests/), run by the "Screen tour" GitHub workflow.
+      testTargets:
+        - DungeonDescentUITests
+    info:
+      path: DungeonDescent/Info.plist
+      properties:
+        CFBundleDisplayName: Dungeon Descent
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDevelopmentRegion: en
+        # Lets iPhone Settings → Dungeon Descent → Language offer Portuguese.
+        CFBundleLocalizations: [en, pt-BR]
+        LSApplicationCategoryType: public.app-category.role-playing-games
+        GCSupportsGameMode: true
+        ITSAppUsesNonExemptEncryption: false
+        LSRequiresIPhoneOS: true
+        UIBackgroundModes:
+          - audio
+          # Endless Descent catches up in the background (AFKBackground.swift).
+          - fetch
+        BGTaskSchedulerPermittedIdentifiers:
+          - com.dungeon.descent.afk-refresh
+        # Endless Descent's run on the Lock Screen and in the Dynamic Island.
+        NSSupportsLiveActivities: true
+        # One update per fight from the liveActivity function (LiveActivityPush.swift).
+        NSSupportsLiveActivitiesFrequentUpdates: true
+        # The Command Center's mic.
+        NSMicrophoneUsageDescription: Dungeon Descent listens for a spoken command when you tap the mic in the Command Center.
+        NSAppleMusicUsageDescription: Dungeon Descent plays songs you choose from your Apple Music library in My Tracks, in place of the game music.
+        NSSpeechRecognitionUsageDescription: Dungeon Descent turns your spoken command into text in the Command Center.
+        CFBundleURLTypes:
+          - CFBundleURLName: com.dungeon.descent
+            CFBundleURLSchemes:
+              - dungeondescent
+          # Google sign-in returns here (REVERSED_CLIENT_ID in GoogleService-Info.plist).
+          - CFBundleURLName: google
+            CFBundleURLSchemes:
+              - com.googleusercontent.apps.109323203666-sj667ngkft9jr7h85c5338bvllhl3hoq
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        # The web version's Google fonts (OFL), bundled.
+        UIAppFonts:
+          - Cinzel-Variable.ttf
+          - CinzelDecorative-Regular.ttf
+          - CinzelDecorative-Bold.ttf
+          - CinzelDecorative-Black.ttf
+          - CrimsonText-Regular.ttf
+          - CrimsonText-Italic.ttf
+          - CrimsonText-SemiBold.ttf
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    entitlements:
+      path: DungeonDescent/DungeonDescent.entitlements
+      properties:
+        com.apple.developer.game-center: true
+        # Live Activity updates pushed while the app is closed.
+        aps-environment: development
+        com.apple.developer.applesignin:
+          - Default
+        com.apple.developer.icloud-container-identifiers:
+          - iCloud.com.dungeon.descent
+        com.apple.developer.icloud-services:
+          - CloudKit
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent
+        PRODUCT_NAME: DungeonDescent
+        # 12.0: iPhone and iPad need iOS 18 (the Lewis Voice Pack); the Mac
+        # version (built with the macOS SDK) keeps its older minimum.
+        "IPHONEOS_DEPLOYMENT_TARGET[sdk=iphoneos*]": "18.0"
+        "IPHONEOS_DEPLOYMENT_TARGET[sdk=iphonesimulator*]": "18.0"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # Apple Vision Pro's layered icon (back: the app icon; front, middle: clear).
+        "ASSETCATALOG_COMPILER_APPICON_NAME[sdk=xros*]": AppIconVision
+        # The Mac version is the same app on the App Store: same bundle ID,
+        # its own sandboxed entitlements, macOS 13 and later.
+        DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER: NO
+        "CODE_SIGN_ENTITLEMENTS[sdk=macosx*]": DungeonDescent/DungeonDescent-Mac.entitlements
+        # Mac App Store signing (Codemagic's Mac workflow makes this profile).
+        "CODE_SIGN_STYLE[sdk=macosx*]": Manual
+        "DEVELOPMENT_TEAM[sdk=macosx*]": ZPD555RW3A
+        "CODE_SIGN_IDENTITY[sdk=macosx*]": Apple Distribution
+        "PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]": Dungeon Descent Mac App Store
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+  # The Live Activity, same bundle ID and App Store profile as the web
+  # version's DDLiveActivity extension.
+  DDLiveActivity:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "16.2"
+    sources:
+      - path: DDLiveActivity
+      - path: Shared
+    info:
+      path: DDLiveActivity/Info.plist
+      properties:
+        CFBundleDisplayName: Dungeon Descent
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.DDLiveActivity
+        PRODUCT_NAME: DDLiveActivity
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
+  # The Apple Watch app: pick a character and start, check, heal or end an
+  # Endless Descent run on your iPhone (WatchBridge.swift is the phone's end).
+  DungeonWatch:
+    type: application
+    platform: watchOS
+    deploymentTarget: "9.0"
+    sources:
+      - path: DungeonWatch
+      - path: WatchShared
+    dependencies:
+      # The complications (today's World Boss), inside the watch app.
+      - target: DungeonWatchWidget
+    info:
+      path: DungeonWatch/Info.plist
+      properties:
+        CFBundleDisplayName: Dungeon Descent
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        WKApplication: true
+        WKCompanionAppBundleIdentifier: com.dungeon.descent
+    # Game Center is on for the app, so App Store review wants it on the watch app too.
+    entitlements:
+      path: DungeonWatch/DungeonWatch.entitlements
+      properties:
+        com.apple.developer.game-center: true
+        # 12.0: shared with the complications (your floor, streak and tier).
+        com.apple.security.application-groups: [group.com.dungeon.descent]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.watchkitapp
+        PRODUCT_NAME: DungeonWatch
+        TARGETED_DEVICE_FAMILY: "4"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
+  # The Apple Watch complications: today's Daily World Boss and the hours
+  # until the next one, worked out from the date (no data from the iPhone).
+  DungeonWatchWidget:
+    type: app-extension
+    platform: watchOS
+    deploymentTarget: "9.0"
+    sources:
+      - path: DungeonWatchWidget
+      - path: WatchShared/ComplicationData.swift
+    info:
+      path: DungeonWatchWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Dungeon Descent
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    # 12.0: reads what the watch app saves for the complications.
+    entitlements:
+      path: DungeonWatchWidget/DungeonWatchWidget.entitlements
+      properties:
+        com.apple.security.application-groups: [group.com.dungeon.descent]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.watchkitapp.widget
+        PRODUCT_NAME: DungeonWatchWidget
+        TARGETED_DEVICE_FAMILY: "4"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
+  # Opens the game, visits a few screens, saves screenshots and runs Apple's
+  # accessibility audit (the "Screen tour" GitHub workflow). Not in the App Store build.
+  DungeonDescentUITests:
+    type: bundle.ui-testing
+    platform: auto
+    supportedDestinations: [iOS, visionOS, macCatalyst]
+    sources:
+      - path: UITests
+    dependencies:
+      - target: DungeonDescent
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.uitests
+        TEST_TARGET_NAME: DungeonDescent
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        XROS_DEPLOYMENT_TARGET: "1.0"
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic

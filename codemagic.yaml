@@ -44,7 +44,7 @@ workflows:
     # Paid pay-as-you-go Mac: starts right away instead of waiting in the free line.
     # The 60 minute cap keeps a stuck build from costing much.
     max_build_duration: 60
-    instance_type: mac_mini_m4
+    instance_type: mac_mini_m2
     integrations:
       app_store_connect: Accessible Backrooms
     environment:
@@ -109,3 +109,553 @@ workflows:
       app_store_connect:
         auth: integration
         submit_to_testflight: false  # internal testers get every build anyway; true tries external beta review and fails without Test Information
+
+  dungeon-descent-swift:
+    name: Dungeon Descent Swift (TestFlight)
+    # The Swift rewrite in swift/. Same bundle ID as the web version, so each
+    # build replaces it on TestFlight. Start it by hand from Codemagic.
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Accessible Backrooms
+    environment:
+      ios_signing:
+        provisioning_profiles:
+          - Dungeon Descent Live Activity App Store
+        certificates:
+          - Accessible Backrooms Distribution
+      xcode: latest
+    scripts:
+      - name: Install XcodeGen
+        script: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+      - name: Run the game rules tests
+        script: |
+          cd swift/DungeonCore
+          swift test
+      - name: Get the App Store profile from Apple
+        script: |
+          # The app needs a profile with iCloud and Push Notifications (Live
+          # Activity updates while the app is closed). The first build turns
+          # Push Notifications on for com.dungeon.descent and makes the profile
+          # with the App Store Connect integration's key; later builds reuse it.
+          set -e
+          ID=com.dungeon.descent
+          NAME="Dungeon Descent Push App Store"
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          fetch() {
+            TMP=$(mktemp -d)
+            app-store-connect profiles list --type IOS_APP_STORE --state ACTIVE \
+              --name "$NAME" --save --profiles-dir "$TMP" >/dev/null 2>&1 || true
+            for F in "$TMP"/*; do
+              [ -f "$F" ] || continue
+              if security cms -D -i "$F" | grep -q "iCloud.com.dungeon.descent" && \
+                 security cms -D -i "$F" | grep -q "aps-environment"; then
+                cp "$F" "$DEST/"; return 0
+              fi
+            done
+            return 1
+          }
+          if fetch; then echo "Using \"$NAME\" from Apple"; exit 0; fi
+          BID=$(app-store-connect bundle-ids list --bundle-id-identifier "$ID" --strict-match-identifier --json \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")')
+          [ -n "$BID" ] || { echo "No bundle ID $ID on Apple"; exit 1; }
+          echo "Turning on Push Notifications for $ID"
+          app-store-connect bundle-ids enable-capabilities "$BID" --capability "Push Notifications" || true
+          CERTS=""
+          for T in DISTRIBUTION IOS_DISTRIBUTION; do
+            C=$(app-store-connect certificates list --type $T --json 2>/dev/null \
+              | python3 -c 'import sys,json; print(" ".join(c["id"] for c in json.load(sys.stdin)))' || true)
+            CERTS="$CERTS $C"
+          done
+          [ -n "${CERTS// /}" ] || { echo "No distribution certificate found on Apple"; exit 1; }
+          app-store-connect profiles create "$BID" --certificate-ids $CERTS \
+            --type IOS_APP_STORE --name "$NAME" >/dev/null
+          echo "Made \"$NAME\""
+          fetch || { echo "Made the profile but it is missing iCloud or push; check the App ID on Apple"; exit 1; }
+      - name: Get the Apple Watch app's profile from Apple
+        script: |
+          # The watch app (com.dungeon.descent.watchkitapp) needs its own App
+          # Store profile with Game Center (the app uses Game Center, and App
+          # Store review wants the watch app to have it too). The integration's
+          # key turns Game Center on for the watch app's ID and makes the profile.
+          set -e
+          ID=com.dungeon.descent.watchkitapp
+          NAME="Dungeon Descent Watch App Store"
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          BID=$(app-store-connect bundle-ids list --bundle-id-identifier "$ID" --strict-match-identifier --json 2>/dev/null \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")' || true)
+          if [ -z "$BID" ]; then
+            BID=$(app-store-connect bundle-ids create "$ID" --name "Dungeon Descent Watch" --platform IOS --json \
+              | python3 -c 'import sys,json; d=json.load(sys.stdin); print((d[0] if isinstance(d,list) else d)["id"])')
+            echo "Registered $ID"
+          fi
+          app-store-connect bundle-ids enable-capabilities "$BID" --capability "Game Center" >/dev/null 2>&1 || true
+          # Use an active profile only if it has Game Center; otherwise remove it and make a new one.
+          TMP=$(mktemp -d)
+          app-store-connect profiles list --type IOS_APP_STORE --state ACTIVE --name "$NAME" \
+            --save --profiles-dir "$TMP" --json > "$TMP/list.json" 2>/dev/null || echo "[]" > "$TMP/list.json"
+          GOOD=""
+          for F in "$TMP"/*.mobileprovision; do
+            [ -f "$F" ] || continue
+            if security cms -D -i "$F" | grep -q "com.apple.developer.game-center"; then GOOD="$F"; fi
+          done
+          if [ -n "$GOOD" ]; then
+            cp "$GOOD" "$DEST/"; echo "Using \"$NAME\" from Apple (with Game Center)"; exit 0
+          fi
+          # Old ones with this name in any state (turning Game Center on makes them Invalid).
+          app-store-connect profiles list --type IOS_APP_STORE --name "$NAME" --json > "$TMP/all.json" 2>/dev/null || echo "[]" > "$TMP/all.json"
+          python3 -c 'import sys,json; [print(p["id"]) for p in json.load(open(sys.argv[1]))]' "$TMP/all.json" | while read -r OLD; do
+            app-store-connect profiles delete "$OLD" --ignore-not-found >/dev/null && echo "Removed the old watch profile (no Game Center)"
+          done
+          CERTS=""
+          for T in DISTRIBUTION IOS_DISTRIBUTION; do
+            C=$(app-store-connect certificates list --type $T --json 2>/dev/null \
+              | python3 -c 'import sys,json; print(" ".join(c["id"] for c in json.load(sys.stdin)))' || true)
+            CERTS="$CERTS $C"
+          done
+          [ -n "${CERTS// /}" ] || { echo "No distribution certificate found on Apple"; exit 1; }
+          app-store-connect profiles create "$BID" --certificate-ids $CERTS --type IOS_APP_STORE --name "$NAME" \
+            --save --profiles-dir "$DEST" >/dev/null
+          echo "Made \"$NAME\" with Game Center"
+      - name: Set build number
+        script: |
+          # TestFlight only accepts a build number higher than every earlier
+          # one, including the web version's builds from the other workflow.
+          # Ask Apple for the latest; if that fails, the project-wide build
+          # count is still higher than any number Codemagic has used before.
+          APP_ID=$(app-store-connect apps list --bundle-id-identifier com.dungeon.descent \
+            --strict-match-identifier --json 2>/dev/null \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")' || true)
+          LATEST=0
+          if [ -n "$APP_ID" ]; then
+            LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_ID" 2>/dev/null \
+              | grep -Eo '^[0-9]+$' | tail -1 || true)
+          fi
+          NEXT=$(( ${LATEST:-0} + 1 ))
+          if [ "${PROJECT_BUILD_NUMBER:-0}" -gt "$NEXT" ]; then NEXT=$PROJECT_BUILD_NUMBER; fi
+          echo "Latest on TestFlight: ${LATEST:-unknown}. Using build number $NEXT"
+          sed -i '' "s/CURRENT_PROJECT_VERSION: \"[0-9]*\"/CURRENT_PROJECT_VERSION: \"$NEXT\"/" swift/App/project.yml
+          grep CURRENT_PROJECT_VERSION swift/App/project.yml
+      - name: Generate the Xcode project
+        script: |
+          cd swift/App
+          xcodegen generate
+      - name: Use the App Store signing profiles
+        script: |
+          xcode-project use-profiles --project swift/App/DungeonDescent.xcodeproj
+      - name: Build signed IPA
+        script: |
+          xcode-project build-ipa \
+            --project swift/App/DungeonDescent.xcodeproj \
+            --scheme DungeonDescent
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false  # internal testers get every build anyway
+
+  dungeon-descent-vision:
+    name: Dungeon Descent Vision Pro (TestFlight)
+    # The native Apple Vision Pro build of the Swift app (same app, visionOS
+    # platform in App Store Connect). Start it by hand from Codemagic.
+    # The Swift rewrite in swift/. Same bundle ID as the web version, so each
+    # build replaces it on TestFlight. Start it by hand from Codemagic.
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Accessible Backrooms
+    environment:
+      ios_signing:
+        provisioning_profiles:
+          - Dungeon Descent Live Activity App Store
+        certificates:
+          - Accessible Backrooms Distribution
+      xcode: latest
+    scripts:
+      - name: Install XcodeGen
+        script: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+      - name: Run the game rules tests
+        script: |
+          cd swift/DungeonCore
+          swift test
+      - name: Get the App Store profile from Apple
+        script: |
+          # The app needs a profile with iCloud and Push Notifications (Live
+          # Activity updates while the app is closed). The first build turns
+          # Push Notifications on for com.dungeon.descent and makes the profile
+          # with the App Store Connect integration's key; later builds reuse it.
+          set -e
+          ID=com.dungeon.descent
+          NAME="Dungeon Descent Push App Store"
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          fetch() {
+            TMP=$(mktemp -d)
+            app-store-connect profiles list --type IOS_APP_STORE --state ACTIVE \
+              --name "$NAME" --save --profiles-dir "$TMP" >/dev/null 2>&1 || true
+            for F in "$TMP"/*; do
+              [ -f "$F" ] || continue
+              if security cms -D -i "$F" | grep -q "iCloud.com.dungeon.descent" && \
+                 security cms -D -i "$F" | grep -q "aps-environment"; then
+                cp "$F" "$DEST/"; return 0
+              fi
+            done
+            return 1
+          }
+          if fetch; then echo "Using \"$NAME\" from Apple"; exit 0; fi
+          BID=$(app-store-connect bundle-ids list --bundle-id-identifier "$ID" --strict-match-identifier --json \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")')
+          [ -n "$BID" ] || { echo "No bundle ID $ID on Apple"; exit 1; }
+          echo "Turning on Push Notifications for $ID"
+          app-store-connect bundle-ids enable-capabilities "$BID" --capability "Push Notifications" || true
+          CERTS=""
+          for T in DISTRIBUTION IOS_DISTRIBUTION; do
+            C=$(app-store-connect certificates list --type $T --json 2>/dev/null \
+              | python3 -c 'import sys,json; print(" ".join(c["id"] for c in json.load(sys.stdin)))' || true)
+            CERTS="$CERTS $C"
+          done
+          [ -n "${CERTS// /}" ] || { echo "No distribution certificate found on Apple"; exit 1; }
+          app-store-connect profiles create "$BID" --certificate-ids $CERTS \
+            --type IOS_APP_STORE --name "$NAME" >/dev/null
+          echo "Made \"$NAME\""
+          fetch || { echo "Made the profile but it is missing iCloud or push; check the App ID on Apple"; exit 1; }
+      - name: Set build number
+        script: |
+          # TestFlight only accepts a build number higher than every earlier
+          # one, including the web version's builds from the other workflow.
+          # Ask Apple for the latest; if that fails, the project-wide build
+          # count is still higher than any number Codemagic has used before.
+          APP_ID=$(app-store-connect apps list --bundle-id-identifier com.dungeon.descent \
+            --strict-match-identifier --json 2>/dev/null \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")' || true)
+          LATEST=0
+          if [ -n "$APP_ID" ]; then
+            LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_ID" 2>/dev/null \
+              | grep -Eo '^[0-9]+$' | tail -1 || true)
+          fi
+          NEXT=$(( ${LATEST:-0} + 1 ))
+          if [ "${PROJECT_BUILD_NUMBER:-0}" -gt "$NEXT" ]; then NEXT=$PROJECT_BUILD_NUMBER; fi
+          echo "Latest on TestFlight: ${LATEST:-unknown}. Using build number $NEXT"
+          sed -i '' "s/CURRENT_PROJECT_VERSION: \"[0-9]*\"/CURRENT_PROJECT_VERSION: \"$NEXT\"/" swift/App/project.yml
+          grep CURRENT_PROJECT_VERSION swift/App/project.yml
+      - name: Generate the Xcode project
+        script: |
+          cd swift/App
+          xcodegen generate
+      - name: Use the App Store signing profiles
+        script: |
+          xcode-project use-profiles --project swift/App/DungeonDescent.xcodeproj
+      - name: Build signed Vision Pro app
+        script: |
+          # Firestore has no ready-made Vision Pro library; build it from source.
+          export FIREBASE_SOURCE_FIRESTORE=1
+          xcode-project build-ipa \
+            --project swift/App/DungeonDescent.xcodeproj \
+            --scheme DungeonDescent \
+            --archive-flags="-destination 'generic/platform=visionOS'"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: false  # internal testers get every build anyway
+
+  store-listing:
+    name: App Store listing text (iPhone, Mac, Vision Pro)
+    # Puts store/en-US/*.txt (description, promotional text, What's New,
+    # keywords) into every Dungeon Descent version waiting for submission in
+    # App Store Connect, on every platform. Start it by hand from Codemagic.
+    max_build_duration: 15
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Accessible Backrooms
+    scripts:
+      - name: Fill in the listing
+        script: |
+          python3 - <<'PY'
+          import json, os, subprocess, sys
+          def asc(*args):
+              r = subprocess.run(["app-store-connect", *args, "--json"], capture_output=True, text=True)
+              if r.returncode != 0:
+                  raise RuntimeError(r.stderr.strip() or r.stdout.strip())
+              return json.loads(r.stdout or "null")
+          def text_for(platform):
+              # iPhone/iPad: the full text. Mac and Vision Pro: the .other files
+              # (no Apple Watch, Lock Screen or Google sign-in there).
+              def read(k):
+                  if platform != "IOS" and os.path.exists(f"store/en-US/{k}.other.txt"):
+                      return open(f"store/en-US/{k}.other.txt").read().strip()
+                  return open(f"store/en-US/{k}.txt").read().strip()
+              return {k: read(k) for k in ("description", "promotional_text", "whats_new", "keywords")}
+          apps = asc("apps", "list", "--bundle-id-identifier", "com.dungeon.descent", "--strict-match-identifier")
+          app_id = apps[0]["id"]
+          every = asc("apps", "app-store-versions", app_id) or []
+          print("All versions:")
+          for v in every:
+              print("  ", v["attributes"].get("platform"), v["attributes"].get("versionString"), v["attributes"].get("appStoreState") or v["attributes"].get("appVersionState"))
+          editable = {"PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED"}
+          versions = [v for v in every if (v["attributes"].get("appStoreState") or v["attributes"].get("appVersionState")) in editable]
+          if not versions:
+              print("No version is waiting for submission."); sys.exit(1)
+          failed = False
+          for v in versions:
+              a = v["attributes"]
+              name = f'{a.get("platform")} {a.get("versionString")}'
+              locs = asc("app-store-versions", "localizations", v["id"], "--locale", "en-US")
+              if not locs:
+                  print(f"{name}: no en-US listing, skipped"); continue
+              lid = locs[0]["id"]
+              text = text_for(a.get("platform"))
+              cur = locs[0].get("attributes", {})
+              if os.environ.get("MODE") == "read":
+                  print(f"===== {name} =====")
+                  for k in ("promotionalText", "description", "whatsNew", "keywords"):
+                      print(f"--- {k} ---"); print(cur.get(k) or "(empty)")
+                  continue
+              try:
+                  asc("app-store-version-localizations", "modify", lid,
+                      "--description", text["description"],
+                      "--promotional-text", text["promotional_text"],
+                      "--keywords", text["keywords"])
+                  print(f"{name}: description, promotional text and keywords set")
+              except RuntimeError as e:
+                  failed = True; print(f"{name}: couldn't set the listing: {e}")
+              try:
+                  asc("app-store-version-localizations", "modify", lid, "--whats-new", text["whats_new"])
+                  print(f"{name}: What's New set")
+              except RuntimeError as e:
+                  # A platform's first version has no What's New.
+                  print(f"{name}: What's New not set (normal for a platform's first version): {e}")
+          sys.exit(1 if failed else 0)
+          PY
+
+  store-screenshots:
+    name: App Store screenshots (one platform)
+    # Uploads store/screenshots/<folder> into the matching App Store Connect
+    # version, replacing that version's screenshots of that size. Start it
+    # with PLATFORM, DISPLAY_TYPE and SHOTS_DIR set (see store/upload_screenshots.py).
+    max_build_duration: 20
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Accessible Backrooms
+    scripts:
+      - name: Upload screenshots
+        script: |
+          python3 -m pip install --quiet --user pyjwt cryptography requests
+          python3 store/upload_screenshots.py
+
+  dungeon-descent-mac:
+    name: Dungeon Descent Mac (TestFlight)
+    # The Mac version (Mac Catalyst) of the Swift app, same bundle ID, macOS
+    # platform in App Store Connect. Mac App Store packages need a Mac
+    # Installer certificate, which Codemagic can't generate: each build makes
+    # a temporary one with a key that lives only in the build, and deletes it
+    # from Apple at the end (also when the build fails). Start it by hand.
+    max_build_duration: 90
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Accessible Backrooms
+    environment:
+      ios_signing:
+        # Installs the Apple Distribution certificate (Codemagic wants a profile
+        # listed with it; the Mac build uses its own Mac profile).
+        provisioning_profiles:
+          - Dungeon Descent Live Activity App Store
+        certificates:
+          - Accessible Backrooms Distribution
+      xcode: latest
+    scripts:
+      - name: Install XcodeGen
+        script: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+      - name: Run the game rules tests
+        script: |
+          cd swift/DungeonCore
+          swift test
+      - name: Get the Mac App Store profile from Apple
+        script: |
+          # A Mac Catalyst App Store profile for com.dungeon.descent, made once
+          # with the App Store Connect integration's key; later builds reuse it.
+          set -e
+          ID=com.dungeon.descent
+          NAME="Dungeon Descent Mac App Store"
+          DEST="$HOME/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p "$DEST"
+          fetch() {
+            TMP=$(mktemp -d)
+            app-store-connect profiles list --type MAC_CATALYST_APP_STORE --state ACTIVE \
+              --name "$NAME" --save --profiles-dir "$TMP" >/dev/null 2>&1 || true
+            if ls "$TMP"/* >/dev/null 2>&1; then cp "$TMP"/* "$DEST/"; return 0; fi
+            return 1
+          }
+          if fetch; then echo "Using \"$NAME\" from Apple"; exit 0; fi
+          BID=$(app-store-connect bundle-ids list --bundle-id-identifier "$ID" --strict-match-identifier --json \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")')
+          [ -n "$BID" ] || { echo "No bundle ID $ID on Apple"; exit 1; }
+          CERTS=$(app-store-connect certificates list --type DISTRIBUTION --json 2>/dev/null \
+            | python3 -c 'import sys,json; print(" ".join(c["id"] for c in json.load(sys.stdin)))' || true)
+          [ -n "${CERTS// /}" ] || { echo "No Apple Distribution certificate found on Apple"; exit 1; }
+          app-store-connect profiles create "$BID" --certificate-ids $CERTS \
+            --type MAC_CATALYST_APP_STORE --name "$NAME" >/dev/null
+          echo "Made \"$NAME\""
+          fetch || { echo "Made the profile but couldn't download it"; exit 1; }
+      - name: Temporary Mac installer certificate
+        script: |
+          set -e
+          umask 077
+          W=$(mktemp -d)
+          openssl genrsa -out "$W/installer.key" 2048 2>/dev/null
+          PW=$(openssl rand -hex 16)
+          app-store-connect certificates create --type MAC_INSTALLER_DISTRIBUTION \
+            --certificate-key "@file:$W/installer.key" --save --p12-path "$W/installer.p12" \
+            --p12-password "$PW" --json > "$W/installer.json"
+          python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(d["id"] if isinstance(d,dict) else d[0]["id"])' \
+            "$W/installer.json" > "$CM_BUILD_DIR/.installer_cert_id"
+          echo "Made temporary installer certificate $(cat "$CM_BUILD_DIR/.installer_cert_id")"
+          # Xcode packages with productbuild, which also has to be allowed to use the key.
+          keychain add-certificates --certificate "$W/installer.p12" --certificate-password "$PW" \
+            --allow-app /usr/bin/codesign /usr/bin/productsign /usr/bin/productbuild
+          rm -f "$W/installer.key" "$W/installer.json"
+      - name: Set build number
+        script: |
+          APP_ID=$(app-store-connect apps list --bundle-id-identifier com.dungeon.descent \
+            --strict-match-identifier --json 2>/dev/null \
+            | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d[0]["id"] if d else "")' || true)
+          LATEST=0
+          if [ -n "$APP_ID" ]; then
+            LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_ID" --platform MAC_OS 2>/dev/null \
+              | grep -Eo '^[0-9]+$' | tail -1 || true)
+          fi
+          NEXT=$(( ${LATEST:-0} + 1 ))
+          if [ "${PROJECT_BUILD_NUMBER:-0}" -gt "$NEXT" ]; then NEXT=$PROJECT_BUILD_NUMBER; fi
+          echo "Using build number $NEXT"
+          sed -i '' "s/CURRENT_PROJECT_VERSION: \"[0-9]*\"/CURRENT_PROJECT_VERSION: \"$NEXT\"/" swift/App/project.yml
+      - name: Generate the Xcode project
+        script: |
+          cd swift/App
+          xcodegen generate
+      - name: Build, sign and package the Mac app
+        script: |
+          set -eo pipefail
+          cd swift/App
+          xcodebuild -project DungeonDescent.xcodeproj -scheme DungeonDescent -configuration Release \
+            -destination 'generic/platform=macOS,variant=Mac Catalyst' \
+            -archivePath "$CM_BUILD_DIR/build/mac/DungeonDescent.xcarchive" \
+            archive | tail -40
+          cat > "$CM_BUILD_DIR/build/mac/ExportOptions.plist" <<'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store</string>
+            <key>teamID</key><string>ZPD555RW3A</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>signingCertificate</key><string>Apple Distribution</string>
+            <key>installerSigningCertificate</key><string>INSTALLER_ID</string>
+            <key>provisioningProfiles</key>
+            <dict><key>com.dungeon.descent</key><string>Dungeon Descent Mac App Store</string></dict>
+          </dict>
+          </plist>
+          PLIST
+          # The installer certificate this build installed, by its fingerprint
+          # (its name differs between older and newer Apple certificates).
+          security find-identity -v -p basic | grep -i installer || true
+          INSTALLER_ID=$(security find-identity -v -p basic | grep -i installer | head -1 | awk '{print $2}')
+          [ -n "$INSTALLER_ID" ] || { echo "No installer certificate in the keychain"; exit 1; }
+          sed -i '' "s/INSTALLER_ID/$INSTALLER_ID/" "$CM_BUILD_DIR/build/mac/ExportOptions.plist"
+          sed -i '' 's#<string>app-store</string>#<string>app-store-connect</string>#' "$CM_BUILD_DIR/build/mac/ExportOptions.plist"
+          set +e
+          xcodebuild -exportArchive -archivePath "$CM_BUILD_DIR/build/mac/DungeonDescent.xcarchive" \
+            -exportOptionsPlist "$CM_BUILD_DIR/build/mac/ExportOptions.plist" \
+            -exportPath "$CM_BUILD_DIR/build/mac/export" | tail -20
+          RC=${PIPESTATUS[0]}
+          if [ "$RC" != "0" ]; then
+            echo "──── Apple's export log ────"
+            L=$(ls -td "$TMPDIR"/DungeonDescent_*.xcdistributionlogs 2>/dev/null | head -1)
+            [ -n "$L" ] && grep -hiE "error|fail|productbuild|installer|identity" "$L"/*.log | tail -40
+            exit "$RC"
+          fi
+          set -e
+          ls -la "$CM_BUILD_DIR/build/mac/export"
+      - name: Upload to App Store Connect
+        script: |
+          app-store-connect publish --path "$CM_BUILD_DIR"/build/mac/export/*.pkg
+      - name: Delete the temporary installer certificate
+        script: |
+          if [ -f "$CM_BUILD_DIR/.installer_cert_id" ]; then
+            app-store-connect certificates delete "$(cat "$CM_BUILD_DIR/.installer_cert_id")" --ignore-not-found
+            rm -f "$CM_BUILD_DIR/.installer_cert_id"
+          fi
+    artifacts:
+      - build/mac/export/*.pkg
+    publishing:
+      scripts:
+        # Runs even when the build failed, so no certificate is left behind.
+        - name: Make sure the temporary installer certificate is gone
+          script: |
+            if [ -f "$CM_BUILD_DIR/.installer_cert_id" ]; then
+              app-store-connect certificates delete "$(cat "$CM_BUILD_DIR/.installer_cert_id")" --ignore-not-found || true
+            fi
+
+  testflight-notes:
+    name: TestFlight "What to Test" notes (iPhone, Mac, Vision Pro)
+    # Puts store/en-US/testflight/<PLATFORM>.txt into the newest 11.8 build of
+    # each platform. Start it by hand from Codemagic.
+    max_build_duration: 15
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Accessible Backrooms
+    scripts:
+      - name: Set What to Test
+        script: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+          def asc(*args):
+              r = subprocess.run(["app-store-connect", *args, "--json"], capture_output=True, text=True)
+              if r.returncode != 0:
+                  raise RuntimeError(r.stderr.strip() or r.stdout.strip())
+              return json.loads(r.stdout or "null") or []
+          app = asc("apps", "list", "--bundle-id-identifier", "com.dungeon.descent", "--strict-match-identifier")[0]["id"]
+          def newest(builds):
+              return sorted(builds, key=lambda b: b["attributes"].get("uploadedDate") or "", reverse=True)
+          base = ["apps", "builds", app, "--pre-release-version", "11.8", "--processing-state", "VALID"]
+          picked = {}
+          for p in ("IOS", "MAC_OS"):
+              b = newest(asc(*base, "--platform", p))
+              if b: picked[p] = b[0]
+          seen = {b["id"] for b in picked.values()}
+          everything = newest(asc(*base))
+          ios_mac = {b["id"] for p in ("IOS", "MAC_OS") for b in asc(*base, "--platform", p)}
+          rest = [b for b in everything if b["id"] not in ios_mac]
+          if rest: picked["VISION_OS"] = rest[0]
+          failed = False
+          for p, b in picked.items():
+              text = open(f"store/en-US/testflight/{p}.txt").read().strip()
+              try:
+                  asc("beta-build-localizations", "create", b["id"], "--locale", "en-US", "--whats-new", text)
+                  print(f'{p}: build {b["attributes"].get("version")} — What to Test set')
+              except RuntimeError as e:
+                  failed = True; print(f"{p}: couldn't set it: {e}")
+          sys.exit(1 if failed else 0)
+          PY
+
+  store-submit:
+    name: Get a version ready and send it to App Review (one platform)
+    # PLATFORM (VISION_OS, MAC_OS, IOS) and SUBMIT=yes to send it; without
+    # SUBMIT it only checks and fills in. See store/submit_version.py.
+    max_build_duration: 15
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Accessible Backrooms
+    scripts:
+      - name: Prepare and submit
+        script: |
+          python3 -m pip install --quiet --user pyjwt cryptography requests
+          python3 store/submit_version.py
