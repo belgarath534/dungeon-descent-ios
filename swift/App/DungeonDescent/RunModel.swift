@@ -3326,6 +3326,17 @@ final class RunModel: ObservableObject {
         Races.shopPrice(Spirits.shopPrice(RunModifiers.potionCost(entry.item, Inventory.price(entry.item, hour: hour, event: run.event), run), run), run)
     }
 
+    /// What it costs without the night discount, with everything else (run
+    /// modifiers, race, spirit): the price the night discount is shown off.
+    /// (The shop crossed out the item's base price instead, so a Dwarf in a
+    /// Gold Curse run saw a 25g potion "go up" to 32g at night.)
+    func dayPrice(_ entry: Inventory.ShopItem) -> Int {
+        Races.shopPrice(Spirits.shopPrice(RunModifiers.potionCost(entry.item, Inventory.price(entry.item, hour: 12, event: nil), run), run), run)
+    }
+
+    /// The 25% off is on: night time, or an event that brings it (Night Market).
+    var shopDiscountOn: Bool { hour >= 20 || hour < 8 || Festival.shopDiscount(event: run.event) }
+
     func buy(_ id: Int) {
         guard phase == .shopping, let i = shop.firstIndex(where: { $0.id == id }) else { return }
         var r = run

@@ -52,7 +52,7 @@ struct ShopOverlay: View {
 
     var body: some View {
         let run = model.run
-        let night = model.hour >= 20 || model.hour < 8
+        let night = model.shopDiscountOn
         DungeonDialog {
             Text("⚗ The Wandering Merchant").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
                 .padding(.bottom, 2).accessibilityAddTraits(.isHeader)
@@ -97,6 +97,7 @@ struct ShopOverlay: View {
     private func row(_ entry: Inventory.ShopItem, gold: Int, night: Bool) -> some View {
         let item = entry.item
         let price = model.price(entry)
+        let full = model.dayPrice(entry)
         let afford = gold >= price
         return HStack(spacing: 12) {
             Text(item.icon).font(.system(size: 24)).frame(width: 36).accessibilityHidden(true)
@@ -113,7 +114,7 @@ struct ShopOverlay: View {
                 Group {
                     if entry.sold {
                         Text("—")
-                    } else if night, let full = item.cost, full != price {
+                    } else if night, full > price {
                         Text("\(full)g" as String).strikethrough().foregroundColor(Color(hex: 0x555555)).font(Theme.cinzel(10.4))
                             + Text(" 🌙\(price)g" as String).foregroundColor(Color(hex: 0x6ab0f0))
                     } else {
@@ -130,7 +131,7 @@ struct ShopOverlay: View {
                         .background(Color(hex: 0x0d0900)).overlay(Rectangle().stroke(Color(hex: 0x886622)))
                         .opacity(afford ? 1 : 0.3)
                         .disabled(!afford)
-                        .accessibilityLabel("\(item.name). \(item.desc). Cost: \(price) gold.\(afford ? " Press to buy." : " Cannot afford.")" as String)
+                        .accessibilityLabel("\(item.name). \(item.desc). Cost: \(price) gold\(night && full > price ? ", normally \(full)" : "").\(afford ? " Press to buy." : " Cannot afford.")" as String)
                 }
             }
         }
