@@ -2818,6 +2818,23 @@ final class VoidReaperTests: XCTestCase {
         XCTAssertEqual(f.potions, 2)
     }
 
+    func testLaterDungeonsAreHarder() {
+        XCTAssertEqual(Legacy.depthMult("Crypt of Malachar"), 1)
+        XCTAssertEqual(Legacy.depthMult("The Ashbound Wastes"), 1)
+        XCTAssertEqual(Legacy.depthMult("Frosthold Abyss"), 1.15, accuracy: 0.0001)
+        XCTAssertEqual(Legacy.depthMult("The Shadow World"), 1.75, accuracy: 0.0001)
+        let crypt = Run(character: PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var deep = crypt
+        deep.dungeon = "The Hollow"
+        var e = Enemy(name: "X", icon: "x", hp: 100, maxHp: 100, atk: 10...20, gold: 1...2)
+        var f = e
+        Legacy.shape(&e, crypt)
+        Legacy.shape(&f, deep)
+        XCTAssertEqual(e.hp, 100)
+        XCTAssertEqual(f.hp, 135)
+        XCTAssertEqual(f.atk, 14...27)
+    }
+
     func testWorldCurseMakesEnemiesStronger() {
         var r = Run(character: PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer))
         var d1 = SeededDice(seed: 5), d2 = SeededDice(seed: 5)
