@@ -134,6 +134,8 @@ private struct AFKScreens: View {
             }
             .padding(.bottom, 6)
             if !game.characters.isEmpty {
+                // Points left from earlier runs can be spent here too.
+                statPoints
                 Button { model.begin() } label: { Text("⬇ Begin Endless Descent").frame(maxWidth: .infinity) }
                     .buttonStyle(MenuButtonStyle(primary: true))
                     .accessibilityLabel("Begin Endless Descent AFK mode")
@@ -349,6 +351,7 @@ private struct AFKScreens: View {
                 .accessibilityElement(children: .combine)
             }
             .padding(.bottom, 0)
+            statPoints.padding(.top, 20)
             Button {
                 model.phase = .setup
                 announceSetup()
@@ -362,6 +365,42 @@ private struct AFKScreens: View {
                 .accessibilityLabel("Return to main menu")
         }
         .padding(.top, 24)
+    }
+
+    // MARK: Stat points (12.0.1)
+
+    /// Spend the stat points from levels gained: kept on the character for
+    /// every Endless run. The buttons stay when the points run out (dimmed),
+    /// so VoiceOver doesn't lose its place.
+    @ViewBuilder
+    private var statPoints: some View {
+        let t = model.trained
+        if t.points > 0 || t.hp + t.atk + t.def > 0 {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("STAT POINTS: \(t.points)" as String).font(Theme.cinzel(11.2)).tracking(2)
+                    .foregroundStyle(Color(hex: 0xffdd44))
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityLabel("Stat points to spend: \(t.points)" as String)
+                Text("One point for every level gained. Each one makes this character stronger in every Endless run.")
+                    .font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textSecondary)
+                ForEach(AFKStats.Stat.allCases, id: \.self) { s in
+                    Button { model.train(s) } label: {
+                        HStack {
+                            Text(s.label)
+                            Spacer()
+                            Text("×\(t.count(s))" as String).foregroundStyle(Color(hex: 0xaaaaaa))
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(MenuButtonStyle(primary: t.points > 0))
+                    .disabled(t.points == 0)
+                    .accessibilityLabel(t.points > 0 ? "\(s.label). Trained: \(t.count(s))." as String
+                                        : "\(s.label). Trained: \(t.count(s)). No points left." as String)
+                }
+            }
+            .padding(12)
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color(hex: 0x332a00)))
+        }
     }
 
     // MARK: Shop (#screen-afk-shop)

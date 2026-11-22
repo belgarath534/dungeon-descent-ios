@@ -46,7 +46,9 @@ WHATS_NEW_12_0 = {
 }
 # 12.0.1: fixes only; What's New lists them.
 WHATS_NEW_12_0_1 = {
-    "en-US": """12.0.1 fixes:
+    "en-US": """12.0.1:
+• New in Endless Descent: stat points. Every level gained in a run gives a point to spend on +20 max HP, +2 attack or +1 defense, kept for every Endless run.
+Fixes:
 • Prestige no longer crashes the game. If it crashed for you, your character is safe: prestige again.
 • Legacy characters now keep every level the moment they reach it, even if they die or leave the run.
 • Co-op: VoiceOver no longer jumps around during a fight, and your action buttons stay on screen after you choose.
@@ -57,7 +59,9 @@ WHATS_NEW_12_0_1 = {
 • A run no longer crashes if a cloud save with fewer characters loads while you play.
 • "Choose a save" no longer appears when you only play on one device.
 • Easier to read: dim text and gold are brighter, and the Discord link is easier to tap.""",
-    "pt-BR": """Correções da 12.0.1:
+    "pt-BR": """12.0.1:
+• Novo na Descida Infinita: pontos de atributo. Cada nível ganho numa partida dá um ponto para gastar em +20 de HP máximo, +2 de ataque ou +1 de defesa, guardado para todas as partidas da Descida Infinita.
+Correções:
 • O Prestígio não trava mais o jogo. Se travou para você, seu personagem está a salvo: faça o Prestígio de novo.
 • Personagens do Modo Legado agora guardam cada nível assim que o alcançam, mesmo se morrerem ou saírem da partida.
 • Cooperativo: o VoiceOver não pula mais pela tela durante a luta, e seus botões de ação continuam na tela depois que você escolhe.

@@ -1,5 +1,7 @@
 Thanks for testing Dungeon Descent 12.0.1!
 
+New: Endless Descent stat points. Gain a level or two in an Endless run, end it, and spend the points on the summary (HP, attack or defense). Start another run: your HP and attack should be higher.
+
 Fixed, please try:
 • Legacy Mode: level up a Legacy character, then die or leave the run. The level should stay.
 • Prestige: prestiging a character crashed the game. Prestige a max-level character and check you get the star, the gold and the Mystery Coin.

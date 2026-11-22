@@ -5215,3 +5215,25 @@ final class LegacyLevelTests: XCTestCase {
         XCTAssertFalse(Legacy.keepLevel(&classic, run: run), "Classic runs start fresh")
     }
 }
+
+final class AFKStatsTests: XCTestCase {
+    func testPointsAreEarnedSpentAndAddedToTheNextRun() {
+        var ch = PlayerCharacter(name: "Ana", cls: "Monk", race: "Elf", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        let before = AFKRun(character: ch, index: 0, save: AFKSave(raw: [:]), weapon: nil, armor: nil, now: 0)
+        AFKStats.earn(3, &ch)
+        XCTAssertEqual(AFKStats.trained(ch).points, 3)
+        XCTAssertTrue(AFKStats.spend(.hp, &ch))
+        XCTAssertTrue(AFKStats.spend(.atk, &ch))
+        XCTAssertTrue(AFKStats.spend(.def, &ch))
+        XCTAssertFalse(AFKStats.spend(.hp, &ch), "no points left")
+        let after = AFKRun(character: ch, index: 0, save: AFKSave(raw: [:]), weapon: nil, armor: nil, now: 0)
+        XCTAssertEqual(after.maxHp, before.maxHp + 20)
+        XCTAssertEqual(after.hp, after.maxHp)
+        XCTAssertEqual(after.atk, before.atk + 2)
+        XCTAssertEqual(after.def, before.def + 1)
+        // It survives saving the character the web version's way.
+        let back = try? JSONDecoder().decode(PlayerCharacter.self, from: JSONEncoder().encode(ch))
+        XCTAssertEqual(back.map { AFKStats.trained($0) }, AFKStats.trained(ch))
+    }
+}
