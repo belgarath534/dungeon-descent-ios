@@ -1,0 +1,102 @@
+# 12.1 Dynamic Type check: the game on an iPhone simulator with the text
+# size set to the largest accessibility size (and the largest normal one),
+# opened on each screen, with a screenshot of each. Shows what gets cut off.
+#
+# Runs by hand (Actions → Big text tour) or when the big-text-tour branch is
+# pushed. Screenshots go to the screen-tour-results branch, folder bigtext.
+name: Big text tour
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [big-text-tour]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: big-text-tour
+  cancel-in-progress: true
+
+jobs:
+  tour:
+    runs-on: macos-15
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick the newest Xcode
+        run: |
+          XCODE=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          sudo xcode-select -s "$XCODE"
+          xcodebuild -version
+
+      - name: Generate the Xcode project
+        working-directory: swift/App
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          xcodegen generate
+
+      - name: Boot an iPhone simulator
+        run: |
+          UDID=$(xcrun simctl list devices available -j | python3 -c '
+          import json, re, sys
+          d = json.load(sys.stdin)["devices"]
+          def ver(k):
+              m = re.search(r"iOS-(\d+)-(\d+)", k)
+              return (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+          for rt in sorted((k for k in d if "iOS" in k), key=ver, reverse=True):
+              phones = [x for x in d[rt] if x["name"].startswith("iPhone") and "Pro Max" not in x["name"] and "Plus" not in x["name"]]
+              if phones:
+                  print(phones[0]["udid"]); break
+          ')
+          echo "SIM=$UDID" >> "$GITHUB_ENV"
+          xcrun simctl boot "$UDID" || true
+
+      - name: Build the game for the simulator
+        working-directory: swift/App
+        run: |
+          set -o pipefail
+          xcodebuild build -project DungeonDescent.xcodeproj -scheme DungeonDescent \
+            -destination "id=$SIM" -derivedDataPath build CODE_SIGNING_ALLOWED=NO \
+            2>&1 | grep -E "error:|\*\* BUILD" || true
+          APP=$(find build/Build/Products -maxdepth 2 -name 'DungeonDescent.app' -path '*iphonesimulator*' | head -1)
+          echo "APP=$PWD/$APP" >> "$GITHUB_ENV"
+          test -n "$APP"
+
+      - name: Screenshots at large text sizes
+        working-directory: swift/App
+        run: |
+          xcrun simctl install "$SIM" "$APP"
+          xcrun simctl status_bar "$SIM" override --time 9:41 || true
+          for SIZE in accessibility-extra-extra-extra-large extra-extra-extra-large; do
+            xcrun simctl ui "$SIM" content_size "$SIZE"
+            OUT="results/bigtext/$SIZE"; mkdir -p "$OUT"
+            for S in menu charlist dungeon coop friends spire quests challenges settings battlepass blacksmith afk bestiary chronicles help records worldboss mine events; do
+              xcrun simctl terminate "$SIM" com.dungeon.descent 2>/dev/null || true
+              if [ "$S" = menu ]; then xcrun simctl launch "$SIM" com.dungeon.descent -skipLoading -tourCharacter
+              else xcrun simctl launch "$SIM" com.dungeon.descent -tourCharacter -startScreen "$S"; fi
+              sleep 9
+              xcrun simctl io "$SIM" screenshot "$OUT/$S.png" || true
+            done
+          done
+          ls -R results/bigtext
+
+      - name: Save to the screen-tour-results branch
+        if: always()
+        working-directory: swift/App
+        run: |
+          [ -d results/bigtext ] || exit 0
+          git config user.name "Screen tour"
+          git config user.email "actions@users.noreply.github.com"
+          WT=$(mktemp -d)
+          git fetch origin screen-tour-results
+          git worktree add "$WT" FETCH_HEAD
+          cd "$WT" && git checkout -B screen-tour-results
+          rm -rf bigtext && cp -R "$GITHUB_WORKSPACE/swift/App/results/bigtext" bigtext
+          git add -A bigtext
+          git commit -qm "Big text tour, $(date -u +%Y-%m-%dT%H:%MZ), ${GITHUB_SHA::7}" || exit 0
+          for i in 1 2 3; do
+            git push origin screen-tour-results && break
+            git pull --rebase origin screen-tour-results || true
+          done

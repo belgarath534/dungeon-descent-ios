@@ -1,4 +1,5 @@
 import SwiftUI
+import DungeonCore
 #if canImport(GoogleSignIn)
 import GoogleSignIn
 #endif
@@ -34,10 +35,23 @@ struct DungeonDescentApp: App {
                     // App Store screenshots from the simulator: -startScreen <name>
                     // opens that screen (simctl can't tap through the menu).
                     let args = ProcessInfo.processInfo.arguments
+                    // The screen tour (large text): a character to play with.
+                    if args.contains("-tourCharacter"), game.characters.isEmpty {
+                        game.create(PlayerCharacter(name: "Tourist", cls: "Warrior", race: "Human", prof: "Thief",
+                                                    dungeon: "Crypt of Malachar", difficulty: .wanderer))
+                    }
                     if let i = args.firstIndex(of: "-startScreen"), i + 1 < args.count {
                         let screens: [String: Router.Screen] = ["charlist": .charlist, "afk": .afk, "events": .events,
-                                                                "help": .help, "whatsnew": .whatsnew, "bestiary": .bestiary]
-                        if let s = screens[args[i + 1]] { router.goTo(s) }
+                                                                "help": .help, "whatsnew": .whatsnew, "bestiary": .bestiary,
+                                                                "friends": .friends, "coop": .coop, "spire": .spire,
+                                                                "quests": .quests, "challenges": .challenges, "settings": .settings,
+                                                                "battlepass": .battlePass, "blacksmith": .blacksmith, "chronicles": .chronicles,
+                                                                "records": .records, "worldboss": .worldBoss, "mine": .mine, "chat": .chat]
+                        if args[i + 1] == "dungeon", let ch = game.characters.first {
+                            router.goTo(.dungeon(ch.created, resume: false))
+                        } else if let s = screens[args[i + 1]] {
+                            router.goTo(s)
+                        }
                     }
                     // Reminders stay current (the comeback one moves 48 hours out).
                     Task { _ = await GameNotifications.apply(game.store, ask: false) }
