@@ -1,1 +1,13 @@
-No accessibility issues found.
+[Battle Pass] Hit area is too small — "Defeat 60 enemies. 0 of 60." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
+[Battle Pass] Hit area is too small — "Climb 15 floors of The Spire. 0 of 15." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
+[Battle Pass] Hit area is too small — "Descend 50 floors in Endless Descent. 0 of 50." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
+[Battle Pass] Hit area is too small — "Finish a Weekly Ladder run. 0 of 1." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
+[Battle Pass] Hit area is too small — "Defeat 3 bosses. 0 of 3." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
+[Quests] Couldn't find a button starting with "Quests".
+[The Spire] Couldn't find a button starting with "The Spire".
+[Co-op] Couldn't find a button starting with "Co-op".
+[Bestiary] Couldn't find a button starting with "Bestiary".
+[Coin Shop] Couldn't find a button starting with "Mystery Coin Shop".
+[Chronicles] Couldn't find a button starting with "The Chronicles".
+[What's New] Couldn't find a button starting with "What's New".
+[Help] Couldn't find a button starting with "Help".
