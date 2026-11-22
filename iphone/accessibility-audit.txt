@@ -1,97 +1,40 @@
-[Main menu] Hit area is too small — "Join the Dungeon Descent Discord server" (9). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
 [Main menu] Contrast failed — "by Leo Productions" (48). Contrast failed for SwiftUI.AccessibilityNode
 [Main menu] Contrast failed — "🌽 0 Harvest Tokens" (48). Contrast failed for SwiftUI.AccessibilityNode
 [Main menu] Contrast failed — ""Not all who enter are lost — most are."" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Main menu] Contrast failed — "🌑 The Void Stirs — 20% awakened. 8 days until it wakes (Nov 29)." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Main menu] Contrast failed — "🦃 Thanksgiving · ACTIVE · 6d 22h remaining" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 22h remaining" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Main menu] Dynamic Type font sizes are partially unsupported — "🦃 Thanksgiving · ACTIVE · 6d 22h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Main menu] Dynamic Type font sizes are partially unsupported — "⚡ XP Weekend · ACTIVE · 22h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Contrast failed — "🌑 The Void Stirs — 21% awakened. 8 days until it wakes (Nov 29)." (48). Contrast failed for SwiftUI.AccessibilityNode
+[Main menu] Contrast failed — "🦃 Thanksgiving · ACTIVE · 6d 21h remaining" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Main menu] Contrast failed — "⚡ XP Weekend · ACTIVE · 21h remaining" (48). Contrast failed for SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "⚡ XP Weekend · ACTIVE · 21h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Main menu] Dynamic Type font sizes are partially unsupported — "by Leo Productions" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Main menu] Dynamic Type font sizes are partially unsupported — "🌑 The Void Stirs — 20% awakened. 8 days until it wakes (Nov 29)." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Main menu] Text clipped — "🌑 The Void Stirs — 20% awakened. 8 days until it wakes (Nov 29)." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Dynamic Type font sizes are partially unsupported — "🦃 Thanksgiving · ACTIVE · 6d 21h remaining" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Dynamic Type font sizes are partially unsupported — "🌑 The Void Stirs — 21% awakened. 8 days until it wakes (Nov 29)." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Main menu] Text clipped — "🦃 Thanksgiving · ACTIVE · 6d 21h remaining" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
 [Main menu] Text clipped — "🌽 0 Harvest Tokens" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Main menu] Text clipped — "🦃 Thanksgiving · ACTIVE · 6d 22h remaining" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Character list] Contrast failed — "Choose a warrior to continue, or forge a new legend." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Character list] Contrast failed — "No champions yet. Create your first character." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Character list] Contrast failed — "✦" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Character list] Contrast failed — "CREATE NEW CHARACTER" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Character list] Contrast failed — "✦" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Character list] Dynamic Type font sizes are partially unsupported — "Choose a warrior to continue, or forge a new legend." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Contrast failed — "The dungeon has no end. Leave it running. See how far you fall." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Endless Descent] Contrast failed — "It keeps descending when you leave the app. Your Lock Screen shows the run." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Endless Descent] Contrast failed — "CHOOSE YOUR CHAMPION" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Endless Descent] Contrast failed — "Create a character first." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Endless Descent] Contrast failed — "DAILY CHALLENGE" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Endless Descent] Contrast failed — "DESCENT POINTS" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "It keeps descending when you leave the app. Your Lock Screen shows the run." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "0" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "Available to spend" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "The dungeon has no end. Leave it running. See how far you fall." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "🎯 Daily: Reach floor 100. — +200 pts" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "DESCENT POINTS" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "DAILY CHALLENGE" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Dynamic Type font sizes are partially unsupported — "CHOOSE YOUR CHAMPION" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Endless Descent] Text clipped — "🎯 Daily: Reach floor 100. — +200 pts" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Challenges] Contrast failed — "🔥 Challenges" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Challenges] Contrast failed — "🎮 CHALLENGE A FRIEND" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Challenges] Contrast failed — "Opens Game Center: see your friends' scores and send them a challenge to beat yours." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Challenges] Contrast nearly passed — "Enter the Gauntlet and face all six dungeons back to back without rest. No healing between dungeons. No second chances. Clear all 60 floors or fall trying." (48). Contrast is not high enough for SwiftUI.AccessibilityNode unless font size is larger.
-[Challenges] Contrast failed — "Reward: The Gauntlet Champion title and exclusive achievement." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Challenges] Contrast failed — "No characters. Create one first." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Challenges] Dynamic Type font sizes are partially unsupported — "Enter the Gauntlet and face all six dungeons back to back without rest. No healing between dungeons. No second chances. Clear all 60 floors or fall trying." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Challenges] Dynamic Type font sizes are partially unsupported — "No characters. Create one first." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Challenges] Dynamic Type font sizes are partially unsupported — "🎮 CHALLENGE A FRIEND" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Challenges] Dynamic Type font sizes are partially unsupported — "Reward: The Gauntlet Champion title and exclusive achievement." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Challenges] Text clipped — "🎮 CHALLENGE A FRIEND" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Challenges] Text clipped — "🔥 Challenges" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Battle Pass] Hit area is too small — "Defeat 60 enemies. 0 of 60." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
-[Battle Pass] Hit area is too small — "Climb 15 floors of The Spire. 0 of 15." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
-[Battle Pass] Hit area is too small — "Descend 50 floors in Endless Descent. 0 of 50." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
-[Battle Pass] Hit area is too small — "Finish a Weekly Ladder run. 0 of 1." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
-[Battle Pass] Hit area is too small — "Defeat 3 bosses. 0 of 3." (1). The size of this SwiftUI.AccessibilityNode is too small for user to interact.
-[Battle Pass] Contrast failed — "🏆 Battle Pass" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "Season 1 · 57 days left · earned by playing, never bought" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast nearly passed — "📜 THIS WEEK'S QUESTS" (48). Contrast is not high enough for SwiftUI.AccessibilityNode unless font size is larger.
-[Battle Pass] Contrast failed — "+250 Pass XP each. New quests every Monday." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "HOW TO EARN PASS XP" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "Enemies 5, elites 15, bosses 60 · each new floor 10 · clearing a dungeon 150 · World Boss strike 10 · Weekly Ladder run 100 · Endless Descent floor 2 · Spire floor 5 · daily quest 50." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "🎁 EVERY TIER'S REWARD" (9). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "TIER 0 OF 50" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "0 / 500 XP to tier 1" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "Next: 175 gold" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "•" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "0 / 60" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "•" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "0 / 15" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "•" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "0 / 50" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "•" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "Finish a Weekly Ladder run" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "0 / 1" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "•" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "Defeat 3 bosses" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Contrast failed — "0 / 3" (48). Contrast failed for SwiftUI.AccessibilityNode
-[Battle Pass] Dynamic Type font sizes are partially unsupported — "HOW TO EARN PASS XP" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Battle Pass] Dynamic Type font sizes are partially unsupported — "0 / 500 XP to tier 1" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Battle Pass] Dynamic Type font sizes are partially unsupported — "📜 THIS WEEK'S QUESTS" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Battle Pass] Text clipped — "🏆 Battle Pass" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Battle Pass] Text clipped — "📜 THIS WEEK'S QUESTS" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Battle Pass] Text clipped — "🎁 EVERY TIER'S REWARD" (9). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Main menu] Text clipped — "🌑 The Void Stirs — 21% awakened. 8 days until it wakes (Nov 29)." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Character list] Couldn't find a button starting with "Play,".
+[Endless Descent] Couldn't find a button starting with "Endless Descent".
+[Challenges] Couldn't find a button starting with "Challenges".
+[Battle Pass] Couldn't find a button starting with "Battle Pass".
 [Quests] Couldn't find a button starting with "Quests".
-[The Spire] Contrast failed — "Your progress is never lost. Death only sends you back one floor." (48). Contrast failed for SwiftUI.AccessibilityNode
 [The Spire] Contrast failed — "Choose Your Champion" (48). Contrast failed for SwiftUI.AccessibilityNode
 [The Spire] Contrast failed — "Create a character first to enter The Spire." (48). Contrast failed for SwiftUI.AccessibilityNode
-[The Spire] Contrast failed — "YOUR HIGHEST FLOOR" (48). Contrast failed for SwiftUI.AccessibilityNode
-[The Spire] Contrast failed — "Floor 1 of 1800" (48). Contrast failed for SwiftUI.AccessibilityNode
-[The Spire] Dynamic Type font sizes are partially unsupported — "YOUR HIGHEST FLOOR" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [The Spire] Dynamic Type font sizes are partially unsupported — "Floor 1 of 1800" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[The Spire] Dynamic Type font sizes are partially unsupported — "YOUR HIGHEST FLOOR" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
 [Co-op] Couldn't find a button starting with "Co-op".
 [Bestiary] Couldn't find a button starting with "Bestiary".
 [Coin Shop] Couldn't find a button starting with "Mystery Coin Shop".
 [Chronicles] Couldn't find a button starting with "The Chronicles".
 [What's New] Couldn't find a button starting with "What's New".
 [Help] Couldn't find a button starting with "Help".
+[Settings] Dynamic Type font sizes are partially unsupported — "YOUR ABILITIES" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Settings] Dynamic Type font sizes are partially unsupported — "🌑 Void Blast — 40-70 damage. Cooldown: 2 turns." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Settings] Dynamic Type font sizes are partially unsupported — "🛡 Shadow Shield — Reduce all damage by 60% for 2 turns. Cooldown: 3 turns." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Settings] Dynamic Type font sizes are partially unsupported — "⚔ Dark Strike — 20-35 damage. No cooldown." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Settings] Dynamic Type font sizes are partially unsupported — "💀 Soul Drain — Steal 30-50 HP from target. Cooldown: 3 turns." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
+[Settings] Text clipped — "💀 Soul Drain — Steal 30-50 HP from target. Cooldown: 3 turns." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Settings] Text clipped — "🛡 Shadow Shield — Reduce all damage by 60% for 2 turns. Cooldown: 3 turns." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Settings] Text clipped — "🌑 Void Mode" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
+[Settings] Text clipped — "🌑 Void Blast — 40-70 damage. Cooldown: 2 turns." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
 [Settings] Contrast failed — "🌑 Void Mode" (48). Contrast failed for SwiftUI.AccessibilityNode
 [Settings] Contrast failed — "Five waves of heroes are coming to defeat you. They carry torches and hope. They will find neither. As the Void Commander you have 500 HP and four abilities. Survive all five waves to win a prize — gold, Mystery Coins, a Blacksmith discount or double XP — and every one of your characters goes up 3 levels." (48). Contrast failed for SwiftUI.AccessibilityNode
 [Settings] Contrast failed — "Wave 1 — A lone Warrior. Weak. Overconfident.
@@ -101,12 +44,3 @@ Wave 4 — Three heroes including an Elite. They have a plan.
 Wave 5 — A full party of 4. One of them is legendary." (48). Contrast failed for SwiftUI.AccessibilityNode
 [Settings] Contrast failed — "YOUR ABILITIES" (48). Contrast failed for SwiftUI.AccessibilityNode
 [Settings] Contrast failed — "⚔ Dark Strike — 20-35 damage. No cooldown." (48). Contrast failed for SwiftUI.AccessibilityNode
-[Settings] Dynamic Type font sizes are partially unsupported — "🛡 Shadow Shield — Reduce all damage by 60% for 2 turns. Cooldown: 3 turns." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Settings] Dynamic Type font sizes are partially unsupported — "🌑 Void Blast — 40-70 damage. Cooldown: 2 turns." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Settings] Dynamic Type font sizes are partially unsupported — "⚔ Dark Strike — 20-35 damage. No cooldown." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Settings] Dynamic Type font sizes are partially unsupported — "YOUR ABILITIES" (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Settings] Dynamic Type font sizes are partially unsupported — "💀 Soul Drain — Steal 30-50 HP from target. Cooldown: 3 turns." (48). User will not be able to change the font size of this SwiftUI.AccessibilityNode
-[Settings] Text clipped — "💀 Soul Drain — Steal 30-50 HP from target. Cooldown: 3 turns." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Settings] Text clipped — "🌑 Void Blast — 40-70 damage. Cooldown: 2 turns." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Settings] Text clipped — "🌑 Void Mode" (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
-[Settings] Text clipped — "🛡 Shadow Shield — Reduce all damage by 60% for 2 turns. Cooldown: 3 turns." (48). Text of this SwiftUI.AccessibilityNode may be clipped at larger Dynamic Type sizes.
