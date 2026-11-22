@@ -10,9 +10,11 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "12.0")
+VERSION = os.environ.get("VERSION", "12.0.1")
+# Only these platforms (store-submit-ios: "IOS").
+PLATFORMS = os.environ.get("PLATFORMS", "IOS MAC_OS VISION_OS").split()
 
-WHATS_NEW = {
+WHATS_NEW_12_0 = {
     "en-US": """New in 12.0, The Legends Update:
 • Co-op Dungeon: fight through ten floors with up to three friends, on iPhone, Mac, Apple Vision Pro and the web together. Share a 4-letter room code.
 • A new main menu with tabs along the bottom: Play, Modes, Multiplayer, More and Settings. Prefer the old list? Settings, Gameplay, Classic Menu.
@@ -42,6 +44,18 @@ WHATS_NEW = {
 • O Game Center está na aba Multijogador.
 • Correções: o rotor do VoiceOver não volta mais para Ações na masmorra, espíritos forjados aparecem ao criar um personagem e o título Campeão do Desafio agora é concedido.""",
 }
+# 12.0.1: fixes only; What's New lists them.
+WHATS_NEW_12_0_1 = {
+    "en-US": """12.0.1 fixes:
+• Prestige no longer crashes the game. If it crashed for you, your character is safe: prestige again.
+• Co-op: VoiceOver no longer jumps around during a fight, and your action buttons stay on screen after you choose.
+• VoiceOver no longer jumps to the top after pressing buttons at Home, in the Gun Workshop and Gun Shop, the Arcane Shop and the Command Center switch.""",
+    "pt-BR": """Correções da 12.0.1:
+• O Prestígio não trava mais o jogo. Se travou para você, seu personagem está a salvo: faça o Prestígio de novo.
+• Cooperativo: o VoiceOver não pula mais pela tela durante a luta, e seus botões de ação continuam na tela depois que você escolhe.
+• O VoiceOver não volta mais para o topo depois de tocar em botões na Casa, na Oficina e na Loja de Armas, na Loja Arcana e na opção da Central de Comando.""",
+}
+WHATS_NEW = WHATS_NEW_12_0_1 if VERSION == "12.0.1" else WHATS_NEW_12_0
 PROMO = {
     "en-US": "New in 12.0: play together. Co-op dungeons with friends on iPhone, Mac, Vision Pro and the web, a Battle Pass, and hunting by sound.",
     "pt-BR": "Novo na 12.0: jogue junto. Masmorras cooperativas com amigos no iPhone, Mac, Vision Pro e web, Passe de Batalha e caça pelo som.",
@@ -83,7 +97,7 @@ def notes(platform, locale):
 
 
 app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
-for platform in ("IOS", "MAC_OS", "VISION_OS"):
+for platform in PLATFORMS:
     found = call("GET", f"/apps/{app}/appStoreVersions",
                  params={"filter[platform]": platform, "filter[versionString]": VERSION})
     if found is None:
@@ -111,4 +125,4 @@ for platform in ("IOS", "MAC_OS", "VISION_OS"):
 if problems:
     print(f"\n{len(problems)} step(s) didn't go through; see the ⚠️ lines above.")
     sys.exit(1)
-print(f"\nVersion {VERSION} is ready on all three platforms.")
+print(f"\nVersion {VERSION} is ready on {', '.join(PLATFORMS)}.")
