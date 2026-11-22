@@ -210,7 +210,9 @@ struct CharacterListView: View {
 
     private func card(_ ch: PlayerCharacter, _ i: Int) -> some View {
         let info = GameData.classInfo(ch.cls)
-        let level = ch.persistLevel ?? 1
+        // A run in progress shows the level it's at (the saved level only
+        // changes when the run ends, so a level-4 run looked like level 1).
+        let level = max(ch.persistLevel ?? 1, (!ch.completed ? game.savedRun(for: i)?.level : nil) ?? 1)
         let resumable = game.savedRun(for: i) != nil && !ch.completed
         let playLabel = resumable ? "▶ Resume" : ch.completed ? "✦ NG+" : "⚔ Play"
         let (diffColor, diffBorder) = Self.difficultyColors(ch.difficulty)
