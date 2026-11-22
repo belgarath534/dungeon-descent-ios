@@ -27,6 +27,9 @@ public enum AFKStats {
 
     public struct Trained: Equatable, Sendable {
         public var hp = 0, atk = 0, def = 0, points = 0
+        public init(hp: Int = 0, atk: Int = 0, def: Int = 0, points: Int = 0) {
+            self.hp = hp; self.atk = atk; self.def = def; self.points = points
+        }
         public func count(_ s: Stat) -> Int { s == .hp ? hp : s == .atk ? atk : def }
     }
 
