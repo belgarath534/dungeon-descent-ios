@@ -5237,3 +5237,22 @@ final class AFKStatsTests: XCTestCase {
         XCTAssertEqual(back.map { AFKStats.trained($0) }, AFKStats.trained(ch))
     }
 }
+
+final class SpeechTextTests: XCTestCase {
+    func testNumbersAreSpelledTheWayPeopleSayThem() {
+        XCTAssertEqual(SpeechText.spellNumbers("Floor 21"), "Floor twenty one")
+        XCTAssertEqual(SpeechText.spellNumbers("You have 3,082 gold."), "You have three thousand eighty two gold.")
+        XCTAssertEqual(SpeechText.spellNumbers("3082"), "three thousand eighty two")
+        XCTAssertEqual(SpeechText.spellNumbers("Floors 21 through 29"), "Floors twenty one through twenty nine")
+        XCTAssertEqual(SpeechText.spellNumbers("40% off"), "forty percent off")
+        XCTAssertEqual(SpeechText.spellNumbers("the 2nd and 23rd floor"), "the second and twenty third floor")
+        XCTAssertEqual(SpeechText.spellNumbers("HP 0 of 1,000,000"), "HP zero of one million")
+        XCTAssertEqual(SpeechText.spellNumbers("x1.5 damage"), "x one point five damage")
+        XCTAssertEqual(SpeechText.spellNumbers("Floor 1800"), "Floor one thousand eight hundred")
+        XCTAssertEqual(SpeechText.spellNumbers("Level 10, -5 HP"), "Level ten, minus five HP")
+        XCTAssertEqual(SpeechText.spellNumbers("Wave 105"), "Wave one hundred five")
+        XCTAssertEqual(SpeechText.spellNumbers("Lv5 Monk"), "Lv five Monk")
+        XCTAssertEqual(SpeechText.spellNumbers("Deals 20-35 damage"), "Deals twenty to thirty five damage")
+        XCTAssertEqual(SpeechText.spellNumbers("No numbers here."), "No numbers here.")
+    }
+}

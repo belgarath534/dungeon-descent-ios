@@ -49,6 +49,7 @@ WHATS_NEW_12_0_1 = {
     "en-US": """12.0.1:
 • New in Endless Descent: stat points. Every level gained in a run gives a point to spend on +20 max HP, +2 attack or +1 defense, kept for every Endless run.
 Fixes:
+• Lewis now says numbers right: "twenty-one", "three thousand eighty-two", "forty percent" (he said "floor one" for floor 21, and "three eighty-two" for 3,082).
 • Prestige no longer crashes the game. If it crashed for you, your character is safe: prestige again.
 • Legacy characters now keep every level the moment they reach it, even if they die or leave the run.
 • Co-op: VoiceOver no longer jumps around during a fight, and your action buttons stay on screen after you choose.
@@ -62,6 +63,7 @@ Fixes:
     "pt-BR": """12.0.1:
 • Novo na Descida Infinita: pontos de atributo. Cada nível ganho numa partida dá um ponto para gastar em +20 de HP máximo, +2 de ataque ou +1 de defesa, guardado para todas as partidas da Descida Infinita.
 Correções:
+• O Lewis agora fala os números certo: "twenty-one", "three thousand eighty-two" (ele dizia "floor one" no andar 21 e "three eighty-two" para 3.082).
 • O Prestígio não trava mais o jogo. Se travou para você, seu personagem está a salvo: faça o Prestígio de novo.
 • Personagens do Modo Legado agora guardam cada nível assim que o alcançam, mesmo se morrerem ou saírem da partida.
 • Cooperativo: o VoiceOver não pula mais pela tela durante a luta, e seus botões de ação continuam na tela depois que você escolhe.

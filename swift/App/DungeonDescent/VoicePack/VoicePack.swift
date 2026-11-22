@@ -2,6 +2,7 @@ import Foundation
 import AVFoundation
 import CryptoKit
 import SwiftUI
+import DungeonCore
 #if canImport(OnnxRuntimeC) && canImport(MisakiSwift) && os(iOS) && !targetEnvironment(macCatalyst)
 import MisakiSwift
 import MLX
@@ -399,7 +400,10 @@ final class LiveVoice {
         guard let session, let g2p else { return (nil, "the voice engine didn't start") }
         // Text to phonemes (MisakiSwift), phonemes to Kokoro's numbers, one
         // symbol at a time (a combining accent is its own symbol).
-        let phonemes = Device.withDefaultDevice(.cpu) { g2p.phonemize(text: text).0 }
+        // Numbers in words first: the pronunciation engine said "Floor 21"
+        // as "floor one" and 3,082 as "three eighty-two" (SpeechText).
+        let spoken = SpeechText.spellNumbers(text)
+        let phonemes = Device.withDefaultDevice(.cpu) { g2p.phonemize(text: spoken).0 }
         var tokens: [Int64] = phonemes.unicodeScalars.compactMap { vocab[String($0)] }
         if tokens.count > 510 { tokens = Array(tokens.prefix(510)) }
         guard !tokens.isEmpty else { return (nil, "no sounds to say for this line (phonemes: \(phonemes.prefix(40)))") }

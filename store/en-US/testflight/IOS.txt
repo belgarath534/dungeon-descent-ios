@@ -3,6 +3,7 @@ Thanks for testing Dungeon Descent 12.0.1!
 New: Endless Descent stat points. Gain a level or two in an Endless run, end it, and spend the points on the summary (HP, attack or defense). Start another run: your HP and attack should be higher.
 
 Fixed, please try:
+• Lewis Voice Pack: numbers. Floors 21 to 29 should be "twenty one" and so on, and big numbers like 3,082 gold "three thousand eighty two".
 • Legacy Mode: level up a Legacy character, then die or leave the run. The level should stay.
 • Prestige: prestiging a character crashed the game. Prestige a max-level character and check you get the star, the gold and the Mystery Coin.
 • Co-op: VoiceOver no longer jumps around during a fight. The action buttons stay on screen after you choose (the chosen one is marked) until the next round.
