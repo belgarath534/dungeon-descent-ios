@@ -89,7 +89,7 @@ final class CharacterTests: XCTestCase {
         XCTAssertNil(classic.dungeonTier)
         let legacy = PlayerCharacter(name: "Kael", cls: "Warrior", race: "Human", prof: "Thief",
                                dungeon: "Crypt of Malachar", difficulty: .wanderer, runMode: "legacy")
-        XCTAssertEqual(legacy.levelCap, 25)
+        XCTAssertEqual(legacy.levelCap, 50)
         XCTAssertEqual(legacy.dungeonTier, 1)
     }
 
@@ -2099,6 +2099,34 @@ final class SpireTests: XCTestCase {
         XCTAssertTrue(r.won)
         XCTAssertGreaterThanOrEqual(CoinShop.coins(store), 25)
         XCTAssertEqual(Blacksmith.discount(store).pct, 0.25)
+    }
+
+    func testSpireKillsGiveXPAndLevels() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        var ch = climber()
+        ch.persistLevel = 3
+        ch.extra["persistXp"] = .number(200)
+        var r = Spire.start(ch, store: store, wallet: w)
+        XCTAssertEqual(r.level, 3)
+        XCTAssertEqual(r.xp, 200)
+        let hp = r.maxHp, atk = r.atk
+        // Level 3 needs 380; a floor-1 kill gives 23, a boss on floor 10 gives 200.
+        r.floor = 10
+        r.atk = 100_000
+        var dice = SeededDice(seed: 5)
+        _ = Spire.enter(&r, store: store, wallet: w, dice: &dice)
+        let lines = Spire.turn(&r, .attack, store: store, wallet: w, dice: &dice)
+        XCTAssertEqual(r.level, 4)
+        XCTAssertEqual(r.xp, 20)
+        XCTAssertEqual(r.maxHp, hp + 25)
+        XCTAssertEqual(r.atk, 100_002)
+        XCTAssertTrue(lines.contains { $0.hasPrefix("⬆ LEVEL UP! Level 4.") })
+        _ = atk
+        // Level 50 is the top.
+        r.level = AFK.maxLevel
+        XCTAssertEqual(Spire.gainXP(&r, 99_999), [])
+        XCTAssertEqual(r.level, AFK.maxLevel)
     }
 
     func testDeathSaves() {
@@ -4890,6 +4918,24 @@ final class PrestigeTests: XCTestCase {
         ch.extra["prestige"] = .number(10)
         ch.persistLevel = 25
         XCTAssertNotNil(Prestige.blocker(ch))
+    }
+
+    /// 12.0.2: Legacy goes to 50, prestige still at 25, and old saves move up.
+    func testLegacyFiftyPrestigeTwentyFive() throws {
+        let old = try JSONDecoder().decode(PlayerCharacter.self, from: Data(#"{"name":"Old","cls":"Warrior","race":"Human","prof":"Thief","dungeon":"Crypt of Malachar","difficulty":"wanderer","runMode":"legacy","levelCap":25,"persistLevel":28}"#.utf8))
+        XCTAssertEqual(old.levelCap, 50)
+        XCTAssertEqual(Prestige.requiredLevel(old), 25)
+        XCTAssertNil(Prestige.blocker(old))
+        let classic = PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        XCTAssertEqual(Prestige.requiredLevel(classic), 10)
+        var run = Run(character: old)
+        _ = Legacy.start(&run, old)
+        XCTAssertEqual(run.level, 28)
+        XCTAssertEqual(Progression.xpNeeded(atLevel: 9), 2240)
+        XCTAssertEqual(Progression.xpNeeded(atLevel: 28), AFK.xpToLevelUp(from: 28))
+        run.xp = 0
+        XCTAssertGreaterThanOrEqual(Progression.gainXP(&run, AFK.xpToLevelUp(from: 28)!), 1)
+        XCTAssertGreaterThanOrEqual(run.level, 29)
     }
 }
 

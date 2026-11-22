@@ -297,7 +297,7 @@ struct CharacterListView: View {
                         charButton("⭐ Prestige", Color(hex: 0xffdd44), Color(hex: 0xaa8800)) { askPrestige(i) }
                             .accessibilityLabel(Prestige.blocker(ch) == nil
                                 ? "Prestige \(ch.name): back to level 1 for a permanent star"
-                                : "Prestige \(ch.name), at level \(ch.levelCap)")
+                                : "Prestige \(ch.name), at level \(Prestige.requiredLevel(ch))")
                     }
                     charButton("🗑 Delete", Color(hex: 0xc06060), Color(hex: 0x6a2020)) { pendingDelete = i }
                         .accessibilityLabel("Delete \(ch.name)" as String)

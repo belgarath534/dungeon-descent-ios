@@ -1,12 +1,14 @@
 import Foundation
 
 /// Legacy Mode (runMode "legacy", dungeonTier, persistLevel): the level
-/// carries between runs (up to 25), and each dungeon you clear raises the
+/// carries between runs (up to 50 since 12.0.2; it was 25), and each dungeon you clear raises the
 /// Dungeon Tier: +20% enemy HP, +10% enemy attack and +15% gold a tier. Dying
 /// keeps the level and puts the tier back to 1. The web version saved the
 /// level on a clear but every run started at level 1 anyway; Swift starts
 /// you at it, with its level points to spend again.
 public enum Legacy {
+    /// The highest Legacy level, the same as Endless Descent's.
+    public static let maxLevel = AFK.maxLevel
     public static func isLegacy(_ ch: PlayerCharacter) -> Bool { ch.runMode == "legacy" }
 
     public static func hpMult(tier: Int) -> Double { 1 + Double(max(0, tier - 1)) * 0.20 }

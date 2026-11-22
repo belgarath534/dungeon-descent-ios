@@ -2331,6 +2331,7 @@ enum Patterns {
         ("Downloading… {0}%", "Baixando… {0}%"),
         ("Downloading the Voice Pack, {0} percent", "Baixando o Pacote de Voz, {0} por cento"),
         ("Voice Pack {0} percent.", "Pacote de Voz {0} por cento."),
+        ("⬆ LEVEL UP! Level {0}. +25 max HP, +2 attack. HP: {1}/{2}.", "⬆ SUBIU DE NÍVEL! Nível {0}. +25 de HP máximo, +2 de ataque. HP: {1}/{2}."),
         ("The Voice Pack download stopped: {0}", "O download do Pacote de Voz parou: {0}"),
     ]
 

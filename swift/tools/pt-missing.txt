@@ -4,6 +4,7 @@
 ## Labels with a value in them (0)
 
 
-## Announcements and text built in code (0)
-
+## Announcements and text built in code (2)
+SpeechText.swift: $1 to $2
+SpeechText.swift: (?<![\d.,])(-)?(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?(%|st|nd|rd|th)?
 

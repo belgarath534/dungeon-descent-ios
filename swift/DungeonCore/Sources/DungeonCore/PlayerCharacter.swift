@@ -55,7 +55,7 @@ public struct PlayerCharacter: Equatable, Sendable {
         let legacy = runMode == "legacy"
         self.dungeonTier = legacy ? 1 : nil
         self.persistLevel = legacy ? 1 : nil
-        self.levelCap = legacy ? 25 : 10
+        self.levelCap = legacy ? Legacy.maxLevel : 10
         self.completed = false
         self.ngPlusActive = false
         self.extra = ["earnedSpirits": .array([])]
@@ -100,6 +100,8 @@ extension PlayerCharacter: Codable {
         guidePersonality = str("guidePersonality", "encouraging")
         guideEnabled = bool("guideEnabled", true)
         levelCap = Int(num("levelCap") ?? 10)
+        // 12.0.2: Legacy goes to 50 (it was 25), like Endless Descent.
+        if runMode == "legacy" { levelCap = max(levelCap, Legacy.maxLevel) }
         dungeonTier = num("dungeonTier").map { Int($0) }
         persistLevel = num("persistLevel").map { Int($0) }
         completed = bool("completed")

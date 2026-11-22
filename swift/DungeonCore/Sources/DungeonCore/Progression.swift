@@ -26,8 +26,10 @@ public enum Progression {
         return .t3
     }
 
+    /// The same curve as Endless Descent: the table to level 10, then 500
+    /// more a level (12.0.2; levels 10 to 25 used to need 9999 each).
     public static func xpNeeded(atLevel level: Int) -> Int {
-        xpTable[min(level, xpTable.count - 1)]
+        AFK.xpToLevelUp(from: max(1, level)) ?? 9999
     }
 
     /// Adds XP and levels up as far as it reaches. Returns how many levels

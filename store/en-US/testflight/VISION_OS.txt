@@ -3,5 +3,7 @@ Thanks for testing Dungeon Descent 12.0.2!
 Please try:
 • Endless Descent: it now goes past level 10, up to 50. Keep a run going and check the level keeps rising (and the XP bar shows the next amount).
 • 3D Mode with VoiceOver: moving around and focusing buttons should feel instant, with no multi-second delay before VoiceOver speaks. The spatial sound and Echo-Location should still work.
+• Legacy Mode: characters now go past level 25, up to 50. A Legacy character at 25 or more can still prestige.
+• The Spire: each kill gives XP and you can level up during a climb (+25 max HP, +2 attack). Check the level shows in other modes afterwards.
 
 Found a bug? Tell us in #dungeon-descent-testers on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.
