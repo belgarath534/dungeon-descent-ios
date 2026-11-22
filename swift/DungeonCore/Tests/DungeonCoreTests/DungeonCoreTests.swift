@@ -5024,15 +5024,38 @@ final class BattlePassTests: XCTestCase {
 }
 
 final class CoopTests: XCTestCase {
-    func testPartyRoundsAndFloors() {
+    func hero(_ id: String, level: Int = 5) -> Coop.Player {
+        var ch = PlayerCharacter(name: id == "a" ? "Kai" : "Mira", cls: "Warrior", race: "Human", prof: "Mercenary",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = level
+        return Coop.player(Run(character: ch), character: ch, id: id, platform: "ios")
+    }
+
+    func testPlayerFromTheRealCharacter() {
         var ch = PlayerCharacter(name: "Kai", cls: "Warrior", race: "Human", prof: "Mercenary",
                                  dungeon: "Crypt of Malachar", difficulty: .wanderer)
         ch.persistLevel = 5
-        let a = Coop.player(ch, id: "a", platform: "ios")
-        let info = GameData.classInfo("Warrior")
-        XCTAssertEqual(a.maxHp, info.maxHp + 48)
-        XCTAssertEqual(a.atkLo, info.atk.lowerBound + 4)
-        var b = a; b.id = "b"; b.name = "Mira"
+        let run = Run(character: ch)
+        let gun = Guns.all.first!
+        let a = Coop.player(run, character: ch, id: "a", platform: "ios", gun: gun)
+        XCTAssertEqual(a.level, 5)
+        XCTAssertEqual(a.maxHp, run.maxHp + 48)
+        XCTAssertEqual(a.atkLo, run.atk.lowerBound + run.totalAtkBonus + 4)
+        XCTAssertEqual(a.def, run.totalDef)
+        XCTAssertEqual(a.potions, Coop.startPotions)
+        XCTAssertFalse(a.skills.isEmpty)
+        XCTAssertLessThanOrEqual(a.skills.count, 3)
+        XCTAssertTrue(a.hasGun)
+        XCTAssertEqual(a.gunLo, gun.damage.lowerBound)
+        // A round-trip through the database's dictionaries.
+        XCTAssertEqual(Coop.Player(a.dict), a)
+        for act in [Coop.Action.attack, .heavy, .defend, .potion, .gun, .skill("x"), .revive("b"), .protect("b")] {
+            XCTAssertEqual(Coop.Action(act.raw), act)
+        }
+    }
+
+    func testEnemiesScaleWithThePartyAndTheDepth() {
+        let a = hero("a"), b = hero("b")
         var dice = SeededDice(seed: 7)
         let solo = Coop.foe(dungeon: "Crypt of Malachar", floor: 1, party: [a], dice: &dice)
         var dice2 = SeededDice(seed: 7)
@@ -5040,28 +5063,89 @@ final class CoopTests: XCTestCase {
         XCTAssertEqual(duo.name, solo.name)
         XCTAssertEqual(duo.maxHp, jsRound(Double(solo.maxHp) * 1.7))
         var boss = SeededDice(seed: 1)
-        XCTAssertTrue(Coop.foe(dungeon: "Crypt of Malachar", floor: 10, party: [a], dice: &boss).boss)
+        let king = Coop.foe(dungeon: "Crypt of Malachar", floor: 10, party: [a], dice: &boss)
+        XCTAssertTrue(king.boss)
+        XCTAssertFalse(king.elite)
+    }
 
-        // A potion heals, a defender takes half, an enemy with 1 HP falls.
-        var hurt = a; hurt.hp = 10
-        var d = LoadedDice(rolls: [], chances: [])
-        let r = Coop.resolve(party: [hurt, b], foe: Coop.Foe(name: "Rat", icon: "🐀", hp: 1, maxHp: 30, atkLo: 5, atkHi: 5, boss: false),
-                             actions: ["a": .potion, "b": .attack], dice: &d)
+    func testPotionReviveAndProtect() {
+        var a = hero("a"), b = hero("b")
+        a.hp = 10
+        var d = LoadedDice()
+        let r = Coop.resolve(party: [a, b], foe: Coop.Foe(name: "Rat", icon: "🐀", hp: 1, maxHp: 30, atkLo: 5, atkHi: 5, boss: false),
+                             actions: ["a": "potion", "b": "attack"], dice: &d)
         XCTAssertTrue(r.foeDown)
         XCTAssertEqual(r.party[0].hp, 10 + jsRound(Double(a.maxHp) * 0.4))
-        XCTAssertEqual(r.party[0].potions, Coop.potions - 1)
+        XCTAssertEqual(r.party[0].potions, Coop.startPotions - 1)
 
-        // Everyone down: the run is lost.
-        var weak = a; weak.hp = 1; weak.def = 0
-        var d2 = LoadedDice(rolls: [], chances: [])
+        // Revive: a potion brings a downed friend back up.
+        a = hero("a"); b.hp = 0
+        var d2 = LoadedDice()
+        let rv = Coop.resolve(party: [a, b], foe: Coop.Foe(name: "Ogre", icon: "👹", hp: 999, maxHp: 999, atkLo: 5, atkHi: 5, boss: false),
+                              actions: ["a": "revive:b"], dice: &d2)
+        XCTAssertEqual(rv.party[1].hp, max(1, jsRound(Double(b.maxHp) * 0.35)))
+        XCTAssertEqual(rv.party[0].potions, Coop.startPotions - 1)
+
+        // Protect: the enemy goes for the big hitter, the protector takes it.
+        b = hero("b")
+        var d3 = LoadedDice()
+        let pr = Coop.resolve(party: [a, b], foe: Coop.Foe(name: "Ogre", icon: "👹", hp: 999, maxHp: 999, atkLo: 30, atkHi: 30, boss: false),
+                              actions: ["a": "protect:b", "b": "attack"], dice: &d3)
+        XCTAssertEqual(pr.party[1].hp, b.hp)
+        XCTAssertLessThan(pr.party[0].hp, a.hp)
+        XCTAssertTrue(pr.lines.contains { $0.contains("takes the hit for") })
+    }
+
+    func testSkillsGunsAndBossPhases() {
+        var a = hero("a")
+        var bash = Coop.Skill(id: "bash", name: "Bash", icon: "🔨", sp: 5)
+        bash.dmg = 1; bash.stun = 1
+        a.skills = [bash]
+        a.sp = 10
+        var d = LoadedDice()
+        let r = Coop.resolve(party: [a], foe: Coop.Foe(name: "Ogre", icon: "👹", hp: 999, maxHp: 999, atkLo: 30, atkHi: 30, boss: false),
+                             actions: ["a": "skill:bash"], dice: &d)
+        XCTAssertEqual(r.party[0].hp, a.hp, "stunned: no counter-attack")
+        XCTAssertEqual(r.party[0].sp, 10 - 5 + Coop.spPerRound)
+        XCTAssertTrue(r.lines.contains { $0.contains("is stunned") })
+        // Not enough SP: an attack instead.
+        a.sp = 1
+        var d1 = LoadedDice()
+        let weak = Coop.resolve(party: [a], foe: Coop.Foe(name: "Ogre", icon: "👹", hp: 999, maxHp: 999, atkLo: 1, atkHi: 1, boss: false),
+                                actions: ["a": "skill:bash"], dice: &d1)
+        XCTAssertTrue(weak.lines.first!.hasPrefix("⚔"))
+
+        // The gun: its own damage, one shot used.
+        a = hero("a")
+        a.gunName = "Pistol"; a.gunLo = 10; a.gunHi = 10; a.gunShots = 2; a.shots = 2
+        var d2 = LoadedDice()
+        let g = Coop.resolve(party: [a], foe: Coop.Foe(name: "Ogre", icon: "👹", hp: 999, maxHp: 999, atkLo: 1, atkHi: 1, boss: false),
+                             actions: ["a": "gun"], dice: &d2)
+        XCTAssertEqual(g.foe.hp, 999 - (10 + a.atkLo / 2))
+        XCTAssertEqual(g.party[0].shots, 1)
+        XCTAssertEqual(Coop.rest(g.party, floor: false)[0].shots, 2)
+
+        // The boss changes phase under two thirds and hits everyone.
+        a.atkLo = 40; a.atkHi = 40
+        var d3 = LoadedDice()
+        let b = Coop.resolve(party: [a], foe: Coop.Foe(name: "King", icon: "👑", hp: 100, maxHp: 100, atkLo: 10, atkHi: 10, boss: true),
+                             actions: ["a": "attack"], dice: &d3)
+        XCTAssertEqual(b.foe.phase, 2)
+        XCTAssertTrue(b.lines.contains { $0.contains("roars") })
+        XCTAssertLessThan(b.party[0].hp, a.hp)
+    }
+
+    func testFloorsAndRewards() {
+        var weak = hero("a"); weak.hp = 1; weak.def = 0
+        var d = LoadedDice()
         let lost = Coop.resolve(party: [weak], foe: Coop.Foe(name: "Ogre", icon: "👹", hp: 999, maxHp: 999, atkLo: 50, atkHi: 50, boss: false),
-                                actions: [:], dice: &d2)
+                                actions: [:], dice: &d)
         XCTAssertTrue(lost.partyDown)
-        // The downed come back with 30% next floor.
-        XCTAssertEqual(Coop.rest(lost.party)[0].hp, jsRound(Double(a.maxHp) * 0.3))
+        // Between fights the downed stay down; between floors they get up with 30%.
+        XCTAssertEqual(Coop.rest(lost.party, floor: false)[0].hp, 0)
+        XCTAssertEqual(Coop.rest(lost.party, floor: true)[0].hp, jsRound(Double(weak.maxHp) * 0.3))
         XCTAssertEqual(Coop.gold(floorsCleared: 10, won: true), 2000)
-        // A round-trip through the database's dictionaries.
-        XCTAssertEqual(Coop.Player(a.dict), a)
+        XCTAssertEqual(Coop.xp(floorsCleared: 2, won: false), 60 + 75)
     }
 }
 

@@ -2,8 +2,8 @@ import SwiftUI
 import FirebaseDatabase
 import DungeonCore
 
-/// CO-OP DUNGEON online (the rules are Coop.swift). The room is
-/// "pvp_rooms/coop_CODE": the host's device runs the fight and writes it;
+/// CO-OP 2.0 online (the rules are Coop.swift). The room is
+/// "pvp_rooms/coop_CODE", kind "coop2": the host's device runs the fight and writes it;
 /// everyone (host included) sends their choice to "actions/{id}" and reads
 /// every new line of the log aloud. The web version (js/31-coop.js) uses the
 /// same room, so web and app players play together.
@@ -21,6 +21,10 @@ final class CoopModel: ObservableObject {
     @Published private(set) var dungeon = ""
     @Published private(set) var roomStatus = "lobby"
     @Published private(set) var myAction: Coop.Action?
+    /// Which fight of the floor (1 or 2), and the merchant between floors.
+    @Published private(set) var fight = 1
+    @Published private(set) var shopOpen = false
+    @Published private(set) var bought = 0
     @Published private(set) var waitingOn: [String] = []
     /// The newest first; each line keeps its number, so VoiceOver focus on
     /// a line stays put when new lines arrive.
@@ -35,6 +39,7 @@ final class CoopModel: ObservableObject {
     private var round = 0
     private var roundStart = 0.0
     private var actions: [String: String] = [:]
+    private var buys: [String: Int] = [:]
     private var hostId = ""
     private var resolving = false
     private var timer: Timer?
@@ -67,10 +72,28 @@ final class CoopModel: ObservableObject {
         round = 0
         actions = [:]
         myAction = nil
+        fight = 1
+        shopOpen = false
+        bought = 0
+        buys = [:]
         waitingOn = []
         log = []
         seenLog = []
         status = ""
+    }
+
+    /// Your co-op self: the run your character would start a dungeon with
+    /// (gear, Legacy level, spent level points, prestige stars) and your gun.
+    private func makePlayer(_ ch: PlayerCharacter) -> Coop.Player {
+        var run = Run(character: ch)
+        if let game {
+            game.globalInventory.load(into: &run)
+            _ = Legacy.start(&run, ch)
+            if run.level > 1 { Progression.restore(&run, Progression.savedSpend(ch)) }
+            _ = Prestige.start(&run, ch)
+            return Coop.player(run, character: ch, id: myId, platform: CloudAccount.platform, gun: Guns.equipped(game.store))
+        }
+        return Coop.player(run, character: ch, id: myId, platform: CloudAccount.platform)
     }
 
     func host(_ ch: PlayerCharacter, dungeon: String) {
@@ -80,11 +103,11 @@ final class CoopModel: ObservableObject {
         code = c
         isHost = true
         hostId = myId
-        let p = Coop.player(ch, id: myId, platform: CloudAccount.platform)
+        let p = makePlayer(ch)
         var pd = p.dict
         pd["joinedAt"] = Self.now
         let data: [String: Any] = [
-            "kind": "coop", "code": c, "status": "lobby", "host": myId, "dungeon": dungeon,
+            "kind": Coop.kind, "version": 2, "code": c, "status": "lobby", "host": myId, "dungeon": dungeon,
             "floor": 1, "round": 0, "createdAt": Self.now, "players": [myId: pd], "beat": [myId: Self.now],
         ]
         room?.setValue(data) { [weak self] error, ref in
@@ -108,15 +131,19 @@ final class CoopModel: ObservableObject {
         room?.observeSingleEvent(of: .value, with: { [weak self] snap in
             Task { @MainActor in
                 guard let self else { return }
-                guard let r = snap.value as? [String: Any], r["kind"] as? String == "coop" else {
+                guard let r = snap.value as? [String: Any], r["kind"] as? String == Coop.kind else {
                     self.code = nil
-                    self.say("No co-op room with that code. Check it and try again.")
+                    if (snap.value as? [String: Any])?["kind"] as? String == "coop" {
+                        self.say("That room is from an older version of Dungeon Descent. Ask the host to update, then make a new room.")
+                    } else {
+                        self.say("No co-op room with that code. Check it and try again.")
+                    }
                     return
                 }
                 let players = r["players"] as? [String: Any] ?? [:]
                 guard r["status"] as? String == "lobby" else { self.code = nil; self.say("That run has already started."); return }
                 guard players.count < Coop.maxPlayers else { self.code = nil; self.say("That room is full."); return }
-                var pd = Coop.player(ch, id: self.myId, platform: CloudAccount.platform).dict
+                var pd = self.makePlayer(ch).dict
                 pd["joinedAt"] = Self.now
                 self.room?.child("players").child(self.myId).setValue(pd)
                 self.room?.child("beat").child(self.myId).setValue(Self.now)
@@ -144,8 +171,8 @@ final class CoopModel: ObservableObject {
             return
         }
         let f = Coop.foe(dungeon: dungeon, floor: 1, party: party, dice: &dice)
-        room?.updateChildValues(["status": "playing", "floor": 1, "round": 1, "roundStart": Self.now, "foe": f.dict])
-        addLog(["⚔ The party descends into \(dungeon). Floor 1: \(f.icon) \(f.name) blocks the way, \(f.hp) HP."])
+        room?.updateChildValues(["status": "playing", "floor": 1, "fight": 1, "round": 1, "roundStart": Self.now, "foe": f.dict])
+        addLog(["⚔ The party descends into \(dungeon). Floor 1, fight 1 of \(Coop.fightsPerFloor): \(f.icon) \(f.name) blocks the way, \(f.hp) HP."])
     }
 
     func leave() {
@@ -165,12 +192,46 @@ final class CoopModel: ObservableObject {
     // MARK: Playing
 
     func act(_ a: Coop.Action) {
-        guard roomStatus == "playing", let m = me, m.alive, myAction == nil else { return }
-        if a == .potion && m.potions <= 0 { say("No potions left."); return }
+        guard roomStatus == "playing", !shopOpen, let m = me, m.alive, myAction == nil else { return }
+        switch a {
+        case .potion where m.potions <= 0, .revive where m.potions <= 0: say("No potions left."); return
+        case .gun where m.shots <= 0: say("Your gun is empty until the next fight."); return
+        case .skill(let id):
+            guard let s = m.skills.first(where: { $0.id == id }) else { return }
+            if m.sp < s.sp { say("Not enough SP: \(s.name) needs \(s.sp), you have \(m.sp).") ; return }
+        default: break
+        }
         myAction = a
-        room?.child("actions").child(myId).setValue(a.rawValue)
+        room?.child("actions").child(myId).setValue(a.raw)
         Sound.sfx(a == .potion ? "sfx-potion" : a == .defend ? "sfx-select" : "sfx-attack")
-        Feedback.announce("\(a.label.dropFirst(2)) chosen. Waiting for the party.")
+        Feedback.announce("\(name(of: a)) chosen. Waiting for the party.")
+    }
+
+    /// What an action is called, for the buttons and VoiceOver.
+    func name(of a: Coop.Action) -> String {
+        switch a {
+        case .attack: return "Attack"
+        case .heavy: return "Heavy strike"
+        case .defend: return "Defend"
+        case .potion: return "Potion"
+        case .gun: return me?.gunName.isEmpty == false ? "Fire \(me!.gunName)" : "Fire your gun"
+        case .skill(let id): return me?.skills.first { $0.id == id }?.name ?? "Skill"
+        case .revive(let id): return "Revive \(party.first { $0.id == id }?.name ?? "a friend")"
+        case .protect(let id): return "Protect \(party.first { $0.id == id }?.name ?? "a friend")"
+        }
+    }
+
+    /// The merchant between floors: a potion for your own gold, added when
+    /// the next floor starts.
+    func buyPotion() {
+        guard shopOpen, let game, let m = me else { return }
+        guard m.potions + bought < Coop.maxPotions else { say("You can carry \(Coop.maxPotions) potions."); return }
+        guard game.wallet.spendGold(Coop.potionPrice) else { say("Not enough gold. A potion is \(Coop.potionPrice) gold, you have \(game.wallet.gold).") ; return }
+        bought += 1
+        room?.child("buys").child(myId).setValue(bought)
+        game.refresh()
+        Sound.sfx("sfx-purchase")
+        say("Potion bought for \(Coop.potionPrice) gold. You'll have \(m.potions + bought). \(game.wallet.gold) gold left.")
     }
 
     private func addLog(_ lines: [String]) {
@@ -210,6 +271,14 @@ final class CoopModel: ObservableObject {
             if stage == .playing, me?.alive == true { WatchBridge.shared.alert(.coopTurn, "Your move in co-op — floor \(floor).") }
         }
         roundStart = (r["roundStart"] as? NSNumber)?.doubleValue ?? roundStart
+        let newFight = max(1, (r["fight"] as? NSNumber)?.intValue ?? 1)
+        if fight != newFight { fight = newFight }
+        let shop = r["shop"] as? Bool ?? false
+        if shop != shopOpen {
+            shopOpen = shop
+            if !shop { bought = 0 }
+        }
+        buys = (r["buys"] as? [String: Any] ?? [:]).compactMapValues { ($0 as? NSNumber)?.intValue }
         let players = (r["players"] as? [String: Any] ?? [:]).compactMap { (_, v) -> (Coop.Player, Double)? in
             guard let d = v as? [String: Any], let p = Coop.Player(d) else { return nil }
             return (p, (d["joinedAt"] as? NSNumber)?.doubleValue ?? 0)
@@ -225,7 +294,7 @@ final class CoopModel: ObservableObject {
         let newFoe = Coop.Foe(r["foe"] as? [String: Any])
         if foe != newFoe { foe = newFoe }
         actions = (r["actions"] as? [String: Any] ?? [:]).compactMapValues { $0 as? String }
-        if let a = actions[myId], myAction != Coop.Action(rawValue: a) { myAction = Coop.Action(rawValue: a) }
+        if let a = actions[myId], myAction != Coop.Action(a) { myAction = Coop.Action(a) }
         let waiting = party.filter { $0.alive && actions[$0.id] == nil }.map(\.name)
         if waitingOn != waiting { waitingOn = waiting }
         beats = (r["beat"] as? [String: Any] ?? [:]).compactMapValues { ($0 as? NSNumber)?.doubleValue }
@@ -277,37 +346,50 @@ final class CoopModel: ObservableObject {
     // MARK: The host runs the fight
 
     private func hostStep() {
-        guard isHost, roomStatus == "playing", !resolving, var f = foe, f.hp > 0, round > 0 else { return }
+        guard isHost, roomStatus == "playing", !resolving, !shopOpen, var f = foe, f.hp > 0, round > 0 else { return }
         let standing = party.filter(\.alive)
         let allIn = standing.allSatisfy { actions[$0.id] != nil }
         let timedOut = Self.now - roundStart > Coop.roundSeconds * 1000
         guard allIn || timedOut else { return }
         resolving = true
-        let acts = actions.compactMapValues { Coop.Action(rawValue: $0) }
-        let r = Coop.resolve(party: party, foe: f, actions: acts, dice: &dice)
+        let r = Coop.resolve(party: party, foe: f, actions: actions, dice: &dice)
         f = r.foe
         var lines = r.lines
         if timedOut && !allIn { lines.insert("⏱ Time's up — anyone who hadn't chosen attacks.", at: 0) }
         var update: [String: Any] = ["foe": f.dict, "actions": NSNull()]
-        for p in r.party { update["players/\(p.id)/hp"] = p.hp; update["players/\(p.id)/potions"] = p.potions }
+        write(r.party, into: &update)
         if r.foeDown {
             if floor >= Coop.floors {
                 lines.append("👑 \(f.name) is defeated! The party has conquered \(dungeon)!")
                 update["status"] = "won"
-            } else {
-                lines.append("✨ Floor \(floor) cleared! Everyone heals, and the fallen get back up.")
+            } else if fight < Coop.fightsPerFloor {
+                // The next fight on this floor, after a short breath.
+                lines.append("✨ Fight won! Everyone catches their breath and heals a little.")
                 update["round"] = 0
+                let rested = Coop.rest(r.party, floor: false)
+                let nextFight = fight + 1, fl = floor
+                after(3) { [weak self] in
+                    guard let self else { return }
+                    self.startFight(floor: fl, fight: nextFight, party: rested)
+                }
+            } else {
+                // Floor cleared: the merchant opens for 15 seconds.
+                lines.append("✨ Floor \(floor) cleared! Everyone heals, and the fallen get back up.")
+                lines.append("🛒 The merchant is here for 15 seconds: potions are \(Coop.potionPrice) gold each, with your own gold.")
+                update["round"] = 0
+                update["shop"] = true
+                let rested = Coop.rest(r.party, floor: true)
+                write(rested, into: &update)
                 let next = floor + 1
-                let rested = Coop.rest(r.party)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
-                    guard let self, self.roomStatus == "playing" else { return }
-                    let nf = Coop.foe(dungeon: self.dungeon, floor: next, party: rested, dice: &self.dice)
-                    var u: [String: Any] = ["floor": next, "round": 1, "roundStart": Self.now, "foe": nf.dict]
-                    for p in rested { u["players/\(p.id)/hp"] = p.hp }
-                    self.room?.updateChildValues(u)
-                    self.addLog([nf.boss
-                        ? "👑 Floor \(next): the boss, \(nf.icon) \(nf.name), \(nf.hp) HP. This is it."
-                        : "⬇ Floor \(next): \(nf.icon) \(nf.name), \(nf.hp) HP."])
+                after(15) { [weak self] in
+                    guard let self else { return }
+                    var party = self.party
+                    for i in party.indices {
+                        let n = self.buys[party[i].id] ?? 0
+                        party[i].potions = min(Coop.maxPotions, party[i].potions + n)
+                    }
+                    self.room?.updateChildValues(["shop": false, "buys": NSNull()])
+                    self.startFight(floor: next, fight: 1, party: party)
                 }
             }
         } else if r.partyDown {
@@ -323,6 +405,35 @@ final class CoopModel: ObservableObject {
         addLog(lines)
     }
 
+    /// The players' changing numbers, as room paths.
+    private func write(_ players: [Coop.Player], into u: inout [String: Any]) {
+        for p in players {
+            for (k, v) in ["hp": p.hp, "potions": p.potions, "sp": p.sp, "shield": p.shield, "shots": p.shots, "dealt": p.dealt] {
+                u["players/\(p.id)/\(k)"] = v
+            }
+        }
+    }
+
+    private func after(_ seconds: Double, _ f: @escaping @MainActor () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) { [weak self] in
+            MainActor.assumeIsolated {
+                guard let self, self.roomStatus == "playing" else { return }
+                f()
+            }
+        }
+    }
+
+    /// The host sets up a fight: its enemy and everyone's numbers.
+    private func startFight(floor next: Int, fight n: Int, party: [Coop.Player]) {
+        let nf = Coop.foe(dungeon: dungeon, floor: next, party: party, dice: &dice)
+        var u: [String: Any] = ["floor": next, "fight": n, "round": 1, "roundStart": Self.now, "foe": nf.dict]
+        write(party, into: &u)
+        room?.updateChildValues(u)
+        addLog([nf.boss
+            ? "👑 Floor \(next): the boss, \(nf.icon) \(nf.name), \(nf.hp) HP. It changes when it's hurt. This is it."
+            : "⬇ Floor \(next), fight \(n) of \(Coop.fightsPerFloor): \(nf.icon) \(nf.name)\(nf.elite ? ", an elite," : ""), \(nf.hp) HP."])
+    }
+
     // MARK: Rewards, on each player's own device
 
     private func payOut(won: Bool) {
@@ -331,6 +442,21 @@ final class CoopModel: ObservableObject {
         let cleared = won ? Coop.floors : max(0, floor - 1)
         let gold = Coop.gold(floorsCleared: cleared, won: won)
         if gold > 0 { game.wallet.addGold(gold) }
+        // XP for your real level, on the Endless Descent curve (never lower).
+        let xp = Coop.xp(floorsCleared: cleared, won: won)
+        var levelLine = ""
+        if xp > 0, let ch = character, let i = game.characters.firstIndex(where: { $0.created == ch.created }) {
+            game.updateCharacter(i) { c in
+                var level = max(1, c.persistLevel ?? 1)
+                var have: Int = { if case .number(let n)? = c.extra["persistXp"] { return Int(n) }; return 0 }() + xp
+                let start = level
+                while let need = AFKRun.xpToLevelUp(from: level), have >= need { have -= need; level += 1 }
+                if level >= AFKRun.maxLevel { have = 0 }
+                c.persistLevel = level
+                c.extra["persistXp"] = .number(Double(have))
+                if level > start { levelLine = " \(c.name) reaches level \(level)!" }
+            }
+        }
         if cleared > 0 {
             game.pass(.kill(elite: false, boss: false), times: won ? cleared - 1 : cleared)
             game.pass(.floor, times: cleared)
@@ -343,8 +469,8 @@ final class CoopModel: ObservableObject {
         Sound.track("menu")
         game.refresh()
         let text = won
-            ? "Victory! The party cleared all \(Coop.floors) floors. You earn \(gold) gold."
-            : cleared > 0 ? "The run is over after \(cleared) floor\(cleared == 1 ? "" : "s"). You earn \(gold) gold." : "The run is over."
+            ? "Victory! The party cleared all \(Coop.floors) floors. You earn \(gold) gold and \(xp) XP.\(levelLine)"
+            : cleared > 0 ? "The run is over after \(cleared) floor\(cleared == 1 ? "" : "s"). You earn \(gold) gold and \(xp) XP.\(levelLine)" : "The run is over."
         status = text
         Feedback.announce(text, after: 1.5)
         // The host tidies up the room a little later.

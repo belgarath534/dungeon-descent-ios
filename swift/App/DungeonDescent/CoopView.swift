@@ -102,16 +102,16 @@ struct CoopView: View {
     // MARK: The fight
 
     @ViewBuilder private var fight: some View {
-        Text("Floor \(model.floor) of \(Coop.floors) · \(model.dungeon)" as String).font(Theme.cinzel(12)).foregroundStyle(Theme.gold)
+        Text("Floor \(model.floor) of \(Coop.floors) · Fight \(model.foe?.boss == true ? "BOSS" : "\(model.fight) of \(Coop.fightsPerFloor)") · \(model.dungeon)" as String).font(Theme.cinzel(12)).foregroundStyle(Theme.gold)
         if let f = model.foe {
             VStack(alignment: .leading, spacing: 4) {
-                Text("\(f.icon) \(f.name)\(f.boss ? " — BOSS" : "")" as String).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe08080))
+                Text("\(f.icon) \(f.name)\(f.boss ? " — BOSS, phase \(f.phase)" : "")\(f.stun > 0 ? " · stunned" : "")" as String).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe08080))
                 bar(Double(f.hp) / Double(f.maxHp), Color(hex: 0xcc3333))
                 Text("\(f.hp) / \(f.maxHp) HP" as String).font(Theme.cinzel(11)).foregroundStyle(Theme.textSecondary)
             }
             .padding(10).overlay(Rectangle().stroke(Color(hex: 0x5a2020)))
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(f.name)\(f.boss ? ", the boss" : ""). \(f.hp) of \(f.maxHp) HP." as String)
+            .accessibilityLabel("\(f.name)\(f.boss ? ", the boss, phase \(f.phase) of 3" : ""). \(f.hp) of \(f.maxHp) HP.\(f.stun > 0 ? " Stunned." : "")" as String)
         }
         header("THE PARTY")
         ForEach(model.party, id: \.id) { p in
@@ -121,32 +121,20 @@ struct CoopView: View {
                 bar(Double(p.hp) / Double(p.maxHp), Color(hex: 0x44cc44))
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(p.name)\(p.id == model.myId ? ", you" : ""). " + (p.alive ? "\(p.hp) of \(p.maxHp) HP. \(p.potions) potions." : "Down until the next floor."))
+            .accessibilityLabel("\(p.name)\(p.id == model.myId ? ", you" : ""). " + (p.alive ? "\(p.hp) of \(p.maxHp) HP, \(p.sp) SP, \(p.potions) potions\(p.shield > 0 ? ", \(p.shield) shield" : "")." : "Down. A potion can revive them."))
         }
-        if let m = model.me, m.alive {
-            // The buttons stay on screen after you choose (dimmed), so
-            // VoiceOver stays on the one you pressed instead of jumping away.
-            let rows = [[Coop.Action.attack, .heavy], [.defend, .potion]]
-            VStack(spacing: 8) {
-                ForEach(0..<rows.count, id: \.self) { r in
-                    HStack(spacing: 8) {
-                        ForEach(rows[r], id: \.self) { a in
-                            let chosen = model.myAction == a
-                            Button(a == .potion ? "\(a.label) (\(m.potions))" : a.label) { model.act(a) }
-                                .buttonStyle(WebButtonStyle(kind: chosen ? .gold : a == .attack || a == .heavy ? .red : .ghost))
-                                .frame(maxWidth: .infinity)
-                                .disabled(model.myAction != nil)
-                                .accessibilityLabel(chosen ? "\(actionLabel(a, m)). Chosen." : actionLabel(a, m))
-                        }
-                    }
-                }
-            }
-            if let a = model.myAction {
-                Text("You chose \(a.label.dropFirst(2)). Waiting for \(model.waitingOn.isEmpty ? "the round" : model.waitingOn.joined(separator: ", "))." as String)
-                    .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
-            }
+        if model.shopOpen {
+            header("THE MERCHANT")
+            Text("Potions are \(Coop.potionPrice) gold each, paid with your own gold. They're added when the next floor starts." as String)
+                .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
+            Button("🧪 Buy a Potion (\(Coop.potionPrice)g)" as String) { model.buyPotion() }
+                .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                .accessibilityLabel("Buy a potion for \(Coop.potionPrice) gold. You have \(game.wallet.gold) gold\(model.bought > 0 ? ", \(model.bought) bought" : "")." as String)
+        } else if let m = model.me, m.alive {
+            actions(m)
         } else {
-            Text("You're down. You get back up on the next floor.").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
+            Text("You're down. A friend can revive you with a potion, or you get back up on the next floor.")
+                .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
         }
         header("WHAT HAPPENED")
         VStack(alignment: .leading, spacing: 3) {
@@ -157,13 +145,54 @@ struct CoopView: View {
         Button("Leave the Run") { model.leave() }.buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
     }
 
-    private func actionLabel(_ a: Coop.Action, _ m: Coop.Player) -> String {
-        switch a {
-        case .attack: return "Attack, \(m.atkLo) to \(m.atkHi) damage"
-        case .heavy: return "Heavy strike, much harder but can miss"
-        case .defend: return "Defend: strike for half and take half"
-        case .potion: return "Potion, heal 40 percent. \(m.potions) left."
+    /// Your buttons: the four basics, your skills, your gun, and team moves
+    /// for each friend. They stay on screen after you choose (dimmed), so
+    /// VoiceOver stays on the one you pressed instead of jumping away.
+    @ViewBuilder private func actions(_ m: Coop.Player) -> some View {
+        let friends = model.party.filter { $0.id != model.myId }
+        VStack(spacing: 8) {
+            HStack(spacing: 8) {
+                actionButton(.attack, "⚔ Attack", "Attack, \(m.atkLo) to \(m.atkHi) damage", .red, m)
+                actionButton(.heavy, "💥 Heavy", "Heavy strike, much harder but can miss", .red, m)
+            }
+            HStack(spacing: 8) {
+                actionButton(.defend, "🛡 Defend", "Defend: strike for half and take half", .ghost, m)
+                actionButton(.potion, "🧪 Potion (\(m.potions))", "Potion, heal 40 percent. \(m.potions) left.", .ghost, m, off: m.potions <= 0)
+            }
+            if !m.skills.isEmpty {
+                header("SKILLS · \(m.sp) of \(m.maxSp) SP")
+                ForEach(m.skills, id: \.id) { sk in
+                    actionButton(.skill(sk.id), "\(sk.icon) \(sk.name) (\(sk.sp) SP)", "\(sk.name), \(sk.sp) SP: \(sk.summary)", .gold, m, off: m.sp < sk.sp)
+                }
+            }
+            if m.hasGun {
+                actionButton(.gun, "🔫 \(m.gunName) (\(m.shots))", "Fire \(m.gunName), \(m.gunLo) to \(m.gunHi) damage. \(m.shots) shots left this fight.", .red, m, off: m.shots <= 0)
+            }
+            if !friends.isEmpty {
+                header("TEAM MOVES")
+                ForEach(friends, id: \.id) { f in
+                    if f.alive {
+                        actionButton(.protect(f.id), "🛡 Protect \(f.name)", "Protect \(f.name): take the enemy's hit for them this round, at half damage", .ghost, m)
+                    } else {
+                        actionButton(.revive(f.id), "💫 Revive \(f.name)", "Revive \(f.name) with one of your potions. \(m.potions) left.", .gold, m, off: m.potions <= 0)
+                    }
+                }
+            }
         }
+        if let a = model.myAction {
+            Text("You chose \(model.name(of: a)). Waiting for \(model.waitingOn.isEmpty ? "the round" : model.waitingOn.joined(separator: ", "))." as String)
+                .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
+        }
+    }
+
+    private func actionButton(_ a: Coop.Action, _ title: String, _ label: String, _ kind: WebButtonStyle.Kind,
+                              _ m: Coop.Player, off: Bool = false) -> some View {
+        let chosen = model.myAction == a
+        return Button(title) { model.act(a) }
+            .buttonStyle(WebButtonStyle(kind: chosen ? .gold : kind))
+            .frame(maxWidth: .infinity)
+            .disabled(model.myAction != nil || off)
+            .accessibilityLabel(chosen ? "\(label). Chosen." : label)
     }
 
     private func bar(_ v: Double, _ c: Color) -> some View {
