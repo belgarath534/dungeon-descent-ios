@@ -56,7 +56,25 @@ final class CoopModel: ObservableObject {
 
     // MARK: Lobby
 
+    /// A fresh run: nothing left from the last room. (After Play Again, the
+    /// next run paid nothing: "rewarded" was still set from the first.)
+    private func resetRun() {
+        rewarded = false
+        roomStatus = "lobby"
+        party = []
+        foe = nil
+        floor = 1
+        round = 0
+        actions = [:]
+        myAction = nil
+        waitingOn = []
+        log = []
+        seenLog = []
+        status = ""
+    }
+
     func host(_ ch: PlayerCharacter, dungeon: String) {
+        resetRun()
         character = ch
         let c = Coop.code(dice: &dice)
         code = c
@@ -84,6 +102,7 @@ final class CoopModel: ObservableObject {
     func join(_ raw: String, _ ch: PlayerCharacter) {
         let c = raw.trimmingCharacters(in: .whitespaces).uppercased()
         guard c.count == 4 else { say("Enter the 4 character room code."); return }
+        resetRun()
         character = ch
         code = c
         room?.observeSingleEvent(of: .value, with: { [weak self] snap in
