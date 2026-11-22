@@ -84,6 +84,8 @@ WHATS_NEW_12_0_2 = {
 • A Descida Infinita agora vai até o nível 50 (parava no 10). Cada nível pede mais XP e continua dando HP, ataque e um ponto de atributo.
 • Modo 3D: o VoiceOver está rápido de novo. A sala em 3D não é desenhada com o VoiceOver ligado, o que fazia o VoiceOver esperar segundos para mover e falar; o som espacial, a Ecolocalização e as direções continuam iguais.""",
 }
+# 12.0.1 never shipped, so 12.0.2's notes carry its fixes too.
+WHATS_NEW_12_0_2 = {k: v + "\n" + WHATS_NEW_12_0_1[k].split("\n", 1)[1] for k, v in WHATS_NEW_12_0_2.items()}
 WHATS_NEW = {"12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
 
 PROMO = {
