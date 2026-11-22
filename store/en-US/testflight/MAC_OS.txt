@@ -1,12 +1,12 @@
-Thanks for testing Dungeon Descent 12.0.2!
+Thanks for testing Dungeon Descent 12.1!
 
 Please try:
-• Endless Descent: it now goes past level 10, up to 50. Keep a run going and check the level keeps rising (and the XP bar shows the next amount).
-• 3D Mode with VoiceOver: moving around and focusing buttons should feel instant, with no multi-second delay before VoiceOver speaks. The spatial sound and Echo-Location should still work.
-• Legacy Mode: characters now go past level 25, up to 50. A Legacy character at 25 or more can still prestige.
-• The Spire: each kill gives XP and you can level up during a climb (+25 max HP, +2 attack). Check the level shows in other modes afterwards.
-• Later dungeons: from Frosthold Abyss on, enemies and bosses are tougher (+15%, and 10% more in each dungeon after). Tell us if it feels too hard or too easy.
-• Level points: spend some in a Legacy run, then start another. They should still be on your stats, with only new points to spend (the Level Points button, while exploring).
-• Merchant: selling several of the same item shows one row with a count.
+• Co-op 2.0 (Multiplayer, Co-op Dungeon): play with a friend on another device. Your real character comes in: gear, level, prestige stars, up to 3 class skills (they cost SP) and your gun. Each floor is two fights, sometimes an elite, and the floor 10 boss changes phase twice and hits everyone when it does. Try Revive (a potion brings a downed friend back) and Protect (take the hit for a friend). Between floors the merchant sells potions for your own gold. You earn gold and XP for your real level.
+• Prestige: prestige a character with a run in progress. It should really go back to level 1, and the old level shouldn't come back.
+• The character list: each character is one button with its own page.
+• Text boxes: the Hide Keyboard button above the keyboard closes it.
+• Lewis: gold amounts read as "ninety five gold".
+
+Note: co-op rooms from 12.1 and 12.0 can't mix. Both players need this build.
 
 Found a bug? Tell us in #dungeon-descent-testers on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.
