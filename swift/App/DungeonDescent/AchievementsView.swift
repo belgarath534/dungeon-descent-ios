@@ -187,7 +187,7 @@ struct AchievementsView: View {
             .overlay(alignment: .leading) { Rectangle().fill(Theme.goldDim).frame(width: 3) }
             .padding(.bottom, 6)
             .accessibilityElement(children: .combine)
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 10, alignment: .top)], spacing: 10) {
+            EagerGrid(columns: [GridItem(.adaptive(minimum: 150), spacing: 10, alignment: .top)], spacing: 10) {
                 ForEach(all.prefix(visible)) { a in achCard(a, earned: unlocked.contains(a.id)) }
             }
             if all.count > visible {

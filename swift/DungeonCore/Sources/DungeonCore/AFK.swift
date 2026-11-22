@@ -107,6 +107,9 @@ public struct AFKRun: Codable, Sendable {
         atk = 28 + jsRound(Double(num("atkBonus")) * 0.7) + (chLevel > 0 ? (chLevel - 1) * 2 : 0)
             + (up["afk-atk-boost"] ?? 0) * 5 + (lvl - 1) + weaponBonus
         def = num("defBonus") + armorBonus
+        // The stat points spent at the end of earlier runs.
+        AFKStats.apply(ch, maxHp: &maxHp, atk: &atk, def: &def)
+        hp = maxHp
         potions = 5 + (up["afk-extra-potion"] ?? 0)
         fightSeconds = (up["afk-slow-fight"] ?? 0) > 0 ? 20 : 15
         level = lvl

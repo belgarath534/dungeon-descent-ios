@@ -22,7 +22,7 @@ struct ObituaryView: View {
                     Text("☠️ Obituary").font(Theme.decorative(17.6)).foregroundStyle(Color(hex: 0xe0c080))
                         .padding(.bottom, 4).accessibilityAddTraits(.isHeader)
                     Text("The fallen. Your deaths and those of players worldwide.")
-                        .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x666666))
+                        .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x909090))
                         .multilineTextAlignment(.center).padding(.bottom, 20)
                     if loading {
                         note("Loading deaths...")
@@ -47,7 +47,7 @@ struct ObituaryView: View {
     }
 
     private func note(_ text: String) -> some View {
-        Text(text).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x555555))
+        Text(text).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x909090))
             .frame(maxWidth: .infinity).padding(20)
     }
 
@@ -56,7 +56,7 @@ struct ObituaryView: View {
         return VStack(alignment: .leading, spacing: 2) {
             Text("☠ \(d.name)" as String).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc4444))
             Text("Floor \(d.floor) · \(d.dungeon)" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x888888))
-            Text("Slain by \(d.killedBy) · \(time)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+            Text("Slain by \(d.killedBy) · \(time)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
         }
         .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)

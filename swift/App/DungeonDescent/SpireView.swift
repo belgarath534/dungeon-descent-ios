@@ -71,7 +71,7 @@ private struct SpireScreens: View {
             Text("Choose Your Champion").font(Theme.cinzel(12)).foregroundStyle(Theme.gold).padding(.top, 14)
                 .accessibilityAddTraits(.isHeader)
             if model.game.characters.isEmpty {
-                Text("Create a character first to enter The Spire.").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x555555))
+                Text("Create a character first to enter The Spire.").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x909090))
             }
             ForEach(Array(model.game.characters.enumerated()), id: \.offset) { i, ch in
                 let on = i == model.characterIndex
@@ -158,7 +158,7 @@ private struct SpireScreens: View {
                         .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
                         .accessibilityLabel("Advance to next floor")
                 } else {
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                    EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                         Button("⚔ Attack") { model.act(.attack) }.buttonStyle(WebButtonStyle(kind: .red))
                             .accessibilityLabel("Attack the enemy")
                         Button("💥 Heavy") { model.act(.heavy) }.buttonStyle(WebButtonStyle(kind: .red))

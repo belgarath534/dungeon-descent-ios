@@ -135,7 +135,7 @@ struct BlacksmithView: View {
     }
 
     private func empty(_ t: String) -> some View {
-        Text(t).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x555555))
+        Text(t).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x909090))
             .padding(12).frame(maxWidth: .infinity, alignment: .leading).overlay(Rectangle().stroke(Color(hex: 0x1a1a1a)))
     }
 
@@ -178,7 +178,7 @@ struct BlacksmithView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("\(item.icon) \(item.name)\((item.level ?? 1) > 1 ? " Lv\(item.level ?? 1)" : "") \(extra)" as String)
                     .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xe0c080))
-                Text(item.desc).font(Theme.crimson(12, italic: true)).foregroundStyle(Color(hex: 0x666666))
+                Text(item.desc).font(Theme.crimson(12, italic: true)).foregroundStyle(Color(hex: 0x909090))
             }
             .accessibilityHidden(true)
             Spacer()

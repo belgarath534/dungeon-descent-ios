@@ -42,7 +42,7 @@ struct LoadingScreen: View {
             VStack(spacing: 0) {
                 Text("A Leo Productions Game")
                     .font(Theme.cinzel(9.3)).tracking(3.2).textCase(.uppercase)
-                    .foregroundStyle(Color(hex: 0x444444))
+                    .foregroundStyle(Color(hex: 0x909090))
                     .padding(.bottom, 28)
                 Text("Dungeon\nDescent")
                     .font(Theme.decorative(38)).multilineTextAlignment(.center)
@@ -53,7 +53,7 @@ struct LoadingScreen: View {
                     .foregroundStyle(Theme.goldDim)
                     .padding(.bottom, 6)
                 Text(verbatim: version)
-                    .font(Theme.cinzel(9.3)).tracking(1.9).foregroundStyle(Color(hex: 0x333333))
+                    .font(Theme.cinzel(9.3)).tracking(1.9).foregroundStyle(Color(hex: 0x909090))
                     .padding(.bottom, 40)
                 GeometryReader { g in
                     ZStack(alignment: .leading) {
@@ -64,7 +64,7 @@ struct LoadingScreen: View {
                 .frame(width: 300, height: 3)
                 Text(Self.tips[tip])
                     .font(Theme.cinzel(9.9).italic()).tracking(1)
-                    .foregroundStyle(Color(hex: 0x444444)).multilineTextAlignment(.center)
+                    .foregroundStyle(Color(hex: 0x909090)).multilineTextAlignment(.center)
                     .frame(minHeight: 20).padding(.top, 14)
                     .id(tip).transition(.opacity)
                 Text("Created by Leo Productions · DDDI Certified")

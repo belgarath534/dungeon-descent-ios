@@ -18,7 +18,7 @@ struct BountyBoardView: View {
                     .buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Back to main menu")
                 Text("The Bounty Board").font(Theme.decorative(22)).foregroundStyle(Color(hex: 0xe0c080)).accessibilityAddTraits(.isHeader)
                 Text("\(refreshes) refreshes remaining today" as String).font(Theme.cinzel(10.4)).tracking(1.5)
-                    .foregroundStyle(Color(hex: 0x555555)).frame(maxWidth: .infinity)
+                    .foregroundStyle(Color(hex: 0x909090)).frame(maxWidth: .infinity)
                 if let a = active {
                     Text("📋 Active: \(a.title) — \(progress) / \(a.count) \(a.progressLabel)" as String)
                         .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x44ff88))
@@ -27,7 +27,7 @@ struct BountyBoardView: View {
                 }
                 if today.isEmpty {
                     Text("No bounties available. Refresh to generate new ones.").font(Theme.cinzel(11))
-                        .foregroundStyle(Color(hex: 0x555555)).frame(maxWidth: .infinity).padding(20)
+                        .foregroundStyle(Color(hex: 0x909090)).frame(maxWidth: .infinity).padding(20)
                 }
                 ForEach(today) { b in card(b) }
                 Button("🔄 Refresh Bounties") { refresh() }
@@ -35,7 +35,7 @@ struct BountyBoardView: View {
                     .disabled(refreshes <= 0).opacity(refreshes <= 0 ? 0.4 : 1)
                     .accessibilityLabel("Refresh bounties. \(refreshes) refreshes remaining today." as String)
                 Text("Completing a bounty rewards gold and trophies. Only one active bounty at a time.")
-                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x333333)).multilineTextAlignment(.center).frame(maxWidth: .infinity)
+                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090)).multilineTextAlignment(.center).frame(maxWidth: .infinity)
                 Divider().background(Color(hex: 0x1a1a1a))
                 Button("🌲 Enter The Hunting Grounds") { router.goTo(.hunting) }
                 .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)

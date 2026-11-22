@@ -242,14 +242,18 @@ struct MainMenuView: View {
             Text("by Leo Productions")
                 .font(Theme.cinzel(10.4))
                 .tracking(2.6)
-                .foregroundStyle(Color(hex: 0x666666))
+                .foregroundStyle(Color(hex: 0x909090))
                 .padding(.top, 2)
                 .padding(.bottom, 10)
             Link(destination: URL(string: "https://discord.gg/3FbYrQysRN")!) {
                 Text("💬 Join our Discord")
                     .font(Theme.cinzel(9.6))
                     .tracking(1.9)
-                    .foregroundStyle(Color(hex: 0x5865F2))
+                    .foregroundStyle(Color(hex: 0x8a93f7))
+                    // Apple's minimum tap target (the audit found it too small).
+                    .frame(minWidth: 44, minHeight: 44)
+                    .padding(.horizontal, 12)
+                    .contentShape(Rectangle())
             }
             .accessibilityLabel("Join the Dungeon Descent Discord server")
             .padding(.bottom, 14)
@@ -694,8 +698,8 @@ struct FamiliarOverlay: View {
             HStack(spacing: 10) {
                 Text("🔒").font(.system(size: 20))
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(sp.label).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x666666))
-                    Text("Locked — " + sp.unlock).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                    Text(sp.label).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x909090))
+                    Text("Locked — " + sp.unlock).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                 }
                 Spacer()
             }
@@ -726,7 +730,7 @@ struct TrophyOverlay: View {
             ScrollView {
                 VStack(spacing: 6) {
                     if list.isEmpty {
-                        Text("No achievements yet. Start playing!").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x444444)).padding(20)
+                        Text("No achievements yet. Start playing!").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x909090)).padding(20)
                     }
                     ForEach(list) { a in
                         HStack(spacing: 10) {
@@ -806,7 +810,7 @@ struct OnlineCount: View {
     var body: some View {
         let n = presence.online
         Text(n > 0 ? "⚔ \(n) player\(n == 1 ? "" : "s") online" : " ")
-            .font(Theme.cinzel(8.8)).tracking(1).foregroundStyle(Color(hex: 0x444444))
+            .font(Theme.cinzel(8.8)).tracking(1).foregroundStyle(Color(hex: 0x909090))
             .accessibilityLabel("\(n) players currently online" as String)
             .accessibilityHidden(n == 0)
     }

@@ -118,6 +118,13 @@ print(f"{platform} {version}: {state}")
 if state not in ("PREPARE_FOR_SUBMISSION", "READY_FOR_REVIEW", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED"):
     sys.exit(f"It's {state}, nothing to do.")
 source = version_of("IOS")
+# The iPhone version itself: copy from the iPhone version before it (a new
+# 12.0.1 starts without App Review details).
+if platform == "IOS" or not source:
+    for v in call("GET", f"/apps/{app}/appStoreVersions", params={"filter[platform]": "IOS", "limit": 5})["data"]:
+        if v["id"] != target["id"]:
+            source = v
+            break
 
 # 1. Copyright
 if not target["attributes"].get("copyright") and source and source["attributes"].get("copyright"):
@@ -180,6 +187,12 @@ if count == 0:
 if not submit:
     print("Check only (SUBMIT is not yes): ready to submit.")
     sys.exit(0)
+
+# Released as soon as it's approved.
+if target["attributes"].get("releaseType") != "AFTER_APPROVAL":
+    call("PATCH", f"/appStoreVersions/{target['id']}", json={"data": {"type": "appStoreVersions", "id": target["id"],
+         "attributes": {"releaseType": "AFTER_APPROVAL"}}})
+    print("Release: as soon as it's approved")
 
 # 3. Send to App Review
 # Screenshots that were just uploaded need a few minutes of processing first.

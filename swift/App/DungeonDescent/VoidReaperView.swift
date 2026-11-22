@@ -233,7 +233,7 @@ struct VoidReaperView: View {
 
     private func bossInfo(_ s: VoidReaper.State) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("WORLD BOSS — ALL PLAYERS").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Color(hex: 0x555555))
+            Text("WORLD BOSS — ALL PLAYERS").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Color(hex: 0x909090))
             bar(Double(s.currentHp) / Double(s.totalHp), Color(hex: 0x6666ff))
             Text("\(s.currentHp.formatted()) / \(s.totalHp.formatted()) HP" as String).font(Theme.cinzel(12)).foregroundStyle(blue)
             Text("\(s.hoursLeft(now: VoidReaperLive.now))h remaining · \(s.killCount) strikes · each strike deals \(VoidReaper.playerDamage) damage" as String)
@@ -295,7 +295,7 @@ struct VoidReaperView: View {
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("Your HP \(f.hp) of \(f.maxHp). \(f.potions) potions." as String)
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+            EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                 Button("⚔ Attack") { swing(.attack) }.buttonStyle(WebButtonStyle(kind: .red)).disabled(busy)
                     .accessibilityLabel("Attack, \(VoidReaper.playerDamage) damage to the shared boss" as String)
                 Button("💥 Heavy") { swing(.heavy) }.buttonStyle(WebButtonStyle(kind: .red)).disabled(busy)

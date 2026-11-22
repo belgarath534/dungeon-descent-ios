@@ -73,12 +73,12 @@ struct HighScoreView: View {
                 }
             case "leaderboard":
                 Text("GLOBAL TOP 20")
-                    .font(Theme.cinzel(9.6)).tracking(2.9).foregroundStyle(Color(hex: 0x666666))
+                    .font(Theme.cinzel(9.6)).tracking(2.9).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity).padding(.bottom, 12)
                 leaderboardList
             default:
                 Text("MESSAGES FROM THE DEVELOPER")
-                    .font(Theme.cinzel(9.6)).tracking(2.9).foregroundStyle(Color(hex: 0x666666))
+                    .font(Theme.cinzel(9.6)).tracking(2.9).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity).padding(.bottom, 12)
                 inboxList
             }

@@ -220,6 +220,10 @@ final class AFKModel: ObservableObject {
         if r.level >= 10 && r.floor >= 50 { a.setMax("afkLevel10Floor50", 1) }
         a.check()
         savePersistentLevel(r)
+        // One stat point for every level gained, spent on the summary.
+        if game.characters.indices.contains(r.charIndex), game.characters[r.charIndex].name == r.charName {
+            game.updateCharacter(r.charIndex) { AFKStats.earn(r.levelsGainedThisRun, &$0) }
+        }
         game.store.removeItem(Self.saveKey)
         game.saveNow()
         AFKLiveActivity.end(r)
@@ -244,12 +248,37 @@ final class AFKModel: ObservableObject {
     private func savePersistentLevel(_ r: AFKRun) {
         guard game.characters.indices.contains(r.charIndex), game.characters[r.charIndex].name == r.charName else { return }
         game.updateCharacter(r.charIndex) { ch in
-            ch.persistLevel = r.level
+            // Never lower: a level from the dungeon or Legacy can be above
+            // Endless Descent's own cap of 10.
+            ch.persistLevel = max(ch.persistLevel ?? 1, r.level)
             ch.extra["persistXp"] = .number(Double(r.xp))
             ch.extra["persistSkills"] = .array(r.skills.map { .string($0) })
             ch.extra["persistMaxHp"] = .number(Double(r.maxHp))
             ch.extra["persistAtk"] = .number(Double(r.atk - 20))
         }
+    }
+
+    // MARK: Stat points (12.0.1)
+
+    /// The character the stat points belong to: the run's, or the one picked.
+    var statsIndex: Int? {
+        let i = run?.charIndex ?? picked
+        return game.characters.indices.contains(i) ? i : nil
+    }
+
+    var trained: AFKStats.Trained {
+        statsIndex.map { AFKStats.trained(game.characters[$0]) } ?? AFKStats.Trained()
+    }
+
+    func train(_ s: AFKStats.Stat) {
+        guard let i = statsIndex else { return }
+        var ok = false
+        game.updateCharacter(i) { ok = AFKStats.spend(s, &$0) }
+        guard ok else { Feedback.announce("No stat points left."); return }
+        objectWillChange.send()
+        Sound.sfx("sfx-select")
+        let t = trained
+        Feedback.announce("\(s.spoken) for every Endless run. \(t.points) point\(t.points == 1 ? "" : "s") left.")
     }
 
     var skillsToChoose: Int { min(run?.levelsGainedThisRun ?? 0, skillChoices.count) }
@@ -271,7 +300,9 @@ final class AFKModel: ObservableObject {
         guard let r = run else { phase = .setup; return }
         phase = .summary
         Sound.track("menu")
-        Feedback.announce("Run ended. Floor \(r.floor) reached. Level \(r.level). \(r.levelsGainedThisRun) levels gained. \(r.points) descent points earned. Your progress is saved and carries into all game modes.")
+        let pts = trained.points
+        Feedback.announce("Run ended. Floor \(r.floor) reached. Level \(r.level). \(r.levelsGainedThisRun) levels gained. \(r.points) descent points earned. Your progress is saved and carries into all game modes."
+                          + (pts > 0 ? " You have \(pts) stat point\(pts == 1 ? "" : "s") to spend below." : ""))
     }
 
     // MARK: Shop

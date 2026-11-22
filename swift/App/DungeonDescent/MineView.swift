@@ -293,7 +293,7 @@ private struct MineScreens: View {
             status
             Text("Choose a character to send into the mine:").font(Theme.cinzel(11)).foregroundStyle(Theme.textSecondary)
             if model.game.characters.isEmpty {
-                Text("No characters yet. Create one first from the main menu.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x555555))
+                Text("No characters yet. Create one first from the main menu.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x909090))
             }
             ForEach(Array(model.game.characters.enumerated()), id: \.offset) { i, ch in
                 Button("⚔ \(ch.name) — \(ch.cls) · \(ch.race)" as String) { model.start(i) }
@@ -407,7 +407,7 @@ private struct MineScreens: View {
                 }
                 Button("Cancel") { model.choosingSkill = false }.buttonStyle(WebButtonStyle(kind: .ghost))
             } else {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                     Button("⚔ Attack") { model.act(.attack) }.buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Attack enemy")
                     Button("💥 Heavy") { model.act(.heavy) }.buttonStyle(WebButtonStyle(kind: .gold))
                         .accessibilityLabel("Heavy strike, high damage but enemy hits back harder")
@@ -452,7 +452,7 @@ private struct MineScreens: View {
                 if !h.potions.isEmpty { row("🧪 Potions → Items", "+\(h.potions.count)") }
                 ForEach(h.parts.sorted(by: { $0.key < $1.key }), id: \.key) { p, n in row("🔩 \(Mine.partNames[p] ?? p)", "+\(n)") }
                 if h.herbs > 0 { row("🌿 Alchemy Herbs", "+\(h.herbs)") }
-                if h.isEmpty { Text("Nothing found this run.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x444444)) }
+                if h.isEmpty { Text("Nothing found this run.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x909090)) }
                 if h.defeated { Text("Hand items lost on defeat.").font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x886666)) }
             }
             .padding(14).frame(maxWidth: .infinity, alignment: .leading)

@@ -1,12 +1,15 @@
-Thanks for testing Dungeon Descent 12.0!
+Thanks for testing Dungeon Descent 12.0.1!
 
-New, please try:
-• The new main menu: tabs along the bottom (Play, Modes, Multiplayer, More, Settings). Settings, Gameplay, Classic Menu brings back the old list.
-• Co-op Dungeon (Multiplayer tab): ten floors with up to three friends, on the web and the apps together. Share the 4-letter room code.
-• Battle Pass: 50 tiers earned by playing, never bought, with five new quests every Monday.
-• Prestige: a character at their level cap can start over for a permanent star (on the character's card).
-• Cloud sync: your whole save travels between the web and the apps. Sign in on both and play on one, then open the other.
-• Hunting Grounds, remade: track beasts by sound (Listen, Search for Tracks, walk or sneak), today's three bounties and five legends. The new narrator, Lewis (Alex in Portuguese), needs no account. Best with headphones.
-• Audio Map (in the dungeon): plays the floor as sounds around you. Best with headphones; try it in 3D Mode too.
-• Portuguese: the whole game should now be in Portuguese. Developer Tools, Missing Portuguese records anything still in English.
-• Apple Watch: a new home screen with World Boss strikes, the Battle Pass, the daily reward and Quick Fight (turn the Digital Crown to pick a move). Wrist Alerts tap you for low HP, elites, the hunter and your co-op turn while you play on the iPhone with the watch app open. Siri on the watch, and new complications: Endless Descent, Daily Streak and the Battle Pass.
+New: Endless Descent stat points. Gain a level or two in an Endless run, end it, and spend the points on the summary (HP, attack or defense). Start another run: your HP and attack should be higher.
+
+Fixed, please try:
+• Lewis Voice Pack: numbers. Floors 21 to 29 should be "twenty one" and so on, and big numbers like 3,082 gold "three thousand eighty two".
+• Legacy Mode: level up a Legacy character, then die or leave the run. The level should stay.
+• Prestige: prestiging a character crashed the game. Prestige a max-level character and check you get the star, the gold and the Mystery Coin.
+• Co-op: VoiceOver no longer jumps around during a fight. The action buttons stay on screen after you choose (the chosen one is marked) until the next round.
+• VoiceOver no longer jumps to the top after pressing buttons at Home (all its tabs), in the Gun Workshop and Gun Shop, the Arcane Shop, and the Command Center switch in Settings.
+• VoiceOver keeps its place on the dungeon's fight buttons, the Mine, Spire, Siege and other button grids, and on the merchant after buying (the Buy button now stays, as Sold).
+• Co-op: play two runs in a row with Play Again; the second should pay gold and Battle Pass progress too.
+• The merchant at night (8 PM to 8 AM): the crossed-out price should be the daytime price.
+
+Found a bug? Tell us in #dungeon-descent-testers on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.

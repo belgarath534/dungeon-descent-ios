@@ -195,7 +195,7 @@ struct WebSettingsView: View {
             title("🔊 Audio")
             volumeRow("Music", on: $musicOn, volume: $musicVolume, toggleLabel: "Music toggle", volumeLabel: "Music volume")
             Text("📱 On iPhone, use your device volume buttons to control audio levels.")
-                .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x666666)).padding(.bottom, 14)
+                .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x909090)).padding(.bottom, 14)
             divider
             volumeRow("Sound Effects", on: $sfxOn, volume: $sfxVolume, toggleLabel: "Sound effects toggle", volumeLabel: "Sound effects volume")
             divider
@@ -297,7 +297,7 @@ struct WebSettingsView: View {
                    isOn: Binding(get: { game.store.getItem("dd_command_center") != "off" },
                                  set: { game.store.setItem("dd_command_center", $0 ? "on" : "off"); refreshCommandCenter.toggle() }),
                    label: "Command Center toggle")
-                .id(refreshCommandCenter)
+            let _ = refreshCommandCenter
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Repair Dungeon Unlocks").font(Theme.cinzel(12)).foregroundStyle(Theme.ashLight)

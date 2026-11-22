@@ -5178,3 +5178,81 @@ final class EarnedTitleTests: XCTestCase {
         XCTAssertFalse(Titles.listed(MemoryStore()).map(\.tag).contains("Gauntlet Champion"))
     }
 }
+
+final class RosterReentryTests: XCTestCase {
+    /// Prestige pays gold inside the update, and the wallet's refresh reads
+    /// the roster: that used to crash (simultaneous access).
+    func testUpdateCanReadTheRosterWhileChanging() {
+        let store = MemoryStore()
+        let roster = CharacterRoster(store: store)
+        _ = roster.add(PlayerCharacter(name: "Ana", cls: "Monk", race: "Elf", prof: "Thief",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var seen = 0
+        roster.update(0) { ch in
+            ch.persistLevel = 7
+            seen = roster.characters.count
+        }
+        XCTAssertEqual(seen, 1)
+        XCTAssertEqual(roster.characters[0].persistLevel, 7)
+    }
+}
+
+final class LegacyLevelTests: XCTestCase {
+    /// Levels reached in a Legacy run are kept at once, before any clear or death.
+    func testLegacyKeepsLevelAsItIsReached() {
+        var ch = PlayerCharacter(name: "Ana", cls: "Monk", race: "Elf", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer, runMode: "legacy")
+        var run = Run(character: ch)
+        run.level = 4
+        XCTAssertTrue(Legacy.keepLevel(&ch, run: run))
+        XCTAssertEqual(ch.persistLevel, 4)
+        run.level = 3
+        XCTAssertFalse(Legacy.keepLevel(&ch, run: run), "never goes down")
+        XCTAssertEqual(ch.persistLevel, 4)
+        var classic = PlayerCharacter(name: "Bo", cls: "Monk", race: "Elf", prof: "Thief",
+                                      dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        run.level = 6
+        XCTAssertFalse(Legacy.keepLevel(&classic, run: run), "Classic runs start fresh")
+    }
+}
+
+final class AFKStatsTests: XCTestCase {
+    func testPointsAreEarnedSpentAndAddedToTheNextRun() {
+        var ch = PlayerCharacter(name: "Ana", cls: "Monk", race: "Elf", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        let before = AFKRun(character: ch, index: 0, save: AFKSave(raw: [:]), weapon: nil, armor: nil, now: 0)
+        AFKStats.earn(3, &ch)
+        XCTAssertEqual(AFKStats.trained(ch).points, 3)
+        XCTAssertTrue(AFKStats.spend(.hp, &ch))
+        XCTAssertTrue(AFKStats.spend(.atk, &ch))
+        XCTAssertTrue(AFKStats.spend(.def, &ch))
+        XCTAssertFalse(AFKStats.spend(.hp, &ch), "no points left")
+        let after = AFKRun(character: ch, index: 0, save: AFKSave(raw: [:]), weapon: nil, armor: nil, now: 0)
+        XCTAssertEqual(after.maxHp, before.maxHp + 20)
+        XCTAssertEqual(after.hp, after.maxHp)
+        XCTAssertEqual(after.atk, before.atk + 2)
+        XCTAssertEqual(after.def, before.def + 1)
+        // It survives saving the character the web version's way.
+        let back = try? JSONDecoder().decode(PlayerCharacter.self, from: JSONEncoder().encode(ch))
+        XCTAssertEqual(back.map { AFKStats.trained($0) }, AFKStats.trained(ch))
+    }
+}
+
+final class SpeechTextTests: XCTestCase {
+    func testNumbersAreSpelledTheWayPeopleSayThem() {
+        XCTAssertEqual(SpeechText.spellNumbers("Floor 21"), "Floor twenty one")
+        XCTAssertEqual(SpeechText.spellNumbers("You have 3,082 gold."), "You have three thousand eighty two gold.")
+        XCTAssertEqual(SpeechText.spellNumbers("3082"), "three thousand eighty two")
+        XCTAssertEqual(SpeechText.spellNumbers("Floors 21 through 29"), "Floors twenty one through twenty nine")
+        XCTAssertEqual(SpeechText.spellNumbers("40% off"), "forty percent off")
+        XCTAssertEqual(SpeechText.spellNumbers("the 2nd and 23rd floor"), "the second and twenty third floor")
+        XCTAssertEqual(SpeechText.spellNumbers("HP 0 of 1,000,000"), "HP zero of one million")
+        XCTAssertEqual(SpeechText.spellNumbers("x1.5 damage"), "x one point five damage")
+        XCTAssertEqual(SpeechText.spellNumbers("Floor 1800"), "Floor one thousand eight hundred")
+        XCTAssertEqual(SpeechText.spellNumbers("Level 10, -5 HP"), "Level ten, minus five HP")
+        XCTAssertEqual(SpeechText.spellNumbers("Wave 105"), "Wave one hundred five")
+        XCTAssertEqual(SpeechText.spellNumbers("Lv5 Monk"), "Lv five Monk")
+        XCTAssertEqual(SpeechText.spellNumbers("Deals 20-35 damage"), "Deals twenty to thirty five damage")
+        XCTAssertEqual(SpeechText.spellNumbers("No numbers here."), "No numbers here.")
+    }
+}

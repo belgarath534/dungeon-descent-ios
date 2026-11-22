@@ -130648,6 +130648,105 @@
           }
         }
       }
+    },
+    "❤️ +20 Max HP": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "❤️ +20 de HP Máximo"
+          }
+        }
+      }
+    },
+    "⚔️ +2 Attack": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚔️ +2 de Ataque"
+          }
+        }
+      }
+    },
+    "🛡 +1 Defense": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🛡 +1 de Defesa"
+          }
+        }
+      }
+    },
+    "20 more max HP": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "20 de HP máximo a mais"
+          }
+        }
+      }
+    },
+    "2 more attack": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2 de ataque a mais"
+          }
+        }
+      }
+    },
+    "1 more defense": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 de defesa a mais"
+          }
+        }
+      }
+    },
+    "One point for every level gained. Each one makes this character stronger in every Endless run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um ponto para cada nível ganho. Cada um deixa este personagem mais forte em todas as partidas da Descida Infinita."
+          }
+        }
+      }
+    },
+    "No stat points left.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sem pontos de atributo."
+          }
+        }
+      }
+    },
+    "No points left.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sem pontos restantes."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

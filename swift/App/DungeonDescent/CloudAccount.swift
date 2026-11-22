@@ -303,7 +303,14 @@ final class CloudAccount: NSObject, ObservableObject {
             }
             let store = game.store
             let savedAt = (cloud["savedAt"] as? NSNumber)?.doubleValue ?? 0
-            let last = CloudSync.number(store.getItem(CloudSync.lastKey))
+            var last = CloudSync.number(store.getItem(CloudSync.lastKey))
+            // The newest cloud save is this device's own (its note of having
+            // sent it can be lost when iOS freezes the app right after the
+            // upload): nobody else changed it, so never ask about it.
+            if savedAt > last, (cloud["savedDevice"] as? String) == Self.deviceId {
+                last = savedAt
+                store.setItem(CloudSync.lastKey, String(Int(savedAt)))
+            }
             var dirty = CloudSync.number(store.getItem(CloudSync.dirtyKey))
             // Nothing played here yet: there's nothing to lose.
             if game.characters.isEmpty && last == 0 { dirty = 0 }
@@ -326,6 +333,15 @@ final class CloudAccount: NSObject, ObservableObject {
         } catch {
             if launch { message = "Couldn't reach your cloud save." }
         }
+    }
+
+    /// This install's id, kept outside the save (so it never syncs): which
+    /// device wrote a cloud save.
+    static var deviceId: String {
+        if let id = UserDefaults.standard.string(forKey: "swift_device_id") { return id }
+        let id = UUID().uuidString
+        UserDefaults.standard.set(id, forKey: "swift_device_id")
+        return id
     }
 
     /// The choice when both have a save.
@@ -393,10 +409,15 @@ final class CloudAccount: NSObject, ObservableObject {
             data["full"] = full
             data["savedAt"] = savedAt
             data["savedBy"] = Self.platform
+            data["savedDevice"] = Self.deviceId
         }
         do {
             try await db.collection("saves").document(uid).setData(data, merge: true)
-            if data["full"] != nil { store.setItem(CloudSync.lastKey, String(Int(savedAt))) }
+            if data["full"] != nil {
+                store.setItem(CloudSync.lastKey, String(Int(savedAt)))
+                // Written to disk now: the app is often frozen right after.
+                game?.saveNow()
+            }
             lastAutoSync = Date()
             if !silent { say("✓ Synced to cloud! Your save data is backed up.", color: 0x44ff88) }
         } catch {

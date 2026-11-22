@@ -31,7 +31,7 @@ struct AccountPanel: View {
             .accessibilityElement(children: .combine)
             .padding(.bottom, 20)
 
-            Text("☁ ACCOUNT").font(Theme.cinzel(9.6)).tracking(3.8).foregroundStyle(Color(hex: 0x555555))
+            Text("☁ ACCOUNT").font(Theme.cinzel(9.6)).tracking(3.8).foregroundStyle(Color(hex: 0x909090))
                 .padding(.bottom, 16).accessibilityAddTraits(.isHeader)
 
             Text(cloud.signedIn ? "Signed in" : "Not signed in — saving on this device")
@@ -102,7 +102,7 @@ struct AccountPanel: View {
                 await cloud.signInWithApple()
             }
             Button("Forgot password?") { Task { await cloud.resetPassword(email: email) } }
-                .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).underline()
+                .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090)).underline()
                 .padding(8)
                 .accessibilityLabel("Forgot password")
         }
@@ -203,7 +203,7 @@ struct TitlePicker: View {
                 Button("🪙 \(cost)" as String) { buy(tag, cost) }.buttonStyle(SmallGhostStyle(color: Color(hex: 0xffdd44)))
                     .accessibilityLabel("Buy title \(tag) for \(cost) mystery coins" as String)
             } else {
-                Text("🪙 \(cost)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x444444))
+                Text("🪙 \(cost)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
                     .accessibilityLabel("\(tag) costs \(cost) mystery coins, not enough coins" as String)
             }
         }

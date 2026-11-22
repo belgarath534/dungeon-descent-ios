@@ -77,7 +77,7 @@ struct ChallengesView: View {
     private func characters(_ selected: Binding<Int>, label: String) -> some View {
         VStack(spacing: 8) {
             if game.characters.isEmpty {
-                Text("No characters. Create one first.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x555555))
+                Text("No characters. Create one first.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x909090))
             }
             ForEach(Array(game.characters.enumerated()), id: \.offset) { i, c in
                 Button("\(c.name) — \(c.cls) (Lv \(c.persistLevel ?? 1))" as String) {
@@ -99,9 +99,9 @@ struct ChallengesView: View {
             box {
                 Text("All 6 Dungeons. One Life.").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xe0c080))
                 Text("Enter the Gauntlet and face all six dungeons back to back without rest. No healing between dungeons. No second chances. Clear all 60 floors or fall trying.")
-                    .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666)).lineSpacing(4)
+                    .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090)).lineSpacing(4)
                 Text("Reward: The Gauntlet Champion title and exclusive achievement.")
-                    .font(Theme.crimson(10, italic: true)).foregroundStyle(Color(hex: 0x444444))
+                    .font(Theme.crimson(10, italic: true)).foregroundStyle(Color(hex: 0x909090))
             }
             characters($gauntletChar, label: "Select a character for the Gauntlet")
             Button("⚔ Enter the Gauntlet") { start(.gauntlet, gauntletChar) }
@@ -119,7 +119,7 @@ struct ChallengesView: View {
                 ForEach(daily.mods, id: \.id) { m in
                     Text("⚡ \(m.name) — \(m.desc)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaaaaaa))
                 }
-                Text("Resets at midnight.").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444))
+                Text("Resets at midnight.").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
             }
             Text(Challenges.todaysBest(game.store).map { "Today completed! Best time: \($0). Come back tomorrow." } ?? "Not yet completed today.")
                 .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xaaaaaa))
@@ -140,7 +140,7 @@ struct ChallengesView: View {
                     Text("⚡ \(m.name) — \(m.desc)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaaaaaa))
                 }
                 Text("One life. Score: 100 a floor, 5 a kill, 2000 for the boss. Starts over every Monday.")
-                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
             }
             Text("Your best this week: \(Challenges.weeklyBest(game.store))" as String)
                 .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xaaaaaa))

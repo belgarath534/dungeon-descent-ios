@@ -10,9 +10,11 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "12.0")
+VERSION = os.environ.get("VERSION", "12.0.1")
+# Only these platforms (store-submit-ios: "IOS").
+PLATFORMS = os.environ.get("PLATFORMS", "IOS MAC_OS VISION_OS").split()
 
-WHATS_NEW = {
+WHATS_NEW_12_0 = {
     "en-US": """New in 12.0, The Legends Update:
 • Co-op Dungeon: fight through ten floors with up to three friends, on iPhone, Mac, Apple Vision Pro and the web together. Share a 4-letter room code.
 • A new main menu with tabs along the bottom: Play, Modes, Multiplayer, More and Settings. Prefer the old list? Settings, Gameplay, Classic Menu.
@@ -42,6 +44,38 @@ WHATS_NEW = {
 • O Game Center está na aba Multijogador.
 • Correções: o rotor do VoiceOver não volta mais para Ações na masmorra, espíritos forjados aparecem ao criar um personagem e o título Campeão do Desafio agora é concedido.""",
 }
+# 12.0.1: fixes only; What's New lists them.
+WHATS_NEW_12_0_1 = {
+    "en-US": """12.0.1:
+• New in Endless Descent: stat points. Every level gained in a run gives a point to spend on +20 max HP, +2 attack or +1 defense, kept for every Endless run.
+Fixes:
+• Lewis now says numbers right: "twenty-one", "three thousand eighty-two", "forty percent" (he said "floor one" for floor 21, and "three eighty-two" for 3,082).
+• Prestige no longer crashes the game. If it crashed for you, your character is safe: prestige again.
+• Legacy characters now keep every level the moment they reach it, even if they die or leave the run.
+• Co-op: VoiceOver no longer jumps around during a fight, and your action buttons stay on screen after you choose.
+• VoiceOver no longer jumps to the top after pressing buttons at Home, in the Gun Workshop and Gun Shop, the Arcane Shop and the Command Center switch.
+• VoiceOver keeps its place on the fight buttons, in the Mine, the Spire, the Siege and other modes' button grids, and on the merchant after you buy.
+• Co-op: Play Again now pays your gold and Battle Pass progress for every run, not just the first.
+• The merchant's night discount now shows the right "before" price (the daytime price with your run's modifiers).
+• A run no longer crashes if a cloud save with fewer characters loads while you play.
+• "Choose a save" no longer appears when you only play on one device.
+• Easier to read: dim text and gold are brighter, and the Discord link is easier to tap.""",
+    "pt-BR": """12.0.1:
+• Novo na Descida Infinita: pontos de atributo. Cada nível ganho numa partida dá um ponto para gastar em +20 de HP máximo, +2 de ataque ou +1 de defesa, guardado para todas as partidas da Descida Infinita.
+Correções:
+• O Lewis agora fala os números certo: "twenty-one", "three thousand eighty-two" (ele dizia "floor one" no andar 21 e "three eighty-two" para 3.082).
+• O Prestígio não trava mais o jogo. Se travou para você, seu personagem está a salvo: faça o Prestígio de novo.
+• Personagens do Modo Legado agora guardam cada nível assim que o alcançam, mesmo se morrerem ou saírem da partida.
+• Cooperativo: o VoiceOver não pula mais pela tela durante a luta, e seus botões de ação continuam na tela depois que você escolhe.
+• O VoiceOver não volta mais para o topo depois de tocar em botões na Casa, na Oficina e na Loja de Armas, na Loja Arcana e na opção da Central de Comando.
+• O VoiceOver não perde mais o lugar nos botões de luta, nas grades de botões da Mina, da Torre, do Cerco e de outros modos, e no mercador depois de comprar.
+• Cooperativo: Jogar de Novo agora paga seu ouro e o progresso do Passe de Batalha em todas as partidas, não só na primeira.
+• O desconto noturno do mercador agora mostra o preço "antes" certo (o preço do dia com os modificadores da sua partida).
+• Uma partida não trava mais se um salvamento na nuvem com menos personagens carregar enquanto você joga.
+• "Escolha um salvamento" não aparece mais quando você joga em um só aparelho.
+• Mais fácil de ler: textos apagados e dourados estão mais claros, e o link do Discord é mais fácil de tocar.""",
+}
+WHATS_NEW = WHATS_NEW_12_0_1 if VERSION == "12.0.1" else WHATS_NEW_12_0
 PROMO = {
     "en-US": "New in 12.0: play together. Co-op dungeons with friends on iPhone, Mac, Vision Pro and the web, a Battle Pass, and hunting by sound.",
     "pt-BR": "Novo na 12.0: jogue junto. Masmorras cooperativas com amigos no iPhone, Mac, Vision Pro e web, Passe de Batalha e caça pelo som.",
@@ -83,7 +117,7 @@ def notes(platform, locale):
 
 
 app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
-for platform in ("IOS", "MAC_OS", "VISION_OS"):
+for platform in PLATFORMS:
     found = call("GET", f"/apps/{app}/appStoreVersions",
                  params={"filter[platform]": platform, "filter[versionString]": VERSION})
     if found is None:
@@ -111,4 +145,4 @@ for platform in ("IOS", "MAC_OS", "VISION_OS"):
 if problems:
     print(f"\n{len(problems)} step(s) didn't go through; see the ⚠️ lines above.")
     sys.exit(1)
-print(f"\nVersion {VERSION} is ready on all three platforms.")
+print(f"\nVersion {VERSION} is ready on {', '.join(PLATFORMS)}.")

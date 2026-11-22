@@ -167,7 +167,14 @@ public final class CharacterRoster {
 
     public func update(_ index: Int, _ change: (inout PlayerCharacter) -> Void) {
         guard characters.indices.contains(index) else { return }
-        change(&characters[index])
+        // On a copy, written back after: the change can pay gold, and the
+        // wallet's refresh reads the roster. Changing characters[index] in
+        // place meant two accesses at once, which Swift stops with a crash
+        // (Prestige crashed the game in 12.0).
+        var ch = characters[index]
+        change(&ch)
+        guard characters.indices.contains(index) else { return }
+        characters[index] = ch
         save()
     }
 

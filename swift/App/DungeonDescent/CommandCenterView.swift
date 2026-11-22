@@ -29,7 +29,7 @@ struct CommandCenterView: View {
         WebScreen {
             ScreenHeader(title: "⌨️ Command Center")
             Text("Type a command or tap the mic to speak. Type help to see all commands.")
-                .font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x666666))
+                .font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x909090))
             HStack(spacing: 8) {
                 TextField("Type a command...", text: $input)
                     .textInputAutocapitalization(.never).autocorrectionDisabled()
@@ -66,7 +66,7 @@ struct CommandCenterView: View {
                 .onChange(of: lines.count) { n in withAnimation { proxy.scrollTo(n - 1, anchor: .bottom) } }
                 .accessibilityLabel("Command output")
             }
-            Text("QUICK COMMANDS").font(Theme.cinzel(9.3)).tracking(2.8).foregroundStyle(Color(hex: 0x555555)).padding(.top, 4)
+            Text("QUICK COMMANDS").font(Theme.cinzel(9.3)).tracking(2.8).foregroundStyle(Color(hex: 0x909090)).padding(.top, 4)
             FlowRow(spacing: 6) {
                 ForEach(Self.quick.indices, id: \.self) { i in
                     let q = Self.quick[i]

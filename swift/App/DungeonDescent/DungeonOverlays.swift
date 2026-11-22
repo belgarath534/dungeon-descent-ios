@@ -52,12 +52,12 @@ struct ShopOverlay: View {
 
     var body: some View {
         let run = model.run
-        let night = model.hour >= 20 || model.hour < 8
+        let night = model.shopDiscountOn
         DungeonDialog {
             Text("⚗ The Wandering Merchant").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
                 .padding(.bottom, 2).accessibilityAddTraits(.isHeader)
             Text("A hooded figure crouches in the stairwell, wares spread on a ragged cloth.")
-                .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Color(hex: 0x555555)).padding(.bottom, 10)
+                .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Color(hex: 0x909090)).padding(.bottom, 10)
             Text("💰 \(run.gold)g\(night ? "  🌙 Night Discount Active" : "")" as String)
                 .font(Theme.cinzel(12.8)).tracking(1.3).foregroundStyle(Color(hex: 0xffdd44))
                 .padding(.vertical, 8).padding(.horizontal, 14)
@@ -97,15 +97,16 @@ struct ShopOverlay: View {
     private func row(_ entry: Inventory.ShopItem, gold: Int, night: Bool) -> some View {
         let item = entry.item
         let price = model.price(entry)
+        let full = model.dayPrice(entry)
         let afford = gold >= price
         return HStack(spacing: 12) {
             Text(item.icon).font(.system(size: 24)).frame(width: 36).accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 4) {
                     Text(item.name).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xccaa66))
-                    if entry.sold { Text("[SOLD]").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555)) }
+                    if entry.sold { Text("[SOLD]").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090)) }
                 }
-                Text(item.desc).font(Theme.crimson(10.4, italic: true)).foregroundStyle(Color(hex: 0x555555)).lineSpacing(2)
+                Text(item.desc).font(Theme.crimson(10.4, italic: true)).foregroundStyle(Color(hex: 0x909090)).lineSpacing(2)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityHidden(!entry.sold)
@@ -113,8 +114,8 @@ struct ShopOverlay: View {
                 Group {
                     if entry.sold {
                         Text("—")
-                    } else if night, let full = item.cost, full != price {
-                        Text("\(full)g" as String).strikethrough().foregroundColor(Color(hex: 0x555555)).font(Theme.cinzel(10.4))
+                    } else if night, full > price {
+                        Text("\(full)g" as String).strikethrough().foregroundColor(Color(hex: 0x909090)).font(Theme.cinzel(10.4))
                             + Text(" 🌙\(price)g" as String).foregroundColor(Color(hex: 0x6ab0f0))
                     } else {
                         Text("\(price)g" as String)
@@ -123,15 +124,16 @@ struct ShopOverlay: View {
                 .font(Theme.cinzel(12.5, weight: .bold))
                 .foregroundStyle(afford || entry.sold ? Theme.gold : Color(hex: 0xcc4444))
                 .accessibilityHidden(true)
-                if !entry.sold {
-                    Button(afford ? "Buy" : "Too costly") { model.buy(entry.id) }
-                        .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xcc9944))
-                        .padding(.vertical, 5).padding(.horizontal, 12)
-                        .background(Color(hex: 0x0d0900)).overlay(Rectangle().stroke(Color(hex: 0x886622)))
-                        .opacity(afford ? 1 : 0.3)
-                        .disabled(!afford)
-                        .accessibilityLabel("\(item.name). \(item.desc). Cost: \(price) gold.\(afford ? " Press to buy." : " Cannot afford.")" as String)
-                }
+                // Stays after buying (as "Sold"), so VoiceOver stays on it
+                // instead of jumping away when the button disappears.
+                Button(entry.sold ? "Sold" : afford ? "Buy" : "Too costly") { model.buy(entry.id) }
+                    .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xcc9944))
+                    .padding(.vertical, 5).padding(.horizontal, 12)
+                    .background(Color(hex: 0x0d0900)).overlay(Rectangle().stroke(Color(hex: 0x886622)))
+                    .opacity(afford && !entry.sold ? 1 : 0.3)
+                    .disabled(!afford || entry.sold)
+                    .accessibilityLabel(entry.sold ? "\(item.name). Sold." as String
+                        : "\(item.name). \(item.desc). Cost: \(price) gold\(night && full > price ? ", normally \(full)" : "").\(afford ? " Press to buy." : " Cannot afford.")" as String)
             }
         }
         .padding(.vertical, 10).padding(.horizontal, 12)
@@ -145,7 +147,7 @@ struct ShopOverlay: View {
     private func sellList(_ run: Run) -> some View {
         VStack(spacing: 0) {
             if run.inventory.isEmpty {
-                Text("Nothing in inventory to sell.").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x555555))
+                Text("Nothing in inventory to sell.").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity, alignment: .leading).padding(8)
             }
             ForEach(Array(run.inventory.enumerated()), id: \.offset) { i, item in
@@ -182,7 +184,7 @@ struct LevelUpOverlay: View {
             Text("\(model.run.name) grows stronger. You have \(lp) Level Point\(lp != 1 ? "s" : "") to spend." as String)
                 .font(Theme.crimson(14.4, italic: true)).foregroundStyle(Theme.textSecondary)
                 .multilineTextAlignment(.center).frame(maxWidth: .infinity).padding(.vertical, 10)
-            (Text("ALLOCATE LEVEL POINTS — \(lp) remaining " as String) + Text("(unspent points carry over)").foregroundColor(Color(hex: 0x666666)))
+            (Text("ALLOCATE LEVEL POINTS — \(lp) remaining " as String) + Text("(unspent points carry over)").foregroundColor(Color(hex: 0x909090)))
                 .font(Theme.cinzel(10.4)).tracking(1).foregroundStyle(Color(hex: 0xffaa44)).padding(.bottom, 8)
             VStack(spacing: 6) {
                 ForEach(Progression.Stat.allCases, id: \.self) { stat in
@@ -352,7 +354,7 @@ struct StatsOverlay: View {
     }
 
     private func grid(_ cols: Int, _ items: [(String, String)]) -> some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: cols), spacing: 6) {
+        EagerGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: cols), spacing: 6) {
             ForEach(Array(items.enumerated()), id: \.offset) { _, kv in
                 VStack(spacing: 2) {
                     Text(kv.1).font(Theme.cinzel(12.5)).foregroundStyle(Theme.ashLight).multilineTextAlignment(.center)
@@ -386,7 +388,7 @@ struct DeathCinematic: View {
                 Text(line).font(Theme.crimson(20, italic: true)).foregroundStyle(Color(hex: 0xd4a0a0))
                     .multilineTextAlignment(.center).lineSpacing(5)
                 Text("\(r.name) — \(r.race) \(r.cls)" as String).font(Theme.cinzel(13)).foregroundStyle(Theme.ashLight)
-                Text("Slain by \(model.killer) · \(r.kills) enemies defeated" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666))
+                Text("Slain by \(model.killer) · \(r.kills) enemies defeated" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
                 Text("· TAP TO CONTINUE ·").font(Theme.cinzel(8.8)).tracking(3.5).foregroundStyle(.white.opacity(0.3))
                     .padding(.top, 32)
             }
@@ -446,7 +448,7 @@ struct RunSummaryView: View {
                         .padding(.horizontal, 10)
                         .accessibilityLabel("Closing line: " + (victory ? UIText.shared.closingLine(dungeon: r.dungeon, cls: r.cls)
                                                                  : "The dungeon claimed you on floor \(r.floor). It will not forget your name. Neither should you."))
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
+                    EagerGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
                         stat("\(r.kills)", "Enemies Slain")
                         stat("Floor \(r.floor)", "Reached")
                         stat("Lv \(r.level)", "Level")
@@ -547,7 +549,7 @@ struct SubclassOverlay: View {
             Text("Choose Your Subclass").font(Theme.decorative(16)).foregroundStyle(Theme.gold)
                 .frame(maxWidth: .infinity).padding(.bottom, 6).accessibilityAddTraits(.isHeader)
             Text("You are a \(run.cls). Your training diverges at level 5. This choice is permanent for this run." as String)
-                .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).multilineTextAlignment(.center)
+                .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090)).multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity).padding(.bottom, 20)
             VStack(spacing: 12) {
                 ForEach(options) { sub in

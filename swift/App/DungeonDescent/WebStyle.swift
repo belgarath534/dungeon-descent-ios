@@ -20,14 +20,16 @@ enum Theme {
     static let bgPanel = Color(hex: 0x1f1812)
     static let gold = Color(hex: 0xc9a227)
     static let goldBright = Color(hex: 0xf0c040)
-    static let goldDim = Color(hex: 0x7a6018)
+    // Brightened in 12.0.1 to Apple's contrast minimum (4.5:1) on the dark
+    // panels: the accessibility audit flagged the old 0x7a6018 and 0x5a4e40.
+    static let goldDim = Color(hex: 0xa08030)
     static let blood = Color(hex: 0x8b1a1a)
     static let bloodBright = Color(hex: 0xc0392b)
     static let ash = Color(hex: 0x9e8e78)
     static let ashLight = Color(hex: 0xd4c4aa)
     static let textPrimary = Color(hex: 0xe8d9c0)
     static let textSecondary = Color(hex: 0xa89070)
-    static let textDim = Color(hex: 0x5a4e40)
+    static let textDim = Color(hex: 0x908068)
     static let borderDim = Color(hex: 0x2e2418)
     static let borderGlow = Color(hex: 0x6a5010)
     static let panel = bgPanel

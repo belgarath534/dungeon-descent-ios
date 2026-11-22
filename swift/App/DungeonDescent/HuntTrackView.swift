@@ -248,7 +248,7 @@ struct HuntTrackView: View {
     }
 
     @ViewBuilder private func fight(_ h: Tracking.Hunt) -> some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+        EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
             Button("⚔ Attack") { model.strike(.attack) }.buttonStyle(WebButtonStyle(kind: .red))
                 .accessibilityLabel("Attack, \(h.atkLo) to \(h.atkHi) damage" as String)
             Button("🔨 Heavy") { model.strike(.heavy) }.buttonStyle(WebButtonStyle(kind: .red))

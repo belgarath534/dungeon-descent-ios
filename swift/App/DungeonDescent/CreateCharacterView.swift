@@ -271,7 +271,7 @@ struct CreateCharacterView: View {
 
     private func cardGrid(_ cards: [CreationData.Card], min: CGFloat, selected: @escaping (CreationData.Card) -> Bool,
                           pick: @escaping (CreationData.Card) -> Void) -> some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: min), spacing: 10, alignment: .top)], spacing: 10) {
+        EagerGrid(columns: [GridItem(.adaptive(minimum: min), spacing: 10, alignment: .top)], spacing: 10) {
             ForEach(Array(cards.enumerated()), id: \.offset) { _, c in
                 CreationCard(card: c, selected: selected(c)) { pick(c) }
             }
@@ -456,7 +456,7 @@ struct CreateCharacterView: View {
             sliderIndex["diff"] = i
             pickDiff(Self.diffOrder[i])
         }
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 10, alignment: .top), GridItem(.flexible(), spacing: 10, alignment: .top)], spacing: 10) {
+        EagerGrid(columns: [GridItem(.flexible(), spacing: 10, alignment: .top), GridItem(.flexible(), spacing: 10, alignment: .top)], spacing: 10) {
             ForEach(Array(fates.enumerated()), id: \.offset) { _, c in
                 CreationCard(card: c, selected: diff == c.key) { pickDiff(c.key) }
             }
@@ -558,7 +558,7 @@ struct CreateCharacterView: View {
         Text(runMode == "classic"
              ? "Classic Run selected. You will start fresh at Level 1 every time you descend. Die and your journey ends. The roguelike experience."
              : "Legacy Mode selected. Your level carries over between runs. Complete this dungeon to raise its tier. Die and you keep your level but the dungeon resets. Build one legend over a long time.")
-            .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x666666)).lineSpacing(6)
+            .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x909090)).lineSpacing(6)
             .padding(12).frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(hex: 0x0a0a0a)).overlay(Rectangle().stroke(Color(hex: 0x222222)))
             .padding(.bottom, 16)
@@ -608,7 +608,7 @@ struct CreateCharacterView: View {
                             if sp.rarity == "rare" { tag("RARE", Theme.gold, Theme.goldDim) }
                             if sp.rarity == "elite" { tag("ELITE", Color(hex: 0xcc88ff), Color(hex: 0x884499)) }
                         }
-                        Text("✦ \(sp.ability ?? "")" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x666666))
+                        Text("✦ \(sp.ability ?? "")" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x909090))
                     }
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -659,7 +659,7 @@ struct CreateCharacterView: View {
                 .padding(.top, 6)
         }
         Text("Her Personality").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xaa88dd)).padding(.top, 14).padding(.bottom, 8)
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
+        EagerGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
             personality("encouraging", "💛 Encouraging", "Always lifts you up")
             personality("sarcastic", "😏 Sarcastic", "Dry humor, roasts you")
             personality("mysterious", "🌙 Mysterious", "Speaks in riddles")
@@ -719,7 +719,7 @@ struct CreateCharacterView: View {
                 pickBackstory(list[j])
             }
         }
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 8, alignment: .top), GridItem(.flexible(), spacing: 8, alignment: .top)], spacing: 8) {
+        EagerGrid(columns: [GridItem(.flexible(), spacing: 8, alignment: .top), GridItem(.flexible(), spacing: 8, alignment: .top)], spacing: 8) {
             ForEach(list, id: \.id) { b in
                 let sel = backstory == b.id
                 Button { pickBackstory(b) } label: {
@@ -891,7 +891,7 @@ struct WebSlider: View {
             arrow("◀", prevLabel) { step(-1) }
             VStack(spacing: 2) {
                 Text(name).font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0xe0c080))
-                Text(sub).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x666666))
+                Text(sub).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x909090))
             }
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)
