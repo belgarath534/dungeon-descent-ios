@@ -44,11 +44,15 @@ final class RunModel: ObservableObject {
 
     private let game: GameModel
     private let characterIndex: Int
+    private let startCharacter: PlayerCharacter
     private var dice = SystemDice()
 
     init(game: GameModel, characterIndex: Int, resume: Bool) {
         self.game = game
         self.characterIndex = characterIndex
+        self.startCharacter = game.characters.indices.contains(characterIndex) ? game.characters[characterIndex]
+            : PlayerCharacter(name: "Wanderer", cls: "Warrior", race: "Human", prof: "Blacksmith",
+                              dungeon: GameData.dungeons[0], difficulty: .wanderer)
         if resume, let saved = game.savedRun(for: characterIndex) {
             run = saved
             phase = saved.inCombat ? .fighting
@@ -293,14 +297,14 @@ final class RunModel: ObservableObject {
         var moved = false
         game.updateCharacter(characterIndex) { moved = $0.continueJourney(level: level, xp: xp) }
         guard moved else { return }
-        restart("Journey continues. Entering \(game.characters[characterIndex].dungeon). Your character carries all their strength forward.")
+        restart("Journey continues. Entering \(character.dungeon). Your character carries all their strength forward.")
     }
 
     /// After a victory: the same dungeon again with stronger enemies.
     func startNewGamePlus() {
         guard phase == .victory else { return }
         game.updateCharacter(characterIndex) { $0.startNewGamePlus() }
-        let n = game.characters[characterIndex].ngPlusCount
+        let n = character.ngPlusCount
         restart(n == 1 ? "New Game Plus! Enemies are stronger. The dungeon has not forgotten you."
                 : n == 2 ? "NG+2! The dungeon is actively hostile now."
                 : "NG+\(n)! You should not still be alive. The dungeon is impressed and furious.")
@@ -1635,7 +1639,7 @@ final class RunModel: ObservableObject {
     func toggleGuide() {
         var r = run
         let on = r.guide == nil
-        r.guide = on ? game.characters[characterIndex].guidePersonality : nil
+        r.guide = on ? character.guidePersonality : nil
         run = r
         game.updateCharacter(characterIndex) { $0.guideEnabled = on }
         persist()
@@ -2001,7 +2005,7 @@ final class RunModel: ObservableObject {
     /// Spirits this character has earned (earnedSpirits).
     var earnedSpirits: Set<String> {
         guard game.characters.indices.contains(characterIndex),
-              case .array(let a)? = game.characters[characterIndex].extra["earnedSpirits"] else { return [] }
+              case .array(let a)? = character.extra["earnedSpirits"] else { return [] }
         return Set(a.compactMap { if case .string(let s) = $0 { return s }; return nil })
     }
 
@@ -2019,7 +2023,7 @@ final class RunModel: ObservableObject {
     /// Sprite costs 50 gold to bring back once its discount has been used.
     func switchSpirit(_ id: String) {
         guard let sp = Spirits.spirit(id), run.spirit != id else { return }
-        let used = game.characters[characterIndex].extra["marketSpriteUsed"] == .bool(true)
+        let used = character.extra["marketSpriteUsed"] == .bool(true)
         if id == "market-sprite" && used {
             guard run.gold >= 50, game.wallet.spendGold(50) else {
                 Feedback.announce("Not enough gold to reactivate the Market Sprite. You need 50 gold.")
@@ -2950,7 +2954,7 @@ final class RunModel: ObservableObject {
     private func learnScroll(at index: Int) {
         let item = run.inventory[index]
         guard case .string(let id)? = item.extra["spellId"], let entry = Spells.entry(id) else { return }
-        let ch = game.characters[characterIndex]
+        let ch = character
         guard Spells.hasBook(ch), Spells.isMagic(ch.cls) || run.subclass == "pure-magic" else {
             Feedback.announce("\(item.name). Read it in combat to cast it once." + (Spells.isMagic(ch.cls) ? " With a Spell Book you could learn it." : ""))
             return
@@ -3053,7 +3057,7 @@ final class RunModel: ObservableObject {
     func buySpell(_ entry: SpellEntry) -> String {
         var r = run
         var d = dice
-        var ch = game.characters[characterIndex]
+        var ch = character
         let (res, item) = Spells.buy(entry, character: &ch, gold: r.gold, subclass: r.subclass, dice: &d)
         let msg: String
         switch res {
@@ -3083,7 +3087,12 @@ final class RunModel: ObservableObject {
         return msg
     }
 
-    var character: PlayerCharacter { game.characters[characterIndex] }
+    /// The run's character. A cloud save loaded mid-run (coming back to the
+    /// app) can leave fewer characters than the index: then the copy the run
+    /// started with, instead of a crash.
+    var character: PlayerCharacter {
+        game.characters.indices.contains(characterIndex) ? game.characters[characterIndex] : startCharacter
+    }
 
     func pickSkill(_ effect: String) {
         var r = run
