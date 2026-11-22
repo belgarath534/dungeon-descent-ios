@@ -2333,6 +2333,8 @@ enum Patterns {
         ("Voice Pack {0} percent.", "Pacote de Voz {0} por cento."),
         ("⬆ Level Points ({0})", "⬆ Pontos de Nível ({0})"),
         ("⬆ Level Points", "⬆ Pontos de Nível"),
+        ("Hide Keyboard", "Esconder Teclado"),
+        ("Hide keyboard", "Esconder teclado"),
         ("Sell one {0} for {1} gold. You have {2}", "Vender um {0} por {1} de ouro. Você tem {2}"),
         ("Spend {0} level points on your stats", "Gastar {0} pontos de nível nos seus atributos"),
         ("Level Points. You have {0} to spend.", "Pontos de Nível. Você tem {0} para gastar."),
