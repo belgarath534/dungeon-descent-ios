@@ -52,6 +52,12 @@ public enum Prestige {
         ch.extra["persistXp"] = .number(0)
         ch.extra["persistSkills"] = .array([])
         ch.extra["lpSpent"] = nil
+        // 12.1: a run in progress or a Continue Journey level brought the old
+        // level straight back, so the prestige looked like it hadn't worked.
+        ch.extra["midRunSave"] = nil
+        ch.extra["carryLevel"] = nil
+        ch.extra["carryXp"] = nil
+        ch.floor = 0
         if ch.dungeonTier != nil { ch.dungeonTier = 1 }
         let gold = 1000 * s
         wallet.addGold(gold)

@@ -466,12 +466,14 @@ struct CharacterListView: View {
         let pct = { (x: Double) in Int((x * Double(next) * 100).rounded()) }
         dialog = Dialog(
             title: "⭐ Prestige \(ch.name)?",
-            text: "\(ch.name) goes back to level 1: level, experience, skills\(ch.dungeonTier != nil ? " and the Legacy tier" : ""). In return, star \(next) of \(Prestige.maxStars): \(pct(Prestige.hpPerStar))% more health, \(pct(Prestige.atkPerStar))% more attack and \(pct(Prestige.goldPerStar))% more gold in every run, forever, plus \(1000 * next) gold and a Mystery Coin now.",
+            text: "\(ch.name) goes back to level 1: level, experience, skills\(ch.dungeonTier != nil ? " and the Legacy tier" : ""). In return, star \(next) of \(Prestige.maxStars): \(pct(Prestige.hpPerStar))% more health, \(pct(Prestige.atkPerStar))% more attack and \(pct(Prestige.goldPerStar))% more gold in every run, forever, plus \(1000 * next) gold and a Mystery Coin now.\(game.savedRun(for: i) != nil && !ch.completed ? " The run in progress ends." : "")",
             ok: "⭐ Prestige", cancel: "Not yet",
             onOK: {
                 dialog = nil
                 var result: Prestige.Result?
                 game.updateCharacter(i) { result = Prestige.prestige(&$0, wallet: game.wallet, store: game.store) }
+                // The run in progress ends: resuming it put the old level back.
+                if result != nil { game.clearRun(for: i) }
                 game.refresh()
                 if let r = result {
                     Sound.sfx("sfx-ach-gold")

@@ -4959,10 +4959,17 @@ final class PrestigeTests: XCTestCase {
         low.level = 2
         XCTAssertEqual(Progression.restore(&low, [.strength: 5]), 3)
         XCTAssertEqual(low.levelPoints, 0)
-        // Prestige clears them.
+        // Prestige clears them, and a carried level or run in progress.
         ch.persistLevel = 25
+        ch.floor = 7
+        ch.extra["carryLevel"] = .number(25)
+        ch.extra["midRunSave"] = .object([:])
         _ = Prestige.prestige(&ch, wallet: Wallet(store: MemoryStore()), store: MemoryStore())
         XCTAssertTrue(Progression.savedSpend(ch).isEmpty)
+        XCTAssertNil(ch.extra["carryLevel"])
+        XCTAssertNil(ch.extra["midRunSave"])
+        XCTAssertEqual(Run(character: ch).level, 1)
+        XCTAssertEqual(Run(character: ch).floor, 1)
     }
 
     /// 12.0.2: Legacy goes to 50, prestige still at 25, and old saves move up.
