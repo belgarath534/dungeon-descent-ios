@@ -4290,6 +4290,7 @@ final class LegacyAndJuly4Tests: XCTestCase {
         var next = Run(character: ch)
         XCTAssertEqual(Legacy.start(&next, ch).count, 2)
         XCTAssertEqual(next.level, 7)
+        XCTAssertEqual(Progression.restore(&next, [:]), 0)
         XCTAssertEqual(next.levelPoints, 18)
         XCTAssertEqual(next.unlockedSkills, ["a"])
         var e = Enemy(name: "X", icon: "x", hp: 100, maxHp: 100, atk: 10...20, gold: 10...10)
@@ -4935,6 +4936,33 @@ final class PrestigeTests: XCTestCase {
         ch.extra["prestige"] = .number(10)
         ch.persistLevel = 25
         XCTAssertNotNil(Prestige.blocker(ch))
+    }
+
+    /// 12.0.2: spent level points stay on their stats between runs.
+    func testLevelPointsStayWhereSpent() {
+        var ch = PlayerCharacter(name: "L", cls: "Warrior", race: "Human", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer, runMode: "legacy")
+        Progression.recordSpend(&ch, .strength)
+        Progression.recordSpend(&ch, .strength)
+        Progression.recordSpend(&ch, .stamina)
+        XCTAssertEqual(Progression.savedSpend(ch), [.strength: 2, .stamina: 1])
+        ch.persistLevel = 3
+        var r = Run(character: ch)
+        _ = Legacy.start(&r, ch)
+        let atk0 = r.atkBonus, hp0 = r.maxHp, lp0 = r.levelPoints
+        XCTAssertEqual(Progression.restore(&r, Progression.savedSpend(ch)), 3)
+        XCTAssertEqual(r.atkBonus, atk0 + 4)
+        XCTAssertEqual(r.maxHp, hp0 + 10)
+        XCTAssertEqual(r.levelPoints, lp0 + 3) // 6 for level 3, 3 already spent
+        // More spent than the level allows: only what fits goes back.
+        var low = Run(character: ch)
+        low.level = 2
+        XCTAssertEqual(Progression.restore(&low, [.strength: 5]), 3)
+        XCTAssertEqual(low.levelPoints, 0)
+        // Prestige clears them.
+        ch.persistLevel = 25
+        _ = Prestige.prestige(&ch, wallet: Wallet(store: MemoryStore()), store: MemoryStore())
+        XCTAssertTrue(Progression.savedSpend(ch).isEmpty)
     }
 
     /// 12.0.2: Legacy goes to 50, prestige still at 25, and old saves move up.

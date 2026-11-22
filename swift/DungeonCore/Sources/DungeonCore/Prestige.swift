@@ -51,6 +51,7 @@ public enum Prestige {
         ch.persistLevel = 1
         ch.extra["persistXp"] = .number(0)
         ch.extra["persistSkills"] = .array([])
+        ch.extra["lpSpent"] = nil
         if ch.dungeonTier != nil { ch.dungeonTier = 1 }
         let gold = 1000 * s
         wallet.addGold(gold)

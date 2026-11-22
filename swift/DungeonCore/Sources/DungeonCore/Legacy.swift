@@ -27,8 +27,8 @@ public enum Legacy {
                 let ids = s.compactMap { v -> String? in if case .string(let id) = v { return id }; return nil }
                 if !ids.isEmpty { r.unlockedSkills = ids }
             }
-            r.levelPoints += 3 * (level - 1)
-            notes.append("🌑 Legacy — you return at level \(level). \(3 * (level - 1)) level points to spend.")
+            // Level points: Progression.restore, from the run's start.
+            notes.append("🌑 Legacy — you return at level \(level).")
         }
         let tier = max(1, ch.dungeonTier ?? 1)
         r.legacyTier = tier

@@ -6,5 +6,7 @@ Please try:
 • Legacy Mode: characters now go past level 25, up to 50. A Legacy character at 25 or more can still prestige.
 • The Spire: each kill gives XP and you can level up during a climb (+25 max HP, +2 attack). Check the level shows in other modes afterwards.
 • Later dungeons: from Frosthold Abyss on, enemies and bosses are tougher (+15%, and 10% more in each dungeon after). Tell us if it feels too hard or too easy.
+• Level points: spend some in a Legacy run, then start another. They should still be on your stats, with only new points to spend (the Level Points button, while exploring).
+• Merchant: selling several of the same item shows one row with a count.
 
 Found a bug? Tell us in #dungeon-descent-testers on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.

@@ -670,6 +670,9 @@ struct DungeonView: View {
             FlowRow(spacing: 8) {
                 act("🎒 Inventory", "Toggle inventory") { toggleInventory() }
                 act("📊 Stats", "View character stats") { showStats = true; Feedback.announce(statsSpoken) }
+                if model.run.levelPoints > 0 {
+                    act("⬆ Level Points (\(model.run.levelPoints))", "Spend \(model.run.levelPoints) level points on your stats") { model.openLevelPoints() }
+                }
                 act("📖 Skills", "Open skill book, view and reorder your unlocked skills") { showSkillBook() }
                 act("⚙ Settings", "Open settings, adjust music and sound effects") { showSettings = true }
                 act("📜 Run Log", "Open run log, see everything that happened this run") { showRunLog = true }

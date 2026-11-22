@@ -83,14 +83,18 @@ WHATS_NEW_12_0_2 = {
 • Legacy Mode now goes up to level 50 (it stopped at 25). Prestige still needs level 25.
 • The Spire gives XP: every kill counts toward your level, and you can level up during a climb (+25 max HP, +2 attack), up to 50.
 • Leveling past 10 takes the same XP in the dungeon as in Endless Descent.
-• Later dungeons are harder: from Frosthold Abyss on, enemies and bosses have more health and hit harder, more in each dungeon after it.""",
+• Later dungeons are harder: from Frosthold Abyss on, enemies and bosses have more health and hit harder, more in each dungeon after it.
+• Level points stay where you spent them when your level carries over (Legacy, Continue Journey), and the Level Points button lets you spend new ones any time you're exploring.
+• Selling to the merchant: the same items are one row with a count (10 elixirs were 10 rows).""",
     "pt-BR": """12.0.2:
 • A Descida Infinita agora vai até o nível 50 (parava no 10). Cada nível pede mais XP e continua dando HP, ataque e um ponto de atributo.
 • Modo 3D: o VoiceOver está rápido de novo. A sala em 3D não é desenhada com o VoiceOver ligado, o que fazia o VoiceOver esperar segundos para mover e falar; o som espacial, a Ecolocalização e as direções continuam iguais.
 • O Modo Legado agora vai até o nível 50 (parava no 25). O Prestígio continua pedindo nível 25.
 • A Torre dá XP: cada inimigo derrotado conta para o seu nível, e você pode subir de nível durante a escalada (+25 de HP máximo, +2 de ataque), até o 50.
 • Subir depois do nível 10 pede o mesmo XP na masmorra e na Descida Infinita.
-• As masmorras mais fundas estão mais difíceis: a partir do Abismo Glacial, inimigos e chefes têm mais vida e batem mais forte, e mais ainda em cada masmorra seguinte.""",
+• As masmorras mais fundas estão mais difíceis: a partir do Abismo Glacial, inimigos e chefes têm mais vida e batem mais forte, e mais ainda em cada masmorra seguinte.
+• Os pontos de nível continuam onde você os gastou quando o seu nível passa para a próxima partida (Legado, Continuar Jornada), e o botão Pontos de Nível deixa você gastar os novos a qualquer momento explorando.
+• Vender ao mercador: itens iguais ficam numa linha só com a quantidade (10 elixires eram 10 linhas).""",
 }
 # 12.0.1 never shipped, so 12.0.2's notes carry its fixes too.
 WHATS_NEW_12_0_2 = {k: v + "\n" + WHATS_NEW_12_0_1[k].split("\n", 1)[1] for k, v in WHATS_NEW_12_0_2.items()}
