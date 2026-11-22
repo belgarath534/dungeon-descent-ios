@@ -50,6 +50,20 @@ public enum Legacy {
         e.gold = glo...max(glo, ghi)
     }
 
+    /// A Legacy character's level is kept the moment it's reached (the web
+    /// version's levelUp → saveCharPersistentLevel), so dying or leaving the
+    /// run doesn't take it away. It was only kept when the dungeon was
+    /// cleared, so a Legacy character back from a death was level 1 again.
+    /// False when there was nothing to keep.
+    @discardableResult
+    public static func keepLevel(_ ch: inout PlayerCharacter, run: Run) -> Bool {
+        guard isLegacy(ch), run.level > (ch.persistLevel ?? 1) else { return false }
+        ch.persistLevel = run.level
+        ch.extra["persistXp"] = .number(Double(run.xp))
+        ch.extra["persistSkills"] = .array(run.unlockedSkills.map { .string($0) })
+        return true
+    }
+
     /// The dungeon is cleared: saveCharPersistentLevel, and the tier goes up.
     /// Returns the news, if any.
     @discardableResult

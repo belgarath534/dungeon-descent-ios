@@ -48,6 +48,7 @@ WHATS_NEW_12_0 = {
 WHATS_NEW_12_0_1 = {
     "en-US": """12.0.1 fixes:
 • Prestige no longer crashes the game. If it crashed for you, your character is safe: prestige again.
+• Legacy characters now keep every level the moment they reach it, even if they die or leave the run.
 • Co-op: VoiceOver no longer jumps around during a fight, and your action buttons stay on screen after you choose.
 • VoiceOver no longer jumps to the top after pressing buttons at Home, in the Gun Workshop and Gun Shop, the Arcane Shop and the Command Center switch.
 • VoiceOver keeps its place on the fight buttons, in the Mine, the Spire, the Siege and other modes' button grids, and on the merchant after you buy.
@@ -58,6 +59,7 @@ WHATS_NEW_12_0_1 = {
 • Easier to read: dim text and gold are brighter, and the Discord link is easier to tap.""",
     "pt-BR": """Correções da 12.0.1:
 • O Prestígio não trava mais o jogo. Se travou para você, seu personagem está a salvo: faça o Prestígio de novo.
+• Personagens do Modo Legado agora guardam cada nível assim que o alcançam, mesmo se morrerem ou saírem da partida.
 • Cooperativo: o VoiceOver não pula mais pela tela durante a luta, e seus botões de ação continuam na tela depois que você escolhe.
 • O VoiceOver não volta mais para o topo depois de tocar em botões na Casa, na Oficina e na Loja de Armas, na Loja Arcana e na opção da Central de Comando.
 • O VoiceOver não perde mais o lugar nos botões de luta, nas grades de botões da Mina, da Torre, do Cerco e de outros modos, e no mercador depois de comprar.

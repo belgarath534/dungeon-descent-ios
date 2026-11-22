@@ -5196,3 +5196,22 @@ final class RosterReentryTests: XCTestCase {
         XCTAssertEqual(roster.characters[0].persistLevel, 7)
     }
 }
+
+final class LegacyLevelTests: XCTestCase {
+    /// Levels reached in a Legacy run are kept at once, before any clear or death.
+    func testLegacyKeepsLevelAsItIsReached() {
+        var ch = PlayerCharacter(name: "Ana", cls: "Monk", race: "Elf", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer, runMode: "legacy")
+        var run = Run(character: ch)
+        run.level = 4
+        XCTAssertTrue(Legacy.keepLevel(&ch, run: run))
+        XCTAssertEqual(ch.persistLevel, 4)
+        run.level = 3
+        XCTAssertFalse(Legacy.keepLevel(&ch, run: run), "never goes down")
+        XCTAssertEqual(ch.persistLevel, 4)
+        var classic = PlayerCharacter(name: "Bo", cls: "Monk", race: "Elf", prof: "Thief",
+                                      dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        run.level = 6
+        XCTAssertFalse(Legacy.keepLevel(&classic, run: run), "Classic runs start fresh")
+    }
+}

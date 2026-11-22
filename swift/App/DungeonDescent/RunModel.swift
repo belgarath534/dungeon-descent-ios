@@ -22,7 +22,10 @@ final class RunModel: ObservableObject {
         let text: String
     }
 
-    @Published private(set) var run: Run
+    @Published private(set) var run: Run {
+        // A Legacy character keeps each level as soon as it's reached.
+        didSet { if run.level > oldValue.level { keepLevel() } }
+    }
     @Published private(set) var phase: Phase = .exploring
     @Published private(set) var log: [LogLine] = []
     @Published private(set) var roomTitle = ""
@@ -3090,6 +3093,12 @@ final class RunModel: ObservableObject {
     /// The run's character. A cloud save loaded mid-run (coming back to the
     /// app) can leave fewer characters than the index: then the copy the run
     /// started with, instead of a crash.
+    private func keepLevel() {
+        guard Legacy.isLegacy(character), run.level > (character.persistLevel ?? 1) else { return }
+        let r = run
+        game.updateCharacter(characterIndex) { Legacy.keepLevel(&$0, run: r) }
+    }
+
     var character: PlayerCharacter {
         game.characters.indices.contains(characterIndex) ? game.characters[characterIndex] : startCharacter
     }
