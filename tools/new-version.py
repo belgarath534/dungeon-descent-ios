@@ -10,7 +10,7 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "12.0.1")
+VERSION = os.environ.get("VERSION", "12.0.2")
 # Only these platforms (store-submit-ios: "IOS").
 PLATFORMS = os.environ.get("PLATFORMS", "IOS MAC_OS VISION_OS").split()
 
@@ -75,7 +75,17 @@ Correções:
 • "Escolha um salvamento" não aparece mais quando você joga em um só aparelho.
 • Mais fácil de ler: textos apagados e dourados estão mais claros, e o link do Discord é mais fácil de tocar.""",
 }
-WHATS_NEW = WHATS_NEW_12_0_1 if VERSION == "12.0.1" else WHATS_NEW_12_0
+# 12.0.2: two fixes after 12.0.1.
+WHATS_NEW_12_0_2 = {
+    "en-US": """12.0.2:
+• Endless Descent now goes up to level 50 (it stopped at 10). Each level asks for more XP, and still gives HP, attack and a stat point.
+• 3D Mode: VoiceOver is quick again. The 3D room isn't drawn while VoiceOver is on, which made VoiceOver wait seconds to move and speak; the spatial sound, Echo-Location and directions are all still there.""",
+    "pt-BR": """12.0.2:
+• A Descida Infinita agora vai até o nível 50 (parava no 10). Cada nível pede mais XP e continua dando HP, ataque e um ponto de atributo.
+• Modo 3D: o VoiceOver está rápido de novo. A sala em 3D não é desenhada com o VoiceOver ligado, o que fazia o VoiceOver esperar segundos para mover e falar; o som espacial, a Ecolocalização e as direções continuam iguais.""",
+}
+WHATS_NEW = {"12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
+
 PROMO = {
     "en-US": "New in 12.0: play together. Co-op dungeons with friends on iPhone, Mac, Vision Pro and the web, a Battle Pass, and hunting by sound.",
     "pt-BR": "Novo na 12.0: jogue junto. Masmorras cooperativas com amigos no iPhone, Mac, Vision Pro e web, Passe de Batalha e caça pelo som.",
