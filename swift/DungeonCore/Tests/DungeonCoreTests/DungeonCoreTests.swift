@@ -2832,7 +2832,7 @@ final class VoidReaperTests: XCTestCase {
         Legacy.shape(&f, deep)
         XCTAssertEqual(e.hp, 100)
         XCTAssertEqual(f.hp, 135)
-        XCTAssertEqual(f.atk, 14...27)
+        XCTAssertEqual(f.atk, 13...27) // 10 × 1.35 is 13.4999… in floating point
     }
 
     func testWorldCurseMakesEnemiesStronger() {
