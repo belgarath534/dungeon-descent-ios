@@ -261,3 +261,19 @@ struct OverlayText: View {
         Text(text).font(Theme.crimson(14.4, italic: true)).foregroundStyle(Theme.ash).lineSpacing(4)
     }
 }
+
+/// 12.1 Dynamic Type: a row that becomes a column at the accessibility text
+/// sizes, where side-by-side words got squeezed into a letter or two per line.
+struct AdaptiveRow<Content: View>: View {
+    @Environment(\.dynamicTypeSize) private var size
+    var spacing: CGFloat? = nil
+    @ViewBuilder var content: () -> Content
+
+    var body: some View {
+        if size.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: spacing, content: content)
+        } else {
+            HStack(spacing: spacing, content: content)
+        }
+    }
+}

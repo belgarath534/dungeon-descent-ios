@@ -120,6 +120,8 @@ struct WebSettingsView: View {
                             VStack(alignment: .leading, spacing: 3) {
                                 HStack(spacing: 6) {
                                     Text(c.name).font(Theme.cinzel(14)).foregroundStyle(Theme.ashLight)
+                                        // One long word ("Accessibility") shrinks a little instead of breaking.
+                                        .lineLimit(1).minimumScaleFactor(0.6)
                                     if let t = c.tag { Text(t).font(Theme.cinzel(8.8)).foregroundStyle(Theme.goldDim) }
                                 }
                                 Text(c.desc).font(Theme.crimson(12, italic: true)).foregroundStyle(Theme.textDim)

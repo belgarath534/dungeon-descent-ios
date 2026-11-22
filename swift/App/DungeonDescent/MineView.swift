@@ -272,13 +272,14 @@ private struct MineScreens: View {
     }
 
     private var status: some View {
-        HStack(spacing: 14) {
+        AdaptiveRow(spacing: 14) {
             Text("💰 \(model.game.wallet.gold)g" as String)
             Text("💎 \(model.game.wallet.diamonds)" as String)
             Text("🪙 \(model.game.mysteryCoins)" as String)
-            Spacer()
+            Spacer(minLength: 0)
             Text("⛏ Depth: \(model.run?.depth ?? 1)" as String)
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .font(Theme.cinzel(11)).foregroundStyle(gold)
         .padding(10).background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Color(hex: 0x443300)))
         .accessibilityElement(children: .combine)

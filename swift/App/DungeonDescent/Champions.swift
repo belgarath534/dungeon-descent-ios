@@ -6,6 +6,8 @@ import DungeonCore
 /// Export, and Create New Character.
 @MainActor
 struct CharacterListView: View {
+    /// 12.1: at the accessibility text sizes the slider stacks (the name was squeezed to a letter column).
+    @Environment(\.dynamicTypeSize) private var typeSize
     @EnvironmentObject var game: GameModel
     @EnvironmentObject var router: Router
     @State private var sliderIndex = 0
@@ -152,10 +154,13 @@ struct CharacterListView: View {
                 .background(Color(hex: 0x1a1000))
                 .overlay(Rectangle().stroke(border))
         }
-        return HStack(spacing: 10) {
-            Button { step(-1) } label: { sliderButton("◀", Color(hex: 0xaaaaaa), Color(hex: 0x555555)) }
-                .accessibilityLabel("Previous character")
-            VStack(spacing: 2) {
+        let prev = Button { step(-1) } label: { sliderButton("◀", Color(hex: 0xaaaaaa), Color(hex: 0x555555)) }
+            .accessibilityLabel("Previous character")
+        let next = Button { step(1) } label: { sliderButton("▶", Color(hex: 0xaaaaaa), Color(hex: 0x555555)) }
+            .accessibilityLabel("Next character")
+        let playButton = Button { play(i) } label: { sliderButton("⚔ Play", Color(hex: 0xe0c080), Color(hex: 0xe0c080)) }
+            .accessibilityLabel("Play selected character")
+        let info = VStack(spacing: 2) {
                 Text("\(ch.name) — \(ch.cls)" as String).font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0xe0c080))
                 Text("Level \(ch.persistLevel ?? 1) · \(ch.race) · \(ch.dungeon)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x909090))
             }
@@ -172,10 +177,15 @@ struct CharacterListView: View {
                 @unknown default: break
                 }
             }
-            Button { step(1) } label: { sliderButton("▶", Color(hex: 0xaaaaaa), Color(hex: 0x555555)) }
-                .accessibilityLabel("Next character")
-            Button { play(i) } label: { sliderButton("⚔ Play", Color(hex: 0xe0c080), Color(hex: 0xe0c080)) }
-                .accessibilityLabel("Play selected character")
+        return Group {
+            if typeSize.isAccessibilitySize {
+                VStack(spacing: 10) {
+                    info
+                    HStack(spacing: 10) { prev; next; playButton }
+                }
+            } else {
+                HStack(spacing: 10) { prev; info; next; playButton }
+            }
         }
         .padding(12)
         .background(Color(hex: 0x0a0800))

@@ -1436,6 +1436,18 @@ private struct StartCardOverlay: View {
     var body: some View {
         ZStack {
             Color.black.opacity(0.92).ignoresSafeArea()
+            // 12.1: long text at large sizes scrolls instead of being cut off.
+            ViewThatFits(in: .vertical) {
+                content
+                ScrollView { content }
+            }
+        }
+        .transition(.opacity)
+        .onTapGesture(perform: skip)
+        .accessibilityHidden(true)
+    }
+
+    private var content: some View {
             VStack(spacing: 16) {
                 Text(card.eyebrow).font(Theme.cinzel(9.6)).tracking(5).foregroundStyle(Theme.goldDim)
                 if !card.title.isEmpty {
@@ -1448,10 +1460,7 @@ private struct StartCardOverlay: View {
                 }
             }
             .padding(30)
-        }
-        .transition(.opacity)
-        .onTapGesture(perform: skip)
-        .accessibilityHidden(true)
+            .frame(maxWidth: .infinity)
     }
 }
 

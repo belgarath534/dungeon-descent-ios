@@ -76,7 +76,8 @@ jobs:
               xcrun simctl terminate "$SIM" com.dungeon.descent 2>/dev/null || true
               if [ "$S" = menu ]; then xcrun simctl launch "$SIM" com.dungeon.descent -skipLoading -tourCharacter
               else xcrun simctl launch "$SIM" com.dungeon.descent -tourCharacter -startScreen "$S"; fi
-              sleep 9
+              # The dungeon opens with story cards first; wait them out.
+              if [ "$S" = dungeon ]; then sleep 22; else sleep 9; fi
               xcrun simctl io "$SIM" screenshot "$OUT/$S.png" || true
             done
           done

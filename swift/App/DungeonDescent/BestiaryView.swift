@@ -48,7 +48,7 @@ struct BestiaryView: View {
         let revealed = list.filter { (kills[$0.id] ?? 0) > 0 }.count
         WebScreen {
             ScreenHeader(title: "The Bestiary")
-            HStack(spacing: 0) {
+            AdaptiveRow(spacing: 0) {
                 tabButton("enemies", "Enemies")
                 tabButton("spirits", "Spirits")
                 tabButton("community", "⚔ Community")

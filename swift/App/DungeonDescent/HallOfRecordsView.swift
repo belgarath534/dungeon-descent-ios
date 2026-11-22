@@ -5,6 +5,7 @@ import DungeonCore
 /// stats, milestone awards to claim, and the Hall of Legends.
 @MainActor
 struct HallOfRecordsView: View {
+    @Environment(\.dynamicTypeSize) private var typeSize
     @EnvironmentObject var game: GameModel
     @State private var tab = "stats"
     @State private var refresh = 0
@@ -47,7 +48,7 @@ struct HallOfRecordsView: View {
         let _ = refresh
         WebScreen {
             ScreenHeader(title: "Hall of Records")
-            HStack(spacing: 0) {
+            AdaptiveRow(spacing: 0) {
                 tabButton("stats", "📊 Stats")
                 tabButton("awards", "🏅 Milestones")
                 tabButton("legends", "👑 Legends")
@@ -111,7 +112,8 @@ struct HallOfRecordsView: View {
             ("Characters", "\(chars.count)", false), ("Fav Class", fav, false),
         ]
         return section("Lifetime Statistics") {
-            EagerGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 8)], spacing: 8) {
+            // One column at the accessibility text sizes ("Floors Descended" broke mid-word).
+            EagerGrid(columns: [GridItem(.adaptive(minimum: typeSize.isAccessibilitySize ? 300 : 140), spacing: 8)], spacing: 8) {
                 ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(row.0).font(Theme.cinzel(9.3)).tracking(1.4).textCase(.uppercase).foregroundStyle(Theme.textDim)
