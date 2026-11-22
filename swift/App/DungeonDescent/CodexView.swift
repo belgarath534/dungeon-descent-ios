@@ -47,7 +47,7 @@ struct CodexView: View {
         WebScreen {
             ScreenHeader(title: "The Codex")
             Text("Knowledge earned through descent. Lore unlocked through experience.")
-                .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                 .frame(maxWidth: .infinity).multilineTextAlignment(.center)
             HStack(spacing: 6) {
                 tabButton("world", "📖 World", "World Lore tab")
@@ -66,7 +66,7 @@ struct CodexView: View {
                 .frame(height: 6)
                 .accessibilityHidden(true)
                 Text("\(unlocked) / \(all.count) entries unlocked (\(pct)%)" as String)
-                    .font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x555555))
+                    .font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity)
             }
             ForEach(entries ?? []) { e in card(e) }
@@ -101,7 +101,7 @@ struct CodexView: View {
                 Text(e.body).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xaaaaaa)).lineSpacing(5)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                Text("🔒 \(e.unlockHint)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x444444))
+                Text("🔒 \(e.unlockHint)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity).multilineTextAlignment(.center).padding(8)
                     .accessibilityLabel("Locked entry. \(e.unlockHint)" as String)
             }

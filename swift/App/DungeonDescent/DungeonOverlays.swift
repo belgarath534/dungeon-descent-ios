@@ -57,7 +57,7 @@ struct ShopOverlay: View {
             Text("⚗ The Wandering Merchant").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
                 .padding(.bottom, 2).accessibilityAddTraits(.isHeader)
             Text("A hooded figure crouches in the stairwell, wares spread on a ragged cloth.")
-                .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Color(hex: 0x555555)).padding(.bottom, 10)
+                .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Color(hex: 0x909090)).padding(.bottom, 10)
             Text("💰 \(run.gold)g\(night ? "  🌙 Night Discount Active" : "")" as String)
                 .font(Theme.cinzel(12.8)).tracking(1.3).foregroundStyle(Color(hex: 0xffdd44))
                 .padding(.vertical, 8).padding(.horizontal, 14)
@@ -104,9 +104,9 @@ struct ShopOverlay: View {
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 4) {
                     Text(item.name).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xccaa66))
-                    if entry.sold { Text("[SOLD]").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555)) }
+                    if entry.sold { Text("[SOLD]").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090)) }
                 }
-                Text(item.desc).font(Theme.crimson(10.4, italic: true)).foregroundStyle(Color(hex: 0x555555)).lineSpacing(2)
+                Text(item.desc).font(Theme.crimson(10.4, italic: true)).foregroundStyle(Color(hex: 0x909090)).lineSpacing(2)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityHidden(!entry.sold)
@@ -115,7 +115,7 @@ struct ShopOverlay: View {
                     if entry.sold {
                         Text("—")
                     } else if night, full > price {
-                        Text("\(full)g" as String).strikethrough().foregroundColor(Color(hex: 0x555555)).font(Theme.cinzel(10.4))
+                        Text("\(full)g" as String).strikethrough().foregroundColor(Color(hex: 0x909090)).font(Theme.cinzel(10.4))
                             + Text(" 🌙\(price)g" as String).foregroundColor(Color(hex: 0x6ab0f0))
                     } else {
                         Text("\(price)g" as String)
@@ -147,7 +147,7 @@ struct ShopOverlay: View {
     private func sellList(_ run: Run) -> some View {
         VStack(spacing: 0) {
             if run.inventory.isEmpty {
-                Text("Nothing in inventory to sell.").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x555555))
+                Text("Nothing in inventory to sell.").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity, alignment: .leading).padding(8)
             }
             ForEach(Array(run.inventory.enumerated()), id: \.offset) { i, item in
@@ -184,7 +184,7 @@ struct LevelUpOverlay: View {
             Text("\(model.run.name) grows stronger. You have \(lp) Level Point\(lp != 1 ? "s" : "") to spend." as String)
                 .font(Theme.crimson(14.4, italic: true)).foregroundStyle(Theme.textSecondary)
                 .multilineTextAlignment(.center).frame(maxWidth: .infinity).padding(.vertical, 10)
-            (Text("ALLOCATE LEVEL POINTS — \(lp) remaining " as String) + Text("(unspent points carry over)").foregroundColor(Color(hex: 0x666666)))
+            (Text("ALLOCATE LEVEL POINTS — \(lp) remaining " as String) + Text("(unspent points carry over)").foregroundColor(Color(hex: 0x909090)))
                 .font(Theme.cinzel(10.4)).tracking(1).foregroundStyle(Color(hex: 0xffaa44)).padding(.bottom, 8)
             VStack(spacing: 6) {
                 ForEach(Progression.Stat.allCases, id: \.self) { stat in
@@ -388,7 +388,7 @@ struct DeathCinematic: View {
                 Text(line).font(Theme.crimson(20, italic: true)).foregroundStyle(Color(hex: 0xd4a0a0))
                     .multilineTextAlignment(.center).lineSpacing(5)
                 Text("\(r.name) — \(r.race) \(r.cls)" as String).font(Theme.cinzel(13)).foregroundStyle(Theme.ashLight)
-                Text("Slain by \(model.killer) · \(r.kills) enemies defeated" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666))
+                Text("Slain by \(model.killer) · \(r.kills) enemies defeated" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
                 Text("· TAP TO CONTINUE ·").font(Theme.cinzel(8.8)).tracking(3.5).foregroundStyle(.white.opacity(0.3))
                     .padding(.top, 32)
             }
@@ -549,7 +549,7 @@ struct SubclassOverlay: View {
             Text("Choose Your Subclass").font(Theme.decorative(16)).foregroundStyle(Theme.gold)
                 .frame(maxWidth: .infinity).padding(.bottom, 6).accessibilityAddTraits(.isHeader)
             Text("You are a \(run.cls). Your training diverges at level 5. This choice is permanent for this run." as String)
-                .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).multilineTextAlignment(.center)
+                .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090)).multilineTextAlignment(.center)
                 .frame(maxWidth: .infinity).padding(.bottom, 20)
             VStack(spacing: 12) {
                 ForEach(options) { sub in

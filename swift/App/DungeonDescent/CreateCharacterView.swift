@@ -558,7 +558,7 @@ struct CreateCharacterView: View {
         Text(runMode == "classic"
              ? "Classic Run selected. You will start fresh at Level 1 every time you descend. Die and your journey ends. The roguelike experience."
              : "Legacy Mode selected. Your level carries over between runs. Complete this dungeon to raise its tier. Die and you keep your level but the dungeon resets. Build one legend over a long time.")
-            .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x666666)).lineSpacing(6)
+            .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x909090)).lineSpacing(6)
             .padding(12).frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(hex: 0x0a0a0a)).overlay(Rectangle().stroke(Color(hex: 0x222222)))
             .padding(.bottom, 16)
@@ -608,7 +608,7 @@ struct CreateCharacterView: View {
                             if sp.rarity == "rare" { tag("RARE", Theme.gold, Theme.goldDim) }
                             if sp.rarity == "elite" { tag("ELITE", Color(hex: 0xcc88ff), Color(hex: 0x884499)) }
                         }
-                        Text("✦ \(sp.ability ?? "")" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x666666))
+                        Text("✦ \(sp.ability ?? "")" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x909090))
                     }
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -891,7 +891,7 @@ struct WebSlider: View {
             arrow("◀", prevLabel) { step(-1) }
             VStack(spacing: 2) {
                 Text(name).font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0xe0c080))
-                Text(sub).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x666666))
+                Text(sub).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x909090))
             }
             .multilineTextAlignment(.center)
             .frame(maxWidth: .infinity)

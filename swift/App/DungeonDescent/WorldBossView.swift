@@ -82,7 +82,7 @@ struct WorldBossView: View {
         let t = total ?? 0
         let hp = WorldBoss.remaining(totalDamage: t)
         return VStack(alignment: .leading, spacing: 4) {
-            Text("WORLD BOSS — ALL PLAYERS").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Color(hex: 0x555555))
+            Text("WORLD BOSS — ALL PLAYERS").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Color(hex: 0x909090))
             GeometryReader { g in
                 ZStack(alignment: .leading) {
                     Rectangle().fill(Color(hex: 0x111111))

@@ -53,7 +53,9 @@ WHATS_NEW_12_0_1 = {
 • VoiceOver keeps its place on the fight buttons, in the Mine, the Spire, the Siege and other modes' button grids, and on the merchant after you buy.
 • Co-op: Play Again now pays your gold and Battle Pass progress for every run, not just the first.
 • The merchant's night discount now shows the right "before" price (the daytime price with your run's modifiers).
-• A run no longer crashes if a cloud save with fewer characters loads while you play.""",
+• A run no longer crashes if a cloud save with fewer characters loads while you play.
+• "Choose a save" no longer appears when you only play on one device.
+• Easier to read: dim text and gold are brighter, and the Discord link is easier to tap.""",
     "pt-BR": """Correções da 12.0.1:
 • O Prestígio não trava mais o jogo. Se travou para você, seu personagem está a salvo: faça o Prestígio de novo.
 • Cooperativo: o VoiceOver não pula mais pela tela durante a luta, e seus botões de ação continuam na tela depois que você escolhe.
@@ -61,7 +63,9 @@ WHATS_NEW_12_0_1 = {
 • O VoiceOver não perde mais o lugar nos botões de luta, nas grades de botões da Mina, da Torre, do Cerco e de outros modos, e no mercador depois de comprar.
 • Cooperativo: Jogar de Novo agora paga seu ouro e o progresso do Passe de Batalha em todas as partidas, não só na primeira.
 • O desconto noturno do mercador agora mostra o preço "antes" certo (o preço do dia com os modificadores da sua partida).
-• Uma partida não trava mais se um salvamento na nuvem com menos personagens carregar enquanto você joga.""",
+• Uma partida não trava mais se um salvamento na nuvem com menos personagens carregar enquanto você joga.
+• "Escolha um salvamento" não aparece mais quando você joga em um só aparelho.
+• Mais fácil de ler: textos apagados e dourados estão mais claros, e o link do Discord é mais fácil de tocar.""",
 }
 WHATS_NEW = WHATS_NEW_12_0_1 if VERSION == "12.0.1" else WHATS_NEW_12_0
 PROMO = {

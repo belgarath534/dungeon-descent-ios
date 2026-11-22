@@ -44,7 +44,7 @@ struct ShadowRealmView: View {
     private var intro: some View {
         VStack(spacing: 14) {
             Text("🌑").font(.system(size: 56)).accessibilityHidden(true)
-            Text("— classified —").font(Theme.cinzel(10)).tracking(4).foregroundStyle(Color(hex: 0x555555))
+            Text("— classified —").font(Theme.cinzel(10)).tracking(4).foregroundStyle(Color(hex: 0x909090))
             Text("The Shadow Realm").font(Theme.decorative(24)).foregroundStyle(Self.purple).accessibilityAddTraits(.isHeader)
             Group {
                 Text("You were not supposed to find this.")
@@ -65,11 +65,11 @@ struct ShadowRealmView: View {
     private var choose: some View {
         let chars = game.characters
         return VStack(spacing: 14) {
-            Text("shadow realm").font(Theme.cinzel(10)).tracking(4).textCase(.uppercase).foregroundStyle(Color(hex: 0x555555))
+            Text("shadow realm").font(Theme.cinzel(10)).tracking(4).textCase(.uppercase).foregroundStyle(Color(hex: 0x909090))
             Text("Choose Your Champion").font(Theme.decorative(20)).foregroundStyle(Self.purple).accessibilityAddTraits(.isHeader)
             Text("Who faces the shadow?").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
             if chars.isEmpty {
-                Text("No characters found. Create one first.").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x555555))
+                Text("No characters found. Create one first.").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x909090))
             } else {
                 let ch = chars[min(pick, chars.count - 1)]
                 let lvl = ch.persistLevel ?? 1
@@ -78,7 +78,7 @@ struct ShadowRealmView: View {
                     VStack(spacing: 4) {
                         Text(ch.name).font(Theme.decorative(15)).foregroundStyle(Self.purple)
                         Text("Lv\(lvl) \(ch.race) \(ch.cls)" as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x888888))
-                        Text("\(pick + 1) / \(chars.count)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x555555))
+                        Text("\(pick + 1) / \(chars.count)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x909090))
                     }
                     .frame(maxWidth: .infinity)
                     .accessibilityElement(children: .combine)
@@ -220,7 +220,7 @@ struct ShadowRealmView: View {
             }
             VStack(alignment: .leading, spacing: 4) {
                 Text("🏆 Shadow Realm — Best Runs").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xffd700)).accessibilityAddTraits(.isHeader)
-                if board.isEmpty { Text("No records yet.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x444444)) }
+                if board.isEmpty { Text("No records yet.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x909090)) }
                 ForEach(Array(board.enumerated()), id: \.offset) { i, r in
                     let mine = r.name == s?.name && r.wave == s?.wave && r.kills == s?.kills
                     HStack {

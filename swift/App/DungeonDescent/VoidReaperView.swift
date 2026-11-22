@@ -233,7 +233,7 @@ struct VoidReaperView: View {
 
     private func bossInfo(_ s: VoidReaper.State) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("WORLD BOSS — ALL PLAYERS").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Color(hex: 0x555555))
+            Text("WORLD BOSS — ALL PLAYERS").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Color(hex: 0x909090))
             bar(Double(s.currentHp) / Double(s.totalHp), Color(hex: 0x6666ff))
             Text("\(s.currentHp.formatted()) / \(s.totalHp.formatted()) HP" as String).font(Theme.cinzel(12)).foregroundStyle(blue)
             Text("\(s.hoursLeft(now: VoidReaperLive.now))h remaining · \(s.killCount) strikes · each strike deals \(VoidReaper.playerDamage) damage" as String)

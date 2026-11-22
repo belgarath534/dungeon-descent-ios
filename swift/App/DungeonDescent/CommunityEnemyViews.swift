@@ -121,7 +121,7 @@ struct EnemyCreatorView: View {
     }
 
     private func label(_ t: String, _ hint: String = "") -> some View {
-        (Text(t) + Text(hint.isEmpty ? "" : " (\(hint))").foregroundColor(Color(hex: 0x555555)))
+        (Text(t) + Text(hint.isEmpty ? "" : " (\(hint))").foregroundColor(Color(hex: 0x909090)))
             .font(Theme.cinzel(10.4)).foregroundStyle(Self.violet).accessibilityHidden(true)
     }
 
@@ -190,7 +190,7 @@ struct EnemyCreatorView: View {
 
     private func stat(_ t: String, _ v: Int) -> some View {
         VStack(spacing: 2) {
-            Text(t).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+            Text(t).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
             Text("\(v)" as String).font(Theme.decorative(18)).foregroundStyle(Self.violet)
         }
         .frame(maxWidth: .infinity)
@@ -296,7 +296,7 @@ struct CommunityBestiary: View {
     }
 
     private func note(_ t: String) -> some View {
-        Text(t).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).frame(maxWidth: .infinity).padding(20)
+        Text(t).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090)).frame(maxWidth: .infinity).padding(20)
     }
 
     private func card(_ e: CommunityEnemies.Entry) -> some View {
@@ -307,7 +307,7 @@ struct CommunityBestiary: View {
                 Text("Created by \(e.creator)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0xaa88ff))
                 if !e.desc.isEmpty { Text(e.desc).font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textSecondary) }
                 Text("\(e.dungeon == "all" ? "All Dungeons" : e.dungeon) · \(e.type) · HP \(e.hp) · ATK \(e.atk) · ⚔ \(e.kills) kills" as String)
-                    .font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x555555))
+                    .font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x909090))
             }
             .accessibilityElement(children: .combine)
             .accessibilityLabel("\(e.name), created by \(e.creator), \(e.kills) kills. \(e.desc)" as String)

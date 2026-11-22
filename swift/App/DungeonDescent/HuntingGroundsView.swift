@@ -114,21 +114,21 @@ struct HuntingGroundsView: View {
                     HStack {
                         Text("🏹 Bounty Rank \(rank.rank)" as String).font(Theme.cinzel(11.2)).foregroundStyle(green)
                         Spacer()
-                        Text("\(xp) / \(next.xpNeeded) XP" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x555555))
+                        Text("\(xp) / \(next.xpNeeded) XP" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x909090))
                     }
                     Bar(value: next.xpNeeded > rank.xpNeeded ? Double(xp - rank.xpNeeded) / Double(next.xpNeeded - rank.xpNeeded) : 1,
                         colors: [green, Color(hex: 0x44ff88)], track: green.opacity(0.15), height: 4)
-                    Text("\(rank.name) — \(rank.desc)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                    Text("\(rank.name) — \(rank.desc)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                 }
                 .padding(12).background(Color(hex: 0x030803)).overlay(Rectangle().stroke(Color(hex: 0x0a1a0a)))
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel("Bounty Rank \(rank.rank), \(rank.name). \(rank.desc) \(xp) of \(next.xpNeeded) XP." as String)
 
                 if !hunt.active {
-                    Text("SELECT HUNTER").font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(Color(hex: 0x555555))
+                    Text("SELECT HUNTER").font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(Color(hex: 0x909090))
                         .accessibilityAddTraits(.isHeader)
                     if game.characters.isEmpty {
-                        Text("No characters. Create one first.").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555))
+                        Text("No characters. Create one first.").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
                     }
                     ForEach(Array(game.characters.enumerated()), id: \.offset) { i, c in
                         Button((i == hunt.charIndex ? "► " : "  ") + "\(c.name) — \(c.cls) Lv.\(c.persistLevel ?? 1)") {
@@ -142,7 +142,7 @@ struct HuntingGroundsView: View {
                     trackSection(rank)
                 }
 
-                Text("🌙 RELAXING HUNT").font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(Color(hex: 0x555555))
+                Text("🌙 RELAXING HUNT").font(Theme.cinzel(10.4)).tracking(1.5).foregroundStyle(Color(hex: 0x909090))
                     .accessibilityAddTraits(.isHeader).padding(.top, 8)
                 Text("Your hunter wanders the forest on their own while Lewis narrates. Keep playing anywhere in the game.")
                     .font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textDim)
@@ -233,7 +233,7 @@ struct HuntingGroundsView: View {
 
     private func stat(_ k: String, _ v: String) -> some View {
         HStack {
-            Text(k).foregroundStyle(Color(hex: 0x555555))
+            Text(k).foregroundStyle(Color(hex: 0x909090))
             Spacer()
             Text(v).foregroundStyle(green)
         }

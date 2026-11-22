@@ -151,7 +151,7 @@ struct CharacterListView: View {
                 .accessibilityLabel("Previous character")
             VStack(spacing: 2) {
                 Text("\(ch.name) — \(ch.cls)" as String).font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0xe0c080))
-                Text("Level \(ch.persistLevel ?? 1) · \(ch.race) · \(ch.dungeon)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x666666))
+                Text("Level \(ch.persistLevel ?? 1) · \(ch.race) · \(ch.dungeon)" as String).font(Theme.cinzel(10)).foregroundStyle(Color(hex: 0x909090))
             }
             .frame(maxWidth: .infinity)
             .multilineTextAlignment(.center)
@@ -512,7 +512,7 @@ struct DeathLogView: View {
                          backLabel: "← Characters", backHint: "Back to character list", back: .charlist)
             if game.characters.isEmpty {
                 Text("No characters yet.")
-                    .font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x555555))
+                    .font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity).padding(20)
             } else {
                 ForEach(game.characters, id: \.created) { ch in
@@ -520,7 +520,7 @@ struct DeathLogView: View {
                 }
                 let total = game.characters.reduce(0) { $0 + $1.deaths.count }
                 VStack(spacing: 4) {
-                    Text("Total across all characters").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555))
+                    Text("Total across all characters").font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
                     Text("☠ \(total) death\(total != 1 ? "s" : "")" as String).font(Theme.cinzel(16)).foregroundStyle(Color(hex: 0xff6666))
                 }
                 .frame(maxWidth: .infinity)
@@ -550,7 +550,7 @@ struct DeathLogView: View {
                 Spacer()
                 Text("Lv \(level) \(ch.cls)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffaa00))
             }
-            Text("☠ \(deaths.count) death\(deaths.count != 1 ? "s" : "")" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555))
+            Text("☠ \(deaths.count) death\(deaths.count != 1 ? "s" : "")" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
         }
         .padding(14)
         .background(Color(hex: 0x0a0800))
@@ -561,7 +561,7 @@ struct DeathLogView: View {
 
         if deaths.isEmpty {
             Text("\(ch.name) still lives. No deaths recorded." as String)
-                .font(Theme.cinzel(10.9)).italic().foregroundStyle(Color(hex: 0x444444))
+                .font(Theme.cinzel(10.9)).italic().foregroundStyle(Color(hex: 0x909090))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.vertical, 10).padding(.horizontal, 14)
                 .background(Color(hex: 0x050505))
@@ -574,17 +574,17 @@ struct DeathLogView: View {
                         HStack {
                             Text("☠ Floor \(d.floor) — \(d.killedBy)" as String).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xff6666))
                             Spacer()
-                            Text(d.date).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444))
+                            Text(d.date).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                         }
                         Text("\(d.dungeon)\(d.diff.isEmpty ? "" : " · " + d.diff) · Lv \(max(d.level, 1))" as String)
-                            .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666))
+                            .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
                         HStack(spacing: 12) {
                             Text("⚔ \(d.kills) kills" as String)
                             Text("💰 \(d.gold)g" as String)
                             if d.bestDmg > 0 { Text("💥 \(d.bestDmg) best" as String) }
                         }
-                        .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555))
-                        Text(d.flavor).font(Theme.cinzel(9.9)).italic().foregroundStyle(Color(hex: 0x333333)).padding(.top, 2)
+                        .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
+                        Text(d.flavor).font(Theme.cinzel(9.9)).italic().foregroundStyle(Color(hex: 0x909090)).padding(.top, 2)
                     }
                     .padding(.vertical, 12).padding(.horizontal, 14)
                     .frame(maxWidth: .infinity, alignment: .leading)

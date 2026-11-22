@@ -62,7 +62,7 @@ struct SiegeView: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("\(u.icon) \(u.name)" as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xffdd44))
-                        Text(u.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                        Text(u.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                     }
                     Spacer()
                     Button("\(u.gold)g" + (u.wavePoints > 0 ? " + \(u.wavePoints) WP" : "")) { buy(u.id) }
@@ -86,7 +86,7 @@ struct SiegeView: View {
             }
             Text("SELECT CHARACTER").font(Theme.cinzel(9.6)).tracking(2).foregroundStyle(Theme.textDim)
             if game.characters.isEmpty {
-                Text("No characters available. Create a character first.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x555555))
+                Text("No characters available. Create a character first.").font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x909090))
             }
             ForEach(Array(game.characters.enumerated()), id: \.offset) { i, c in
                 Button((i == charIndex ? "► " : "") + "\(c.name) — \(c.cls) Lv.\(c.persistLevel ?? 1)") {

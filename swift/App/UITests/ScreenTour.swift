@@ -111,9 +111,10 @@ final class ScreenTour: XCTestCase {
     private func scrollTo(_ e: XCUIElement) -> Bool {
         for _ in 0..<12 {
             if e.exists && e.isHittable { return true }
-            // Swipe the menu itself: on a Mac the app window has no single hit point.
-            let list = app.scrollViews.firstMatch
-            if list.exists { list.swipeUp() } else { app.swipeUp() }
+            // The visible tab's list: with the tab menu, every tab has its own
+            // scroll view and the first one is often a hidden tab's.
+            let list = app.scrollViews.allElementsBoundByIndex.first { $0.isHittable }
+            if let list { list.swipeUp() } else { app.swipeUp() }
         }
         return e.exists && e.isHittable
     }

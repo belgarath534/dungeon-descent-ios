@@ -45,7 +45,7 @@ struct DevToolsPanel: View {
 
     private var gate: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("DEVELOPER TOOLS").font(Theme.cinzel(9.6)).tracking(4).foregroundStyle(Color(hex: 0x555555))
+            Text("DEVELOPER TOOLS").font(Theme.cinzel(9.6)).tracking(4).foregroundStyle(Color(hex: 0x909090))
             Text("Enter the password to continue.").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
             SecureField("", text: $password, prompt: Text("••••").foregroundColor(Theme.textDim))
                 .focused($focused)
@@ -85,7 +85,7 @@ struct DevToolsPanel: View {
 
     private var tools: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("🔧 DEVELOPER TOOLS").font(Theme.cinzel(9.6)).tracking(4).foregroundStyle(Color(hex: 0x555555)).padding(.bottom, 16)
+            Text("🔧 DEVELOPER TOOLS").font(Theme.cinzel(9.6)).tracking(4).foregroundStyle(Color(hex: 0x909090)).padding(.bottom, 16)
                 .accessibilityAddTraits(.isHeader)
             changePassword
             row("💎 Give 1M Diamonds", "Adds 1,000,000 diamonds for testing the gun shop.", "Give", label: "Add 1 million diamonds") {

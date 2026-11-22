@@ -148,7 +148,7 @@ struct GunWorkshop: View {
                     if mode == .craft {
                         let need = g.partCounts.sorted { $0.key < $1.key }
                         Text(need.map { "\(Guns.part($0.key)?.icon ?? "🔩") \(Guns.part($0.key)?.name ?? $0.key) \(parts[$0.key, default: 0])/\($0.value)" }.joined(separator: " · "))
-                            .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                            .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                         let can = Guns.canCraft(g, store: store)
                         Button(can ? "⚙️ Craft \(g.name)" : "Need more parts") { act(Guns.craft(g.id, store: store)) }
                             .buttonStyle(WebButtonStyle(kind: can ? .gold : .ghost)).disabled(!can)
@@ -164,7 +164,7 @@ struct GunWorkshop: View {
             }
             if mode == .buy && owned.isEmpty {
                 Text("Earn diamonds by defeating dungeon bosses or digging in the Mine, or craft guns at Home from gun parts.")
-                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
             }
         }
     }

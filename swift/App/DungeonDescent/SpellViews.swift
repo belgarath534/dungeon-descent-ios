@@ -77,7 +77,7 @@ struct SpellBookList: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("\(s.name)  [\(s.rarity.uppercased())]" as String).font(Theme.cinzel(11.5)).foregroundStyle(rarityColor(s.rarity))
                             Text(s.desc).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x888888))
-                            Text(powerful ? "⚡ Powerful — 6 turn cooldown" : "· 3 turn cooldown").font(Theme.cinzel(8.8)).foregroundStyle(Color(hex: 0x555555))
+                            Text(powerful ? "⚡ Powerful — 6 turn cooldown" : "· 3 turn cooldown").font(Theme.cinzel(8.8)).foregroundStyle(Color(hex: 0x909090))
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -231,7 +231,7 @@ struct CastSpellOverlay: View {
                                     Text(s.icon).font(.system(size: 22)).accessibilityHidden(true)
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(s.name + (powerful ? "  [POWERFUL — 6 turns]" : "  [3 turns]")).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0xcc88ff))
-                                        Text(s.desc).font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x666666))
+                                        Text(s.desc).font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x909090))
                                     }
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 }

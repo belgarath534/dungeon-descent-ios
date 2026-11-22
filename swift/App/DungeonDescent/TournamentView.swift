@@ -246,7 +246,7 @@ struct TournamentView: View {
             }
             .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0x888888)).multilineTextAlignment(.center).lineSpacing(6)
             Text("Your best this season: \(Tournament.best(season, store: game.store)) pts" as String)
-                .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x666666)).padding(.bottom, 16)
+                .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x909090)).padding(.bottom, 16)
             Button {
                 fight = nil
                 finished = false

@@ -65,12 +65,12 @@ struct GraveyardView: View {
         let list = stones
         WebScreen {
             ScreenHeader(title: "⚰️ The Graveyard")
-            Text("The dungeon remembers what you forget.").font(Theme.crimson(14.4, italic: true)).foregroundStyle(Color(hex: 0x555555))
+            Text("The dungeon remembers what you forget.").font(Theme.crimson(14.4, italic: true)).foregroundStyle(Color(hex: 0x909090))
             Text("Characters you have deleted or lost to the dark.").font(Theme.crimson(13)).foregroundStyle(Theme.textDim)
                 .padding(.bottom, 12)
             if list.isEmpty {
                 Text("No one has fallen yet. The graveyard waits.")
-                    .font(Theme.cinzel(12)).italic().foregroundStyle(Color(hex: 0x555555))
+                    .font(Theme.cinzel(12)).italic().foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity).padding(30)
             }
             ForEach(Array(list.enumerated()), id: \.offset) { _, e in stone(e) }
@@ -86,19 +86,19 @@ struct GraveyardView: View {
         return VStack(spacing: 4) {
             Text("⚰").font(.system(size: 24)).padding(.bottom, 4)
             Text(e.name).font(Theme.cinzel(13.6)).foregroundStyle(Color(hex: 0x888888))
-            Text("\(e.race) \(e.cls) Level \(e.level)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).padding(.bottom, 4)
-            Text("\(e.dungeon)\(e.difficulty.isEmpty ? "" : " " + e.difficulty)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444))
+            Text("\(e.race) \(e.cls) Level \(e.level)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090)).padding(.bottom, 4)
+            Text("\(e.dungeon)\(e.difficulty.isEmpty ? "" : " " + e.difficulty)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
             if fell {
-                Text("Fell to \(e.killedBy)\(e.topFloor > 0 ? " on floor \(e.topFloor)" : "")" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x666666))
+                Text("Fell to \(e.killedBy)\(e.topFloor > 0 ? " on floor \(e.topFloor)" : "")" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
             } else {
-                Text("Removed from the roster.").font(Theme.cinzel(10.4)).italic().foregroundStyle(Color(hex: 0x444444))
+                Text("Removed from the roster.").font(Theme.cinzel(10.4)).italic().foregroundStyle(Color(hex: 0x909090))
             }
             if !e.journal.isEmpty {
-                Text(e.journal).font(Theme.cinzel(9.9)).italic().foregroundStyle(Color(hex: 0x555555))
+                Text(e.journal).font(Theme.cinzel(9.9)).italic().foregroundStyle(Color(hex: 0x909090))
                     .padding(.top, 8)
                     .overlay(alignment: .top) { Rectangle().fill(Color(hex: 0x111111)).frame(height: 1) }
             }
-            Text(e.date).font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x333333)).padding(.top, 6)
+            Text(e.date).font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x909090)).padding(.top, 6)
         }
         .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity)

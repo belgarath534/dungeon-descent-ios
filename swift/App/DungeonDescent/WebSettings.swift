@@ -195,7 +195,7 @@ struct WebSettingsView: View {
             title("🔊 Audio")
             volumeRow("Music", on: $musicOn, volume: $musicVolume, toggleLabel: "Music toggle", volumeLabel: "Music volume")
             Text("📱 On iPhone, use your device volume buttons to control audio levels.")
-                .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x666666)).padding(.bottom, 14)
+                .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x909090)).padding(.bottom, 14)
             divider
             volumeRow("Sound Effects", on: $sfxOn, volume: $sfxVolume, toggleLabel: "Sound effects toggle", volumeLabel: "Sound effects volume")
             divider

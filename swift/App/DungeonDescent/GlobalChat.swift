@@ -271,7 +271,7 @@ struct GlobalChatView: View {
     private var messagesBox: some View {
         VStack(alignment: .leading, spacing: 0) {
             if chat.messages.isEmpty {
-                Text(chat.status).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x444444))
+                Text(chat.status).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity).padding(20)
             }
             ForEach(chat.messages) { m in
@@ -279,7 +279,7 @@ struct GlobalChatView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(spacing: 6) {
                         Text(m.username).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: mine ? 0xc8a832 : 0x88aacc))
-                        Text(m.timestamp > 0 ? GlobalChat.ago(m.timestamp) : "").font(Theme.cinzel(8.8)).foregroundStyle(Color(hex: 0x333333))
+                        Text(m.timestamp > 0 ? GlobalChat.ago(m.timestamp) : "").font(Theme.cinzel(8.8)).foregroundStyle(Color(hex: 0x909090))
                     }
                     Text(m.message).font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xaaaaaa))
                         .fixedSize(horizontal: false, vertical: true)
@@ -360,7 +360,7 @@ struct GlobalChatView: View {
                     .background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Theme.gold))
                     .accessibilityLabel("Send message")
             }
-            Text("\(draft.count) / 200" as String).font(Theme.cinzel(8.8)).foregroundStyle(Color(hex: 0x333333))
+            Text("\(draft.count) / 200" as String).font(Theme.cinzel(8.8)).foregroundStyle(Color(hex: 0x909090))
                 .accessibilityHidden(true)
         }
     }

@@ -89,15 +89,15 @@ private struct AFKScreens: View {
                 Text("Endless Descent").font(Theme.decorative(17.6)).foregroundStyle(Self.violet)
                     .accessibilityAddTraits(.isHeader)
                 Text("The dungeon has no end. Leave it running. See how far you fall.")
-                    .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x666666)).multilineTextAlignment(.center)
+                    .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x909090)).multilineTextAlignment(.center)
                 Text("It keeps descending when you leave the app. Your Lock Screen shows the run.")
-                    .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x555555)).multilineTextAlignment(.center)
+                    .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x909090)).multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
             .padding(.bottom, 10)
             label("CHOOSE YOUR CHAMPION")
             if game.characters.isEmpty {
-                Text("Create a character first.").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x555555))
+                Text("Create a character first.").font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity)
             }
             ForEach(Array(game.characters.enumerated()), id: \.element.created) { i, ch in
@@ -193,7 +193,7 @@ private struct AFKScreens: View {
                     Spacer()
                     Text("\(r?.xp ?? 0) / \(level >= 10 || need == nil ? "MAX" : "\(need!)")" as String)
                 }
-                .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                 bar(level >= 10 || need == nil ? 1 : min(1, Double(r?.xp ?? 0) / Double(need!)), height: 5,
                     colors: [0x446644, 0x88ff88], border: 0x1a1a1a)
             }
@@ -209,7 +209,7 @@ private struct AFKScreens: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     if (r?.log ?? []).isEmpty {
-                        Text("Awaiting your descent...").foregroundStyle(Color(hex: 0x555555))
+                        Text("Awaiting your descent...").foregroundStyle(Color(hex: 0x909090))
                             .frame(maxWidth: .infinity).padding(.top, 60)
                     }
                     ForEach(Array((r?.log ?? []).enumerated()), id: \.offset) { _, line in
@@ -291,7 +291,7 @@ private struct AFKScreens: View {
                                 Text("\(sk.icon) \(sk.name)" as String).font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffdd44))
                                 Text(sk.desc).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x888888))
                                     .multilineTextAlignment(.leading).lineSpacing(3)
-                                Text("\(sk.spCost) SP · \(sk.tier)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                                Text("\(sk.spCost) SP · \(sk.tier)" as String).font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                                     .padding(.top, 2)
                             }
                             .padding(10).frame(maxWidth: .infinity, alignment: .leading)
@@ -339,7 +339,7 @@ private struct AFKScreens: View {
                 .accessibilityAddTraits(.isHeader)
             ForEach(rows.indices, id: \.self) { i in
                 HStack {
-                    Text(rows[i].0).foregroundStyle(Color(hex: 0x555555))
+                    Text(rows[i].0).foregroundStyle(Color(hex: 0x909090))
                     Spacer()
                     Text(rows[i].1).foregroundStyle(Color(hex: 0xaaaaaa))
                 }
@@ -385,7 +385,7 @@ private struct AFKScreens: View {
                 Text("⬇").font(.system(size: 19)).accessibilityHidden(true)
                 VStack(alignment: .leading) {
                     Text(s.totalPoints.formatted()).font(Theme.decorative(16)).foregroundStyle(Color(hex: 0xaaaaff))
-                    Text("Descent Points").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x555555))
+                    Text("Descent Points").font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                 }
                 Spacer()
             }
@@ -401,7 +401,7 @@ private struct AFKScreens: View {
                 HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 3) {
                         Text("\(item.icon) \(item.name)" as String).font(Theme.cinzel(11.5)).foregroundStyle(maxed ? Color(hex: 0xffdd44) : Color(hex: 0xaaaaaa))
-                        Text(item.desc).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x555555)).lineSpacing(3)
+                        Text(item.desc).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x909090)).lineSpacing(3)
                         if owned > 0 && item.max > 1 {
                             Text("Owned: \(owned)\(item.max < 99 ? " / \(item.max)" : "")" as String).font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x888888))
                         }

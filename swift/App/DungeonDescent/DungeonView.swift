@@ -812,7 +812,7 @@ struct DungeonView: View {
             }
             if !invSearch.isEmpty {
                 Text("\(stacks.count) item\(stacks.count == 1 ? "" : "s") found for \"\(invSearch)\"" as String)
-                    .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x666666))
+                    .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x909090))
             }
             if run.inventory.isEmpty {
                 Text("Your satchel is empty.").font(Theme.crimson(12.8, italic: true)).foregroundStyle(Theme.textDim)
@@ -916,7 +916,7 @@ struct DungeonView: View {
                     statLine("💊 HP healed: ", "\(f.hpHealed)", Color(hex: 0x44cc44))
                     statLine("💰 Gold earned: ", "\(gold)", Color(hex: 0xe0c080))
                 }
-                .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x666666))
+                .font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x909090))
                 .padding(.bottom, 20)
                 VStack(spacing: 10) {
                     Button { model.descend() } label: {
@@ -991,7 +991,7 @@ struct DungeonView: View {
     private var medusaOverlay: some View {
         WebOverlay {
             Text("🐍").font(.system(size: 24)).accessibilityHidden(true)
-            Text("MEDUSA IS DEFEATED").font(Theme.cinzel(9.6)).tracking(4).foregroundStyle(Color(hex: 0x555555))
+            Text("MEDUSA IS DEFEATED").font(Theme.cinzel(9.6)).tracking(4).foregroundStyle(Color(hex: 0x909090))
             OverlayText(text: "She kneels. Her eyes are still closed. You have a choice.")
             VStack(spacing: 12) {
                 Button("🛡 Raise the Shield") { model.medusaRaise() }
@@ -1019,7 +1019,7 @@ struct DungeonView: View {
                     .accessibilityLabel("Run from the hunter. It will be one room behind you.")
             }
             Text("Running resets distance to 1. It will catch you next time.")
-                .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x444444))
+                .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
         }
     }
 
@@ -1069,7 +1069,7 @@ struct DungeonView: View {
                 Text(run.name).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe0c080))
                 Text("Floor \(run.floor) · \(run.dungeon) · \(run.hp) HP" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x888888))
                 Text("🕐 Total playtime: \(Playtime.format(ms: PlaytimeClock.shared.totalMs))" as String)
-                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x666666))
+                    .font(Theme.cinzel(9.6)).foregroundStyle(Color(hex: 0x909090))
                     .accessibilityLabel("Total playtime: \(Playtime.spoken(ms: PlaytimeClock.shared.totalMs))" as String)
             }
             .accessibilityElement(children: .combine)
