@@ -35,7 +35,7 @@ enum MainTab: String, CaseIterable {
         case .play: return ["afk", "challenges", "battlepass", "quests"]
         case .modes: return ["spire", "bossrush", "raid", "siege", "mine", "bounty", "void", "shadowrealm",
                              "hideseek", "creator", "command"]
-        case .multiplayer: return ["coop", "worldboss", "multiplayer", "tournament", "chat", "obituary"]
+        case .multiplayer: return ["coop", "friends", "worldboss", "multiplayer", "tournament", "chat", "obituary"]
         case .more: return ["blacksmith", "coinshop", "arcane", "spellbook", "bestiary", "codex", "chronicles",
                             "graveyard", "records", "highscore", "events", "whatsnew", "help", "credits", "leo", "quit"]
         case .settings: return []

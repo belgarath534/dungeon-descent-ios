@@ -154,6 +154,20 @@ extension View {
 /// template's {0}, {1} … match anything; names are looked up on their own.
 enum Patterns {
     static let pt: [(String, String)] = [
+        // 12.1: Friends.
+        ("{0} friends online.", "{0} amigos online."),
+        ("Invite sent to {0}.", "Convite enviado para {0}."),
+        ("📨 Invite {0}", "📨 Convidar {0}"),
+        ("Block {0}", "Bloquear {0}"),
+        ("Report {0}", "Denunciar {0}"),
+        ("Report {0}?", "Denunciar {0}?"),
+        ("Unblock Everyone ({0})", "Desbloquear Todos ({0})"),
+        ("Status: {0}.", "Status: {0}."),
+        ("{0} invites you to their co-op room, {1}.", "{0} convidou você para a sala co-op dele, {1}."),
+        ("{0} is blocked. They're hidden from your friends list, and their invites won't reach you.", "{0} foi bloqueado. Não aparece mais na sua lista de amigos e os convites dele não chegam até você."),
+        ("Co-op Dungeon. Room {0} is filled in. Choose your character, then press Join.", "Masmorra Co-op. A sala {0} já está preenchida. Escolha seu personagem e toque em Entrar."),
+        ("You: number {0}, {1}", "Você: número {0}, {1}"),
+        ("You're number {0}.", "Você é o número {0}."),
         // 12.1: The Conductor (whole lines first, so shorter patterns don't grab them).
         ("A hall that wasn't there before. At the far end, something is conducting a lullaby. The Conductor. The door out is {0} steps away. Step forward only while the music plays. When it stops, don't move: it listens. If the song slows down and goes out of tune, it's about to stop, but not always.", "Um corredor que não estava aqui antes. No fundo, algo rege uma canção de ninar. O Maestro. A porta de saída está a {0} passos. Só dê um passo enquanto a música toca. Quando ela parar, não se mexa: ele escuta. Se a música ficar lenta e desafinada, está prestes a parar, mas nem sempre."),
         ("The song changes. You're close now. {0} steps to the door.", "A música muda. Agora você está perto. {0} passos até a porta."),

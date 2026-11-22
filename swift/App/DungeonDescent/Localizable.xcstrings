@@ -131286,6 +131286,479 @@
           }
         }
       }
+    },
+    "👥 Friends": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "👥 Amigos"
+          }
+        }
+      }
+    },
+    "Friends": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amigos"
+          }
+        }
+      }
+    },
+    "Rankings": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rankings"
+          }
+        }
+      }
+    },
+    "🏆 Rankings": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🏆 Rankings"
+          }
+        }
+      }
+    },
+    "Friends.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amigos."
+          }
+        }
+      }
+    },
+    "Rankings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rankings."
+          }
+        }
+      }
+    },
+    "Friends. Your Game Center friends who play Dungeon Descent.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amigos. Seus amigos do Game Center que jogam Dungeon Descent."
+          }
+        }
+      }
+    },
+    "Sign in to Game Center in the Settings app to see your friends. Friends are your Game Center friends who also play Dungeon Descent.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entre no Game Center no app Ajustes para ver seus amigos. Amigos são seus amigos do Game Center que também jogam Dungeon Descent."
+          }
+        }
+      }
+    },
+    "Dungeon Descent isn't allowed to see your Game Center friends. Turn it on in the Settings app: Game Center, Friends List, then Dungeon Descent.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Dungeon Descent não tem permissão para ver seus amigos do Game Center. Ative no app Ajustes: Game Center, Lista de Amigos e depois Dungeon Descent."
+          }
+        }
+      }
+    },
+    "Loading your friends…": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carregando seus amigos…"
+          }
+        }
+      }
+    },
+    "Loading…": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carregando…"
+          }
+        }
+      }
+    },
+    "None of your Game Center friends play Dungeon Descent yet. Add friends in the Game Center app, or share the game with them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum dos seus amigos do Game Center joga Dungeon Descent ainda. Adicione amigos no app Game Center ou compartilhe o jogo com eles."
+          }
+        }
+      }
+    },
+    "No friends online right now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum amigo online agora."
+          }
+        }
+      }
+    },
+    "1 friend online.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 amigo online."
+          }
+        }
+      }
+    },
+    "🔄 Refresh": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🔄 Atualizar"
+          }
+        }
+      }
+    },
+    "Refreshed.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atualizado."
+          }
+        }
+      }
+    },
+    "To play together, host a room in Co-op Dungeon and press Invite next to a friend who's online.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Para jogar juntos, crie uma sala no Co-op e toque em Convidar ao lado de um amigo online."
+          }
+        }
+      }
+    },
+    "← All Friends": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "← Todos os Amigos"
+          }
+        }
+      }
+    },
+    "Back to all friends": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltar para todos os amigos"
+          }
+        }
+      }
+    },
+    "BEST SCORES": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MELHORES PONTUAÇÕES"
+          }
+        }
+      }
+    },
+    "PLAY TOGETHER": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JOGAR JUNTOS"
+          }
+        }
+      }
+    },
+    "SAFETY": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SEGURANÇA"
+          }
+        }
+      }
+    },
+    "🤝 Open Co-op Dungeon": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🤝 Abrir Masmorra Co-op"
+          }
+        }
+      }
+    },
+    "Host a room there, then invite them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crie uma sala lá e depois convide."
+          }
+        }
+      }
+    },
+    "🚫 Block": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🚫 Bloquear"
+          }
+        }
+      }
+    },
+    "⚠️ Report": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚠️ Denunciar"
+          }
+        }
+      }
+    },
+    "Hides them from your list and stops their invites.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esconde da sua lista e bloqueia os convites."
+          }
+        }
+      }
+    },
+    "Report and Block": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Denunciar e Bloquear"
+          }
+        }
+      }
+    },
+    "The developer reviews reports within 24 hours. They're also blocked for you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O desenvolvedor analisa denúncias em até 24 horas. A pessoa também fica bloqueada para você."
+          }
+        }
+      }
+    },
+    "👥 Friends ": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "👥 Amigos "
+          }
+        }
+      }
+    },
+    "🌍 World Top 10": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌍 Top 10 Mundial"
+          }
+        }
+      }
+    },
+    "Sign in to Game Center in the Settings app to see the rankings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entre no Game Center no app Ajustes para ver os rankings."
+          }
+        }
+      }
+    },
+    "No scores yet. Be the first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma pontuação ainda. Seja o primeiro."
+          }
+        }
+      }
+    },
+    "You don't have a score here yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você ainda não tem pontuação aqui."
+          }
+        }
+      }
+    },
+    "Couldn't load the rankings. Check your connection.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível carregar os rankings. Verifique sua conexão."
+          }
+        }
+      }
+    },
+    "Open in Game Center": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abrir no Game Center"
+          }
+        }
+      }
+    },
+    "Apple's leaderboard page, with challenges.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A página de rankings da Apple, com desafios."
+          }
+        }
+      }
+    },
+    "Co-op invite": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Convite para co-op"
+          }
+        }
+      }
+    },
+    "Not Now": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agora Não"
+          }
+        }
+      }
+    },
+    "INVITE A FRIEND": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "CONVIDAR UM AMIGO"
+          }
+        }
+      }
+    },
+    "None of your Game Center friends are online right now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum dos seus amigos do Game Center está online agora."
+          }
+        }
+      }
+    },
+    "Everyone is unblocked.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todos foram desbloqueados."
+          }
+        }
+      }
+    },
+    "Couldn't send the invite. Check your connection.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível enviar o convite. Verifique sua conexão."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

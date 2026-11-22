@@ -6,6 +6,7 @@ struct CoopView: View {
     @EnvironmentObject var game: GameModel
     @EnvironmentObject var router: Router
     @StateObject private var model = CoopModel()
+    @ObservedObject private var friends = Friends.shared
     @State private var charIndex = 0
     @State private var dungeonIndex = 0
     @State private var joinCode = ""
@@ -28,6 +29,14 @@ struct CoopView: View {
         }
         .onAppear {
             model.game = game
+            friends.load()
+            // Came from a friend's invite: the code is filled in.
+            if let c = friends.pendingJoin {
+                friends.pendingJoin = nil
+                joinCode = c
+                Feedback.announce("Co-op Dungeon. Room \(c.map(String.init).joined(separator: " ")) is filled in. Choose your character, then press Join.")
+                return
+            }
             Feedback.announce("Co-op Dungeon. Fight through ten floors with up to three friends, on the web or the app. Choose a character, then host a room or join one with its code.")
         }
         .onDisappear { model.stop() }
@@ -87,6 +96,17 @@ struct CoopView: View {
         ForEach(model.party, id: \.id) { p in
             Text("\(p.ready || (model.isHost && p.id == model.myId) ? "✓" : "…") \(p.name) — \(p.cls), Lv \(p.level), \(p.maxHp) HP\(p.id == model.myId ? " (you)" : "")" as String)
                 .font(Theme.crimson(15)).foregroundStyle(Theme.textSecondary)
+        }
+        if model.isHost, let code = model.code, friends.access == .ok, model.party.count < Coop.maxPlayers {
+            header("INVITE A FRIEND")
+            if friends.online.isEmpty {
+                Text("None of your Game Center friends are online right now.")
+                    .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
+            }
+            ForEach(friends.online) { f in
+                Button("📨 Invite \(f.name)" as String) { friends.invite(f, code: code) }
+                    .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+            }
         }
         if model.isHost {
             Button("⚔ Start the Run") { model.start() }.buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)

@@ -20,6 +20,7 @@ struct DungeonDescentApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .modifier(FriendInviteAlert())
                 .environmentObject(game)
                 .environmentObject(router)
                 .environment(\.locale, locale)

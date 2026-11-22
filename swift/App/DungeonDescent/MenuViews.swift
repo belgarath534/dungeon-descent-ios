@@ -81,6 +81,8 @@ struct MainMenuView: View {
         Entry(id: "chronicles", text: "📚 Chronicles", label: "The Chronicles, lore and history of the dungeons", action: .go(.chronicles)),
         Entry(id: "codex", text: "📖 Codex", label: "The Codex, world lore enemy lore and artifacts unlocked through gameplay", action: .go(.codex)),
         Entry(id: "creator", text: "⚔ Enemy Creator", label: "Community Enemy Creator, build an enemy and set it loose in the dungeon", action: .go(.enemyCreator)),
+        Entry(id: "friends", text: "👥 Friends", label: "Friends and Rankings, your Game Center friends who play, who's online, and the leaderboards",
+              color: Color(hex: 0x66ddcc), border: Color(hex: 0x226655), action: .go(.friends)),
         Entry(id: "chat", text: "💬 Global Chat", label: "Global Chat, talk to other players", action: .go(.chat)),
         Entry(id: "bounty", text: "📋 Bounty Board", label: "The Bounty Board — register for bounties and earn rewards", action: .go(.bounty)),
         Entry(id: "siege", text: "🏰 The Siege", label: "The Siege — defend your fortress against waves of enemies", action: .go(.siege)),

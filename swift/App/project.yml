@@ -128,6 +128,7 @@ targets:
         NSMicrophoneUsageDescription: Dungeon Descent listens for a spoken command when you tap the mic in the Command Center.
         NSAppleMusicUsageDescription: Dungeon Descent plays songs you choose from your Apple Music library in My Tracks, in place of the game music.
         NSSpeechRecognitionUsageDescription: Dungeon Descent turns your spoken command into text in the Command Center.
+        NSGKFriendListUsageDescription: Dungeon Descent shows which of your Game Center friends play, who is online, and lets you invite them to co-op.
         CFBundleURLTypes:
           - CFBundleURLName: com.dungeon.descent
             CFBundleURLSchemes:

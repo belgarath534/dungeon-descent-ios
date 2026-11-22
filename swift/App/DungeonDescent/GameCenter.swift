@@ -15,7 +15,11 @@ enum GameCenter {
                 return
             }
             isSignedIn = GKLocalPlayer.local.isAuthenticated
-            if isSignedIn { reportAll(pending) ; pending = [] }
+            if isSignedIn {
+                reportAll(pending)
+                pending = []
+                Friends.shared.start()
+            }
         }
     }
 
