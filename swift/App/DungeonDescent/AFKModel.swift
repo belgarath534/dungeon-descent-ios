@@ -244,7 +244,9 @@ final class AFKModel: ObservableObject {
     private func savePersistentLevel(_ r: AFKRun) {
         guard game.characters.indices.contains(r.charIndex), game.characters[r.charIndex].name == r.charName else { return }
         game.updateCharacter(r.charIndex) { ch in
-            ch.persistLevel = r.level
+            // Never lower: a level from the dungeon or Legacy can be above
+            // Endless Descent's own cap of 10.
+            ch.persistLevel = max(ch.persistLevel ?? 1, r.level)
             ch.extra["persistXp"] = .number(Double(r.xp))
             ch.extra["persistSkills"] = .array(r.skills.map { .string($0) })
             ch.extra["persistMaxHp"] = .number(Double(r.maxHp))
