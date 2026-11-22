@@ -308,10 +308,10 @@ public enum Spire {
     /// 150 + 5 a floor). Each level gives +25 max HP and +2 attack, the same
     /// as a level counts for when a climb starts, up to level 50.
     static func gainXP(_ run: inout SpireRun, _ amount: Int) -> [String] {
-        guard run.level < AFK.maxLevel else { return [] }
+        guard run.level < AFKRun.maxLevel else { return [] }
         run.xp += amount
         var lines = ["+\(amount) XP."]
-        while let needed = AFK.xpToLevelUp(from: run.level), run.xp >= needed {
+        while let needed = AFKRun.xpToLevelUp(from: run.level), run.xp >= needed {
             run.xp -= needed
             run.level += 1
             run.maxHp += 25
@@ -319,7 +319,7 @@ public enum Spire {
             run.atk += 2
             lines.append("⬆ LEVEL UP! Level \(run.level). +25 max HP, +2 attack. HP: \(run.hp)/\(run.maxHp).")
         }
-        if run.level >= AFK.maxLevel { run.xp = 0 }
+        if run.level >= AFKRun.maxLevel { run.xp = 0 }
         return lines
     }
 

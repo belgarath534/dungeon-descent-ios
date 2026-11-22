@@ -8,7 +8,7 @@ import Foundation
 /// you at it, with its level points to spend again.
 public enum Legacy {
     /// The highest Legacy level, the same as Endless Descent's.
-    public static let maxLevel = AFK.maxLevel
+    public static let maxLevel = AFKRun.maxLevel
     public static func isLegacy(_ ch: PlayerCharacter) -> Bool { ch.runMode == "legacy" }
 
     public static func hpMult(tier: Int) -> Double { 1 + Double(max(0, tier - 1)) * 0.20 }

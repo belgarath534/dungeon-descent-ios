@@ -2124,9 +2124,9 @@ final class SpireTests: XCTestCase {
         XCTAssertTrue(lines.contains { $0.hasPrefix("⬆ LEVEL UP! Level 4.") })
         _ = atk
         // Level 50 is the top.
-        r.level = AFK.maxLevel
+        r.level = AFKRun.maxLevel
         XCTAssertEqual(Spire.gainXP(&r, 99_999), [])
-        XCTAssertEqual(r.level, AFK.maxLevel)
+        XCTAssertEqual(r.level, AFKRun.maxLevel)
     }
 
     func testDeathSaves() {
@@ -4949,9 +4949,9 @@ final class PrestigeTests: XCTestCase {
         _ = Legacy.start(&run, old)
         XCTAssertEqual(run.level, 28)
         XCTAssertEqual(Progression.xpNeeded(atLevel: 9), 2240)
-        XCTAssertEqual(Progression.xpNeeded(atLevel: 28), AFK.xpToLevelUp(from: 28))
+        XCTAssertEqual(Progression.xpNeeded(atLevel: 28), AFKRun.xpToLevelUp(from: 28))
         run.xp = 0
-        XCTAssertGreaterThanOrEqual(Progression.gainXP(&run, AFK.xpToLevelUp(from: 28)!), 1)
+        XCTAssertGreaterThanOrEqual(Progression.gainXP(&run, AFKRun.xpToLevelUp(from: 28)!), 1)
         XCTAssertGreaterThanOrEqual(run.level, 29)
     }
 }
