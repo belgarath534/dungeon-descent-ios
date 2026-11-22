@@ -5345,6 +5345,9 @@ final class SpeechTextTests: XCTestCase {
         XCTAssertEqual(SpeechText.spellNumbers("Lv5 Monk"), "Lv five Monk")
         XCTAssertEqual(SpeechText.spellNumbers("Deals 20-35 damage"), "Deals twenty to thirty five damage")
         XCTAssertEqual(SpeechText.spellNumbers("No numbers here."), "No numbers here.")
+        XCTAssertEqual(SpeechText.spellNumbers("defeated! +95g."), "defeated! +ninety five gold.")
+        XCTAssertEqual(SpeechText.spellNumbers("Sell for 1,200g"), "Sell for one thousand two hundred gold")
+        XCTAssertEqual(SpeechText.spellNumbers("5 gold, 3gems"), "five gold, three gems")
     }
 }
 
