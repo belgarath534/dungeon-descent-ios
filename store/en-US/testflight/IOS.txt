@@ -1,15 +1,12 @@
-Thanks for testing Dungeon Descent 12.0.1!
+Thanks for testing Dungeon Descent 12.0.2!
 
-New: Endless Descent stat points. Gain a level or two in an Endless run, end it, and spend the points on the summary (HP, attack or defense). Start another run: your HP and attack should be higher.
-
-Fixed, please try:
-• Lewis Voice Pack: numbers. Floors 21 to 29 should be "twenty one" and so on, and big numbers like 3,082 gold "three thousand eighty two".
-• Legacy Mode: level up a Legacy character, then die or leave the run. The level should stay.
-• Prestige: prestiging a character crashed the game. Prestige a max-level character and check you get the star, the gold and the Mystery Coin.
-• Co-op: VoiceOver no longer jumps around during a fight. The action buttons stay on screen after you choose (the chosen one is marked) until the next round.
-• VoiceOver no longer jumps to the top after pressing buttons at Home (all its tabs), in the Gun Workshop and Gun Shop, the Arcane Shop, and the Command Center switch in Settings.
-• VoiceOver keeps its place on the dungeon's fight buttons, the Mine, Spire, Siege and other button grids, and on the merchant after buying (the Buy button now stays, as Sold).
-• Co-op: play two runs in a row with Play Again; the second should pay gold and Battle Pass progress too.
-• The merchant at night (8 PM to 8 AM): the crossed-out price should be the daytime price.
+Please try:
+• Endless Descent: it now goes past level 10, up to 50. Keep a run going and check the level keeps rising (and the XP bar shows the next amount).
+• 3D Mode with VoiceOver: moving around and focusing buttons should feel instant, with no multi-second delay before VoiceOver speaks. The spatial sound and Echo-Location should still work.
+• Legacy Mode: characters now go past level 25, up to 50. A Legacy character at 25 or more can still prestige.
+• The Spire: each kill gives XP and you can level up during a climb (+25 max HP, +2 attack). Check the level shows in other modes afterwards.
+• Later dungeons: from Frosthold Abyss on, enemies and bosses are tougher (+15%, and 10% more in each dungeon after). Tell us if it feels too hard or too easy.
+• Level points: spend some in a Legacy run, then start another. They should still be on your stats, with only new points to spend (the Level Points button, while exploring).
+• Merchant: selling several of the same item shows one row with a count.
 
 Found a bug? Tell us in #dungeon-descent-testers on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.

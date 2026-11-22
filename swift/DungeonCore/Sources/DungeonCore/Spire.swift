@@ -22,6 +22,10 @@ public struct SpireRun: Codable, Sendable {
     public var charName: String
     public var cls: String
     public var enemy: Foe? = nil
+    /// 12.0.2: the character's level and XP, raised by Spire kills (the same
+    /// curve and XP as Endless Descent) and saved to the character.
+    public var level = 1
+    public var xp = 0
     /// The floor's fight is over (or it's a rest floor): Next Floor is up.
     public var cleared = false
     public var won = false
@@ -140,9 +144,12 @@ public enum Spire {
         let stash = GlobalInventory(store: store)
         let wpn = stash.equippedWeapon.map { ($0.weaponAttack.lowerBound + $0.weaponAttack.upperBound) / 2 } ?? 0
         let arm = stash.equippedArmor?.armorDefense ?? 0
-        return SpireRun(floor: floor, hp: maxHp, maxHp: maxHp, atk: 20 + num(ch, "atkBonus") + (level - 1) * 2 + wpn,
-                        def: num(ch, "defBonus") + arm, potions: 3 + floor / 100, gold: wallet.gold,
-                        charName: ch.name, cls: ch.cls)
+        var r = SpireRun(floor: floor, hp: maxHp, maxHp: maxHp, atk: 20 + num(ch, "atkBonus") + (level - 1) * 2 + wpn,
+                         def: num(ch, "defBonus") + arm, potions: 3 + floor / 100, gold: wallet.gold,
+                         charName: ch.name, cls: ch.cls)
+        r.level = max(1, level)
+        r.xp = max(0, num(ch, "persistXp"))
+        return r
     }
 
     /// After the Blacksmith: gear bought or upgraded there counts right away
@@ -289,10 +296,30 @@ public enum Spire {
         run.gold += g
         wallet.addGold(g)
         var lines = ["\(e.icon) \(e.name) defeated! +\(g)g. Your HP: \(run.hp)/\(run.maxHp)."]
+        lines += gainXP(&run, e.isBoss ? 150 + run.floor * 5 : 20 + run.floor * 3)
         lines += floorRewards(&run, store: store, wallet: wallet, dice: &dice)
         saveBest(run.floor, store: store)
         run.cleared = true
         if run.floor >= top { lines += victory(&run, store: store, wallet: wallet) }
+        return lines
+    }
+
+    /// 12.0.2: XP for a kill, as in Endless Descent (20 + 3 a floor, a boss
+    /// 150 + 5 a floor). Each level gives +25 max HP and +2 attack, the same
+    /// as a level counts for when a climb starts, up to level 50.
+    static func gainXP(_ run: inout SpireRun, _ amount: Int) -> [String] {
+        guard run.level < AFKRun.maxLevel else { return [] }
+        run.xp += amount
+        var lines = ["+\(amount) XP."]
+        while let needed = AFKRun.xpToLevelUp(from: run.level), run.xp >= needed {
+            run.xp -= needed
+            run.level += 1
+            run.maxHp += 25
+            run.hp = min(run.maxHp, run.hp + 25)
+            run.atk += 2
+            lines.append("⬆ LEVEL UP! Level \(run.level). +25 max HP, +2 attack. HP: \(run.hp)/\(run.maxHp).")
+        }
+        if run.level >= AFKRun.maxLevel { run.xp = 0 }
         return lines
     }
 

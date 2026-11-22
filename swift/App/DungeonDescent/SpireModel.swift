@@ -136,6 +136,7 @@ final class SpireModel: ObservableObject {
     /// Records progress and moves on: death, victory, or Auto Mode's next tick.
     private func afterStep() {
         guard let r = run else { return }
+        saveLevel(r)
         game.achievements.setGlobalMax("spireBestFloor", Double(Spire.bestFloor(game.store)))
         GameCenter.submit(Spire.bestFloor(game.store), to: .spireFloor)
         if r.won {
@@ -155,6 +156,18 @@ final class SpireModel: ObservableObject {
         }
         _ = game.achievements.check()
         if autoMode { scheduleAuto() }
+    }
+
+    /// 12.0.2: Spire levels count everywhere, like Endless Descent's. Never
+    /// lowers the level; XP is saved as it changes.
+    private func saveLevel(_ r: SpireRun) {
+        guard let ch = character, ch.name == r.charName else { return }
+        let xp: Int = { if case .number(let n)? = ch.extra["persistXp"] { return Int(n) }; return 0 }()
+        guard r.level > (ch.persistLevel ?? 1) || (r.level == (ch.persistLevel ?? 1) && r.xp != xp) else { return }
+        game.updateCharacter(characterIndex) { c in
+            c.persistLevel = max(c.persistLevel ?? 1, r.level)
+            c.extra["persistXp"] = .number(Double(r.xp))
+        }
     }
 
     private func died(_ r: SpireRun) {

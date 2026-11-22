@@ -10,7 +10,7 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "12.0.1")
+VERSION = os.environ.get("VERSION", "12.0.2")
 # Only these platforms (store-submit-ios: "IOS").
 PLATFORMS = os.environ.get("PLATFORMS", "IOS MAC_OS VISION_OS").split()
 
@@ -75,7 +75,31 @@ Correções:
 • "Escolha um salvamento" não aparece mais quando você joga em um só aparelho.
 • Mais fácil de ler: textos apagados e dourados estão mais claros, e o link do Discord é mais fácil de tocar.""",
 }
-WHATS_NEW = WHATS_NEW_12_0_1 if VERSION == "12.0.1" else WHATS_NEW_12_0
+# 12.0.2: what's new after 12.0.1.
+WHATS_NEW_12_0_2 = {
+    "en-US": """12.0.2:
+• Endless Descent now goes up to level 50 (it stopped at 10). Each level asks for more XP, and still gives HP, attack and a stat point.
+• 3D Mode: VoiceOver is quick again. The 3D room isn't drawn while VoiceOver is on, which made VoiceOver wait seconds to move and speak; the spatial sound, Echo-Location and directions are all still there.
+• Legacy Mode now goes up to level 50 (it stopped at 25). Prestige still needs level 25.
+• The Spire gives XP: every kill counts toward your level, and you can level up during a climb (+25 max HP, +2 attack), up to 50.
+• Leveling past 10 takes the same XP in the dungeon as in Endless Descent.
+• Later dungeons are harder: from Frosthold Abyss on, enemies and bosses have more health and hit harder, more in each dungeon after it.
+• Level points stay where you spent them when your level carries over (Legacy, Continue Journey), and the Level Points button lets you spend new ones any time you're exploring.
+• Selling to the merchant: the same items are one row with a count (10 elixirs were 10 rows).""",
+    "pt-BR": """12.0.2:
+• A Descida Infinita agora vai até o nível 50 (parava no 10). Cada nível pede mais XP e continua dando HP, ataque e um ponto de atributo.
+• Modo 3D: o VoiceOver está rápido de novo. A sala em 3D não é desenhada com o VoiceOver ligado, o que fazia o VoiceOver esperar segundos para mover e falar; o som espacial, a Ecolocalização e as direções continuam iguais.
+• O Modo Legado agora vai até o nível 50 (parava no 25). O Prestígio continua pedindo nível 25.
+• A Torre dá XP: cada inimigo derrotado conta para o seu nível, e você pode subir de nível durante a escalada (+25 de HP máximo, +2 de ataque), até o 50.
+• Subir depois do nível 10 pede o mesmo XP na masmorra e na Descida Infinita.
+• As masmorras mais fundas estão mais difíceis: a partir do Abismo Glacial, inimigos e chefes têm mais vida e batem mais forte, e mais ainda em cada masmorra seguinte.
+• Os pontos de nível continuam onde você os gastou quando o seu nível passa para a próxima partida (Legado, Continuar Jornada), e o botão Pontos de Nível deixa você gastar os novos a qualquer momento explorando.
+• Vender ao mercador: itens iguais ficam numa linha só com a quantidade (10 elixires eram 10 linhas).""",
+}
+# 12.0.1 never shipped, so 12.0.2's notes carry its fixes too.
+WHATS_NEW_12_0_2 = {k: v + "\n" + WHATS_NEW_12_0_1[k].split("\n", 1)[1] for k, v in WHATS_NEW_12_0_2.items()}
+WHATS_NEW = {"12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
+
 PROMO = {
     "en-US": "New in 12.0: play together. Co-op dungeons with friends on iPhone, Mac, Vision Pro and the web, a Battle Pass, and hunting by sound.",
     "pt-BR": "Novo na 12.0: jogue junto. Masmorras cooperativas com amigos no iPhone, Mac, Vision Pro e web, Passe de Batalha e caça pelo som.",
@@ -122,9 +146,24 @@ for platform in PLATFORMS:
                  params={"filter[platform]": platform, "filter[versionString]": VERSION})
     if found is None:
         continue
+    # A version that was never released (taken out of review, or never sent)
+    # is renamed instead: App Store Connect allows one at a time.
+    unsent = None
+    if not found["data"]:
+        for o in (call("GET", f"/apps/{app}/appStoreVersions", params={"filter[platform]": platform, "limit": 5}) or {"data": []})["data"]:
+            if (o["attributes"].get("appStoreState") or "") in ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED"):
+                unsent = o
+                break
     if found["data"]:
         v = found["data"][0]
         print(f"• {platform} {VERSION} is already there ({v['attributes'].get('appStoreState')})")
+    elif unsent:
+        old = unsent["attributes"].get("versionString")
+        if call("PATCH", f"/appStoreVersions/{unsent['id']}", {"data": {"type": "appStoreVersions", "id": unsent["id"],
+                "attributes": {"versionString": VERSION}}}) is None:
+            continue
+        v = unsent
+        print(f"✅ {platform} {old} renamed to {VERSION}")
     else:
         made = call("POST", "/appStoreVersions", {"data": {"type": "appStoreVersions",
                     "attributes": {"platform": platform, "versionString": VERSION},

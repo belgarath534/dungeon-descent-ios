@@ -45347,6 +45347,17 @@
         }
       }
     },
+    "Done, back to exploring": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pronto, voltar a explorar"
+          }
+        }
+      }
+    },
     "Ready to Descend": {
       "extractionState": "manual",
       "localizations": {

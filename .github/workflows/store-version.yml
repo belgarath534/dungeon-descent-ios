@@ -18,7 +18,7 @@ on:
     # (the other two may already be in review).
     # store-submit-ios: iPhone only (a fix update while Mac and Vision Pro
     # are still in review).
-    branches: [store-version, store-submit, store-cancel, store-status, store-auto-release, store-submit-ios-mac, store-submit-vision, store-submit-ios, store-cancel-ios]
+    branches: [store-version, store-submit, store-cancel, store-status, store-auto-release, store-submit-ios-mac, store-submit-vision, store-submit-ios, store-cancel-ios, store-cancel-ios-mac]
   workflow_dispatch:
 
 jobs:
@@ -68,9 +68,9 @@ jobs:
 
       - name: Pick the builds (and submit, from store-submit)
         env:
-          VERSION: "12.0.1"
+          VERSION: "12.0.2"
           SUBMIT: ${{ startsWith(github.ref_name, 'store-submit') && 'yes' || '' }}
-          PLATFORMS: ${{ github.ref_name == 'store-submit-ios-mac' && 'IOS MAC_OS' || github.ref_name == 'store-submit-vision' && 'VISION_OS' || (github.ref_name == 'store-submit-ios' || github.ref_name == 'store-cancel-ios') && 'IOS' || 'IOS MAC_OS VISION_OS' }}
+          PLATFORMS: ${{ github.ref_name == 'store-submit-ios-mac' && 'IOS MAC_OS' || github.ref_name == 'store-submit-vision' && 'VISION_OS' || (github.ref_name == 'store-submit-ios' || github.ref_name == 'store-cancel-ios') && 'IOS' || github.ref_name == 'store-cancel-ios-mac' && 'IOS MAC_OS' || 'IOS MAC_OS VISION_OS' }}
           CANCEL: ${{ startsWith(github.ref_name, 'store-cancel') && 'yes' || '' }}
           STATUS: ${{ github.ref_name == 'store-status' && 'yes' || '' }}
           AUTO_RELEASE: ${{ github.ref_name == 'store-auto-release' && 'yes' || '' }}

@@ -142,6 +142,20 @@ struct ShopOverlay: View {
         .opacity(entry.sold ? 0.3 : 1)
     }
 
+    /// Identical items (same name, type and price) as one row: the first
+    /// one's index and how many there are, in bag order.
+    struct Stack { let index: Int; let item: Item; var count: Int }
+
+    static func stacks(_ items: [Item]) -> [Stack] {
+        var out: [Stack] = []
+        var at: [String: Int] = [:]
+        for (i, item) in items.enumerated() {
+            let key = "\(item.name)|\(item.type)|\(Inventory.sellPrice(item))"
+            if let k = at[key] { out[k].count += 1 } else { at[key] = out.count; out.append(Stack(index: i, item: item, count: 1)) }
+        }
+        return out
+    }
+
     /// #shop-sell-list
     @ViewBuilder
     private func sellList(_ run: Run) -> some View {
@@ -150,16 +164,20 @@ struct ShopOverlay: View {
                 Text("Nothing in inventory to sell.").font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0x909090))
                     .frame(maxWidth: .infinity, alignment: .leading).padding(8)
             }
-            ForEach(Array(run.inventory.enumerated()), id: \.offset) { i, item in
+            // 12.0.2: the same item once, with how many you have; selling
+            // sells one (ten elixirs were ten rows).
+            ForEach(Self.stacks(run.inventory), id: \.index) { stack in
+                let item = stack.item
                 let price = Inventory.sellPrice(item)
+                let count = stack.count > 1 ? " ×\(stack.count)" : ""
                 HStack(spacing: 8) {
-                    Text("\(item.icon) \(item.name)" as String).font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xcc9944))
+                    Text("\(item.icon) \(item.name)\(count)" as String).font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xcc9944))
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Button("\(price)g" as String) { model.sell(at: i) }
+                    Button("\(price)g" as String) { model.sell(at: stack.index) }
                         .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xcc8844))
                         .padding(.vertical, 4).padding(.horizontal, 10)
                         .background(Color(hex: 0x1a0800)).overlay(Rectangle().stroke(Color(hex: 0xaa6622)))
-                        .accessibilityLabel("Sell \(item.name) for \(price) gold" as String)
+                        .accessibilityLabel((stack.count > 1 ? "Sell one \(item.name) for \(price) gold. You have \(stack.count)" : "Sell \(item.name) for \(price) gold") as String)
                 }
                 .padding(.vertical, 6)
                 .overlay(alignment: .bottom) { Rectangle().fill(Color(hex: 0x1a1a00)).frame(height: 1) }
@@ -179,7 +197,7 @@ struct LevelUpOverlay: View {
     var body: some View {
         let lp = model.run.levelPoints
         DungeonDialog(maxWidth: 420, background: Color(hex: 0x0a0a06), border: Theme.goldDim) {
-            Text("⬆ Level \(level)!" as String).font(Theme.decorative(22)).foregroundStyle(Theme.gold)
+            Text(model.pointsOnly ? "⬆ Level Points" : "⬆ Level \(level)!" as String).font(Theme.decorative(22)).foregroundStyle(Theme.gold)
                 .frame(maxWidth: .infinity).accessibilityAddTraits(.isHeader)
             Text("\(model.run.name) grows stronger. You have \(lp) Level Point\(lp != 1 ? "s" : "") to spend." as String)
                 .font(Theme.crimson(14.4, italic: true)).foregroundStyle(Theme.textSecondary)
@@ -207,10 +225,10 @@ struct LevelUpOverlay: View {
                 }
             }
             .padding(.bottom, 16)
-            Button("Continue Descent") { model.continueAfterLevelUp() }
+            Button(model.pointsOnly ? LocalizedStringKey("Done") : LocalizedStringKey("Continue Descent")) { model.continueAfterLevelUp() }
                 .buttonStyle(WebButtonStyle(kind: .gold))
                 .frame(maxWidth: .infinity)
-                .accessibilityLabel("Continue your descent")
+                .accessibilityLabel(model.pointsOnly ? LocalizedStringKey("Done, back to exploring") : LocalizedStringKey("Continue your descent"))
         }
     }
 

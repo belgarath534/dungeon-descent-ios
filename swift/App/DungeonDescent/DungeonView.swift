@@ -613,6 +613,10 @@ struct DungeonView: View {
     private var view3D: some View {
         if model.threeD, let g = run.roomGraph {
             let settings = ThreeDMode.settings(game.store)
+            // Not drawn with VoiceOver on: rendering the room 60 times a
+            // second slowed VoiceOver down by seconds (a player's report).
+            // The spatial audio, Echo-Location and directions don't need it.
+            if !UIAccessibility.isVoiceOverRunning {
             Dungeon3DView(graph: g, dungeon: run.dungeon, settings: settings)
                 .frame(height: 240)
                 .overlay(alignment: .topTrailing) {
@@ -620,6 +624,7 @@ struct DungeonView: View {
                 }
                 .overlay(Rectangle().stroke(Theme.borderDim))
                 .accessibilityHidden(true)
+            }
             Text("🧊 " + g.exitsText).font(Theme.crimson(13, italic: true)).foregroundStyle(Theme.textSecondary)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -665,6 +670,9 @@ struct DungeonView: View {
             FlowRow(spacing: 8) {
                 act("🎒 Inventory", "Toggle inventory") { toggleInventory() }
                 act("📊 Stats", "View character stats") { showStats = true; Feedback.announce(statsSpoken) }
+                if model.run.levelPoints > 0 {
+                    act("⬆ Level Points (\(model.run.levelPoints))", "Spend \(model.run.levelPoints) level points on your stats") { model.openLevelPoints() }
+                }
                 act("📖 Skills", "Open skill book, view and reorder your unlocked skills") { showSkillBook() }
                 act("⚙ Settings", "Open settings, adjust music and sound effects") { showSettings = true }
                 act("📜 Run Log", "Open run log, see everything that happened this run") { showRunLog = true }

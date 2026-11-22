@@ -14,6 +14,7 @@ struct DungeonDescentApp: App {
     init() {
         CloudAccount.configure()
         WatchBridge.shared.activate()
+        KeyboardDone.install()
     }
 
     var body: some Scene {

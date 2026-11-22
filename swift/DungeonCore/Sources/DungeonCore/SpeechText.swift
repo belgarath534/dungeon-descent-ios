@@ -11,7 +11,9 @@ public enum SpeechText {
     /// the second floor, minus five HP, one point five x"
     public static func spellNumbers(_ raw: String) -> String {
         // A range between numbers ("20-35 damage") is "twenty to thirty five".
-        let text = raw.replacingOccurrences(of: #"(\d)\s*[-–]\s*(\d)"#, with: "$1 to $2", options: .regularExpression)
+        var text = raw.replacingOccurrences(of: #"(\d)\s*[-–]\s*(\d)"#, with: "$1 to $2", options: .regularExpression)
+        // Gold written short ("+95g", "1,200g"): "ninety five gold", not the letter g.
+        text = text.replacingOccurrences(of: #"(\d)g(?![A-Za-z])"#, with: "$1 gold", options: .regularExpression)
         let pattern = #"(?<![\d.,])(-)?(\d{1,3}(?:,\d{3})+|\d+)(\.\d+)?(%|st|nd|rd|th)?"#
         guard let rx = try? NSRegularExpression(pattern: pattern) else { return text }
         let ns = text as NSString

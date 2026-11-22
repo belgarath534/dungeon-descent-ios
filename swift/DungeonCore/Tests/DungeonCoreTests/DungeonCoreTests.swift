@@ -89,7 +89,7 @@ final class CharacterTests: XCTestCase {
         XCTAssertNil(classic.dungeonTier)
         let legacy = PlayerCharacter(name: "Kael", cls: "Warrior", race: "Human", prof: "Thief",
                                dungeon: "Crypt of Malachar", difficulty: .wanderer, runMode: "legacy")
-        XCTAssertEqual(legacy.levelCap, 25)
+        XCTAssertEqual(legacy.levelCap, 50)
         XCTAssertEqual(legacy.dungeonTier, 1)
     }
 
@@ -1502,7 +1502,7 @@ final class AFKTests: XCTestCase {
                 XCTAssertLessThanOrEqual(run.log.count, 50)
             }
             XCTAssertGreaterThan(run.floor, 10, "seed \(seed)")
-            XCTAssertLessThanOrEqual(run.level, 10)
+            XCTAssertLessThanOrEqual(run.level, AFKRun.maxLevel)
             let back = try JSONDecoder().decode(AFKRun.self, from: JSONEncoder().encode(run))
             XCTAssertEqual(back.floor, run.floor)
             XCTAssertEqual(back.log, run.log)
@@ -2099,6 +2099,34 @@ final class SpireTests: XCTestCase {
         XCTAssertTrue(r.won)
         XCTAssertGreaterThanOrEqual(CoinShop.coins(store), 25)
         XCTAssertEqual(Blacksmith.discount(store).pct, 0.25)
+    }
+
+    func testSpireKillsGiveXPAndLevels() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        var ch = climber()
+        ch.persistLevel = 3
+        ch.extra["persistXp"] = .number(200)
+        var r = Spire.start(ch, store: store, wallet: w)
+        XCTAssertEqual(r.level, 3)
+        XCTAssertEqual(r.xp, 200)
+        let hp = r.maxHp, atk = r.atk
+        // Level 3 needs 380; a floor-1 kill gives 23, a boss on floor 10 gives 200.
+        r.floor = 10
+        r.atk = 100_000
+        var dice = SeededDice(seed: 5)
+        _ = Spire.enter(&r, store: store, wallet: w, dice: &dice)
+        let lines = Spire.turn(&r, .attack, store: store, wallet: w, dice: &dice)
+        XCTAssertEqual(r.level, 4)
+        XCTAssertEqual(r.xp, 20)
+        XCTAssertEqual(r.maxHp, hp + 25)
+        XCTAssertEqual(r.atk, 100_002)
+        XCTAssertTrue(lines.contains { $0.hasPrefix("⬆ LEVEL UP! Level 4.") })
+        _ = atk
+        // Level 50 is the top.
+        r.level = AFKRun.maxLevel
+        XCTAssertEqual(Spire.gainXP(&r, 99_999), [])
+        XCTAssertEqual(r.level, AFKRun.maxLevel)
     }
 
     func testDeathSaves() {
@@ -2788,6 +2816,23 @@ final class VoidReaperTests: XCTestCase {
         XCTAssertEqual(f.hp, full - hit)
         XCTAssertNotNil(VoidReaper.heal(&f, phase: 3, dice: &dice))
         XCTAssertEqual(f.potions, 2)
+    }
+
+    func testLaterDungeonsAreHarder() {
+        XCTAssertEqual(Legacy.depthMult("Crypt of Malachar"), 1)
+        XCTAssertEqual(Legacy.depthMult("The Ashbound Wastes"), 1)
+        XCTAssertEqual(Legacy.depthMult("Frosthold Abyss"), 1.15, accuracy: 0.0001)
+        XCTAssertEqual(Legacy.depthMult("The Shadow World"), 1.75, accuracy: 0.0001)
+        let crypt = Run(character: PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var deep = crypt
+        deep.dungeon = "The Hollow"
+        var e = Enemy(name: "X", icon: "x", hp: 100, maxHp: 100, atk: 10...20, gold: 1...2)
+        var f = e
+        Legacy.shape(&e, crypt)
+        Legacy.shape(&f, deep)
+        XCTAssertEqual(e.hp, 100)
+        XCTAssertEqual(f.hp, 135)
+        XCTAssertEqual(f.atk, 13...27) // 10 × 1.35 is 13.4999… in floating point
     }
 
     func testWorldCurseMakesEnemiesStronger() {
@@ -4245,6 +4290,7 @@ final class LegacyAndJuly4Tests: XCTestCase {
         var next = Run(character: ch)
         XCTAssertEqual(Legacy.start(&next, ch).count, 2)
         XCTAssertEqual(next.level, 7)
+        XCTAssertEqual(Progression.restore(&next, [:]), 0)
         XCTAssertEqual(next.levelPoints, 18)
         XCTAssertEqual(next.unlockedSkills, ["a"])
         var e = Enemy(name: "X", icon: "x", hp: 100, maxHp: 100, atk: 10...20, gold: 10...10)
@@ -4891,6 +4937,51 @@ final class PrestigeTests: XCTestCase {
         ch.persistLevel = 25
         XCTAssertNotNil(Prestige.blocker(ch))
     }
+
+    /// 12.0.2: spent level points stay on their stats between runs.
+    func testLevelPointsStayWhereSpent() {
+        var ch = PlayerCharacter(name: "L", cls: "Warrior", race: "Human", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer, runMode: "legacy")
+        Progression.recordSpend(&ch, .strength)
+        Progression.recordSpend(&ch, .strength)
+        Progression.recordSpend(&ch, .stamina)
+        XCTAssertEqual(Progression.savedSpend(ch), [.strength: 2, .stamina: 1])
+        ch.persistLevel = 3
+        var r = Run(character: ch)
+        _ = Legacy.start(&r, ch)
+        let atk0 = r.atkBonus, hp0 = r.maxHp, lp0 = r.levelPoints
+        XCTAssertEqual(Progression.restore(&r, Progression.savedSpend(ch)), 3)
+        XCTAssertEqual(r.atkBonus, atk0 + 4)
+        XCTAssertEqual(r.maxHp, hp0 + 10)
+        XCTAssertEqual(r.levelPoints, lp0 + 3) // 6 for level 3, 3 already spent
+        // More spent than the level allows: only what fits goes back.
+        var low = Run(character: ch)
+        low.level = 2
+        XCTAssertEqual(Progression.restore(&low, [.strength: 5]), 3)
+        XCTAssertEqual(low.levelPoints, 0)
+        // Prestige clears them.
+        ch.persistLevel = 25
+        _ = Prestige.prestige(&ch, wallet: Wallet(store: MemoryStore()), store: MemoryStore())
+        XCTAssertTrue(Progression.savedSpend(ch).isEmpty)
+    }
+
+    /// 12.0.2: Legacy goes to 50, prestige still at 25, and old saves move up.
+    func testLegacyFiftyPrestigeTwentyFive() throws {
+        let old = try JSONDecoder().decode(PlayerCharacter.self, from: Data(#"{"name":"Old","cls":"Warrior","race":"Human","prof":"Thief","dungeon":"Crypt of Malachar","difficulty":"wanderer","runMode":"legacy","levelCap":25,"persistLevel":28}"#.utf8))
+        XCTAssertEqual(old.levelCap, 50)
+        XCTAssertEqual(Prestige.requiredLevel(old), 25)
+        XCTAssertNil(Prestige.blocker(old))
+        let classic = PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        XCTAssertEqual(Prestige.requiredLevel(classic), 10)
+        var run = Run(character: old)
+        _ = Legacy.start(&run, old)
+        XCTAssertEqual(run.level, 28)
+        XCTAssertEqual(Progression.xpNeeded(atLevel: 9), 2240)
+        XCTAssertEqual(Progression.xpNeeded(atLevel: 28), AFKRun.xpToLevelUp(from: 28))
+        run.xp = 0
+        XCTAssertGreaterThanOrEqual(Progression.gainXP(&run, AFKRun.xpToLevelUp(from: 28)!), 1)
+        XCTAssertGreaterThanOrEqual(run.level, 29)
+    }
 }
 
 final class BattlePassTests: XCTestCase {
@@ -5254,5 +5345,18 @@ final class SpeechTextTests: XCTestCase {
         XCTAssertEqual(SpeechText.spellNumbers("Lv5 Monk"), "Lv five Monk")
         XCTAssertEqual(SpeechText.spellNumbers("Deals 20-35 damage"), "Deals twenty to thirty five damage")
         XCTAssertEqual(SpeechText.spellNumbers("No numbers here."), "No numbers here.")
+        XCTAssertEqual(SpeechText.spellNumbers("defeated! +95g."), "defeated! +ninety five gold.")
+        XCTAssertEqual(SpeechText.spellNumbers("Sell for 1,200g"), "Sell for one thousand two hundred gold")
+        XCTAssertEqual(SpeechText.spellNumbers("5 gold, 3gems"), "five gold, three gems")
+    }
+}
+
+final class AFKLevelCapTests: XCTestCase {
+    func testEndlessLevelsGoPastTenUpToFifty() {
+        XCTAssertEqual(AFKRun.xpToLevelUp(from: 1), 100)
+        XCTAssertEqual(AFKRun.xpToLevelUp(from: 9), 2240)
+        XCTAssertEqual(AFKRun.xpToLevelUp(from: 10), 2740)
+        XCTAssertEqual(AFKRun.xpToLevelUp(from: 49), 2240 + 40 * 500)
+        XCTAssertNil(AFKRun.xpToLevelUp(from: 50))
     }
 }

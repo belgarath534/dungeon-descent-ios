@@ -26,8 +26,10 @@ public enum Progression {
         return .t3
     }
 
+    /// The same curve as Endless Descent: the table to level 10, then 500
+    /// more a level (12.0.2; levels 10 to 25 used to need 9999 each).
     public static func xpNeeded(atLevel level: Int) -> Int {
-        xpTable[min(level, xpTable.count - 1)]
+        AFKRun.xpToLevelUp(from: max(1, level)) ?? 9999
     }
 
     /// Adds XP and levels up as far as it reaches. Returns how many levels
@@ -91,6 +93,42 @@ public enum Progression {
 
     /// Spends one level point. Returns false if there are none left.
     @discardableResult
+    /// 12.0.2: the level points a character has spent (extra["lpSpent"],
+    /// stat → count). A run that starts above level 1 (Legacy, Continue
+    /// Journey) puts them back where they were, and only the rest are free to
+    /// spend; before, every run handed all of them back to spend again.
+    public static func savedSpend(_ ch: PlayerCharacter) -> [Stat: Int] {
+        guard case .object(let o)? = ch.extra["lpSpent"] else { return [:] }
+        var out: [Stat: Int] = [:]
+        for (k, v) in o { if let s = Stat(rawValue: k), case .number(let n) = v, n > 0 { out[s] = Int(n) } }
+        return out
+    }
+
+    public static func recordSpend(_ ch: inout PlayerCharacter, _ stat: Stat) {
+        var o: [String: JSONValue] = [:]
+        if case .object(let old)? = ch.extra["lpSpent"] { o = old }
+        var n = 0.0
+        if case .number(let x)? = o[stat.rawValue] { n = x }
+        o[stat.rawValue] = .number(n + 1)
+        ch.extra["lpSpent"] = .object(o)
+    }
+
+    /// The points a run at this level has: 3 a level past 1. Spent ones go
+    /// back on their stats; the rest are left to spend. Returns how many
+    /// were put back.
+    @discardableResult
+    public static func restore(_ run: inout Run, _ spent: [Stat: Int]) -> Int {
+        let budget = 3 * max(0, run.level - 1)
+        var used = 0
+        for stat in Stat.allCases {
+            let n = min(spent[stat] ?? 0, budget - used)
+            for _ in 0..<max(0, n) { run.levelPoints += 1; _ = spend(&run, on: stat) }
+            used += max(0, n)
+        }
+        run.levelPoints += budget - used
+        return used
+    }
+
     public static func spend(_ run: inout Run, on stat: Stat) -> Bool {
         guard run.levelPoints > 0 else { return false }
         switch stat {

@@ -145,6 +145,17 @@ final class RunModel: ObservableObject {
         game.globalInventory.load(into: &r)
         r.applyStartBonuses(wallet: game.wallet)
         r.startNotes += Legacy.start(&r, game.characters[index])
+        // 12.0.2: level points stay where they were spent when the level
+        // carries over (Legacy, Continue Journey); a fresh level-1 run clears them.
+        let spent = Progression.savedSpend(game.characters[index])
+        if r.level > 1 {
+            let used = Progression.restore(&r, spent)
+            r.startNotes.append(used > 0
+                ? "📊 Your \(used) spent level point\(used == 1 ? "" : "s") stay on your stats. \(r.levelPoints) to spend."
+                : "📊 Level \(r.level): \(r.levelPoints) level points to spend.")
+        } else if !spent.isEmpty {
+            game.updateCharacter(index) { $0.extra["lpSpent"] = nil }
+        }
         r.startNotes += Prestige.start(&r, game.characters[index])
         r.startNotes += Professions.start(&r, prof: r.prof)
         BossRelics.start(&r)
@@ -3467,6 +3478,7 @@ final class RunModel: ObservableObject {
         var r = run
         guard Progression.spend(&r, on: stat) else { return }
         run = r
+        game.updateCharacter(characterIndex) { Progression.recordSpend(&$0, stat) }
         persist()
         add("\(stat.label) increased. \(r.levelPoints) level points left.", speak: true)
     }
@@ -3569,8 +3581,25 @@ final class RunModel: ObservableObject {
 
     // MARK: Level up and skills (triggerLevelUp, closeLevelUp, showSkillChoice)
 
+    /// 12.0.2: unspent level points can be spent any time you're exploring,
+    /// not only at the next level-up.
+    @Published var pointsOnly = false
+
+    func openLevelPoints() {
+        guard phase == .exploring, levelUp == nil, run.levelPoints > 0 else { return }
+        pointsOnly = true
+        levelUp = run.level
+        Sound.sfx("sfx-select")
+        Feedback.announce("Level Points. You have \(run.levelPoints) to spend.")
+    }
+
     func continueAfterLevelUp() {
         levelUp = nil
+        if pointsOnly {
+            pointsOnly = false
+            Feedback.announce("Back to exploring. \(run.levelPoints) level point\(run.levelPoints == 1 ? "" : "s") left.")
+            return
+        }
         let c = run.skillChoices
         if c.isEmpty {
             Feedback.announce("Continuing your descent. No more skills available.")

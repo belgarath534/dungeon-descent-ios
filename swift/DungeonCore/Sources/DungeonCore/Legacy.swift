@@ -1,12 +1,14 @@
 import Foundation
 
 /// Legacy Mode (runMode "legacy", dungeonTier, persistLevel): the level
-/// carries between runs (up to 25), and each dungeon you clear raises the
+/// carries between runs (up to 50 since 12.0.2; it was 25), and each dungeon you clear raises the
 /// Dungeon Tier: +20% enemy HP, +10% enemy attack and +15% gold a tier. Dying
 /// keeps the level and puts the tier back to 1. The web version saved the
 /// level on a clear but every run started at level 1 anyway; Swift starts
 /// you at it, with its level points to spend again.
 public enum Legacy {
+    /// The highest Legacy level, the same as Endless Descent's.
+    public static let maxLevel = AFKRun.maxLevel
     public static func isLegacy(_ ch: PlayerCharacter) -> Bool { ch.runMode == "legacy" }
 
     public static func hpMult(tier: Int) -> Double { 1 + Double(max(0, tier - 1)) * 0.20 }
@@ -25,8 +27,8 @@ public enum Legacy {
                 let ids = s.compactMap { v -> String? in if case .string(let id) = v { return id }; return nil }
                 if !ids.isEmpty { r.unlockedSkills = ids }
             }
-            r.levelPoints += 3 * (level - 1)
-            notes.append("🌑 Legacy — you return at level \(level). \(3 * (level - 1)) level points to spend.")
+            // Level points: Progression.restore, from the run's start.
+            notes.append("🌑 Legacy — you return at level \(level).")
         }
         let tier = max(1, ch.dungeonTier ?? 1)
         r.legacyTier = tier
@@ -36,8 +38,24 @@ public enum Legacy {
         return notes
     }
 
-    /// applyTierScaling.
+    /// 12.0.2: later dungeons are harder. From the third dungeon (Frosthold
+    /// Abyss) enemies and bosses have +15% HP and attack, and 10% more for
+    /// each dungeon after it (The Shadow World +75%). The web does the same.
+    public static func depthMult(_ dungeon: String) -> Double {
+        guard let i = GameData.dungeons.firstIndex(of: dungeon), i >= 2 else { return 1 }
+        return 1.15 + Double(i - 2) * 0.10
+    }
+
+    /// applyTierScaling (with the dungeon's depth first, in every run mode).
     static func shape(_ e: inout Enemy, _ run: Run) {
+        let d = depthMult(run.dungeon)
+        if d != 1 {
+            e.hp = jsRound(Double(e.hp) * d)
+            e.maxHp = e.hp
+            let lo = jsRound(Double(e.atk.lowerBound) * d), hi = jsRound(Double(e.atk.upperBound) * d)
+            e.atk = lo...max(lo, hi)
+            if e.isBoss { e.phase1Hp = jsRound(Double(e.hp) * 0.66); e.phase2Hp = jsRound(Double(e.hp) * 0.33) }
+        }
         let t = run.legacyTier
         guard t > 1 else { return }
         e.hp = jsRound(Double(e.hp) * hpMult(tier: t))

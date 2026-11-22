@@ -22,12 +22,16 @@ public enum Prestige {
         return s > 0 ? "\(ch.name) ★\(s)" : ch.name
     }
 
+    /// The level a prestige needs: 10, or 25 in Legacy. It stayed 25 when
+    /// Legacy's cap went up to 50 in 12.0.2.
+    public static func requiredLevel(_ ch: PlayerCharacter) -> Int { min(ch.levelCap, 25) }
+
     /// The reason a character can't prestige yet, or nil when they can.
     public static func blocker(_ ch: PlayerCharacter) -> String? {
         if stars(ch) >= maxStars { return "\(ch.name) already has every star there is." }
         let level = ch.persistLevel ?? 1
-        if level < ch.levelCap {
-            return "Reach level \(ch.levelCap) to prestige. \(ch.name) is level \(level)."
+        if level < requiredLevel(ch) {
+            return "Reach level \(requiredLevel(ch)) to prestige. \(ch.name) is level \(level)."
         }
         return nil
     }
@@ -47,6 +51,7 @@ public enum Prestige {
         ch.persistLevel = 1
         ch.extra["persistXp"] = .number(0)
         ch.extra["persistSkills"] = .array([])
+        ch.extra["lpSpent"] = nil
         if ch.dungeonTier != nil { ch.dungeonTier = 1 }
         let gold = 1000 * s
         wallet.addGold(gold)
