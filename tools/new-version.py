@@ -132,9 +132,24 @@ for platform in PLATFORMS:
                  params={"filter[platform]": platform, "filter[versionString]": VERSION})
     if found is None:
         continue
+    # A version that was never released (taken out of review, or never sent)
+    # is renamed instead: App Store Connect allows one at a time.
+    unsent = None
+    if not found["data"]:
+        for o in (call("GET", f"/apps/{app}/appStoreVersions", params={"filter[platform]": platform, "limit": 5}) or {"data": []})["data"]:
+            if (o["attributes"].get("appStoreState") or "") in ("PREPARE_FOR_SUBMISSION", "DEVELOPER_REJECTED", "REJECTED", "METADATA_REJECTED"):
+                unsent = o
+                break
     if found["data"]:
         v = found["data"][0]
         print(f"• {platform} {VERSION} is already there ({v['attributes'].get('appStoreState')})")
+    elif unsent:
+        old = unsent["attributes"].get("versionString")
+        if call("PATCH", f"/appStoreVersions/{unsent['id']}", {"data": {"type": "appStoreVersions", "id": unsent["id"],
+                "attributes": {"versionString": VERSION}}}) is None:
+            continue
+        v = unsent
+        print(f"✅ {platform} {old} renamed to {VERSION}")
     else:
         made = call("POST", "/appStoreVersions", {"data": {"type": "appStoreVersions",
                     "attributes": {"platform": platform, "versionString": VERSION},
