@@ -30,6 +30,8 @@ struct DevToolsPanel: View {
     @State private var sendOK = false
     @State private var sending = false
     @FocusState private var focused: Bool
+    @State private var modTarget = ""
+    @State private var modResult = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -83,11 +85,47 @@ struct DevToolsPanel: View {
 
     // MARK: Tools
 
+    /// Remove a reported community enemy for every player (Formspree reports
+    /// carry its ID), bring it back, or remove everything one creator made.
+    private var moderation: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("🛡 MODERATION").font(Theme.cinzel(11.2)).tracking(2).foregroundStyle(Theme.gold)
+                .accessibilityAddTraits(.isHeader)
+            Text("Paste the enemy ID from a report, or type a creator's name.")
+                .font(Theme.crimson(12.8, italic: true)).foregroundStyle(Theme.textSecondary)
+            TextField("", text: $modTarget, prompt: Text("Enemy ID or creator name").foregroundColor(Theme.textDim))
+                .textInputAutocapitalization(.never).autocorrectionDisabled()
+                .font(Theme.cinzel(13)).foregroundStyle(Theme.textPrimary)
+                .padding(10).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
+                .accessibilityLabel("Enemy ID or creator name")
+            Button("🗑 Remove Enemy (by ID)") { run { await CommunityEnemyStore.shared.moderate(modTarget, approved: false) } }
+                .buttonStyle(WebButtonStyle(kind: .red)).frame(maxWidth: .infinity)
+            Button("↩ Restore Enemy (by ID)") { run { await CommunityEnemyStore.shared.moderate(modTarget, approved: true) } }
+                .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+            Button("🚫 Remove All by Creator") { run { await CommunityEnemyStore.shared.removeAll(by: modTarget) } }
+                .buttonStyle(WebButtonStyle(kind: .red)).frame(maxWidth: .infinity)
+            // Stays on screen (empty until there's a result), so VoiceOver keeps its place.
+            Text(modResult).font(Theme.cinzel(11)).foregroundStyle(Theme.textSecondary)
+                .accessibilityHidden(modResult.isEmpty)
+        }
+        .padding(.bottom, 20)
+    }
+
+    private func run(_ action: @escaping () async -> String) {
+        modResult = "Working…"
+        Task { @MainActor in
+            let r = await action()
+            modResult = r
+            Feedback.announce(r)
+        }
+    }
+
     private var tools: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("🔧 DEVELOPER TOOLS").font(Theme.cinzel(9.6)).tracking(4).foregroundStyle(Color(hex: 0x909090)).padding(.bottom, 16)
                 .accessibilityAddTraits(.isHeader)
             changePassword
+            moderation
             row("💎 Give 1M Diamonds", "Adds 1,000,000 diamonds for testing the gun shop.", "Give", label: "Add 1 million diamonds") {
                 game.wallet.addDiamonds(1_000_000)
                 Feedback.announce("1 million diamonds added.")

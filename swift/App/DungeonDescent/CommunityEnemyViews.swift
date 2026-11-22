@@ -77,6 +77,44 @@ final class CommunityEnemyStore: ObservableObject {
                                     reason: reason, reporter: chat.username)
     }
 
+    // MARK: Moderation (Developer Tools, 12.1)
+    //
+    // Every version of the game, the web included, only loads enemies marked
+    // approved, so switching that off removes one for everyone at once, even
+    // players who never update. Nothing is deleted: Restore brings it back.
+
+    /// One enemy, by the ID in a report.
+    func moderate(_ id: String, approved: Bool) async -> String {
+        let clean = id.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !clean.isEmpty else { return "Paste an enemy ID first." }
+        do {
+            let doc = try await col.document(clean).getDocument()
+            guard doc.exists, let name = doc.data()?["name"] as? String else { return "No enemy with that ID." }
+            try await col.document(clean).updateData(["approved": approved, "moderatedAt": (Date().timeIntervalSince1970 * 1000).rounded()])
+            loadedAt = .distantPast
+            return approved ? "\(name) is back in everyone's dungeons." : "\(name) is removed from everyone's dungeons."
+        } catch {
+            return "Couldn't change it: \(error.localizedDescription)"
+        }
+    }
+
+    /// Every enemy one creator made.
+    func removeAll(by creator: String) async -> String {
+        let name = creator.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else { return "Type the creator's name first." }
+        do {
+            let snap = try await col.whereField("creator", isEqualTo: name).getDocuments()
+            guard !snap.documents.isEmpty else { return "No enemies by \(name)." }
+            for d in snap.documents {
+                try await d.reference.updateData(["approved": false, "moderatedAt": (Date().timeIntervalSince1970 * 1000).rounded()])
+            }
+            loadedAt = .distantPast
+            return "Enemies removed by \(name): \(snap.documents.count)."
+        } catch {
+            return "Couldn't remove them: \(error.localizedDescription)"
+        }
+    }
+
     func block(_ creator: String, store: GameStore) {
         GlobalChat(store: store).block(creator)
         refreshPool(store)

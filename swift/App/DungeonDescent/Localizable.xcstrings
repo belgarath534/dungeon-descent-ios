@@ -130747,6 +130747,116 @@
           }
         }
       }
+    },
+    "Enemy ID or creator name": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ID do inimigo ou nome do criador"
+          }
+        }
+      }
+    },
+    "↩ Restore Enemy (by ID)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "↩ Restaurar Inimigo (por ID)"
+          }
+        }
+      }
+    },
+    "🗑 Remove Enemy (by ID)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🗑 Remover Inimigo (por ID)"
+          }
+        }
+      }
+    },
+    "🚫 Remove All by Creator": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🚫 Remover Todos do Criador"
+          }
+        }
+      }
+    },
+    "🛡 MODERATION": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🛡 MODERAÇÃO"
+          }
+        }
+      }
+    },
+    "No enemy with that ID.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhum inimigo com esse ID."
+          }
+        }
+      }
+    },
+    "Paste an enemy ID first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cole o ID de um inimigo primeiro."
+          }
+        }
+      }
+    },
+    "Working…": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trabalhando…"
+          }
+        }
+      }
+    },
+    "Paste the enemy ID from a report, or type a creator's name.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cole o ID do inimigo de uma denúncia, ou digite o nome de um criador."
+          }
+        }
+      }
+    },
+    "Type the creator's name first.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Digite o nome do criador primeiro."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
