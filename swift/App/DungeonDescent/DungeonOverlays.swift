@@ -124,15 +124,16 @@ struct ShopOverlay: View {
                 .font(Theme.cinzel(12.5, weight: .bold))
                 .foregroundStyle(afford || entry.sold ? Theme.gold : Color(hex: 0xcc4444))
                 .accessibilityHidden(true)
-                if !entry.sold {
-                    Button(afford ? "Buy" : "Too costly") { model.buy(entry.id) }
-                        .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xcc9944))
-                        .padding(.vertical, 5).padding(.horizontal, 12)
-                        .background(Color(hex: 0x0d0900)).overlay(Rectangle().stroke(Color(hex: 0x886622)))
-                        .opacity(afford ? 1 : 0.3)
-                        .disabled(!afford)
-                        .accessibilityLabel("\(item.name). \(item.desc). Cost: \(price) gold\(night && full > price ? ", normally \(full)" : "").\(afford ? " Press to buy." : " Cannot afford.")" as String)
-                }
+                // Stays after buying (as "Sold"), so VoiceOver stays on it
+                // instead of jumping away when the button disappears.
+                Button(entry.sold ? "Sold" : afford ? "Buy" : "Too costly") { model.buy(entry.id) }
+                    .font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xcc9944))
+                    .padding(.vertical, 5).padding(.horizontal, 12)
+                    .background(Color(hex: 0x0d0900)).overlay(Rectangle().stroke(Color(hex: 0x886622)))
+                    .opacity(afford && !entry.sold ? 1 : 0.3)
+                    .disabled(!afford || entry.sold)
+                    .accessibilityLabel(entry.sold ? "\(item.name). Sold." as String
+                        : "\(item.name). \(item.desc). Cost: \(price) gold\(night && full > price ? ", normally \(full)" : "").\(afford ? " Press to buy." : " Cannot afford.")" as String)
             }
         }
         .padding(.vertical, 10).padding(.horizontal, 12)
@@ -353,7 +354,7 @@ struct StatsOverlay: View {
     }
 
     private func grid(_ cols: Int, _ items: [(String, String)]) -> some View {
-        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: cols), spacing: 6) {
+        EagerGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 6), count: cols), spacing: 6) {
             ForEach(Array(items.enumerated()), id: \.offset) { _, kv in
                 VStack(spacing: 2) {
                     Text(kv.1).font(Theme.cinzel(12.5)).foregroundStyle(Theme.ashLight).multilineTextAlignment(.center)
@@ -447,7 +448,7 @@ struct RunSummaryView: View {
                         .padding(.horizontal, 10)
                         .accessibilityLabel("Closing line: " + (victory ? UIText.shared.closingLine(dungeon: r.dungeon, cls: r.cls)
                                                                  : "The dungeon claimed you on floor \(r.floor). It will not forget your name. Neither should you."))
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
+                    EagerGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
                         stat("\(r.kills)", "Enemies Slain")
                         stat("Floor \(r.floor)", "Reached")
                         stat("Lv \(r.level)", "Level")

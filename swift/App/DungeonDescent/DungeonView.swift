@@ -267,7 +267,7 @@ struct DungeonView: View {
                 .accessibilityAddTraits(.isHeader)
             Text(s.status).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc88ff)).multilineTextAlignment(.center)
                 .accessibilityLabel("Darkness Swallower \(s.distance) steps away to the \(s.direction). Escapes: \(s.escapes) of \(StalkerFloor.escapesNeeded)." as String)
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+            EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                 ForEach([("north", "↑ North"), ("south", "↓ South"), ("west", "← West"), ("east", "→ East")], id: \.0) { d in
                     Button(d.1) { model.stalkerMove(d.0) }
                         .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xcc88ff))

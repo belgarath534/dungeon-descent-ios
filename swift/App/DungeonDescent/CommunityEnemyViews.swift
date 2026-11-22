@@ -265,7 +265,7 @@ struct CommunityBestiary: View {
             } else if list.isEmpty {
                 note("No community enemies to show.")
             }
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 220), spacing: 12, alignment: .top)], spacing: 12) {
+            EagerGrid(columns: [GridItem(.adaptive(minimum: 220), spacing: 12, alignment: .top)], spacing: 12) {
                 ForEach(list) { e in card(e) }
             }
         }

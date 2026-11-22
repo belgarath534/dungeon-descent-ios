@@ -154,7 +154,7 @@ struct RaidView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Wave \(r.wave) of 5 — \(r.enemies.count) enemies" as String).font(Theme.cinzel(9.9)).tracking(3).textCase(.uppercase)
                     .foregroundStyle(Theme.blood)
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 7)], spacing: 7) {
+                EagerGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 7)], spacing: 7) {
                     ForEach(Array(r.enemies.enumerated()), id: \.offset) { _, e in
                         VStack(spacing: 2) {
                             Text(e.icon).font(.system(size: 20))

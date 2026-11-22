@@ -271,7 +271,7 @@ struct CreateCharacterView: View {
 
     private func cardGrid(_ cards: [CreationData.Card], min: CGFloat, selected: @escaping (CreationData.Card) -> Bool,
                           pick: @escaping (CreationData.Card) -> Void) -> some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: min), spacing: 10, alignment: .top)], spacing: 10) {
+        EagerGrid(columns: [GridItem(.adaptive(minimum: min), spacing: 10, alignment: .top)], spacing: 10) {
             ForEach(Array(cards.enumerated()), id: \.offset) { _, c in
                 CreationCard(card: c, selected: selected(c)) { pick(c) }
             }
@@ -456,7 +456,7 @@ struct CreateCharacterView: View {
             sliderIndex["diff"] = i
             pickDiff(Self.diffOrder[i])
         }
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 10, alignment: .top), GridItem(.flexible(), spacing: 10, alignment: .top)], spacing: 10) {
+        EagerGrid(columns: [GridItem(.flexible(), spacing: 10, alignment: .top), GridItem(.flexible(), spacing: 10, alignment: .top)], spacing: 10) {
             ForEach(Array(fates.enumerated()), id: \.offset) { _, c in
                 CreationCard(card: c, selected: diff == c.key) { pickDiff(c.key) }
             }
@@ -659,7 +659,7 @@ struct CreateCharacterView: View {
                 .padding(.top, 6)
         }
         Text("Her Personality").font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xaa88dd)).padding(.top, 14).padding(.bottom, 8)
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
+        EagerGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
             personality("encouraging", "💛 Encouraging", "Always lifts you up")
             personality("sarcastic", "😏 Sarcastic", "Dry humor, roasts you")
             personality("mysterious", "🌙 Mysterious", "Speaks in riddles")
@@ -719,7 +719,7 @@ struct CreateCharacterView: View {
                 pickBackstory(list[j])
             }
         }
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 8, alignment: .top), GridItem(.flexible(), spacing: 8, alignment: .top)], spacing: 8) {
+        EagerGrid(columns: [GridItem(.flexible(), spacing: 8, alignment: .top), GridItem(.flexible(), spacing: 8, alignment: .top)], spacing: 8) {
             ForEach(list, id: \.id) { b in
                 let sel = backstory == b.id
                 Button { pickBackstory(b) } label: {

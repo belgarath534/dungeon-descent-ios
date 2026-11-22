@@ -295,7 +295,7 @@ struct VoidReaperView: View {
             }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("Your HP \(f.hp) of \(f.maxHp). \(f.potions) potions." as String)
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+            EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                 Button("⚔ Attack") { swing(.attack) }.buttonStyle(WebButtonStyle(kind: .red)).disabled(busy)
                     .accessibilityLabel("Attack, \(VoidReaper.playerDamage) damage to the shared boss" as String)
                 Button("💥 Heavy") { swing(.heavy) }.buttonStyle(WebButtonStyle(kind: .red)).disabled(busy)

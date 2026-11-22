@@ -158,7 +158,7 @@ private struct SpireScreens: View {
                         .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
                         .accessibilityLabel("Advance to next floor")
                 } else {
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                    EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                         Button("⚔ Attack") { model.act(.attack) }.buttonStyle(WebButtonStyle(kind: .red))
                             .accessibilityLabel("Attack the enemy")
                         Button("💥 Heavy") { model.act(.heavy) }.buttonStyle(WebButtonStyle(kind: .red))

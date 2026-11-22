@@ -96,7 +96,7 @@ struct BestiaryView: View {
                 }
                 .accessibilityElement(children: .contain)
                 .accessibilityLabel("Filter by dungeon")
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 220), spacing: 12, alignment: .top)], spacing: 12) {
+                EagerGrid(columns: [GridItem(.adaptive(minimum: 220), spacing: 12, alignment: .top)], spacing: 12) {
                     ForEach(Array(list.prefix(visible).enumerated()), id: \.offset) { _, e in
                         card(e, kills: kills[e.id] ?? 0)
                     }

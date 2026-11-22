@@ -162,7 +162,7 @@ struct SiegeView: View {
             }
             .padding(10).overlay(Rectangle().stroke(Color(hex: 0x442222)))
             .accessibilityElement(children: .combine)
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+            EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                 Button("⚔️ Attack") { act(.attack) }.buttonStyle(WebButtonStyle(kind: .red)).accessibilityLabel("Attack the enemy")
                 Button("💥 Heavy Strike") { act(.heavy) }.buttonStyle(WebButtonStyle(kind: .red))
                     .accessibilityLabel("Heavy Strike — hits harder but 30 percent chance to miss")

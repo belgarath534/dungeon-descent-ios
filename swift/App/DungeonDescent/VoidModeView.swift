@@ -100,7 +100,7 @@ struct VoidModeView: View {
                 Button("Continue → Next Wave") { next() }
                     .buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Continue to next wave")
             } else {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                     ability(.blast, "🌑 Void Blast", v.blastCooldown, "Void Blast, 40 to 70 damage, 2 turn cooldown")
                     ability(.shield, "🛡 Shadow Shield", v.shieldCooldown, "Shadow Shield, reduce damage by 60 percent for 2 turns")
                     ability(.drain, "💀 Soul Drain", v.drainCooldown, "Soul Drain, steal 30 to 50 HP from enemy")

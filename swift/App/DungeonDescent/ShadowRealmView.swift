@@ -152,7 +152,7 @@ struct ShadowRealmView: View {
             if waveCleared {
                 big("⚔ Next Wave", "Face the next wave") { nextWave() }
             } else {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                     Button("⚔ Attack") { act(.attack) }.buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Attack the shadow entity")
                     Button("💥 Heavy") { act(.heavy) }.buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Heavy strike — more damage, may miss")
                     Button("🛡 Defend") { act(.defend) }.buttonStyle(WebButtonStyle(kind: .ghost)).accessibilityLabel("Defend and counterattack")

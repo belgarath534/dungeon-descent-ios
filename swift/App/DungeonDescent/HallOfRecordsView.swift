@@ -111,7 +111,7 @@ struct HallOfRecordsView: View {
             ("Characters", "\(chars.count)", false), ("Fav Class", fav, false),
         ]
         return section("Lifetime Statistics") {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 8)], spacing: 8) {
+            EagerGrid(columns: [GridItem(.adaptive(minimum: 140), spacing: 8)], spacing: 8) {
                 ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
                     VStack(alignment: .leading, spacing: 4) {
                         Text(row.0).font(Theme.cinzel(9.3)).tracking(1.4).textCase(.uppercase).foregroundStyle(Theme.textDim)

@@ -407,7 +407,7 @@ private struct MineScreens: View {
                 }
                 Button("Cancel") { model.choosingSkill = false }.buttonStyle(WebButtonStyle(kind: .ghost))
             } else {
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                EagerGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
                     Button("⚔ Attack") { model.act(.attack) }.buttonStyle(WebButtonStyle(kind: .gold)).accessibilityLabel("Attack enemy")
                     Button("💥 Heavy") { model.act(.heavy) }.buttonStyle(WebButtonStyle(kind: .gold))
                         .accessibilityLabel("Heavy strike, high damage but enemy hits back harder")
