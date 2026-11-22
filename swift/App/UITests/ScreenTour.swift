@@ -37,12 +37,20 @@ final class ScreenTour: XCTestCase {
         audit("Main menu")
         dumpButtons("menu-buttons")
 
+        // 12.0's tab menu: each screen is in its tab.
         visit(prefix: "Play,", name: "02-characters", screen: "Character list")
-        visit(prefix: "Endless Descent", name: "03-endless-descent", screen: "Endless Descent")
-        visit(prefix: "Bestiary", name: "04-bestiary", screen: "Bestiary")
-        visit(prefix: "Quests", name: "05-quests", screen: "Quests")
-        visit(prefix: "What's New", name: "06-whats-new", screen: "What's New")
-        visit(prefix: "Help", name: "07-help", screen: "Help")
+        visit(prefix: "Endless Descent", tab: "Play", name: "03-endless-descent", screen: "Endless Descent")
+        visit(prefix: "Challenges", tab: "Play", name: "04-challenges", screen: "Challenges")
+        visit(prefix: "Battle Pass", tab: "Play", name: "05-battle-pass", screen: "Battle Pass")
+        visit(prefix: "Quests", tab: "Play", name: "06-quests", screen: "Quests")
+        visit(prefix: "The Spire", tab: "Modes", name: "07-spire", screen: "The Spire")
+        visit(prefix: "Co-op", tab: "Multiplayer", name: "08-coop", screen: "Co-op")
+        visit(prefix: "Bestiary", tab: "More", name: "09-bestiary", screen: "Bestiary")
+        visit(prefix: "Mystery Coin Shop", tab: "More", name: "10-coin-shop", screen: "Coin Shop")
+        visit(prefix: "The Chronicles", tab: "More", name: "11-chronicles", screen: "Chronicles")
+        visit(prefix: "What's New", tab: "More", name: "12-whats-new", screen: "What's New")
+        visit(prefix: "Help", tab: "More", name: "13-help", screen: "Help")
+        settings()
     }
 
     // MARK: Helpers
@@ -70,8 +78,22 @@ final class ScreenTour: XCTestCase {
         }
     }
 
-    private func visit(prefix: String, name: String, screen: String) {
+    /// The tab bar's own button (Play, Modes, Multiplayer, More, Settings).
+    private func openTab(_ tab: String) {
+        let t = app.tabBars.buttons[tab]
+        if t.exists && t.isHittable { t.tap(); sleep(1) }
+    }
+
+    private func settings() {
         launch()
+        openTab("Settings")
+        shot("14-settings")
+        audit("Settings")
+    }
+
+    private func visit(prefix: String, tab: String? = nil, name: String, screen: String) {
+        launch()
+        if let tab { openTab(tab) }
         let button = app.buttons.matching(NSPredicate(format: "label BEGINSWITH[c] %@", prefix)).firstMatch
         guard scrollTo(button) else {
             auditReport.append("[\(screen)] Couldn't find a button starting with \"\(prefix)\".")
