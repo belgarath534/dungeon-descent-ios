@@ -381,14 +381,22 @@ public struct AFKRun: Codable, Sendable {
         return s
     }
 
-    static let xpTable = [0, 100, 220, 380, 580, 820, 1100, 1430, 1810, 2240, 9999]
+    static let xpTable = [0, 100, 220, 380, 580, 820, 1100, 1430, 1810, 2240]
+    /// The Endless level cap: 50 since 12.0.1 (it stopped at 10, and players
+    /// hit the ceiling). Past level 9 each level needs 500 more XP than the last.
+    public static let maxLevel = 50
 
-    public var xpNeeded: Int? { level < Self.xpTable.count ? Self.xpTable[level] : nil }
+    public static func xpToLevelUp(from level: Int) -> Int? {
+        guard level >= 1, level < maxLevel else { return nil }
+        return level < xpTable.count ? xpTable[level] : xpTable[xpTable.count - 1] + (level - 9) * 500
+    }
 
-    /// afkCheckLevelUp: up to level 10, +10 max HP and +1 attack each.
+    public var xpNeeded: Int? { Self.xpToLevelUp(from: level) }
+
+    /// afkCheckLevelUp: up to level 50, +10 max HP and +1 attack each.
     mutating func levelUp(_ s: inout Step) {
-        guard level < 10 else { return }
-        while let need = xpNeeded, xp >= need, level < 10 {
+        guard level < Self.maxLevel else { return }
+        while let need = xpNeeded, xp >= need, level < Self.maxLevel {
             xp -= need
             level += 1
             levelsGainedThisRun += 1

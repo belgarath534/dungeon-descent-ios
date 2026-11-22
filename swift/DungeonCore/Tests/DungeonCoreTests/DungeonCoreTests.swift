@@ -1502,7 +1502,7 @@ final class AFKTests: XCTestCase {
                 XCTAssertLessThanOrEqual(run.log.count, 50)
             }
             XCTAssertGreaterThan(run.floor, 10, "seed \(seed)")
-            XCTAssertLessThanOrEqual(run.level, 10)
+            XCTAssertLessThanOrEqual(run.level, AFKRun.maxLevel)
             let back = try JSONDecoder().decode(AFKRun.self, from: JSONEncoder().encode(run))
             XCTAssertEqual(back.floor, run.floor)
             XCTAssertEqual(back.log, run.log)
@@ -5254,5 +5254,15 @@ final class SpeechTextTests: XCTestCase {
         XCTAssertEqual(SpeechText.spellNumbers("Lv5 Monk"), "Lv five Monk")
         XCTAssertEqual(SpeechText.spellNumbers("Deals 20-35 damage"), "Deals twenty to thirty five damage")
         XCTAssertEqual(SpeechText.spellNumbers("No numbers here."), "No numbers here.")
+    }
+}
+
+final class AFKLevelCapTests: XCTestCase {
+    func testEndlessLevelsGoPastTenUpToFifty() {
+        XCTAssertEqual(AFKRun.xpToLevelUp(from: 1), 100)
+        XCTAssertEqual(AFKRun.xpToLevelUp(from: 9), 2240)
+        XCTAssertEqual(AFKRun.xpToLevelUp(from: 10), 2740)
+        XCTAssertEqual(AFKRun.xpToLevelUp(from: 49), 2240 + 40 * 500)
+        XCTAssertNil(AFKRun.xpToLevelUp(from: 50))
     }
 }
