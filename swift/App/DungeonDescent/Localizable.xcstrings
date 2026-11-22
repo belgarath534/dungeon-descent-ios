@@ -130868,6 +130868,424 @@
           }
         }
       }
+    },
+    "Anomaly 0-17, \"The Conductor\". Threat Class: Unknown. It appears in a hall that was not there before. It faces away from you and conducts a lullaby no one is playing. Do not move without music.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anomalia 0-17, \"O Maestro\". Classe de Ameaça: Desconhecida. Ele aparece em um corredor que não estava lá antes. Fica de costas para você e rege uma canção de ninar que ninguém está tocando. Não se mexa sem música."
+          }
+        }
+      }
+    },
+    "Addendum 1: It has never been seen to turn around. Every report says it knew exactly where the explorer was standing when the music stopped.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adendo 1: Ele nunca foi visto se virando. Todos os relatos dizem que ele sabia exatamente onde o explorador estava quando a música parou."
+          }
+        }
+      }
+    },
+    "Addendum 2: The lullaby slows and goes out of tune before it ends. Explorers learned to stop when it drags. Then, sometimes, it played on. It is learning too.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adendo 2: A canção de ninar fica lenta e desafina antes de acabar. Os exploradores aprenderam a parar quando ela se arrasta. Então, às vezes, ela continuou tocando. Ele também está aprendendo."
+          }
+        }
+      }
+    },
+    "Addendum 3: Explorers it kept were found outside the hall the next morning, unharmed but for the ears. They hum the song. They do not know the words. There are no words.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adendo 3: Os exploradores que ele levou foram encontrados fora do corredor na manhã seguinte, ilesos, exceto pelos ouvidos. Eles cantarolam a música. Não sabem a letra. Não existe letra."
+          }
+        }
+      }
+    },
+    "Addendum 4: Recovered sheet music, one page, unsigned. The final bar is a rest that goes on forever. Someone has written in the margin: 'not yet'.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adendo 4: Partitura recuperada, uma página, sem assinatura. O último compasso é uma pausa que dura para sempre. Alguém escreveu na margem: 'ainda não'."
+          }
+        }
+      }
+    },
+    "Final entry: The hall has a door at each end. No one has ever used the one behind it. Do not try. Do not move without music.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entrada final: O corredor tem uma porta em cada ponta. Ninguém jamais usou a que fica atrás dele. Não tente. Não se mexa sem música."
+          }
+        }
+      }
+    },
+    "📄 Anomaly 0-17, \"The Conductor\". Threat Class: Unknown. It appears in a hall that was not there before. It faces away from you and conducts a lullaby no one is playing. Do not move without music.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📄 Anomalia 0-17, \"O Maestro\". Classe de Ameaça: Desconhecida. Ele aparece em um corredor que não estava lá antes. Fica de costas para você e rege uma canção de ninar que ninguém está tocando. Não se mexa sem música."
+          }
+        }
+      }
+    },
+    "📄 Addendum 1: It has never been seen to turn around. Every report says it knew exactly where the explorer was standing when the music stopped.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📄 Adendo 1: Ele nunca foi visto se virando. Todos os relatos dizem que ele sabia exatamente onde o explorador estava quando a música parou."
+          }
+        }
+      }
+    },
+    "📄 Addendum 2: The lullaby slows and goes out of tune before it ends. Explorers learned to stop when it drags. Then, sometimes, it played on. It is learning too.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📄 Adendo 2: A canção de ninar fica lenta e desafina antes de acabar. Os exploradores aprenderam a parar quando ela se arrasta. Então, às vezes, ela continuou tocando. Ele também está aprendendo."
+          }
+        }
+      }
+    },
+    "📄 Addendum 3: Explorers it kept were found outside the hall the next morning, unharmed but for the ears. They hum the song. They do not know the words. There are no words.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📄 Adendo 3: Os exploradores que ele levou foram encontrados fora do corredor na manhã seguinte, ilesos, exceto pelos ouvidos. Eles cantarolam a música. Não sabem a letra. Não existe letra."
+          }
+        }
+      }
+    },
+    "📄 Addendum 4: Recovered sheet music, one page, unsigned. The final bar is a rest that goes on forever. Someone has written in the margin: 'not yet'.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📄 Adendo 4: Partitura recuperada, uma página, sem assinatura. O último compasso é uma pausa que dura para sempre. Alguém escreveu na margem: 'ainda não'."
+          }
+        }
+      }
+    },
+    "📄 Final entry: The hall has a door at each end. No one has ever used the one behind it. Do not try. Do not move without music.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📄 Entrada final: O corredor tem uma porta em cada ponta. Ninguém jamais usou a que fica atrás dele. Não tente. Não se mexa sem música."
+          }
+        }
+      }
+    },
+    "🎻 The Conductor": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎻 O Maestro"
+          }
+        }
+      }
+    },
+    "👣 Step Forward": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "👣 Dar um Passo"
+          }
+        }
+      }
+    },
+    "👂 Hold Still and Listen": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "👂 Ficar Parado e Ouvir"
+          }
+        }
+      }
+    },
+    "Step forward": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dar um passo"
+          }
+        }
+      }
+    },
+    "Only while the music plays.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Só enquanto a música toca."
+          }
+        }
+      }
+    },
+    "Hold still and listen": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ficar parado e ouvir"
+          }
+        }
+      }
+    },
+    "Doesn't move you. Says where you are.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não move você. Diz onde você está."
+          }
+        }
+      }
+    },
+    "It heard you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ele ouviu você."
+          }
+        }
+      }
+    },
+    "Once more and it keeps you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mais uma vez e ele fica com você."
+          }
+        }
+      }
+    },
+    "The Conductor turns around.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Maestro se vira."
+          }
+        }
+      }
+    },
+    "💀 The Conductor turns around.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "💀 O Maestro se vira."
+          }
+        }
+      }
+    },
+    "Everything goes quiet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tudo fica em silêncio."
+          }
+        }
+      }
+    },
+    "You wake up outside the hall, humming its song.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você acorda fora do corredor, cantarolando a música dele."
+          }
+        }
+      }
+    },
+    "You wake up outside the hall.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você acorda fora do corredor."
+          }
+        }
+      }
+    },
+    "You reach the door.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você chega à porta."
+          }
+        }
+      }
+    },
+    "✨ You reach the door.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "✨ Você chega à porta."
+          }
+        }
+      }
+    },
+    "The music stops behind you, and does not start again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A música para atrás de você e não volta a tocar."
+          }
+        }
+      }
+    },
+    "A page of its containment file was by the door.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma página do arquivo de contenção dele estava perto da porta."
+          }
+        }
+      }
+    },
+    "🎻 The song changes. You're close to it now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎻 A música muda. Agora você está perto dele."
+          }
+        }
+      }
+    },
+    "The song changes.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A música muda."
+          }
+        }
+      }
+    },
+    "You're close now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Agora você está perto."
+          }
+        }
+      }
+    },
+    "1 step to the door.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 passo até a porta."
+          }
+        }
+      }
+    },
+    "🎻 A hall that wasn't there before. At the far end, something with its back to you is conducting a lullaby no one is playing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎻 Um corredor que não estava aqui antes. No fundo, algo de costas para você rege uma canção de ninar que ninguém está tocando."
+          }
+        }
+      }
+    },
+    "Don't move.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não se mexa."
+          }
+        }
+      }
+    },
+    "The music is playing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A música está tocando."
+          }
+        }
+      }
+    },
+    "The Conductor": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Maestro"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

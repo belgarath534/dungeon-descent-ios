@@ -64,7 +64,7 @@ struct DungeonView: View {
                     }
                     if fighting, let e = run.enemy, e.isBoss { bossPhaseBar(e) }
                     roomSection
-                    if fighting { combatSection } else if let s = run.stalker { stalkerSection(s) } else { navSection }
+                    if fighting { combatSection } else if let h = run.conductor { conductorSection(h) } else if let s = run.stalker { stalkerSection(s) } else { navSection }
                     if showInventory { inventorySection }
                 }
                 .padding(.horizontal, 14)
@@ -85,8 +85,10 @@ struct DungeonView: View {
             let m = model
             ShakeDetector.shared.onShake = { [weak m] hard in m?.shakeAttack(hard: hard) }
             ShakeDetector.shared.start()
+            if run.conductor != nil { model.conductorWake() }
         }
         .onDisappear {
+            model.conductorSleep()
             ShakeDetector.shared.stop()
             ShakeDetector.shared.onShake = nil
         }
@@ -286,6 +288,31 @@ struct DungeonView: View {
         }
         .padding(16)
         .background(Color(hex: 0x050005)).overlay(Rectangle().stroke(Color(hex: 0x9966cc)))
+    }
+
+    /// 12.1: The Conductor's hall. One big button to step forward; you hear
+    /// whether you may.
+    private func conductorSection(_ h: ConductorHall) -> some View {
+        VStack(spacing: 10) {
+            Text("🎻 The Conductor").font(Theme.decorative(14.4)).foregroundStyle(Color(hex: 0xe8c890))
+                .accessibilityAddTraits(.isHeader)
+            Text(h.status).font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xe8c890)).multilineTextAlignment(.center)
+                .accessibilityLabel("Step \(h.step) of \(h.length). Heard \(h.caught) of \(ConductorHall.catchesAllowed) times." as String)
+            Button("👣 Step Forward") { model.conductorStep() }
+                .font(Theme.cinzel(13)).foregroundStyle(Color(hex: 0xe8c890))
+                .frame(maxWidth: .infinity, minHeight: 64).padding(10)
+                .background(Color(hex: 0x120a04)).overlay(Rectangle().stroke(Color(hex: 0xb08850)))
+                .accessibilityLabel("Step forward")
+                .accessibilityHint("Only while the music plays.")
+            Button("👂 Hold Still and Listen") { model.conductorListen() }
+                .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xb8a080))
+                .frame(maxWidth: .infinity).padding(10)
+                .background(Color(hex: 0x0a0604)).overlay(Rectangle().stroke(Color(hex: 0x6a5030)))
+                .accessibilityLabel("Hold still and listen")
+                .accessibilityHint("Doesn't move you. Says where you are.")
+        }
+        .padding(16)
+        .background(Color(hex: 0x060402)).overlay(Rectangle().stroke(Color(hex: 0xb08850)))
     }
 
     /// .dg-spirit-row: your spirit companion.

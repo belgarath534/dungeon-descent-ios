@@ -336,6 +336,10 @@ final class RunModel: ObservableObject {
     /// Exploration, battle or boss music for where the run is, plus the dungeon's ambience.
     func playMusic() {
         let r = run
+        if r.conductor != nil {
+            conductorWake()
+            return
+        }
         if let s = r.stalker {
             Sound.track("shadow-stalker")
             if s.grid != nil {
@@ -371,7 +375,7 @@ final class RunModel: ObservableObject {
 
     /// The compass buttons. Outside 3D Mode any direction leads to the next room.
     func move(_ dir: String) {
-        guard phase == .exploring else { return }
+        guard phase == .exploring, run.conductor == nil else { return }
         if threeD, let c = Compass(rawValue: dir) {
             move3D(c)
             return
@@ -424,7 +428,7 @@ final class RunModel: ObservableObject {
                 Feedback.announce("Moving \(d.rawValue). You are back in a room you already cleared. \(g.exitsText)" + takeHunterLine())
             }
             hunterAfterRoom()
-            if run.stalker == nil && !run.inCombat { SpatialAudio.shared.exitCues(g.here) }
+            if run.stalker == nil && run.conductor == nil && !run.inCombat { SpatialAudio.shared.exitCues(g.here) }
         }
     }
 
@@ -439,7 +443,7 @@ final class RunModel: ObservableObject {
             Feedback.announce("Echo-location needs 3D Mode turned on in Settings, Beta Features.")
             return
         }
-        guard phase == .exploring, run.stalker == nil else {
+        guard phase == .exploring, run.stalker == nil, run.conductor == nil else {
             Feedback.announce("Echo-location only works while exploring, not during combat.")
             return
         }
@@ -486,13 +490,18 @@ final class RunModel: ObservableObject {
     }
 
     func enterRoom() {
-        guard phase == .exploring, run.stalker == nil else { return }
+        guard phase == .exploring, run.stalker == nil, run.conductor == nil else { return }
         if !threeD { Sound.sfx("sfx-footstep") }
         var r = run
         var d = dice
         // The Shadow World: the Darkness Swallower finds you before the room does.
         if StalkerFloor.shouldStart(r, dice: &d) {
             startStalker(&r, &d)
+            return
+        }
+        // 12.1: The Conductor's hall, in any dungeon.
+        if ConductorHall.shouldStart(r, bossFloor: r.floor == Challenges.bossFloor(r), dice: &d) {
+            startConductor(&r, &d)
             return
         }
         r.roomsOnFloor += 1
@@ -835,7 +844,7 @@ final class RunModel: ObservableObject {
     }
 
     func search() {
-        guard phase == .exploring || phase == .floorCleared else { return }
+        guard phase == .exploring || phase == .floorCleared, run.conductor == nil else { return }
         var r = run
         var d = dice
         Sound.sfx("sfx-search")
@@ -1005,6 +1014,184 @@ final class RunModel: ObservableObject {
         add("⚔ You turn to face the Darkness Swallower!")
         Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
         finish(r, dice, phase: .fighting, spoken: "You face the Darkness Swallower. \(e.hp) HP. It hits hard and adds 2 corruption per hit. Use Purge.")
+    }
+
+
+    // MARK: The Conductor (12.1)
+
+    /// Each verse's timers check this; bumping it cancels them.
+    private var conductorClock = 0
+    private var conductorRunning = false
+    private var silentSince = Date.distantPast
+
+    private func startConductor(_ r: inout Run, _ d: inout SystemDice) {
+        let h = ConductorHall.start(&r)
+        // The room it took you in doesn't count; it's still new.
+        r.roomGraph?.unvisitHere()
+        let first = !UserDefaults.standard.bool(forKey: "swift_conductor_met")
+        UserDefaults.standard.set(true, forKey: "swift_conductor_met")
+        add("🎻 A hall that wasn't there before. At the far end, something with its back to you is conducting a lullaby no one is playing.")
+        Sound.stopMusic()
+        Sound.ambient(nil)
+        Feedback.hit(heavy: true)
+        finish(r, d, phase: .exploring,
+               spoken: "A hall that wasn't there before. At the far end, something is conducting a lullaby. The Conductor. The door out is \(h.length) steps away. Step forward only while the music plays. When it stops, don't move: it listens. If the song slows down and goes out of tune, it's about to stop, but not always.")
+        // The first time, its containment file (said on its own, so it's translated whole).
+        if first {
+            add("📄 " + ConductorHall.files[0])
+            Feedback.announce(ConductorHall.files[0])
+        }
+        conductorRunning = false
+        // Time to hear all that before the first silence.
+        conductorWake(extra: first ? 22 : 12)
+    }
+
+    /// Starts (or restarts, after the app was closed) the song and its clock.
+    func conductorWake(extra: Double = 5) {
+        guard let h = run.conductor, !conductorRunning else { return }
+        conductorRunning = true
+        conductorClock += 1
+        Sound.stopMusic()
+        Sound.ambient(nil)
+        ConductorAudio.shared.play(near: h.near, tempo: h.tempo)
+        if h.silent {
+            // Closed the app in the silence: it lets the song start again.
+            var g = h
+            g.silent = false
+            run.conductor = g
+            persist()
+        }
+        conductorVerse(extra: extra)
+    }
+
+    /// Leaving the dungeon screen: the song and its clock stop until you're back.
+    func conductorSleep() {
+        guard conductorRunning else { return }
+        conductorRunning = false
+        conductorClock += 1
+        ConductorAudio.shared.stop()
+    }
+
+    private func conductorAfter(_ seconds: Double, _ then: @escaping @MainActor (RunModel) -> Void) {
+        let tick = conductorClock
+        Task { [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+            guard let self, self.conductorClock == tick, self.run.conductor != nil else { return }
+            then(self)
+        }
+    }
+
+    private func conductorVerse(extra: Double = 0) {
+        guard let h = run.conductor else { return }
+        var d = dice
+        let v = h.verse(dice: &d)
+        dice = d
+        let dragSeconds = 1.8
+        conductorAfter(v.play + extra) { m in
+            guard v.drag else { m.conductorSilence(v.silence); return }
+            ConductorAudio.shared.drag(seconds: dragSeconds)
+            m.conductorAfter(dragSeconds) { m in
+                if v.stops {
+                    m.conductorSilence(v.silence)
+                } else {
+                    ConductorAudio.shared.recover()
+                    m.conductorVerse()
+                }
+            }
+        }
+    }
+
+    private func conductorSilence(_ seconds: Double) {
+        guard var h = run.conductor else { return }
+        h.silent = true
+        run.conductor = h
+        silentSince = Date()
+        persist()
+        ConductorAudio.shared.pause()
+        Feedback.hit(heavy: true)
+        conductorAfter(0.15) { _ in Feedback.hit(heavy: true) }
+        // Something in the silence, so you know it's still there.
+        conductorAfter(min(1.6, seconds / 2)) { _ in Sound.placed("ambient-whisper.mp3", volume: 0.35, pan: 0) }
+        conductorAfter(seconds) { m in
+            guard var h = m.run.conductor else { return }
+            h.silent = false
+            m.run.conductor = h
+            m.persist()
+            // Picks up where it stopped (or the close song, if you got there).
+            ConductorAudio.shared.play(near: h.near, tempo: h.tempo)
+            Feedback.tap()
+            m.conductorVerse()
+        }
+    }
+
+    private func conductorEnd() {
+        conductorRunning = false
+        conductorClock += 1
+        ConductorAudio.shared.stop()
+    }
+
+    /// A step toward the door.
+    func conductorStep() {
+        guard var h = run.conductor, phase == .exploring else { return }
+        var r = run
+        var d = dice
+        // A step right as the music stops still counts as in time.
+        let forgiven = h.silent && Date().timeIntervalSince(silentSince) < ConductorHall.grace
+        if forgiven { h.silent = false }
+        let wasNear = h.near
+        let out = h.move()
+        if forgiven { h.silent = true }
+        r.conductor = h
+        switch out {
+        case .moved:
+            Sound.sfx("sfx-footstep")
+            if h.near && !wasNear {
+                // (A step just as the music stopped: the new song starts with the next verse.)
+                if !h.silent { ConductorAudio.shared.play(near: true, tempo: h.tempo) }
+                add("🎻 The song changes. You're close to it now.")
+                finish(r, d, phase: .exploring, spoken: "The song changes. You're close now. \(h.left) steps to the door.")
+            } else {
+                finish(r, d, phase: .exploring, spoken: h.left == 1 ? "1 step to the door." : "\(h.left) steps to the door.")
+            }
+        case .caught:
+            Sound.placed("jump-scare-v3.mp3", volume: 1, pan: 0)
+            Feedback.warning()
+            let dmg = ConductorHall.heard(&r)
+            let left = ConductorHall.catchesAllowed - h.caught
+            add("💀 IT HEARD YOU. \(dmg) damage. You're dragged back to step \(h.step).")
+            finish(r, d, phase: .exploring, spoken: "It heard you. \(dmg) damage, and you're dragged back. \(h.left) steps to the door. " + (left == 1 ? "Once more and it keeps you." : "\(left) more and it keeps you."))
+        case .taken:
+            conductorEnd()
+            Sound.placed("hunter-jumpscare.mp3", volume: 1, pan: 0)
+            Feedback.warning()
+            let t = ConductorHall.taken(&r)
+            add("💀 The Conductor turns around. Everything goes quiet. You wake up outside the hall. \(t.damage) damage" + (t.gold > 0 ? ", and \(t.gold) gold is gone." : "."))
+            finish(r, d, phase: .exploring, spoken: "The Conductor turns around. Everything goes quiet. You wake up outside the hall, humming its song. \(t.damage) damage" + (t.gold > 0 ? ", and \(t.gold) gold is gone." : ".") + (exitsText.map { " " + $0 } ?? ""))
+            playMusic()
+        case .escaped:
+            conductorEnd()
+            let reward = ConductorHall.escaped(&r, wallet: game.wallet, dice: &d)
+            let pages = UserDefaults.standard.integer(forKey: "swift_conductor_pages")
+            var page = ""
+            if pages < ConductorHall.files.count - 1 {
+                page = ConductorHall.files[pages + 1]
+                UserDefaults.standard.set(pages + 1, forKey: "swift_conductor_pages")
+            }
+            add("✨ You reach the door. The music stops behind you, and does not start again. \(reward.gold) gold.")
+            if let item = reward.item { add("📦 Found: \(item.name)!") }
+            if !page.isEmpty { add("📄 " + page) }
+            Sound.sfx("sfx-victory")
+            Feedback.success()
+            finish(r, d, phase: .exploring, spoken: "You reach the door. The music stops behind you, and does not start again. \(reward.gold) gold" + (reward.item.map { " and \($0.name)" } ?? "") + "." + (page.isEmpty ? "" : " A page of its containment file was by the door.") + (exitsText.map { " " + $0 } ?? ""))
+            if !page.isEmpty { Feedback.announce(page) }
+            playMusic()
+        }
+    }
+
+    /// Holding still on purpose: says where you are.
+    func conductorListen() {
+        guard let h = run.conductor else { return }
+        Feedback.announce(h.silent ? "Silence. Don't move. Step \(h.step) of \(h.length)." : "The music is playing. Step \(h.step) of \(h.length). \(h.left) to the door.")
     }
 
     /// The Shadow World's Purge: 4 SP clears all corruption. A free action.
@@ -1408,7 +1595,7 @@ final class RunModel: ObservableObject {
     }
 
     private func forestTick() {
-        guard phase == .exploring, levelUp == nil, !hunterChoice, run.stalker == nil, run.skillChoices.isEmpty,
+        guard phase == .exploring, levelUp == nil, !hunterChoice, run.stalker == nil, run.conductor == nil, run.skillChoices.isEmpty,
               !Subclasses.pending(run), blacksmith == nil, !showingHome else { return }
         var r = run
         let lines = WhisperingForest.corrupt(&r, 1)
@@ -1493,7 +1680,7 @@ final class RunModel: ObservableObject {
 
     /// After the room: two rooms away and not in a fight means choose.
     private func hunterAfterRoom() {
-        guard hunterAsk, !hunterChoice, let h = run.hunter, h.dist <= 2, phase != .fighting, phase != .defeat, phase != .victory, run.stalker == nil else { return }
+        guard hunterAsk, !hunterChoice, let h = run.hunter, h.dist <= 2, phase != .fighting, phase != .defeat, phase != .victory, run.stalker == nil, run.conductor == nil else { return }
         if !hunterLine.isEmpty { Feedback.announce(takeHunterLine(), after: 0.8) }
         hunterAsk = false
         hunterChoice = true

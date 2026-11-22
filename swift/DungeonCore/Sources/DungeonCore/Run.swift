@@ -62,6 +62,9 @@ public struct Run: Codable, Sendable {
     public var shadowKilled: [Enemy] = []
     /// The Stalker Floor in progress, if the Darkness Swallower found you.
     public var stalker: StalkerFloor? = nil
+    /// 12.1: The Conductor's hall in progress, and the floor it last appeared on.
+    public var conductor: ConductorHall? = nil
+    public var conductorFloor = 0
     /// The Void Reaper wasn't stopped: enemies are 50% stronger (set while the curse lasts).
     public var worldCurse = false
     /// Spells known by the character (copied in at run start) and their cooldown.

@@ -5451,3 +5451,108 @@ final class AFKLevelCapTests: XCTestCase {
         XCTAssertNil(AFKRun.xpToLevelUp(from: 50))
     }
 }
+
+final class ConductorTests: XCTestCase {
+    func hero(floor: Int = 5) -> Run {
+        var r = Run(character: PlayerCharacter(name: "Co", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.floor = floor
+        return r
+    }
+
+    func testMoveOnlyWithMusic() {
+        var h = ConductorHall(floor: 4)
+        XCTAssertEqual(h.length, 7)
+        XCTAssertEqual(h.move(), .moved)
+        XCTAssertEqual(h.move(), .moved)
+        XCTAssertEqual(h.move(), .moved)
+        XCTAssertFalse(h.near)
+        XCTAssertEqual(h.move(), .moved)
+        XCTAssertTrue(h.near)
+        // Moving in the silence: heard and pushed back 2 steps.
+        h.silent = true
+        XCTAssertEqual(h.move(), .caught)
+        XCTAssertEqual(h.step, 2)
+        XCTAssertEqual(h.move(), .caught)
+        XCTAssertEqual(h.step, 0)
+        XCTAssertEqual(h.move(), .taken)
+        // With the music, all the way to the door.
+        var g = ConductorHall(floor: 9)
+        XCTAssertEqual(g.length, 8)
+        for _ in 1..<8 { XCTAssertEqual(g.move(), .moved) }
+        XCTAssertEqual(g.move(), .escaped)
+    }
+
+    func testVersesGetHarderDeeper() {
+        var dice = SeededDice(seed: 7)
+        var fakeOuts = 0, stops = 0
+        for _ in 0..<400 {
+            let v = ConductorHall(floor: 3).verse(dice: &dice)
+            XCTAssert((3.0...8.0).contains(v.play))
+            XCTAssert((2.5...4.5).contains(v.silence))
+            if v.drag && !v.stops { fakeOuts += 1 }
+            if v.stops { stops += 1 }
+            let d = ConductorHall(floor: 10).verse(dice: &dice)
+            XCTAssertLessThan(d.play, 5.3)
+            XCTAssertGreaterThan(d.silence, 3.4)
+        }
+        XCTAssertGreaterThan(fakeOuts, 50)
+        XCTAssertGreaterThan(stops, 200)
+        XCTAssertEqual(ConductorHall(floor: 3).tempo, 1)
+        XCTAssertGreaterThan(ConductorHall(floor: 10).tempo, 1.15)
+    }
+
+    func testStartsOncePerFloorAndNotOnBossFloors() {
+        var r = hero(floor: 5)
+        var dice = SeededDice(seed: 2)
+        var hits = 0
+        for _ in 0..<2000 where ConductorHall.shouldStart(r, bossFloor: false, dice: &dice) { hits += 1 }
+        XCTAssert((20...110).contains(hits), "\(hits)")
+        for _ in 0..<500 { XCTAssertFalse(ConductorHall.shouldStart(r, bossFloor: true, dice: &dice)) }
+        _ = ConductorHall.start(&r)
+        XCTAssertNotNil(r.conductor)
+        r.conductor = nil
+        for _ in 0..<500 { XCTAssertFalse(ConductorHall.shouldStart(r, bossFloor: false, dice: &dice)) }
+        var early = hero(floor: 2)
+        early.conductorFloor = 0
+        for _ in 0..<500 { XCTAssertFalse(ConductorHall.shouldStart(early, bossFloor: false, dice: &dice)) }
+    }
+
+    func testRewardsAndPenalties() {
+        let w = Wallet(store: MemoryStore())
+        var r = hero(floor: 5)
+        var dice = SeededDice(seed: 1)
+        r.hp = r.maxHp
+        _ = ConductorHall.start(&r)
+        let dmg = ConductorHall.heard(&r)
+        XCTAssertEqual(dmg, jsRound(Double(r.maxHp) * 0.25))
+        XCTAssertNotNil(r.conductor)
+        let before = w.gold
+        let out = ConductorHall.escaped(&r, wallet: w, dice: &dice)
+        XCTAssertEqual(out.gold, 200)
+        XCTAssertEqual(w.gold, before + 200)
+        XCTAssertNotNil(out.item)
+        XCTAssertNil(r.conductor)
+        // Taken: never below 1 HP, and it takes some gold.
+        _ = ConductorHall.start(&r)
+        r.hp = 3
+        r.gold = 1000
+        let t = ConductorHall.taken(&r)
+        XCTAssertEqual(r.hp, 1)
+        XCTAssertEqual(t.gold, 125)
+        XCTAssertEqual(r.gold, 875)
+        XCTAssertNil(r.conductor)
+        XCTAssertEqual(ConductorHall.files.count, 6)
+    }
+
+    func testSavesInTheRun() throws {
+        var r = hero()
+        var h = ConductorHall.start(&r)
+        h.silent = true
+        h.step = 3
+        r.conductor = h
+        let back = try JSONDecoder().decode(Run.self, from: JSONEncoder().encode(r))
+        XCTAssertEqual(back.conductor, h)
+        XCTAssertEqual(back.conductorFloor, 5)
+    }
+}
