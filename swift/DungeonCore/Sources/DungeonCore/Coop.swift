@@ -347,7 +347,10 @@ public enum Coop {
         var guardOf: [String: String] = [:]          // protected id → protector id
         for i in r.party.indices { r.party[i].dealt = 0 }
 
-        for i in r.party.indices where r.party[i].alive {
+        // Only those standing when the round starts act (a friend revived
+        // this round gets up, but doesn't swing until the next one).
+        let acting = r.party.indices.filter { r.party[$0].alive }
+        for i in acting {
             let p = r.party[i]
             var a = actions[p.id].flatMap(Action.init) ?? .attack
             switch a {
