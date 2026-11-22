@@ -87,6 +87,8 @@ extension Router {
         case .chronicles: Sound.track("chronicles")
         case .spire: Sound.track("spire")
         case .graveyard: Sound.track("graveyard")
+        // 12.1: the tavern songs, shuffled.
+        case .coop, .friends, .bounty: Sound.track("tavern")
         // The death log is silent, like the run summary.
         case .deathlog: Sound.stopMusic()
         default: break

@@ -64,10 +64,19 @@ final class AudioEngine {
             startWhenOpened = true
             return
         }
-        guard let file = Soundtrack.file(forTrack: name), let u = url(file),
-              let next = Self.player(u) else { return }
+        // A playlist: one of its songs (not the one just heard), then the next.
+        let list = Self.playlists[name]
+        let file: String?
+        if let list {
+            file = list.filter { $0 != playlistFile }.randomElement()
+            playlistFile = file
+        } else {
+            file = Soundtrack.file(forTrack: name)
+        }
+        guard let file, let u = url(file), let next = Self.player(u) else { return }
         fadeOut(music)
-        next.numberOfLoops = -1
+        next.numberOfLoops = list == nil ? -1 : 0
+        next.delegate = list == nil ? nil : playlistEnd
         next.volume = 0
         next.play()
         next.setVolume(Float(AppSettings.musicVolume), fadeDuration: 0.8)
@@ -178,6 +187,29 @@ final class AudioEngine {
         guard let data = try? Data(contentsOf: url) else { return nil }
         let wav = data.prefix(4) == Data("RIFF".utf8)
         return try? AVAudioPlayer(data: data, fileTypeHint: wav ? AVFileType.wav.rawValue : nil)
+    }
+
+    // MARK: Playlists (12.1)
+
+    /// Names that play several songs shuffled, one after another, instead of
+    /// one song on repeat. The tavern songs (all CC0, from OpenGameArt.org):
+    /// King's Feast, Minstrel Dance and The Bard's Tale by RandomMind, The Old
+    /// Tower Inn by Airos, Crowded Pub by Bobjt.
+    static let playlists: [String: [String]] = ["tavern": (1...5).map { "music-tavern\($0).mp3" }]
+    private var playlistFile: String?
+    private let playlistEnd = PlaylistEnd()
+
+    private final class PlaylistEnd: NSObject, AVAudioPlayerDelegate {
+        func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+            let id = ObjectIdentifier(player)
+            Task { @MainActor in AudioEngine.shared.playlistSongEnded(id) }
+        }
+    }
+
+    private func playlistSongEnded(_ id: ObjectIdentifier) {
+        guard let m = music, ObjectIdentifier(m) == id, let name = musicName, Self.playlists[name] != nil else { return }
+        musicName = nil
+        playTrack(name)
     }
 
     func stopMusic() {

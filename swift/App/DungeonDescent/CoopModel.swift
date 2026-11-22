@@ -179,6 +179,8 @@ final class CoopModel: ObservableObject {
         if isHost, ["lobby", "playing"].contains(roomStatus) { room?.child("status").setValue("closed") }
         else if roomStatus == "lobby" { room?.child("players").child(myId).removeValue() }
         stop()
+        // Out of a fight and back to the tavern.
+        if stage == .playing || stage == .over { Sound.track("tavern") }
         stage = .choose
         code = nil
     }
@@ -466,7 +468,7 @@ final class CoopModel: ObservableObject {
             game.pass(.dungeonCleared)
             Sound.sfx("sfx-victory")
         }
-        Sound.track("menu")
+        Sound.track("tavern")
         game.refresh()
         let text = won
             ? "Victory! The party cleared all \(Coop.floors) floors. You earn \(gold) gold and \(xp) XP.\(levelLine)"
