@@ -60,7 +60,7 @@ jobs:
         if: (github.ref_name == 'store-version' || startsWith(github.ref_name, 'store-submit') || github.event_name == 'workflow_dispatch') && github.ref_name != 'store-submit-vision'
         run: |
           pip install --quiet pyjwt cryptography requests
-          PLATFORMS="${{ github.ref_name == 'store-submit-ios' && 'IOS' || 'IOS MAC_OS VISION_OS' }}" python3 tools/new-version.py
+          PLATFORMS="${{ github.ref_name == 'store-submit-ios' && 'IOS' || github.ref_name == 'store-submit-ios-mac' && 'IOS MAC_OS' || 'IOS MAC_OS VISION_OS' }}" python3 tools/new-version.py
 
       - name: Release the Game Center leaderboards and challenges
         if: (github.ref_name == 'store-version' || startsWith(github.ref_name, 'store-submit') || github.event_name == 'workflow_dispatch') && github.ref_name != 'store-submit-vision'
