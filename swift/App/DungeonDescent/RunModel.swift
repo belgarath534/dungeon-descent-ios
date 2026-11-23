@@ -742,6 +742,12 @@ final class RunModel: ObservableObject {
         let out = Encounters.choose(choice, &r, dice: &d, wallet: game.wallet)
         // The Sunken Archives' inscriptions are its lore fragments (dq-sunken).
         if studied && !out.retry { _ = quest(&r, "fragment") }
+        // 12.1: and a page of the Archives' records (the web version's unused lore).
+        var pageLine = ""
+        if studied && !out.retry, let pg = SunkenPages.next(game.store) {
+            add("📜 \(pg.page.name) (\(pg.number) of \(SunkenPages.all.count)): \(pg.page.text)")
+            pageLine = " Among the inscriptions you find a page: \(pg.page.name). \(pg.page.text)"
+        }
         if out.retry {
             // A requirement wasn't met: nothing happened, choose again.
             Feedback.warning()
@@ -800,7 +806,7 @@ final class RunModel: ObservableObject {
         }
         if out.item != nil || out.gold > 0 { Sound.sfx("sfx-loot") }
         let q = questFound(&r, item: out.item, gold: out.gold)
-        finishQuietRoom(r, d, spoken: out.message + fragLine + q)
+        finishQuietRoom(r, d, spoken: out.message + fragLine + pageLine + q)
     }
 
     private var achievements: AchievementBook { game.achievements }

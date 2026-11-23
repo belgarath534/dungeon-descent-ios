@@ -5792,3 +5792,13 @@ final class DDDITests: XCTestCase {
         XCTAssertTrue(book.unlockedIDs.contains("ach-skills"))
     }
 }
+
+final class WebAuditTests: XCTestCase {
+    func testHiddenItemsAreInShopsAndPagesComeInOrder() {
+        let shop = ItemTables.shop(for: "Crypt of Malachar").map(\.name)
+        XCTAssertTrue(shop.contains("Soul Trap") || shop.contains("Warding Bell") || shop.contains("Cursed Vial"), "\(shop)")
+        let store = MemoryStore()
+        for i in 1...8 { XCTAssertEqual(SunkenPages.next(store)?.number, i) }
+        XCTAssertNil(SunkenPages.next(store))
+    }
+}

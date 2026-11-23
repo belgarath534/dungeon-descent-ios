@@ -247,6 +247,12 @@ public enum Combat {
         baseAtk = ShadowWorld.attackRoll(&run, baseAtk, log: &r.log)
         baseAtk = ShapeshifterMask.attackRoll(&run, baseAtk, log: &r.log)
         baseAtk = BossRelics.attackRoll(run, baseAtk)
+        // The Shadow World's Echo Bone: +25% against the Echoes and the Shapeshifter.
+        if let e = run.enemy, e.name.contains("Echo") || e.name.contains("Shapeshifter"),
+           run.inventory.contains(where: { $0.name == "Echo Bone" || $0.extra["shadowItem"] == .string("echoBone") }) {
+            baseAtk = jsRound(Double(baseAtk) * 1.25)
+            r.log.append("🦴 Echo Bone — +25% damage vs \(e.name)!")
+        }
         if action == .attack || action == .heavy { baseAtk = Alchemy.rage(&run, baseAtk, log: &r.log) }
         if action != .flee && !run.frozen {
             guard let a = HollowAbyssal.attackRoll(&run, baseAtk, dice: &dice, log: &r.log) else {

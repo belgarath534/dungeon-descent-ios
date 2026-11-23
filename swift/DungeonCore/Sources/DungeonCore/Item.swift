@@ -174,6 +174,8 @@ public enum ItemTables {
         "potion", "elixir", "heal", "atk-potion", "def-potion", "luck-potion", "fire-potion",
         "curse-potion", "swift-potion", "phoenix-feather", "weapon", "armor", "rune", "scroll", "ring", "gem", "sp-potion",
         "mirror-flask", "phantom-potion", "gravity-tonic", "leech-brew", "rage-tonic", "fog-flask", "time-potion", "corruption-flask",
+        // Handled for a while but still left out of shops and loot (the web audit):
+        "soul-trap", "warding-bell", "cursed", "relic",
     ]
     static let supportedIds: [String: Set<String>] = [
         "rune": ["rune-strength", "rune-protection", "rune-speed", "rune-fortune", "rune-vitality"],

@@ -422,3 +422,31 @@ public enum JulioFragments {
         return (f, have.count, unlocked)
     }
 }
+
+// MARK: - The Sunken Archives' lore pages (SUNKEN_LORE_FRAGMENTS)
+
+/// Eight pages of the Archives' records. The web version wrote them but
+/// never handed them out; in Swift, studying an inscription in the Sunken
+/// Archives finds the next one (kept across characters).
+public enum SunkenPages {
+    public struct Page: Sendable, Equatable { public let name, text: String }
+
+    public static let all: [Page] = [
+        Page(name: "Page 1 of the Founding Record", text: "The Archives were established in the year of the Second Tide. We chose this location because the water preserves. The Chancellor said nothing drowns here. The Chancellor has not been seen in forty years."),
+        Page(name: "A Cataloguer Log", text: "Day 847. Found another section today that does not appear on any map of the building. The books there are in perfect condition. I cannot read the title of a single one. They seem different each time I look."),
+        Page(name: "Torn Research Note", text: "The Leviathan arrived three hundred years before the Archives were built. We built around it. This was not a choice. This was the only option. You cannot move something that has always been there."),
+        Page(name: "The Last Curator Manifesto", text: "I have been here long enough to understand. The Archives do not preserve knowledge. The Archives preserve everything. Every thought that has ever been thought in this place still exists here. That includes the bad ones."),
+        Page(name: "Expedition Journal — Final Entry", text: "The water is rising again. This happens twice a year. The books do not get wet. The researchers do. I have stopped questioning this. I have stopped questioning most things. It is easier."),
+        Page(name: "Classification Record — Item 7,891", text: "Item: Unknown. Origin: Unknown. Date catalogued: Unknown. Current location: Unknown. Notes: Do not look for it. It will find the catalog entry on its own. This is fine. This has always been fine."),
+        Page(name: "A Child Drawing", text: "[A drawing of the Archives, rendered in faded ink. Everything is accurate — the shelves, the reading desks, the flooded floors — except in the drawing, every bookshelf has eyes. In the corner, in small handwriting: I found the special section. I did not come back out the same way I went in. This is an improvement.]"),
+        Page(name: "The Archivist Oath — Partial", text: "...and I swear to preserve what is written, to catalog what is found, to shelve what arrives, and to ask no questions about where it came from. The Archives hold all knowledge. Some of it is knowledge of things that should not be known. This is not my concern. My concern is correct shelving procedure."),
+    ]
+
+    /// The next page not yet found, or nil once all eight are.
+    public static func next(_ store: GameStore) -> (page: Page, number: Int)? {
+        let have = Int(store.getItem("swift_sunken_pages") ?? "0") ?? 0
+        guard have < all.count else { return nil }
+        store.setItem("swift_sunken_pages", String(have + 1))
+        return (all[have], have + 1)
+    }
+}
