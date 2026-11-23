@@ -10,7 +10,7 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "12.0.2")
+VERSION = os.environ.get("VERSION", "12.1")
 # Only these platforms (store-submit-ios: "IOS").
 PLATFORMS = os.environ.get("PLATFORMS", "IOS MAC_OS VISION_OS").split()
 
@@ -98,11 +98,45 @@ WHATS_NEW_12_0_2 = {
 }
 # 12.0.1 never shipped, so 12.0.2's notes carry its fixes too.
 WHATS_NEW_12_0_2 = {k: v + "\n" + WHATS_NEW_12_0_1[k].split("\n", 1)[1] for k, v in WHATS_NEW_12_0_2.items()}
-WHATS_NEW = {"12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
+WHATS_NEW_12_1 = {
+    "en-US": """New in 12.1:
+• Raid Boss: invite up to three friends to fight one giant boss together. Win gold, XP, diamonds and raid gear.
+• Co-op with your real character: your gear, level, prestige stars, skills, gun and potions come with you. Revive or protect a friend.
+• Community Dungeons: build your own dungeon and play other players' dungeons.
+• Friends: your Game Center friends who play, who's online, and an invite to your co-op room.
+• Voice commands in fights: say attack, defend, a skill's name and more.
+• Choose a Dungeon: after a win, go to any dungeon you've unlocked, normally or as New Game+.
+• Four new enemies made for listening: The Liar, The Bell Choir, The Counting Thing and The Silent One.
+• Insane Mode has its sanity bar, with The Distorted, The Sanity Drainer and the Insanity Potion.
+• The Conductor: a rare hall where you move only while the music plays.
+• A low HP heartbeat you can hear and feel.
+• Events now cover the screen until you choose, and 3D Mode always tells you the way to a new room.
+• Skill Book: reorder your skills. Holiday enemies use their own moves. Endless enemies from floor 20.
+• Apple Watch: make your co-op moves from your wrist.
+• High Contrast, Lewis's speed and Keep Up, and a two-finger scrub to go back.
+• Many more fixes.""",
+    "pt-BR": """Novo na 12.1:
+• Chefe de Raide: convide até três amigos para enfrentar juntos um chefe gigante. Ganhe ouro, XP, diamantes e equipamento de raide.
+• Cooperativo com o seu personagem de verdade: equipamento, nível, estrelas de prestígio, habilidades, arma e poções vão com você. Reviva ou proteja um amigo.
+• Masmorras da Comunidade: crie a sua masmorra e jogue as dos outros jogadores.
+• Amigos: seus amigos do Game Center que jogam, quem está online e um convite para a sua sala.
+• Comandos de voz nas lutas: diga atacar, defender, o nome de uma habilidade e mais.
+• Escolher uma Masmorra: depois de vencer, vá para qualquer masmorra desbloqueada, normal ou em Novo Jogo+.
+• Quatro inimigos novos feitos para ouvir: O Mentiroso, O Coro de Sinos, A Coisa que Conta e O Silencioso.
+• O Modo Insano tem sua barra de sanidade, com O Distorcido, O Drenador de Sanidade e a Poção da Insanidade.
+• O Maestro: um salão raro onde você só anda enquanto a música toca.
+• Um batimento cardíaco de HP baixo que você ouve e sente.
+• Eventos agora cobrem a tela até você escolher, e o Modo 3D sempre indica o caminho para uma sala nova.
+• Livro de Habilidades: reorganize suas habilidades. Inimigos de feriados usam seus golpes. Inimigos do Infinito a partir do andar 20.
+• Apple Watch: faça suas jogadas do cooperativo pelo pulso.
+• Alto Contraste, velocidade do Lewis e Acompanhar, e o gesto de dois dedos para voltar.
+• Muitas outras correções.""",
+}
+WHATS_NEW = {"12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
 
 PROMO = {
-    "en-US": "New in 12.0: play together. Co-op dungeons with friends on iPhone, Mac, Vision Pro and the web, a Battle Pass, and hunting by sound.",
-    "pt-BR": "Novo na 12.0: jogue junto. Masmorras cooperativas com amigos no iPhone, Mac, Vision Pro e web, Passe de Batalha e caça pelo som.",
+    "en-US": "New in 12.1: raid a giant boss with friends, build your own dungeons, and face four new enemies made for listening.",
+    "pt-BR": "Novo na 12.1: enfrente um chefe gigante com amigos, crie suas masmorras e encare quatro inimigos novos feitos para ouvir.",
 }
 # The Mac and Vision Pro have no watch, Lock Screen or Apple Music picker.
 SKIP = {
