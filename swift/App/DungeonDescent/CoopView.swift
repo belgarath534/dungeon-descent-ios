@@ -123,6 +123,15 @@ struct CoopView: View {
             Text("\(p.ready || (model.isHost && p.id == model.myId) ? "✓" : "…") \(p.name) — \(p.cls), Lv \(p.level), \(p.maxHp) HP\(p.id == model.myId ? " (you)" : "")" as String)
                 .font(Theme.crimson(15)).foregroundStyle(Theme.textSecondary)
         }
+        // 12.1: your real potions, and more for your own gold before the run.
+        if let m = model.me {
+            header("YOUR POTIONS")
+            Text("You have \(m.potions) potion\(m.potions == 1 ? "" : "s") from your bag. Potions you drink are used up; ones you buy and don't use go into your bag." as String)
+                .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
+            Button("🧪 Buy a Potion (\(Coop.potionPrice)g)" as String) { model.buyPotion() }
+                .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+                .accessibilityLabel("Buy a potion for \(Coop.potionPrice) gold. You have \(m.potions) and \(game.wallet.gold) gold." as String)
+        }
         if model.isHost, let code = model.code, friends.access == .ok, model.party.count < Coop.maxPlayers {
             header("INVITE A FRIEND")
             if friends.online.isEmpty {

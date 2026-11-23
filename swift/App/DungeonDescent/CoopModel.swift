@@ -66,8 +66,15 @@ final class CoopModel: ObservableObject {
 
     /// A fresh run: nothing left from the last room. (After Play Again, the
     /// next run paid nothing: "rewarded" was still set from the first.)
+    /// 12.1: potions are real. How many came from your bag, and whether the
+    /// bag has been settled (drunk ones out, bought-and-unused ones in).
+    private var stashBrought = 0
+    private var potionsSettled = false
+
     private func resetRun() {
         rewarded = false
+        stashBrought = 0
+        potionsSettled = false
         raidId = nil
         roomStatus = "lobby"
         party = []
@@ -95,7 +102,9 @@ final class CoopModel: ObservableObject {
             _ = Legacy.start(&run, ch)
             if run.level > 1 { Progression.restore(&run, Progression.savedSpend(ch)) }
             _ = Prestige.start(&run, ch)
-            return Coop.player(run, character: ch, id: myId, platform: CloudAccount.platform, gun: Guns.equipped(game.store))
+            stashBrought = min(Coop.maxPotions, game.globalInventory.potionCount)
+            return Coop.player(run, character: ch, id: myId, platform: CloudAccount.platform, gun: Guns.equipped(game.store),
+                               potions: stashBrought)
         }
         return Coop.player(run, character: ch, id: myId, platform: CloudAccount.platform)
     }
@@ -193,7 +202,18 @@ final class CoopModel: ObservableObject {
         addLog(["⚔ The party descends into \(dungeon). Floor 1, fight 1 of \(Coop.fightsPerFloor): \(f.icon) \(f.name) blocks the way, \(f.hp) HP."])
     }
 
+    /// Your bag after co-op: the potions you brought and drank are gone, and
+    /// the ones you bought and didn't use are kept.
+    private func settlePotions() {
+        guard !potionsSettled, code != nil, let game else { return }
+        potionsSettled = true
+        let left = me?.potions ?? 0
+        game.globalInventory.changePotions(by: stashBrought - left)
+        game.refresh()
+    }
+
     func leave() {
+        settlePotions()
         if isHost, ["lobby", "playing"].contains(roomStatus) { room?.child("status").setValue("closed") }
         else if roomStatus == "lobby" { room?.child("players").child(myId).removeValue() }
         stop()
@@ -244,7 +264,18 @@ final class CoopModel: ObservableObject {
     /// The merchant between floors: a potion for your own gold, added when
     /// the next floor starts.
     func buyPotion() {
-        guard shopOpen, let game, let m = me else { return }
+        guard let game, let m = me else { return }
+        // Before the run, in the lobby: straight into your hands.
+        if stage == .lobby {
+            guard m.potions < Coop.maxPotions else { say("You can carry \(Coop.maxPotions) potions."); return }
+            guard game.wallet.spendGold(Coop.potionPrice) else { say("Not enough gold. A potion is \(Coop.potionPrice) gold, you have \(game.wallet.gold).") ; return }
+            room?.child("players").child(myId).child("potions").setValue(m.potions + 1)
+            game.refresh()
+            Sound.sfx("sfx-purchase")
+            say("Potion bought for \(Coop.potionPrice) gold. You have \(m.potions + 1). \(game.wallet.gold) gold left.")
+            return
+        }
+        guard shopOpen else { return }
         guard m.potions + bought < Coop.maxPotions else { say("You can carry \(Coop.maxPotions) potions."); return }
         guard game.wallet.spendGold(Coop.potionPrice) else { say("Not enough gold. A potion is \(Coop.potionPrice) gold, you have \(game.wallet.gold).") ; return }
         bought += 1
@@ -511,6 +542,7 @@ final class CoopModel: ObservableObject {
     private func payOut(won: Bool) {
         guard !rewarded, let game else { return }
         rewarded = true
+        settlePotions()
         if let b = raid { payRaid(b, won: won, game: game); return }
         let cleared = won ? Coop.floors : max(0, floor - 1)
         let gold = Coop.gold(floorsCleared: cleared, won: won)

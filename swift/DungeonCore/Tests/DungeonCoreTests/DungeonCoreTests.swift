@@ -5711,3 +5711,25 @@ final class VoiceCommandTests: XCTestCase {
         XCTAssertNil(VoiceCommands.match("", opts))
     }
 }
+
+final class CoopPotionStashTests: XCTestCase {
+    func testStashPotionsGoInAndOut() {
+        let store = MemoryStore()
+        let inv = GlobalInventory(store: store)
+        inv.add(Item(name: "Greater Potion", icon: "🧪", type: "potion", desc: "", heal: 80))
+        inv.add(Item(name: "Health Potion", icon: "🧪", type: "potion", desc: "", heal: 40))
+        inv.add(Item(name: "Rune", icon: "ᚱ", type: "rune", desc: ""))
+        XCTAssertEqual(inv.potionCount, 2)
+        inv.changePotions(by: 1)
+        XCTAssertEqual(inv.potionCount, 1)
+        XCTAssertEqual(inv.items.first { $0.type == "potion" }?.name, "Greater Potion", "the weakest goes first")
+        inv.changePotions(by: -2)
+        XCTAssertEqual(inv.potionCount, 3)
+        XCTAssertEqual(inv.items.filter { $0.type == "rune" }.count, 1)
+        inv.changePotions(by: 9)
+        XCTAssertEqual(inv.potionCount, 0)
+        let ch = PlayerCharacter(name: "A", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        XCTAssertEqual(Coop.player(Run(character: ch), character: ch, id: "a", platform: "ios", potions: 9).potions, Coop.maxPotions)
+        XCTAssertEqual(Coop.player(Run(character: ch), character: ch, id: "a", platform: "ios", potions: 0).potions, 0)
+    }
+}

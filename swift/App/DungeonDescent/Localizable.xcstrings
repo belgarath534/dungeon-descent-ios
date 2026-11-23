@@ -132727,6 +132727,17 @@
           }
         }
       }
+    },
+    "YOUR POTIONS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SUAS POÇÕES"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

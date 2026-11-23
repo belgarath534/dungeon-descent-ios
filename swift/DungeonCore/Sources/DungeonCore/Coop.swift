@@ -243,14 +243,15 @@ public enum Coop {
     /// starts (gear, spent level points, prestige stars and Legacy's level
     /// already on it): +12 HP and +1 attack a level, the gear's attack and
     /// defense, up to three skills and the equipped gun.
-    public static func player(_ run: Run, character ch: PlayerCharacter, id: String, platform: String, gun: Gun? = nil) -> Player {
+    public static func player(_ run: Run, character ch: PlayerCharacter, id: String, platform: String, gun: Gun? = nil,
+                              potions: Int = startPotions) -> Player {
         let level = max(1, max(run.level, ch.persistLevel ?? 1))
         let hp = run.maxHp + 12 * (level - 1)
         let bonus = run.totalAtkBonus + level - 1
         let lo = max(1, run.atk.lowerBound + bonus), hi = max(lo, run.atk.upperBound + bonus)
         var p = Player(id: id, name: Prestige.label(ch), cls: ch.cls, level: level, hp: hp, maxHp: hp,
                        atkLo: lo, atkHi: hi, def: max(0, run.totalDef), sp: run.maxSp, maxSp: run.maxSp,
-                       crit: min(0.5, 0.1 + run.critBonus), potions: startPotions, platform: platform)
+                       crit: min(0.5, 0.1 + run.critBonus), potions: max(0, min(maxPotions, potions)), platform: platform)
         p.skills = loadout(cls: ch.cls, level: level, known: run.unlockedSkills)
         if let g = gun {
             p.gunName = g.icon + " " + g.name

@@ -547,6 +547,30 @@ public struct GlobalInventory {
         run.equippedArmor = equippedArmor
     }
 
+    // MARK: 12.1 co-op potions are real
+
+    static func isHealPotion(_ i: Item) -> Bool { i.type == "potion" && ((i.heal ?? 0) > 0 || (i.healPct ?? 0) > 0) }
+
+    /// Healing potions in the stash.
+    public var potionCount: Int { items.filter(Self.isHealPotion).count }
+
+    /// Takes `n` healing potions out (the weakest first), or puts `-n` Health
+    /// Potions in when `n` is negative.
+    public func changePotions(by n: Int) {
+        guard n != 0 else { return }
+        var inv = items
+        if n > 0 {
+            for _ in 0..<n {
+                let idx = inv.indices.filter { Self.isHealPotion(inv[$0]) }.min { (inv[$0].heal ?? 0) < (inv[$1].heal ?? 0) }
+                guard let idx else { break }
+                inv.remove(at: idx)
+            }
+        } else {
+            for _ in 0..<(-n) { inv.append(Item(name: "Health Potion", icon: "🧪", type: "potion", desc: "Restores 40 HP.", heal: 40)) }
+        }
+        save(inv)
+    }
+
     /// Adds one item to the stash like addToGlobalInventory(): one of each
     /// music player, enchanter, soul trap and skill orb, and gear unique by name.
     public func add(_ item: Item) {

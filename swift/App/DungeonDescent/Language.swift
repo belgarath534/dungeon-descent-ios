@@ -209,6 +209,10 @@ enum Patterns {
         ("I heard {0}, but that isn't a move. Say attack, heavy, defend, potion, or a skill's name.", "Ouvi {0}, mas isso não é uma jogada. Diga attack, heavy, defend, potion ou o nome de uma habilidade."),
         ("I heard {0}, but that isn't a move. Try again.", "Ouvi {0}, mas isso não é uma jogada. Tente de novo."),
         ("Not enough SP for {0}.", "SP insuficiente para {0}."),
+        // 12.1: real co-op potions.
+        ("You have {0} potions from your bag. Potions you drink are used up; ones you buy and don't use go into your bag.", "Você tem {0} poções da sua bolsa. As que você bebe são gastas; as que compra e não usa vão para a sua bolsa."),
+        ("You have {0} potion from your bag. Potions you drink are used up; ones you buy and don't use go into your bag.", "Você tem {0} poção da sua bolsa. As que você bebe são gastas; as que compra e não usa vão para a sua bolsa."),
+        ("Potion bought for {0} gold. You have {1}. {2} gold left.", "Poção comprada por {0} de ouro. Você tem {1}. Restam {2} de ouro."),
         // 12.1: Friends.
         ("online, on floor {0} of {1}", "online, no andar {0} de {1}"),
         ("online, in a dungeon", "online, numa masmorra"),
