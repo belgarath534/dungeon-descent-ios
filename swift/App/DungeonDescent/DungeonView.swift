@@ -7,6 +7,8 @@ import DungeonCore
 /// pause, stats and run log open over it like the web overlays.
 @MainActor
 struct DungeonView: View {
+    /// 12.1: the top bar and daily quest stack at the accessibility text sizes.
+    @Environment(\.dynamicTypeSize) private var typeSize
     @StateObject private var model: RunModel
     @EnvironmentObject var router: Router
     @EnvironmentObject var game: GameModel
@@ -175,7 +177,7 @@ struct DungeonView: View {
     // MARK: Top bar (.dg-topbar)
 
     private var topBar: some View {
-        HStack(alignment: .center, spacing: 10) {
+        AdaptiveRow(spacing: 10) {
             HStack(spacing: 6) {
                 smallButton("⏸", label: "Pause game") { openPause() }
                 // dg-chat-btn: only with Settings → Chat → Show Chat in Dungeon.
@@ -187,7 +189,7 @@ struct DungeonView: View {
                     Text("\(run.race) \(run.cls)\(Subclasses.current(run).map { " · \($0.icon) \($0.name)" } ?? "") · \(run.dungeon == "The Ashbound Wastes" ? "Ashbound Wastes" : run.dungeon)" as String)
                         .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
                 }
-                .lineLimit(2).minimumScaleFactor(0.8)
+                .lineLimit(typeSize.isAccessibilitySize ? nil : 2).minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             VStack(spacing: 0) {
@@ -236,7 +238,7 @@ struct DungeonView: View {
         let q = dq.quest
         let done = dq.isComplete
         let pct = min(1, Double(dq.progress) / Double(max(q.target, 1)))
-        return HStack(spacing: 8) {
+        return AdaptiveRow(spacing: 8) {
             Text("Daily").font(Theme.cinzel(9.6)).tracking(1.4).textCase(.uppercase).foregroundStyle(Theme.goldDim)
             Text(done ? "\(q.desc) ✦ Complete!" : "\(q.desc) (\(dq.progress)/\(q.target))")
                 .font(Theme.cinzel(10.4)).foregroundStyle(done ? Color(hex: 0x7aaa7a) : Theme.ash)

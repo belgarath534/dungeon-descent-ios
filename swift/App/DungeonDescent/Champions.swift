@@ -251,7 +251,7 @@ struct CharacterListView: View {
             HStack(spacing: 14) {
                 Text(Self.classIcons[ch.cls] ?? "⚔️").font(.system(size: 26))
                 VStack(alignment: .leading, spacing: 3) {
-                    HStack(spacing: 8) {
+                    AdaptiveRow(spacing: 8) {
                         Text(ch.name).font(Theme.cinzel(15, weight: .semibold)).foregroundStyle(Theme.ashLight)
                         Text("Lv \(level)" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xffaa00))
                         if Prestige.stars(ch) > 0 {
