@@ -446,6 +446,7 @@ struct RunSummaryView: View {
     @ObservedObject var model: RunModel
     let victory: Bool
     @Binding var choosingPath: Bool
+    @Binding var choosingDungeon: Bool
     @EnvironmentObject var router: Router
 
     var body: some View {
@@ -511,6 +512,9 @@ struct RunSummaryView: View {
                             Button("⬆ Continue...") { choosingPath = true }
                                 .buttonStyle(WebButtonStyle(kind: .gold))
                                 .accessibilityLabel("Continue Journey to next dungeon or New Game Plus")
+                            Button("🗺 Choose a Dungeon") { choosingDungeon = true }
+                                .buttonStyle(WebButtonStyle(kind: .gold))
+                                .accessibilityLabel("Choose a Dungeon — pick any dungeon you've unlocked, normal or New Game Plus")
                         }
                         Button("← Character Select") { router.goTo(.charlist) }
                             .buttonStyle(WebButtonStyle(kind: .ghost))
@@ -693,6 +697,52 @@ struct SkillBookOverlay: View {
                               : "Skill Book. \(list.count) skills unlocked. " + list.map(\.name).joined(separator: ", ")
                                 + ". Use Move Up and Move Down to reorder.")
         }
+    }
+}
+
+/// 12.1: after a win, any unlocked dungeon, as a normal run (your level
+/// carries over) or New Game+.
+struct ChooseDungeonOverlay: View {
+    @ObservedObject var model: RunModel
+    @EnvironmentObject var game: GameModel
+    let close: () -> Void
+    @State private var picked: String?
+
+    var body: some View {
+        let list = game.unlockedDungeons()
+        DungeonDialog(maxWidth: 460) {
+            if let d = picked {
+                Text("🗺 \(d)" as String).font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
+                    .padding(.bottom, 8).accessibilityAddTraits(.isHeader)
+                Text("How do you want to face it?").font(Theme.crimson(13)).foregroundStyle(Theme.textSecondary)
+                    .padding(.bottom, 10)
+                Button("⚔ Normal") { close(); model.travel(to: d, newGamePlus: false) }
+                    .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                    .accessibilityLabel("Normal — enter \(d) with your current level" as String)
+                Button("🔄 New Game+") { close(); model.travel(to: d, newGamePlus: true) }
+                    .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity).padding(.top, 6)
+                    .accessibilityLabel("New Game Plus — enter \(d) with harder enemies" as String)
+                Button("← Back") { picked = nil; Feedback.announce("Choose a dungeon.") }
+                    .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity).padding(.top, 8)
+                    .accessibilityLabel("Back to the dungeon list")
+            } else {
+                Text("🗺 Choose a Dungeon").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
+                    .padding(.bottom, 12).accessibilityAddTraits(.isHeader)
+                ForEach(list, id: \.self) { d in
+                    let here = d == model.run.dungeon
+                    Button((here ? "\(d) · just cleared" : d) as String) {
+                        picked = d
+                        Sound.sfx("sfx-select")
+                        Feedback.announce("\(d). Normal or New Game Plus?")
+                    }
+                    .buttonStyle(WebButtonStyle(kind: here ? .ghost : .gold)).frame(maxWidth: .infinity).padding(.bottom, 4)
+                    .accessibilityLabel((here ? "\(d), the dungeon you just cleared" : d) as String)
+                }
+                Button("← Cancel", action: close).buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity).padding(.top, 8)
+                    .accessibilityLabel("Cancel and return to the end screen")
+            }
+        }
+        .onAppear { Feedback.announce("Choose a dungeon. \(list.count) unlocked.") }
     }
 }
 

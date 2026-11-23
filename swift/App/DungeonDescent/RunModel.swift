@@ -347,6 +347,17 @@ final class RunModel: ObservableObject {
         restart("Journey continues. Entering \(character.dungeon). Your character carries all their strength forward.")
     }
 
+    /// 12.1: after a victory, any unlocked dungeon, normal or New Game+.
+    func travel(to dungeon: String, newGamePlus: Bool) {
+        guard phase == .victory else { return }
+        let level = run.level, xp = run.xp
+        game.updateCharacter(characterIndex) { $0.travel(to: dungeon, newGamePlus: newGamePlus, level: level, xp: xp) }
+        let n = character.ngPlusCount
+        restart(newGamePlus
+                ? "New Game Plus \(n) in \(dungeon)! Enemies are stronger. The dungeon has not forgotten you."
+                : "Entering \(dungeon). Your character carries all their strength forward.")
+    }
+
     /// After a victory: the same dungeon again with stronger enemies.
     func startNewGamePlus() {
         guard phase == .victory else { return }

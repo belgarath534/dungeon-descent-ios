@@ -333,6 +333,24 @@ extension PlayerCharacter {
         extra["carryXp"] = nil
     }
 
+    /// 12.1: after a victory, go to any dungeon you've unlocked. Normal keeps
+    /// your level and XP (like Continue Journey) and turns New Game+ off for
+    /// the run; New Game+ is startNewGamePlus() in that dungeon.
+    public mutating func travel(to d: String, newGamePlus: Bool, level: Int, xp: Int) {
+        dungeon = d
+        if newGamePlus {
+            startNewGamePlus()
+            return
+        }
+        floor = 1
+        completed = false
+        ngPlusActive = false
+        extra["ngPlus"] = nil
+        extra["midRunSave"] = nil
+        extra["carryLevel"] = .number(Double(level))
+        extra["carryXp"] = .number(Double(xp))
+    }
+
     public var ngPlusCount: Int {
         if case .number(let n)? = extra["ngPlusCount"] { return Int(n) }
         return 0

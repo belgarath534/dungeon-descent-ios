@@ -143,3 +143,23 @@ final class HolidayFoeTests: XCTestCase {
         XCTAssertEqual(r.inventory.last?.name, "Love Potion")
     }
 }
+
+final class ChooseDungeonTests: XCTestCase {
+    func testTravelNormalAndNewGamePlus() {
+        var ch = PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",
+                                 dungeon: "The Abyssal Deep", difficulty: .wanderer)
+        ch.completed = true
+        ch.travel(to: "Crypt of Malachar", newGamePlus: true, level: 9, xp: 50)
+        XCTAssertEqual(ch.dungeon, "Crypt of Malachar")
+        XCTAssertTrue(ch.ngPlusActive)
+        XCTAssertEqual(ch.ngPlusCount, 1)
+        XCTAssertEqual(Run(character: ch).ngPlus, true)
+        ch.travel(to: "The Hollow", newGamePlus: false, level: 9, xp: 50)
+        XCTAssertEqual(ch.dungeon, "The Hollow")
+        XCTAssertFalse(ch.ngPlusActive)
+        XCTAssertFalse(ch.completed)
+        let r = Run(character: ch)
+        XCTAssertFalse(r.ngPlus)
+        XCTAssertEqual(r.level, 9)
+    }
+}

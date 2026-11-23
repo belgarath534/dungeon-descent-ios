@@ -28,6 +28,7 @@ struct DungeonView: View {
     /// 12.1: say your move.
     @StateObject private var voice = VoiceCommand()
     @State private var choosingPath = false
+    @State private var choosingDungeon = false
     @State private var invTab = "all"
     @State private var invSearch = ""
     @State private var openDetails: Set<String> = []
@@ -110,12 +111,12 @@ struct DungeonView: View {
         case .shopping: ShopOverlay(model: model)
         case .floorCleared where model.levelUp == nil && run.skillChoices.isEmpty: floorComplete
         case .victory:
-            RunSummaryView(model: model, victory: true, choosingPath: $choosingPath)
+            RunSummaryView(model: model, victory: true, choosingPath: $choosingPath, choosingDungeon: $choosingDungeon)
         case .defeat:
             if model.showingDeathCinematic {
                 DeathCinematic(model: model)
             } else {
-                RunSummaryView(model: model, victory: false, choosingPath: $choosingPath)
+                RunSummaryView(model: model, victory: false, choosingPath: $choosingPath, choosingDungeon: $choosingDungeon)
             }
         default: EmptyView()
         }
@@ -143,6 +144,7 @@ struct DungeonView: View {
         }
         if showRunLog { runLogOverlay }
         if choosingPath { ngPlusChoice }
+        if choosingDungeon { ChooseDungeonOverlay(model: model) { choosingDungeon = false } }
         if model.hunterChoice { hunterOverlay }
         if model.medusaChoice { medusaOverlay }
         if showSettings { WebSettingsView(run: model) { showSettings = false } }
@@ -1281,6 +1283,18 @@ struct DungeonView: View {
                 }
                 .buttonStyle(WebButtonStyle(kind: .gold))
                 .accessibilityLabel("New Game Plus — replay this dungeon with harder enemies, keep your character")
+                // 12.1: or any dungeon you've unlocked, normal or New Game+.
+                Button {
+                    choosingPath = false
+                    choosingDungeon = true
+                } label: {
+                    VStack(spacing: 3) {
+                        Text("🗺 Choose a Dungeon")
+                        Text("Pick any dungeon you've unlocked — normal or New Game+").font(Theme.crimson(11, italic: true)).textCase(nil)
+                    }
+                }
+                .buttonStyle(WebButtonStyle(kind: .gold))
+                .accessibilityLabel("Choose a Dungeon — pick any dungeon you've unlocked, normal or New Game Plus")
                 Button("Decide Later") { choosingPath = false }
                     .buttonStyle(WebButtonStyle(kind: .ghost))
                     .accessibilityLabel("Decide later and return to the end screen")
