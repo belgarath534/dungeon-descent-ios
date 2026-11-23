@@ -64,7 +64,7 @@ public struct Run: Codable, Sendable {
     public var stalker: StalkerFloor? = nil
     /// 12.1: The Conductor's hall in progress, and the floor it last appeared on.
     public var conductor: ConductorHall? = nil
-    public var conductorFloor = 0
+    public var conductorFloor: Int? = nil
     /// 12.1: the community dungeon this run is playing, if any.
     public var communityDungeon: CommunityDungeons.Dungeon? = nil
     /// The Void Reaper wasn't stopped: enemies are 50% stronger (set while the curse lasts).

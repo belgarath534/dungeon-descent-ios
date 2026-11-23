@@ -5733,3 +5733,25 @@ final class CoopPotionStashTests: XCTestCase {
         XCTAssertEqual(Coop.player(Run(character: ch), character: ch, id: "a", platform: "ios", potions: 0).potions, 0)
     }
 }
+
+final class MineGearTests: XCTestCase {
+    func testGearComesAlong() throws {
+        let ch = PlayerCharacter(name: "M", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var r = Run(character: ch)
+        var sword = Item(name: "Big Sword", icon: "⚔", type: "weapon", desc: "")
+        sword.atkBase = [20, 30]
+        var mail = Item(name: "Mail", icon: "🛡", type: "armor", desc: "")
+        mail.defBase = 10
+        r.equippedWeapon = sword
+        r.equippedArmor = mail
+        let plain = Mine.start(ch)
+        let geared = Mine.start(ch, as: r)
+        XCTAssertGreaterThanOrEqual(geared.maxHp, plain.maxHp)
+        XCTAssertEqual(geared.def, r.totalDef)
+        XCTAssertEqual(geared.gearAtk, max(0, r.totalAtkBonus))
+        // An older saved trip (no gear fields) still loads.
+        var obj = try JSONSerialization.jsonObject(with: JSONEncoder().encode(plain)) as! [String: Any]
+        obj.removeValue(forKey: "gearAtk"); obj.removeValue(forKey: "def")
+        XCTAssertNoThrow(try JSONDecoder().decode(MineRun.self, from: JSONSerialization.data(withJSONObject: obj)))
+    }
+}

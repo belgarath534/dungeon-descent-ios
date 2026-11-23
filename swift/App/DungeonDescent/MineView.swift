@@ -31,7 +31,13 @@ final class MineModel: ObservableObject {
     func start(_ index: Int) {
         guard game.characters.indices.contains(index) else { return }
         let ch = game.characters[index]
-        run = Mine.start(ch)
+        // 12.1: your real gear, level points and prestige come along.
+        var r = Run(character: ch)
+        game.globalInventory.load(into: &r)
+        _ = Legacy.start(&r, ch)
+        if r.level > 1 { Progression.restore(&r, Progression.savedSpend(ch)) }
+        _ = Prestige.start(&r, ch)
+        run = Mine.start(ch, as: r)
         log = []
         fightLog = []
         haul = nil

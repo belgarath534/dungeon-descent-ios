@@ -87,6 +87,10 @@ public struct MineRun: Codable, Equatable, Sendable {
     var burn = 0
     var burnTurns = 0
     var skillsDrained = 0
+    /// 12.1: your gear, level points and prestige: attack added to every hit,
+    /// and armor that softens each blow (optional, so older saved trips load).
+    public var gearAtk: Int? = nil
+    public var def: Int? = nil
 
     public var inCombat: Bool { enemy != nil }
     public var handsFull: Bool { hand.count >= Mine.maxCarry }
@@ -186,6 +190,19 @@ public enum Mine {
             if case .array(let a)? = ch.extra[key] { skills = a.compactMap { if case .string(let s) = $0 { return s }; return nil } }
         }
         return MineRun(name: ch.name, cls: ch.cls, level: lvl, skills: skills, hp: hp, maxHp: hp)
+    }
+
+    /// 12.1: the same, with the character as a dungeon run would start
+    /// (equipped gear, spent level points, prestige stars, Legacy): their
+    /// extra HP, their attack bonus and their armor come along.
+    public static func start(_ ch: PlayerCharacter, as run: Run) -> MineRun {
+        var m = start(ch)
+        let extraHp = max(0, run.maxHp - GameData.classInfo(ch.cls).maxHp)
+        m.maxHp += extraHp
+        m.hp = m.maxHp
+        m.gearAtk = max(0, run.totalAtkBonus)
+        m.def = max(0, run.totalDef)
+        return m
     }
 
     /// getMineSkills: up to six of the character's learned skills.
@@ -290,7 +307,7 @@ public enum Mine {
     /// Your attack: the class's range, 5% more per level (mineCombatAction).
     static func roll(_ m: MineRun, dice: inout some Dice) -> Int {
         let a = GameData.classInfo(m.cls).atk
-        return Int((Double(dice.roll(a)) * (1 + Double(m.level - 1) * 0.05)).rounded(.down))
+        return Int((Double(dice.roll(a)) * (1 + Double(m.level - 1) * 0.05)).rounded(.down)) + (m.gearAtk ?? 0)
     }
 
     /// Damage landing on the enemy, through its defenses.
@@ -441,6 +458,8 @@ public enum Mine {
         if m.defending { dmg = Int((Double(dmg) * 0.4).rounded(.down)); m.defending = false }
         if e.weakened { dmg = Int((Double(dmg) * 0.6).rounded(.down)); e.weakened = false }
         if m.shielded { dmg = Int((Double(dmg) * 0.2).rounded(.down)); m.shielded = false }
+        // Your armor takes the edge off (half its defense, never below 1).
+        if let d = m.def, d > 0, dmg > 0 { dmg = max(1, dmg - d / 2) }
         if m.hp > 0 {
             m.hp = max(0, m.hp - dmg)
             t.log.append("💥 \(e.name) hits you for \(dmg)! HP: \(m.hp) of \(m.maxHp).")
