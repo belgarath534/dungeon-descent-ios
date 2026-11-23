@@ -132782,6 +132782,72 @@
           }
         }
       }
+    },
+    "⬆ Update Required": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⬆ Atualização Obrigatória"
+          }
+        }
+      }
+    },
+    "Update in the App Store": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atualizar na App Store"
+          }
+        }
+      }
+    },
+    "I Updated — Check Again": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Já Atualizei — Verificar de Novo"
+          }
+        }
+      }
+    },
+    "Update required. A new version of Dungeon Descent is needed to keep playing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atualização obrigatória. Uma nova versão do Dungeon Descent é necessária para continuar jogando."
+          }
+        }
+      }
+    },
+    "Still out of date. Please update in the App Store.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ainda desatualizado. Atualize na App Store."
+          }
+        }
+      }
+    },
+    "Thanks! You can keep playing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obrigado! Você pode continuar jogando."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

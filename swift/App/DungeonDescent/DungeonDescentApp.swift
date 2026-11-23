@@ -23,6 +23,7 @@ struct DungeonDescentApp: App {
             RootView()
                 .modifier(FriendInviteAlert())
                 .modifier(UpdatePrompt())
+                .modifier(UpdateRequired())
                 .environmentObject(game)
                 .environmentObject(router)
                 .environment(\.locale, locale)
@@ -74,6 +75,7 @@ struct DungeonDescentApp: App {
         }
         .onChange(of: scenePhase) { phase in
             game.afk.inForeground = phase == .active
+            if phase == .active { UpdateCheck.shared.check() }
             if phase == .background {
                 if AFKModel.isRunning(game.store) {
                     AFKBackground.schedule()
