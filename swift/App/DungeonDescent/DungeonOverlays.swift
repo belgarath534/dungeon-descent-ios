@@ -170,14 +170,21 @@ struct ShopOverlay: View {
                 let item = stack.item
                 let price = Inventory.sellPrice(item)
                 let count = stack.count > 1 ? " ×\(stack.count)" : ""
+                let equipped = item.isWeapon ? run.equippedWeapon : item.isArmor ? run.equippedArmor : nil
+                let vs = item.compared(to: equipped).map { ", \($0) your \(item.isWeapon ? "weapon" : "armor")" } ?? ""
                 HStack(spacing: 8) {
-                    Text("\(item.icon) \(item.name)\(count)" as String).font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xcc9944))
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("\(item.icon) \(item.name)\(count)" as String).font(Theme.cinzel(10.9)).foregroundStyle(Color(hex: 0xcc9944))
+                        if let st = item.statText {
+                            Text(st + (item.compared(to: equipped).map { " · \($0) equipped" } ?? "")).font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textSecondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     Button("\(price)g" as String) { model.sell(at: stack.index) }
                         .font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0xcc8844))
                         .padding(.vertical, 4).padding(.horizontal, 10)
                         .background(Color(hex: 0x1a0800)).overlay(Rectangle().stroke(Color(hex: 0xaa6622)))
-                        .accessibilityLabel((stack.count > 1 ? "Sell one \(item.name) for \(price) gold. You have \(stack.count)" : "Sell \(item.name) for \(price) gold") as String)
+                        .accessibilityLabel(((stack.count > 1 ? "Sell one \(item.name) for \(price) gold. You have \(stack.count)" : "Sell \(item.name) for \(price) gold") + (item.statSpoken.map { ". \($0.prefix(1).uppercased() + $0.dropFirst())\(vs)" } ?? "")) as String)
                 }
                 .padding(.vertical, 6)
                 .overlay(alignment: .bottom) { Rectangle().fill(Color(hex: 0x1a1a00)).frame(height: 1) }

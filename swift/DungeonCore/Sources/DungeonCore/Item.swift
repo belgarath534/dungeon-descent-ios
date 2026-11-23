@@ -60,6 +60,35 @@ public struct Item: Equatable, Sendable {
     public var armorDefense: Int {
         (defBase ?? 4) + jsRound(Double((level ?? 1) - 1) * 1.5)
     }
+
+    /// 12.1: a weapon's or armor's stats for lists ("ATK 12-18", "DEF +9"),
+    /// nil for everything else. A player asked for them in the sell list.
+    public var statText: String? {
+        if isWeapon { return "ATK \(weaponAttack.lowerBound)-\(weaponAttack.upperBound)" }
+        if isArmor { return "DEF +\(armorDefense)" }
+        return nil
+    }
+
+    /// The same, read aloud ("attack 12 to 18", "defense plus 9").
+    public var statSpoken: String? {
+        if isWeapon { return "attack \(weaponAttack.lowerBound) to \(weaponAttack.upperBound)" }
+        if isArmor { return "defense plus \(armorDefense)" }
+        return nil
+    }
+
+    /// Against what's equipped: "better than", "worse than" or "same as" it.
+    public func compared(to other: Item?) -> String? {
+        guard let other else { return nil }
+        let mine: Double, theirs: Double
+        if isWeapon && other.isWeapon {
+            mine = Double(weaponAttack.lowerBound + weaponAttack.upperBound)
+            theirs = Double(other.weaponAttack.lowerBound + other.weaponAttack.upperBound)
+        } else if isArmor && other.isArmor {
+            mine = Double(armorDefense)
+            theirs = Double(other.armorDefense)
+        } else { return nil }
+        return mine > theirs ? "better than" : mine < theirs ? "worse than" : "same as"
+    }
 }
 
 extension Item: Codable {

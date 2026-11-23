@@ -154,6 +154,20 @@ extension View {
 /// template's {0}, {1} … match anything; names are looked up on their own.
 enum Patterns {
     static let pt: [(String, String)] = [
+        // 12.1: item stats in the sell lists.
+        ("{0} · better than equipped", "{0} · melhor que o equipado"),
+        ("{0} · worse than equipped", "{0} · pior que o equipado"),
+        ("{0} · same as equipped", "{0} · igual ao equipado"),
+        ("Attack {0} to {1}, better than your weapon", "Ataque {0} a {1}, melhor que sua arma"),
+        ("Attack {0} to {1}, worse than your weapon", "Ataque {0} a {1}, pior que sua arma"),
+        ("Attack {0} to {1}, same as your weapon", "Ataque {0} a {1}, igual à sua arma"),
+        ("Attack {0} to {1}", "Ataque {0} a {1}"),
+        ("Defense plus {0}, better than your armor", "Defesa mais {0}, melhor que sua armadura"),
+        ("Defense plus {0}, worse than your armor", "Defesa mais {0}, pior que sua armadura"),
+        ("Defense plus {0}, same as your armor", "Defesa mais {0}, igual à sua armadura"),
+        ("Defense plus {0}", "Defesa mais {0}"),
+        ("Sell {0} for {1} gold, attack {2} to {3}", "Vender {0} por {1} de ouro, ataque {2} a {3}"),
+        ("Sell {0} for {1} gold, defense plus {2}", "Vender {0} por {1} de ouro, defesa mais {2}"),
         // 12.1: Friends.
         ("online, on floor {0} of {1}", "online, no andar {0} de {1}"),
         ("online, in a dungeon", "online, numa masmorra"),

@@ -5556,3 +5556,23 @@ final class ConductorTests: XCTestCase {
         XCTAssertEqual(back.conductorFloor, 5)
     }
 }
+
+final class ItemStatTextTests: XCTestCase {
+    func testWeaponAndArmorStats() {
+        var w = Item(name: "Sword", icon: "⚔", type: "weapon", desc: "")
+        w.atkBase = [10, 14]
+        var w2 = w
+        w2.level = 3
+        var a = Item(name: "Mail", icon: "🛡", type: "armor", desc: "")
+        a.defBase = 6
+        XCTAssertEqual(w.statText, "ATK 10-14")
+        XCTAssertEqual(w2.statText, "ATK 15-19")
+        XCTAssertEqual(a.statText, "DEF +6")
+        XCTAssertEqual(w.statSpoken, "attack 10 to 14")
+        XCTAssertEqual(w2.compared(to: w), "better than")
+        XCTAssertEqual(w.compared(to: w2), "worse than")
+        XCTAssertNil(w.compared(to: a))
+        XCTAssertNil(w.compared(to: nil))
+        XCTAssertNil(Item(name: "Potion", icon: "🧪", type: "potion", desc: "").statText)
+    }
+}

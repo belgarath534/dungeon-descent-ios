@@ -203,7 +203,7 @@ struct BlacksmithView: View {
                 Text("\(f.bag.count) items — tap to sell" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
                 ForEach(Array(f.bag.enumerated()), id: \.offset) { i, item in
                     let price = Inventory.sellPrice(item)
-                    itemRow(item, button: "💰 \(price)g", label: "Sell \(item.name) for \(price) gold") { model.sell(i) }
+                    itemRow(item, button: "💰 \(price)g", label: "Sell \(item.name) for \(price) gold" + (item.statSpoken.map { ", \($0)" } ?? "")) { model.sell(i) }
                 }
             }
         }
@@ -233,9 +233,16 @@ struct BlacksmithView: View {
 
     private func itemRow(_ item: Item, button: String?, label: String, action: @escaping () -> Void) -> some View {
         HStack(spacing: 8) {
-            Text("\(item.icon) \(item.name)\((item.level ?? 1) > 1 ? " Lv\(item.level ?? 1)" : "")" as String)
-                .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc9944))
-                .accessibilityLabel("\(item.name)\((item.level ?? 1) > 1 ? " Level \(item.level ?? 1)" : ""). \(item.desc)" as String)
+            VStack(alignment: .leading, spacing: 1) {
+                Text("\(item.icon) \(item.name)\((item.level ?? 1) > 1 ? " Lv\(item.level ?? 1)" : "")" as String)
+                    .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc9944))
+                // 12.1: weapon and armor stats in the lists.
+                if let st = item.statText {
+                    Text(st).font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textSecondary)
+                }
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("\(item.name)\((item.level ?? 1) > 1 ? " Level \(item.level ?? 1)" : "")\(item.statSpoken.map { ", \($0)" } ?? ""). \(item.desc)" as String)
             Spacer()
             if let button {
                 Button(button, action: action)
