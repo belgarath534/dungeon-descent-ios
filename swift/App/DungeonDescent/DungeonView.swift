@@ -161,6 +161,17 @@ struct DungeonView: View {
             .accessibilityHidden(true)
         }
         if let c = model.startCard { StartCardOverlay(card: c) { model.skipStartCard() } }
+        // 12.1 Boss Retry.
+        if let o = model.bossRetry {
+            WebOverlay {
+                OverlayTitle(text: "Fallen Before \(o.boss)")
+                OverlayText(text: "You were struck down, but the dungeon offers one final chance. Retry \(o.boss) with half your maximum HP. Your items stay with you. The boss resets to full strength. It costs \(o.penalty) gold, and you only get this once per run.")
+                Button("⚔ Retry the Boss (\(o.penalty) gold)" as String) { model.acceptBossRetry(true) }
+                    .buttonStyle(WebButtonStyle(kind: .gold))
+                Button("Accept Defeat") { model.acceptBossRetry(false) }
+                    .buttonStyle(WebButtonStyle(kind: .ghost))
+            }
+        }
         if let c = model.bossPreview { BossPreviewOverlay(card: c) { model.bossPreview = nil } }
         if model.trueEnding { TrueEndingOverlay(model: model) }
         if model.musicPlayerOpen {

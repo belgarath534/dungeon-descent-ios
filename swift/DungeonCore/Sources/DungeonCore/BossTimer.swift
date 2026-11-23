@@ -48,6 +48,29 @@ public enum BossTimer {
     }
 }
 
+/// BOSS RETRY (showBossRetry, doBossRetry): killed by a final boss, you get
+/// one more try a run, for 15% of your gold: back at half HP with one life,
+/// the boss back to full HP and its first phase. Not in Hardcore.
+public enum BossRetry {
+    public static func offer(_ run: Run) -> Int? {
+        guard let e = run.enemy, e.isBoss, !e.isDead, run.bossRetryUsed != true, !run.hardcore, run.lives <= 0 else { return nil }
+        return run.gold * 15 / 100
+    }
+
+    public static func retry(_ run: inout Run, wallet: Wallet) -> Int {
+        let penalty = run.gold * 15 / 100
+        run.bossRetryUsed = true
+        run.gold = max(0, run.gold - penalty)
+        _ = wallet.spendGold(min(penalty, wallet.gold))
+        run.hp = max(1, jsRound(Double(run.maxHp) * 0.5))
+        run.lives = 1
+        run.inCombat = true
+        run.bossPhase = 1
+        if var e = run.enemy { e.hp = e.maxHp; run.enemy = e }
+        return penalty
+    }
+}
+
 /// The pre-boss gauntlet (startPreBossGauntlet, spawnGauntletWave): after the
 /// floor 10 Elite Guardian, one or two waves of the dungeon's tier 2 enemies
 /// stand between you and the boss.

@@ -35,6 +35,20 @@ final class RunModel: ObservableObject {
     @Published private(set) var eventText = ""
     @Published private(set) var eventTone = ""
     /// Set on a level-up until the player leaves the Level Up panel.
+    /// 12.1: the Boss Retry offer (gold it costs, the boss, and how the run ends without it).
+    @Published var bossRetry: (penalty: Int, boss: String, killedBy: String, spoken: String)?
+
+    func acceptBossRetry(_ yes: Bool) {
+        guard let offer = bossRetry else { return }
+        bossRetry = nil
+        var r = run
+        guard yes else { runOver(r, killedBy: offer.killedBy, spoken: ""); return }
+        let lost = BossRetry.retry(&r, wallet: game.wallet)
+        add("⚔ Boss Retry — \(offer.boss) resets. You fight on with \(r.hp) HP. \(lost) gold lost.")
+        Sound.track(Soundtrack.bossTrack(dungeon: r.dungeon))
+        finish(r, dice, phase: .fighting, spoken: "Retrying the boss. \(offer.boss) is at full strength. You have \(r.hp) of \(r.maxHp) HP. \(lost) gold lost.")
+    }
+
     @Published var levelUp: Int? { didSet { if levelUp != nil && oldValue == nil { showTip("first-levelup") } } }
     /// The first-run tip on show (showDungeonTip), and its length in seconds.
     @Published var tip: (text: String, seconds: Double)?
@@ -2631,6 +2645,13 @@ final class RunModel: ObservableObject {
                    spoken: spoken + " " + msg)
             playMusic()
         case .runOver:
+            // 12.1 Boss Retry (the web version's): one more try at the boss.
+            if let penalty = BossRetry.offer(r) {
+                run = r
+                bossRetry = (penalty, r.enemy?.name ?? "the boss", killedBy, spoken)
+                Feedback.announce(spoken + " You fell before \(r.enemy?.name ?? "the boss"). Retry with half your HP for \(penalty) gold, or accept defeat.", after: 0.8)
+                return
+            }
             runOver(r, killedBy: killedBy, spoken: spoken)
         }
     }

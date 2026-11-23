@@ -5844,3 +5844,33 @@ final class GoldenElixirTests: XCTestCase {
         XCTAssertEqual(r.tempAtk, 8)
     }
 }
+
+final class BossRetryTests: XCTestCase {
+    func testOneRetryForFifteenPercent() {
+        let store = MemoryStore()
+        let w = Wallet(store: store)
+        w.addGold(1000)
+        var r = Run(character: PlayerCharacter(name: "B", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.gold = 1000
+        var dice = SeededDice(seed: 1)
+        var boss = Combat.nextBoss(for: r, dice: &dice)
+        boss.hp = 10
+        r.enemy = boss
+        r.lives = 0
+        r.hp = 0
+        XCTAssertEqual(BossRetry.offer(r), 150)
+        let lost = BossRetry.retry(&r, wallet: w)
+        XCTAssertEqual(lost, 150)
+        XCTAssertEqual(r.gold, 850)
+        XCTAssertEqual(r.lives, 1)
+        XCTAssertEqual(r.hp, r.maxHp / 2)
+        XCTAssertEqual(r.enemy?.hp, r.enemy?.maxHp)
+        r.lives = 0
+        XCTAssertNil(BossRetry.offer(r), "once a run")
+        var hc = r
+        hc.bossRetryUsed = nil
+        hc.hardcore = true
+        XCTAssertNil(BossRetry.offer(hc))
+    }
+}

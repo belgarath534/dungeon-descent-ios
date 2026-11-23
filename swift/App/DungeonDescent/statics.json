@@ -381,6 +381,26 @@
      {
       "title": "Blacksmith",
       "body": "The Blacksmith appears inside dungeons and has two tabs — Upgrade and Buy Weapons. Upgrade spends gold to improve your equipped weapon or armor. Buy Weapons lets you purchase from a catalog of 8 weapons using gold. Your first weapon is always free — a Worn Blade available from the Buy Weapons tab. Weapons go into your inventory. Open inventory to equip them. Blacksmith profession gets a 10 percent discount on all upgrades."
+     },
+     {
+      "title": "⛏ The Mine and Guns",
+      "body": "A standalone mode, separate from the story dungeons. Send a character into the Mine to dig for Diamonds, Mystery Coins, gold and Gun Parts — carry up to 15 items before surfacing, and descend deeper for rarer loot but tougher enemies. Your equipped gear comes with you. Diamonds buy guns at the Blacksmith, each with its own charge, shot count and cooldown. Gun Parts let you craft guns at Home instead. Guns work in dungeons, co-op, The Siege and Raids."
+     },
+     {
+      "title": "📖 The Codex",
+      "body": "A lore system separate from The Chronicles — three tabs: World Lore, Enemy Lore and Artifacts. Entries unlock through play: clearing a dungeon, reaching kill totals, hitting Mine depth milestones, or collecting Void Fragments. Find it in the More tab."
+     },
+     {
+      "title": "🏆 Boss Loot — Dungeon Relics",
+      "body": "Every dungeon boss drops a unique relic the first time you beat it — one per dungeon, each with a passive effect for the rest of your run: extra max HP, a chance to freeze or dodge, bonus elemental damage, healing per room, and more. Malachar's Crown Fragment can shatter once to save you from a killing blow. Relics stay with you for future runs."
+     },
+     {
+      "title": "🌑 Legacy Mode vs. Classic Run",
+      "body": "Choose your run mode when you create a character. Classic Run is the original experience — your level resets on death and every run is a fresh start. Legacy Mode keeps your level between runs; clearing a dungeon raises its Dungeon Tier, which makes enemies stronger but pays more gold. Die in Legacy Mode and your level is kept, but that dungeon's tier resets."
+     },
+     {
+      "title": "⚔ Boss Retry and the Pre-Boss Gauntlet",
+      "body": "Die to a dungeon's final boss and you get one retry per run (not in Hardcore) — it costs 15% of your gold and brings you back at 50% HP, but the boss resets to full strength. Before you reach the boss, expect a Pre-Boss Gauntlet: one or two waves of stronger dungeon enemies between the floor 10 elite and the final fight."
      }
     ]
    },

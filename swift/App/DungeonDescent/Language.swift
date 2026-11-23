@@ -219,6 +219,11 @@ enum Patterns {
         ("You're on {0}, and {1} is out. Many bugs are already fixed in it, so please update first. You can still send this if the bug is still there after updating.", "Você está na {0}, e a {1} já chegou. Muitos bugs já foram corrigidos nela, então atualize primeiro. Você ainda pode enviar isto se o bug continuar depois de atualizar."),
         // 12.1: tutorial.
         ("{0} — Step {1} of {2}", "{0} — Etapa {1} de {2}"),
+        // 12.1: Boss Retry.
+        ("Fallen Before {0}", "Caído Diante de {0}"),
+        ("⚔ Retry the Boss ({0} gold)", "⚔ Tentar o Chefe de Novo ({0} de ouro)"),
+        ("You were struck down, but the dungeon offers one final chance. Retry {0} with half your maximum HP. Your items stay with you. The boss resets to full strength. It costs {1} gold, and you only get this once per run.", "Você caiu, mas a masmorra oferece uma última chance. Enfrente {0} de novo com metade do seu HP máximo. Seus itens ficam com você. O chefe volta com força total. Custa {1} de ouro, e só acontece uma vez por partida."),
+        ("Retrying the boss. {0} is at full strength. You have {1} of {2} HP. {3} gold lost.", "Tentando o chefe de novo. {0} está com força total. Você tem {1} de {2} de HP. {3} de ouro perdidos."),
         // 12.1: Friends.
         ("online, on floor {0} of {1}", "online, no andar {0} de {1}"),
         ("online, in a dungeon", "online, numa masmorra"),

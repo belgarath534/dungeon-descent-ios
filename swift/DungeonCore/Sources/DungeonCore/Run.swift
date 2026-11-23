@@ -71,6 +71,8 @@ public struct Run: Codable, Sendable {
     public var dddiDefeated: Bool? = nil
     /// The floor The Founder last struck on (once a floor).
     public var founderFloor: Int? = nil
+    /// The web version's Boss Retry was used this run (once a run).
+    public var bossRetryUsed: Bool? = nil
     /// The Void Reaper wasn't stopped: enemies are 50% stronger (set while the curse lasts).
     public var worldCurse = false
     /// Spells known by the character (copied in at run start) and their cooldown.
