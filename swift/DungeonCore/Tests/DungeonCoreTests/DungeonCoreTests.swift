@@ -5677,3 +5677,21 @@ final class CommunityDungeonTests: XCTestCase {
         XCTAssertEqual(back.communityDungeon, dungeon())
     }
 }
+
+final class JulioFragmentTests: XCTestCase {
+    func testFiveFragmentsUnlockTheStory() {
+        let store = MemoryStore()
+        var dice = SeededDice(seed: 3)
+        var seen = Set<String>()
+        for i in 1...5 {
+            let got = JulioFragments.collect(store, dice: &dice)
+            XCTAssertNotNil(got)
+            XCTAssertEqual(got?.count, i)
+            XCTAssertEqual(got?.storyUnlocked, i == 5)
+            seen.insert(got!.fragment.id)
+        }
+        XCTAssertEqual(seen.count, 5)
+        XCTAssertEqual(store.getItem("dd_julio_story"), "true")
+        XCTAssertNil(JulioFragments.collect(store, dice: &dice))
+    }
+}

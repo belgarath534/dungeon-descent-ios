@@ -736,7 +736,8 @@ final class RunModel: ObservableObject {
         var r = run
         var d = dice
         let levelBefore = r.level
-        if r.pendingEvent == "julio" && choice == 0 { achievements.record(.julioMet) }
+        let talkedToJulio = r.pendingEvent == "julio" && choice == 0
+        if talkedToJulio { achievements.record(.julioMet) }
         let studied = r.pendingEvent == "inscription" && choice == 0 && r.dungeon == "The Sunken Archives"
         let out = Encounters.choose(choice, &r, dice: &d, wallet: game.wallet)
         // The Sunken Archives' inscriptions are its lore fragments (dq-sunken).
@@ -753,6 +754,18 @@ final class RunModel: ObservableObject {
             Sound.sfx("sfx-unlock")
         }
         var fragLine = ""
+        // 12.1: Julio hands you one of his five fragments (the web version's questline).
+        if talkedToJulio, let jf = JulioFragments.collect(game.store, dice: &d) {
+            fragLine = " Julio hands you something as you talk. \(jf.fragment.text) You have \(jf.count) of \(JulioFragments.all.count) of his fragments."
+            add("🏷️ Julio fragment: \(jf.fragment.text) (\(jf.count) of \(JulioFragments.all.count))")
+            if jf.storyUnlocked {
+                fragLine += " That's all of them. Julio's story is unlocked in the Chronicles Library."
+                add("📖 Julio's story is unlocked in the Chronicles Library.")
+                achievements.increment("julioStoryUnlocked")
+                _ = achievements.check()
+                Sound.sfx("sfx-unlock")
+            }
+        }
         if out.voidFragment {
             fragLine = " " + voidFragment()
             add(fragLine)

@@ -132419,6 +132419,105 @@
           }
         }
       }
+    },
+    "A folded piece of paper. It reads: \"Back at 3AM. — J\"": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um pedaço de papel dobrado. Diz: \"Volto às 3 da manhã. — J\""
+          }
+        }
+      }
+    },
+    "A name tag. It says JULIO. Someone has written underneath in small letters: \"still here.\"": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um crachá. Diz JULIO. Alguém escreveu embaixo em letras pequenas: \"ainda aqui.\""
+          }
+        }
+      }
+    },
+    "A memo. \"RE: Founding Charter signatures. I signed it because it was on my desk. I thought it needed a signature. — J\"": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um memorando. \"RE: Assinaturas da Carta de Fundação. Assinei porque estava na minha mesa. Achei que precisava de uma assinatura. — J\""
+          }
+        }
+      }
+    },
+    "A lunch schedule. 3AM to 3:15AM. Every day. The dungeon is listed as the lunch location.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um horário de almoço. Das 3h às 3h15 da manhã. Todos os dias. A masmorra aparece como local do almoço."
+          }
+        }
+      }
+    },
+    "A note. \"The Department keeps asking where I am. I am right here. I am always right here. — Julio\"": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um bilhete. \"O Departamento continua perguntando onde estou. Estou bem aqui. Estou sempre bem aqui. — Julio\""
+          }
+        }
+      }
+    },
+    "Julio hands you something as you talk.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Julio te entrega algo enquanto vocês conversam."
+          }
+        }
+      }
+    },
+    "That's all of them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isso é tudo."
+          }
+        }
+      }
+    },
+    "Julio's story is unlocked in the Chronicles Library.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A história de Julio foi desbloqueada na Biblioteca das Crônicas."
+          }
+        }
+      }
+    },
+    "📖 Julio's story is unlocked in the Chronicles Library.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "📖 A história de Julio foi desbloqueada na Biblioteca das Crônicas."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

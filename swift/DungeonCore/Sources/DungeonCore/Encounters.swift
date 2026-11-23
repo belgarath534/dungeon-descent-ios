@@ -383,3 +383,42 @@ public enum Encounters {
         }
     }
 }
+
+// MARK: - Julio's fragments (JULIO_FRAGMENTS, collectJulioFragment)
+
+/// Talking to Julio hands you one of five fragments, kept across characters;
+/// the fifth unlocks his story in the Chronicles Library (dd_julio_story).
+public enum JulioFragments {
+    public struct Fragment: Sendable, Equatable { public let id, text: String }
+
+    public static let all: [Fragment] = [
+        Fragment(id: "jf1", text: "A folded piece of paper. It reads: \"Back at 3AM. — J\""),
+        Fragment(id: "jf2", text: "A name tag. It says JULIO. Someone has written underneath in small letters: \"still here.\""),
+        Fragment(id: "jf3", text: "A memo. \"RE: Founding Charter signatures. I signed it because it was on my desk. I thought it needed a signature. — J\""),
+        Fragment(id: "jf4", text: "A lunch schedule. 3AM to 3:15AM. Every day. The dungeon is listed as the lunch location."),
+        Fragment(id: "jf5", text: "A note. \"The Department keeps asking where I am. I am right here. I am always right here. — Julio\""),
+    ]
+
+    public static func collected(_ store: GameStore) -> [String] {
+        guard let s = store.getItem("dd_julio_fragments"), let d = s.data(using: .utf8),
+              let v = try? JSONDecoder().decode([String].self, from: d) else { return [] }
+        return v
+    }
+
+    /// One not yet found (nil once all five are); `storyUnlocked` the moment
+    /// the fifth is found.
+    public static func collect(_ store: GameStore, dice: inout some Dice) -> (fragment: Fragment, count: Int, storyUnlocked: Bool)? {
+        var have = collected(store)
+        let left = all.filter { !have.contains($0.id) }
+        guard !left.isEmpty else { return nil }
+        let f = left[dice.roll(0...(left.count - 1))]
+        have.append(f.id)
+        if let d = try? JSONEncoder().encode(have), let s = String(data: d, encoding: .utf8) { store.setItem("dd_julio_fragments", s) }
+        var unlocked = false
+        if have.count >= all.count && store.getItem("dd_julio_story") == nil {
+            store.setItem("dd_julio_story", "true")
+            unlocked = true
+        }
+        return (f, have.count, unlocked)
+    }
+}

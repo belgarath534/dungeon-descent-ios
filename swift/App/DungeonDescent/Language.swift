@@ -202,6 +202,9 @@ enum Patterns {
         ("{0} as the boss", "{0} como chefe"),
         ("You can choose up to {0}. Unselect one first.", "Você pode escolher até {0}. Desmarque um primeiro."),
         ("{0} selected.", "{0} selecionado."),
+        // 12.1: Julio fragments.
+        ("You have {0} of {1} of his fragments.", "Você tem {0} de {1} fragmentos dele."),
+        ("🏷️ Julio fragment: {0} ({1} of {2})", "🏷️ Fragmento de Julio: {0} ({1} de {2})"),
         // 12.1: Friends.
         ("online, on floor {0} of {1}", "online, no andar {0} de {1}"),
         ("online, in a dungeon", "online, numa masmorra"),
