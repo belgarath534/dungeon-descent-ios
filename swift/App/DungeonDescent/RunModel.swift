@@ -1693,6 +1693,45 @@ final class RunModel: ObservableObject {
         return " First encounter. \(e.name). \(entry.desc)"
     }
 
+    // MARK: Low HP heartbeat (12.1)
+
+    private var lowHpTimer: Timer?
+    private var lowHpTier = 0
+
+    /// The web's low-HP heartbeat: a beat every 0.8 seconds at 10% HP or
+    /// less, every 0.4 seconds at 5% (with a spoken warning). Each beat also
+    /// vibrates. It stops when you heal, and while the Hunter's own heartbeat
+    /// is playing.
+    private func checkLowHp() {
+        let alive = phase != .victory && phase != .defeat && !characterGone && run.hp > 0 && run.maxHp > 0 && run.hunter == nil
+        let pct = Double(run.hp) / Double(max(1, run.maxHp))
+        let tier = !alive ? 0 : pct <= 0.05 ? 2 : pct <= 0.10 ? 1 : 0
+        guard tier != lowHpTier else { return }
+        lowHpTier = tier
+        lowHpTimer?.invalidate()
+        lowHpTimer = nil
+        guard tier > 0 else { return }
+        if tier == 2 { Feedback.announce("Critical! Health nearly gone.", after: 1) }
+        lowHpBeat()
+        lowHpTimer = Timer.scheduledTimer(withTimeInterval: tier == 2 ? 0.4 : 0.8, repeats: true) { [weak self] t in
+            Task { @MainActor in
+                guard let self, self.lowHpTier > 0 else { t.invalidate(); return }
+                self.lowHpBeat()
+            }
+        }
+    }
+
+    private func lowHpBeat() {
+        Sound.sfx("hunter-heartbeat")
+        Feedback.heartbeat()
+    }
+
+    func stopLowHp() {
+        lowHpTier = 0
+        lowHpTimer?.invalidate()
+        lowHpTimer = nil
+    }
+
     // MARK: Insane Mode (12.1)
 
     private var sanityTimer: Timer?
@@ -2753,6 +2792,7 @@ final class RunModel: ObservableObject {
 
     private func runOver(_ r: Run, killedBy: String, spoken: String) {
         stopHeartbeat()
+        stopLowHp()
         if let line = weeklyDone(r, cleared: false) { Feedback.announce(line, after: 2) }
         medusaStillLooking(r)
         // homeCreateSkillOrbs: the fallen character's upgrades become Skill Orbs.
@@ -4018,6 +4058,7 @@ final class RunModel: ObservableObject {
     }
 
     private func persist() {
+        checkLowHp()
         guard phase != .victory && phase != .defeat, !characterGone else { return }
         game.saveRun(run, for: characterIndex)
         sanityComfort()

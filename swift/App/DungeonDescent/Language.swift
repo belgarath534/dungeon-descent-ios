@@ -245,6 +245,8 @@ enum Patterns {
         ("First encounter. {0}. {1}", "Primeiro encontro. {0}. {1}"),
         ("⚔ Leo enters the dungeon. The dungeon does not know what is coming.", "⚔ Leo entra na masmorra. A masmorra não sabe o que está por vir."),
         ("Leo. The dungeon has heard this name before. It fears it.", "Leo. A masmorra já ouviu esse nome antes. Ela o teme."),
+        // 12.1: Low HP heartbeat.
+        ("Critical! Health nearly gone.", "Crítico! A vida está quase no fim."),
         // 12.1: Holiday enemies' moves.
         ("🧝 The Leprechaun steals {0} gold! Kill it fast!", "🧝 O Leprechaun rouba {0} de ouro! Mate-o rápido!"),
         ("⚽ O Craque kicks the ball! It hits you square in the face for {0} damage!", "⚽ O Craque chuta a bola! Acerta bem na sua cara causando {0} de dano!"),

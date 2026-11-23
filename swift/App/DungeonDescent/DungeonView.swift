@@ -96,6 +96,7 @@ struct DungeonView: View {
         }
         .onDisappear {
             model.conductorSleep()
+            model.stopLowHp()
             ShakeDetector.shared.stop()
             ShakeDetector.shared.onShake = nil
         }

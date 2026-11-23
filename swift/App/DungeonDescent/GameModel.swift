@@ -293,6 +293,17 @@ enum Feedback {
         #endif
     }
 
+    /// 12.1: one heartbeat on the phone — a strong thump, then a softer one.
+    static func heartbeat() {
+        guard AppSettings.haptics else { return }
+        #if !os(visionOS)
+        UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.14) {
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred(intensity: 0.7)
+        }
+        #endif
+    }
+
     static func warning() {
         guard AppSettings.haptics else { return }
         #if !os(visionOS)
