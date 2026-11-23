@@ -213,6 +213,9 @@ enum Patterns {
         ("You have {0} potions from your bag. Potions you drink are used up; ones you buy and don't use go into your bag.", "Você tem {0} poções da sua bolsa. As que você bebe são gastas; as que compra e não usa vão para a sua bolsa."),
         ("You have {0} potion from your bag. Potions you drink are used up; ones you buy and don't use go into your bag.", "Você tem {0} poção da sua bolsa. As que você bebe são gastas; as que compra e não usa vão para a sua bolsa."),
         ("Potion bought for {0} gold. You have {1}. {2} gold left.", "Poção comprada por {0} de ouro. Você tem {1}. Restam {2} de ouro."),
+        // 12.1: update prompt.
+        ("Dungeon Descent {0} is out, with bug fixes and new features. You have {1}. Updating keeps your characters and progress.", "O Dungeon Descent {0} chegou, com correções e novidades. Você tem a {1}. Atualizar mantém seus personagens e progresso."),
+        ("You're on {0}, and {1} is out. Many bugs are already fixed in it, so please update first. You can still send this if the bug is still there after updating.", "Você está na {0}, e a {1} já chegou. Muitos bugs já foram corrigidos nela, então atualize primeiro. Você ainda pode enviar isto se o bug continuar depois de atualizar."),
         // 12.1: Friends.
         ("online, on floor {0} of {1}", "online, no andar {0} de {1}"),
         ("online, in a dungeon", "online, numa masmorra"),

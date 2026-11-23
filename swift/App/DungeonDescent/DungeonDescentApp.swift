@@ -22,12 +22,14 @@ struct DungeonDescentApp: App {
         WindowGroup {
             RootView()
                 .modifier(FriendInviteAlert())
+                .modifier(UpdatePrompt())
                 .environmentObject(game)
                 .environmentObject(router)
                 .environment(\.locale, locale)
                 .onReceive(Language.changed) { locale = Language.locale }
                 .onAppear {
                     GameCenter.signIn()
+                    UpdateCheck.shared.check()
                     PlaytimeClock.shared.start(game)
                     CloudAccount.shared.start(game: game)
                     // An Endless Descent run left going picks up where it is.

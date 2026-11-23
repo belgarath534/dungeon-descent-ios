@@ -182,6 +182,7 @@ struct NotificationsPanel: View {
 
 /// #settings-panel-feedback: straight to the developer (the same Formspree form).
 struct FeedbackPanel: View {
+    @ObservedObject private var update = UpdateCheck.shared
     @State private var kind = "Bug report"
     @State private var message = ""
     @State private var email = Auth.auth().currentUser?.email ?? ""
@@ -214,6 +215,13 @@ struct FeedbackPanel: View {
                 .font(Theme.crimson(15)).foregroundStyle(Theme.textPrimary)
                 .padding(10).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
                 .accessibilityLabel("Your email, optional, so the developer can write back to you")
+            // 12.1: many reports are about bugs a newer version already fixed.
+            if update.outdated, kind == "Bug report" {
+                Text("You're on \(UpdateCheck.current), and \(update.storeVersion ?? "a newer version") is out. Many bugs are already fixed in it, so please update first. You can still send this if the bug is still there after updating." as String)
+                    .font(Theme.crimson(14)).foregroundStyle(Color(hex: 0xffcc66))
+                Button("⬆ Update Dungeon Descent") { update.openStore() }
+                    .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+            }
             Button(sending ? "Sending..." : "📨 Send") { send() }
                 .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
                 .disabled(sending)
