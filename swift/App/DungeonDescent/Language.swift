@@ -168,6 +168,17 @@ enum Patterns {
         ("Defense plus {0}", "Defesa mais {0}"),
         ("Sell {0} for {1} gold, attack {2} to {3}", "Vender {0} por {1} de ouro, ataque {2} a {3}"),
         ("Sell {0} for {1} gold, defense plus {2}", "Vender {0} por {1} de ouro, defesa mais {2}"),
+        // 12.1: Raid Boss.
+        ("One giant boss, fought together. It has three times a dungeon boss's HP and enrages after {0} rounds. Win for 2,500 gold and 1,200 XP, plus 5 diamonds and a piece of raid gear once a day.", "Um chefe gigante, enfrentado em grupo. Tem três vezes o HP de um chefe de masmorra e fica enfurecido após {0} rodadas. Vença para ganhar 2.500 de ouro e 1.200 de XP, além de 5 diamantes e um equipamento de raide uma vez por dia."),
+        ("Host a raid against {0}", "Criar uma raide contra {0}"),
+        ("{0} selected. {1}", "{0} selecionado. {1}"),
+        ("🐉 Raid Boss · {0}", "🐉 Chefe de Raide · {0}"),
+        ("🐉 Raid: {0} · up to {1} players", "🐉 Raide: {0} · até {1} jogadores"),
+        ("Joined the raid against {0}. Press Ready when you're set. The host starts the fight.", "Você entrou na raide contra {0}. Toque em Pronto quando estiver preparado. O anfitrião começa a luta."),
+        ("Raid room created: {0}. Your code is {1}. Invite up to three friends, then press Start.", "Sala de raide criada: {0}. Seu código é {1}. Convide até três amigos e toque em Começar."),
+        ("🐉 RAID BOSS: {0} {1}, {2} HP. It changes twice as it's hurt, and after {3} rounds it enrages. Fight together!", "🐉 CHEFE DE RAIDE: {0} {1}, {2} de HP. Ele muda duas vezes quando ferido e, após {3} rodadas, fica enfurecido. Lutem juntos!"),
+        ("🏆 {0} falls! The raid is won!", "🏆 {0} cai! A raide foi vencida!"),
+        ("🔥 {0} is ENRAGED! Its attacks are twice as strong. Finish it!", "🔥 {0} está ENFURECIDO! Seus ataques ficam duas vezes mais fortes. Acabem com ele!"),
         // 12.1: Friends.
         ("online, on floor {0} of {1}", "online, no andar {0} de {1}"),
         ("online, in a dungeon", "online, numa masmorra"),

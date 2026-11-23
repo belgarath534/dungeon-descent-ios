@@ -5576,3 +5576,48 @@ final class ItemStatTextTests: XCTestCase {
         XCTAssertNil(Item(name: "Potion", icon: "🧪", type: "potion", desc: "").statText)
     }
 }
+
+final class RaidBossTests: XCTestCase {
+    func party(_ n: Int) -> [Coop.Player] {
+        (0..<n).map { i in
+            let ch = PlayerCharacter(name: "P\(i)", cls: "Warrior", race: "Human", prof: "Thief",
+                                     dungeon: "Crypt of Malachar", difficulty: .wanderer)
+            var r = Run(character: ch)
+            r.level = 10
+            return Coop.player(r, character: ch, id: "p\(i)", platform: "ios")
+        }
+    }
+
+    func testRaidBossIsMuchBiggerThanTheDungeonBoss() {
+        for b in Coop.raidBosses {
+            var d1 = SeededDice(seed: 4), d2 = SeededDice(seed: 4)
+            let boss = Coop.foe(dungeon: b.home, floor: Coop.floors, party: party(2), dice: &d1)
+            let raid = Coop.raidFoe(b, party: party(2), dice: &d2)
+            XCTAssertEqual(raid.maxHp, boss.maxHp * 3, b.name)
+            XCTAssertGreaterThanOrEqual(raid.atkLo, boss.atkLo)
+            XCTAssertTrue(raid.boss)
+            XCTAssertEqual(raid.name, b.name)
+        }
+        var d = SeededDice(seed: 1)
+        let f = Coop.raidFoe(Coop.raidBoss("tyrant"), party: party(1), dice: &d)
+        XCTAssertEqual(Coop.enrage(f).atkHi, f.atkHi * 2)
+        XCTAssertEqual(Coop.raidBoss("nope").id, "colossus")
+    }
+
+    func testRewardsDiamondsAndGearOnceADay() {
+        var d = SeededDice(seed: 2)
+        let b = Coop.raidBoss("colossus")
+        let first = Coop.raidReward(b, won: true, daily: true, dice: &d)
+        XCTAssertEqual(first.diamonds, 5)
+        XCTAssertNotNil(first.item)
+        XCTAssertTrue(first.item!.name.hasPrefix("Raid "))
+        XCTAssertGreaterThanOrEqual(first.item!.level ?? 1, 3)
+        let again = Coop.raidReward(b, won: true, daily: false, dice: &d)
+        XCTAssertEqual(again.diamonds, 0)
+        XCTAssertNil(again.item)
+        XCTAssertEqual(again.gold, 2500)
+        let lost = Coop.raidReward(b, won: false, daily: true, dice: &d)
+        XCTAssertEqual(lost.diamonds, 0)
+        XCTAssertEqual(lost.gold, 200)
+    }
+}

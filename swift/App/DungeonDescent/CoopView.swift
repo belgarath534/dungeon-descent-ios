@@ -10,6 +10,7 @@ struct CoopView: View {
     @State private var charIndex = 0
     @State private var dungeonIndex = 0
     @State private var joinCode = ""
+    @State private var raidIndex = 0
     private let teal = Color(hex: 0x66ddcc)
 
     /// Dungeons a co-op run can go to: the first six (the rest need unlocking).
@@ -73,6 +74,26 @@ struct CoopView: View {
             Button("🤝 Host a Room") { model.host(game.characters[charIndex], dungeon: dungeons[dungeonIndex]) }
                 .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
                 .accessibilityLabel("Host a co-op room in \(dungeons[dungeonIndex])" as String)
+            // 12.1: one giant boss for the whole party.
+            header("🐉 RAID BOSS")
+            Text("One giant boss, fought together. It has three times a dungeon boss's HP and enrages after \(Coop.raidEnrageRound) rounds. Win for 2,500 gold and 1,200 XP, plus 5 diamonds and a piece of raid gear once a day." as String)
+                .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
+            ForEach(Coop.raidBosses.indices, id: \.self) { i in
+                let b = Coop.raidBosses[i]
+                Button("\(b.icon) \(b.name)" as String) {
+                    raidIndex = i
+                    Feedback.announce("\(b.name) selected. \(b.lore)")
+                }
+                .buttonStyle(WebButtonStyle(kind: i == raidIndex ? .gold : .ghost))
+                .accessibilityAddTraits(i == raidIndex ? .isSelected : [])
+                .accessibilityHint(b.lore)
+            }
+            Button("🐉 Host a Raid") {
+                let b = Coop.raidBosses[raidIndex]
+                model.host(game.characters[charIndex], dungeon: b.home, raid: b)
+            }
+            .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+            .accessibilityLabel("Host a raid against \(Coop.raidBosses[raidIndex].name)" as String)
             header("JOIN A FRIEND")
             HStack {
                 TextField("Room code", text: $joinCode)
@@ -91,7 +112,10 @@ struct CoopView: View {
     @ViewBuilder private var lobby: some View {
         Text("Room code: \(model.code ?? "")" as String).font(Theme.cinzel(18)).foregroundStyle(teal)
             .accessibilityLabel("Room code: \((model.code ?? "").map(String.init).joined(separator: " "))" as String)
-        Text("\(model.dungeon) · up to \(Coop.maxPlayers) players" as String).font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
+        Text(model.raid.map { "🐉 Raid: \($0.icon) \($0.name) · up to \(Coop.maxPlayers) players" } ?? "\(model.dungeon) · up to \(Coop.maxPlayers) players").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
+        if let b = model.raid {
+            Text(b.lore).font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
+        }
         header("THE PARTY")
         ForEach(model.party, id: \.id) { p in
             Text("\(p.ready || (model.isHost && p.id == model.myId) ? "✓" : "…") \(p.name) — \(p.cls), Lv \(p.level), \(p.maxHp) HP\(p.id == model.myId ? " (you)" : "")" as String)
@@ -122,7 +146,7 @@ struct CoopView: View {
     // MARK: The fight
 
     @ViewBuilder private var fight: some View {
-        Text("Floor \(model.floor) of \(Coop.floors) · Fight \(model.foe?.boss == true ? "BOSS" : "\(model.fight) of \(Coop.fightsPerFloor)") · \(model.dungeon)" as String).font(Theme.cinzel(12)).foregroundStyle(Theme.gold)
+        Text(model.raid.map { "🐉 Raid Boss · \($0.name)" } ?? "Floor \(model.floor) of \(Coop.floors) · Fight \(model.foe?.boss == true ? "BOSS" : "\(model.fight) of \(Coop.fightsPerFloor)") · \(model.dungeon)").font(Theme.cinzel(12)).foregroundStyle(Theme.gold)
         if let f = model.foe {
             VStack(alignment: .leading, spacing: 4) {
                 Text("\(f.icon) \(f.name)\(f.boss ? " — BOSS, phase \(f.phase)" : "")\(f.stun > 0 ? " · stunned" : "")" as String).font(Theme.cinzel(14)).foregroundStyle(Color(hex: 0xe08080))

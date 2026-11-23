@@ -131803,6 +131803,160 @@
           }
         }
       }
+    },
+    "🐉 RAID BOSS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🐉 CHEFE DE RAIDE"
+          }
+        }
+      }
+    },
+    "🐉 Host a Raid": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🐉 Criar uma Raide"
+          }
+        }
+      }
+    },
+    "🗿 The Hollow Colossus": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🗿 O Colosso Oco"
+          }
+        }
+      }
+    },
+    "🐉 Vyrmathra, the Ember Tyrant": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🐉 Vyrmathra, a Tirana das Brasas"
+          }
+        }
+      }
+    },
+    "🌊 The Drowned King": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌊 O Rei Afogado"
+          }
+        }
+      }
+    },
+    "❄️ The Frost Mother": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "❄️ A Mãe do Gelo"
+          }
+        }
+      }
+    },
+    "The Hollow Colossus": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Colosso Oco"
+          }
+        }
+      }
+    },
+    "Vyrmathra, the Ember Tyrant": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vyrmathra, a Tirana das Brasas"
+          }
+        }
+      }
+    },
+    "The Frost Mother": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Mãe do Gelo"
+          }
+        }
+      }
+    },
+    "A giant of fused bone that walks the crypt's lowest halls. Every warrior it has crushed is part of it now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um gigante de ossos fundidos que anda pelos salões mais fundos da cripta. Todo guerreiro que ele esmagou agora faz parte dele."
+          }
+        }
+      }
+    },
+    "The dragon whose breath made the Wastes. It wakes when enough heroes gather to make waking worth it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O dragão cujo sopro criou as Terras Devastadas. Ele desperta quando heróis suficientes se reúnem para que valha a pena."
+          }
+        }
+      }
+    },
+    "He ruled the Archives before the water came, and he still holds court beneath it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ele governava os Arquivos antes da água chegar, e ainda mantém sua corte lá embaixo."
+          }
+        }
+      }
+    },
+    "Older than the ice. Her children are the cold; her voice is the wind that freezes breath mid-word.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mais antiga que o gelo. Seus filhos são o frio; sua voz é o vento que congela o fôlego no meio da palavra."
+          }
+        }
+      }
+    },
+    "The raid is won!": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A raide foi vencida!"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

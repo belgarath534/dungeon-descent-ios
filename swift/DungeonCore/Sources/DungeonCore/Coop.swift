@@ -548,3 +548,78 @@ public enum Coop {
         return String((0..<4).map { _ in chars[dice.roll(0...(chars.count - 1))] })
     }
 }
+
+// MARK: - Raid Boss (12.1)
+
+/// A giant boss for the whole party in one long fight: much more HP than a
+/// dungeon boss, it hits harder, changes phase twice (striking everyone),
+/// and enrages after 20 rounds. Beating it pays gold, XP, diamonds and a
+/// piece of gear; the diamonds and gear once a day for each character.
+extension Coop {
+    public struct RaidBoss: Sendable, Equatable {
+        public let id: String
+        public let name: String
+        public let icon: String
+        /// The dungeon its strength and its gear come from.
+        public let home: String
+        public let lore: String
+    }
+
+    public static let raidBosses: [RaidBoss] = [
+        RaidBoss(id: "colossus", name: "The Hollow Colossus", icon: "🗿", home: "Crypt of Malachar",
+                 lore: "A giant of fused bone that walks the crypt's lowest halls. Every warrior it has crushed is part of it now."),
+        RaidBoss(id: "tyrant", name: "Vyrmathra, the Ember Tyrant", icon: "🐉", home: "The Ashbound Wastes",
+                 lore: "The dragon whose breath made the Wastes. It wakes when enough heroes gather to make waking worth it."),
+        RaidBoss(id: "drowned", name: "The Drowned King", icon: "🌊", home: "The Sunken Archives",
+                 lore: "He ruled the Archives before the water came, and he still holds court beneath it."),
+        RaidBoss(id: "frostmother", name: "The Frost Mother", icon: "❄️", home: "Frosthold Abyss",
+                 lore: "Older than the ice. Her children are the cold; her voice is the wind that freezes breath mid-word."),
+    ]
+
+    public static func raidBoss(_ id: String) -> RaidBoss { raidBosses.first { $0.id == id } ?? raidBosses[0] }
+
+    /// Rounds before it enrages (its attack doubles).
+    public static let raidEnrageRound = 20
+
+    /// Its home dungeon's floor 10 boss for this party, with three times
+    /// the HP and 15% more attack, under the raid boss's own name.
+    public static func raidFoe<D: Dice>(_ b: RaidBoss, party: [Player], dice: inout D) -> Foe {
+        let base = foe(dungeon: b.home, floor: floors, party: party, dice: &dice)
+        let hp = base.maxHp * 3
+        let lo = jsRound(Double(base.atkLo) * 1.15), hi = jsRound(Double(base.atkHi) * 1.15)
+        return Foe(name: b.name, icon: b.icon, hp: hp, maxHp: hp, atkLo: lo, atkHi: max(lo, hi), boss: true)
+    }
+
+    /// Enraged: twice the attack, once.
+    public static func enrage(_ f: Foe) -> Foe {
+        var e = f
+        e.atkLo *= 2
+        e.atkHi *= 2
+        return e
+    }
+
+    /// Each player's rewards. Gold and XP every time; diamonds and gear only
+    /// on the first win of the day (`daily`).
+    public struct RaidReward: Equatable, Sendable {
+        public var gold: Int
+        public var xp: Int
+        public var diamonds: Int
+        public var item: Item?
+    }
+
+    public static func raidReward<D: Dice>(_ b: RaidBoss, won: Bool, daily: Bool, dice: inout D) -> RaidReward {
+        guard won else { return RaidReward(gold: 200, xp: 150, diamonds: 0, item: nil) }
+        var r = RaidReward(gold: 2500, xp: 1200, diamonds: 0, item: nil)
+        if daily {
+            r.diamonds = 5
+            let gear = ItemTables.loot(for: b.home).filter { $0.isWeapon || $0.isArmor }
+            if !gear.isEmpty {
+                var item = gear[dice.roll(0...(gear.count - 1))]
+                item.level = max(item.level ?? 1, 3)
+                item.name = "Raid " + item.name
+                r.item = item
+            }
+        }
+        return r
+    }
+}

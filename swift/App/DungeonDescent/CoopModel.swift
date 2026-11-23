@@ -37,6 +37,9 @@ final class CoopModel: ObservableObject {
     private var handle: DatabaseHandle?
     private var seenLog = Set<String>()
     private var round = 0
+    /// 12.1: a Raid Boss room (one giant boss) instead of a ten-floor run.
+    @Published private(set) var raidId: String?
+    var raid: Coop.RaidBoss? { raidId.map(Coop.raidBoss) }
     private var roundStart = 0.0
     private var actions: [String: String] = [:]
     private var buys: [String: Int] = [:]
@@ -65,6 +68,7 @@ final class CoopModel: ObservableObject {
     /// next run paid nothing: "rewarded" was still set from the first.)
     private func resetRun() {
         rewarded = false
+        raidId = nil
         roomStatus = "lobby"
         party = []
         foe = nil
@@ -96,8 +100,9 @@ final class CoopModel: ObservableObject {
         return Coop.player(run, character: ch, id: myId, platform: CloudAccount.platform)
     }
 
-    func host(_ ch: PlayerCharacter, dungeon: String) {
+    func host(_ ch: PlayerCharacter, dungeon: String, raid: Coop.RaidBoss? = nil) {
         resetRun()
+        raidId = raid?.id
         character = ch
         let c = Coop.code(dice: &dice)
         code = c
@@ -109,13 +114,14 @@ final class CoopModel: ObservableObject {
         let data: [String: Any] = [
             "kind": Coop.kind, "version": 2, "code": c, "status": "lobby", "host": myId, "dungeon": dungeon,
             "floor": 1, "round": 0, "createdAt": Self.now, "players": [myId: pd], "beat": [myId: Self.now],
-        ]
+        ].merging(raid.map { ["mode": "raid", "raid": $0.id] as [String: Any] } ?? [:]) { a, _ in a }
         room?.setValue(data) { [weak self] error, ref in
             Task { @MainActor in
                 guard let self else { return }
                 if error != nil { self.say("Couldn't create the room. Check your connection."); return }
                 self.stage = .lobby
                 Sound.sfx("sfx-confirm")
+                if let raid { self.say("Raid room created: \(raid.name). Your code is \(c.map(String.init).joined(separator: " ")). Invite up to three friends, then press Start."); self.listen(); return }
                 self.say("Room created. Your code is \(c.map(String.init).joined(separator: " ")). Share it with up to three friends, then press Start when everyone is ready.")
                 self.listen()
             }
@@ -149,7 +155,12 @@ final class CoopModel: ObservableObject {
                 self.room?.child("beat").child(self.myId).setValue(Self.now)
                 self.stage = .lobby
                 Sound.sfx("sfx-confirm")
-                self.say("Joined room \(c). Press Ready when you're set. The host starts the run.")
+                if r["mode"] as? String == "raid" {
+                    let b = Coop.raidBoss(r["raid"] as? String ?? "")
+                    self.say("Joined the raid against \(b.name). Press Ready when you're set. The host starts the fight.")
+                } else {
+                    self.say("Joined room \(c). Press Ready when you're set. The host starts the run.")
+                }
                 self.listen()
             }
         }, withCancel: { [weak self] _ in
@@ -168,6 +179,13 @@ final class CoopModel: ObservableObject {
         guard isHost else { return }
         guard party.allSatisfy({ $0.ready || $0.id == myId }) else {
             say("Waiting for " + party.filter { !$0.ready && $0.id != myId }.map(\.name).joined(separator: ", ") + " to be ready.")
+            return
+        }
+        if let b = raid {
+            // One fight: the raid boss, as a floor 10 boss (phases, then the win).
+            let f = Coop.raidFoe(b, party: party, dice: &dice)
+            room?.updateChildValues(["status": "playing", "floor": Coop.floors, "fight": 1, "round": 1, "roundStart": Self.now, "foe": f.dict])
+            addLog(["🐉 RAID BOSS: \(f.icon) \(f.name), \(f.hp) HP. It changes twice as it's hurt, and after \(Coop.raidEnrageRound) rounds it enrages. Fight together!"])
             return
         }
         let f = Coop.foe(dungeon: dungeon, floor: 1, party: party, dice: &dice)
@@ -262,6 +280,7 @@ final class CoopModel: ObservableObject {
         }
         hostId = r["host"] as? String ?? hostId
         dungeon = r["dungeon"] as? String ?? dungeon
+        raidId = r["mode"] as? String == "raid" ? (r["raid"] as? String ?? "colossus") : nil
         let newFloor = (r["floor"] as? NSNumber)?.intValue ?? floor
         if newFloor != floor && newFloor >= Coop.floors && roomStatus == "playing" {
             Sound.track(Soundtrack.bossTrack(dungeon: dungeon))
@@ -361,7 +380,10 @@ final class CoopModel: ObservableObject {
         var update: [String: Any] = ["foe": f.dict, "actions": NSNull()]
         write(r.party, into: &update)
         if r.foeDown {
-            if floor >= Coop.floors {
+            if raid != nil {
+                lines.append("🏆 \(f.name) falls! The raid is won!")
+                update["status"] = "won"
+            } else if floor >= Coop.floors {
                 lines.append("👑 \(f.name) is defeated! The party has conquered \(dungeon)!")
                 update["status"] = "won"
             } else if fight < Coop.fightsPerFloor {
@@ -400,6 +422,12 @@ final class CoopModel: ObservableObject {
         } else {
             update["round"] = round + 1
             update["roundStart"] = Self.now
+            // The raid boss enrages once, after enough rounds.
+            if raid != nil && round == Coop.raidEnrageRound {
+                f = Coop.enrage(f)
+                update["foe"] = f.dict
+                lines.append("🔥 \(f.name) is ENRAGED! Its attacks are twice as strong. Finish it!")
+            }
         }
         room?.updateChildValues(update) { [weak self] _, _ in
             Task { @MainActor in self?.resolving = false }
@@ -436,11 +464,54 @@ final class CoopModel: ObservableObject {
             : "⬇ Floor \(next), fight \(n) of \(Coop.fightsPerFloor): \(nf.icon) \(nf.name)\(nf.elite ? ", an elite," : ""), \(nf.hp) HP."])
     }
 
+    // MARK: Raid rewards (12.1)
+
+    /// Gold and XP every time; diamonds and a piece of raid gear on each
+    /// character's first raid win of the day.
+    private func payRaid(_ b: Coop.RaidBoss, won: Bool, game: GameModel) {
+        let day = ISO8601DateFormatter.string(from: Date(), timeZone: .current, formatOptions: [.withFullDate])
+        let key = "swift_raid_day_\(Int(character?.created ?? 0))"
+        let daily = won && UserDefaults.standard.string(forKey: key) != day
+        let r = Coop.raidReward(b, won: won, daily: daily, dice: &dice)
+        if daily { UserDefaults.standard.set(day, forKey: key) }
+        game.wallet.addGold(r.gold)
+        if r.diamonds > 0 { game.wallet.addDiamonds(r.diamonds) }
+        if let item = r.item { game.globalInventory.add(item) }
+        var levelLine = ""
+        if let ch = character, let i = game.characters.firstIndex(where: { $0.created == ch.created }) {
+            game.updateCharacter(i) { c in
+                var level = max(1, c.persistLevel ?? 1)
+                var have: Int = { if case .number(let n)? = c.extra["persistXp"] { return Int(n) }; return 0 }() + r.xp
+                let start = level
+                while let need = AFKRun.xpToLevelUp(from: level), have >= need { have -= need; level += 1 }
+                if level >= AFKRun.maxLevel { have = 0 }
+                c.persistLevel = level
+                c.extra["persistXp"] = .number(Double(have))
+                if level > start { levelLine = " \(c.name) reaches level \(level)!" }
+            }
+        }
+        if won {
+            game.pass(.kill(elite: false, boss: true))
+            Sound.sfx("sfx-victory")
+        }
+        Sound.track("tavern")
+        game.refresh()
+        var text = won ? "Victory! \(b.name) is defeated. You earn \(r.gold) gold and \(r.xp) XP" : "The raid failed. You earn \(r.gold) gold and \(r.xp) XP for trying"
+        if r.diamonds > 0 { text += ", \(r.diamonds) diamonds" }
+        if let item = r.item { text += ", and \(item.name)\(item.statSpoken.map { ", \($0)" } ?? ""). It's in your inventory at the Blacksmith" }
+        text += "." + levelLine
+        if won && !daily { text += " Diamonds and raid gear come once a day; this character already earned today's." }
+        status = text
+        Feedback.announce(text, after: 1.5)
+        if isHost { let ref = room; DispatchQueue.main.asyncAfter(deadline: .now() + 120) { ref?.removeValue() } }
+    }
+
     // MARK: Rewards, on each player's own device
 
     private func payOut(won: Bool) {
         guard !rewarded, let game else { return }
         rewarded = true
+        if let b = raid { payRaid(b, won: won, game: game); return }
         let cleared = won ? Coop.floors : max(0, floor - 1)
         let gold = Coop.gold(floorsCleared: cleared, won: won)
         if gold > 0 { game.wallet.addGold(gold) }
