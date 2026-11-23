@@ -67,6 +67,7 @@ final class Router: ObservableObject {
         if case .dungeon = s { runID += 1 }
         screen = s
         Self.playMusic(for: s)
+        Friends.shared.doing(screen: s)
         // A new page: VoiceOver starts again from its top.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             UIAccessibility.post(notification: .screenChanged, argument: nil)

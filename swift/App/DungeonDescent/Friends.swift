@@ -16,6 +16,8 @@ final class Friends: ObservableObject {
         let id: String
         let name: String
         var lastSeen: Double = 0
+        /// What they're doing ("in co-op", "on floor 6 of Crypt of Malachar").
+        var activity = ""
         var online: Bool { Date().timeIntervalSince1970 * 1000 - lastSeen < 300_000 }
     }
 
@@ -56,12 +58,44 @@ final class Friends: ObservableObject {
         started = true
         access = .ok
         let ref = Self.root.child(Self.key(me))
-        func beat() { ref.updateChildValues(["kind": "friend", "n": myName, "t": Self.now]) }
+        func beat() { ref.updateChildValues(["kind": "friend", "n": myName, "t": Self.now, "a": activity]) }
         beat()
         timer = Timer.scheduledTimer(withTimeInterval: 120, repeats: true) { _ in Task { @MainActor in beat() } }
         ref.child("inv").observe(.value) { [weak self] snap in
             let v = snap.value as? [String: Any]
             Task { @MainActor in self?.received(v) }
+        }
+    }
+
+    // MARK: What you're doing (12.1)
+
+    private(set) var activity = "in the menus"
+
+    /// Shown to your friends next to your name; sent when it changes.
+    func doing(_ what: String) {
+        guard what != activity else { return }
+        activity = what
+        guard started, let me = myId else { return }
+        Self.root.child(Self.key(me)).updateChildValues(["a": what, "t": Self.now])
+    }
+
+    /// The screen you open says what you're doing (a dungeon run says its floor).
+    func doing(screen: Router.Screen) {
+        switch screen {
+        case .dungeon: doing("in a dungeon")
+        case .coop: doing("in co-op")
+        case .spire: doing("climbing the Spire")
+        case .afk: doing("in Endless Descent")
+        case .worldBoss: doing("fighting the World Boss")
+        case .raid: doing("in a raid")
+        case .bossrush: doing("in Boss Rush")
+        case .mine: doing("in the Mine")
+        case .multiplayer: doing("in the PvP Arena")
+        case .challenges: doing("in Challenges")
+        case .siege: doing("in the Siege")
+        case .shadowRealm: doing("in the Shadow Realm")
+        case .chat: doing("in Global Chat")
+        default: doing("in the menus")
         }
     }
 
@@ -109,11 +143,19 @@ final class Friends: ObservableObject {
     /// When each friend was last seen.
     func refreshOnline() {
         for f in friends {
-            Self.root.child(Self.key(f.id)).child("t").observeSingleEvent(of: .value) { [weak self] snap in
+            let ref = Self.root.child(Self.key(f.id))
+            ref.child("t").observeSingleEvent(of: .value) { [weak self] snap in
                 let t = (snap.value as? NSNumber)?.doubleValue ?? 0
                 Task { @MainActor in
                     guard let self, let i = self.friends.firstIndex(where: { $0.id == f.id }) else { return }
                     self.friends[i].lastSeen = t
+                }
+            }
+            ref.child("a").observeSingleEvent(of: .value) { [weak self] snap in
+                let a = String((snap.value as? String ?? "").prefix(60))
+                Task { @MainActor in
+                    guard let self, let i = self.friends.firstIndex(where: { $0.id == f.id }) else { return }
+                    self.friends[i].activity = a
                 }
             }
         }
@@ -122,7 +164,7 @@ final class Friends: ObservableObject {
     var online: [Friend] { friends.filter(\.online) }
 
     func seenText(_ f: Friend) -> String {
-        if f.online { return "online now" }
+        if f.online { return f.activity.isEmpty ? "online now" : "online, \(f.activity)" }
         guard f.lastSeen > 0 else { return "hasn't opened this version yet" }
         let mins = Int((Date().timeIntervalSince1970 * 1000 - f.lastSeen) / 60_000)
         if mins < 60 { return "seen \(mins) minutes ago" }

@@ -88,6 +88,7 @@ struct DungeonView: View {
             ShakeDetector.shared.onShake = { [weak m] hard in m?.shakeAttack(hard: hard) }
             ShakeDetector.shared.start()
             if run.conductor != nil { model.conductorWake() }
+            Friends.shared.doing("on floor \(run.floor) of \(run.dungeon)")
         }
         .onDisappear {
             model.conductorSleep()

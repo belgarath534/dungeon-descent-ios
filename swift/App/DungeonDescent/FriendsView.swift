@@ -32,6 +32,8 @@ struct FriendsView: View {
                 }
             }
         }
+        // Who's online and what they're doing, every 30 seconds while this is open.
+        .onReceive(Timer.publish(every: 30, on: .main, in: .common).autoconnect()) { _ in friends.refreshOnline() }
         .onAppear {
             friends.load()
             Feedback.announce("Friends. Your Game Center friends who play Dungeon Descent.")

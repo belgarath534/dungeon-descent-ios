@@ -3434,6 +3434,7 @@ final class RunModel: ObservableObject {
 
     func descend() {
         guard phase == .floorCleared else { return }
+        Friends.shared.doing("on floor \(run.floor + 1) of \(run.dungeon)")
         var r = run
         var d = dice
         r.floor += 1

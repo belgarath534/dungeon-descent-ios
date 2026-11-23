@@ -155,6 +155,22 @@ extension View {
 enum Patterns {
     static let pt: [(String, String)] = [
         // 12.1: Friends.
+        ("online, on floor {0} of {1}", "online, no andar {0} de {1}"),
+        ("online, in a dungeon", "online, numa masmorra"),
+        ("online, in co-op", "online, no co-op"),
+        ("online, climbing the Spire", "online, subindo a Torre"),
+        ("online, in Endless Descent", "online, na Descida Infinita"),
+        ("online, fighting the World Boss", "online, lutando contra o Chefe Mundial"),
+        ("online, in a raid", "online, numa incursão"),
+        ("online, in Boss Rush", "online, no Boss Rush"),
+        ("online, in the Mine", "online, na Mina"),
+        ("online, in the PvP Arena", "online, na Arena PvP"),
+        ("online, in Challenges", "online, nos Desafios"),
+        ("online, in the Siege", "online, no Cerco"),
+        ("online, in the Shadow Realm", "online, no Reino das Sombras"),
+        ("online, in Global Chat", "online, no Chat Global"),
+        ("online, in the menus", "online, nos menus"),
+        ("{0}, online, on floor {1} of {2}", "{0}, online, no andar {1} de {2}"),
         ("{0} friends online.", "{0} amigos online."),
         ("Invite sent to {0}.", "Convite enviado para {0}."),
         ("📨 Invite {0}", "📨 Convidar {0}"),
