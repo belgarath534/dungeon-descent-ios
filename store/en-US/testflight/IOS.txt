@@ -1,6 +1,10 @@
 Thanks for testing Dungeon Descent 12.1!
 
 Please try:
+• NEW — The Conductor (any dungeon from floor 3, rare): a hall with a door at the end and something conducting a lullaby. Step forward only while the music plays; when it stops, hold still. Tell us if it's too easy or too hard. Use headphones.
+• NEW — Friends (Multiplayer tab): your Game Center friends who play, who's online, their best scores, and Block / Report. Host a co-op room to invite an online friend; they get a pop-up with Join. The Rankings tab reads the leaderboards for friends and the world.
+• NEW — tavern music in Co-op, Friends and the Bounty Board.
+• Big text: try Settings, Accessibility, Display & Text Size, Larger Text at the biggest sizes. Nothing should be cut off.
 • Co-op 2.0 (Multiplayer, Co-op Dungeon): play with a friend on another device. Your real character comes in: gear, level, prestige stars, up to 3 class skills (they cost SP) and your gun. Each floor is two fights, sometimes an elite, and the floor 10 boss changes phase twice and hits everyone when it does. Try Revive (a potion brings a downed friend back) and Protect (take the hit for a friend). Between floors the merchant sells potions for your own gold. You earn gold and XP for your real level.
 • Prestige: prestige a character with a run in progress. It should really go back to level 1, and the old level shouldn't come back.
 • The character list: each character is one button with its own page.
