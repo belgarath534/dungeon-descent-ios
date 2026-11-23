@@ -1,6 +1,39 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "low": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "grave"
+          }
+        }
+      }
+    },
+    "middle": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "médio"
+          }
+        }
+      }
+    },
+    "high": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "agudo"
+          }
+        }
+      }
+    },
     "No skills unlocked yet. Level up to choose your first skill.": {
       "extractionState": "manual",
       "localizations": {

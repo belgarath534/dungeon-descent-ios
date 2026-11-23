@@ -68,6 +68,7 @@ public enum Combat {
             log.append("🐍 Medusa stands beside you. Serpent Guard — she will absorb one attack this fight.")
         }
         Sanity.begin(&run, enemy, log: &log)
+        NewFoes.begin(&run, enemy, log: &log)
         Alchemy.combatStart(&run, log: &log)
         Spirits.combatStart(&run, log: &log)
         ShadowWorld.combatStart(&run, log: &log)
@@ -87,6 +88,7 @@ public enum Combat {
         // 12.1: Insane Mode's own enemies.
         if !elite, let s = Sanity.encounter(for: run, dice: &dice) { return s }
         if !elite, let x = EndlessExclusive.encounter(for: run, dice: &dice) { return x }
+        if !elite, let n = NewFoes.encounter(for: run, dice: &dice) { return n }
         if !elite, var td = TimeDescender.encounter(for: run, dice: &dice) {
             if run.worldCurse { cursed(&td) }
             Challenges.shape(&td, run)
@@ -527,6 +529,10 @@ public enum Combat {
         r.announcement = taken > 0
             ? "\(e.name) dealt \(taken) damage. Your HP: \(run.hp) of \(run.maxHp)."
             : "Your HP: \(run.hp) of \(run.maxHp)."
+        // 12.1: The Liar and The Silent One change what you hear (never your HP).
+        if let said = NewFoes.announcement(e, run: run, taken: taken, playerDamage: r.playerDamage, log: r.log, dice: &dice) {
+            r.announcement = said
+        }
         if run.isDead {
             r.playerDied = true
             run.inCombat = false

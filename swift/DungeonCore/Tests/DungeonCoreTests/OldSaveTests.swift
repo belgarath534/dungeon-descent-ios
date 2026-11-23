@@ -163,3 +163,81 @@ final class ChooseDungeonTests: XCTestCase {
         XCTAssertEqual(r.level, 9)
     }
 }
+
+final class NewFoesTests: XCTestCase {
+    func run(_ dungeon: String, floor: Int = 4) -> Run {
+        var r = Run(character: PlayerCharacter(name: "N", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: dungeon, difficulty: .wanderer))
+        r.floor = floor
+        r.spirit = nil
+        return r
+    }
+
+    func spawn(_ dungeon: String) -> Run {
+        var r = run(dungeon)
+        var d = LoadedDice(rolls: [0, 0], chances: [true])
+        let e = NewFoes.encounter(for: r, dice: &d)!
+        _ = Combat.begin(&r, against: e)
+        return r
+    }
+
+    func testOnlyInTheirDungeonFromFloorThree() {
+        var d = LoadedDice(chances: [true])
+        XCTAssertNil(NewFoes.encounter(for: run("Crypt of Malachar", floor: 2), dice: &d))
+        d = LoadedDice(chances: [true])
+        XCTAssertEqual(NewFoes.encounter(for: run("Crypt of Malachar"), dice: &d)?.name, NewFoes.counter)
+        d = LoadedDice(chances: [true])
+        XCTAssertEqual(NewFoes.encounter(for: run("The Hollow"), dice: &d)?.name, NewFoes.liar)
+        d = LoadedDice(chances: [true])
+        XCTAssertEqual(NewFoes.encounter(for: run("The Sunken Archives"), dice: &d)?.name, NewFoes.bellChoir)
+        d = LoadedDice(chances: [true])
+        XCTAssertEqual(NewFoes.encounter(for: run("The Shadow World"), dice: &d)?.name, NewFoes.silent)
+        d = LoadedDice(chances: [true])
+        XCTAssertNil(NewFoes.encounter(for: run("Frosthold Abyss"), dice: &d))
+    }
+
+    func testCountingThingHitsTripleAtZeroAndDefendResets() {
+        var r = spawn("Crypt of Malachar")
+        var d = LoadedDice()
+        var log: [String] = []
+        var hits: [Int] = []
+        for _ in 0..<6 {
+            r.hp = r.maxHp
+            hits.append(Combat.enemyTurn(&r, dice: &d, options: .init(), log: &log))
+        }
+        XCTAssertTrue(log.contains("🔢 Five…"))
+        XCTAssertTrue(log.contains("🔢 ZERO. It strikes with everything it has!"))
+        XCTAssertGreaterThan(hits[5], hits[4] * 2)
+        r.defending = true
+        log = []
+        _ = Combat.enemyTurn(&r, dice: &d, options: .init(), log: &log)
+        XCTAssertEqual(r.enemy?.number("count"), 5)
+    }
+
+    func testBellHealSkipsTheAttack() {
+        var r = spawn("The Sunken Archives")
+        var e = r.enemy!
+        e.hp = 10
+        e.mechanics["bellNext"] = .string("heal")
+        r.enemy = e
+        let hp = r.hp
+        var d = LoadedDice()
+        var log: [String] = []
+        XCTAssertEqual(Combat.enemyTurn(&r, dice: &d, options: .init(), log: &log), 0)
+        XCTAssertEqual(r.hp, hp)
+        XCTAssertGreaterThan(r.enemy!.hp, 10)
+        XCTAssertTrue(log.contains { $0.hasPrefix("🔔") && $0.contains("rings") })
+    }
+
+    func testLiarAndSilentChangeOnlyWhatYouHear() {
+        let liar = spawn("The Hollow")
+        var d = LoadedDice(chances: [true, true])
+        let said = NewFoes.announcement(liar.enemy!, run: liar, taken: 9, playerDamage: 5, log: [], dice: &d)!
+        XCTAssertTrue(said.hasPrefix("The Liar misses you completely!"))
+        XCTAssertTrue(said.hasSuffix("Your HP: \(liar.hp) of \(liar.maxHp)."))
+        let silent = spawn("The Shadow World")
+        d = LoadedDice()
+        XCTAssertEqual(NewFoes.announcement(silent.enemy!, run: silent, taken: 7, playerDamage: 0, log: [], dice: &d),
+                       "Silence. Your HP: \(silent.hp) of \(silent.maxHp).")
+    }
+}

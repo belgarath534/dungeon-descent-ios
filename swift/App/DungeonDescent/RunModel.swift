@@ -399,7 +399,9 @@ final class RunModel: ObservableObject {
             Sound.ambient(Soundtrack.ambientKey(dungeon: r.dungeon, difficulty: r.difficulty))
             return
         }
-        if let e = r.enemy, r.inCombat {
+        if let e = r.enemy, r.inCombat, NewFoes.isSilent(e) {
+            Sound.stopMusic()
+        } else if let e = r.enemy, r.inCombat {
             // The Hunter fights to the plain battle music (hunterFight).
             Sound.track(e.name == "The Hunter" ? "battle"
                         : e.isBoss ? Soundtrack.bossTrack(dungeon: r.dungeon, phase: r.bossPhase) : Soundtrack.battleTrack(dungeon: r.dungeon))
@@ -705,7 +707,8 @@ final class RunModel: ObservableObject {
                 finish(r, d, phase: .exploring, spoken: spoken + " " + line)
                 return
             }
-            Combat.begin(&r, against: enemy).forEach { add($0) }
+            let opening = Combat.begin(&r, against: enemy)
+            opening.forEach { add($0) }
             if enemy.name == "The Music Box" && game.store.getItem("dd_mb_tutorial") != "1" {
                 game.store.setItem("dd_mb_tutorial", "1")
                 musicBoxTutorial = true
@@ -726,12 +729,14 @@ final class RunModel: ObservableObject {
                 : "\(label) \(enemy.icon) A \(enemy.name) attacks! \(enemy.hp) HP."
             add(line)
             enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
-            Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
+            // 12.1: The Silent One — the music stops.
+            if NewFoes.isSilent(enemy) { Sound.stopMusic() } else { Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon)) }
             spoken += enemy.isElite
                 ? " Elite enemy! \(enemy.name). \(ability) \(enemy.hp) HP."
                 : " A \(enemy.name) attacks! \(enemy.hp) HP."
             spoken += thirdEye(r)
             spoken += firstEncounter(enemy)
+            if NewFoes.isNew(enemy) { spoken += " " + opening.joined(separator: " ") }
             finish(r, d, phase: .fighting, spoken: spoken)
         case .loot:
             let find = Inventory.lootRoom(&r, dice: &d, wallet: game.wallet)
@@ -1393,7 +1398,9 @@ final class RunModel: ObservableObject {
         }
         if let a = result.announcement, result.bossPhaseMessage == nil { spoken += " " + a }
         // Combat Announcements off: an ordinary exchange isn't read out.
-        if !AppSettings.combatAnnouncements && result.bossPhaseMessage == nil { spoken = questLine }
+        // (12.1's listening enemies always speak: their count, bells and lies are the fight.)
+        if NewFoes.isNew(r.enemy) { }
+        else if !AppSettings.combatAnnouncements && result.bossPhaseMessage == nil { spoken = questLine }
         else if AppSettings.briefCombat && result.bossPhaseMessage == nil { spoken = Self.brief(action, result, r) + questLine }
         let riddle = action == .attack || action == .heavy ? BossRiddles.roll(&r, dice: &d) : nil
         finish(r, d, phase: .fighting, spoken: spoken)

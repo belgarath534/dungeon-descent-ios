@@ -3565,6 +3565,38 @@
    "tier": "Infernal 6-9",
    "dungeon": "infernal",
    "desc": "Announces arrivals in the descent. Has been announcing arrivals for a very long time. Its voice has gotten very loud."
+  },
+  {
+   "id": "the-liar",
+   "name": "The Liar",
+   "icon": "🎭",
+   "tier": "Hollow 3-9",
+   "desc": "It learned to talk from the guests. It only learned the parts that weren't true. Half of what you hear about the fight is a lie. Your HP never lies.",
+   "dungeon": "hollow"
+  },
+  {
+   "id": "the-bell-choir",
+   "name": "The Bell Choir",
+   "icon": "🔔",
+   "tier": "Archives 3-9",
+   "desc": "Three bells from the drowned chapel, still ringing. Low, middle and high: a strike, a healing, an escape. Which is which changes every fight. Listen first.",
+   "dungeon": "sunken"
+  },
+  {
+   "id": "the-counting-thing",
+   "name": "The Counting Thing",
+   "icon": "🔢",
+   "tier": "Crypt 3-9",
+   "desc": "It counts down, out loud, every turn. Nobody knows what it was counting before you arrived. At zero it strikes with everything. Defending makes it lose count.",
+   "dungeon": "crypt"
+  },
+  {
+   "id": "the-silent-one",
+   "name": "The Silent One",
+   "icon": "🤫",
+   "tier": "Shadow 3-9",
+   "desc": "It makes no sound. The music stops when it arrives. You only know it hit you by checking your HP, unless you strike it, and it cries out.",
+   "dungeon": "shadow"
   }
  ],
  "nameToId": {
@@ -3739,7 +3771,11 @@
   "Drowned Paladin": "drowned-paladin",
   "The First Fear": "first-fear",
   "Void Champion": "void-champion",
-  "The One That Watches": "one-that-watches"
+  "The One That Watches": "one-that-watches",
+  "The Liar": "the-liar",
+  "The Bell Choir": "the-bell-choir",
+  "The Counting Thing": "the-counting-thing",
+  "The Silent One": "the-silent-one"
  },
  "milestones": {
   "hollow-shade": {
