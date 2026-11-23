@@ -11,6 +11,12 @@ struct HomeView: View {
                 Text(a).font(.footnote).foregroundStyle(.orange)
                     .accessibilityLabel("Latest alert: \(a)")
             }
+            // 12.1: a co-op or raid fight on the iPhone, playable here.
+            if let c = store.coop {
+                NavigationLink { CoopFightView() } label: {
+                    row("🤝", "Co-op Fight", c.chosen == nil && c.alive ? "Your move!" : c.title)
+                }
+            }
             NavigationLink { EndlessView() } label: {
                 row("🏃", "Endless Descent", endlessLine)
             }
@@ -187,5 +193,47 @@ struct DailyView: View {
         }
         .navigationTitle("Daily")
         .onAppear { store.refresh() }
+    }
+}
+
+/// 12.1: your move in the co-op or raid fight on your iPhone, from your wrist.
+struct CoopFightView: View {
+    @EnvironmentObject var store: WatchStore
+
+    var body: some View {
+        List {
+            if let c = store.coop {
+                Section {
+                    Text(c.title).font(.headline).foregroundStyle(gold).accessibilityAddTraits(.isHeader)
+                    Text("\(c.foe): \(c.foeHp)/\(c.foeMaxHp) HP").font(.footnote)
+                    Text("You: \(c.hp)/\(c.maxHp) HP · \(c.sp) SP · \(c.potions) 🧪").font(.footnote)
+                        .accessibilityLabel("You: \(c.hp) of \(c.maxHp) HP, \(c.sp) SP, \(c.potions) potions")
+                    ForEach(c.party, id: \.self) { Text($0).font(.caption2).foregroundStyle(.secondary) }
+                }
+                Section {
+                    if !c.alive {
+                        Text("You're down. A friend can revive you.").font(.footnote)
+                    } else if let chosen = c.chosen {
+                        Text("\(chosen) chosen. Waiting for the party…").font(.footnote)
+                    } else if c.options.isEmpty {
+                        Text("Between fights…").font(.footnote)
+                    } else {
+                        ForEach(c.options) { o in
+                            Button(o.label) { store.coopAct(o.raw) }
+                                .disabled(store.busy)
+                        }
+                    }
+                }
+                if !c.log.isEmpty {
+                    Section("What happened") {
+                        ForEach(Array(c.log.enumerated()), id: \.offset) { Text($0.element).font(.caption2) }
+                    }
+                }
+                StatusLine()
+            } else {
+                Text("The co-op fight has ended.").font(.footnote)
+            }
+        }
+        .navigationTitle("Co-op")
     }
 }

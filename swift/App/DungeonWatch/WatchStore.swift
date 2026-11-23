@@ -65,6 +65,9 @@ final class WatchStore: NSObject, ObservableObject {
 
     var boss: WatchLink.Boss? { snapshot?.boss }
     var pass: WatchLink.Pass? { snapshot?.pass }
+    /// 12.1: the co-op or raid fight going on the iPhone.
+    var coop: WatchLink.Coop? { snapshot?.coop }
+    func coopAct(_ raw: String) { send(.coopAct, action: raw) }
     var daily: WatchLink.Daily? { snapshot?.daily }
 
     // MARK: Wrist alerts
@@ -146,7 +149,7 @@ final class WatchStore: NSObject, ObservableObject {
         return snap.message ?? ""
     }
 
-    private func send(_ cmd: WatchLink.Command, index: Int? = nil) {
+    private func send(_ cmd: WatchLink.Command, index: Int? = nil, action: String? = nil) {
         let s = WCSession.default
         guard s.activationState == .activated else {
             if cmd != .status { message = "Connecting to your iPhone… try again in a moment." }
@@ -154,6 +157,7 @@ final class WatchStore: NSObject, ObservableObject {
         }
         var msg: [String: Any] = [WatchLink.commandKey: cmd.rawValue]
         if let index { msg[WatchLink.indexKey] = index }
+        if let action { msg[WatchLink.actionKey] = action }
         // isReachable is often false for a moment even with the phone in hand
         // (right after opening, or while the phone app sleeps), so always try:
         // a message wakes the phone app when it can.

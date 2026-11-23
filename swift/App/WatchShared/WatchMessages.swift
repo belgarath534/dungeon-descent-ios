@@ -6,6 +6,7 @@ import Foundation
 enum WatchLink {
     static let commandKey = "cmd"
     static let indexKey = "index"
+    static let actionKey = "action"
     static let payloadKey = "payload"
     /// A tap on your wrist from the phone: danger in a run, or your co-op turn.
     static let alertKey = "alert"
@@ -17,6 +18,8 @@ enum WatchLink {
         case strike
         /// 12.0: claim today's daily reward.
         case claimDaily
+        /// 12.1: your move in a co-op or raid fight going on the iPhone (`actionKey`).
+        case coopAct
     }
 
     /// What kind of tap an alert is.
@@ -62,6 +65,31 @@ enum WatchLink {
         var next: String
     }
 
+    /// 12.1: the co-op or raid fight on the iPhone, playable from the watch.
+    struct Coop: Codable, Equatable {
+        struct Option: Codable, Equatable, Identifiable {
+            var raw: String
+            var label: String
+            var id: String { raw }
+        }
+        var title: String
+        var foe: String
+        var foeHp: Int
+        var foeMaxHp: Int
+        var hp: Int
+        var maxHp: Int
+        var sp: Int
+        var potions: Int
+        var alive: Bool
+        /// Your move this round, once chosen.
+        var chosen: String?
+        var options: [Option]
+        /// Each friend: "Mortarion 80/120", "Ana — down".
+        var party: [String]
+        /// The newest lines, newest first.
+        var log: [String]
+    }
+
     struct Character: Codable, Identifiable, Equatable {
         var index: Int
         var name: String
@@ -103,6 +131,8 @@ enum WatchLink {
         var boss: Boss?
         var pass: Pass?
         var daily: Daily?
+        // 12.1
+        var coop: Coop?
     }
 
     static func encode(_ s: Snapshot) -> [String: Any] {

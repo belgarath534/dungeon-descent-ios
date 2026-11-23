@@ -48,7 +48,8 @@ final class WatchBridge: NSObject, WCSessionDelegate {
         let save = afk.save
         return WatchLink.Snapshot(characters: chars, run: run, totalPoints: save.totalPoints, bestFloor: save.bestFloor,
                                   message: message, sentAt: Date().timeIntervalSince1970,
-                                  boss: bossInfo(), pass: passInfo(), daily: dailyInfo())
+                                  boss: bossInfo(), pass: passInfo(), daily: dailyInfo(),
+                                  coop: CoopModel.current?.watchState)
     }
 
     // MARK: 12.0: World Boss, Battle Pass, daily reward
@@ -168,6 +169,13 @@ final class WatchBridge: NSObject, WCSessionDelegate {
                 }
             } else {
                 note = "That character is gone. Pull to refresh."
+            }
+        case .coopAct:
+            if let model = CoopModel.current, let raw = msg[WatchLink.actionKey] as? String, let a = Coop.Action(raw) {
+                model.act(a)
+                note = model.myAction != nil ? "\(model.name(of: a)) chosen." : model.status
+            } else {
+                note = "The co-op fight has ended."
             }
         case .claimDaily:
             if let r = DailyDescent.claim(store: game.store, wallet: game.wallet) {

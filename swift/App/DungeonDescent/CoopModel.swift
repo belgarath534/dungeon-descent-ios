@@ -71,7 +71,11 @@ final class CoopModel: ObservableObject {
     private var stashBrought = 0
     private var potionsSettled = false
 
+    /// 12.1: the co-op room open on this iPhone, for the Apple Watch.
+    static weak var current: CoopModel?
+
     private func resetRun() {
+        Self.current = self
         rewarded = false
         stashBrought = 0
         potionsSettled = false
@@ -224,6 +228,7 @@ final class CoopModel: ObservableObject {
     }
 
     func stop() {
+        if Self.current === self { Self.current = nil; WatchBridge.shared.push() }
         timer?.invalidate(); timer = nil
         if let h = handle { room?.removeObserver(withHandle: h) }
         handle = nil
@@ -242,9 +247,37 @@ final class CoopModel: ObservableObject {
         default: break
         }
         myAction = a
+        WatchBridge.shared.push()
         room?.child("actions").child(myId).setValue(a.raw)
         Sound.sfx(a == .potion ? "sfx-potion" : a == .defend ? "sfx-select" : "sfx-attack")
         Feedback.announce("\(name(of: a)) chosen. Waiting for the party.")
+    }
+
+    /// 12.1: the fight for the Apple Watch: the enemy, you, your friends and
+    /// the moves you can make now (the same ones as the buttons).
+    var watchState: WatchLink.Coop? {
+        guard roomStatus == "playing", let f = foe, let m = me else { return nil }
+        var opts: [WatchLink.Coop.Option] = []
+        if m.alive && myAction == nil && !shopOpen {
+            func add(_ a: Coop.Action, _ label: String) { opts.append(.init(raw: a.raw, label: label)) }
+            add(.attack, "⚔ Attack")
+            add(.heavy, "💥 Heavy")
+            add(.defend, "🛡 Defend")
+            if m.potions > 0 { add(.potion, "🧪 Potion (\(m.potions))") }
+            if m.hasGun && m.shots > 0 { add(.gun, "🔫 Shoot (\(m.shots))") }
+            for s in m.skills where m.sp >= s.sp { add(.skill(s.id), "\(s.icon) \(s.name) (\(s.sp) SP)") }
+            for p in party where p.id != myId {
+                if p.alive { add(.protect(p.id), "🛡 Protect \(p.name)") }
+                else if m.potions > 0 { add(.revive(p.id), "💫 Revive \(p.name)") }
+            }
+        }
+        return WatchLink.Coop(
+            title: raid.map { "🐉 \($0.name)" } ?? "Floor \(floor) · \(f.boss ? "Boss" : "Fight \(fight)")",
+            foe: "\(f.icon) \(f.name)", foeHp: f.hp, foeMaxHp: f.maxHp,
+            hp: m.hp, maxHp: m.maxHp, sp: m.sp, potions: m.potions, alive: m.alive,
+            chosen: myAction.map(name(of:)), options: opts,
+            party: party.filter { $0.id != myId }.map { $0.alive ? "\($0.name) \($0.hp)/\($0.maxHp)" : "\($0.name) — down" },
+            log: log.prefix(3).map { $0.text })
     }
 
     /// What an action is called, for the buttons and VoiceOver.
@@ -309,6 +342,7 @@ final class CoopModel: ObservableObject {
             stop()
             return
         }
+        defer { WatchBridge.shared.push() }
         hostId = r["host"] as? String ?? hostId
         dungeon = r["dungeon"] as? String ?? dungeon
         raidId = r["mode"] as? String == "raid" ? (r["raid"] as? String ?? "colossus") : nil
