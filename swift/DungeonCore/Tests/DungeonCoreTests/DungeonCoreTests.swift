@@ -5802,3 +5802,29 @@ final class WebAuditTests: XCTestCase {
         XCTAssertNil(SunkenPages.next(store))
     }
 }
+
+final class SecretCodeTests: XCTestCase {
+    override func tearDown() { SecretCodes.chaos = false }
+
+    func testCodes() {
+        let store = MemoryStore()
+        let june = Calendar(identifier: .gregorian).date(from: DateComponents(year: 2026, month: 6, day: 1))!
+        let july4 = Calendar(identifier: .gregorian).date(from: DateComponents(year: 2026, month: 7, day: 4))!
+        XCTAssertNil(SecretCodes.run("go spire", store: store))
+        XCTAssertNotNil(SecretCodes.run("uuddlrlrba", store: store))
+        XCTAssertTrue(SecretCodes.isChaos(store))
+        XCTAssertTrue(SecretCodes.chaos)
+        _ = SecretCodes.run("chaos", store: store)
+        XCTAssertFalse(SecretCodes.isChaos(store))
+        _ = SecretCodes.run("WITNESS", store: store)
+        XCTAssertTrue(Home.minions(store).contains { $0.id == "the-witness" })
+        _ = SecretCodes.run("4", store: store, now: june)
+        XCTAssertFalse(Home.minions(store).contains { $0.id == "liberty-eagle" })
+        _ = SecretCodes.run("4", store: store, now: july4)
+        XCTAssertTrue(Home.minions(store).contains { $0.id == "liberty-eagle" })
+        let w = Wallet(store: store)
+        let gold = w.gold
+        _ = SecretCodes.run("GIVEGOLD", store: store)
+        XCTAssertEqual(w.gold, gold, "no free gold")
+    }
+}

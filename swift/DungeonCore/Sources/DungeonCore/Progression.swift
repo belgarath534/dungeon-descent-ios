@@ -160,6 +160,7 @@ public enum Progression {
         if run.luckBonus != 0 { g = jsRound(Double(g) * (1 + run.luckBonus)) }
         if run.runeFortune { g = jsRound(Double(g) * 1.25) }
         if run.weaponEffect == "fortune" { g = jsRound(Double(g) * 1.25) }
+        g = SecretCodes.gold(g, dice: &dice)
         if run.has("cu-night-blessing") && CoinShop.isNightNow() { g = jsRound(Double(g) * 1.10) }
         if run.dreamGoldMult != 1 { g = jsRound(Double(g) * run.dreamGoldMult) }
         // Event gold bonuses: the web version listed them but never paid them.

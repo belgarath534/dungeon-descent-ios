@@ -135,6 +135,7 @@ public enum Combat {
         }
         if !elite { DailyChallenge.shape(&e, run) }
         if !elite { CommunityDungeons.dress(&e, for: run, dice: &dice) }
+        SecretCodes.shape(&e, dice: &dice)
         if run.worldCurse { cursed(&e) }
         Challenges.shape(&e, run)
         Legacy.shape(&e, run); Prestige.shape(&e, run)

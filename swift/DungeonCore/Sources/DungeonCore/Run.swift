@@ -69,6 +69,8 @@ public struct Run: Codable, Sendable {
     public var communityDungeon: CommunityDungeons.Dungeon? = nil
     /// The DDDI's Grand Overseer was beaten this run (he comes once a run at most).
     public var dddiDefeated: Bool? = nil
+    /// The floor The Founder last struck on (once a floor).
+    public var founderFloor: Int? = nil
     /// The Void Reaper wasn't stopped: enemies are 50% stronger (set while the curse lasts).
     public var worldCurse = false
     /// Spells known by the character (copied in at run start) and their cooldown.

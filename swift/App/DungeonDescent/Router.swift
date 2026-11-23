@@ -142,7 +142,12 @@ struct RootView: View {
 
     var body: some View {
         if loading {
-            LoadingScreen { loading = false; checkRest(after: 1.5) }.preferredColorScheme(.dark)
+            LoadingScreen {
+                loading = false
+                checkRest(after: 1.5)
+                // 12.1: the welcome tutorial, the first time (no characters yet).
+                if !LoadingScreen.skipped { Tutorial.shared.showIfNew(game) }
+            }.preferredColorScheme(.dark)
         } else {
             content
                 .overlay { if let r = rested { OfflineRestOverlay(reward: r) { rested = nil } } }

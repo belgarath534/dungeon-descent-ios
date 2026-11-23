@@ -132848,6 +132848,391 @@
           }
         }
       }
+    },
+    "Before you descend, you build your character across 10 steps.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antes de descer, você monta seu personagem em 10 etapas."
+          }
+        }
+      }
+    },
+    "Class — 18 classes available. Warrior, Monk, Assassin, Paladin, Naturalist, Sorcerer, Necromancer, Berserker, Bard, Alchemist, BloodKnight, Druid, Warlock, DeathKnight, Ranger, Sentinel, Cleric, Wizard. Each plays completely differently.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Classe — 18 classes disponíveis. Guerreiro, Monge, Assassino, Paladino, Naturalista, Feiticeiro, Necromante, Berserker, Bardo, Alquimista, Cavaleiro de Sangue, Druida, Bruxo, Cavaleiro da Morte, Patrulheiro, Sentinela, Clérigo, Mago. Cada uma joga de um jeito completamente diferente."
+          }
+        }
+      }
+    },
+    "Race — 11 races. Human is balanced. Orc hits hardest. Vampire heals on every kill. Angel gains a second life. Goblin finds 25% more gold. Merfolk get bonus HP in the Sunken Archives.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raça — 11 raças. Humano é equilibrado. Orc bate mais forte. Vampiro se cura a cada abate. Anjo ganha uma segunda vida. Goblin encontra 25% mais ouro. Sereianos ganham HP extra nos Arquivos Submersos."
+          }
+        }
+      }
+    },
+    "Profession — 11 options. Herbalist doubles potion healing. Pilgrim gets 15% bonus XP. Blacksmith gets 10% off upgrades.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profissão — 11 opções. Herbalista dobra a cura das poções. Peregrino ganha 15% de XP extra. Ferreiro tem 10% de desconto em melhorias."
+          }
+        }
+      }
+    },
+    "Starting Skill — every class now begins with their signature skill already unlocked on floor 1.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Habilidade Inicial — toda classe começa com sua habilidade característica já desbloqueada no andar 1."
+          }
+        }
+      }
+    },
+    "The dungeon has 10 floors. Each floor has 5 rooms. After room 5 you reach a shop, then descend to the next floor.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A masmorra tem 10 andares. Cada andar tem 5 salas. Depois da sala 5 você chega a uma loja e desce para o próximo andar."
+          }
+        }
+      }
+    },
+    "Use the North, South, East, West buttons to move between rooms. Direction does not matter — each move generates a new room.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use os botões Norte, Sul, Leste e Oeste para andar entre as salas. A direção não importa — cada movimento gera uma sala nova."
+          }
+        }
+      }
+    },
+    "Use the Search button to search the current room for hidden loot. You can only search each room once.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use o botão Procurar para vasculhar a sala atual em busca de tesouros escondidos. Cada sala só pode ser vasculhada uma vez."
+          }
+        }
+      }
+    },
+    "Every room can contain combat, loot, a special event, or nothing. You never know what waits ahead.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toda sala pode ter combate, tesouro, um evento especial ou nada. Você nunca sabe o que espera adiante."
+          }
+        }
+      }
+    },
+    "Voice Commands — in every fight, the Speak button lets you say your move: \"attack,\" \"heavy,\" \"defend,\" \"potion,\" or a skill's name.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comandos de Voz — em toda luta, o botão Falar deixa você dizer sua jogada em inglês: \"attack\", \"heavy\", \"defend\", \"potion\" ou o nome de uma habilidade."
+          }
+        }
+      }
+    },
+    "Haptic Feedback — distinct vibration patterns for hits, crits, level-ups, and danger. On by default — adjust intensity in Settings under Accessibility.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vibração — padrões diferentes para golpes, críticos, subidas de nível e perigo. Ativada por padrão — ajuste em Configurações, Acessibilidade."
+          }
+        }
+      }
+    },
+    "3D Mode & Echo-Location — an optional spatial-audio layer for exploring rooms. Turn it on in Settings under Beta Features, then use the two-finger double tap to sonar-ping a room for walls and doors.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modo 3D e Ecolocalização — uma camada opcional de áudio espacial para explorar as salas. Ative em Configurações, Recursos Beta, e use o toque duplo com dois dedos para mapear paredes e portas pelo som."
+          }
+        }
+      }
+    },
+    "Combat is turn-based. You act, then the enemy acts.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O combate é por turnos. Você age, depois o inimigo age."
+          }
+        }
+      }
+    },
+    "Attack — reliable, always hits. 10% chance to critically hit for 1.8x damage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atacar — confiável, sempre acerta. 10% de chance de acerto crítico com 1,8x de dano."
+          }
+        }
+      }
+    },
+    "Heavy Strike — deals 1.7x damage but has a 30% chance to miss completely.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Golpe Pesado — causa 1,7x de dano, mas tem 30% de chance de errar completamente."
+          }
+        }
+      }
+    },
+    "Defend — reduces incoming damage this turn and deals a small counter hit.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Defender — reduz o dano recebido neste turno e dá um pequeno contra-ataque."
+          }
+        }
+      }
+    },
+    "Potion — drinks a health potion from your inventory. Herbalists get double healing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poção — bebe uma poção de vida do seu inventário. Herbalistas curam o dobro."
+          }
+        }
+      }
+    },
+    "Skills — unlock as you level up. Each class has unique powerful abilities that cost SP.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Habilidades — desbloqueiam conforme você sobe de nível. Cada classe tem habilidades poderosas que custam SP."
+          }
+        }
+      }
+    },
+    "Soul Trap — if you have one in your inventory, a Soul Trap button appears in combat. Use it to capture the enemy as a permanent minion instead of killing it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Armadilha de Almas — se você tiver uma no inventário, aparece um botão de Armadilha de Almas no combate. Use para capturar o inimigo como um lacaio permanente em vez de matá-lo."
+          }
+        }
+      }
+    },
+    "You earn XP from every kill. Level up to gain HP, attack power, and skill unlocks. Every level gives 3 points to spend on stats.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você ganha XP a cada abate. Suba de nível para ganhar HP, poder de ataque e novas habilidades. Cada nível dá 3 pontos para gastar em atributos."
+          }
+        }
+      }
+    },
+    "SP (Skill Points) power your class skills. You start with 20 SP and regenerate 2 per room entered.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SP (Pontos de Habilidade) alimentam as habilidades da sua classe. Você começa com 20 SP e recupera 2 a cada sala."
+          }
+        }
+      }
+    },
+    "The shop appears between floors. Buy potions, weapons, armor, runes, scrolls, and Soul Traps with gold from kills.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A loja aparece entre os andares. Compre poções, armas, armaduras, runas, pergaminhos e Armadilhas de Almas com o ouro dos abates."
+          }
+        }
+      }
+    },
+    "Complete dungeons to unlock the next. 8 dungeons — Crypt, Ashbound Wastes, Frosthold, Sunken Archives, The Hollow, Whispering Forest, The Infernal, and The Abyssal Deep.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Complete masmorras para desbloquear a próxima. 8 masmorras — Cripta, Terras Devastadas, Frosthold, Arquivos Submersos, O Vazio, Floresta Sussurrante, O Infernal e O Abismo Profundo."
+          }
+        }
+      }
+    },
+    "Trophies — earned from achievements. Reaching 100 trophies unlocks The Infernal Descent.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Troféus — ganhos com conquistas. Chegar a 100 troféus desbloqueia A Descida Infernal."
+          }
+        }
+      }
+    },
+    "The Blacksmith appears inside dungeons and lets you do two things.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Ferreiro aparece dentro das masmorras e permite duas coisas."
+          }
+        }
+      }
+    },
+    "Upgrade — spend gold to upgrade your currently equipped weapon or armor. Higher level gear deals more damage and has better defense.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Melhorar — gaste ouro para melhorar a arma ou armadura equipada. Equipamentos de nível mais alto causam mais dano e defendem melhor."
+          }
+        }
+      }
+    },
+    "Buy Weapons — browse a selection of weapons available for purchase with gold. Your first weapon is always free — a starter blade to get you going.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comprar Armas — veja uma seleção de armas à venda por ouro. Sua primeira arma é sempre grátis — uma lâmina inicial para começar."
+          }
+        }
+      }
+    },
+    "Check the Bestiary to track every enemy you encounter. Visit The Chronicles for lore and stories. Use Quests for daily challenges and achievements.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veja o Bestiário para acompanhar cada inimigo que encontrar. Visite As Crônicas para lendas e histórias. Use Missões para desafios diários e conquistas."
+          }
+        }
+      }
+    },
+    "The Blacksmith is on the main menu — upgrade weapons between runs using your global gold. The Daily Raid gives gold and Mystery Coins. The Spire lets you climb 1800 floors endlessly.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Ferreiro está no menu principal — melhore armas entre partidas com seu ouro global. A Incursão Diária dá ouro e Moedas Misteriosas. A Torre deixa você subir 1800 andares sem fim."
+          }
+        }
+      }
+    },
+    "Every achievement earns you gold and trophies. 100 trophies unlocks The Infernal Descent. Unlock The Abyssal Deep after that.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toda conquista dá ouro e troféus. 100 troféus desbloqueiam A Descida Infernal. Depois disso, desbloqueie O Abismo Profundo."
+          }
+        }
+      }
+    },
+    "Features Worth Turning On": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recursos Que Vale a Pena Ativar"
+          }
+        }
+      }
+    },
+    "🎓 Replay the Tutorial": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎓 Ver o Tutorial de Novo"
+          }
+        }
+      }
+    },
+    "⚔ Start Playing": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚔ Começar a Jogar"
+          }
+        }
+      }
+    },
+    "Tutorial skipped. Welcome to Dungeon Descent.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutorial pulado. Bem-vindo ao Dungeon Descent."
+          }
+        }
+      }
+    },
+    "Welcome to Dungeon Descent. Press Play to make your first character.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bem-vindo ao Dungeon Descent. Toque em Jogar para criar seu primeiro personagem."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

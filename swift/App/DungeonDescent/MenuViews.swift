@@ -782,7 +782,7 @@ struct BirthdayOverlay: View {
             Text("Built by Leo Productions").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim)
             Button("🎁 Claim Birthday Reward") { claim() }
                 .buttonStyle(WebButtonStyle(kind: .gold))
-                .accessibilityLabel("Claim birthday reward — 1500 gold, The Golden Sword and a Blacksmith discount")
+                .accessibilityLabel("Claim birthday reward — 1500 gold, The Golden Sword, The Founder spirit and a Blacksmith discount")
             if !result.isEmpty { OverlayText(text: result) }
             Button("← Back to Menu") { Sound.track("menu"); close() }
                 .buttonStyle(WebButtonStyle(kind: .ghost))
@@ -799,9 +799,18 @@ struct BirthdayOverlay: View {
             if out.sword && !game.globalInventory.items.contains(where: { $0.id == "golden-sword" }) {
                 game.globalInventory.add(RewardCodes.goldenSword)
             }
+            // 12.1: and The Founder spirit, for every character (as on the web).
+            for i in game.characters.indices {
+                game.updateCharacter(i) { ch in
+                    var list: [JSONValue] = []
+                    if case .array(let a)? = ch.extra["earnedSpirits"] { list = a }
+                    if !list.contains(.string("birthday-spirit")) { list.append(.string("birthday-spirit")) }
+                    ch.extra["earnedSpirits"] = .array(list)
+                }
+            }
             Sound.sfx("sfx-unlock")
         }
-        Feedback.announce(out.ok ? "Birthday reward claimed! \(out.gold) gold, The Golden Sword, and 15 percent off at the Blacksmith." : out.message)
+        Feedback.announce(out.ok ? "Birthday reward claimed! \(out.gold) gold, The Golden Sword, The Founder spirit for every character, and 15 percent off at the Blacksmith." : out.message)
     }
 }
 

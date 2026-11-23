@@ -111,6 +111,15 @@ struct CommandCenterView: View {
         let acct = CommandCenter.Account(gold: game.wallet.gold, characters: game.characters.count,
                                          fragments: jsParseInt(game.store.getItem("dd_soul_fragments")) ?? 0,
                                          coins: game.mysteryCoins)
+        // 12.1: the web version's secret console codes.
+        if let secret = SecretCodes.run(raw, store: game.store) {
+            lines.append(.init(text: "> " + raw.trimmingCharacters(in: .whitespacesAndNewlines), kind: .cmd))
+            lines.append(.init(text: secret, kind: .ok))
+            Feedback.announce(secret)
+            Sound.sfx("sfx-unlock")
+            _ = game.achievements.check()
+            return
+        }
         let r = cc.run(raw, account: acct, scheduled: CommandSchedule.shared.pending != nil)
         lines += r.lines
         if !r.spoken.isEmpty { Feedback.announce(r.spoken) }

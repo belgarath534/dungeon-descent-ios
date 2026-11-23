@@ -53,6 +53,9 @@ public enum Spirits {
           "Attacks for 25% damage. At combat start reduces enemy attack by 15%.", "Guardian Growl", strike: 0.25),
         s("the-lantern", "The Lantern", "🏮", "starter", "A warm light that guides and protects. Reveals traps and rewards exploration.",
           "Detects traps like Frost Sprite. Each kill grants +5 gold.", "Guiding Light"),
+        // 12.1: the birthday reward's spirit (BIRTHDAY_SPIRIT on the web).
+        s("birthday-spirit", "The Founder", "🎂", "elite", "Born on the day Dungeon Descent launched. It remembers the beginning.",
+          "Once per floor — deals damage equal to 10% of the enemy's max HP.", "The First Day", minLevel: 1),
         s("medusa-spirit", "Medusa", "🐍", "elite", "Found at last. She guards those who showed her mercy.",
           "Serpent Guard — absorbs one enemy attack per combat.", "Serpent Guard"),
         s("easter-bunny", "Easter Bunny", "🐰", "starter", "A spirit companion found only during Easter. Hops alongside you and finds hidden treats.",
@@ -120,6 +123,11 @@ public enum Spirits {
         case "glacial-wolf": run.fight.def += 4; log.append("Glacial Wolf surrounds you in ice armor. +4 defense!")
         case "frost-sovereign-spirit": run.fight.def += 5; log.append("Frost Crown hardens your defenses. +5 defense!")
         case "shadow-stalker": weaken(0.80); log.append("Shadow Stalker webs the enemy — attack reduced 20%!")
+        case "birthday-spirit" where run.founderFloor != run.floor:
+            let dmg = max(1, jsRound(Double(e.maxHp) * 0.10))
+            e.hp = max(1, e.hp - dmg)
+            run.founderFloor = run.floor
+            log.append("🎂 The Founder remembers the first day — \(dmg) damage to \(e.name)!")
         case "grave-hound": weaken(0.85); log.append("Grave Hound growls — enemy attack reduced 15%!")
         case "medusa-spirit": run.fight.medusaGuard = true; log.append("🐍 Medusa: Serpent Guard active.")
         default: break

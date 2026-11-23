@@ -295,6 +295,10 @@ struct WebSettingsView: View {
             option("Earcons", "A short sound before VoiceOver speaks: a warning when your HP drops to a quarter, a chime when an elite appears.", isOn: $earcons,
                    label: "Earcons")
             if VoicePack.available { voicePack }
+            // 12.1: the welcome tutorial, again.
+            Button("🎓 Replay the Tutorial") { Tutorial.shared.showing = true }
+                .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
+                .padding(.vertical, 6)
             Text("Tip: in the dungeon, a two-finger double tap (or the Actions rotor on the room's title, What just happened) reads the last 5 things that happened.")
                 .font(Theme.crimson(11.5, italic: true)).foregroundStyle(Theme.textDim)
                 .padding(.vertical, 10)

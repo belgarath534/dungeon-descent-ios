@@ -23,6 +23,7 @@ struct DungeonDescentApp: App {
             RootView()
                 .modifier(FriendInviteAlert())
                 .modifier(UpdatePrompt())
+                .modifier(TutorialOverlay())
                 .modifier(UpdateRequired())
                 .environmentObject(game)
                 .environmentObject(router)
@@ -31,6 +32,7 @@ struct DungeonDescentApp: App {
                 .onAppear {
                     GameCenter.signIn()
                     UpdateCheck.shared.check()
+                    SecretCodes.chaos = SecretCodes.isChaos(game.store)
                     PlaytimeClock.shared.start(game)
                     CloudAccount.shared.start(game: game)
                     // An Endless Descent run left going picks up where it is.
