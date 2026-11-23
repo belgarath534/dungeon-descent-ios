@@ -1157,7 +1157,7 @@ struct DungeonView: View {
     }
 
     /// Alt+R reads the status; I (or Ctrl+Shift+I) opens the inventory, K the
-    /// Skill Book, C your stats, Escape closes them, and Backspace the pause
+    /// Skill Book, C your stats, S saves, Escape closes them, and Backspace the pause
     /// menu, as in the web version.
     private var dungeonKeys: some View {
         Group {
@@ -1170,6 +1170,7 @@ struct DungeonView: View {
             // 12.1: K opens the Skill Book, C your stats, Escape closes them.
             Button("Skill book") { showSkillBook() }.keyboardShortcut("k", modifiers: [])
             Button("Character stats") { showStats = true }.keyboardShortcut("c", modifiers: [])
+            Button("Save") { model.manualSave() }.keyboardShortcut("s", modifiers: [])
             Button("Close") {
                 if skillBookOpen { skillBookOpen = false; Feedback.announce("Skill book closed.") }
                 else if showStats { showStats = false }
