@@ -7,6 +7,28 @@ import Foundation
 /// Where an item's description and the web code disagree, this follows the
 /// description (see "Web bugs fixed" in swift/MIGRATION.md).
 public enum Inventory {
+    // MARK: 12.1 combineElixirs (the web audit)
+
+    public static var goldenElixir: Item {
+        var it = Item(name: "Golden Elixir", icon: "🏆", type: "potion",
+                      desc: "A perfect elixir, brewed from three lesser ones. Fully restores HP and grants +8 ATK for 3 turns.", heal: 9999)
+        it.extra["applyEffect"] = .string("atk-boost")
+        it.extra["atkBoost"] = .number(8)
+        it.extra["boostTurns"] = .number(3)
+        return it
+    }
+
+    public static func elixirCount(_ run: Run) -> Int { run.inventory.filter { $0.type == "elixir" }.count }
+
+    /// Three elixirs (any kind) become one Golden Elixir.
+    public static func combineElixirs(_ run: inout Run) -> Bool {
+        let idx = run.inventory.indices.filter { run.inventory[$0].type == "elixir" }.prefix(3)
+        guard idx.count == 3 else { return false }
+        for i in idx.sorted(by: >) { run.inventory.remove(at: i) }
+        run.inventory.append(goldenElixir)
+        return true
+    }
+
     public struct Outcome: Equatable, Sendable {
         public var message: String
         /// False when nothing happened and the item was kept.

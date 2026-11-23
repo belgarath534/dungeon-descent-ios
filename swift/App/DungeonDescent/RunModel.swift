@@ -3360,6 +3360,22 @@ final class RunModel: ObservableObject {
     /// Gambler's Spirit is waiting for Double or Halve.
     @Published var gambling = false
 
+    /// 12.1 combineElixirs.
+    func combineElixirs() {
+        var r = run
+        guard Inventory.combineElixirs(&r) else {
+            Feedback.announce("You need at least 3 elixirs to combine. You have \(Inventory.elixirCount(run)).")
+            return
+        }
+        achievements.increment("elixirsCombined")
+        add("🏆 Three elixirs combine into a single Golden Elixir!")
+        Sound.sfx("sfx-unlock")
+        Feedback.success()
+        run = r
+        persist()
+        Feedback.announce("Three elixirs combined into one Golden Elixir. It fully restores HP and boosts attack when used.")
+    }
+
     func useItem(at index: Int) {
         guard phase != .victory && phase != .defeat else { return }
         // useMusicPlayerItem: the music player, over the dungeon. It's kept.

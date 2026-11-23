@@ -37,6 +37,9 @@ extension EnemyTemplate: Decodable {
         coward = (try? c.decode(Bool.self, forKey: AnyKey("coward"))) ?? false
         phaseMsg2 = try? c.decode(String.self, forKey: AnyKey("phaseMsg2"))
         phaseMsg3 = try? c.decode(String.self, forKey: AnyKey("phaseMsg3"))
+        // 12.1: The Hard Void's own phase lines (phase2Desc / phase3Desc on the web).
+        if phaseMsg2 == nil { phaseMsg2 = try? c.decode(String.self, forKey: AnyKey("phase2Desc")) }
+        if phaseMsg3 == nil { phaseMsg3 = try? c.decode(String.self, forKey: AnyKey("phase3Desc")) }
         var m: [String: JSONValue] = [:]
         for k in c.allKeys where !Self.baseKeys.contains(k.stringValue) {
             m[k.stringValue] = try c.decode(JSONValue.self, forKey: k)

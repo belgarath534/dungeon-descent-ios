@@ -135,6 +135,11 @@ public enum Combat {
         }
         if !elite { DailyChallenge.shape(&e, run) }
         if !elite { CommunityDungeons.dress(&e, for: run, dice: &dice) }
+        // 12.1: The Nameless hides its name until you land a hit.
+        if e.flag("hiddenName") && e.mechanics["trueName"] == nil {
+            e.mechanics["trueName"] = .string(e.name)
+            e.name = "Something Without a Name"
+        }
         SecretCodes.shape(&e, dice: &dice)
         if run.worldCurse { cursed(&e) }
         Challenges.shape(&e, run)
@@ -389,6 +394,21 @@ public enum Combat {
     static func afterGearHit(_ run: inout Run, _ dmg: Int, dice: inout some Dice, log: inout [String]) {
         WeaponForge.afterHit(&run, dmg, dice: &dice, log: &log)
         guard dmg > 0, var e = run.enemy, !e.isDead else { return }
+        // 12.1 (the web version's hiddenName and splitsAt50):
+        if case .string(let real)? = e.mechanics["trueName"], e.name != real {
+            e.name = real
+            log.append("❓ Its true name is revealed: \(real)!")
+        }
+        if e.flag("splitsAt50") && !e.flag("hasSplit") && e.hp <= e.maxHp / 2 {
+            e.mechanics["hasSplit"] = .bool(true)
+            let half = max(1, e.hp / 2)
+            e.hp = half
+            e.maxHp = half
+            var frag = Enemy(name: e.name + " (Fragment)", icon: e.icon, hp: half, maxHp: half, atk: e.atk, gold: 0...0)
+            frag.mechanics["hasSplit"] = .bool(true)
+            run.foes.append(frag)
+            log.append("⚡ \(e.name) SPLITS at half HP! A fragment emerges with \(half) HP.")
+        }
         switch run.weaponEffect {
         case "serrated" where dice.chance(0.15):
             e.hp = max(0, e.hp - dmg)

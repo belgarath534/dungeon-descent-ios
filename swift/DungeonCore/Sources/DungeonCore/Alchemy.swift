@@ -287,6 +287,13 @@ public enum Alchemy {
         if (i.heal ?? 0) >= 9999 {
             run.hp = run.maxHp
             if i.extra["restoreSP"] == .bool(true) { run.sp = run.maxSp }
+            // The Golden Elixir: a full heal and an attack boost.
+            if effect(i) == "atk-boost" {
+                let b = Int(num(i, "atkBoost") ?? 8), t = Int(num(i, "boostTurns") ?? 3)
+                run.tempAtk += b
+                run.tempAtkTurns = max(run.tempAtkTurns, t)
+                return "🏆 \(i.name)! HP fully restored and ATK +\(b) for \(t) turns."
+            }
             return "✨ \(i.name)! HP and SP fully restored."
         }
         switch effect(i) {

@@ -5828,3 +5828,19 @@ final class SecretCodeTests: XCTestCase {
         XCTAssertEqual(w.gold, gold, "no free gold")
     }
 }
+
+final class GoldenElixirTests: XCTestCase {
+    func testCombineAndDrink() {
+        var r = Run(character: PlayerCharacter(name: "G", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.inventory = (0..<3).map { _ in Item(name: "Elixir", icon: "💧", type: "elixir", desc: "") }
+        XCTAssertTrue(Inventory.combineElixirs(&r))
+        XCTAssertEqual(Inventory.elixirCount(r), 0)
+        XCTAssertFalse(Inventory.combineElixirs(&r))
+        r.hp = 1
+        let i = r.inventory.firstIndex { $0.name == "Golden Elixir" }!
+        _ = Inventory.use(&r, at: i)
+        XCTAssertEqual(r.hp, r.maxHp)
+        XCTAssertEqual(r.tempAtk, 8)
+    }
+}

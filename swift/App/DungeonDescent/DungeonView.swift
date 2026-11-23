@@ -873,6 +873,14 @@ struct DungeonView: View {
                         .accessibilityAddTraits(sel ? .isSelected : [])
                 }
             }
+            // 12.1: three elixirs make a Golden Elixir (the web's combineElixirs).
+            if Inventory.elixirCount(run) >= 3 {
+                Button("🏆 Combine 3 Elixirs into a Golden Elixir") { model.combineElixirs() }
+                    .font(Theme.cinzel(10.4)).foregroundStyle(Theme.gold)
+                    .padding(.vertical, 6).padding(.horizontal, 10).frame(maxWidth: .infinity, minHeight: 36)
+                    .background(Color(hex: 0x1a1200)).overlay(Rectangle().stroke(Theme.goldDim))
+                    .accessibilityHint("Fully restores HP and gives 8 attack for 3 turns when you drink it.")
+            }
             if (invTab == "all" || invTab == "weapons") && (run.equippedWeapon != nil || run.equippedArmor != nil) {
                 Text("EQUIPPED").font(Theme.cinzel(9.6)).tracking(3).foregroundStyle(Theme.goldDim)
                 if let w = run.equippedWeapon {

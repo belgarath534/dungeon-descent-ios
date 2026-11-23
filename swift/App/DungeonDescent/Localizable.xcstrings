@@ -133233,6 +133233,28 @@
           }
         }
       }
+    },
+    "Fully restores HP and gives 8 attack for 3 turns when you drink it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restaura todo o HP e dá 8 de ataque por 3 turnos quando você o bebe."
+          }
+        }
+      }
+    },
+    "Something Without a Name": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo Sem Nome"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
