@@ -231,6 +231,15 @@ enum Patterns {
         ("Move {0} down", "Mover {0} para baixo"),
         ("{0} of {1}. {2}. {3}. {4} Costs {5} SP.", "{0} de {1}. {2}. {3}. {4} Custa {5} de SP."),
         ("Skill Book. {0} skills unlocked. {1}. Use Move Up and Move Down to reorder.", "Livro de Habilidades. {0} habilidades desbloqueadas. {1}. Use Mover para Cima e Mover para Baixo para reorganizar."),
+        // 12.1: The familiar at low sanity.
+        ("{0} presses close against you. Steady. Still here.", "{0} se aperta contra você. Firme. Ainda aqui."),
+        ("{0} does not leave, even now. Not for this.", "{0} não vai embora, nem agora. Não por isso."),
+        ("Whatever the dungeon is doing to your mind, {0} has not stopped watching over you.", "Seja o que for que a masmorra está fazendo com sua mente, {0} não parou de cuidar de você."),
+        // 12.1: Eagle's Cry.
+        ("🦅 Eagle's Cry! The eagle screams. The enemy hesitates. Its attack is reduced by 30 percent for 3 turns.", "🦅 Grito da Águia! A águia grita. O inimigo hesita. O ataque dele cai 30 por cento por 3 turnos."),
+        ("Eagle's Cry is already active.", "O Grito da Águia já está ativo."),
+        ("🦅 Eagle's Cry", "🦅 Grito da Águia"),
+        ("Eagle's Cry, Fourth of July skill. Reduces enemy attack 30 percent for 3 turns.", "Grito da Águia, habilidade do Quatro de Julho. Reduz o ataque do inimigo em 30 por cento por 3 turnos."),
         // 12.1: Insane Mode.
         ("🕳️ Insane Mode active. Sanity bar at 100 percent. Keep it above zero or the dungeon claims your mind.", "🕳️ Modo Insano ativo. Barra de sanidade em 100 por cento. Mantenha-a acima de zero ou a masmorra reivindica sua mente."),
         ("🕳️ Sanity zero. The sanity bar reached zero. The dungeon did not kill you. It absorbed you. You woke up at the entrance with no memory of what happened below. The dungeon kept what it took.", "🕳️ Sanidade zero. A barra de sanidade chegou a zero. A masmorra não te matou. Ela te absorveu. Você acordou na entrada sem nenhuma lembrança do que aconteceu lá embaixo. A masmorra ficou com o que tomou."),

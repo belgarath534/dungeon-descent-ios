@@ -1251,6 +1251,20 @@ final class RunModel: ObservableObject {
         Feedback.announce(msg.hasPrefix("✨") ? "Purge. Corruption cleared. \(ShadowWorld.purgeCost) SP spent." : msg)
     }
 
+    /// Fourth of July: Eagle's Cry. A free action.
+    var canEaglesCry: Bool { phase == .fighting && Festival.canEaglesCry(run) }
+
+    func eaglesCry() {
+        var r = run
+        let msg = Festival.eaglesCry(&r)
+        guard !msg.isEmpty else { return }
+        run = r
+        add(msg)
+        persist()
+        Sound.sfx("sfx-confirm")
+        Feedback.announce(msg)
+    }
+
     /// Independencia de México: ¡El Grito!, once a fight. A free action.
     var canGrito: Bool { phase == .fighting && Festival.canGrito(run) && !run.fight.gritoUsed }
 
@@ -3986,6 +4000,19 @@ final class RunModel: ObservableObject {
     private func persist() {
         guard phase != .victory && phase != .defeat, !characterGone else { return }
         game.saveRun(run, for: characterIndex)
+        sanityComfort()
+    }
+
+    /// Insane Mode: your familiar comforts you once each time sanity falls to
+    /// 10% (it can again after sanity climbs back above 25%).
+    private var sanityComforted = false
+    private func sanityComfort() {
+        guard Sanity.active(run) else { return }
+        let s = Sanity.value(run)
+        if s > 25 { sanityComforted = false; return }
+        guard s <= 10, s > 0, !sanityComforted else { return }
+        sanityComforted = true
+        Feedback.announce(Familiar.sanityComfort(game.store, dice: &dice), after: 3)
     }
 
     private func add(_ text: String, speak: Bool = false) {

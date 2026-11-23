@@ -573,6 +573,10 @@ struct DungeonView: View {
                     Button("✨ Purge (\(ShadowWorld.purgeCost) SP)" as String) { model.purge() }.buttonStyle(DungeonButtonStyle(kind: .skill))
                         .accessibilityLabel("Purge shadow corruption for \(ShadowWorld.purgeCost) SP. \(run.shadowCorruption) stacks." as String)
                 }
+                if model.canEaglesCry {
+                    Button("🦅 Eagle's Cry") { model.eaglesCry() }.buttonStyle(DungeonButtonStyle(kind: .skill))
+                        .accessibilityLabel("Eagle's Cry, Fourth of July skill. Reduces enemy attack 30 percent for 3 turns.")
+                }
                 if model.canGrito {
                     Button("🇲🇽 ¡El Grito!") { model.grito() }.buttonStyle(DungeonButtonStyle(kind: .skill))
                         .accessibilityLabel("El Grito, Mexican Independence battle cry. Plus 30 percent attack for 3 turns, once a fight.")

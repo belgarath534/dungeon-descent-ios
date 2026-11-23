@@ -181,6 +181,18 @@ public enum Festival {
         return b
     }
 
+    /// Fourth of July: Eagle's Cry (activateEaglesCry). The enemy's next 3
+    /// hits deal 30% less. A free action; it can be given again once it fades.
+    public static func canEaglesCry(_ run: Run) -> Bool { run.event == "july4" && run.inCombat && run.enemy != nil }
+
+    public static func eaglesCry(_ run: inout Run) -> String {
+        guard canEaglesCry(run) else { return "" }
+        guard run.fight.softenHits <= 0 else { return "Eagle's Cry is already active." }
+        run.fight.soften = 0.70
+        run.fight.softenHits = 3
+        return "🦅 Eagle's Cry! The eagle screams. The enemy hesitates. Its attack is reduced by 30 percent for 3 turns."
+    }
+
     /// ¡El Grito!: once a fight, +30% attack for 3 turns. It doesn't use your turn.
     public static func canGrito(_ run: Run) -> Bool { run.event == "mexico" && run.inCombat && run.enemy != nil }
 

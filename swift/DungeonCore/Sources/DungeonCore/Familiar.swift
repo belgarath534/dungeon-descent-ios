@@ -152,6 +152,15 @@ public enum Familiar {
     }
 
     /// familiarRecognizeJulio / familiarRecognizeVoidReaper
+    /// familiarSanityComfort: once each time Insane Mode's sanity drops to 10%.
+    public static func sanityComfort(_ store: GameStore, dice: inout some Dice) -> String {
+        let n = load(store).displayName
+        let lines = ["\(n) presses close against you. Steady. Still here.",
+                     "\(n) does not leave, even now. Not for this.",
+                     "Whatever the dungeon is doing to your mind, \(n) has not stopped watching over you."]
+        return lines[dice.roll(0...(lines.count - 1))]
+    }
+
     public static func recognizesJulio(_ store: GameStore) -> String { "\(load(store).displayName) seems unbothered by Julio. As if this has happened before." }
     public static func recognizesVoidReaper(_ store: GameStore) -> String { "\(load(store).displayName) goes very still. It knows exactly what this is." }
 }
