@@ -3382,6 +3382,17 @@ final class RunModel: ObservableObject {
     @Published var gambling = false
 
     /// 12.1 combineElixirs.
+    /// Skill Book: reorder a learned skill (the combat buttons follow).
+    func moveSkill(_ effect: String, by dir: Int) {
+        var r = run
+        guard let to = Skills.move(&r, effect: effect, by: dir) else { return }
+        run = r
+        persist()
+        Sound.sfx("sfx-select")
+        let name = Skills.skill(effect, cls: r.cls)?.name ?? "Skill"
+        Feedback.announce("\(name) moved \(dir < 0 ? "up" : "down"). Now position \(to + 1) of \(skills.count).")
+    }
+
     func combineElixirs() {
         var r = run
         guard Inventory.combineElixirs(&r) else {

@@ -21,6 +21,7 @@ struct DungeonView: View {
     @State private var showSettings = false
     @State private var chatOpen = false
     @State private var showSpirits = false
+    @State private var skillBookOpen = false
     /// The Arcane Shop or Spell Book (true) during the run, and the cast panel.
     @State private var spellScreen: Bool?
     @State private var casting = false
@@ -131,6 +132,7 @@ struct DungeonView: View {
         if model.showingHome { HomeOverlay(model: model) }
         if let b = model.blacksmith { BlacksmithView(model: b) { model.closeBlacksmith() } }
         if showSpirits { SpiritsOverlay(model: model) { showSpirits = false } }
+        if skillBookOpen { SkillBookOverlay(model: model) { skillBookOpen = false; Feedback.announce("Skill book closed.") } }
         if askingFlee { fleeOverlay }
         if paused { pauseOverlay }
         if model.musicBoxTutorial { MusicBoxTutorial { model.musicBoxTutorial = false; Feedback.announce("The fight begins.") } }
@@ -786,10 +788,8 @@ struct DungeonView: View {
     }
 
     private func showSkillBook() {
-        let s = model.skills
         Sound.sfx("sfx-select")
-        Feedback.announce(s.isEmpty ? "Skill book. No skills unlocked yet."
-                          : "Skill book. \(s.count) skills. " + s.map { "\($0.name), \(model.skillCost($0)) SP" }.joined(separator: ". ") + ".")
+        skillBookOpen = true
     }
 
     private var statsSpoken: String {

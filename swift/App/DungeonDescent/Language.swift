@@ -224,6 +224,13 @@ enum Patterns {
         ("⚔ Retry the Boss ({0} gold)", "⚔ Tentar o Chefe de Novo ({0} de ouro)"),
         ("You were struck down, but the dungeon offers one final chance. Retry {0} with half your maximum HP. Your items stay with you. The boss resets to full strength. It costs {1} gold, and you only get this once per run.", "Você caiu, mas a masmorra oferece uma última chance. Enfrente {0} de novo com metade do seu HP máximo. Seus itens ficam com você. O chefe volta com força total. Custa {1} de ouro, e só acontece uma vez por partida."),
         ("Retrying the boss. {0} is at full strength. You have {1} of {2} HP. {3} gold lost.", "Tentando o chefe de novo. {0} está com força total. Você tem {1} de {2} de HP. {3} de ouro perdidos."),
+        // 12.1: Skill Book.
+        ("{0} moved up. Now position {1} of {2}.", "{0} subiu. Agora na posição {1} de {2}."),
+        ("{0} moved down. Now position {1} of {2}.", "{0} desceu. Agora na posição {1} de {2}."),
+        ("Move {0} up", "Mover {0} para cima"),
+        ("Move {0} down", "Mover {0} para baixo"),
+        ("{0} of {1}. {2}. {3}. {4} Costs {5} SP.", "{0} de {1}. {2}. {3}. {4} Custa {5} de SP."),
+        ("Skill Book. {0} skills unlocked. {1}. Use Move Up and Move Down to reorder.", "Livro de Habilidades. {0} habilidades desbloqueadas. {1}. Use Mover para Cima e Mover para Baixo para reorganizar."),
         // 12.1: Friends.
         ("online, on floor {0} of {1}", "online, no andar {0} de {1}"),
         ("online, in a dungeon", "online, numa masmorra"),

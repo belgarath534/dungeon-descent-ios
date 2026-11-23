@@ -645,6 +645,57 @@ struct SpiritsOverlay: View {
     }
 }
 
+/// #skillbook-overlay: the learned skills, with Move Up and Move Down to
+/// change their order (and the order of the combat buttons).
+struct SkillBookOverlay: View {
+    @ObservedObject var model: RunModel
+    let close: () -> Void
+
+    var body: some View {
+        let list = model.skills
+        DungeonDialog(maxWidth: 440) {
+            Text("📖 Skill Book").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
+                .padding(.bottom, 12).accessibilityAddTraits(.isHeader)
+            if list.isEmpty {
+                Text("No skills unlocked yet. Level up to choose your first skill.")
+                    .font(Theme.crimson(13)).foregroundStyle(Theme.textSecondary)
+            }
+            ForEach(Array(list.enumerated()), id: \.element.effect) { i, sk in
+                HStack(spacing: 8) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("\(sk.icon) \(sk.name) · \(sk.tier)" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xe0c080))
+                        Text(sk.desc).font(Theme.crimson(12)).foregroundStyle(Theme.textSecondary)
+                        Text("\(model.skillCost(sk)) SP" as String).font(Theme.cinzel(9.9)).foregroundStyle(Color(hex: 0x6080c0))
+                    }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("\(i + 1) of \(list.count). \(sk.name). \(sk.tier). \(sk.desc) Costs \(model.skillCost(sk)) SP." as String)
+                    Spacer()
+                    VStack(spacing: 4) {
+                        Button("▲") { model.moveSkill(sk.effect, by: -1) }
+                            .disabled(i == 0)
+                            .accessibilityLabel("Move \(sk.name) up" as String)
+                        Button("▼") { model.moveSkill(sk.effect, by: 1) }
+                            .disabled(i == list.count - 1)
+                            .accessibilityLabel("Move \(sk.name) down" as String)
+                    }
+                    .font(Theme.cinzel(12)).foregroundStyle(Color(hex: 0xffaa44))
+                    .buttonStyle(.plain)
+                }
+                .padding(8).background(Color(hex: 0x050505))
+                .overlay(Rectangle().stroke(Color(hex: 0x222222)))
+                .padding(.bottom, 6)
+            }
+            Button("← Close", action: close).buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity).padding(.top, 8)
+                .accessibilityLabel("Close skill book")
+        }
+        .onAppear {
+            Feedback.announce(list.isEmpty ? "Skill Book. Level up to unlock skills."
+                              : "Skill Book. \(list.count) skills unlocked. " + list.map(\.name).joined(separator: ", ")
+                                + ". Use Move Up and Move Down to reorder.")
+        }
+    }
+}
+
 /// #ov-boss-riddle
 struct BossRiddleOverlay: View {
     @ObservedObject var model: RunModel

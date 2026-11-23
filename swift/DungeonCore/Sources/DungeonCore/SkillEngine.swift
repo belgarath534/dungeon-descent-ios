@@ -19,6 +19,21 @@ public enum Skills {
         run.unlockedSkills.compactMap { skill($0, cls: run.cls) }
     }
 
+    /// Skill Book (moveSkill): moves a learned skill up (-1) or down (+1) in
+    /// the list, which is also the order of the combat buttons. Returns its
+    /// new position among the unlocked skills, or nil if it can't move.
+    @discardableResult
+    public static func move(_ run: inout Run, effect: String, by dir: Int) -> Int? {
+        let shown = run.unlockedSkills.filter { skill($0, cls: run.cls) != nil }
+        guard let i = shown.firstIndex(of: effect) else { return nil }
+        let j = i + dir
+        guard j >= 0, j < shown.count,
+              let a = run.unlockedSkills.firstIndex(of: shown[i]),
+              let b = run.unlockedSkills.firstIndex(of: shown[j]) else { return nil }
+        run.unlockedSkills.swapAt(a, b)
+        return j
+    }
+
     /// Sets up the run's skill pool and grants the starting skill. Classes the
     /// web version gives no (or a missing) starting skill get their first one.
     public static func start(_ run: inout Run, dice: inout some Dice) {

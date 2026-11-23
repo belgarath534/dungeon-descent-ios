@@ -1,6 +1,28 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "No skills unlocked yet. Level up to choose your first skill.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nenhuma habilidade desbloqueada ainda. Suba de nível para escolher a primeira."
+          }
+        }
+      }
+    },
+    "Skill Book. Level up to unlock skills.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Livro de Habilidades. Suba de nível para desbloquear habilidades."
+          }
+        }
+      }
+    },
     "  ·  On hand: ": {
       "extractionState": "manual",
       "localizations": {
