@@ -18,31 +18,32 @@ enum Theme {
     static let bgDeep = Color(hex: 0x0e0b08)
     static let bgStone = Color(hex: 0x1a1410)
     static let bgPanel = Color(hex: 0x1f1812)
-    static let gold = Color(hex: 0xc9a227)
+    static var gold: Color { HighContrast.on ? Color(hex: 0xe0b830) : Color(hex: 0xc9a227) }
     static let goldBright = Color(hex: 0xf0c040)
     // Brightened in 12.0.1 to Apple's contrast minimum (4.5:1) on the dark
     // panels: the accessibility audit flagged the old 0x7a6018 and 0x5a4e40.
-    static let goldDim = Color(hex: 0xa08030)
+    static var goldDim: Color { HighContrast.on ? Color(hex: 0xd4b060) : Color(hex: 0xa08030) }
     static let blood = Color(hex: 0x8b1a1a)
     static let bloodBright = Color(hex: 0xc0392b)
-    static let ash = Color(hex: 0x9e8e78)
-    static let ashLight = Color(hex: 0xd4c4aa)
-    static let textPrimary = Color(hex: 0xe8d9c0)
-    static let textSecondary = Color(hex: 0xa89070)
-    static let textDim = Color(hex: 0x908068)
-    static let borderDim = Color(hex: 0x2e2418)
-    static let borderGlow = Color(hex: 0x6a5010)
+    static var ash: Color { HighContrast.on ? Color(hex: 0xd0c0a8) : Color(hex: 0x9e8e78) }
+    static var ashLight: Color { HighContrast.on ? Color(hex: 0xf0e4d0) : Color(hex: 0xd4c4aa) }
+    static var textPrimary: Color { HighContrast.on ? Color(hex: 0xfff4e0) : Color(hex: 0xe8d9c0) }
+    static var textSecondary: Color { HighContrast.on ? Color(hex: 0xe0ccaa) : Color(hex: 0xa89070) }
+    static var textDim: Color { HighContrast.on ? Color(hex: 0xd0bc98) : Color(hex: 0x908068) }
+    static var borderDim: Color { HighContrast.on ? Color(hex: 0x9a8058) : Color(hex: 0x2e2418) }
+    static var borderGlow: Color { HighContrast.on ? Color(hex: 0xd4a830) : Color(hex: 0x6a5010) }
     static let panel = bgPanel
 
     // 1rem in the web version is 16 points. Fonts scale with Dynamic Type.
+    // 12.1 High Contrast: bold letters (Cinzel is a variable font; Crimson has a semibold).
     static func cinzel(_ size: CGFloat, weight: Font.Weight = .regular, relativeTo style: Font.TextStyle = .body) -> Font {
-        .custom("Cinzel", size: size, relativeTo: style).weight(weight)
+        .custom("Cinzel", size: size, relativeTo: style).weight(HighContrast.on && weight != .black ? .bold : weight)
     }
     static func decorative(_ size: CGFloat, black: Bool = false, relativeTo style: Font.TextStyle = .title) -> Font {
-        .custom(black ? "CinzelDecorative-Black" : "CinzelDecorative-Bold", size: size, relativeTo: style)
+        .custom(black || HighContrast.on ? "CinzelDecorative-Black" : "CinzelDecorative-Bold", size: size, relativeTo: style)
     }
     static func crimson(_ size: CGFloat = 16, italic: Bool = false, relativeTo style: Font.TextStyle = .body) -> Font {
-        .custom(italic ? "CrimsonText-Italic" : "CrimsonText-Regular", size: size, relativeTo: style)
+        .custom(italic ? "CrimsonText-Italic" : HighContrast.on ? "CrimsonText-SemiBold" : "CrimsonText-Regular", size: size, relativeTo: style)
     }
 }
 
@@ -68,7 +69,7 @@ struct MenuButtonStyle: ButtonStyle {
                         : primary ? Color(hex: 0x100e00) : Color(hex: 0x0d0d0d))
             .overlay(RoundedRectangle(cornerRadius: 2)
                 .stroke(down ? (primary ? Theme.goldBright : Color(hex: 0x6a5020))
-                        : primary ? Color(hex: 0xcc9944) : border ?? Color(hex: 0x2a2218), lineWidth: 1))
+                        : primary ? Color(hex: 0xcc9944) : HighContrast.on ? Theme.borderDim : border ?? Color(hex: 0x2a2218), lineWidth: HighContrast.line))
             .scaleEffect(down ? 1.03 : 1)
             .animation(.easeOut(duration: 0.15), value: down)
     }
@@ -85,7 +86,7 @@ struct BackButtonStyle: ButtonStyle {
             .padding(.vertical, 8)
             .padding(.horizontal, 14)
             .frame(minHeight: 44)
-            .overlay(Rectangle().stroke(configuration.isPressed ? Theme.goldDim : Theme.borderDim, lineWidth: 1))
+            .overlay(Rectangle().stroke(configuration.isPressed ? Theme.goldDim : Theme.borderDim, lineWidth: HighContrast.line))
     }
 }
 
@@ -212,7 +213,7 @@ struct WebButtonStyle: ButtonStyle {
                         : kind == .red && down ? Theme.blood : Color.clear)
             .overlay(Rectangle().stroke(kind == .gold ? .clear
                                         : kind == .red ? Theme.blood
-                                        : (down ? Theme.ash : Theme.borderDim), lineWidth: 1))
+                                        : (down ? Theme.ash : Theme.borderDim), lineWidth: HighContrast.line))
     }
 }
 
@@ -275,5 +276,27 @@ struct AdaptiveRow<Content: View>: View {
         } else {
             HStack(spacing: spacing, content: content)
         }
+    }
+}
+
+/// 12.1 High Contrast (Settings, Accessibility; a player's request): brighter
+/// box outlines and text, and bold letters. Also on when the iPhone's own
+/// Bold Text or Increase Contrast is on.
+enum HighContrast {
+    static let key = "swift_high_contrast"
+    static var setting: Bool {
+        get { UserDefaults.standard.bool(forKey: key) }
+        set { UserDefaults.standard.set(newValue, forKey: key) }
+    }
+    /// Button and box outlines: twice as thick.
+    static var line: CGFloat { on ? 2 : 1 }
+
+    static var on: Bool {
+        if setting { return true }
+        #if os(visionOS)
+        return false
+        #else
+        return UIAccessibility.isBoldTextEnabled || UIAccessibility.isDarkerSystemColorsEnabled
+        #endif
     }
 }

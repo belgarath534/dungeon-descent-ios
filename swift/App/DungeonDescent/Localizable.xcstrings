@@ -131759,6 +131759,50 @@
           }
         }
       }
+    },
+    "High Contrast": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alto Contraste"
+          }
+        }
+      }
+    },
+    "Brighter box outlines and text, and bold letters, for low vision. Also on when Bold Text or Increase Contrast is on in the iPhone's settings.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contornos e textos mais claros e letras em negrito, para baixa visão. Também fica ativo quando Texto em Negrito ou Aumentar Contraste estão ativos nos ajustes do iPhone."
+          }
+        }
+      }
+    },
+    "High Contrast on.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alto Contraste ativado."
+          }
+        }
+      }
+    },
+    "High Contrast off.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alto Contraste desativado."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

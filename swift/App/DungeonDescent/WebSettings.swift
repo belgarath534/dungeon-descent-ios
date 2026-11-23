@@ -289,6 +289,9 @@ struct WebSettingsView: View {
                    label: "Combat announcements")
             option("Short Combat Lines", "Read each exchange in a few words: Hit 12. Took 5. HP 40 of 90. Skeleton 22.", isOn: $briefCombat,
                    label: "Short combat lines")
+            option("High Contrast", "Brighter box outlines and text, and bold letters, for low vision. Also on when Bold Text or Increase Contrast is on in the iPhone's settings.",
+                   isOn: Binding(get: { HighContrast.setting }, set: { HighContrast.setting = $0; refreshCommandCenter.toggle() }),
+                   label: "High contrast")
             option("Earcons", "A short sound before VoiceOver speaks: a warning when your HP drops to a quarter, a chime when an elite appears.", isOn: $earcons,
                    label: "Earcons")
             if VoicePack.available { voicePack }
