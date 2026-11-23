@@ -56,6 +56,7 @@ enum EnemyAbilities {
 
     /// Cowards run when you look strong. Returns the gold they drop, or nil if they stay.
     static func cowardFlees(_ run: inout Run, dice: inout some Dice, log: inout [String]) -> Int? {
+        if HolidayFoes.goldFlees(run, dice: &dice, log: &log) { return 0 }
         guard let e = run.enemy, e.flag("coward") else { return nil }
         guard Double(run.hp) >= Double(run.maxHp) * 0.80 else { return nil }
         let g = dice.roll(e.gold)
@@ -68,6 +69,8 @@ enum EnemyAbilities {
         var extra = 0
         var ignoreDefense = false
         var skipAttack = false
+        /// O Papagaio: the hit is at least this.
+        var minimum = 0
     }
 
     /// Before the enemy attacks: first-turn buffs and its special move, if it rolls one.
@@ -81,6 +84,8 @@ enum EnemyAbilities {
         }
         run.enemy = e
         Chimera.beforeAttack(&run, log: &log)
+        HolidayFoes.beforeAttack(&run, &m, dice: &dice, log: &log)
+        if m.skipAttack { return m }
         // The Music Box plays instead of attacking.
         if HollowEvents.melody(&run, dice: &dice, log: &log) {
             m.skipAttack = true

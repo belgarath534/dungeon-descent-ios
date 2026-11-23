@@ -104,3 +104,42 @@ final class EndlessExclusiveTests: XCTestCase {
         XCTAssertEqual(e?.gold, 28...36)
     }
 }
+
+final class HolidayFoeTests: XCTestCase {
+    func fight(_ flags: [String: JSONValue], name: String = "Foe") -> Run {
+        var r = Run(character: PlayerCharacter(name: "H", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var e = Enemy(name: name, icon: "x", hp: 50, maxHp: 50, atk: 10...10, gold: 1...1)
+        e.mechanics = flags
+        _ = Combat.begin(&r, against: e)
+        r.gold = 25
+        return r
+    }
+
+    func testLeprechaunStealsGoldNotHp() {
+        var r = fight(["stealsGold": .bool(true)], name: "The Leprechaun")
+        let hp = r.hp
+        var d = LoadedDice()
+        var log: [String] = []
+        XCTAssertEqual(Combat.enemyTurn(&r, dice: &d, options: .init(), log: &log), 0)
+        XCTAssertEqual(r.hp, hp)
+        XCTAssertEqual(r.gold, 15)
+        XCTAssertEqual(r.fight.stolenGold, 10)
+    }
+
+    func testFootballKick() {
+        var r = fight(["footballKick": .bool(true)], name: "O Craque")
+        let hp = r.hp
+        var d = LoadedDice(rolls: [4])
+        var log: [String] = []
+        _ = Combat.enemyTurn(&r, dice: &d, options: .init(), log: &log)
+        XCTAssertEqual(r.hp, hp - 14)
+    }
+
+    func testCupidDropsLovePotion() {
+        var r = fight(["dropsLovePotion": .bool(true)], name: "The Cupid")
+        var log: [String] = []
+        HolidayFoes.onKill(&r, r.enemy!, log: &log)
+        XCTAssertEqual(r.inventory.last?.name, "Love Potion")
+    }
+}

@@ -677,6 +677,7 @@ public enum Combat {
         }
         if let e = run.enemy { Subclasses.onKill(&run, e, log: &r.log) }
         if let e = run.enemy { Sanity.onKill(&run, e, log: &r.log) }
+        if let e = run.enemy { HolidayFoes.onKill(&run, e, log: &r.log) }
         if let e = run.enemy { var d = SystemDice(); Spells.onKill(&run, e, dice: &d, log: &r.log) }
         r.announcement = "\(run.enemy?.name ?? "The enemy") defeated."
         return r
@@ -804,6 +805,7 @@ public enum Combat {
         let swing = run.enemy?.currentAtk ?? e.currentAtk
         var raw = (deep.maxRoll ? swing.upperBound : dice.roll(swing)) + EnemyAbilities.secondStrike(e, dice: &dice, log: &log)
         raw = jsRound(Double(raw) * move.multiplier * shadow.multiplier * deep.multiplier) + move.extra
+        raw = max(raw, move.minimum)
         if Alchemy.gravity(&run, log: &log) { raw = 1 }
         if run.fight.softenHits > 0 {
             run.fight.softenHits -= 1

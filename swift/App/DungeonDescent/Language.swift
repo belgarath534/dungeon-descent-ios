@@ -235,6 +235,14 @@ enum Patterns {
         ("{0} presses close against you. Steady. Still here.", "{0} se aperta contra você. Firme. Ainda aqui."),
         ("{0} does not leave, even now. Not for this.", "{0} não vai embora, nem agora. Não por isso."),
         ("Whatever the dungeon is doing to your mind, {0} has not stopped watching over you.", "Seja o que for que a masmorra está fazendo com sua mente, {0} não parou de cuidar de você."),
+        // 12.1: Holiday enemies' moves.
+        ("🧝 The Leprechaun steals {0} gold! Kill it fast!", "🧝 O Leprechaun rouba {0} de ouro! Mate-o rápido!"),
+        ("⚽ O Craque kicks the ball! It hits you square in the face for {0} damage!", "⚽ O Craque chuta a bola! Acerta bem na sua cara causando {0} de dano!"),
+        ("💘 The Heartbreaker fires a charm arrow! You are charmed — you will skip your next turn.", "💘 O Destruidor de Corações dispara uma flecha encantada! Você está encantado — vai pular seu próximo turno."),
+        ("🍺 The Clurichaun rages! +{0}% damage!", "🍺 O Clurichaun se enfurece! +{0}% de dano!"),
+        ("{0} copies your own strength back at you!", "{0} copia sua própria força contra você!"),
+        ("💰 The Gold Goblin flees with its gold! It escaped.", "💰 O Goblin Dourado foge com seu ouro! Ele escapou."),
+        ("💘 The Cupid drops a Love Potion!", "💘 O Cupido deixa cair uma Poção do Amor!"),
         // 12.1: Endless-only enemies.
         ("⚠ Special Endless Enemy. {0}", "⚠ Inimigo Especial do Modo Infinito. {0}"),
         // 12.1: Eagle's Cry.
