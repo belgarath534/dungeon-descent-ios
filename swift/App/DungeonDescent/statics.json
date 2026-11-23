@@ -401,6 +401,10 @@
      {
       "title": "⚔ Boss Retry and the Pre-Boss Gauntlet",
       "body": "Die to a dungeon's final boss and you get one retry per run (not in Hardcore) — it costs 15% of your gold and brings you back at 50% HP, but the boss resets to full strength. Before you reach the boss, expect a Pre-Boss Gauntlet: one or two waves of stronger dungeon enemies between the floor 10 elite and the final fight."
+     },
+     {
+      "title": "⭐ Prestige — when can I prestige?",
+      "body": "A character can prestige once they reach their level cap, and the cap depends on the run mode you picked at creation, not on class or race. Classic characters (level resets every run) can prestige at level 10. Legacy characters (level carries between runs, up to 50) prestige at level 25. Prestiging starts the character over at level 1 with a permanent star, up to 10 stars. Each star is +5% health, +5% attack and +10% gold in every run, and pays 1,000 gold per star and a Mystery Coin. Find the Prestige button on the character's card."
      }
     ]
    },
