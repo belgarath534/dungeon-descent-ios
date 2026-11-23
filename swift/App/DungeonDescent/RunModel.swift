@@ -765,7 +765,7 @@ final class RunModel: ObservableObject {
         let talkedToJulio = r.pendingEvent == "julio" && choice == 0
         if talkedToJulio { achievements.record(.julioMet) }
         let studied = r.pendingEvent == "inscription" && choice == 0 && r.dungeon == "The Sunken Archives"
-        let out = Encounters.choose(choice, &r, dice: &d, wallet: game.wallet)
+        let out = Encounters.choose(choice, &r, dice: &d, wallet: game.wallet, julioMet: Int(achievements.stat("julioFound")))
         // The Sunken Archives' inscriptions are its lore fragments (dq-sunken).
         if studied && !out.retry { _ = quest(&r, "fragment") }
         // 12.1: and a page of the Archives' records (the web version's unused lore).

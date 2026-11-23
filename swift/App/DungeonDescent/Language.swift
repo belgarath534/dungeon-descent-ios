@@ -235,6 +235,11 @@ enum Patterns {
         ("{0} presses close against you. Steady. Still here.", "{0} se aperta contra você. Firme. Ainda aqui."),
         ("{0} does not leave, even now. Not for this.", "{0} não vai embora, nem agora. Não por isso."),
         ("Whatever the dungeon is doing to your mind, {0} has not stopped watching over you.", "Seja o que for que a masmorra está fazendo com sua mente, {0} não parou de cuidar de você."),
+        // 12.1: Julio, the third time on.
+        ("He looks up. For the first time, he looks directly at you. \"You keep finding me,\" he says. \"That is either very good or very bad.\" He does not say which.", "Ele levanta os olhos. Pela primeira vez, olha diretamente para você. \"Você continua me encontrando\", diz ele. \"Isso é muito bom ou muito ruim.\" Ele não diz qual."),
+        ("\"You again,\" he says. He does not sound surprised. He sounds like someone who has never been surprised by anything. \"Sit down.\" There is nowhere to sit. You sit anyway.", "\"Você de novo\", diz ele. Não parece surpreso. Parece alguém que nunca se surpreendeu com nada. \"Sente-se.\" Não há onde sentar. Você senta mesmo assim."),
+        ("He slides something across the floor. It is the DDDI founding charter. Your name is on it. You have never signed anything. \"You were always going to be here,\" he says.", "Ele desliza algo pelo chão. É a carta de fundação do DDDI. Seu nome está nela. Você nunca assinou nada. \"Você sempre ia estar aqui\", diz ele."),
+        ("\"I have been here longer than the dungeon,\" he says. \"I will be here after it ends.\" He hands you a Greater Potion. \"You look like you need this more than I do.\"", "\"Estou aqui há mais tempo que a masmorra\", diz ele. \"Estarei aqui depois que ela acabar.\" Ele te entrega uma Poção Maior. \"Você parece precisar disso mais do que eu.\""),
         // 12.1: First encounters and the Leo easter egg.
         ("📖 First encounter: {0} — {1}", "📖 Primeiro encontro: {0} — {1}"),
         ("First encounter. {0}. {1}", "Primeiro encontro. {0}. {1}"),

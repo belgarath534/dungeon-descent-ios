@@ -233,7 +233,8 @@ public enum Encounters {
     static let spiritTonic = Item(name: "Spirit Tonic", icon: "🔵", type: "sp-potion", desc: "Restores 15 SP.", sp: 15)
 
     /// Carries out the player's choice for the pending event.
-    public static func choose(_ choice: Int, _ run: inout Run, dice: inout some Dice, wallet: Wallet) -> Outcome {
+    /// `julioMet`: how many times you've talked to Julio (julioFound), this time included.
+    public static func choose(_ choice: Int, _ run: inout Run, dice: inout some Dice, wallet: Wallet, julioMet: Int = 0) -> Outcome {
         guard let id = run.pendingEvent else { return Outcome(message: "") }
         run.pendingEvent = nil
         func gold(_ g: Int) { run.gold += g; wallet.addGold(g) }
@@ -296,7 +297,14 @@ public enum Encounters {
         case ("abyssal-shrine", _):
             return Outcome(message: "You leave the shrine alone. It continues to glow behind you as you walk away.")
         case ("julio", 0):
-            let msgs = [
+            // The third time on, he acknowledges you (and the potion is a Greater one).
+            let knows = julioMet >= 3
+            let msgs = knows ? [
+                "He looks up. For the first time, he looks directly at you. \"You keep finding me,\" he says. \"That is either very good or very bad.\" He does not say which.",
+                "\"You again,\" he says. He does not sound surprised. He sounds like someone who has never been surprised by anything. \"Sit down.\" There is nowhere to sit. You sit anyway.",
+                "He slides something across the floor. It is the DDDI founding charter. Your name is on it. You have never signed anything. \"You were always going to be here,\" he says.",
+                "\"I have been here longer than the dungeon,\" he says. \"I will be here after it ends.\" He hands you a Greater Potion. \"You look like you need this more than I do.\"",
+            ] : [
                 "He looks up slowly. \"The audit went well,\" he says. Then he is gone.",
                 "He slides a potion across the floor without looking at you. You gain a Health Potion.",
                 "\"Three hundred fifty-nine million years,\" he says quietly. \"Give or take.\" He does not elaborate.",
@@ -305,7 +313,10 @@ public enum Encounters {
                 "\"The Department is watching,\" he says. \"It is always watching.\" He gestures vaguely at everything.",
             ]
             let roll = dice.roll(0...(msgs.count - 1))
-            if roll == 1 { run.inventory.append(potion) }
+            if roll == 1 && !knows { run.inventory.append(potion) }
+            if roll == 3 && knows {
+                run.inventory.append(greaterPotion)
+            }
             if roll == 4 { run.hp = min(run.maxHp, run.hp + 10) }
             // julioRestoresSanity: he is completely unbothered, which is grounding.
             if Sanity.active(run) {
