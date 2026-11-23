@@ -53,7 +53,8 @@ public enum BossTimer {
 /// the boss back to full HP and its first phase. Not in Hardcore.
 public enum BossRetry {
     public static func offer(_ run: Run) -> Int? {
-        guard let e = run.enemy, e.isBoss, !e.isDead, run.bossRetryUsed != true, !run.hardcore, run.lives <= 0 else { return nil }
+        guard let e = run.enemy, e.isBoss, !e.isDead, run.bossRetryUsed != true, !run.hardcore, run.lives <= 0,
+              !(Sanity.active(run) && Sanity.value(run) <= 0) else { return nil }
         return run.gold * 15 / 100
     }
 

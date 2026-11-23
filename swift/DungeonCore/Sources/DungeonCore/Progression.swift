@@ -215,6 +215,12 @@ public enum Progression {
     /// cheat-death items and skills are not ported yet.
     public static func handleDeath(_ run: inout Run) -> DeathOutcome {
         run.diedThisRun = true
+        // 12.1: Insane Mode — at zero sanity the dungeon keeps your mind; nothing brings you back.
+        if Sanity.active(run) && Sanity.value(run) <= 0 {
+            run.lives = 0
+            run.inCombat = false
+            return .runOver
+        }
         if !run.gearSavedThisFloor && (run.weaponEffect == "undying" || run.armorEffect == "sanctuary") {
             run.gearSavedThisFloor = true
             run.hp = 1

@@ -60,6 +60,7 @@ struct DungeonView: View {
                     if let h = run.hunter { hunterBar(h.dist) }
                     if let c = run.corruption, c > 0 { corruptionBar(c) }
                     if WhisperingForest.here(run) { forestBar(run.forestCorruption) }
+                    if Sanity.active(run) { sanityBar(Sanity.value(run)) }
                     if let b = model.bountyBanner {
                         Text(b).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x44ff88))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -794,7 +795,7 @@ struct DungeonView: View {
 
     private var statsSpoken: String {
         let all = Skills.all(for: run.cls).count
-        return "\(run.name) the \(run.race) \(run.cls) on \(run.difficulty.rawValue). Level \(run.level). HP \(run.hp) of \(run.maxHp). SP \(run.sp) of \(run.maxSp). Attack \(run.atk.lowerBound + run.totalAtkBonus) to \(run.atk.upperBound + run.totalAtkBonus). Defense \(run.totalDef). Gold \(run.gold). Kills \(run.kills). Floor \(run.floor) of 10. Skills unlocked: \(model.skills.count) of \(all)."
+        return "\(run.name) the \(run.race) \(run.cls) on \(run.difficulty.rawValue). Level \(run.level). HP \(run.hp) of \(run.maxHp). SP \(run.sp) of \(run.maxSp). Attack \(run.atk.lowerBound + run.totalAtkBonus) to \(run.atk.upperBound + run.totalAtkBonus). Defense \(run.totalDef). Gold \(run.gold). Kills \(run.kills). Floor \(run.floor) of 10. Skills unlocked: \(model.skills.count) of \(all)." + (Sanity.active(run) ? " Sanity: \(Sanity.value(run)) percent." : "")
     }
 
     // MARK: Inventory (.dg-inventory)
@@ -827,7 +828,7 @@ struct DungeonView: View {
     private static func category(_ i: Item) -> String {
         if i.isWeapon { return "weapons" }
         if i.isArmor { return "armor" }
-        if ["potion", "elixir", "sp-potion", "luck-potion", "fire-potion", "curse-potion", "swift-potion", "def-potion",
+        if ["potion", "insanity", "elixir", "sp-potion", "luck-potion", "fire-potion", "curse-potion", "swift-potion", "def-potion",
             "atk-potion", "cursed", "heal"].contains(i.type) || Alchemy.tacticalTypes.contains(i.type) { return "potions" }
         if i.type == "material" { return "materials" }
         if ["relic", "mask"].contains(i.type) { return "equipment" }
@@ -1073,6 +1074,17 @@ struct DungeonView: View {
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Corruption: \(c) percent." as String)
+    }
+
+    /// #sanity-bar-wrap (Insane Mode).
+    private func sanityBar(_ s: Int) -> some View {
+        let color = Color(hex: s > 50 ? 0xff4444 : s > 25 ? 0xcc2222 : 0x880000)
+        return VStack(alignment: .leading, spacing: 4) {
+            Text("🕳️ Sanity: \(s)%" as String).font(Theme.cinzel(10.4)).foregroundStyle(color)
+            Bar(value: Double(s) / 100, colors: [color, color.opacity(0.7)], track: color.opacity(0.15), height: 4)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Sanity: \(s) percent." as String)
     }
 
     /// #corruption-bar-wrap: the Whispering Forest's meter.

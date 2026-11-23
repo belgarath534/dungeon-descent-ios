@@ -307,6 +307,11 @@ public enum Encounters {
             let roll = dice.roll(0...(msgs.count - 1))
             if roll == 1 { run.inventory.append(potion) }
             if roll == 4 { run.hp = min(run.maxHp, run.hp + 10) }
+            // julioRestoresSanity: he is completely unbothered, which is grounding.
+            if Sanity.active(run) {
+                Sanity.restore(&run, 15)
+                return Outcome(message: "Julio. " + msgs[roll] + " Julio is completely unbothered by everything around him. This is somehow grounding. Plus 15 sanity.")
+            }
             return Outcome(message: "Julio. " + msgs[roll])
         case ("julio", 1):
             guard run.gold >= 10, wallet.spendGold(10) else {

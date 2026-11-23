@@ -67,6 +67,7 @@ public enum Combat {
             run.fight.medusaGuard = true
             log.append("🐍 Medusa stands beside you. Serpent Guard — she will absorb one attack this fight.")
         }
+        Sanity.begin(&run, enemy, log: &log)
         Alchemy.combatStart(&run, log: &log)
         Spirits.combatStart(&run, log: &log)
         ShadowWorld.combatStart(&run, log: &log)
@@ -83,6 +84,8 @@ public enum Combat {
         // 15% elite chance from floor 4 (enterRoom)
         let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(0.15)
         let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
+        // 12.1: Insane Mode's own enemies.
+        if !elite, let s = Sanity.encounter(for: run, dice: &dice) { return s }
         if !elite, var td = TimeDescender.encounter(for: run, dice: &dice) {
             if run.worldCurse { cursed(&td) }
             Challenges.shape(&td, run)
@@ -504,6 +507,7 @@ public enum Combat {
             return r
         }
         let taken = enemiesTurn(&run, &r, dice: &dice, options: options)
+        r.log += Sanity.hit(&run, taken: taken)
         if let dead = run.enemy, dead.isDead {
             if let lines = ShadowWorld.refusesDeath(&run) {
                 r.log += lines
@@ -624,6 +628,7 @@ public enum Combat {
         run.enemy = run.foes.removeFirst()
         run.inCombat = true
         let taken = enemiesTurn(&run, &r, dice: &dice, options: options)
+        r.log += Sanity.hit(&run, taken: taken)
         r.enemyDamage = taken
         tickEffects(&run, log: &r.log)
         let left = 1 + run.foes.count
@@ -670,6 +675,7 @@ public enum Combat {
             r.log.append("🩸 Soul Drinker feeds — you heal 5 HP!")
         }
         if let e = run.enemy { Subclasses.onKill(&run, e, log: &r.log) }
+        if let e = run.enemy { Sanity.onKill(&run, e, log: &r.log) }
         if let e = run.enemy { var d = SystemDice(); Spells.onKill(&run, e, dice: &d, log: &r.log) }
         r.announcement = "\(run.enemy?.name ?? "The enemy") defeated."
         return r
@@ -748,6 +754,11 @@ public enum Combat {
             e.stunTurns -= 1
             run.enemy = e
             log.append("\(e.name) cannot act this turn!")
+            return 0
+        }
+        // 12.1: The Distorted drains sanity, not HP.
+        if e.flag("distorted") {
+            Sanity.distortedTurn(&run, dice: &dice, log: &log)
             return 0
         }
         if run.fight.dodges > 0 {

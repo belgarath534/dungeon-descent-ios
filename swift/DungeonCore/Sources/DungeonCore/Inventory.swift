@@ -114,6 +114,8 @@ public enum Inventory {
                 run.forestCorruption = max(0, run.forestCorruption - WhisperingForest.potionCleanse)
                 out.message += " The forest's corruption recedes to \(run.forestCorruption) percent."
             }
+        case "insanity":
+            out.message = Sanity.drink(&run, dice: &dice)
         case "elixir", "heal":
             guard run.hp < run.maxHp else {
                 return Outcome(message: "Your health is already full. Save the elixir for when you need it.", used: false)

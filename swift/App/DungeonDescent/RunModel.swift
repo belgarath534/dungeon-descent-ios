@@ -89,6 +89,7 @@ final class RunModel: ObservableObject {
             }
             bountyBanner = Bounties.banner(game.store)
             startForest()
+            startSanity()
             loadCommunity()
             if let h = saved.hunter {
                 add(Hunter.line(h.dist))
@@ -233,6 +234,8 @@ final class RunModel: ObservableObject {
         if let m = r.minion { add("👾 \(m.name) fights beside you.") }
         _ = bounty(.runStarted)
         startForest()
+        startSanity()
+        if Sanity.active(r) { add("🕳️ " + Sanity.startLine) }
         if WhisperingForest.here(r) { add("🌲 The forest's corruption creeps in while you explore. Music Boxes and potions push it back.") }
         if let c = Corruption.status(r) { add(c) }
         let lead = showStartCards(r)
@@ -1656,6 +1659,43 @@ final class RunModel: ObservableObject {
         }
     }
 
+    // MARK: Insane Mode (12.1)
+
+    private var sanityTimer: Timer?
+
+    /// initInsaneMode: 1 sanity every 10 seconds spent exploring. Like the
+    /// forest, it waits while a fight, an event, the shop or a choice is open.
+    private func startSanity() {
+        sanityTimer?.invalidate()
+        sanityTimer = nil
+        guard Sanity.active(run) else { return }
+        sanityTimer = Timer.scheduledTimer(withTimeInterval: Sanity.tickSeconds, repeats: true) { [weak self] t in
+            Task { @MainActor in
+                guard let self, self.phase != .victory, self.phase != .defeat else { t.invalidate(); return }
+                self.sanityTick()
+            }
+        }
+    }
+
+    private func sanityTick() {
+        guard phase == .exploring, levelUp == nil, !hunterChoice, run.stalker == nil, run.conductor == nil, run.skillChoices.isEmpty,
+              !Subclasses.pending(run), blacksmith == nil, !showingHome, bossRetry == nil else { return }
+        var r = run
+        let lines = Sanity.drain(&r, 1)
+        lines.forEach { add($0) }
+        if r.hp <= 0 {
+            run = r
+            playerDied(killedBy: Sanity.killedBy, spoken: lines.joined(separator: " "))
+            return
+        }
+        run = r
+        persist()
+        if !lines.isEmpty {
+            Sound.sfx(Sanity.value(r) <= 5 ? "sfx-sanity-critical" : "sfx-sanity-warning")
+            Feedback.announce(lines.joined(separator: " "))
+        }
+    }
+
     // MARK: The Security Room
 
     private var securityTimer: Timer?
@@ -2581,8 +2621,10 @@ final class RunModel: ObservableObject {
         playMusic()
     }
 
-    private func playerDied(killedBy: String, spoken: String) {
+    private func playerDied(killedBy cause: String, spoken: String) {
         var r = run
+        // 12.1: Insane Mode — the mind went before the body did.
+        let killedBy = Sanity.active(r) && Sanity.value(r) <= 0 ? Sanity.killedBy : cause
         Feedback.warning()
         let outcome = Progression.handleDeath(&r)
         // logDeath writes every lost life into the journal.

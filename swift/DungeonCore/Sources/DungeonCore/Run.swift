@@ -65,6 +65,8 @@ public struct Run: Codable, Sendable {
     /// 12.1: The Conductor's hall in progress, and the floor it last appeared on.
     public var conductor: ConductorHall? = nil
     public var conductorFloor: Int? = nil
+    /// 12.1: Insane Mode's sanity bar, 0–100 (nil: full, or not Insane).
+    public var sanity: Int? = nil
     /// 12.1: the community dungeon this run is playing, if any.
     public var communityDungeon: CommunityDungeons.Dungeon? = nil
     /// The DDDI's Grand Overseer was beaten this run (he comes once a run at most).
