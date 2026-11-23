@@ -149,6 +149,9 @@ public final class AchievementBook {
             trackGlobal("totalKills")
             if e.isElite { increment("eliteKills"); trackGlobal("eliteKills") }
             if e.flag("isTwin") { increment("twinKilled") }
+            // 12.1: three achievements nothing counted.
+            if e.name == "Hollow Shade" { increment("hollowShadeKills") }
+            if e.flag("dddi") { increment("dddiDefeated") }
             setMax("bestGoldRun", Double(run.gold))
             setMax("maxFloorReached", Double(run.floor))
             if e.isBoss {
@@ -179,6 +182,8 @@ public final class AchievementBook {
                 "The Infernal Descent": "infernalComplete", "The Abyssal Deep": "abyssalComplete",
             ]
             if let k = completeKey[run.dungeon] { increment(k) }
+            if run.dungeon == "The Infernal Descent" { increment("infernalTrialWon") }
+            if run.unlockedSkills.count >= 5 { markOnce("allSkillsUnlocked") }
             if run.dungeon == "The Abyssal Deep" {
                 markOnce("abyssalBossDefeated")
                 if run.hardcore { markOnce("abyssalHardcoreWin") }

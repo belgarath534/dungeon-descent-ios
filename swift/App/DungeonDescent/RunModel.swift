@@ -1398,6 +1398,8 @@ final class RunModel: ObservableObject {
         r.enemy = nil
         r.inCombat = false
         r.kills += 1
+        achievements.increment("witnessFound")
+        _ = achievements.check()
         var said = SpecialEncounters.witnessText
         add("🦈 " + said)
         if SpecialEncounters.witnessJoins(store: game.store) {
@@ -2136,7 +2138,17 @@ final class RunModel: ObservableObject {
             playMusic()
             return
         }
-        if e.isBoss {
+        if DDDI.isOverseer(e) {
+            // The secret boss: a reward, and the run goes on (the real boss waits).
+            let gold = DDDI.defeated(&r, dice: &d)
+            game.wallet.addGold(gold)
+            add("⚖ " + DDDI.victoryLine)
+            add("✦ +\(gold) gold · +10 max HP · +10 max SP")
+            Sound.sfx("sfx-victory")
+            Feedback.success()
+            finish(r, d, phase: .exploring, spoken: said + " " + DDDI.victoryLine + " Reward: \(gold) gold, plus 10 max HP and 10 max SP. The dungeon's real boss still waits." + (exitsText.map { " " + $0 } ?? ""))
+            playMusic()
+        } else if e.isBoss {
             run = r
             dice = d
             bossFall(e.name, then: said)
@@ -2950,6 +2962,7 @@ final class RunModel: ObservableObject {
         persist()
         add(out.message)
         achievements.increment(out.right ? "riddlesCorrect" : "riddlesWrong")
+        if out.right && run.dungeon == "The Infernal Descent" { achievements.increment("infernalRiddlesSolved") }
         _ = achievements.check()
         Sound.sfx(out.right ? "sfx-unlock" : "sfx-hurt")
         Feedback.announce(out.right ? "Correct answer. The boss falls silent. You recover \(BossRiddles.heal) HP."

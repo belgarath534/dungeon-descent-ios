@@ -179,6 +179,11 @@ public enum Combat {
         let t = pool[dice.roll(0...(pool.count - 1))]
         var b = Enemy.spawnBoss(t, playerLevel: run.level, playerMaxAtk: run.atk.upperBound, ngPlusCount: ngCount(run))
         CommunityDungeons.dressBoss(&b, for: run)
+        // The web version's secret boss: 2% of the time the Department's
+        // Grand Overseer comes for the audit instead (once a run).
+        if run.dddiDefeated != true, run.communityDungeon == nil, run.dungeon != ShadowWorld.name, dice.chance(0.02) {
+            DDDI.dress(&b)
+        }
         if run.worldCurse { cursed(&b) }
         Challenges.shape(&b, run)
         Legacy.shape(&b, run)

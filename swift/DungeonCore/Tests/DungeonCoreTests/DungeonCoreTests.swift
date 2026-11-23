@@ -5755,3 +5755,40 @@ final class MineGearTests: XCTestCase {
         XCTAssertNoThrow(try JSONDecoder().decode(MineRun.self, from: JSONSerialization.data(withJSONObject: obj)))
     }
 }
+
+final class DDDITests: XCTestCase {
+    func testOverseerAndReward() {
+        let r0 = Run(character: PlayerCharacter(name: "D", cls: "Warrior", race: "Human", prof: "Thief",
+                                                dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var dice = SeededDice(seed: 11)
+        var seen = 0
+        for _ in 0..<3000 where DDDI.isOverseer(Combat.nextBoss(for: r0, dice: &dice)) { seen += 1 }
+        XCTAssert((20...110).contains(seen), "\(seen)")
+        var done = r0
+        done.dddiDefeated = true
+        for _ in 0..<500 { XCTAssertFalse(DDDI.isOverseer(Combat.nextBoss(for: done, dice: &dice))) }
+        var b = Combat.nextBoss(for: r0, dice: &dice)
+        DDDI.dress(&b)
+        XCTAssertGreaterThanOrEqual(b.maxHp, 280)
+        XCTAssertNotNil(b.phaseMsg2)
+        var r = r0
+        let hp = r.maxHp, sp = r.maxSp
+        let gold = DDDI.defeated(&r, dice: &dice)
+        XCTAssert((175...225).contains(gold))
+        XCTAssertEqual(r.maxHp, hp + 10)
+        XCTAssertEqual(r.maxSp, sp + 10)
+        XCTAssertEqual(r.dddiDefeated, true)
+    }
+
+    func testStuckAchievementsNowCount() {
+        let store = MemoryStore()
+        let book = AchievementBook(store: store, wallet: Wallet(store: store))
+        var r = Run(character: PlayerCharacter(name: "A", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "The Infernal Descent", difficulty: .wanderer))
+        r.dungeon = "The Infernal Descent"
+        r.unlockedSkills = ["a", "b", "c", "d", "e"]
+        book.record(.runWon(r, diedThisRun: true, seconds: 9999))
+        XCTAssertTrue(book.unlockedIDs.contains("ach-infernal-trial"))
+        XCTAssertTrue(book.unlockedIDs.contains("ach-skills"))
+    }
+}
