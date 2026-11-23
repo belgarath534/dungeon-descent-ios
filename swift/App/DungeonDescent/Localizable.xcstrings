@@ -131957,6 +131957,468 @@
           }
         }
       }
+    },
+    "🏰 Community Dungeons": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🏰 Masmorras da Comunidade"
+          }
+        }
+      }
+    },
+    "Browse": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explorar"
+          }
+        }
+      }
+    },
+    "Create": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criar"
+          }
+        }
+      }
+    },
+    "🏗 Build a Dungeon": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🏗 Construir uma Masmorra"
+          }
+        }
+      }
+    },
+    "Create a dungeon.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Criar uma masmorra."
+          }
+        }
+      }
+    },
+    "Browse community dungeons.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Explorar as masmorras da comunidade."
+          }
+        }
+      }
+    },
+    "Community Dungeons. Dungeons built by players. Play one, or build your own in the Create tab.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masmorras da Comunidade. Masmorras criadas por jogadores. Jogue uma ou construa a sua na aba Criar."
+          }
+        }
+      }
+    },
+    "Loading dungeons…": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carregando masmorras…"
+          }
+        }
+      }
+    },
+    "Couldn't load the dungeons. Check your connection.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não foi possível carregar as masmorras. Verifique sua conexão."
+          }
+        }
+      }
+    },
+    "No community dungeons yet. Be the first: build one in the Create tab.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ainda não há masmorras da comunidade. Seja o primeiro: construa uma na aba Criar."
+          }
+        }
+      }
+    },
+    "Most played and liked first. Playing one never changes your character's own dungeon progress.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As mais jogadas e curtidas primeiro. Jogar uma nunca muda o progresso de masmorras do seu personagem."
+          }
+        }
+      }
+    },
+    "← All Dungeons": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "← Todas as Masmorras"
+          }
+        }
+      }
+    },
+    "Back to all dungeons": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltar para todas as masmorras"
+          }
+        }
+      }
+    },
+    "THE DUNGEON": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A MASMORRA"
+          }
+        }
+      }
+    },
+    "WHO GOES IN": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "QUEM ENTRA"
+          }
+        }
+      }
+    },
+    "WHAT DID YOU THINK": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O QUE VOCÊ ACHOU"
+          }
+        }
+      }
+    },
+    "👍 Like": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "👍 Curtir"
+          }
+        }
+      }
+    },
+    "👍 Liked": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "👍 Curtido"
+          }
+        }
+      }
+    },
+    "Hides everything they made.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esconde tudo o que a pessoa criou."
+          }
+        }
+      }
+    },
+    "A run in progress for this character is replaced.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma partida em andamento deste personagem é substituída."
+          }
+        }
+      }
+    },
+    "It's hidden for you now, and the developer reviews reports within 24 hours.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ela fica escondida para você agora, e o desenvolvedor analisa denúncias em até 24 horas."
+          }
+        }
+      }
+    },
+    "Pick a dungeon to build on, the community enemies that roam it, a boss, a rule and music. Enemies fight at the dungeon's own strength.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha uma masmorra como base, os inimigos da comunidade que andam por ela, um chefe, uma regra e a música. Os inimigos lutam com a força da própria masmorra."
+          }
+        }
+      }
+    },
+    "BUILT ON": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "BASE"
+          }
+        }
+      }
+    },
+    "THE BOSS": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O CHEFE"
+          }
+        }
+      }
+    },
+    "SPECIAL RULE": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "REGRA ESPECIAL"
+          }
+        }
+      }
+    },
+    "MUSIC": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MÚSICA"
+          }
+        }
+      }
+    },
+    "No special rule": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sem regra especial"
+          }
+        }
+      }
+    },
+    "Dungeon name": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nome da masmorra"
+          }
+        }
+      }
+    },
+    "A short description": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma descrição curta"
+          }
+        }
+      }
+    },
+    "Your name as the creator": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seu nome como criador"
+          }
+        }
+      }
+    },
+    "⚔ Make Your Own Enemy": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "⚔ Crie Seu Próprio Inimigo"
+          }
+        }
+      }
+    },
+    "🏰 Publish Dungeon": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🏰 Publicar Masmorra"
+          }
+        }
+      }
+    },
+    "Plays a preview.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca uma prévia."
+          }
+        }
+      }
+    },
+    "Loading community enemies…": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Carregando inimigos da comunidade…"
+          }
+        }
+      }
+    },
+    "No community enemies to choose from yet.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ainda não há inimigos da comunidade para escolher."
+          }
+        }
+      }
+    },
+    "Choose at least one enemy to roam your dungeon.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha pelo menos um inimigo para andar pela sua masmorra."
+          }
+        }
+      }
+    },
+    "Choose a dungeon to build on.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escolha uma masmorra como base."
+          }
+        }
+      }
+    },
+    "Boss Battle": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Batalha contra Chefe"
+          }
+        }
+      }
+    },
+    "The Raid": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Incursão"
+          }
+        }
+      }
+    },
+    "Tavern Songs": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Músicas de Taverna"
+          }
+        }
+      }
+    },
+    "The Guide": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Guia"
+          }
+        }
+      }
+    },
+    "Community dungeons are seen by all players. By continuing you agree to the Dungeon Descent Terms of Service at dungen-descent.org/terms. There is no tolerance for objectionable content. Content that breaks the rules is removed. Do you agree?": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As masmorras da comunidade são vistas por todos os jogadores. Ao continuar, você concorda com os Termos de Serviço do Dungeon Descent em dungen-descent.org/terms. Não há tolerância para conteúdo ofensivo. Conteúdo que quebra as regras é removido. Você concorda?"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

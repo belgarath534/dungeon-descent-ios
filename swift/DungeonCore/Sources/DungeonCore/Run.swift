@@ -65,6 +65,8 @@ public struct Run: Codable, Sendable {
     /// 12.1: The Conductor's hall in progress, and the floor it last appeared on.
     public var conductor: ConductorHall? = nil
     public var conductorFloor = 0
+    /// 12.1: the community dungeon this run is playing, if any.
+    public var communityDungeon: CommunityDungeons.Dungeon? = nil
     /// The Void Reaper wasn't stopped: enemies are 50% stronger (set while the curse lasts).
     public var worldCurse = false
     /// Spells known by the character (copied in at run start) and their cooldown.

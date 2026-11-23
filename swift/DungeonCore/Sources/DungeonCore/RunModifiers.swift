@@ -33,6 +33,17 @@ public enum RunModifiers {
         // A Cursed Modifier from the Curse Shop applies even with modifiers turned off.
         guard enabled(store) || run.cursedModifier else { return nil }
         let m = all[dice.roll(0...(all.count - 1))]
+        apply(&run, m, wallet: wallet)
+        return m
+    }
+
+    /// 12.1: a set modifier (a community dungeon's rule), replacing any rolled one.
+    public static func force(_ run: inout Run, _ id: String, wallet: Wallet) {
+        guard let m = modifier(id), run.modifier != id else { return }
+        apply(&run, m, wallet: wallet)
+    }
+
+    static func apply(_ run: inout Run, _ m: Modifier, wallet: Wallet) {
         run.modifier = m.id
         if m.id == "blessed" {
             for _ in 0..<4 { run.inventory.append(Item(name: "Health Potion", icon: "🧪", type: "potion", desc: "Restores 40 HP.", heal: 40)) }
@@ -40,7 +51,6 @@ public enum RunModifiers {
             wallet.addGold(100)
         }
         if m.id == "frozen" { run.floorRoomsNeeded = rooms(run.floorRoomsNeeded, run) }
-        return m
     }
 
     /// Frozen Floors: one room fewer (never under 4; the boss floor keeps its one).

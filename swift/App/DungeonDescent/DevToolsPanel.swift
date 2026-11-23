@@ -98,9 +98,9 @@ struct DevToolsPanel: View {
                 .font(Theme.cinzel(13)).foregroundStyle(Theme.textPrimary)
                 .padding(10).background(Color(hex: 0x111111)).overlay(Rectangle().stroke(Theme.borderDim))
                 .accessibilityLabel("Enemy ID or creator name")
-            Button("🗑 Remove Enemy (by ID)") { run { await CommunityEnemyStore.shared.moderate(modTarget, approved: false) } }
+            Button("🗑 Remove Enemy or Dungeon (by ID)") { run { modTarget.hasPrefix("cdun_") ? await CommunityDungeonStore.shared.moderate(modTarget, approved: false) : await CommunityEnemyStore.shared.moderate(modTarget, approved: false) } }
                 .buttonStyle(WebButtonStyle(kind: .red)).frame(maxWidth: .infinity)
-            Button("↩ Restore Enemy (by ID)") { run { await CommunityEnemyStore.shared.moderate(modTarget, approved: true) } }
+            Button("↩ Restore Enemy or Dungeon (by ID)") { run { modTarget.hasPrefix("cdun_") ? await CommunityDungeonStore.shared.moderate(modTarget, approved: true) : await CommunityEnemyStore.shared.moderate(modTarget, approved: true) } }
                 .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
             Button("🚫 Remove All by Creator") { run { await CommunityEnemyStore.shared.removeAll(by: modTarget) } }
                 .buttonStyle(WebButtonStyle(kind: .red)).frame(maxWidth: .infinity)

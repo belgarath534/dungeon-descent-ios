@@ -108,7 +108,7 @@ public enum Combat {
             Challenges.shape(&nm, run)
             return nm
         }
-        if !elite, var ce = CommunityEnemies.spawn(for: run, dice: &dice) {
+        if !elite, run.communityDungeon == nil, var ce = CommunityEnemies.spawn(for: run, dice: &dice) {
             Legacy.shape(&ce, run); Prestige.shape(&ce, run)
             return ce
         }
@@ -134,6 +134,7 @@ public enum Combat {
             e.atk = lo...max(lo, hi)
         }
         if !elite { DailyChallenge.shape(&e, run) }
+        if !elite { CommunityDungeons.dress(&e, for: run, dice: &dice) }
         if run.worldCurse { cursed(&e) }
         Challenges.shape(&e, run)
         Legacy.shape(&e, run); Prestige.shape(&e, run)
@@ -177,6 +178,7 @@ public enum Combat {
         }
         let t = pool[dice.roll(0...(pool.count - 1))]
         var b = Enemy.spawnBoss(t, playerLevel: run.level, playerMaxAtk: run.atk.upperBound, ngPlusCount: ngCount(run))
+        CommunityDungeons.dressBoss(&b, for: run)
         if run.worldCurse { cursed(&b) }
         Challenges.shape(&b, run)
         Legacy.shape(&b, run)

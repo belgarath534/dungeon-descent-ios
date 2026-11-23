@@ -56,6 +56,8 @@ final class Router: ObservableObject {
         case enemyCreator
         /// 12.1: Friends and Rankings.
         case friends
+        /// 12.1: dungeons built by players.
+        case communityDungeons
     }
 
     @Published private(set) var screen: Screen = .menu
@@ -188,6 +190,7 @@ struct RootView: View {
             case .battlePass: BattlePassView()
             case .coop: CoopView()
             case .friends: FriendsView()
+            case .communityDungeons: CommunityDungeonsView()
             case .siege: SiegeView()
             case .challenges: ChallengesView()
             case .bounty: BountyBoardView()

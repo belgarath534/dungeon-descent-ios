@@ -80,6 +80,8 @@ struct MainMenuView: View {
         Entry(id: "tournament", text: "🏆 Tournament", label: "Tournament, compete against other players for the highest score", action: .go(.tournament)),
         Entry(id: "chronicles", text: "📚 Chronicles", label: "The Chronicles, lore and history of the dungeons", action: .go(.chronicles)),
         Entry(id: "codex", text: "📖 Codex", label: "The Codex, world lore enemy lore and artifacts unlocked through gameplay", action: .go(.codex)),
+        Entry(id: "cdungeons", text: "🏰 Community Dungeons", label: "Community Dungeons, play dungeons built by players or build your own",
+              color: Color(hex: 0xd0a060), border: Color(hex: 0x6a5030), action: .go(.communityDungeons)),
         Entry(id: "creator", text: "⚔ Enemy Creator", label: "Community Enemy Creator, build an enemy and set it loose in the dungeon", action: .go(.enemyCreator)),
         Entry(id: "friends", text: "👥 Friends", label: "Friends and Rankings, your Game Center friends who play, who's online, and the leaderboards",
               color: Color(hex: 0x66ddcc), border: Color(hex: 0x226655), action: .go(.friends)),

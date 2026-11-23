@@ -5621,3 +5621,59 @@ final class RaidBossTests: XCTestCase {
         XCTAssertEqual(lost.gold, 200)
     }
 }
+
+final class CommunityDungeonTests: XCTestCase {
+    let gob = CommunityEnemies.Entry(id: "g1", name: "Bog Goblin", desc: "Smells.", type: "beast", dungeon: "all", music: nil,
+                                     creator: "Ana", icon: "👺", hp: 5, atk: 1, def: 0)
+    let king = CommunityEnemies.Entry(id: "k1", name: "Mud King", desc: "Sticky.", type: "beast", dungeon: "all", music: nil,
+                                      creator: "Ana", icon: "👑", hp: 5, atk: 1, def: 0)
+
+    func dungeon() -> CommunityDungeons.Dungeon {
+        CommunityDungeons.Dungeon(id: "cd_1", name: "The Bog", desc: "Wet.", creator: "Ana", base: "Crypt of Malachar",
+                                  enemies: ["g1", "k1"], boss: "k1", rule: "burning", music: "spire")
+    }
+
+    override func tearDown() { CommunityEnemies.pool = [] }
+
+    func testChecks() {
+        XCTAssertNil(CommunityDungeons.problem(dungeon(), known: ["g1", "k1"]))
+        var d = dungeon(); d.enemies = []
+        XCTAssertNotNil(CommunityDungeons.problem(d, known: []))
+        d = dungeon(); d.base = "Nowhere"
+        XCTAssertNotNil(CommunityDungeons.problem(d, known: ["g1", "k1"]))
+        d = dungeon(); d.rule = "nope"
+        XCTAssertNotNil(CommunityDungeons.problem(d, known: ["g1", "k1"]))
+        d = dungeon(); d.name = String(repeating: "a", count: 40)
+        XCTAssertNotNil(CommunityDungeons.problem(d, known: ["g1", "k1"]))
+    }
+
+    func testEnemiesKeepTheBaseStrengthAndTheBossIsTheBaseBoss() {
+        CommunityEnemies.pool = [gob, king]
+        var r = Run(character: PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Frosthold Abyss", difficulty: .wanderer))
+        CommunityDungeons.start(&r, dungeon())
+        XCTAssertEqual(r.dungeon, "Crypt of Malachar")
+        var dice = SeededDice(seed: 9)
+        var dressed = 0
+        for _ in 0..<200 {
+            let e = Combat.nextEnemy(for: r, dice: &dice)
+            if e.name == "Bog Goblin" || e.name == "Mud King" {
+                dressed += 1
+                XCTAssertGreaterThan(e.maxHp, 5, "uses the base enemy's strength, not the creator's")
+            }
+        }
+        XCTAssert((40...140).contains(dressed), "\(dressed)")
+        let b = Combat.nextBoss(for: r, dice: &dice)
+        XCTAssertEqual(b.name, "Mud King")
+        XCTAssertGreaterThan(b.maxHp, 100)
+        XCTAssertEqual(CommunityDungeons.music(r), "spire")
+    }
+
+    func testSavedWithTheRun() throws {
+        var r = Run(character: PlayerCharacter(name: "C", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        CommunityDungeons.start(&r, dungeon())
+        let back = try JSONDecoder().decode(Run.self, from: JSONEncoder().encode(r))
+        XCTAssertEqual(back.communityDungeon, dungeon())
+    }
+}

@@ -99,7 +99,10 @@ final class RunModel: ObservableObject {
     /// A fresh run for the character: start bonuses, saved items and gear,
     /// starting skill and the first floor's plan (initDungeon).
     /// A Challenge to start instead of a normal run (set by the Challenges screen).
-    enum Challenge { case gauntlet, daily, weekly }
+    enum Challenge: Equatable { case gauntlet, daily, weekly
+        /// 12.1: a community dungeon, played like a Challenge.
+        case community(CommunityDungeons.Dungeon)
+    }
     static var pendingChallenge: Challenge? = nil
 
     private static func newRun(_ game: GameModel, _ index: Int) -> Run {
@@ -137,6 +140,9 @@ final class RunModel: ObservableObject {
             r.weeklyKey = week.key
             r.lives = 1
             r.maxLives = 1
+        case .community(let cd):
+            CommunityDungeons.start(&r, cd)
+            CommunityDungeonStore.shared.played(cd.id)
         case nil: break
         }
         pendingChallenge = nil
@@ -188,6 +194,8 @@ final class RunModel: ObservableObject {
         Weather.start(&r, dice: &d)
         ClassTraits.shapeWeather(&r)
         _ = RunModifiers.start(&r, store: game.store, wallet: game.wallet, dice: &d)
+        // A community dungeon's rule is always its modifier.
+        if let rule = r.communityDungeon?.rule { RunModifiers.force(&r, rule, wallet: game.wallet) }
         Skills.start(&r, dice: &d)
         if r.floor >= Challenges.bossFloor(r) && r.difficulty != .endless { r.floorRoomsNeeded = 1 }
         Encounters.planFloor(&r, dice: &d)
@@ -360,13 +368,13 @@ final class RunModel: ObservableObject {
             Sound.track(e.name == "The Hunter" ? "battle"
                         : e.isBoss ? Soundtrack.bossTrack(dungeon: r.dungeon, phase: r.bossPhase) : Soundtrack.battleTrack(dungeon: r.dungeon))
         } else {
-            Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: r.floor))
+            Sound.track(CommunityDungeons.music(r) ?? Soundtrack.exploreTrack(dungeon: r.dungeon, floor: r.floor))
         }
         Sound.ambient(Soundtrack.ambientKey(dungeon: r.dungeon, difficulty: r.difficulty))
     }
 
     var isBossFloor: Bool { run.floor >= Challenges.bossFloor(run) && run.difficulty != .endless }
-    var isChallenge: Bool { run.gauntletStage != nil || run.dailyKey != nil || run.weeklyKey != nil }
+    var isChallenge: Bool { run.gauntletStage != nil || run.dailyKey != nil || run.weeklyKey != nil || run.communityDungeon != nil }
     var bossRoomNext: Bool { isBossFloor && run.roomsOnFloor == run.floorRoomsNeeded - 1 }
     var canWander: Bool { run.floor < 9 }
     var hour: Int { Calendar.current.component(.hour, from: Date()) }
@@ -3040,6 +3048,10 @@ final class RunModel: ObservableObject {
 
     /// The end of a Challenge: the Gauntlet's crown or the Daily Dungeon's time.
     private func challengeDone() -> String? {
+        if let cd = run.communityDungeon {
+            CommunityDungeonStore.shared.cleared(cd.id)
+            return "\(cd.name) is conquered! \(cd.creator) built it; you beat it. Give it a like in Community Dungeons if you enjoyed it."
+        }
         if run.gauntletStage != nil {
             achievements.trackGlobal("gauntletClears")
             achievements.award("gauntlet_champion")
@@ -3504,7 +3516,7 @@ final class RunModel: ObservableObject {
         let questLine = milestone + questDone(&r, game.dailyQuests.reachedFloor(floor, usedPotion: r.usedPotion))
             + bounty(.floor(floor, dungeon: r.dungeon, diedThisRun: r.diedThisRun)) + hunterFloor
         Sound.sfx("sfx-stairs")
-        Sound.track(Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
+        Sound.track(CommunityDungeons.music(r) ?? Soundtrack.exploreTrack(dungeon: r.dungeon, floor: floor))
         // Daily Dungeon's Stripped: no merchant on the stairs.
         if Challenges.has(r, "no-shop") {
             shop = []
