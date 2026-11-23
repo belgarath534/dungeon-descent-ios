@@ -86,6 +86,7 @@ public enum Combat {
         let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
         // 12.1: Insane Mode's own enemies.
         if !elite, let s = Sanity.encounter(for: run, dice: &dice) { return s }
+        if !elite, let x = EndlessExclusive.encounter(for: run, dice: &dice) { return x }
         if !elite, var td = TimeDescender.encounter(for: run, dice: &dice) {
             if run.worldCurse { cursed(&td) }
             Challenges.shape(&td, run)

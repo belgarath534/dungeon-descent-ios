@@ -235,6 +235,8 @@ enum Patterns {
         ("{0} presses close against you. Steady. Still here.", "{0} se aperta contra você. Firme. Ainda aqui."),
         ("{0} does not leave, even now. Not for this.", "{0} não vai embora, nem agora. Não por isso."),
         ("Whatever the dungeon is doing to your mind, {0} has not stopped watching over you.", "Seja o que for que a masmorra está fazendo com sua mente, {0} não parou de cuidar de você."),
+        // 12.1: Endless-only enemies.
+        ("⚠ Special Endless Enemy. {0}", "⚠ Inimigo Especial do Modo Infinito. {0}"),
         // 12.1: Eagle's Cry.
         ("🦅 Eagle's Cry! The eagle screams. The enemy hesitates. Its attack is reduced by 30 percent for 3 turns.", "🦅 Grito da Águia! A águia grita. O inimigo hesita. O ataque dele cai 30 por cento por 3 turnos."),
         ("Eagle's Cry is already active.", "O Grito da Águia já está ativo."),

@@ -632,3 +632,38 @@ public struct AFKSave: Sendable {
         return ("Purchased \(item.name). \(totalPoints) descent points remaining.", true)
     }
 }
+
+/// 12.1: Endless difficulty's own enemies in the dungeon (enterRoom): from
+/// floor 20, 20% of fights (35% from floor 31) are one of the Endless-only
+/// enemies, scaled 6% per floor. Outside AFK mode they fight as plain enemies.
+public enum EndlessExclusive {
+    static let descs: [String: String] = [
+        "The Hydra": "Attacks 3 times per turn. Each head is a separate strike.",
+        "The Minotaur": "Charges every 3 rounds for a devastating 3x damage strike.",
+        "The Colossus Spider": "Poisons AND freezes simultaneously. Hard to deal with.",
+        "The Watcher": "Does not attack. Gets 50% stronger every round you survive.",
+        "The Accumulator": "Absorbs damage dealt to it and reflects 20% back next turn.",
+        "Void Leech": "Drains 5 HP from you each turn regardless of combat outcome.",
+        "The Eternal": "Cannot be killed below 1 HP more than once per combat.",
+        "Soul Collector": "Steals 10 SP from you on each hit. High SP players beware.",
+        "The Endless Knight": "Respawns with 50% HP the first time you kill it.",
+        "The Void Titan": "HP and ATK scale with your current floor. Always a challenge.",
+        "The Dread Hydra": "Four heads. Four hits per turn. Deep floor terror.",
+        "The Labyrinth Guard": "Cannot be one-shot. Always survives at least 2 rounds.",
+    ]
+
+    public static func encounter(for run: Run, dice: inout some Dice) -> Enemy? {
+        guard run.difficulty == .endless, run.floor >= 20,
+              let pool = AFKRun.exclusive[run.floor >= 31 ? "t4" : "t3"], !pool.isEmpty,
+              dice.chance(run.floor >= 31 ? 0.35 : 0.20) else { return nil }
+        let b = pool[dice.roll(0...(pool.count - 1))]
+        let scale = 1 + Double(run.floor - 1) * 0.06
+        let hp = jsRound(Double(b.hp) * scale)
+        let lo = jsRound(Double(b.atk.lowerBound) * scale), hi = jsRound(Double(b.atk.upperBound) * scale)
+        var e = Enemy(name: b.name, icon: b.icon, hp: hp, maxHp: hp, atk: lo...max(lo, hi),
+                      gold: (8 + run.floor)...(16 + run.floor))
+        e.desc = "⚠ Special Endless Enemy. " + (descs[b.name] ?? "")
+        e.mechanics["endlessExclusive"] = .bool(true)
+        return e
+    }
+}

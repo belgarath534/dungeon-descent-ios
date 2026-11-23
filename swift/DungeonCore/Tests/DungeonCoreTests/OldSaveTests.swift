@@ -88,3 +88,19 @@ final class SanityTests: XCTestCase {
         XCTAssertEqual(r.sanity, 100)
     }
 }
+
+final class EndlessExclusiveTests: XCTestCase {
+    func testFloorTwentyEndlessSpawnsOne() {
+        var r = Run(character: PlayerCharacter(name: "E", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .endless))
+        r.floor = 19
+        var d = LoadedDice(rolls: [0], chances: [true])
+        XCTAssertNil(EndlessExclusive.encounter(for: r, dice: &d))
+        r.floor = 20
+        d = LoadedDice(rolls: [0], chances: [true])
+        let e = EndlessExclusive.encounter(for: r, dice: &d)
+        XCTAssertEqual(e?.name, "The Hydra")
+        XCTAssertEqual(e?.hp, Int((95 * 2.14).rounded()))
+        XCTAssertEqual(e?.gold, 28...36)
+    }
+}
