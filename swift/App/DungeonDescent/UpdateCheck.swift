@@ -41,7 +41,19 @@ final class UpdateCheck: ObservableObject {
     var outdated: Bool { storeVersion.map { Self.isNewer($0, than: Self.current) } ?? false }
 
     /// When the game opens (and comes back after a while).
+    /// iPhone and iPad only: the Mac and Apple Vision Pro versions often come
+    /// out later (their own reviews), so the iPhone's version would lock
+    /// them out with nothing to update to.
+    static var applies: Bool {
+        #if os(iOS) && !targetEnvironment(macCatalyst)
+        return !ProcessInfo.processInfo.isiOSAppOnMac
+        #else
+        return false
+        #endif
+    }
+
     func check(force: Bool = false) {
+        guard Self.applies else { return }
         // When the game opens, and again when it's come back after six hours.
         guard force || Date().timeIntervalSince(lastChecked) > 6 * 3600, let id = Bundle.main.bundleIdentifier,
               let url = URL(string: "https://itunes.apple.com/lookup?bundleId=\(id)&t=\(Int(Date().timeIntervalSince1970))") else { return }
