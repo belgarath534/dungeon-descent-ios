@@ -185,7 +185,11 @@ final class VoiceCommand: ObservableObject {
     private var task: SFSpeechRecognitionTask?
     private var done: ((String?) -> Void)?
 
-    func start(_ done: @escaping (String?) -> Void) {
+    private var seconds = 6.0
+
+    /// `seconds`: how long it listens (a fight's command is short).
+    func start(seconds: Double = 6, _ done: @escaping (String?) -> Void) {
+        self.seconds = seconds
         SFSpeechRecognizer.requestAuthorization { status in
             Task { @MainActor in
                 guard status == .authorized else {
@@ -223,8 +227,8 @@ final class VoiceCommand: ObservableObject {
                 else if error != nil { self.finish(nil) }
             }
         }
-        // One command: stop listening after six seconds.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 6) { [weak self] in
+        // One command: stop listening after a few seconds.
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds) { [weak self] in
             if self?.listening == true { self?.request?.endAudio() }
         }
     }

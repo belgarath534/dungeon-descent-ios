@@ -205,6 +205,10 @@ enum Patterns {
         // 12.1: Julio fragments.
         ("You have {0} of {1} of his fragments.", "Você tem {0} de {1} fragmentos dele."),
         ("🏷️ Julio fragment: {0} ({1} of {2})", "🏷️ Fragmento de Julio: {0} ({1} de {2})"),
+        // 12.1: voice commands.
+        ("I heard {0}, but that isn't a move. Say attack, heavy, defend, potion, or a skill's name.", "Ouvi {0}, mas isso não é uma jogada. Diga attack, heavy, defend, potion ou o nome de uma habilidade."),
+        ("I heard {0}, but that isn't a move. Try again.", "Ouvi {0}, mas isso não é uma jogada. Tente de novo."),
+        ("Not enough SP for {0}.", "SP insuficiente para {0}."),
         // 12.1: Friends.
         ("online, on floor {0} of {1}", "online, no andar {0} de {1}"),
         ("online, in a dungeon", "online, numa masmorra"),

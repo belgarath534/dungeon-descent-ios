@@ -132595,6 +132595,138 @@
           }
         }
       }
+    },
+    "🎙 Speak": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎙 Falar"
+          }
+        }
+      }
+    },
+    "🎙 Listening…": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎙 Ouvindo…"
+          }
+        }
+      }
+    },
+    "🎙 Speak Your Move": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎙 Fale Sua Jogada"
+          }
+        }
+      }
+    },
+    "Listening": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvindo"
+          }
+        }
+      }
+    },
+    "Speak your move": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fale sua jogada"
+          }
+        }
+      }
+    },
+    "Say attack, heavy, defend, potion, shoot, flee, or a skill's name.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diga attack, heavy, defend, potion, shoot, flee ou o nome de uma habilidade, em inglês."
+          }
+        }
+      }
+    },
+    "Say attack, heavy, defend, potion, shoot, a skill's name, or revive or protect and a friend's name.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diga attack, heavy, defend, potion, shoot, o nome de uma habilidade, ou revive ou protect e o nome de um amigo, em inglês."
+          }
+        }
+      }
+    },
+    "I didn't catch that. Try again.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Não entendi. Tente de novo."
+          }
+        }
+      }
+    },
+    "Voice commands aren't available on this device.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Comandos de voz não estão disponíveis neste aparelho."
+          }
+        }
+      }
+    },
+    "You don't have a gun equipped.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você não tem uma arma de fogo equipada."
+          }
+        }
+      }
+    },
+    "You can't flee from a boss.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você não pode fugir de um chefe."
+          }
+        }
+      }
+    },
+    "Purge only works in the Shadow World.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purgar só funciona no Mundo das Sombras."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

@@ -24,6 +24,8 @@ struct DungeonView: View {
     /// The Arcane Shop or Spell Book (true) during the run, and the cast panel.
     @State private var spellScreen: Bool?
     @State private var casting = false
+    /// 12.1: say your move.
+    @StateObject private var voice = VoiceCommand()
     @State private var choosingPath = false
     @State private var invTab = "all"
     @State private var invSearch = ""
@@ -525,6 +527,10 @@ struct DungeonView: View {
             }
             combatLog
             FlowRow(spacing: 8) {
+                Button(voice.listening ? "🎙 Listening…" : "🎙 Speak") { speakCommand() }
+                    .buttonStyle(DungeonButtonStyle(kind: .skill)).combatKey("v")
+                    .accessibilityLabel(voice.listening ? "Listening" : "Speak your move")
+                    .accessibilityHint("Say attack, heavy, defend, potion, shoot, flee, or a skill's name.")
                 Button("⚔ Attack") { model.act(.attack) }.buttonStyle(DungeonButtonStyle(kind: .combat)).combatKey("a")
                     .accessibilityLabel("Attack")
                 Button("💥 Heavy") { model.act(.heavy) }.buttonStyle(DungeonButtonStyle(kind: .combat)).combatKey("h")
@@ -613,6 +619,42 @@ struct DungeonView: View {
         if e.stunTurns > 0 { c.append("Stunned") }
         if e.dotTurns > 0 { c.append("Burning \(e.dotDamage)/turn (\(e.dotTurns))") }
         return c.joined(separator: " · ")
+    }
+
+    /// 12.1 voice commands: listens for one move and makes it.
+    private func speakCommand() {
+        guard voice.available else { Feedback.announce("Voice commands aren't available on this device."); return }
+        if voice.listening { voice.stop(); return }
+        voice.start(seconds: 4) { heard in
+            guard model.phase == .fighting else { return }
+            guard let heard else { Feedback.announce("I didn't catch that. Try again."); return }
+            var opts = model.skills.map { VoiceCommands.Option($0.name, "skill:" + $0.effect) }
+            opts += [.init("flee", "flee"), .init("run away", "flee"), .init("escape", "flee"),
+                     .init("examine", "examine"), .init("purge", "purge")]
+            opts += VoiceCommands.basics
+            switch VoiceCommands.match(heard, opts) {
+            case "attack": model.act(.attack)
+            case "heavy": model.act(.heavy)
+            case "defend": model.act(.defend)
+            case "flee":
+                if run.enemy?.isBoss == true { Feedback.announce("You can't flee from a boss.") } else { model.act(.flee) }
+            case "potion": drinkPotion()
+            case "gun":
+                if let g = model.gun { model.shoot(g) } else { Feedback.announce("You don't have a gun equipped.") }
+            case "examine": examine()
+            case "purge":
+                if model.canPurge { model.purge() } else { Feedback.announce("Purge only works in the Shadow World.") }
+            case let s? where s.hasPrefix("skill:"):
+                let effect = String(s.dropFirst(6))
+                if let sk = model.skills.first(where: { $0.effect == effect }), model.skillCost(sk) > run.sp {
+                    Feedback.announce("Not enough SP for \(sk.name).")
+                } else {
+                    model.useSkill(effect)
+                }
+            default:
+                Feedback.announce("I heard \(heard), but that isn't a move. Say attack, heavy, defend, potion, or a skill's name.")
+            }
+        }
     }
 
     private func drinkPotion() {

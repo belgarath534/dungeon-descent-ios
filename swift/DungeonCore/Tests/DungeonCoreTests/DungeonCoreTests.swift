@@ -5695,3 +5695,19 @@ final class JulioFragmentTests: XCTestCase {
         XCTAssertNil(JulioFragments.collect(store, dice: &dice))
     }
 }
+
+final class VoiceCommandTests: XCTestCase {
+    func testMatches() {
+        let opts = [VoiceCommands.Option("revive Mortarion", "revive:p2"), VoiceCommands.Option("protect Mortarion", "protect:p2"),
+                    VoiceCommands.Option("fireball", "skill:fireball")] + VoiceCommands.basics
+        XCTAssertEqual(VoiceCommands.match("Attack!", opts), "attack")
+        XCTAssertEqual(VoiceCommands.match("heavy attack", opts), "heavy")
+        XCTAssertEqual(VoiceCommands.match("please revive mortarion", opts), "revive:p2")
+        XCTAssertEqual(VoiceCommands.match("Protect Mortarion now", opts), "protect:p2")
+        XCTAssertEqual(VoiceCommands.match("cast fireball", opts), "skill:fireball")
+        XCTAssertEqual(VoiceCommands.match("drink a potion", opts), "potion")
+        XCTAssertEqual(VoiceCommands.match("block", opts), "defend")
+        XCTAssertNil(VoiceCommands.match("banana", opts))
+        XCTAssertNil(VoiceCommands.match("", opts))
+    }
+}

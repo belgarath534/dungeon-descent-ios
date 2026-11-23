@@ -7,6 +7,8 @@ struct CoopView: View {
     @EnvironmentObject var router: Router
     @StateObject private var model = CoopModel()
     @ObservedObject private var friends = Friends.shared
+    /// 12.1: say your move.
+    @StateObject private var voice = VoiceCommand()
     @State private var charIndex = 0
     @State private var dungeonIndex = 0
     @State private var joinCode = ""
@@ -192,9 +194,37 @@ struct CoopView: View {
     /// Your buttons: the four basics, your skills, your gun, and team moves
     /// for each friend. They stay on screen after you choose (dimmed), so
     /// VoiceOver stays on the one you pressed instead of jumping away.
+    /// 12.1 voice commands: one move, matched to what's on screen.
+    private func speak(_ m: Coop.Player) {
+        guard voice.available else { Feedback.announce("Voice commands aren't available on this device."); return }
+        if voice.listening { voice.stop(); return }
+        voice.start(seconds: 4) { heard in
+            guard let heard else { Feedback.announce("I didn't catch that. Try again."); return }
+            var opts: [VoiceCommands.Option] = []
+            for f in model.party where f.id != model.myId {
+                let first = f.name.split(separator: " ").first.map(String.init) ?? f.name
+                opts += [.init("revive \(f.name)", "revive:\(f.id)"), .init("revive \(first)", "revive:\(f.id)"),
+                         .init("save \(first)", f.alive ? "protect:\(f.id)" : "revive:\(f.id)"),
+                         .init("protect \(f.name)", "protect:\(f.id)"), .init("protect \(first)", "protect:\(f.id)")]
+            }
+            opts += m.skills.map { .init($0.name, "skill:\($0.id)") }
+            opts += VoiceCommands.basics
+            guard let raw = VoiceCommands.match(heard, opts), let a = Coop.Action(raw) else {
+                Feedback.announce("I heard \(heard), but that isn't a move. Try again.")
+                return
+            }
+            model.act(a)
+        }
+    }
+
     @ViewBuilder private func actions(_ m: Coop.Player) -> some View {
         let friends = model.party.filter { $0.id != model.myId }
         VStack(spacing: 8) {
+            if model.myAction == nil {
+                Button(voice.listening ? "🎙 Listening…" : "🎙 Speak Your Move") { speak(m) }
+                    .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                    .accessibilityHint("Say attack, heavy, defend, potion, shoot, a skill's name, or revive or protect and a friend's name.")
+            }
             HStack(spacing: 8) {
                 actionButton(.attack, "⚔ Attack", "Attack, \(m.atkLo) to \(m.atkHi) damage", .red, m)
                 actionButton(.heavy, "💥 Heavy", "Heavy strike, much harder but can miss", .red, m)
