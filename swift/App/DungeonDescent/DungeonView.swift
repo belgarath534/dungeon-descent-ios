@@ -755,6 +755,7 @@ struct DungeonView: View {
             }
             Button("🗺 Audio Map") { model.audioMap() }
                 .buttonStyle(DungeonButtonStyle(kind: .compassAccent))
+                .combatKey("m")
                 .accessibilityLabel("Audio map")
                 .accessibilityHint("Plays this floor as sounds around you, best with headphones. " + AudioMap.legend)
             FlowRow(spacing: 8) {
