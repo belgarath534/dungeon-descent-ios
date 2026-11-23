@@ -1,6 +1,16 @@
 Thanks for testing Dungeon Descent 12.1!
 
 Please try:
+• NEW — Raid Boss (Co-op Dungeon): pick one of four giant bosses, invite up to three friends, and fight it together. Win for gold, XP, and once a day 5 diamonds and a piece of raid gear.
+• NEW — Community Dungeons (Modes tab): build your own dungeon from community enemies, a boss, a rule and music, or play other players' dungeons.
+• NEW — Voice commands: the 🎙 Speak button in fights (solo and co-op). Say attack, heavy, defend, potion, shoot, a skill's name, or revive / protect and a friend's name.
+• NEW — Co-op on the Apple Watch: during a co-op or raid fight, make your move from your wrist.
+• Co-op uses your real potions now: bring them from your bag or buy them in the lobby with your own gold.
+• Lewis: Settings, Accessibility, Lewis's Speed and Keep Up.
+• Back: a two-finger scrub (VoiceOver) or a swipe from the left edge goes back to the previous screen.
+• High Contrast (Settings, Accessibility): bold letters and brighter outlines.
+• Julio now hands you his fragments; collect all five for his story in the Library.
+• Weapon and armor stats show in the sell lists. The Mine uses your real gear.
 • NEW — The Conductor (any dungeon from floor 3, rare): a hall with a door at the end and something conducting a lullaby. Step forward only while the music plays; when it stops, hold still. Tell us if it's too easy or too hard. Use headphones.
 • NEW — Friends (Multiplayer tab): your Game Center friends who play, who's online, their best scores, and Block / Report. Host a co-op room to invite an online friend; they get a pop-up with Join. The Rankings tab reads the leaderboards for friends and the world.
 • NEW — tavern music in Co-op, Friends and the Bounty Board.
