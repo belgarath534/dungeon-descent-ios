@@ -132518,6 +132518,83 @@
           }
         }
       }
+    },
+    "Lewis's Speed": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Velocidade do Lewis"
+          }
+        }
+      }
+    },
+    "Normal": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Normal"
+          }
+        }
+      }
+    },
+    "Fast": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rápido"
+          }
+        }
+      }
+    },
+    "Very Fast": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muito rápido"
+          }
+        }
+      }
+    },
+    "Keep Up": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acompanhar"
+          }
+        }
+      }
+    },
+    "When something new happens, Lewis skips what he hasn't said yet and talks about now. Best for fights.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quando algo novo acontece, Lewis pula o que ainda não falou e fala do agora. Melhor para lutas."
+          }
+        }
+      }
+    },
+    "You're on the main menu.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você está no menu principal."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

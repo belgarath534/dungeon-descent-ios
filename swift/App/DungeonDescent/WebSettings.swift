@@ -356,6 +356,25 @@ struct WebSettingsView: View {
                 }
                 option("Lewis Reads the Game", "Lewis speaks every announcement in place of VoiceOver's voice. VoiceOver still reads buttons as you move around the screen. In Portuguese, VoiceOver reads the game.",
                        isOn: $pack.narrate, label: "Lewis reads the game")
+                // 12.1: how fast he talks, and Keep Up.
+                Text("Lewis's Speed").font(Theme.cinzel(11.2)).tracking(3.4).textCase(.uppercase).foregroundStyle(Theme.goldDim)
+                    .accessibilityAddTraits(.isHeader)
+                AdaptiveRow(spacing: 6) {
+                    ForEach(LiveVoice.speeds, id: \.0) { s in
+                        let on = abs(LiveVoice.speed - s.0) < 0.01
+                        Button(s.1) {
+                            LiveVoice.setSpeed(s.0)
+                            refreshCommandCenter.toggle()
+                            LiveVoice.shared.speak("This is how fast I'll talk.", latest: true, test: true)
+                        }
+                        .buttonStyle(ToggleButtonStyle(on: on))
+                        .accessibilityAddTraits(on ? .isSelected : [])
+                    }
+                }
+                let _ = refreshCommandCenter
+                option("Keep Up", "When something new happens, Lewis skips what he hasn't said yet and talks about now. Best for fights.",
+                       isOn: Binding(get: { LiveVoice.keepUp }, set: { LiveVoice.keepUp = $0; refreshCommandCenter.toggle() }),
+                       label: "Lewis keeps up")
                 Button("▶ Hear Lewis") { LiveVoice.shared.speak("Hello. I'm Lewis. Every fight, every find, every step in the dark, I'll tell you about it.", latest: true, test: true) }
                     .buttonStyle(ToggleButtonStyle(on: true))
                     .accessibilityHint("Plays a sample of his voice.")

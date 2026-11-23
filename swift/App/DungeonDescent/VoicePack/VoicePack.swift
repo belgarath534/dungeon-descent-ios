@@ -258,6 +258,22 @@ final class LiveVoice {
 
     private init() {}
 
+    // MARK: 12.1 speed and Keep Up (a player found him too slow in the dungeon)
+
+    static let speeds: [(Float, String)] = [(1.0, "Normal"), (1.2, "Faster"), (1.4, "Fast"), (1.65, "Very Fast")]
+    nonisolated static var speed: Float {
+        let v = UserDefaults.standard.float(forKey: "swift_lewis_speed")
+        return v > 0 ? v : 1
+    }
+    static func setSpeed(_ v: Float) { UserDefaults.standard.set(v, forKey: "swift_lewis_speed") }
+
+    /// Keep Up: a new line replaces what he hasn't said yet, so he always
+    /// talks about what's happening now.
+    static var keepUp: Bool {
+        get { UserDefaults.standard.bool(forKey: "swift_lewis_keep_up") }
+        set { UserDefaults.standard.set(newValue, forKey: "swift_lewis_keep_up") }
+    }
+
     /// Loads the model in the background (when Lewis is turned on), so his
     /// first line doesn't wait for it.
     func preload() {
@@ -277,7 +293,7 @@ final class LiveVoice {
             Announcer.shared.say(Language.t(clean), latest: latest)
             return
         }
-        if latest { stop() }
+        if latest || (Self.keepUp && !test && (playing || pending > 0)) { stop() }
         let gen = generation
         let parts = Self.sentences(clean)
         pending += parts.count
@@ -412,7 +428,7 @@ final class LiveVoice {
         let style = Array(voice[(row * 256)..<(row * 256 + 256)])
         let raw: [Float]
         do {
-            raw = try session.speak(ids: [0] + tokens + [0], style: style, speed: 1.0)
+            raw = try session.speak(ids: [0] + tokens + [0], style: style, speed: LiveVoice.speed)
         } catch {
             MLX.GPU.clearCache()
             return (nil, "the engine stopped with an error: \(String(describing: error).prefix(160))")

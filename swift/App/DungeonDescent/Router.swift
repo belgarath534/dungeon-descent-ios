@@ -65,8 +65,39 @@ final class Router: ObservableObject {
     /// Changes every time a run starts, so a new run gets a fresh screen.
     private(set) var runID = 0
 
+    /// 12.1: where you've been, for Back (a player asked for an easy way
+    /// back after opening the wrong screen).
+    private var history: [Screen] = []
+
     func goTo(_ s: Screen) {
         if case .dungeon = s { runID += 1 }
+        remember(screen, next: s)
+        show(s)
+    }
+
+    private func remember(_ old: Screen, next: Screen) {
+        guard old != next, old != .quit else { return }
+        // Back into a run always resumes it (never starts a new one).
+        if case .dungeon(let id, _) = old { history.append(.dungeon(id, resume: true)) } else { history.append(old) }
+        if history.count > 20 { history.removeFirst() }
+    }
+
+    /// The screen before this one (the main menu when there isn't one).
+    func back() {
+        guard screen != .menu else {
+            Feedback.announce("You're on the main menu.")
+            return
+        }
+        var target: Screen = .menu
+        while let last = history.popLast() {
+            if last != screen { target = last; break }
+        }
+        if case .dungeon = target { runID += 1 }
+        Sound.sfx("sfx-select")
+        show(target)
+    }
+
+    private func show(_ s: Screen) {
         screen = s
         Self.playMusic(for: s)
         Friends.shared.doing(screen: s)
@@ -141,6 +172,9 @@ struct RootView: View {
     }
 
     private var content: some View {
+        // 12.1 Back: VoiceOver's two-finger scrub (the Z) or a swipe in from
+        // the left edge returns to the previous screen. Pop-ups that handle
+        // the scrub themselves close first.
         Group {
             switch router.screen {
             // The tab menu, or the single list with Settings → Classic menu.
@@ -202,6 +236,14 @@ struct RootView: View {
             }
         }
         .navigationShortcuts()
+        .accessibilityAction(.escape) { router.back() }
+        .overlay(alignment: .leading) {
+            Color.clear.frame(width: 12).contentShape(Rectangle())
+                .gesture(DragGesture(minimumDistance: 30).onEnded { g in
+                    if g.translation.width > 80 && abs(g.translation.height) < 60 { router.back() }
+                })
+                .accessibilityHidden(true)
+        }
         .preferredColorScheme(.dark)
     }
 }
