@@ -3,7 +3,7 @@ Thanks for testing Dungeon Descent 12.1!
 Please try:
 • NEW — Raid Boss (Co-op Dungeon): pick one of four giant bosses, invite up to three friends, and fight it together. Win for gold, XP, and once a day 5 diamonds and a piece of raid gear.
 • NEW — Community Dungeons (Modes tab): build your own dungeon from community enemies, a boss, a rule and music, or play other players' dungeons.
-• NEW — Voice commands: the 🎙 Speak button in fights (solo and co-op). Say attack, heavy, defend, potion, shoot, a skill's name, or revive / protect and a friend's name.
+• NEW — Voice commands: the Speak button in fights (solo and co-op). Say attack, heavy, defend, potion, shoot, a skill's name, or revive / protect and a friend's name.
 • NEW — Co-op on the Apple Watch: during a co-op or raid fight, make your move from your wrist.
 • Co-op uses your real potions now: bring them from your bag or buy them in the lobby with your own gold.
 • Lewis: Settings, Accessibility, Lewis's Speed and Keep Up.
