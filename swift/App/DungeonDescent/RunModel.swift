@@ -421,6 +421,11 @@ final class RunModel: ObservableObject {
 
     /// The compass buttons. Outside 3D Mode any direction leads to the next room.
     func move(_ dir: String) {
+        // An event is waiting: say so instead of doing nothing.
+        if phase == .event, let ev = pendingEvent {
+            Feedback.announce("Choose what to do first. \(ev.title): " + ev.choices.joined(separator: " or ") + ".")
+            return
+        }
         guard phase == .exploring, run.conductor == nil else { return }
         if threeD, let c = Compass(rawValue: dir) {
             move3D(c)
@@ -459,7 +464,7 @@ final class RunModel: ObservableObject {
             SpatialAudio.shared.wallBump(d)
             Feedback.warning()
             persist()
-            Feedback.announce("There is a wall to the \(d.rawValue). \(g.exitsText)")
+            Feedback.announce("There is a wall to the \(d.rawValue). \(g.exitsText)" + g.wayToNewText)
             SpatialAudio.shared.exitCues(g.here)
         case .entered(let first):
             SpatialAudio.shared.footsteps(d)
@@ -470,8 +475,8 @@ final class RunModel: ObservableObject {
                 enterRoom()
             } else {
                 persist()
-                roomText = "You are back in a room you already cleared."
-                Feedback.announce("Moving \(d.rawValue). You are back in a room you already cleared. \(g.exitsText)" + takeHunterLine())
+                roomText = "You are back in a room you already cleared." + g.wayToNewText
+                Feedback.announce("Moving \(d.rawValue). You are back in a room you already cleared. \(g.exitsText)" + g.wayToNewText + takeHunterLine())
             }
             hunterAfterRoom()
             if run.stalker == nil && run.conductor == nil && !run.inCombat { SpatialAudio.shared.exitCues(g.here) }
@@ -479,7 +484,7 @@ final class RunModel: ObservableObject {
     }
 
     /// Where you are and which ways are open.
-    var exitsText: String? { threeD ? run.roomGraph?.exitsText : nil }
+    var exitsText: String? { threeD ? run.roomGraph.map { $0.exitsText + $0.wayToNewText } : nil }
 
     private var echoCooldown = Date.distantPast
 

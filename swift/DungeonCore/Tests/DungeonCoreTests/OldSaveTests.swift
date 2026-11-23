@@ -241,3 +241,21 @@ final class NewFoesTests: XCTestCase {
                        "Silence. Your HP: \(silent.hp) of \(silent.maxHp).")
     }
 }
+
+final class WayToNewRoomTests: XCTestCase {
+    func testPointsTowardTheNearestUnvisitedRoom() {
+        var d = SeededDice(seed: 7)
+        var g = RoomGraph(roomsNeeded: 8, dice: &d)
+        // Walk through new rooms until we're standing somewhere visited, then check the hint.
+        var steps = 0
+        while g.unvisited > 0 && steps < 200 {
+            guard let way = g.wayToNew() else { XCTFail("No way to a new room with \(g.unvisited) left"); return }
+            XCTAssertTrue(g.here.has(way))
+            _ = g.move(way)
+            steps += 1
+        }
+        XCTAssertEqual(g.unvisited, 0)
+        XCTAssertNil(g.wayToNew())
+        XCTAssertEqual(g.wayToNewText, "")
+    }
+}

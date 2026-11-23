@@ -115,6 +115,42 @@ public struct RoomGraph: Codable, Sendable, Equatable {
 
     public var exitsText: String { Self.exitsText(here) }
 
+    /// 12.1: the first step toward the nearest room you haven't been in,
+    /// so a cleared part of the floor never becomes a maze with no way out.
+    public func wayToNew() -> Compass? {
+        var seen: Set<String> = [Self.key(gx, gy)]
+        var queue: [(x: Int, y: Int, first: Compass)] = []
+        for d in Compass.allCases where here.has(d) {
+            let k = Self.key(gx + d.dx, gy + d.dy)
+            guard let c = cells[k], !seen.contains(k) else { continue }
+            if !c.visited { return d }
+            seen.insert(k)
+            queue.append((c.gx, c.gy, d))
+        }
+        var i = 0
+        while i < queue.count {
+            let (x, y, first) = queue[i]
+            i += 1
+            guard let c = cell(x, y) else { continue }
+            for d in Compass.allCases where c.has(d) {
+                let k = Self.key(x + d.dx, y + d.dy)
+                guard let n = cells[k], !seen.contains(k) else { continue }
+                if !n.visited { return first }
+                seen.insert(k)
+                queue.append((n.gx, n.gy, first))
+            }
+        }
+        return nil
+    }
+
+    /// "The nearest new room is to the east." (or nothing when there's none)
+    public var wayToNewText: String {
+        guard let d = wayToNew() else { return "" }
+        return here.has(d) && cell(gx + d.dx, gy + d.dy)?.visited == false
+            ? " A new room is right through the \(d.rawValue) door."
+            : " The way to a new room is \(d.rawValue)."
+    }
+
     /// _corridorDepth: how many rooms run straight on through doors that way.
     public func corridorDepth(_ d: Compass, max maxDepth: Int = 3) -> Int {
         var depth = 0

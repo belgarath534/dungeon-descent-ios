@@ -245,6 +245,13 @@ enum Patterns {
         ("First encounter. {0}. {1}", "Primeiro encontro. {0}. {1}"),
         ("⚔ Leo enters the dungeon. The dungeon does not know what is coming.", "⚔ Leo entra na masmorra. A masmorra não sabe o que está por vir."),
         ("Leo. The dungeon has heard this name before. It fears it.", "Leo. A masmorra já ouviu esse nome antes. Ela o teme."),
+        // 12.1: Events cover the screen.
+        ("Choose what to do first. {0}: {1}.", "Escolha o que fazer primeiro. {0}: {1}."),
+        // 12.1: 3D Mode, the way to a new room.
+        (" A new room is right through the {0} door.", " Uma sala nova fica logo depois da porta {0}."),
+        (" The way to a new room is {0}.", " O caminho para uma sala nova é {0}."),
+        ("A new room is right through the {0} door.", "Uma sala nova fica logo depois da porta {0}."),
+        ("The way to a new room is {0}.", "O caminho para uma sala nova é {0}."),
         // 12.1: The four listening enemies.
         ("The Liar", "O Mentiroso"),
         ("The Bell Choir", "O Coro de Sinos"),

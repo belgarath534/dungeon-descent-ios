@@ -143,6 +143,9 @@ struct DungeonView: View {
             StatsOverlay(run: run, deaths: game.characters.first { $0.name == run.name }?.deaths ?? []) { showStats = false }
         }
         if showRunLog { runLogOverlay }
+        // 12.1: an event covers the whole screen until you choose, so the
+        // direction buttons can't look like they stopped working.
+        if model.phase == .event, let ev = model.pendingEvent { eventOverlay(ev) }
         if choosingPath { ngPlusChoice }
         if choosingDungeon { ChooseDungeonOverlay(model: model) { choosingDungeon = false } }
         if model.hunterChoice { hunterOverlay }
@@ -446,15 +449,8 @@ struct DungeonView: View {
             Text(model.roomText.isEmpty ? "You stand at the entrance." : model.roomText)
                 .font(Theme.crimson(16, italic: true)).foregroundStyle(Theme.textSecondary).lineSpacing(5)
             if model.phase == .event, let ev = model.pendingEvent {
-                eventBox(text: "\(ev.title) — \(ev.text)", tone: "") {
-                    FlowRow(spacing: 8) {
-                        ForEach(Array(ev.choices.enumerated()), id: \.offset) { i, label in
-                            Button(label) { model.chooseEvent(i) }
-                                .buttonStyle(DungeonButtonStyle(kind: .action))
-                        }
-                    }
-                    .padding(.top, 8)
-                }
+                // The choices are in the full-screen event pop-up (eventOverlay).
+                eventBox(text: "\(ev.title) — \(ev.text)", tone: "") { EmptyView() }
             } else if !model.eventText.isEmpty {
                 eventBox(text: model.eventText, tone: model.eventTone) { EmptyView() }
             }
@@ -1252,6 +1248,20 @@ struct DungeonView: View {
             .accessibilityAddTraits(.isModal)
         }
         .onAppear { Feedback.announce("Run log. \(model.log.count) entries, newest first.") }
+    }
+
+    private func eventOverlay(_ ev: Encounters.Event) -> some View {
+        WebOverlay {
+            OverlayTitle(text: ev.title)
+            OverlayText(text: ev.text)
+            VStack(spacing: 10) {
+                ForEach(Array(ev.choices.enumerated()), id: \.offset) { i, label in
+                    Button(label) { model.chooseEvent(i) }
+                        .buttonStyle(WebButtonStyle(kind: .gold))
+                        .frame(maxWidth: .infinity)
+                }
+            }
+        }
     }
 
     private var ngPlusChoice: some View {
