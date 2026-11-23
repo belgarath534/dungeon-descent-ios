@@ -235,6 +235,11 @@ enum Patterns {
         ("{0} presses close against you. Steady. Still here.", "{0} se aperta contra você. Firme. Ainda aqui."),
         ("{0} does not leave, even now. Not for this.", "{0} não vai embora, nem agora. Não por isso."),
         ("Whatever the dungeon is doing to your mind, {0} has not stopped watching over you.", "Seja o que for que a masmorra está fazendo com sua mente, {0} não parou de cuidar de você."),
+        // 12.1: First encounters and the Leo easter egg.
+        ("📖 First encounter: {0} — {1}", "📖 Primeiro encontro: {0} — {1}"),
+        ("First encounter. {0}. {1}", "Primeiro encontro. {0}. {1}"),
+        ("⚔ Leo enters the dungeon. The dungeon does not know what is coming.", "⚔ Leo entra na masmorra. A masmorra não sabe o que está por vir."),
+        ("Leo. The dungeon has heard this name before. It fears it.", "Leo. A masmorra já ouviu esse nome antes. Ela o teme."),
         // 12.1: Holiday enemies' moves.
         ("🧝 The Leprechaun steals {0} gold! Kill it fast!", "🧝 O Leprechaun rouba {0} de ouro! Mate-o rápido!"),
         ("⚽ O Craque kicks the ball! It hits you square in the face for {0} damage!", "⚽ O Craque chuta a bola! Acerta bem na sua cara causando {0} de dano!"),

@@ -235,6 +235,14 @@ final class RunModel: ObservableObject {
         _ = bounty(.runStarted)
         startForest()
         startSanity()
+        // checkLeoEasterEgg
+        if ["leo", "leonardo"].contains(r.name.trimmingCharacters(in: .whitespaces).lowercased()) {
+            add("⚔ Leo enters the dungeon. The dungeon does not know what is coming.")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                Sound.sfx("sfx-unlock")
+                Feedback.announce("Leo. The dungeon has heard this name before. It fears it.")
+            }
+        }
         if Sanity.active(r) { add("🕳️ " + Sanity.startLine) }
         if WhisperingForest.here(r) { add("🌲 The forest's corruption creeps in while you explore. Music Boxes and potions push it back.") }
         if let c = Corruption.status(r) { add(c) }
@@ -712,6 +720,7 @@ final class RunModel: ObservableObject {
                 ? " Elite enemy! \(enemy.name). \(ability) \(enemy.hp) HP."
                 : " A \(enemy.name) attacks! \(enemy.hp) HP."
             spoken += thirdEye(r)
+            spoken += firstEncounter(enemy)
             finish(r, d, phase: .fighting, spoken: spoken)
         case .loot:
             let find = Inventory.lootRoom(&r, dice: &d, wallet: game.wallet)
@@ -1671,6 +1680,17 @@ final class RunModel: ObservableObject {
             Sound.sfx(r.forestCorruption >= 75 ? "sfx-sanity-critical" : "sfx-sanity-warning")
             Feedback.announce(lines.joined(separator: " "))
         }
+    }
+
+    /// The first time you ever face an enemy, its Bestiary entry is read
+    /// ("dd_seen_<name>", shared with the web version).
+    private func firstEncounter(_ e: Enemy) -> String {
+        let key = "dd_seen_" + String(e.name.map { $0.isASCII && ($0.isLetter || $0.isNumber) ? $0 : "_" }).lowercased()
+        guard game.store.getItem(key) == nil else { return "" }
+        game.store.setItem(key, "1")
+        guard let entry = BestiaryData.shared.entries.first(where: { $0.name == e.name }), !entry.desc.isEmpty else { return "" }
+        add("📖 First encounter: \(e.name) — \(entry.desc)")
+        return " First encounter. \(e.name). \(entry.desc)"
     }
 
     // MARK: Insane Mode (12.1)
