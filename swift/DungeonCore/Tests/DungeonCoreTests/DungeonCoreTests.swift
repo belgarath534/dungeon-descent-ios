@@ -851,7 +851,7 @@ final class EncounterTests: XCTestCase {
             if let e = Encounters.rollEvent(newRun(), dice: &dice) { crypt.insert(e.id) }
             if let e = Encounters.rollEvent(newRun("The Abyssal Deep"), dice: &dice) { abyss.insert(e.id) }
         }
-        XCTAssertEqual(crypt, ["julio", "shrine", "chest", "wounded", "inscription"])
+        XCTAssertEqual(crypt, ["julio", "shrine", "chest", "wounded", "inscription", "magic-chamber"])
         XCTAssertEqual(abyss, ["abyssal-singing", "abyssal-crack", "abyssal-ship", "abyssal-shrine", "abyssal-witness"])
     }
 

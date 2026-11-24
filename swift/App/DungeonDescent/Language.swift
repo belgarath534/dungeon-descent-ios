@@ -245,6 +245,18 @@ enum Patterns {
         ("First encounter. {0}. {1}", "Primeiro encontro. {0}. {1}"),
         ("⚔ Leo enters the dungeon. The dungeon does not know what is coming.", "⚔ Leo entra na masmorra. A masmorra não sabe o que está por vir."),
         ("Leo. The dungeon has heard this name before. It fears it.", "Leo. A masmorra já ouviu esse nome antes. Ela o teme."),
+        // 12.1: The Magic Chamber and Starlight the Unicorn.
+        ("✨ The Magic Chamber", "✨ A Câmara Mágica"),
+        ("A hidden chamber glows with soft, shifting light, like moonlight on water. In the middle stands a unicorn, white as starlight, its horn faintly humming. It looks at you as if it has been waiting.", "Uma câmara escondida brilha com uma luz suave e ondulante, como luar sobre a água. No meio está um unicórnio, branco como a luz das estrelas, com o chifre zumbindo baixinho. Ele olha para você como se estivesse esperando."),
+        ("Approach the unicorn", "Aproximar-se do unicórnio"),
+        ("Leave it in peace", "Deixá-lo em paz"),
+        ("You leave the unicorn in peace. It bows its head as you go, and the light follows you a little way. Plus 10 HP.", "Você deixa o unicórnio em paz. Ele abaixa a cabeça quando você sai, e a luz te acompanha um pouco. Mais 10 de HP."),
+        ("The unicorn touches its horn to your shoulder. Warmth floods through you. HP and SP fully restored.", "O unicórnio encosta o chifre no seu ombro. Um calor toma conta de você. HP e SP totalmente restaurados."),
+        ("Starlight's light is in this room. It was here before you, waiting. It touches its horn to your shoulder. HP and SP fully restored.", "A luz de Estrelinha está nesta sala. Ele chegou antes de você, esperando. Encosta o chifre no seu ombro. HP e SP totalmente restaurados."),
+        ("The unicorn touches its horn to your shoulder. HP and SP fully restored. It looks at your crowded Home and does not follow. Free a minion's place and it may come with you next time.", "O unicórnio encosta o chifre no seu ombro. HP e SP totalmente restaurados. Ele olha para a sua Casa lotada e não te segue. Libere o lugar de um lacaio e talvez ele venha da próxima vez."),
+        ("You step closer. The unicorn lowers its head and touches its horn to your shoulder. Warmth floods through you. HP and SP fully restored. Then it follows you out. 🦄 Starlight the Unicorn has joined you as a minion! Choose it in your Home under Minions. It fights beside you, and its horn heals you every round.", "Você se aproxima. O unicórnio abaixa a cabeça e encosta o chifre no seu ombro. Um calor toma conta de você. HP e SP totalmente restaurados. Então ele te segue para fora. 🦄 Estrelinha, o Unicórnio, se juntou a você como lacaio! Escolha-o na sua Casa, em Lacaios. Ele luta ao seu lado, e o chifre dele te cura a cada rodada."),
+        ("Starlight the Unicorn", "Estrelinha, o Unicórnio"),
+        ("🦄 Starlight's horn glows. You heal {0} HP.", "🦄 O chifre de Estrelinha brilha. Você recupera {0} de HP."),
         // 12.1: Events cover the screen.
         ("Choose what to do first. {0}: {1}.", "Escolha o que fazer primeiro. {0}: {1}."),
         // 12.1: 3D Mode, the way to a new room.

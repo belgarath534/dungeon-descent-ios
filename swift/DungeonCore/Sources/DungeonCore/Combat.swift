@@ -454,6 +454,11 @@ public enum Combat {
         }
         e.hp = max(0, e.hp - dmg)
         run.enemy = e
+        // 12.1: Starlight the Unicorn's horn heals you as it fights.
+        if MagicChamber.isUnicorn(m) && run.hp > 0 && run.hp < run.maxHp {
+            run.hp = min(run.maxHp, run.hp + MagicChamber.heal)
+            log.append("🦄 Starlight's horn glows. You heal \(MagicChamber.heal) HP.")
+        }
     }
 
     static func dealDamage(_ run: inout Run, _ dmg: Int, log: inout [String]) {

@@ -259,3 +259,38 @@ final class WayToNewRoomTests: XCTestCase {
         XCTAssertEqual(g.wayToNewText, "")
     }
 }
+
+final class MagicChamberTests: XCTestCase {
+    final class Mem: GameStore {
+        var d: [String: String] = [:]
+        func getItem(_ key: String) -> String? { d[key] }
+        func setItem(_ key: String, _ value: String) { d[key] = value }
+        func removeItem(_ key: String) { d[key] = nil }
+        func setItems(_ items: [String: String]) { items.forEach { d[$0] = $1 } }
+    }
+
+    func testUnicornJoinsOnceAndHealsInFights() {
+        let store = Mem()
+        var r = Run(character: PlayerCharacter(name: "U", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.hp = 5
+        r.pendingEvent = MagicChamber.id
+        var d = LoadedDice()
+        let out = Encounters.choose(0, &r, dice: &d, wallet: Wallet(store: store), store: store)
+        XCTAssertTrue(out.message.contains("Starlight the Unicorn has joined you"))
+        XCTAssertEqual(r.hp, r.maxHp)
+        XCTAssertEqual(Home.minions(store).filter { $0.id == MagicChamber.minionId }.count, 1)
+        r.pendingEvent = MagicChamber.id
+        let again = Encounters.choose(0, &r, dice: &d, wallet: Wallet(store: store), store: store)
+        XCTAssertFalse(again.message.contains("has joined"))
+        XCTAssertEqual(Home.minions(store).filter { $0.id == MagicChamber.minionId }.count, 1)
+
+        r.minion = Home.minions(store).first { $0.id == MagicChamber.minionId }
+        _ = Combat.begin(&r, against: Enemy(name: "Dummy", icon: "x", hp: 100, maxHp: 100, atk: 1...1, gold: 1...1))
+        r.hp = 10
+        var log: [String] = []
+        Combat.minionAttack(&r, dice: &d, log: &log)
+        XCTAssertEqual(r.hp, 10 + MagicChamber.heal)
+        XCTAssertTrue(log.contains { $0.contains("Starlight's horn glows") })
+    }
+}
