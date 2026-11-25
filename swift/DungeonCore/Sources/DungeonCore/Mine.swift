@@ -4,7 +4,7 @@ import Foundation
 public struct MineItem: Codable, Equatable, Sendable {
     public var name: String
     public var icon: String
-    /// mine-gold, mine-coin, mine-diamond, mine-potion, mine-ingredient, gun-part
+    /// mine-gold, mine-coin, mine-diamond, mine-potion, mine-ingredient, gun-part, mine-heartstone (12.2)
     public var type: String
     public var value = 0
     public var heal = 0
@@ -277,7 +277,8 @@ public enum Mine {
         if dice.chance(0.15) { return .empty(empties[dice.roll(0...(empties.count - 1))]) }
         var found: [MineItem] = []
         for _ in 0..<(dice.chance(0.3) ? 2 : 1) where !m.handsFull {
-            let it = pick(table(m.depth), dice: &dice)
+            // 12.2: below depth 50, a Heartstone Shard now and then (2%).
+            let it = m.depth > 50 && dice.chance(0.02) ? Mountainbreaker.shard : pick(table(m.depth), dice: &dice)
             collect(&m, it)
             found.append(it)
         }
@@ -457,6 +458,8 @@ public enum Mine {
                 // 12.2: deeper bosses drop more diamonds.
                 let gems = max(3, ms / 25)
                 t.loot = [i("Mega Potion", "🧪", "mine-potion", heal: 120, w: 1), i("Diamonds ×\(gems)", "💎", "mine-diamond", v: gems, w: 1)]
+                // 12.2: the deep bosses guard the mountain's heart.
+                if ms >= 100 { t.loot.append(Mountainbreaker.shard) }
                 t.log.append("👑 Milestone boss defeated! Special loot dropped.")
             } else if dice.chance(0.5) {
                 t.loot = [dice.chance(0.25) ? healthPotion : pick(table(m.depth), dice: &dice)]
@@ -531,9 +534,11 @@ public enum Mine {
         public var potions: [Item] = []
         public var parts: [String: Int] = [:]
         public var herbs = 0
+        /// 12.2: Heartstone Shards for the Mountainbreaker.
+        public var heartstones = 0
         public var depth = 1
         public var defeated = false
-        public var isEmpty: Bool { gold == 0 && diamonds == 0 && coins == 0 && potions.isEmpty && parts.isEmpty && herbs == 0 }
+        public var isEmpty: Bool { gold == 0 && diamonds == 0 && coins == 0 && potions.isEmpty && parts.isEmpty && herbs == 0 && heartstones == 0 }
     }
 
     public static let partNames = ["barrel": "Gun Barrel", "mechanism": "Firing Mechanism", "stock": "Gun Stock", "trigger": "Trigger Assembly"]
@@ -553,6 +558,7 @@ public enum Mine {
                 h.potions.append(p)
             case "gun-part": h.parts[it.partId ?? "barrel", default: 0] += 1
             case "mine-ingredient": h.herbs += 1
+            case "mine-heartstone": h.heartstones += 1
             default: break
             }
         }

@@ -45,6 +45,17 @@ final class BlacksmithModel: ObservableObject {
 
     func upgrade(_ slot: Blacksmith.Slot) { done(Blacksmith.upgrade(slot, &forge, wallet: game.wallet, store: game.store)) }
     func buyWeapon(_ i: Item) { done(Blacksmith.buyWeapon(i, &forge, wallet: game.wallet, store: game.store), sound: "sfx-purchase") }
+    /// 12.2: the Mountainbreaker, from 5 Heartstone Shards.
+    /// Saved like a bought weapon: into the bag and the saved stash.
+    func forgeMountainbreaker() {
+        var bag: [Item]? = forge.bag
+        let r = Mountainbreaker.forge(store: game.store, bag: &bag)
+        if r.ok, let b = bag {
+            forge.bag = b
+            forge.stashed.append(Mountainbreaker.weapon)
+        }
+        done(r, sound: "sfx-unlock")
+    }
     func buyArmor(_ i: Item) { done(Blacksmith.buyArmor(i, &forge, wallet: game.wallet), sound: "sfx-purchase") }
     func sell(_ index: Int) { done(Blacksmith.sell(at: index, &forge, wallet: game.wallet, store: game.store), sound: "sfx-purchase") }
     func repair() { done(Blacksmith.repair(&forge, wallet: game.wallet)) }

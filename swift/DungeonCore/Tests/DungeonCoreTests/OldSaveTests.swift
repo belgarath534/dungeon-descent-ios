@@ -463,3 +463,53 @@ final class NewGunTests: XCTestCase {
         XCTAssertEqual(dmg[5], dmg[4])                        // capped at double
     }
 }
+
+final class MountainbreakerTests: XCTestCase {
+    final class Mem: GameStore {
+        var d: [String: String] = [:]
+        func getItem(_ key: String) -> String? { d[key] }
+        func setItem(_ key: String, _ value: String) { d[key] = value }
+        func removeItem(_ key: String) { d[key] = nil }
+        func setItems(_ items: [String: String]) { items.forEach { d[$0] = $1 } }
+    }
+
+    func testForgeNeedsFiveShardsAndHappensOnce() {
+        let s = Mem()
+        XCTAssertTrue(Mountainbreaker.forge(store: s).contains("You have 0"))
+        Mountainbreaker.addShards(5, store: s)
+        XCTAssertTrue(Mountainbreaker.forge(store: s).contains("is yours"))
+        XCTAssertEqual(Mountainbreaker.shards(s), 0)
+        XCTAssertTrue(GlobalInventory(store: s).items.contains { $0.id == Mountainbreaker.id })
+        Mountainbreaker.addShards(5, store: s)
+        XCTAssertTrue(Mountainbreaker.forge(store: s).contains("only one"))
+    }
+
+    func testQuakeEveryThirdHitAndStoneMemory() {
+        var r = Run(character: PlayerCharacter(name: "M", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.equippedWeapon = Mountainbreaker.weapon
+        _ = Combat.begin(&r, against: Enemy(name: "Wall", icon: "x", hp: 9999, maxHp: 9999, atk: 1...1, gold: 1...1))
+        var log: [String] = []
+        XCTAssertEqual(Mountainbreaker.onHit(&r, 10, log: &log), 10)
+        XCTAssertEqual(Mountainbreaker.onHit(&r, 10, log: &log), 10)
+        XCTAssertEqual(Mountainbreaker.onHit(&r, 10, log: &log), 20)
+        XCTAssertEqual(r.enemy?.stunTurns, 1)
+        for _ in 0..<50 { Mountainbreaker.onKill(&r, log: &log) }
+        XCTAssertEqual(Mountainbreaker.memory(r.equippedWeapon), 2)
+        XCTAssertTrue(log.contains { $0.contains("Stone Memory +2") })
+    }
+
+    func testDeepBossDropsAShardAndItSurfaces() {
+        var ch = PlayerCharacter(name: "D", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = 50
+        var m = Mine.start(ch)
+        m.depth = 99
+        var boss = Mine.descend(&m)!
+        boss.hp = 1
+        m.enemy = boss
+        var d = LoadedDice(rolls: [999, 999, 999], chances: [false, false, false])
+        let t = Mine.act(&m, .attack, dice: &d)
+        XCTAssertTrue(t.loot.contains { $0.type == "mine-heartstone" })
+        XCTAssertEqual(Mine.surface(m, defeated: false).heartstones, 1)
+    }
+}

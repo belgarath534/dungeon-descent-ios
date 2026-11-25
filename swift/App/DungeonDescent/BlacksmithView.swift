@@ -158,7 +158,30 @@ struct BlacksmithView: View {
                     model.buyWeapon(w)
                 }
             }
+            mountainbreaker
         }
+    }
+
+    /// 12.2: the Mine's legendary warhammer.
+    private var mountainbreaker: some View {
+        let have = Mountainbreaker.shards(model.game.store), forged = Mountainbreaker.forged(model.game.store)
+        let need = Mountainbreaker.shardsNeeded
+        return VStack(alignment: .leading, spacing: 6) {
+            Text("🔨 THE MOUNTAINBREAKER").font(Theme.cinzel(11)).tracking(2).foregroundStyle(Color(hex: 0xff9944))
+                .accessibilityAddTraits(.isHeader)
+            Text(Mountainbreaker.weapon.desc).font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textSecondary)
+            Text(forged ? "Forged. There is only one." : "🔶 Heartstone Shards: \(have) of \(need)" as String)
+                .font(Theme.cinzel(10.5)).foregroundStyle(Color(hex: 0xffcc66))
+            if !forged {
+                Button("Forge the Mountainbreaker") { model.forgeMountainbreaker() }
+                    .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                    .disabled(have < need)
+                    .accessibilityLabel(have >= need ? "Forge the Mountainbreaker from \(need) Heartstone Shards"
+                                        : "Forge the Mountainbreaker. You have \(have) of \(need) Heartstone Shards. Mine bosses from depth 100 drop them." as String)
+            }
+        }
+        .padding(12).background(Color(hex: 0x120a02)).overlay(Rectangle().stroke(Color(hex: 0x664422)))
+        .padding(.top, 10)
     }
 
     private var armorTab: some View {

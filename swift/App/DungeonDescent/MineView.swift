@@ -193,6 +193,7 @@ final class MineModel: ObservableObject {
         if h.coins > 0 { game.addMysteryCoins(h.coins) }
         h.potions.forEach { game.globalInventory.add($0) }
         Mine.storeParts(h, store: game.store)
+        Mountainbreaker.addShards(h.heartstones, store: game.store)
         game.achievements.setMax("mineMaxDepth", Double(m.depth))
         _ = game.achievements.check()
         haul = h
@@ -207,6 +208,9 @@ final class MineModel: ObservableObject {
         if !h.potions.isEmpty { said += "\(h.potions.count) potions saved to your items. " }
         for (p, n) in h.parts.sorted(by: { $0.key < $1.key }) { said += "\(Mine.partNames[p] ?? p): \(n). " }
         if h.herbs > 0 { said += "\(h.herbs) alchemy herbs. " }
+        if h.heartstones > 0 {
+            said += "\(h.heartstones) Heartstone Shard\(h.heartstones == 1 ? "" : "s"). You have \(Mountainbreaker.shards(game.store)) of \(Mountainbreaker.shardsNeeded) for the Mountainbreaker. "
+        }
         if h.isEmpty { said += "Nothing found this run." }
         Feedback.announce(said)
     }

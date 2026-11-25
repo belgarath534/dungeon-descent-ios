@@ -298,6 +298,7 @@ public enum Combat {
                 dmg = empowered(&run, dmg, log: &r.log)
                 dmg = gearDamage(&run, dmg, log: &r.log)
                 r.playerDamage = ClassTraits.attack(&run, Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log), dice: &dice, log: &r.log)
+                r.playerDamage = Mountainbreaker.onHit(&run, r.playerDamage, log: &r.log)
                 r.log.append(r.crit ? "CRITICAL HIT! You strike for \(r.playerDamage) damage!"
                                     : "You attack for \(r.playerDamage) damage.")
             case .heavy:
@@ -309,6 +310,7 @@ public enum Combat {
                     if let e = run.enemy, run.subclass == "crusader", Bestiary.undeadNames.contains(e.name) { dmg = jsRound(Double(dmg) * 1.5) }
                     dmg = gearDamage(&run, dmg, log: &r.log)
                     r.playerDamage = ClassTraits.attack(&run, Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log), dice: &dice, log: &r.log)
+                    r.playerDamage = Mountainbreaker.onHit(&run, r.playerDamage, log: &r.log)
                     r.log.append("Heavy strike lands for \(r.playerDamage) damage!")
                 }
             case .defend:
@@ -689,6 +691,7 @@ public enum Combat {
         if let e = run.enemy { Subclasses.onKill(&run, e, log: &r.log) }
         if let e = run.enemy { Sanity.onKill(&run, e, log: &r.log) }
         if let e = run.enemy { HolidayFoes.onKill(&run, e, log: &r.log) }
+        Mountainbreaker.onKill(&run, log: &r.log)
         if let e = run.enemy { var d = SystemDice(); Spells.onKill(&run, e, dice: &d, log: &r.log) }
         r.announcement = "\(run.enemy?.name ?? "The enemy") defeated."
         return r
