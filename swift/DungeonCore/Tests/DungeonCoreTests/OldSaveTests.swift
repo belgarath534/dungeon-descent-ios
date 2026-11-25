@@ -360,3 +360,22 @@ final class RareRoomsTests: XCTestCase {
         XCTAssertNotNil(Encounters.choose(0, &r, dice: &d, wallet: wallet).enemy)
     }
 }
+
+final class EnemyEditTests: XCTestCase {
+    func testEditKeepsStatsInsideTheTypesRange() {
+        let e = CommunityEnemies.Entry(id: "x", name: "This Matter", desc: "Old.", type: "common", dungeon: "all", music: nil,
+                                       creator: "Leo", icon: "👤", hp: 40, atk: 5, def: 1)
+        var d = SeededDice(seed: 3)
+        let renamed = CommunityEnemies.edit(e, name: "  Dark Matter ", desc: "New.", kind: .common, reroll: false, dice: &d)
+        XCTAssertNil(renamed.problem)
+        XCTAssertEqual(renamed.entry.name, "Dark Matter")
+        XCTAssertEqual(renamed.entry.hp, 40)
+        let boss = CommunityEnemies.edit(e, name: "Dark Matter", desc: "It hums.", kind: .boss, reroll: false, dice: &d).entry
+        XCTAssertEqual(boss.type, "boss")
+        XCTAssertTrue((280...600).contains(boss.hp))
+        XCTAssertTrue((30...55).contains(boss.atk))
+        let again = CommunityEnemies.edit(e, name: "Dark Matter", desc: "It hums.", kind: .common, reroll: true, dice: &d).entry
+        XCTAssertTrue((20...60).contains(again.hp))
+        XCTAssertNotNil(CommunityEnemies.edit(e, name: "shit", desc: "It hums.", kind: .common, reroll: false, dice: &d).problem)
+    }
+}

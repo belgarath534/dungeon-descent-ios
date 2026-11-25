@@ -1,5 +1,6 @@
 import SwiftUI
 import FirebaseFirestore
+import FirebaseAuth
 import DungeonCore
 
 /// The shared "community_enemies" pool (loadCommunityEnemies, ecSubmit,
@@ -41,6 +42,7 @@ final class CommunityEnemyStore: ObservableObject {
                                               type: v["type"] as? String ?? "common", dungeon: v["dungeon"] as? String ?? "all",
                                               music: v["music"] as? String, creator: v["creator"] as? String ?? "Unknown",
                                               icon: v["icon"] as? String ?? "👤", hp: n("hp"), atk: n("atk"), def: n("def"), kills: n("kills"))
+                    .owned(by: v["ownerUid"] as? String)
             }
             loadedAt = Date()
             failed = false
@@ -52,15 +54,99 @@ final class CommunityEnemyStore: ObservableObject {
 
     func refreshPool(_ store: GameStore) { CommunityEnemies.pool = visible(store) }
 
-    /// ecSubmit: fire and forget, like the web version.
+    /// ecSubmit: fire and forget, like the web version. 12.2: it remembers
+    /// who made it (ownerUid, and this device's list), so they can edit it.
     func submit(_ e: CommunityEnemies.Entry) {
         let data: [String: Any] = [
             "name": e.name, "desc": e.desc, "type": e.type, "dungeon": e.dungeon, "music": e.music ?? NSNull(),
             "creator": e.creator, "icon": e.icon, "hp": e.hp, "atk": e.atk, "def": e.def, "kills": 0,
-            "createdAt": (Date().timeIntervalSince1970 * 1000).rounded(), "approved": true,
+            "createdAt": (Date().timeIntervalSince1970 * 1000).rounded(), "approved": true, "ownerUid": Self.ownerId,
         ]
-        col.addDocument(data: data) { _ in }
+        let ref = col.document()
+        ref.setData(data) { _ in }
+        Self.remember(ref.documentID)
         loadedAt = .distantPast
+    }
+
+    // MARK: Your own enemies (12.2)
+
+    /// Your account, or this device if you aren't signed in.
+    static var ownerId: String {
+        if let uid = Auth.auth().currentUser?.uid { return uid }
+        if let d = UserDefaults.standard.string(forKey: "swift_owner_device_id") { return d }
+        let d = "device-" + UUID().uuidString
+        UserDefaults.standard.set(d, forKey: "swift_owner_device_id")
+        return d
+    }
+
+    static var madeHere: [String] { UserDefaults.standard.stringArray(forKey: "swift_my_enemies") ?? [] }
+    static func remember(_ id: String) { UserDefaults.standard.set(madeHere + [id], forKey: "swift_my_enemies") }
+
+    /// Yours: made with your account or on this device, or (an enemy from
+    /// before 12.2, with no owner yet) made under your chat name.
+    func isMine(_ e: CommunityEnemies.Entry, username: String?) -> Bool {
+        if let o = e.owner { return o == Self.ownerId }
+        if Self.madeHere.contains(e.id) { return true }
+        guard let u = username?.trimmingCharacters(in: .whitespacesAndNewlines), !u.isEmpty else { return false }
+        return e.creator.caseInsensitiveCompare(u) == .orderedSame
+    }
+
+    @Published private(set) var mine: [CommunityEnemies.Entry] = []
+
+    /// Every live enemy that's yours (not just the 50 the dungeon loads).
+    func loadMine(username: String?) async {
+        var found: [String: CommunityEnemies.Entry] = [:]
+        func add(_ id: String, _ v: [String: Any]) {
+            guard v["approved"] as? Bool == true, let name = v["name"] as? String else { return }
+            func n(_ k: String) -> Int { (v[k] as? NSNumber)?.intValue ?? 0 }
+            let e = CommunityEnemies.Entry(id: id, name: name, desc: v["desc"] as? String ?? "",
+                                           type: v["type"] as? String ?? "common", dungeon: v["dungeon"] as? String ?? "all",
+                                           music: v["music"] as? String, creator: v["creator"] as? String ?? "Unknown",
+                                           icon: v["icon"] as? String ?? "👤", hp: n("hp"), atk: n("atk"), def: n("def"), kills: n("kills"))
+                .owned(by: v["ownerUid"] as? String)
+            if isMine(e, username: username) { found[e.id] = e }
+        }
+        for d in (try? await col.whereField("ownerUid", isEqualTo: Self.ownerId).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
+        if let u = username, !u.isEmpty {
+            for d in (try? await col.whereField("creator", isEqualTo: u).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
+        }
+        for id in Self.madeHere where found[id] == nil {
+            if let d = try? await col.document(id).getDocument(), let v = d.data() { add(id, v) }
+        }
+        mine = found.values.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+
+    /// Saves your changes (and claims an older enemy for your account).
+    func save(_ e: CommunityEnemies.Entry, username: String?) async -> String? {
+        guard isMine(e, username: username) else { return "That enemy isn't yours." }
+        do {
+            try await col.document(e.id).updateData([
+                "name": e.name, "desc": e.desc, "type": e.type, "icon": e.icon, "hp": e.hp, "atk": e.atk, "def": e.def,
+                "ownerUid": Self.ownerId, "editedAt": (Date().timeIntervalSince1970 * 1000).rounded(),
+            ])
+            loadedAt = .distantPast
+            if let i = mine.firstIndex(where: { $0.id == e.id }) { mine[i] = e.owned(by: Self.ownerId) }
+            return nil
+        } catch {
+            return "Couldn't save it. Check your connection and try again."
+        }
+    }
+
+    /// Takes it out of every dungeon. Kept (not erased) so moderation can still see it.
+    func delete(_ e: CommunityEnemies.Entry, username: String?) async -> String? {
+        guard isMine(e, username: username) else { return "That enemy isn't yours." }
+        do {
+            try await col.document(e.id).updateData([
+                "approved": false, "deletedByOwner": true, "ownerUid": Self.ownerId,
+                "moderatedAt": (Date().timeIntervalSince1970 * 1000).rounded(),
+            ])
+            loadedAt = .distantPast
+            mine.removeAll { $0.id == e.id }
+            entries.removeAll { $0.id == e.id }
+            return nil
+        } catch {
+            return "Couldn't delete it. Check your connection and try again."
+        }
     }
 
     /// incrementCommunityKill.
@@ -283,6 +369,7 @@ struct CommunityBestiary: View {
     @State private var reporting: CommunityEnemies.Entry?
     @State private var reason = ""
     @State private var blocking: CommunityEnemies.Entry?
+    @State private var managing = false
 
     var body: some View {
         let list = pool.visible(game.store)
@@ -294,6 +381,11 @@ struct CommunityBestiary: View {
                 .frame(maxWidth: .infinity).padding(10)
                 .background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Color(hex: 0x554488)))
                 .accessibilityLabel("Create your own community enemy")
+            Button("🛠 My Enemies") { managing = true }
+                .font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0xaa88ff))
+                .frame(maxWidth: .infinity).padding(10)
+                .background(Color(hex: 0x0a0800)).overlay(Rectangle().stroke(Color(hex: 0x554488)))
+                .accessibilityLabel("My enemies. Rename, make stronger or delete the enemies you made")
             if pool.loading && pool.entries.isEmpty {
                 note("Loading community enemies...")
             } else if pool.failed && pool.entries.isEmpty {
@@ -307,6 +399,7 @@ struct CommunityBestiary: View {
                 ForEach(list) { e in card(e) }
             }
         }
+        .fullScreenCover(isPresented: $managing) { MyEnemiesView { managing = false } }
         .task {
             await pool.load(game.store)
             let n = pool.visible(game.store).count

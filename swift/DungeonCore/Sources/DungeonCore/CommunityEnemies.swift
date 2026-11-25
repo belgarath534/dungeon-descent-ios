@@ -39,6 +39,7 @@ public enum CommunityEnemies {
     }
 
     public struct Entry: Codable, Equatable, Sendable, Identifiable {
+        public func owned(by o: String?) -> Entry { var e = self; e.owner = o; return e }
         public var id: String
         public var name: String
         public var desc: String
@@ -52,6 +53,8 @@ public enum CommunityEnemies {
         public var atk: Int
         public var def: Int
         public var kills: Int
+        /// 12.2: who made it (an account or device ID), so its maker can edit it.
+        public var owner: String? = nil
 
         public init(id: String = "", name: String, desc: String, type: String, dungeon: String, music: String?,
                     creator: String, icon: String, hp: Int, atk: Int, def: Int, kills: Int = 0) {
@@ -59,6 +62,25 @@ public enum CommunityEnemies {
             self.music = music; self.creator = creator; self.icon = icon; self.hp = hp; self.atk = atk; self.def = def
             self.kills = kills
         }
+    }
+
+    /// 12.2: what its maker changes. Stats are never typed in: a new type
+    /// rolls fresh stats in that type's range, and Re-roll rolls again in the
+    /// current one, so nobody can make a 9,999 HP monster.
+    public static func edit(_ e: Entry, name: String, desc: String, kind: Kind, reroll: Bool,
+                            dice: inout some Dice) -> (entry: Entry, problem: String?) {
+        let n = name.trimmingCharacters(in: .whitespacesAndNewlines), d = desc.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let p = problem(name: n, desc: d, creator: e.creator) { return (e, p) }
+        var out = e
+        out.name = n
+        out.desc = d
+        if kind.rawValue != e.type || reroll {
+            let s = roll(kind, dice: &dice)
+            out.type = kind.rawValue
+            out.icon = kind.icon
+            out.hp = s.hp; out.atk = s.atk; out.def = s.def
+        }
+        return (out, nil)
     }
 
     /// The dungeons a creator can pick (the Shadow World is left out, as on the web).
