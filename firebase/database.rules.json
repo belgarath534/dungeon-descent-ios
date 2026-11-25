@@ -2,22 +2,23 @@
   "rules": {
     "global_chat": {
       ".read": true,
+      ".indexOn": ["timestamp"],
       "$message": {
-        ".write": true,
-        ".validate": "newData.hasChildren(['username', 'message', 'timestamp']) && newData.child('message').val().length <= 200 && newData.child('username').val().length <= 20"
+        ".write": "!data.exists() || auth.uid === 'WgqZGmnPKeYIymlMkx0aAg8G2T52'",
+        ".validate": "newData.hasChildren(['username', 'message', 'timestamp']) && newData.child('message').isString() && newData.child('message').val().length <= 200 && newData.child('username').isString() && newData.child('username').val().length <= 20 && newData.child('timestamp').isNumber()"
       }
     },
     "pvp_rooms": {
       ".read": true,
-      ".write": true
+      "$room": { ".write": true }
     },
     "hs_rooms": {
       ".read": true,
-      ".write": true
+      "$room": { ".write": true }
     },
     "presence": {
       ".read": true,
-      ".write": true
+      "$player": { ".write": true }
     },
     "void_reaper": {
       ".read": true,

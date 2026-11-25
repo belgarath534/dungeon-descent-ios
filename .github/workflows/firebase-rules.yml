@@ -1,5 +1,7 @@
-# Tests firebase/firestore.rules in the Firestore emulator, then publishes them
-# to both Firestore databases ((default) and dungeon-descent). Run it by pushing
+# Tests firebase/firestore.rules and firebase/database.rules.json in the
+# emulators, then publishes them: the Firestore rules to both Firestore
+# databases ((default) and dungeon-descent), the other to the Realtime
+# Database (chat, co-op, PvP and Hide and Seek rooms). Run it by pushing
 # to the firebase-rules branch. Publishing needs the FIREBASE_SERVICE_ACCOUNT
 # secret (a service account key JSON from Firebase, Project settings, Service
 # accounts); without it, only the tests run.
@@ -23,27 +25,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 21
-      - name: Test the rules in the emulator
+      - name: Test the rules in the emulators
         working-directory: firebase
         run: |
           npm install --no-audit --no-fund
           npm test
-      - name: Show the Realtime Database rules (read only)
-        env:
-          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-        run: |
-          [ -z "$SA" ] && exit 0
-          pip install --quiet google-auth requests
-          python3 - <<'EOF'
-          import json, os
-          from google.oauth2 import service_account
-          from google.auth.transport.requests import AuthorizedSession
-          creds = service_account.Credentials.from_service_account_info(json.loads(os.environ["SA"]), scopes=[
-              "https://www.googleapis.com/auth/firebase.database", "https://www.googleapis.com/auth/userinfo.email"])
-          r = AuthorizedSession(creds).get("https://dungeon-descent-fbaf2-default-rtdb.firebaseio.com/.settings/rules.json")
-          print("status", r.status_code)
-          print(r.text)
-          EOF
       - name: Publish to both databases
         env:
           SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
@@ -74,4 +60,21 @@ jobs:
               print(rel, "->", r.status_code)
               if r.status_code >= 300:
                   print(r.text[:2000]); sys.exit(1)
+          EOF
+      - name: Publish the Realtime Database rules
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          [ -z "$SA" ] && exit 0
+          python3 - <<'EOF'
+          import json, os, sys
+          from google.oauth2 import service_account
+          from google.auth.transport.requests import AuthorizedSession
+          creds = service_account.Credentials.from_service_account_info(json.loads(os.environ["SA"]), scopes=[
+              "https://www.googleapis.com/auth/firebase.database", "https://www.googleapis.com/auth/userinfo.email"])
+          rules = open("firebase/database.rules.json").read()
+          r = AuthorizedSession(creds).put("https://dungeon-descent-fbaf2-default-rtdb.firebaseio.com/.settings/rules.json", data=rules)
+          print("Realtime Database ->", r.status_code)
+          if r.status_code >= 300:
+              print(r.text[:2000]); sys.exit(1)
           EOF
