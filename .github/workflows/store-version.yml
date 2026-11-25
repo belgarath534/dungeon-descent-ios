@@ -68,7 +68,7 @@ jobs:
 
       - name: Pick the builds (and submit, from store-submit)
         env:
-          VERSION: "12.1"
+          VERSION: "12.1.1"
           SUBMIT: ${{ startsWith(github.ref_name, 'store-submit') && 'yes' || '' }}
           PLATFORMS: ${{ github.ref_name == 'store-submit-ios-mac' && 'IOS MAC_OS' || github.ref_name == 'store-submit-vision' && 'VISION_OS' || (github.ref_name == 'store-submit-ios' || github.ref_name == 'store-cancel-ios') && 'IOS' || github.ref_name == 'store-cancel-ios-mac' && 'IOS MAC_OS' || 'IOS MAC_OS VISION_OS' }}
           CANCEL: ${{ startsWith(github.ref_name, 'store-cancel') && 'yes' || '' }}

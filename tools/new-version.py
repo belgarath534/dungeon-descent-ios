@@ -10,7 +10,7 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "12.1")
+VERSION = os.environ.get("VERSION", "12.1.1")
 # Only these platforms (store-submit-ios: "IOS").
 PLATFORMS = os.environ.get("PLATFORMS", "IOS MAC_OS VISION_OS").split()
 
@@ -132,7 +132,15 @@ WHATS_NEW_12_1 = {
 • Alto Contraste, velocidade do Lewis e Acompanhar, e o gesto de dois dedos para voltar.
 • Muitas outras correções.""",
 }
-WHATS_NEW = {"12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
+WHATS_NEW_12_1_1 = {
+    "en-US": """New in 12.1.1:
+• The Magic Chamber: a rare, glowing room in any dungeon where a unicorn waits. Approach it and Starlight the Unicorn joins you as a minion. It fights beside you and heals you every round, and every time you find the chamber again it restores your HP and SP. Asked for by a player on our Discord.
+""" + WHATS_NEW_12_1["en-US"],
+    "pt-BR": """Novo na 12.1.1:
+• A Câmara Mágica: uma sala rara e brilhante em qualquer masmorra, onde um unicórnio espera. Aproxime-se e Estrelinha, o Unicórnio, se junta a você como lacaio. Ele luta ao seu lado e te cura a cada rodada, e toda vez que você encontra a câmara de novo ela restaura seu HP e SP. Um pedido de um jogador no nosso Discord.
+""" + WHATS_NEW_12_1["pt-BR"],
+}
+WHATS_NEW = {"12.1.1": WHATS_NEW_12_1_1, "12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
 
 PROMO = {
     "en-US": "New in 12.1: raid a giant boss with friends, build your own dungeons, and face four new enemies made for listening.",

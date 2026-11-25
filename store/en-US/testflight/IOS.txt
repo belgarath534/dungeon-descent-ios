@@ -1,19 +1,6 @@
-Thanks for testing Dungeon Descent 12.1!
+Thanks for testing Dungeon Descent 12.1.1!
 
 New in this build — please try:
-• Events now cover the whole screen until you choose, so the direction buttons can't look frozen. Pressing a direction during an event tells you to choose first.
-• 3D Mode: in a room you already cleared, the game now says which way the nearest new room is ("A new room is right through the east door"). The exits line shows it too.
-• Choose a Dungeon: after you win, pick any dungeon you've unlocked, Normal (your level carries over) or New Game+. It's on the Your Journey Continues screen and the end screen, even after Decide Later.
-• Low HP heartbeat: at 10% HP a heartbeat plays and the phone vibrates with each beat; at 5% it speeds up.
-• Four new rare enemies (5% of fights from floor 3): The Liar (The Hollow) lies about half its hits, but your HP never lies. The Bell Choir (Sunken Archives): a low, middle or high bell means a strike, a heal or an escape, shuffled every fight. The Counting Thing (Crypt) hits for triple at zero; Defend resets the count. The Silent One (Shadow World): no music, and its hits are only announced when you hit it. Tell us if they're too hard.
-• Insane Mode has its sanity bar now: The Distorted, The Sanity Drainer, the Insanity Potion, Julio and your familiar help.
-• Skill Book (the Skills button in the dungeon): Move Up and Move Down to reorder your skills; the combat buttons follow.
-• Holiday enemies use their moves (Leprechaun steals gold, O Craque, The Heartbreaker, Gold Goblin, The Clurichaun, The Cupid drops a Love Potion). Eagle's Cry on the Fourth of July.
-• Endless difficulty: Endless-only enemies from floor 20.
-• First time you meet an enemy, its Bestiary entry is read. Julio knows you from the third meeting. Name a character Leo.
-• Keyboard: K Skill Book, C stats, S save, Escape closes, Alt+M Audio Map.
-• Help has a Prestige section (Classic prestiges at 10, Legacy at 25).
+• The Magic Chamber: a rare, glowing room in any dungeon (not the Abyssal Deep or the Shadow World). A unicorn waits inside. Approach it and Starlight the Unicorn joins you as a minion; choose it in your Home under Minions. It fights beside you and heals you 3 HP every round. Finding the chamber again restores your HP and SP. Leave it in peace for 10 HP.
 
-Note: co-op rooms from 12.1 and 12.0 can't mix. Both players need this build.
-
-Found a bug? Tell us in #dungeon-descent-testers on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.
+Found a bug? Tell us in bug-reports on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.
