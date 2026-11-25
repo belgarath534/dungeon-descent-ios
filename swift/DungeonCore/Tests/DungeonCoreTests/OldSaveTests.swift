@@ -379,3 +379,41 @@ final class EnemyEditTests: XCTestCase {
         XCTAssertNotNil(CommunityEnemies.edit(e, name: "shit", desc: "It hums.", kind: .common, reroll: false, dice: &d).problem)
     }
 }
+
+final class DeepMineTests: XCTestCase {
+    func miner() -> MineRun {
+        var ch = PlayerCharacter(name: "Deep", cls: "Warrior", race: "Human", prof: "Thief", dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        ch.persistLevel = 50
+        return Mine.start(ch)
+    }
+
+    func testDeeperBossesAndTheUnendingDark() {
+        var m = miner()
+        m.depth = 74
+        XCTAssertEqual(Mine.descend(&m)?.name, "The Lantern Widow")
+        for (d, name) in [(150, "The Hollow Drill"), (200, "The Bone Seam"), (300, "The Pale Queen"), (500, "The First Stone")] {
+            m.enemy = nil; m.depth = d - 1
+            XCTAssertEqual(Mine.descend(&m)?.name, name)
+        }
+        m.enemy = nil; m.depth = 599
+        let dark = Mine.descend(&m)
+        XCTAssertEqual(dark?.name, "The Unending Dark")
+        m.enemy = nil; m.depth = 699
+        XCTAssertGreaterThan(Mine.descend(&m)?.hp ?? 0, dark?.hp ?? 0)
+        m.enemy = nil; m.depth = 649
+        XCTAssertNil(Mine.descend(&m))
+        XCTAssertNotNil(Mine.milestones.first { $0.milestone == 500 }?.special?.contains("Resists 20%"))
+    }
+
+    func testDeepBossesDropMoreDiamonds() {
+        var m = miner()
+        m.depth = 299
+        var boss = Mine.descend(&m)!
+        boss.hp = 1
+        m.enemy = boss
+        var d = LoadedDice(rolls: [999, 999, 999], chances: [false, false, false])
+        let t = Mine.act(&m, .attack, dice: &d)
+        XCTAssertTrue(t.enemyDied)
+        XCTAssertTrue(t.loot.contains { $0.name == "Diamonds ×12" })
+    }
+}

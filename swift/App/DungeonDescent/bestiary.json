@@ -3597,6 +3597,60 @@
    "tier": "Shadow 3-9",
    "desc": "It makes no sound. The music stops when it arrives. You only know it hit you by checking your HP, unless you strike it, and it cries out.",
    "dungeon": "shadow"
+  },
+  {
+   "id": "mine-the-lantern-widow",
+   "name": "The Lantern Widow",
+   "icon": "🕯️",
+   "tier": "The Mine — Depth 75 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "She carries the lantern her husband dropped in the collapse. She is still looking for him. She thinks you might be him, and she is not gentle about checking."
+  },
+  {
+   "id": "mine-the-hollow-drill",
+   "name": "The Hollow Drill",
+   "icon": "⚙️",
+   "tier": "The Mine — Depth 150 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "The company's great drill was never switched off. It kept digging for a hundred years, and somewhere along the way it started wanting to. It gets hotter, and hungrier, the longer it runs."
+  },
+  {
+   "id": "mine-the-bone-seam",
+   "name": "The Bone Seam",
+   "icon": "🦴",
+   "tier": "The Mine — Depth 200 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "A vein of something that is not ore. The miners who found it stayed down here. They are part of it now, and it is very hard to break."
+  },
+  {
+   "id": "mine-the-pale-queen",
+   "name": "The Pale Queen",
+   "icon": "💠",
+   "tier": "The Mine — Depth 300 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "Crystal grows in her shape all through the deepest caves. Nobody carved them. She has been building herself a kingdom, one reflection at a time, and her touch is poison."
+  },
+  {
+   "id": "mine-the-first-stone",
+   "name": "The First Stone",
+   "icon": "🌑",
+   "tier": "The Mine — Depth 500 Boss",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "Before the mountain, there was this. The mountain grew around it to keep it in. It has every trick the Mine ever learned."
+  },
+  {
+   "id": "mine-the-unending-dark",
+   "name": "The Unending Dark",
+   "icon": "🌌",
+   "tier": "The Mine — Every 100 Depths from 600",
+   "dungeon": "mine",
+   "isBoss": true,
+   "desc": "Past the First Stone there is no mine, only dark that goes on. It waits every hundred depths from 600, and each time you go deeper it brings more of itself."
   }
  ],
  "nameToId": {

@@ -52,15 +52,18 @@ public struct MineFoe: Codable, Equatable, Sendable {
     func with(_ f: (inout MineFoe) -> Void) -> MineFoe { var c = self; f(&c); return c }
 
     /// What its special move is, for the screen.
+    /// 12.2: every move it has (the deep bosses have several).
     public var special: String? {
-        if dodgeEvery > 0 { return "Slips aside every \(dodgeEvery)rd strike." }
-        if poisonChance > 0 { return "Its bite can poison." }
-        if immuneFirstHit { return physResist > 0 ? "Shrugs off your first hit, and resists 20% of every blow." : "Shrugs off your first hit." }
-        if drainsSkills { return "Drains your focus — no skills the turn after it hits." }
-        if grows { return "Grows stronger every turn." }
-        if lifesteal { return "Heals from the blood it draws." }
-        if burn > 0 { return "Its strikes set you burning." }
-        return nil
+        var s: [String] = []
+        if dodgeEvery > 0 { s.append("Slips aside every \(dodgeEvery)rd strike.") }
+        if poisonChance > 0 { s.append("Its bite can poison.") }
+        if immuneFirstHit { s.append("Shrugs off your first hit.") }
+        if physResist > 0 { s.append("Resists \(Int((physResist * 100).rounded()))% of every blow.") }
+        if drainsSkills { s.append("Drains your focus — no skills the turn after it hits.") }
+        if grows { s.append("Grows stronger every turn.") }
+        if lifesteal { s.append("Heals from the blood it draws.") }
+        if burn > 0 { s.append("Its strikes set you burning.") }
+        return s.isEmpty ? nil : s.joined(separator: " ")
     }
 }
 
@@ -164,7 +167,30 @@ public enum Mine {
         f("The Deep Hunger", "🕳️", 420, 28...44, 400, 30...30).with { $0.isBoss = true; $0.milestone = 30; $0.lore = "It has been waiting in the dark since before the mine existed. It is very hungry." },
         f("The Vein Titan", "⛰️", 600, 36...55, 600, 50...50).with { $0.isBoss = true; $0.milestone = 50; $0.lore = "The mountain itself has decided you have gone far enough." },
         f("The Mine's Heart", "❤️", 900, 48...72, 1000, 100...100).with { $0.isBoss = true; $0.milestone = 100; $0.lore = "You found it. The thing at the center of everything. It does not want to be found." },
+        // 12.2: deeper still.
+        f("The Lantern Widow", "🕯️", 750, 42...62, 800, 75...75).with { $0.isBoss = true; $0.milestone = 75; $0.drainsSkills = true; $0.lifesteal = true
+            $0.lore = "She carries the lantern her husband dropped in the collapse. She is still looking for him. She thinks you might be him." },
+        f("The Hollow Drill", "⚙️", 1200, 60...85, 1400, 150...150).with { $0.isBoss = true; $0.milestone = 150; $0.grows = true; $0.burn = 6; $0.burnTurns = 2
+            $0.lore = "The company's great drill was never switched off. It kept digging for a hundred years, and somewhere along the way it started wanting to." },
+        f("The Bone Seam", "🦴", 1600, 70...100, 1800, 200...200).with { $0.isBoss = true; $0.milestone = 200; $0.immuneFirstHit = true; $0.physResist = 0.30
+            $0.lore = "A vein of something that is not ore. The miners who found it stayed down here. They are part of it now."},
+        f("The Pale Queen", "💠", 2200, 85...120, 2500, 300...300).with { $0.isBoss = true; $0.milestone = 300; $0.dodgeEvery = 3; $0.poisonChance = 0.30
+            $0.lore = "Crystal grows in her shape all through the deepest caves. Nobody carved them. She has been building herself a kingdom, one reflection at a time." },
+        f("The First Stone", "🌑", 3500, 110...150, 5000, 500...500).with { $0.isBoss = true; $0.milestone = 500; $0.immuneFirstHit = true; $0.physResist = 0.20; $0.grows = true; $0.lifesteal = true
+            $0.lore = "Before the mountain, there was this. The mountain grew around it to keep it in." },
     ]
+
+    /// 12.2: from depth 600, every hundred depths, The Unending Dark, stronger each time.
+    public static func unendingDark(depth: Int) -> MineFoe? {
+        guard depth >= 600, depth % 100 == 0 else { return nil }
+        let n = (depth - 500) / 100
+        let hp = 3500 + n * 900, lo = 110 + n * 12, hi = 150 + n * 16
+        return f("The Unending Dark", "🌌", hp, lo...hi, 5000 + n * 1500, depth...depth).with {
+            $0.isBoss = true; $0.milestone = depth; $0.grows = true; $0.dodgeEvery = 4; $0.drainsSkills = true
+            $0.lore = "Past the First Stone there is no mine, only dark that goes on. It has noticed you. Each time you go deeper, it brings more of itself."
+        }
+    }
+
 
     public static let atmospheres = [
         "The tunnels stretch before you. Pickaxe rings echo off stone.",
@@ -273,7 +299,7 @@ public enum Mine {
         m.digs = 0
         m.hp = min(m.maxHp, m.hp + 10)
         m.atmosphere = "Depth \(m.depth). The air is colder. The darkness is thicker."
-        if let boss = milestones.first(where: { $0.milestone == m.depth }) {
+        if let boss = milestones.first(where: { $0.milestone == m.depth }) ?? unendingDark(depth: m.depth) {
             m.enemy = boss
             return boss
         }
@@ -427,8 +453,10 @@ public enum Mine {
             t.log.append("💀 \(e.name) defeated! +\(e.gold) gold.")
             m.enemy = nil
             m.defending = false; m.heavyPenalty = false; m.buffed = false; m.shielded = false
-            if e.milestone != nil {
-                t.loot = [i("Mega Potion", "🧪", "mine-potion", heal: 120, w: 1), i("Diamonds ×3", "💎", "mine-diamond", v: 3, w: 1)]
+            if let ms = e.milestone {
+                // 12.2: deeper bosses drop more diamonds.
+                let gems = max(3, ms / 25)
+                t.loot = [i("Mega Potion", "🧪", "mine-potion", heal: 120, w: 1), i("Diamonds ×\(gems)", "💎", "mine-diamond", v: gems, w: 1)]
                 t.log.append("👑 Milestone boss defeated! Special loot dropped.")
             } else if dice.chance(0.5) {
                 t.loot = [dice.chance(0.25) ? healthPotion : pick(table(m.depth), dice: &dice)]

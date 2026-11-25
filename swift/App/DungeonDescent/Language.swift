@@ -245,6 +245,18 @@ enum Patterns {
         ("First encounter. {0}. {1}", "Primeiro encontro. {0}. {1}"),
         ("⚔ Leo enters the dungeon. The dungeon does not know what is coming.", "⚔ Leo entra na masmorra. A masmorra não sabe o que está por vir."),
         ("Leo. The dungeon has heard this name before. It fears it.", "Leo. A masmorra já ouviu esse nome antes. Ela o teme."),
+        // 12.2: The Mine goes deeper.
+        ("The Lantern Widow", "A Viúva da Lanterna"), ("The Hollow Drill", "A Broca Oca"), ("The Bone Seam", "O Veio de Ossos"),
+        ("The Pale Queen", "A Rainha Pálida"), ("The First Stone", "A Primeira Pedra"), ("The Unending Dark", "A Escuridão sem Fim"),
+        ("She carries the lantern her husband dropped in the collapse. She is still looking for him. She thinks you might be him.", "Ela carrega a lanterna que o marido deixou cair no desabamento. Ainda o procura. Acha que você pode ser ele."),
+        ("The company's great drill was never switched off. It kept digging for a hundred years, and somewhere along the way it started wanting to.", "A grande broca da companhia nunca foi desligada. Continuou cavando por cem anos, e em algum momento começou a querer."),
+        ("A vein of something that is not ore. The miners who found it stayed down here. They are part of it now.", "Um veio de algo que não é minério. Os mineiros que o encontraram ficaram aqui embaixo. Agora fazem parte dele."),
+        ("Crystal grows in her shape all through the deepest caves. Nobody carved them. She has been building herself a kingdom, one reflection at a time.", "Cristais crescem no formato dela por todas as cavernas mais fundas. Ninguém os esculpiu. Ela vem construindo um reino, um reflexo de cada vez."),
+        ("Before the mountain, there was this. The mountain grew around it to keep it in.", "Antes da montanha, havia isto. A montanha cresceu em volta para mantê-lo preso."),
+        ("Past the First Stone there is no mine, only dark that goes on. It has noticed you. Each time you go deeper, it brings more of itself.", "Depois da Primeira Pedra não há mina, só uma escuridão que continua. Ela notou você. Cada vez que você desce mais, ela traz mais de si mesma."),
+        ("Resists {0}% of every blow.", "Resiste a {0}% de cada golpe."),
+        ("Shrugs off your first hit.", "Ignora o seu primeiro golpe."),
+        ("Diamonds ×{0}", "Diamantes ×{0}"),
         // 12.2: My Enemies.
         ("🛠 My Enemies", "🛠 Meus Inimigos"), ("My Enemies", "Meus Inimigos"),
         ("My enemies. Rename, make stronger or delete the enemies you made", "Meus inimigos. Renomeie, fortaleça ou apague os inimigos que você criou"),
