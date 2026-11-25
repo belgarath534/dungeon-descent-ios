@@ -4930,7 +4930,9 @@ final class PrestigeTests: XCTestCase {
         let hp = run.maxHp, atk = run.atk
         XCTAssertEqual(Prestige.start(&run, ch).count, 1)
         XCTAssertEqual(run.maxHp, jsRound(Double(hp) * 1.15))
-        XCTAssertEqual(run.atk.upperBound, jsRound(Double(atk.upperBound) * 1.15))
+        // 12.2: attack goes on every hit, not on the base range.
+        XCTAssertEqual(run.atk, atk)
+        XCTAssertEqual(Prestige.hit(run, 100), 115)
         XCTAssertEqual(run.prestige, 3)
 
         ch.extra["prestige"] = .number(10)
@@ -5984,5 +5986,39 @@ final class WeaponGrowthTests: XCTestCase {
         XCTAssertEqual(WeaponGrowth.scaled(g, for: r).maxHp, 140)
         Combat.begin(&r, against: e)
         XCTAssertEqual(r.enemy?.hp, 140)
+    }
+}
+
+final class FrozenGunTests: XCTestCase {
+    func testFrozenCantShootOrCast() {
+        var r = Run(character: PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        Combat.begin(&r, against: Enemy(name: "Ice Wraith", icon: "❄️", hp: 50, maxHp: 50, atk: 1...1, gold: 1...1))
+        r.frozen = true
+        var d = SystemDice()
+        let res = Guns.shoot(&r, Guns.gun("ak47")!, dice: &d)
+        XCTAssertEqual(r.enemy?.hp, 50)
+        XCTAssertFalse(r.frozen)
+        XCTAssertTrue(res.log.contains { $0.contains("frozen") })
+        r.frozen = true
+        r.learnedSpells = ["fireball"]
+        XCTAssertFalse(Spells.cast(&r, "fireball", dice: &d).acted)
+    }
+}
+
+final class PrestigeHitTests: XCTestCase {
+    func testStarsAddToEveryHit() {
+        var ch = PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",
+                                 dungeon: "Crypt of Malachar", difficulty: .wanderer)
+        var r = Run(character: ch)
+        XCTAssertEqual(Prestige.hit(r, 40), 40)
+        ch.extra["prestige"] = .number(10)
+        r = Run(character: ch)
+        _ = Prestige.start(&r, ch)
+        XCTAssertEqual(r.prestige, 10)
+        XCTAssertEqual(Prestige.hit(r, 40), 60)
+        r.prestige = 1
+        // Even one star always shows on a small hit.
+        XCTAssertEqual(Prestige.hit(r, 6), 7)
     }
 }

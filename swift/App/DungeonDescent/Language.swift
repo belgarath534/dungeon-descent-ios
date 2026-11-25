@@ -307,6 +307,9 @@ enum Patterns {
         ("Past level 10 every upgrade costs more, and enemies grow with your weapon: {0}% tougher at level {1}.", "Depois do nível 10 cada melhoria custa mais, e os inimigos crescem com a sua arma: {0}% mais resistentes no nível {1}."),
         (" Enemies grow stronger with it: {0}% tougher.", " Os inimigos ficam mais fortes com ela: {0}% mais resistentes."),
         ("{0} upgraded to Level {1}! Attack is now {2} to {3}. Enemies grow stronger with it: {4}% tougher.", "{0} melhorada para o Nível {1}! O ataque agora é de {2} a {3}. Os inimigos ficam mais fortes com ela: {4}% mais resistentes."),
+        ("Slowly.", "Devagar."),
+        ("You are frozen and cannot fire! The turn passes.", "Você está congelado e não pode atirar! O turno passa."),
+        ("You are frozen. You can't cast until you thaw. Attack or defend to pass the turn.", "Você está congelado. Não pode lançar magias até descongelar. Ataque ou defenda para passar o turno."),
         // 12.2: What's New.
         ("The Unicorn Update", "A Atualização do Unicórnio"),
         ("Version 12.1.1", "Versão 12.1.1"),

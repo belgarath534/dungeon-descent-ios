@@ -130,6 +130,14 @@ final class RunModel: ObservableObject {
             r.lives = GameData.Difficulty.wanderer.lives
             r.maxLives = r.lives
         }
+        // 12.2: a character who cleared the dungeon is saved on floor 10, so
+        // Play Again went straight to the boss, again and again, for its
+        // trophies. Playing a cleared dungeon again starts at floor 1.
+        if game.characters[index].completed && r.floor != 1 {
+            r.floor = 1
+            var cd = SystemDice()
+            r.floorRoomsNeeded = Rooms.roomsNeeded(floor: 1, difficulty: r.difficulty, dice: &cd)
+        }
         if pendingChallenge != nil && r.floor != 1 {
             r.floor = 1
             var cd = SystemDice()
@@ -1098,6 +1106,7 @@ final class RunModel: ObservableObject {
     private var conductorClock = 0
     private var conductorRunning = false
     private var silentSince = Date.distantPast
+    private var conductorLastStep = Date.distantPast
 
     private func startConductor(_ r: inout Run, _ d: inout SystemDice) {
         let h = ConductorHall.start(&r)
@@ -1208,6 +1217,13 @@ final class RunModel: ObservableObject {
     /// A step toward the door.
     func conductorStep() {
         guard var h = run.conductor, phase == .exploring else { return }
+        // 12.2: one step a second at most. Spamming Step crossed the whole hall
+        // in one verse (and through the grace moment when the music stops).
+        guard Date().timeIntervalSince(conductorLastStep) >= ConductorHall.stepGap else {
+            Feedback.announce("Slowly.", latest: true)
+            return
+        }
+        conductorLastStep = Date()
         var r = run
         var d = dice
         // A step right as the music stops still counts as in time.

@@ -203,7 +203,14 @@ public enum Guns {
     public static func shoot(_ run: inout Run, _ g: Gun, dice: inout some Dice, options: Combat.Options = Combat.Options()) -> TurnResult {
         var r = TurnResult()
         guard run.inCombat, run.enemy != nil else { r.acted = false; return r }
-        var dmg = damage(g, atkBonus: run.atkBonus, dice: &dice)
+        // 12.2: frozen, you can't pull the trigger: the turn passes (a player
+        // found that shooting killed the enemies that freeze you).
+        if run.frozen {
+            run.frozen = false
+            r.log.append("You are frozen and cannot fire! The turn passes.")
+            return Combat.finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
+        }
+        var dmg = Prestige.hit(run, damage(g, atkBonus: run.atkBonus, dice: &dice))
         // 12.2: the Tesla Coil builds charge with every shot in a row.
         if g.effect == "chain" {
             let n = min(4, run.fight.teslaShots ?? 0)

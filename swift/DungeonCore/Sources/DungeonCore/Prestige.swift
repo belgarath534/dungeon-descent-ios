@@ -75,9 +75,16 @@ public enum Prestige {
         let hp = 1 + hpPerStar * Double(s), atk = 1 + atkPerStar * Double(s)
         r.maxHp = jsRound(Double(r.maxHp) * hp)
         r.hp = r.maxHp
-        let lo = jsRound(Double(r.atk.lowerBound) * atk), hi = jsRound(Double(r.atk.upperBound) * atk)
-        r.atk = lo...max(lo, hi)
+        _ = atk // 12.2: attack is applied to every hit (hit(_:_:)), not to the base range, where 5% rounded away.
         return ["⭐ Prestige \(s) — +\(Int((hpPerStar * Double(s) * 100).rounded()))% health, +\(Int((atkPerStar * Double(s) * 100).rounded()))% attack, +\(Int((goldPerStar * Double(s) * 100).rounded()))% gold."]
+    }
+
+    /// 12.2: a hit with the stars' attack bonus (5% a star on your whole hit,
+    /// weapon included). It used to be 5% of the base attack, 5 to 8, which
+    /// rounded to nothing: players saw no change.
+    public static func hit(_ run: Run, _ dmg: Int) -> Int {
+        guard let s = run.prestige, s > 0, dmg > 0 else { return dmg }
+        return max(dmg + 1, jsRound(Double(dmg) * (1 + atkPerStar * Double(s))))
     }
 
     /// The gold an enemy drops, with the stars.

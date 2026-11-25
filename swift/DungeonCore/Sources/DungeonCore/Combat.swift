@@ -215,7 +215,8 @@ public enum Combat {
         if run.sparkler { a = jsRound(Double(a) * 1.30) }
         let dc = DailyChallenge.attackMult(run)
         if dc != 1 { a = jsRound(Double(a) * dc) }
-        return a
+        // 12.2: prestige stars on the whole hit, weapon and all.
+        return Prestige.hit(run, a)
     }
 
     /// Bonuses that apply to every hit you land: vulnerability and masteries.

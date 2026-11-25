@@ -218,6 +218,12 @@ public enum Spells {
             r.announcement = "You don't know that spell."
             return r
         }
+        // 12.2: frozen means frozen: no spells either (attack to thaw).
+        guard !run.frozen else {
+            r.acted = false
+            r.announcement = "You are frozen. You can't cast until you thaw. Attack or defend to pass the turn."
+            return r
+        }
         if run.spellCooldown > 0 {
             r.acted = false
             r.announcement = "Spells on cooldown. \(run.spellCooldown) turns remaining."

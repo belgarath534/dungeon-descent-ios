@@ -25,6 +25,8 @@ public struct ConductorHall: Codable, Sendable, Equatable {
     /// A step this soon after the music stops still counts as in time:
     /// VoiceOver and your finger need a moment.
     public static let grace = 0.6
+    /// 12.2: the least time between two steps (spamming crossed the hall in a second).
+    public static let stepGap = 1.0
 
     public init(floor: Int) {
         self.floor = floor
