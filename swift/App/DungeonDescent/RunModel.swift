@@ -3617,23 +3617,38 @@ final class RunModel: ObservableObject {
         gambling = true
     }
 
-    func gamble(double: Bool) {
+    /// 12.2: a coin flip on this floor's gold (Gambler.stake), or walk away
+    /// and keep the spirit for later.
+    func gamble(roll: Bool) {
         guard gambling else { return }
         gambling = false
         var r = run
-        let before = r.gold
-        r.gold = double ? before * 2 : before / 2
-        if r.gold > before { game.wallet.addGold(r.gold - before) } else { _ = game.wallet.spendGold(before - r.gold) }
+        guard roll else {
+            r.gamblerUsed = false
+            r.inventory.append(Item(name: "Gambler's Spirit", icon: "🎲", type: "gamblers-spirit",
+                                    desc: "Once per run, outside a fight: bet the gold you earned this floor (up to \(Gambler.maxStake)) on a coin flip. Win, it doubles. Lose, half of it is gone."))
+            run = r
+            persist()
+            Feedback.announce("You keep the Gambler's Spirit for later.")
+            return
+        }
+        let stake = Gambler.stake(r)
+        var d = dice
+        let won = d.chance(0.5)
+        dice = d
+        let change = Gambler.change(stake: stake, won: won)
+        r.gold += change
+        if change > 0 { game.wallet.addGold(change) } else if change < 0 { _ = game.wallet.spendGold(-change) }
         run = r
         persist()
-        if double {
-            add("🎲 Gambler's Spirit — DOUBLED! \(r.gold) gold!")
-            setEvent("🎲 Gambler's Spirit — Fortune smiles. Gold doubled!", tone: "good")
-            Feedback.announce("Gambler's Spirit. You doubled your gold. \(r.gold) gold.")
+        if won {
+            add("🎲 Gambler's Spirit — HEADS! +\(change) gold.")
+            setEvent("🎲 Gambler's Spirit — Fortune smiles. Your \(stake) gold doubled!", tone: "good")
+            Feedback.announce("Gambler's Spirit. You won. Plus \(change) gold.")
         } else {
-            add("🎲 Gambler's Spirit — HALVED. \(r.gold) gold.")
-            setEvent("🎲 Gambler's Spirit — The dice were cruel. Gold halved.", tone: "danger")
-            Feedback.announce("Gambler's Spirit. You halved your gold. \(r.gold) gold.")
+            add("🎲 Gambler's Spirit — TAILS. \(-change) gold lost.")
+            setEvent("🎲 Gambler's Spirit — The coin was cruel. You lost \(-change) gold.", tone: "danger")
+            Feedback.announce("Gambler's Spirit. You lost. \(-change) gold gone.")
         }
     }
 

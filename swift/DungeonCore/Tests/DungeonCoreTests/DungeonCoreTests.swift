@@ -5930,3 +5930,20 @@ final class GuildTests: XCTestCase {
         XCTAssertTrue(Guilds.status(w, totalDamage: 1_000, members: 1, now: monday).hasPrefix("\(w.boss.name): 15,000 of 16,000 HP left."))
     }
 }
+
+final class GamblerTests: XCTestCase {
+    func testOnlyThisFloorsGoldIsAtStake() {
+        var r = Run(character: PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        // A huge wallet carried in is never on the table.
+        r.gold = 1_000_000
+        r.floorStats = FloorStats(goldStart: 1_000_000)
+        XCTAssertEqual(Gambler.stake(r), 0)
+        r.gold += 300
+        XCTAssertEqual(Gambler.stake(r), 300)
+        XCTAssertEqual(Gambler.change(stake: 300, won: true), 300)
+        XCTAssertEqual(Gambler.change(stake: 300, won: false), -150)
+        r.gold += 100_000
+        XCTAssertEqual(Gambler.stake(r), Gambler.maxStake)
+    }
+}

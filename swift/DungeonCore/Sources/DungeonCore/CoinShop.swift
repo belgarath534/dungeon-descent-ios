@@ -31,7 +31,7 @@ public enum CoinShop {
         Upgrade(id: "cu-ember-ward", name: "Ember Ward", icon: "🔥", desc: "Reduce all incoming enemy damage by 2 permanently.", cost: 30),
         Upgrade(id: "cu-void-pact", name: "Void Pact", icon: "🌑", desc: "+5% chance to find Mystery Coins while exploring dungeons.", cost: 30),
         Upgrade(id: "cu-third-eye", name: "Third Eye", icon: "👁", desc: "See enemy HP and special ability before every combat begins.", cost: 40),
-        Upgrade(id: "cu-gamblers-spirit", name: "Gambler's Spirit", icon: "🎲", desc: "Once per run — double or halve your current gold. Your choice.", cost: 20),
+        Upgrade(id: "cu-gamblers-spirit", name: "Gambler's Spirit", icon: "🎲", desc: "Once per run — bet the gold you earned this floor on a coin flip: double it or lose half.", cost: 20),
         Upgrade(id: "cu-deaths-bargain", name: "Death's Bargain", icon: "⚰️", desc: "On death, unleash one final powerful counterattack.", cost: 45),
         Upgrade(id: "cu-hunters-mark", name: "Hunter's Mark", icon: "🏹", desc: "Your first attack in every combat is always a critical hit.", cost: 40),
         Upgrade(id: "cu-night-blessing", name: "Night Blessing", icon: "🌙", desc: "During Night Mode gain +5 ATK and +10% gold on all runs.", cost: 25),
@@ -117,7 +117,7 @@ public enum CoinShop {
         if owned.contains("cu-gamblers-spirit") && !run.gamblerUsed
             && !run.inventory.contains(where: { $0.type == "gamblers-spirit" }) {
             run.inventory.append(Item(name: "Gambler's Spirit", icon: "🎲", type: "gamblers-spirit",
-                                      desc: "Once per run — double or halve your gold. Your choice. No refunds."))
+                                      desc: "Once per run, outside a fight: bet the gold you earned this floor (up to \(Gambler.maxStake)) on a coin flip. Win, it doubles. Lose, half of it is gone."))
         }
         if owned.contains("cu-void-touched") {
             var w = rareWeapons[dice.roll(0...(rareWeapons.count - 1))]
@@ -250,3 +250,18 @@ public enum Titles {
         return tag
     }
 }
+
+/// 12.2: the Gambler's Spirit bets only the gold earned on this floor (up to
+/// 5,000) on a real coin flip. Before, it doubled your whole wallet at your
+/// choice every run, which let players reach quadrillions of gold.
+public enum Gambler {
+    public static let maxStake = 5_000
+
+    /// What's on the table: this floor's earnings, capped.
+    public static func stake(_ run: Run) -> Int { min(maxStake, max(0, run.gold - run.floorStats.goldStart)) }
+
+    /// The flip: won, the stake doubles (you gain it again); lost, half of it is gone.
+    /// Returns the change to your gold.
+    public static func change(stake: Int, won: Bool) -> Int { won ? stake : -(stake / 2) }
+}
+

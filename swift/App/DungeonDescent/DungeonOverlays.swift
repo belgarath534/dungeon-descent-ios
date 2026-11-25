@@ -563,20 +563,24 @@ struct GambleOverlay: View {
     @ObservedObject var model: RunModel
 
     var body: some View {
-        let gold = model.run.gold
+        let stake = Gambler.stake(model.run)
         DungeonDialog(maxWidth: 420) {
-            Text("🎲 Gambler's Spirit — Choose Your Fate").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
+            Text("🎲 Gambler's Spirit").font(Theme.decorative(15.2)).foregroundStyle(Theme.gold)
                 .padding(.bottom, 8).accessibilityAddTraits(.isHeader)
-            Text("Double your gold (\(gold) → \(gold * 2)g) or halve it (\(gold) → \(gold / 2)g). No refunds." as String)
+            Text("Bet the \(stake) gold you earned this floor on a coin flip. Win, it doubles (+\(stake)). Lose, half of it is gone (-\(stake / 2))." as String)
                 .font(Theme.crimson(14)).foregroundStyle(Theme.textSecondary).padding(.bottom, 16)
             HStack(spacing: 10) {
-                Button("Double (\(gold * 2)g)" as String) { model.gamble(double: true) }
-                    .buttonStyle(WebButtonStyle(kind: .gold))
-                Button("Halve (\(gold / 2)g)" as String) { model.gamble(double: false) }
+                Button("🎲 Flip the Coin") { model.gamble(roll: true) }
+                    .buttonStyle(WebButtonStyle(kind: .gold)).disabled(stake == 0)
+                    .accessibilityLabel(stake == 0 ? "Flip the coin. You haven't earned gold on this floor yet." : "Flip the coin for \(stake) gold" as String)
+                Button("Keep It for Later") { model.gamble(roll: false) }
                     .buttonStyle(WebButtonStyle(kind: .ghost))
             }
         }
-        .onAppear { Feedback.announce("Gambler's Spirit. Double your gold to \(gold * 2), or halve it to \(gold / 2). No refunds.") }
+        .onAppear {
+            Feedback.announce(stake == 0 ? "Gambler's Spirit. You haven't earned gold on this floor yet. Keep it for later."
+                              : "Gambler's Spirit. Bet the \(stake) gold you earned this floor. Win, plus \(stake). Lose, minus \(stake / 2).")
+        }
     }
 }
 
