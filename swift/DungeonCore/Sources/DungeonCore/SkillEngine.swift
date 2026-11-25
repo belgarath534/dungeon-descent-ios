@@ -123,6 +123,11 @@ public enum Skills {
             r.announcement = "Your skills are silenced!"
             return r
         }
+        if spec.hasPermanentStats && run.fight.permanentSkillsUsed.contains(effect) {
+            r.acted = false
+            r.announcement = "\(skill.name) can only be used once per fight."
+            return r
+        }
         let price = cost(skill, run)
         guard run.sp >= price else {
             r.acted = false
@@ -219,7 +224,13 @@ public enum Skills {
             if run.sp > before { msg += " +\(run.sp - before) SP." }
         }
         if spec.drainsSP { run.sp = 0; msg += " All SP consumed." }
-        if spec.permAtk != 0 || spec.permDef != 0 || spec.permMaxHp != 0 || spec.permMaxSp != 0 {
+        // Permanent stat skills work once per fight. Most are free actions, so
+        // at 0 SP (Apocalypse) they could otherwise be repeated without limit.
+        let permKey = run.lastSkill ?? effect
+        if spec.hasPermanentStats && run.fight.permanentSkillsUsed.contains(permKey) {
+            msg += " Its permanent bonus was already gained this fight."
+        } else if spec.hasPermanentStats {
+            run.fight.permanentSkillsUsed.append(permKey)
             run.atkBonus += spec.permAtk
             run.defBonus += spec.permDef
             run.maxHp = max(1, run.maxHp + spec.permMaxHp)
@@ -246,7 +257,10 @@ public enum Skills {
             msg += " " + [spec.buffAtk != 0 ? "+\(spec.buffAtk) attack" : nil,
                           spec.buffDef != 0 ? "+\(spec.buffDef) defense" : nil].compactMap { $0 }.joined(separator: " and ") + " for \(spec.buffTurns) turns."
         }
-        if spec.shield > 0 { run.fight.shield += spec.shield; msg += " Shield absorbs up to \(run.fight.shield) damage." }
+        // Shield skills raise the shield to their size; they don't stack (the web
+        // version set it). Stacking let free 0-SP casts under Apocalypse build
+        // a shield of tens of thousands.
+        if spec.shield > 0 { run.fight.shield = max(run.fight.shield, spec.shield); msg += " Shield absorbs up to \(run.fight.shield) damage." }
         if spec.dodges > 0 { run.fight.dodges += spec.dodges; msg += spec.dodges == 1 ? " The next attack will miss you." : " The next \(spec.dodges) attacks will miss you." }
         if spec.enemyMiss > 0 { run.fight.enemyMiss = spec.enemyMiss; msg += " \(Int(spec.enemyMiss * 100))% chance the enemy misses." }
         if spec.reduceTurns > 0 { run.fight.reduce = spec.reduce; run.fight.reduceTurns = spec.reduceTurns; msg += " Damage taken -\(Int(spec.reduce * 100))% for \(spec.reduceTurns) turns." }
@@ -463,7 +477,7 @@ public enum Skills {
             case 0: msg += " Destruction!"; return base * 3
             case 1:
                 let h = min(30, run.maxHp - run.hp); run.hp += h; msg += " Restoration: +\(h) HP."
-            case 2: run.fight.shield += 30; msg += " Protection: a 30-point shield."
+            case 2: run.fight.shield = max(run.fight.shield, 30); msg += " Protection: a 30-point shield."
             default: e.stunTurns = max(e.stunTurns, 1); msg += " Control: the enemy is frozen in place."
             }
             return 0

@@ -958,6 +958,39 @@ final class RarityTests: XCTestCase {
         return i
     }
 
+    /// Apocalypse makes skills free, and utility skills don't give the enemy a
+    /// turn, so a shield or permanent-stat skill could be cast without limit.
+    func testApocalypseCannotLoopFreeSkills() {
+        let dummy = Enemy(name: "D", icon: "", hp: 500, maxHp: 500, atk: 1...1, gold: 1...1)
+        func run(_ cls: String) -> Run {
+            var r = Run(character: PlayerCharacter(name: "R", cls: cls, race: "Human", prof: "Thief",
+                                                   dungeon: "Crypt of Malachar", difficulty: .wanderer))
+            r.equippedWeapon = withEffect(axe, "apocalypse")
+            return r
+        }
+
+        // Arcane Armor raises the shield to 40; casting it again doesn't stack.
+        var s = run("Sorcerer")
+        s.unlockedSkills = ["arcane-armor"]
+        Combat.begin(&s, against: dummy)
+        var d = LoadedDice()
+        for _ in 0..<100 { XCTAssertTrue(Skills.use(&s, "arcane-armor", dice: &d).acted) }
+        XCTAssertEqual(s.fight.shield, 40)
+
+        // Enlightenment's +10 max SP works once per fight.
+        var m = run("Monk")
+        m.unlockedSkills = ["enlightenment"]
+        Combat.begin(&m, against: dummy)
+        let maxSp = m.maxSp
+        XCTAssertTrue(Skills.use(&m, "enlightenment", dice: &d).acted)
+        for _ in 0..<50 { XCTAssertFalse(Skills.use(&m, "enlightenment", dice: &d).acted) }
+        XCTAssertEqual(m.maxSp, maxSp + 10)
+        // A new fight allows it again.
+        Combat.begin(&m, against: dummy)
+        XCTAssertTrue(Skills.use(&m, "enlightenment", dice: &d).acted)
+        XCTAssertEqual(m.maxSp, maxSp + 20)
+    }
+
     func testWeaponEffects() {
         let dummy = Enemy(name: "D", icon: "", hp: 500, maxHp: 500, atk: 1...1, gold: 1...1)
         var r = newRun()
