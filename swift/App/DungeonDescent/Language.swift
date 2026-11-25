@@ -351,6 +351,9 @@ enum Patterns {
         ("💰 You drop half the gold you carried: {0} gold is lost in the dungeon. The {1} gold in your Home safe is safe.", "💰 Você deixa cair metade do ouro que carregava: {0} de ouro se perdem na masmorra. Os {1} de ouro no cofre da sua Casa estão seguros."),
         ("💰 You drop half the gold you carried: {0} gold is lost in the dungeon. Gold kept in your Home safe is never lost.", "💰 Você deixa cair metade do ouro que carregava: {0} de ouro se perdem na masmorra. O ouro guardado no cofre da sua Casa nunca se perde."),
         // 12.2: What's New.
+        ("⚖ Balance, thanks to a player's report — bosses grow to match strong characters, prestige stars now add 5% damage a star to every hit, and the Gambler's Spirit only bets the gold you earned on that floor, on a real coin flip.", "⚖ Equilíbrio, graças ao relato de um jogador — os chefes crescem conforme a força do personagem, as estrelas de prestígio agora somam 5% de dano por estrela a cada golpe, e o Espírito do Apostador só aposta o ouro ganho naquele andar, num cara ou coroa de verdade."),
+        ("🔨 Weapons upgrade past level 10 at the Blacksmith, at rising prices, and enemies grow with them. The Mystery Coin Shop has 8 new upgrades and Mastery ranks that never run out.", "🔨 As armas melhoram além do nível 10 no Ferreiro, por preços crescentes, e os inimigos crescem junto. A Loja de Moedas Misteriosas tem 8 melhorias novas e níveis de Maestria que nunca acabam."),
+        ("💰 Losing a normal dungeon run costs half the gold you carry. Gold in your Home safe is never lost.", "💰 Perder uma partida normal na masmorra custa metade do ouro que você carrega. O ouro no cofre da sua Casa nunca se perde."),
         ("The Unicorn Update", "A Atualização do Unicórnio"),
         ("Version 12.1.1", "Versão 12.1.1"),
         ("The Raid Update", "A Atualização do Raide"),

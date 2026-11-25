@@ -150,6 +150,9 @@ WHATS_NEW_12_2 = {
 • Two rare rooms: the Wishing Well and the Forgotten Music Room.
 • My Enemies: rename, strengthen or delete the community enemies you made.
 • Long lists like the inventory and the shop's selling now open as their own pages, and the Settings button appears only once.
+• Balance, thanks to a player's report: bosses grow to match strong characters, prestige stars now add damage to every hit, and the Gambler's Spirit only bets the gold you earned on that floor.
+• Weapons upgrade past level 10 at rising prices, and enemies grow with them. The Mystery Coin Shop has 8 new upgrades and Mastery ranks that never run out.
+• Losing a normal dungeon run costs half the gold you carry. Keep your gold in your Home safe.
 • Many more fixes.""",
     "pt-BR": """Novo na 12.2:
 • Guildas: entre ou crie uma guilda de até 20 jogadores, com chat próprio e um Chefe da Guilda toda semana. Derrubem ele juntos e ganhem ouro e Fragmentos de Alma. Na aba Multijogador.
@@ -160,6 +163,9 @@ WHATS_NEW_12_2 = {
 • Duas salas raras: o Poço dos Desejos e a Sala de Música Esquecida.
 • Meus Inimigos: renomeie, fortaleça ou apague os inimigos da comunidade que você criou.
 • Listas longas, como o inventário e a venda na loja, agora abrem em páginas próprias, e o botão de Configurações aparece só uma vez.
+• Equilíbrio, graças ao relato de um jogador: os chefes crescem conforme a força do personagem, as estrelas de prestígio agora somam dano a cada golpe, e o Espírito do Apostador só aposta o ouro ganho naquele andar.
+• As armas melhoram além do nível 10 por preços crescentes, e os inimigos crescem junto. A Loja de Moedas Misteriosas tem 8 melhorias novas e níveis de Maestria que nunca acabam.
+• Perder uma partida normal custa metade do ouro que você carrega. Guarde seu ouro no cofre da sua Casa.
 • Muitas outras correções.""",
 }
 WHATS_NEW = {"12.2": WHATS_NEW_12_2, "12.1.1": WHATS_NEW_12_1_1, "12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
