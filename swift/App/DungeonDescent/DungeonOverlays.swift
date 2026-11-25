@@ -64,22 +64,37 @@ struct ShopOverlay: View {
                 .background(Color(hex: 0x0d0a00)).overlay(Rectangle().stroke(Color(hex: 0x332200)))
                 .padding(.bottom, 14)
                 .accessibilityLabel("Your gold: \(run.gold).\(night ? " Night discount active." : "")" as String)
-            VStack(spacing: 8) {
-                ForEach(model.shop) { entry in row(entry, gold: run.gold, night: night) }
+            // 12.1.2: buying and selling are two pages, not a sell list
+            // unfolding under the merchant's wares.
+            if selling {
+                Button("← Back to the Merchant's Wares") {
+                    Sound.sfx("sfx-select")
+                    selling = false
+                    Feedback.announce("The merchant's wares.")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { UIAccessibility.post(notification: .screenChanged, argument: nil) }
+                }
+                .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity).padding(.bottom, 10)
+                Text("💰 Sell Your Items").font(Theme.cinzel(12)).foregroundStyle(Theme.goldDim)
+                    .accessibilityAddTraits(.isHeader).padding(.bottom, 6)
+                sellList(model.run)
+            } else {
+                VStack(spacing: 8) {
+                    ForEach(model.shop) { entry in row(entry, gold: run.gold, night: night) }
+                }
+                .padding(.bottom, 14)
+                .accessibilityElement(children: .contain)
+                .accessibilityLabel("Items for sale")
+                Button("💰 Sell Your Items") {
+                    Sound.sfx("sfx-select")
+                    selling = true
+                    Feedback.announce("Sell your items. Swipe through your items to sell them.")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { UIAccessibility.post(notification: .screenChanged, argument: nil) }
+                }
+                .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x888888))
+                .padding(.vertical, 8).padding(.horizontal, 12).overlay(Rectangle().stroke(Color(hex: 0x333333)))
+                .padding(.bottom, 12)
+                .accessibilityLabel("Sell your items")
             }
-            .padding(.bottom, 14)
-            .accessibilityElement(children: .contain)
-            .accessibilityLabel("Items for sale")
-            Button("💰 Sell Your Items") {
-                Sound.sfx("sfx-select")
-                selling.toggle()
-                Feedback.announce(selling ? "Sell section opened. Swipe through your items to sell them." : "Sell section closed.")
-            }
-            .font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x888888))
-            .padding(.vertical, 8).padding(.horizontal, 12).overlay(Rectangle().stroke(Color(hex: 0x333333)))
-            .padding(.bottom, 12)
-            .accessibilityLabel("Toggle sell your items section")
-            if selling { sellList(model.run) }
             HStack {
                 Spacer()
                 VStack(alignment: .trailing, spacing: 8) {

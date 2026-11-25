@@ -1,6 +1,105 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "← Back to the Merchant's Wares": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "← Voltar às Mercadorias"
+          }
+        }
+      }
+    },
+    "Sell your items": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vender seus itens"
+          }
+        }
+      }
+    },
+    "The merchant's wares.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As mercadorias do mercador."
+          }
+        }
+      }
+    },
+    "Sell your items. Swipe through your items to sell them.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vender seus itens. Deslize pelos itens para vendê-los."
+          }
+        }
+      }
+    },
+    "← Back to the Battle Pass": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "← Voltar ao Passe de Batalha"
+          }
+        }
+      }
+    },
+    "Back to the Battle Pass": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Voltar ao Passe de Batalha"
+          }
+        }
+      }
+    },
+    "🎁 Every Tier's Reward": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🎁 Recompensa de Cada Nível"
+          }
+        }
+      }
+    },
+    "← Back to the Dungeon": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "← Voltar à Masmorra"
+          }
+        }
+      }
+    },
+    "Close inventory and return to the dungeon": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fechar o inventário e voltar à masmorra"
+          }
+        }
+      }
+    },
     "low": {
       "extractionState": "manual",
       "localizations": {

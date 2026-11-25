@@ -65,16 +65,24 @@ struct BattlePassView: View {
             Text("Enemies 5, elites 15, bosses 60 · each new floor 10 · clearing a dungeon 150 · World Boss strike 10 · Weekly Ladder run 100 · Endless Descent floor 2 · Spire floor 5 · daily quest 50.")
                 .font(Theme.crimson(13)).foregroundStyle(Theme.textSecondary)
 
-            Button(showAll ? "Hide the rewards" : "🎁 Every tier's reward") { showAll.toggle() }
+            // 12.1.2: all 50 rewards are their own page, not a list unfolding here.
+            Button("🎁 Every tier's reward") { showAll = true }
                 .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity).padding(.top, 6)
-            if showAll {
-                ForEach(1...BattlePass.tiers, id: \.self) { t in
-                    let r = BattlePass.reward(tier: t, season: season.number).map(\.text).joined(separator: " and ")
-                    Text("\(t <= p.paid ? "✓" : "○") Tier \(t): \(r)" as String)
-                        .font(Theme.crimson(13)).foregroundStyle(t <= p.paid ? Color(hex: 0x44cc88) : Theme.textSecondary)
-                        .accessibilityLabel("Tier \(t), \(t <= p.paid ? "earned" : "not yet"): \(r)" as String)
+                .fullScreenCover(isPresented: $showAll) {
+                    WebScreen {
+                        Button("← Back to the Battle Pass") { showAll = false }
+                            .buttonStyle(BackButtonStyle())
+                            .accessibilityLabel("Back to the Battle Pass")
+                        Text("🎁 Every Tier's Reward").font(Theme.decorative(17)).foregroundStyle(Theme.gold)
+                            .accessibilityAddTraits(.isHeader)
+                        ForEach(1...BattlePass.tiers, id: \.self) { t in
+                            let r = BattlePass.reward(tier: t, season: season.number).map(\.text).joined(separator: " and ")
+                            Text("\(t <= p.paid ? "✓" : "○") Tier \(t): \(r)" as String)
+                                .font(Theme.crimson(13)).foregroundStyle(t <= p.paid ? Color(hex: 0x44cc88) : Theme.textSecondary)
+                                .accessibilityLabel("Tier \(t), \(t <= p.paid ? "earned" : "not yet"): \(r)" as String)
+                        }
+                    }
                 }
-            }
         }
         .onAppear {
             let done = p.questsDone.count
