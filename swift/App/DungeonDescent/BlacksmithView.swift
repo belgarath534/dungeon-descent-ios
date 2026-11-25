@@ -229,9 +229,14 @@ struct BlacksmithView: View {
                 empty("Inventory empty. Find items in dungeons or buy from the shop.")
             } else {
                 Text("\(f.bag.count) items — tap to sell" as String).font(Theme.cinzel(11.2)).foregroundStyle(Color(hex: 0x888888))
-                ForEach(Array(f.bag.enumerated()), id: \.offset) { i, item in
-                    let price = Inventory.sellPrice(item)
-                    itemRow(item, button: "💰 \(price)g", label: "Sell \(item.name) for \(price) gold" + (item.statSpoken.map { ", \($0)" } ?? "")) { model.sell(i) }
+                // 12.2: the same item once, with how many you have (a player had
+                // 20 Soul Traps in a row); selling sells one, like the merchant.
+                ForEach(ShopOverlay.stacks(f.bag), id: \.index) { stack in
+                    let item = stack.item, price = Inventory.sellPrice(item)
+                    let count = stack.count > 1 ? " ×\(stack.count)" : ""
+                    itemRow(item, count: count, button: "💰 \(price)g",
+                            label: (stack.count > 1 ? "Sell one \(item.name) for \(price) gold. You have \(stack.count)" : "Sell \(item.name) for \(price) gold")
+                                + (item.statSpoken.map { ", \($0)" } ?? "")) { model.sell(stack.index) }
                 }
             }
         }
@@ -259,10 +264,10 @@ struct BlacksmithView: View {
         }
     }
 
-    private func itemRow(_ item: Item, button: String?, label: String, action: @escaping () -> Void) -> some View {
+    private func itemRow(_ item: Item, count: String = "", button: String?, label: String, action: @escaping () -> Void) -> some View {
         HStack(spacing: 8) {
             VStack(alignment: .leading, spacing: 1) {
-                Text("\(item.icon) \(item.name)\((item.level ?? 1) > 1 ? " Lv\(item.level ?? 1)" : "")" as String)
+                Text("\(item.icon) \(item.name)\((item.level ?? 1) > 1 ? " Lv\(item.level ?? 1)" : "")\(count)" as String)
                     .font(Theme.cinzel(11.5)).foregroundStyle(Color(hex: 0xcc9944))
                 // 12.1: weapon and armor stats in the lists.
                 if let st = item.statText {
@@ -270,7 +275,7 @@ struct BlacksmithView: View {
                 }
             }
             .accessibilityElement(children: .ignore)
-            .accessibilityLabel("\(item.name)\((item.level ?? 1) > 1 ? " Level \(item.level ?? 1)" : "")\(item.statSpoken.map { ", \($0)" } ?? ""). \(item.desc)" as String)
+            .accessibilityLabel("\(item.name)\((item.level ?? 1) > 1 ? " Level \(item.level ?? 1)" : "")\(count.isEmpty ? "" : ", \(count.dropFirst(2)) of them")\(item.statSpoken.map { ", \($0)" } ?? ""). \(item.desc)" as String)
             Spacer()
             if let button {
                 Button(button, action: action)
