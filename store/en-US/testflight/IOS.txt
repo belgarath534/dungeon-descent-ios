@@ -9,5 +9,6 @@ New in this build — please try:
 • Rare rooms: the Wishing Well and the Forgotten Music Room.
 • My Enemies (Bestiary, Community, needs an account): edit or delete the enemies you made.
 • Balance (please play a lot and tell us how it feels): bosses grow to match strong characters; prestige stars add 5% damage a star to every hit; the Gambler's Spirit bets only this floor's gold on a coin flip; weapons upgrade past level 10; 8 new Mystery Coin Shop upgrades and Mastery ranks; losing a normal run costs half the gold you carry (your Home safe keeps its gold).
+• Fixed: with an Apocalypse weapon, shield skills like Arcane Armor could be cast over and over for a giant shield. Shields now top up instead of stacking, and skills that give permanent stats work once per fight.
 
 Found a bug? Tell us in bug-reports on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.
