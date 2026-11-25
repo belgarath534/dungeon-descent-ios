@@ -19,7 +19,15 @@ public struct Forge: Sendable {
 }
 
 public enum Blacksmith {
+    /// Armor stops at level 10. 12.2: weapons don't stop; past level 10 every
+    /// level costs 40% more than the last, and enemies grow with your weapon
+    /// (WeaponGrowth), so it's something to spend a fortune on, not a way to
+    /// break the game.
     public static let maxLevel = 10
+    /// Enchanters upgrade for free only up to this level; past it, gold only.
+    public static let enchanterMaxLevel = 10
+
+    public static func isMaxed(_ slot: Slot, level: Int) -> Bool { slot == .armor && level >= maxLevel }
     public static let maxDurability = 100
     /// UPGRADE_COSTS, by the gear's current level.
     static let upgradeCosts = [0, 40, 80, 140, 220, 320, 440, 580, 740, 920, 1150]
@@ -120,10 +128,10 @@ public enum Blacksmith {
             return (false, "Nothing equipped to upgrade. Go to the Inventory tab to equip something first.")
         }
         let lvl = item.level ?? 1
-        if lvl >= maxLevel { return (false, "\(item.name) is already at maximum level \(maxLevel).") }
+        if isMaxed(slot, level: lvl) { return (false, "\(item.name) is already at maximum level \(maxLevel).") }
         let cost = upgradeCost(level: lvl, prof: forge.prof, store: store)
         var note = ""
-        if let e = enchanterIndex(forge.bag) {
+        if lvl < enchanterMaxLevel, let e = enchanterIndex(forge.bag) {
             let left = charges(forge.bag[e]) - 1
             if left <= 0 { forge.bag.remove(at: e) } else { forge.bag[e].extra["charges"] = .number(Double(left)) }
             note = "Enchanter used! Free upgrade applied." + (left > 0 ? " \(left) charges remaining. " : " Enchanter used up. ")
@@ -137,7 +145,8 @@ public enum Blacksmith {
         if slot == .weapon {
             forge.weapon = item
             let r = item.weaponAttack
-            return (true, note + "\(item.name) upgraded to Level \(lvl + 1)! Attack is now \(r.lowerBound) to \(r.upperBound).")
+            let warn = lvl + 1 > WeaponGrowth.freeLevels ? " Enemies grow stronger with it: \(WeaponGrowth.percent(level: lvl + 1))% tougher." : ""
+            return (true, note + "\(item.name) upgraded to Level \(lvl + 1)! Attack is now \(r.lowerBound) to \(r.upperBound)." + warn)
         }
         forge.armor = item
         return (true, note + "\(item.name) upgraded to Level \(lvl + 1)! Defense is now +\(item.armorDefense).")

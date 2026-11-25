@@ -5947,3 +5947,38 @@ final class GamblerTests: XCTestCase {
         XCTAssertEqual(Gambler.stake(r), Gambler.maxStake)
     }
 }
+
+final class WeaponGrowthTests: XCTestCase {
+    func testWeaponsUpgradePastTenAndEnemiesGrow() {
+        let store = MemoryStore()
+        let wallet = Wallet(store: store)
+        wallet.addGold(10_000_000)
+        var sword = Blacksmith.weapons[1]
+        sword.level = 10
+        var armor = Blacksmith.armors[0]
+        armor.level = 10
+        var forge = Forge(weapon: sword, armor: armor, bag: [Item(name: "Enchanter", icon: "🪄", type: "enchanter", desc: "")], gold: wallet.gold, prof: nil)
+        forge.bag[0].extra["charges"] = JSONValue.number(3)
+        // Armor still stops at 10; weapons go on, and past 10 an Enchanter doesn't help.
+        XCTAssertFalse(Blacksmith.upgrade(.armor, &forge, wallet: wallet, store: store).ok)
+        let goldBefore = forge.gold
+        XCTAssertTrue(Blacksmith.upgrade(.weapon, &forge, wallet: wallet, store: store).ok)
+        XCTAssertEqual(forge.weapon?.level, 11)
+        XCTAssertEqual(goldBefore - forge.gold, Blacksmith.upgradeCost(level: 10, prof: nil, store: store))
+        XCTAssertEqual(Blacksmith.charges(forge.bag[0]), 3)
+        XCTAssertGreaterThan(Blacksmith.upgradeCost(level: 20, prof: nil, store: store), 80_000)
+
+        var r = Run(character: PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        let e = Enemy(name: "Rat", icon: "🐀", hp: 100, maxHp: 100, atk: 10...20, gold: 1...2)
+        r.equippedWeapon = sword
+        XCTAssertEqual(WeaponGrowth.scaled(e, for: r).maxHp, 100)
+        r.equippedWeapon?.level = 20
+        let g = WeaponGrowth.scaled(e, for: r)
+        XCTAssertEqual(g.maxHp, 140)
+        XCTAssertEqual(g.atk, 13...26)
+        XCTAssertEqual(WeaponGrowth.scaled(g, for: r).maxHp, 140)
+        Combat.begin(&r, against: e)
+        XCTAssertEqual(r.enemy?.hp, 140)
+    }
+}

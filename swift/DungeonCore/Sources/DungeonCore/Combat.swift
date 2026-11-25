@@ -45,6 +45,8 @@ public enum Combat {
     /// Returns log lines from the spirit's combat-start effect.
     @discardableResult
     public static func begin(_ run: inout Run, against enemy: Enemy) -> [String] {
+        // 12.2: enemies grow with a weapon upgraded past level 10.
+        let enemy = WeaponGrowth.scaled(enemy, for: run)
         run.enemy = enemy
         run.foes = []
         run.inCombat = true
@@ -595,7 +597,7 @@ public enum Combat {
     public static func beginAmbush(_ run: inout Run, _ enemies: [Enemy]) -> [String] {
         guard let first = enemies.first else { return [] }
         var log = begin(&run, against: first)
-        run.foes = Array(enemies.dropFirst())
+        run.foes = enemies.dropFirst().map { WeaponGrowth.scaled($0, for: run) }
         log.insert("⚡ AMBUSH! \(enemies.count) enemies attack at once: " + enemies.map(\.name).joined(separator: ", ") + "!", at: 0)
         return log
     }

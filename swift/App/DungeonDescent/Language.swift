@@ -303,6 +303,10 @@ enum Patterns {
         ("🎲 Gambler's Spirit — TAILS. {0} gold lost.", "🎲 Espírito do Apostador — COROA. {0} de ouro perdidos."),
         ("🎲 Gambler's Spirit — The coin was cruel. You lost {0} gold.", "🎲 Espírito do Apostador — A moeda foi cruel. Você perdeu {0} de ouro."),
         ("Gambler's Spirit. You lost. {0} gold gone.", "Espírito do Apostador. Você perdeu. {0} de ouro se foram."),
+        // 12.2: endless weapon upgrades.
+        ("Past level 10 every upgrade costs more, and enemies grow with your weapon: {0}% tougher at level {1}.", "Depois do nível 10 cada melhoria custa mais, e os inimigos crescem com a sua arma: {0}% mais resistentes no nível {1}."),
+        (" Enemies grow stronger with it: {0}% tougher.", " Os inimigos ficam mais fortes com ela: {0}% mais resistentes."),
+        ("{0} upgraded to Level {1}! Attack is now {2} to {3}. Enemies grow stronger with it: {4}% tougher.", "{0} melhorada para o Nível {1}! O ataque agora é de {2} a {3}. Os inimigos ficam mais fortes com ela: {4}% mais resistentes."),
         // 12.2: What's New.
         ("The Unicorn Update", "A Atualização do Unicórnio"),
         ("Version 12.1.1", "Versão 12.1.1"),

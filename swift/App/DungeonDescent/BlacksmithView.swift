@@ -105,15 +105,21 @@ struct BlacksmithView: View {
 
     private func gearCard(_ item: Item, slot: Blacksmith.Slot) -> some View {
         let lvl = item.level ?? 1
-        let maxed = lvl >= Blacksmith.maxLevel
+        let maxed = Blacksmith.isMaxed(slot, level: lvl)
         let cost = Blacksmith.upgradeCost(level: lvl, prof: f.prof, store: model.game.store)
-        let enchanter = Blacksmith.hasEnchanter(f)
+        // Enchanters only work up to level 10.
+        let enchanter = Blacksmith.hasEnchanter(f) && lvl < Blacksmith.enchanterMaxLevel
         let can = !maxed && (f.gold >= cost || enchanter)
         let stat = slot == .weapon ? "ATK \(item.weaponAttack.lowerBound)-\(item.weaponAttack.upperBound)" : "DEF +\(item.armorDefense)"
         let color = slot == .weapon ? Theme.gold : Color(hex: 0x88aaff)
         return VStack(alignment: .leading, spacing: 8) {
             Text("\(item.icon) \(item.name) — Level \(lvl)\(maxed ? "  MAX" : "")" as String).font(Theme.cinzel(11.2)).foregroundStyle(color)
             Text("\(item.desc) \(stat)" as String).font(Theme.crimson(12.5, italic: true)).foregroundStyle(Color(hex: 0x888888))
+            if slot == .weapon && lvl >= WeaponGrowth.freeLevels {
+                // 12.2: no cap, but the dungeon keeps up.
+                Text("Past level 10 every upgrade costs more, and enemies grow with your weapon: \(WeaponGrowth.percent(level: lvl + 1))% tougher at level \(lvl + 1)." as String)
+                    .font(Theme.crimson(12, italic: true)).foregroundStyle(Color(hex: 0xcc8866))
+            }
             HStack {
                 Text(maxed ? "✦ Maximum Level Reached" : enchanter ? "🪄 Enchanter Active — Free Upgrade!"
                      : "Upgrade to Level \(lvl + 1) — \(cost)g\(isSmith ? " (10% off)" : "")")
