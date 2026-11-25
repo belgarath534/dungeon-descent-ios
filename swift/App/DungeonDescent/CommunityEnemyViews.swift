@@ -56,7 +56,7 @@ final class CommunityEnemyStore: ObservableObject {
     func refreshPool(_ store: GameStore) { CommunityEnemies.pool = visible(store) }
 
     /// ecSubmit: fire and forget, like the web version. 12.2: it remembers
-    /// who made it (ownerUid, and this device's list), so they can edit it.
+    /// who made it (ownerUid), so they can edit it.
     func submit(_ e: CommunityEnemies.Entry) {
         let data: [String: Any] = [
             "name": e.name, "desc": e.desc, "type": e.type, "dungeon": e.dungeon, "music": e.music ?? NSNull(),
@@ -65,37 +65,29 @@ final class CommunityEnemyStore: ObservableObject {
         ]
         let ref = col.document()
         ref.setData(data) { _ in }
-        Self.remember(ref.documentID)
         loadedAt = .distantPast
     }
 
     // MARK: Your own enemies (12.2)
 
-    /// Who new enemies belong to: your account, or (signed out) your
-    /// creator ID, which lives in iCloud Keychain so it survives deleting
-    /// the app and follows you to your other Apple devices.
+    /// Who new enemies belong to: your account. Signed out, it's your
+    /// creator ID (iCloud Keychain), so the developer can still tell your
+    /// enemies apart, but only an account can edit online, so sign in first.
     static var ownerId: String { Auth.auth().currentUser?.uid ?? CreatorKey.id }
-
-    /// Every ID that's yours (an enemy made signed out stays yours after you sign in).
-    static var myIds: Set<String> {
-        var s: Set<String> = [CreatorKey.id]
-        if let uid = Auth.auth().currentUser?.uid { s.insert(uid) }
-        return s
-    }
-
-    static var madeHere: [String] { UserDefaults.standard.stringArray(forKey: "swift_my_enemies") ?? [] }
-    static func remember(_ id: String) { UserDefaults.standard.set(madeHere + [id], forKey: "swift_my_enemies") }
 
     /// The developer's account can edit every enemy (older ones saved no
     /// account, only a name anyone could type, so only the developer edits those).
     static var isDeveloper: Bool { CloudAccount.shared.isDeveloper }
 
-    /// Yours: made with your account, or on this device.
+    /// Yours: made while signed in to your account (the online rules only
+    /// let that account change it), or any enemy for the developer.
     func isMine(_ e: CommunityEnemies.Entry, username: String?) -> Bool {
         if Self.isDeveloper { return true }
-        if let o = e.owner { return Self.myIds.contains(o) }
-        return Self.madeHere.contains(e.id)
+        guard let uid = Auth.auth().currentUser?.uid else { return false }
+        return e.owner == uid
     }
+
+    static var signedIn: Bool { Auth.auth().currentUser != nil }
 
     @Published private(set) var mine: [CommunityEnemies.Entry] = []
 
@@ -115,29 +107,22 @@ final class CommunityEnemyStore: ObservableObject {
         if Self.isDeveloper {
             // Every live enemy, for the developer.
             for d in (try? await col.whereField("approved", isEqualTo: true).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
-        } else {
-            for d in (try? await col.whereField("ownerUid", in: Array(Self.myIds)).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
-        }
-        for id in Self.madeHere where found[id] == nil {
-            if let d = try? await col.document(id).getDocument(), let v = d.data() { add(id, v) }
+        } else if let uid = Auth.auth().currentUser?.uid {
+            for d in (try? await col.whereField("ownerUid", isEqualTo: uid).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
         }
         mine = found.values.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
     }
 
-    /// Saves your changes (and claims an older enemy for your account).
+    /// Saves your changes. The enemy stays with whoever made it.
     func save(_ e: CommunityEnemies.Entry, username: String?) async -> String? {
         guard isMine(e, username: username) else { return "That enemy isn't yours." }
         do {
-            // The developer's edits leave the enemy with whoever made it.
-            var fields: [String: Any] = [
+            try await col.document(e.id).updateData([
                 "name": e.name, "desc": e.desc, "type": e.type, "icon": e.icon, "hp": e.hp, "atk": e.atk, "def": e.def,
                 "editedAt": (Date().timeIntervalSince1970 * 1000).rounded(),
-            ]
-            // An enemy keeps the owner it has; one made here before it had one gets yours.
-            if !Self.isDeveloper && e.owner == nil { fields["ownerUid"] = Self.ownerId }
-            try await col.document(e.id).updateData(fields)
+            ])
             loadedAt = .distantPast
-            if let i = mine.firstIndex(where: { $0.id == e.id }) { mine[i] = Self.isDeveloper || e.owner != nil ? e : e.owned(by: Self.ownerId) }
+            if let i = mine.firstIndex(where: { $0.id == e.id }) { mine[i] = e }
             return nil
         } catch {
             return "Couldn't save it. Check your connection and try again."

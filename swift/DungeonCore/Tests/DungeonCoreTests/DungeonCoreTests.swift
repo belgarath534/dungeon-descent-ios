@@ -5874,3 +5874,59 @@ final class BossRetryTests: XCTestCase {
         XCTAssertNil(BossRetry.offer(hc))
     }
 }
+
+final class GuildTests: XCTestCase {
+    func testNames() {
+        XCTAssertNil(Guilds.nameProblem("Iron Wolves"))
+        XCTAssertNil(Guilds.nameProblem("Leo's Raiders-2"))
+        XCTAssertNotNil(Guilds.nameProblem("Io"))
+        XCTAssertNotNil(Guilds.nameProblem(String(repeating: "a", count: 25)))
+        XCTAssertNotNil(Guilds.nameProblem("Wolves/Den"))
+        XCTAssertNotNil(Guilds.nameProblem("Dragon🐉"))
+        XCTAssertNotNil(Guilds.nameProblem("Two  Spaces"))
+        XCTAssertNotNil(Guilds.nameProblem("shit guild"))
+        XCTAssertEqual(Guilds.key("  Iron Wolves "), "iron wolves")
+        XCTAssertNotNil(Guilds.descProblem(String(repeating: "a", count: 121)))
+    }
+
+    func testWeekBossStrikesAndReward() {
+        var cal = Calendar(identifier: .gregorian)
+        cal.timeZone = TimeZone(identifier: "UTC")!
+        let monday = cal.date(from: DateComponents(year: 2026, month: 11, day: 23, hour: 0, minute: 30))!
+        let sunday = cal.date(from: DateComponents(year: 2026, month: 11, day: 29, hour: 23))!
+        let w = Guilds.week(monday)
+        XCTAssertEqual(w.key, "2026-W48")
+        XCTAssertEqual(w, Guilds.week(sunday))
+        XCTAssertNotEqual(w.boss, Guilds.week(sunday.addingTimeInterval(2 * 3600)).boss)
+        XCTAssertEqual(Guilds.lastWeek(monday).key, "2026-W47")
+        XCTAssertEqual(Guilds.daysLeft(monday), 7)
+        XCTAssertEqual(Guilds.daysLeft(sunday), 1)
+        XCTAssertEqual(Guilds.hp(members: 1), 16_000)
+        XCTAssertEqual(Guilds.hp(members: 20), 130_000)
+        XCTAssertEqual(Guilds.hp(members: 50), 130_000)
+
+        let store = MemoryStore()
+        var dice = LoadedDice(rolls: [250, 0], chances: [true])
+        let s = Guilds.strike(w, level: 10, store: store, date: monday, dice: &dice)!
+        XCTAssertEqual(s.damage, 500)
+        XCTAssertTrue(s.crit)
+        XCTAssertEqual(Guilds.strikesLeft(store: store, date: monday), 4)
+        for _ in 0..<4 { XCTAssertNotNil(Guilds.strike(w, level: 10, store: store, date: monday, dice: &dice)) }
+        XCTAssertNil(Guilds.strike(w, level: 10, store: store, date: monday, dice: &dice))
+        // A new day, new strikes; the week's damage keeps adding up.
+        let tuesday = monday.addingTimeInterval(86400)
+        XCTAssertEqual(Guilds.strikesLeft(store: store, date: tuesday), 5)
+        let before = Guilds.myDamage(w, store: store)
+        let t = Guilds.strike(w, level: 10, store: store, date: tuesday, dice: &dice)!
+        XCTAssertEqual(t.myTotal, before + t.damage)
+
+        let wallet = Wallet(store: store)
+        XCTAssertNil(Guilds.claim(w, totalDamage: 20_000, members: 3, store: store, wallet: wallet))
+        XCTAssertNotNil(Guilds.claim(w, totalDamage: 28_000, members: 3, store: store, wallet: wallet))
+        XCTAssertNil(Guilds.claim(w, totalDamage: 28_000, members: 3, store: store, wallet: wallet))
+        XCTAssertEqual(store.getItem("dd_soul_fragments"), "5")
+        // No strikes, no reward.
+        XCTAssertNil(Guilds.claim(Guilds.lastWeek(monday), totalDamage: 999_999, members: 3, store: store, wallet: wallet))
+        XCTAssertTrue(Guilds.status(w, totalDamage: 1_000, members: 1, now: monday).hasPrefix("\(w.boss.name): 15,000 of 16,000 HP left."))
+    }
+}

@@ -58,6 +58,8 @@ final class Router: ObservableObject {
         case friends
         /// 12.1: dungeons built by players.
         case communityDungeons
+        /// 12.2: Guilds.
+        case guilds
     }
 
     @Published private(set) var screen: Screen = .menu
@@ -122,7 +124,7 @@ extension Router {
         case .spire: Sound.track("spire")
         case .graveyard: Sound.track("graveyard")
         // 12.1: the tavern songs, shuffled.
-        case .coop, .friends, .bounty: Sound.track("tavern")
+        case .coop, .friends, .bounty, .guilds: Sound.track("tavern")
         // The death log is silent, like the run summary.
         case .deathlog: Sound.stopMusic()
         default: break
@@ -230,6 +232,7 @@ struct RootView: View {
             case .coop: CoopView()
             case .friends: FriendsView()
             case .communityDungeons: CommunityDungeonsView()
+            case .guilds: GuildsView()
             case .siege: SiegeView()
             case .challenges: ChallengesView()
             case .bounty: BountyBoardView()

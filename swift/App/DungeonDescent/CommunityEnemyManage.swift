@@ -32,8 +32,11 @@ struct MyEnemiesView: View {
                     : "The enemies you made. Rename them, make them stronger, or delete them.")
             if loading {
                 Text("Finding your enemies...").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim).padding(20)
+            } else if !CommunityEnemyStore.signedIn && !CommunityEnemyStore.isDeveloper {
+                Text("Sign in (Settings, Account) to edit your enemies. Enemies you make while signed in are yours to edit, on any device.")
+                    .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary).padding(.vertical, 10)
             } else if pool.mine.isEmpty {
-                Text("You haven't made any enemies to edit yet. Enemies you make from this version on are yours to edit. For an older one, ask the developer on Discord.")
+                Text("You haven't made any enemies to edit yet. Enemies you make while signed in, from this version on, are yours to edit. For an older one, ask the developer on Discord.")
                     .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary).padding(.vertical, 10)
             }
             ForEach(pool.mine) { e in
@@ -53,7 +56,9 @@ struct MyEnemiesView: View {
         .task {
             await pool.loadMine(username: username)
             loading = false
-            Feedback.announce(pool.mine.isEmpty ? "My Enemies. You have no enemies to edit yet."
+            Feedback.announce(!CommunityEnemyStore.signedIn && !CommunityEnemyStore.isDeveloper
+                              ? "My Enemies. Sign in to edit your enemies."
+                              : pool.mine.isEmpty ? "My Enemies. You have no enemies to edit yet."
                               : "My Enemies. \(pool.mine.count). Choose one to edit it.")
         }
         .fullScreenCover(item: $editing) { e in

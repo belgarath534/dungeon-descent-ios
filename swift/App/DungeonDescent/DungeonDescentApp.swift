@@ -51,7 +51,7 @@ struct DungeonDescentApp: App {
                                                                 "friends": .friends, "coop": .coop, "spire": .spire,
                                                                 "quests": .quests, "challenges": .challenges, "settings": .settings,
                                                                 "battlepass": .battlePass, "blacksmith": .blacksmith, "chronicles": .chronicles,
-                                                                "records": .records, "worldboss": .worldBoss, "mine": .mine, "chat": .chat]
+                                                                "records": .records, "worldboss": .worldBoss, "guilds": .guilds, "mine": .mine, "chat": .chat]
                         if args[i + 1] == "dungeon", let ch = game.characters.first {
                             router.goTo(.dungeon(ch.created, resume: false))
                         } else if let s = screens[args[i + 1]] {

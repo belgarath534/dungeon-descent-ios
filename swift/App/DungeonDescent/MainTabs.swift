@@ -35,7 +35,7 @@ enum MainTab: String, CaseIterable {
         case .play: return ["afk", "challenges", "battlepass", "quests"]
         case .modes: return ["spire", "bossrush", "raid", "siege", "mine", "bounty", "void", "shadowrealm",
                              "hideseek", "cdungeons", "creator", "command"]
-        case .multiplayer: return ["coop", "friends", "worldboss", "multiplayer", "tournament", "chat", "obituary"]
+        case .multiplayer: return ["coop", "friends", "guilds", "worldboss", "multiplayer", "tournament", "chat", "obituary"]
         case .more: return ["blacksmith", "coinshop", "arcane", "spellbook", "bestiary", "codex", "chronicles",
                             "graveyard", "records", "highscore", "events", "whatsnew", "help", "credits", "leo", "quit"]
         case .settings: return []
@@ -47,7 +47,7 @@ enum MainTab: String, CaseIterable {
         switch self {
         case .play: return "Play."
         case .modes: return "Modes. The Spire, Boss Rush, Raid, the Siege, the Mine and more."
-        case .multiplayer: return "Multiplayer. Co-op, the World Boss, PvP, the Tournament, Global Chat and Game Center."
+        case .multiplayer: return "Multiplayer. Co-op, Guilds, the World Boss, PvP, the Tournament, Global Chat and Game Center."
         case .more: return "More. Shops, the Blacksmith, the Bestiary, lore, records, help and what's new."
         case .settings: return "Settings."
         }

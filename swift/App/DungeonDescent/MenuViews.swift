@@ -85,6 +85,8 @@ struct MainMenuView: View {
         Entry(id: "creator", text: "⚔ Enemy Creator", label: "Community Enemy Creator, build an enemy and set it loose in the dungeon", action: .go(.enemyCreator)),
         Entry(id: "friends", text: "👥 Friends", label: "Friends and Rankings, your Game Center friends who play, who's online, and the leaderboards",
               color: Color(hex: 0x66ddcc), border: Color(hex: 0x226655), action: .go(.friends)),
+        Entry(id: "guilds", text: "🛡 Guilds", label: "Guilds, join or lead a guild of up to 20 players, with guild chat and a weekly Guild Boss",
+              color: Color(hex: 0x66ddcc), border: Color(hex: 0x226655), action: .go(.guilds)),
         Entry(id: "chat", text: "💬 Global Chat", label: "Global Chat, talk to other players", action: .go(.chat)),
         Entry(id: "bounty", text: "📋 Bounty Board", label: "The Bounty Board — register for bounties and earn rewards", action: .go(.bounty)),
         Entry(id: "siege", text: "🏰 The Siege", label: "The Siege — defend your fortress against waves of enemies", action: .go(.siege)),

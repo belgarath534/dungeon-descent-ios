@@ -95,6 +95,7 @@ final class Friends: ObservableObject {
         case .siege: doing("in the Siege")
         case .shadowRealm: doing("in the Shadow Realm")
         case .chat: doing("in Global Chat")
+        case .guilds: doing("with their guild")
         default: doing("in the menus")
         }
     }
