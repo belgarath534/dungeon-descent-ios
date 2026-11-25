@@ -239,7 +239,7 @@ struct WhatsNewView: View {
 
 /// #whats-new-popup: the newest patch notes, once after each update.
 struct WhatsNewPopup: View {
-    static let version = "12.0"
+    static let version = "12.2"
     static let seenKey = "dd_whats_new_seen"
     let close: () -> Void
     @AccessibilityFocusState private var focus: Bool

@@ -10,7 +10,7 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "12.1.1")
+VERSION = os.environ.get("VERSION", "12.2")
 # Only these platforms (store-submit-ios: "IOS").
 PLATFORMS = os.environ.get("PLATFORMS", "IOS MAC_OS VISION_OS").split()
 
@@ -140,11 +140,33 @@ WHATS_NEW_12_1_1 = {
 • A Câmara Mágica: uma sala rara e brilhante em qualquer masmorra, onde um unicórnio espera. Aproxime-se e Estrelinha, o Unicórnio, se junta a você como lacaio. Ele luta ao seu lado e te cura a cada rodada, e toda vez que você encontra a câmara de novo ela restaura seu HP e SP. Um pedido de um jogador no nosso Discord.
 """ + WHATS_NEW_12_1["pt-BR"],
 }
-WHATS_NEW = {"12.1.1": WHATS_NEW_12_1_1, "12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
+WHATS_NEW_12_2 = {
+    "en-US": """New in 12.2:
+• Guilds: join or start a guild of up to 20 players, with its own chat and a Guild Boss every week. Bring it down together for gold and Soul Fragments. In the Multiplayer tab.
+• Co-op for five: bring up to four friends into a Co-op Dungeon or a Raid.
+• The Mine goes deeper: new bosses at depths 75, 150, 200, 300 and 500, and from 600 one every 100 depths, forever.
+• The Mountainbreaker: a legendary warhammer forged at the Blacksmith from five Heartstone Shards found deep in the Mine. Every third hit is a quake.
+• Four new guns: the Harpoon Gun, the Flare Gun, the Blunderbuss and the Tesla Coil. Every gun now has its own sound.
+• Two rare rooms: the Wishing Well and the Forgotten Music Room.
+• My Enemies: rename, strengthen or delete the community enemies you made.
+• Long lists like the inventory and the shop's selling now open as their own pages, and the Settings button appears only once.
+• Many more fixes.""",
+    "pt-BR": """Novo na 12.2:
+• Guildas: entre ou crie uma guilda de até 20 jogadores, com chat próprio e um Chefe da Guilda toda semana. Derrubem ele juntos e ganhem ouro e Fragmentos de Alma. Na aba Multijogador.
+• Cooperativo para cinco: leve até quatro amigos para uma Masmorra Cooperativa ou um Raide.
+• A Mina fica mais funda: novos chefes nas profundidades 75, 150, 200, 300 e 500, e a partir da 600 um a cada 100 de profundidade, para sempre.
+• O Quebra-Montanhas: um martelo de guerra lendário forjado no Ferreiro com cinco Fragmentos do Coração da Pedra achados no fundo da Mina. A cada três golpes, um terremoto.
+• Quatro armas de fogo novas: o Arpão, a Pistola Sinalizadora, o Bacamarte e a Bobina de Tesla. Cada arma agora tem o seu próprio som.
+• Duas salas raras: o Poço dos Desejos e a Sala de Música Esquecida.
+• Meus Inimigos: renomeie, fortaleça ou apague os inimigos da comunidade que você criou.
+• Listas longas, como o inventário e a venda na loja, agora abrem em páginas próprias, e o botão de Configurações aparece só uma vez.
+• Muitas outras correções.""",
+}
+WHATS_NEW = {"12.2": WHATS_NEW_12_2, "12.1.1": WHATS_NEW_12_1_1, "12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
 
 PROMO = {
-    "en-US": "New in 12.1: raid a giant boss with friends, build your own dungeons, and face four new enemies made for listening.",
-    "pt-BR": "Novo na 12.1: enfrente um chefe gigante com amigos, crie suas masmorras e encare quatro inimigos novos feitos para ouvir.",
+    "en-US": "New in 12.2: Guilds with a weekly Guild Boss, co-op for five, a deeper Mine with a legendary hammer, and four new guns.",
+    "pt-BR": "Novo na 12.2: Guildas com um Chefe semanal, cooperativo para cinco, uma Mina mais funda com um martelo lendário e quatro armas novas.",
 }
 # The Mac and Vision Pro have no watch, Lock Screen or Apple Music picker.
 SKIP = {

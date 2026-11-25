@@ -710,7 +710,79 @@
  },
  "whatsnew": [
   {
-   "num": "v12.0 — Latest",
+   "num": "v12.2 — Latest",
+   "date": "The Guilds Update",
+   "label": "Version 12.2",
+   "changes": [
+    "🛡 Guilds — join or start a guild of up to 20 players, with its own chat and a Guild Boss every week. Every member gets 5 strikes a day; bring it down together for 1,500 gold and 5 Soul Fragments each. In the Multiplayer tab (needs an account).",
+    "🤝 Co-op for five — bring up to four friends into a Co-op Dungeon or a Raid.",
+    "⛏ The Mine goes deeper — new bosses at depths 75, 150, 200, 300 and 500, and from 600 one every 100 depths, forever.",
+    "🔨 The Mountainbreaker — a legendary warhammer forged at the Blacksmith from five Heartstone Shards, dropped by Mine bosses from depth 100. Every third hit is a quake.",
+    "🔫 Four new guns — the Harpoon Gun, the Flare Gun, the Blunderbuss and the Tesla Coil. Every gun now has its own sound.",
+    "🪙 Two rare rooms — the Wishing Well and the Forgotten Music Room.",
+    "🛠 My Enemies — rename, strengthen or delete the community enemies you made (Bestiary, Community).",
+    "📜 Long lists like the inventory and the shop's selling now open as their own pages, and the Settings button appears only once."
+   ]
+  },
+  {
+   "num": "v12.1.1",
+   "date": "The Unicorn Update",
+   "label": "Version 12.1.1",
+   "changes": [
+    "The Magic Chamber: a rare, glowing room in any dungeon where a unicorn waits. Approach it and Starlight the Unicorn joins you as a minion. It fights beside you and heals you every round, and every time you find the chamber again it restores your HP and SP. Asked for by a player on our Discord."
+   ]
+  },
+  {
+   "num": "v12.1",
+   "date": "The Raid Update",
+   "label": "Version 12.1",
+   "changes": [
+    "Raid Boss: invite up to three friends to fight one giant boss together. Win gold, XP, diamonds and raid gear.",
+    "Co-op with your real character: your gear, level, prestige stars, skills, gun and potions come with you. Revive or protect a friend.",
+    "Community Dungeons: build your own dungeon and play other players' dungeons.",
+    "Friends: your Game Center friends who play, who's online, and an invite to your co-op room.",
+    "Voice commands in fights: say attack, defend, a skill's name and more.",
+    "Choose a Dungeon: after a win, go to any dungeon you've unlocked, normally or as New Game+.",
+    "Four new enemies made for listening: The Liar, The Bell Choir, The Counting Thing and The Silent One.",
+    "Insane Mode has its sanity bar, with The Distorted, The Sanity Drainer and the Insanity Potion.",
+    "The Conductor: a rare hall where you move only while the music plays.",
+    "A low HP heartbeat you can hear and feel.",
+    "Events now cover the screen until you choose, and 3D Mode always tells you the way to a new room.",
+    "Skill Book: reorder your skills. Holiday enemies use their own moves. Endless enemies from floor 20.",
+    "Apple Watch: make your co-op moves from your wrist.",
+    "High Contrast, Lewis's speed and Keep Up, and a two-finger scrub to go back.",
+    "Many more fixes."
+   ]
+  },
+  {
+   "num": "v12.0.2",
+   "date": "Endless to Level 50 (with the 12.0.1 fixes)",
+   "label": "Version 12.0.2",
+   "changes": [
+    "Endless Descent now goes up to level 50 (it stopped at 10). Each level asks for more XP, and still gives HP, attack and a stat point.",
+    "3D Mode: VoiceOver is quick again. The 3D room isn't drawn while VoiceOver is on, which made VoiceOver wait seconds to move and speak; the spatial sound, Echo-Location and directions are all still there.",
+    "Legacy Mode now goes up to level 50 (it stopped at 25). Prestige still needs level 25.",
+    "The Spire gives XP: every kill counts toward your level, and you can level up during a climb (+25 max HP, +2 attack), up to 50.",
+    "Leveling past 10 takes the same XP in the dungeon as in Endless Descent.",
+    "Later dungeons are harder: from Frosthold Abyss on, enemies and bosses have more health and hit harder, more in each dungeon after it.",
+    "Level points stay where you spent them when your level carries over (Legacy, Continue Journey), and the Level Points button lets you spend new ones any time you're exploring.",
+    "Selling to the merchant: the same items are one row with a count (10 elixirs were 10 rows).",
+    "New in Endless Descent: stat points. Every level gained in a run gives a point to spend on +20 max HP, +2 attack or +1 defense, kept for every Endless run.",
+    "Lewis now says numbers right: \"twenty-one\", \"three thousand eighty-two\", \"forty percent\" (he said \"floor one\" for floor 21, and \"three eighty-two\" for 3,082).",
+    "Prestige no longer crashes the game. If it crashed for you, your character is safe: prestige again.",
+    "Legacy characters now keep every level the moment they reach it, even if they die or leave the run.",
+    "Co-op: VoiceOver no longer jumps around during a fight, and your action buttons stay on screen after you choose.",
+    "VoiceOver no longer jumps to the top after pressing buttons at Home, in the Gun Workshop and Gun Shop, the Arcane Shop and the Command Center switch.",
+    "VoiceOver keeps its place on the fight buttons, in the Mine, the Spire, the Siege and other modes' button grids, and on the merchant after you buy.",
+    "Co-op: Play Again now pays your gold and Battle Pass progress for every run, not just the first.",
+    "The merchant's night discount now shows the right \"before\" price (the daytime price with your run's modifiers).",
+    "A run no longer crashes if a cloud save with fewer characters loads while you play.",
+    "\"Choose a save\" no longer appears when you only play on one device.",
+    "Easier to read: dim text and gold are brighter, and the Discord link is easier to tap."
+   ]
+  },
+  {
+   "num": "v12.0",
    "date": "The Legends Update",
    "label": "Version 12.0",
    "changes": [
