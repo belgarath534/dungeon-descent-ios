@@ -310,6 +310,10 @@ enum Patterns {
         ("Slowly.", "Devagar."),
         ("You are frozen and cannot fire! The turn passes.", "Você está congelado e não pode atirar! O turno passa."),
         ("You are frozen. You can't cast until you thaw. Attack or defend to pass the turn.", "Você está congelado. Não pode lançar magias até descongelar. Ataque ou defenda para passar o turno."),
+        ("Your characters already gained their levels from Void Mode today. Come back tomorrow for more.", "Seus personagens já ganharam os níveis do Modo Vazio hoje. Volte amanhã para mais."),
+        ("You already collected today's Void Mode prize. Come back tomorrow.", "Você já pegou o prêmio do Modo Vazio de hoje. Volte amanhã."),
+        ("Your levels from Void Mode come once a day.", "Os níveis do Modo Vazio vêm uma vez por dia."),
+        ("All {0} characters leveled up by 3.", "Todos os {0} personagens subiram 3 níveis."),
         // 12.2: What's New.
         ("The Unicorn Update", "A Atualização do Unicórnio"),
         ("Version 12.1.1", "Versão 12.1.1"),

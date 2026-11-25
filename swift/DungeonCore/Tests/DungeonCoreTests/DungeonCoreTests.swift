@@ -469,7 +469,10 @@ final class InventoryTests: XCTestCase {
 
     func testBossPhaseSkipsCounterAndHitsHarder() {
         var r = newRun("Wizard")
-        Combat.begin(&r, against: Enemy.spawnBoss(Bestiary.crypt.bosses[0], playerLevel: 1, playerMaxAtk: 24))
+        // (The phases themselves; BossPower's own test covers its strength.)
+        var boss = Enemy.spawnBoss(Bestiary.crypt.bosses[0], playerLevel: 1, playerMaxAtk: 24)
+        boss.mechanics["bossPower"] = .bool(true)
+        Combat.begin(&r, against: boss)
         var d = LoadedDice(rolls: [24], chances: [true])   // crit: round(24 × 1.8) = 43 → 77 HP left
         let res = Combat.takeTurn(&r, .attack, dice: &d)
         XCTAssertEqual(r.enemy?.hp, 77)
@@ -6020,5 +6023,29 @@ final class PrestigeHitTests: XCTestCase {
         r.prestige = 1
         // Even one star always shows on a small hit.
         XCTAssertEqual(Prestige.hit(r, 6), 7)
+    }
+}
+
+final class BossPowerTests: XCTestCase {
+    func testBossesStandUpToStrongCharacters() {
+        var r = Run(character: PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        var boss = Enemy(name: "Malachar", icon: "💀", hp: 300, maxHp: 300, atk: 10...20, gold: 1...2)
+        boss.isBoss = true
+        boss.phase1Hp = 198; boss.phase2Hp = 99
+        // A weak character: unchanged HP (300 is already more than 15 of its hits).
+        r.atk = 5...8; r.maxHp = 100
+        XCTAssertEqual(BossPower.scaled(boss, for: r).maxHp, 300)
+        // Hitting ~200 with no stars: 15 hits' worth; with 10 stars, 30.
+        r.atk = 190...210; r.maxHp = 1000
+        XCTAssertEqual(BossPower.scaled(boss, for: r).maxHp, 200 * 15)
+        r.prestige = 10
+        let b = BossPower.scaled(boss, for: r)
+        XCTAssertGreaterThanOrEqual(b.maxHp, 300 * 30)
+        XCTAssertEqual(Double(b.phase1Hp) / Double(b.maxHp), 0.66, accuracy: 0.01)
+        XCTAssertGreaterThanOrEqual(b.atk.lowerBound, 80)
+        XCTAssertEqual(BossPower.scaled(b, for: r).maxHp, b.maxHp)
+        // Normal enemies are never touched.
+        XCTAssertEqual(BossPower.scaled(Enemy(name: "Rat", icon: "🐀", hp: 10, maxHp: 10, atk: 1...2, gold: 1...1), for: r).maxHp, 10)
     }
 }

@@ -161,21 +161,37 @@ struct VoidModeView: View {
     /// version gave a shareable code for the prize; the App Store doesn't
     /// allow codes that unlock things, so the prize is given here.
     private func win() {
+        // 12.2: the levels and the prize come once a day (UTC), shared with the
+        // web version's keys. Every win gave them, so a few wins took every
+        // character up 9 levels and paid out Mystery Coins without limit.
+        let today = WorldBoss.day().date
         var n = 0
-        for i in game.characters.indices {
-            game.updateCharacter(i) { $0.persistLevel = min(50, ($0.persistLevel ?? 1) + 3) }
-            n += 1
+        var notes: [String] = []
+        if game.store.getItem("dd_void_level_day") != today {
+            for i in game.characters.indices {
+                game.updateCharacter(i) { $0.persistLevel = min(50, ($0.persistLevel ?? 1) + 3) }
+                n += 1
+            }
+            game.store.setItem("dd_void_level_day", today)
+            notes.append("All \(n) characters leveled up by 3.")
+        } else {
+            notes.append("Your characters already gained their levels from Void Mode today. Come back tomorrow for more.")
         }
         leveled = n
-        let won = RewardCodes.give(VoidMode.victoryPrize(dice: &dice), store: game.store)
-        if won.gold > 0 { game.wallet.addGold(won.gold) }
-        if won.coins > 0 { game.addMysteryCoins(won.coins) }
-        prize = won.message
+        if game.store.getItem("dd_void_code_day") != today {
+            game.store.setItem("dd_void_code_day", today)
+            let won = RewardCodes.give(VoidMode.victoryPrize(dice: &dice), store: game.store)
+            if won.gold > 0 { game.wallet.addGold(won.gold) }
+            if won.coins > 0 { game.addMysteryCoins(won.coins) }
+            prize = won.message
+        } else {
+            prize = "You already collected today's Void Mode prize. Come back tomorrow."
+        }
         game.achievements.setMax("voidConqueror", 1)
         _ = game.achievements.check()
         Sound.sfx("sfx-victory")
         Feedback.success()
-        Feedback.announce("THE VOID PREVAILS! All five waves defeated. All \(n) characters leveled up by 3. \(prize)")
+        Feedback.announce("THE VOID PREVAILS! All five waves defeated. " + notes.joined(separator: " ") + " \(prize)")
     }
 
     private var victory: some View {
@@ -188,7 +204,7 @@ struct VoidModeView: View {
             }
             .accessibilityElement(children: .combine)
             .padding(14).overlay(Rectangle().stroke(purple))
-            Text("\(leveled) character\(leveled == 1 ? "" : "s") leveled up by 3!" as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x44ff88))
+            Text((leveled > 0 ? "\(leveled) character\(leveled == 1 ? "" : "s") leveled up by 3!" : "Your levels from Void Mode come once a day.") as String).font(Theme.cinzel(11)).foregroundStyle(Color(hex: 0x44ff88))
             Button("← Return to Menu") { Sound.track("menu"); router.goTo(.menu) }.buttonStyle(WebButtonStyle(kind: .ghost))
         }
     }

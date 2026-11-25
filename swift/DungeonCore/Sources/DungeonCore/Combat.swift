@@ -46,7 +46,7 @@ public enum Combat {
     @discardableResult
     public static func begin(_ run: inout Run, against enemy: Enemy) -> [String] {
         // 12.2: enemies grow with a weapon upgraded past level 10.
-        let enemy = WeaponGrowth.scaled(enemy, for: run)
+        let enemy = BossPower.scaled(WeaponGrowth.scaled(enemy, for: run), for: run)
         run.enemy = enemy
         run.foes = []
         run.inCombat = true
