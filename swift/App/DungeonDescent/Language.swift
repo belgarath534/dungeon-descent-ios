@@ -175,7 +175,7 @@ enum Patterns {
         ("🐉 Raid Boss · {0}", "🐉 Chefe de Raide · {0}"),
         ("🐉 Raid: {0} · up to {1} players", "🐉 Raide: {0} · até {1} jogadores"),
         ("Joined the raid against {0}. Press Ready when you're set. The host starts the fight.", "Você entrou na raide contra {0}. Toque em Pronto quando estiver preparado. O anfitrião começa a luta."),
-        ("Raid room created: {0}. Your code is {1}. Invite up to three friends, then press Start.", "Sala de raide criada: {0}. Seu código é {1}. Convide até três amigos e toque em Começar."),
+        ("Raid room created: {0}. Your code is {1}. Invite up to four friends, then press Start.", "Sala de raide criada: {0}. Seu código é {1}. Convide até quatro amigos e toque em Começar."),
         ("🐉 RAID BOSS: {0} {1}, {2} HP. It changes twice as it's hurt, and after {3} rounds it enrages. Fight together!", "🐉 CHEFE DE RAIDE: {0} {1}, {2} de HP. Ele muda duas vezes quando ferido e, após {3} rodadas, fica enfurecido. Lutem juntos!"),
         ("🏆 {0} falls! The raid is won!", "🏆 {0} cai! A raide foi vencida!"),
         ("🔥 {0} is ENRAGED! Its attacks are twice as strong. Finish it!", "🔥 {0} está ENFURECIDO! Seus ataques ficam duas vezes mais fortes. Acabem com ele!"),

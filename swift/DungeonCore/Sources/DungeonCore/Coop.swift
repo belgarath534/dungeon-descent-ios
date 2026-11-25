@@ -1,6 +1,6 @@
 import Foundation
 
-/// CO-OP 2.0 (12.1): 2–4 players, on the web and the apps together, through
+/// CO-OP 2.0 (12.1): 2–4 players (5 from 12.2), on the web and the apps together, through
 /// 10 floors of a dungeon: two fights a floor (now and then an elite) and the
 /// boss on floor 10, who changes phase at two thirds and a third of its HP.
 ///
@@ -19,7 +19,16 @@ import Foundation
 /// the same rules.
 public enum Coop {
     public static let kind = "coop2"
-    public static let maxPlayers = 4
+    /// 12.2: rooms hold 5. A room says how many it holds ("max"); one
+    /// without it (made by 12.1 or the web) holds 4, and 12.1 apps never join
+    /// as a fifth, so every version can still play together.
+    public static let maxPlayers = 5
+    public static let legacyMax = 4
+
+    public static func roomMax(_ room: [String: Any]) -> Int {
+        guard let n = (room["max"] as? NSNumber)?.intValue else { return legacyMax }
+        return max(2, min(n, maxPlayers))
+    }
     public static let floors = 10
     public static let fightsPerFloor = 2
     public static let roundSeconds = 30.0

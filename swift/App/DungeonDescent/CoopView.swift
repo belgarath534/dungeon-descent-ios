@@ -40,7 +40,7 @@ struct CoopView: View {
                 Feedback.announce("Co-op Dungeon. Room \(c.map(String.init).joined(separator: " ")) is filled in. Choose your character, then press Join.")
                 return
             }
-            Feedback.announce("Co-op Dungeon. Fight through ten floors with up to three friends, on the web or the app. Choose a character, then host a room or join one with its code.")
+            Feedback.announce("Co-op Dungeon. Fight through ten floors with up to four friends, on the web or the app. Choose a character, then host a room or join one with its code.")
         }
         .onDisappear { model.stop() }
     }
@@ -114,7 +114,7 @@ struct CoopView: View {
     @ViewBuilder private var lobby: some View {
         Text("Room code: \(model.code ?? "")" as String).font(Theme.cinzel(18)).foregroundStyle(teal)
             .accessibilityLabel("Room code: \((model.code ?? "").map(String.init).joined(separator: " "))" as String)
-        Text(model.raid.map { "🐉 Raid: \($0.icon) \($0.name) · up to \(Coop.maxPlayers) players" } ?? "\(model.dungeon) · up to \(Coop.maxPlayers) players").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
+        Text(model.raid.map { "🐉 Raid: \($0.icon) \($0.name) · up to \(model.roomMax) players" } ?? "\(model.dungeon) · up to \(model.roomMax) players").font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary)
         if let b = model.raid {
             Text(b.lore).font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textDim)
         }
@@ -132,7 +132,7 @@ struct CoopView: View {
                 .buttonStyle(WebButtonStyle(kind: .ghost)).frame(maxWidth: .infinity)
                 .accessibilityLabel("Buy a potion for \(Coop.potionPrice) gold. You have \(m.potions) and \(game.wallet.gold) gold." as String)
         }
-        if model.isHost, let code = model.code, friends.access == .ok, model.party.count < Coop.maxPlayers {
+        if model.isHost, let code = model.code, friends.access == .ok, model.party.count < model.roomMax {
             header("INVITE A FRIEND")
             if friends.online.isEmpty {
                 Text("None of your Game Center friends are online right now.")

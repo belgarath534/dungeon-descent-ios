@@ -294,3 +294,13 @@ final class MagicChamberTests: XCTestCase {
         XCTAssertTrue(log.contains { $0.contains("Starlight's horn glows") })
     }
 }
+
+final class FivePlayerCoopTests: XCTestCase {
+    func testRoomsSayHowManyTheyHold() {
+        XCTAssertEqual(Coop.maxPlayers, 5)
+        XCTAssertEqual(Coop.roomMax([:]), 4)                       // a 12.1 or web room
+        XCTAssertEqual(Coop.roomMax(["max": NSNumber(value: 5)]), 5)
+        XCTAssertEqual(Coop.roomMax(["max": NSNumber(value: 9)]), 5)
+        XCTAssertEqual(Coop.roomMax(["max": NSNumber(value: 1)]), 2)
+    }
+}

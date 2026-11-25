@@ -15,6 +15,8 @@ final class CoopModel: ObservableObject {
     @Published var status = ""
     @Published private(set) var code: String?
     @Published private(set) var isHost = false
+    /// How many this room holds (Coop.roomMax).
+    @Published private(set) var roomMax = Coop.maxPlayers
     @Published private(set) var party: [Coop.Player] = []
     @Published private(set) var foe: Coop.Foe?
     @Published private(set) var floor = 1
@@ -121,11 +123,12 @@ final class CoopModel: ObservableObject {
         code = c
         isHost = true
         hostId = myId
+        roomMax = Coop.maxPlayers
         let p = makePlayer(ch)
         var pd = p.dict
         pd["joinedAt"] = Self.now
         let data: [String: Any] = [
-            "kind": Coop.kind, "version": 2, "code": c, "status": "lobby", "host": myId, "dungeon": dungeon,
+            "kind": Coop.kind, "version": 2, "code": c, "status": "lobby", "host": myId, "dungeon": dungeon, "max": Coop.maxPlayers,
             "floor": 1, "round": 0, "createdAt": Self.now, "players": [myId: pd], "beat": [myId: Self.now],
         ].merging(raid.map { ["mode": "raid", "raid": $0.id] as [String: Any] } ?? [:]) { a, _ in a }
         room?.setValue(data) { [weak self] error, ref in
@@ -134,8 +137,8 @@ final class CoopModel: ObservableObject {
                 if error != nil { self.say("Couldn't create the room. Check your connection."); return }
                 self.stage = .lobby
                 Sound.sfx("sfx-confirm")
-                if let raid { self.say("Raid room created: \(raid.name). Your code is \(c.map(String.init).joined(separator: " ")). Invite up to three friends, then press Start."); self.listen(); return }
-                self.say("Room created. Your code is \(c.map(String.init).joined(separator: " ")). Share it with up to three friends, then press Start when everyone is ready.")
+                if let raid { self.say("Raid room created: \(raid.name). Your code is \(c.map(String.init).joined(separator: " ")). Invite up to four friends, then press Start."); self.listen(); return }
+                self.say("Room created. Your code is \(c.map(String.init).joined(separator: " ")). Share it with up to four friends, then press Start when everyone is ready.")
                 self.listen()
             }
         }
@@ -161,7 +164,9 @@ final class CoopModel: ObservableObject {
                 }
                 let players = r["players"] as? [String: Any] ?? [:]
                 guard r["status"] as? String == "lobby" else { self.code = nil; self.say("That run has already started."); return }
-                guard players.count < Coop.maxPlayers else { self.code = nil; self.say("That room is full."); return }
+                let limit = Coop.roomMax(r)
+                guard players.count < limit else { self.code = nil; self.say("That room is full."); return }
+                self.roomMax = limit
                 var pd = self.makePlayer(ch).dict
                 pd["joinedAt"] = Self.now
                 self.room?.child("players").child(self.myId).setValue(pd)

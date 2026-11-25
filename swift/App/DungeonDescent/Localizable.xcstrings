@@ -106394,13 +106394,13 @@
         }
       }
     },
-    "Share it with up to three friends, then press Start when everyone is ready.": {
+    "Share it with up to four friends, then press Start when everyone is ready.": {
       "extractionState": "manual",
       "localizations": {
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Compartilhe com até três amigos e toque em Começar quando todos estiverem prontos."
+            "value": "Compartilhe com até quatro amigos e toque em Começar quando todos estiverem prontos."
           }
         }
       }
@@ -106548,13 +106548,13 @@
         }
       }
     },
-    "Fight through ten floors with up to three friends, on the web or the app.": {
+    "Fight through ten floors with up to four friends, on the web or the app.": {
       "extractionState": "manual",
       "localizations": {
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Lute por dez andares com até três amigos, na web ou no app."
+            "value": "Lute por dez andares com até quatro amigos, na web ou no app."
           }
         }
       }
