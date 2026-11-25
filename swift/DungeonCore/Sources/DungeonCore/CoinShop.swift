@@ -38,6 +38,15 @@ public enum CoinShop {
         Upgrade(id: "cu-bloodhound", name: "Bloodhound's Nose", icon: "🐺", desc: "+5% chance for enemies to drop equipment on kill.", cost: 25),
         Upgrade(id: "cu-trapper", name: "Trapper's Kit", icon: "🪤", desc: "Start every run with a Soul Trap in your inventory.", cost: 30),
         Upgrade(id: "cu-warm-blood", name: "Warm Blood", icon: "💗", desc: "Heal 1 HP every time you reach a new floor.", cost: 20),
+        // 12.2: more to buy (the shop could be bought out in a day).
+        Upgrade(id: "cu-whetstone", name: "Whetstone", icon: "🪨", desc: "+1 attack on every run.", cost: 15),
+        Upgrade(id: "cu-thick-hide", name: "Thick Hide", icon: "🐻", desc: "+15 max HP on every run.", cost: 25),
+        Upgrade(id: "cu-guardian", name: "Guardian's Oath", icon: "🛡", desc: "+1 defense on every run.", cost: 20),
+        Upgrade(id: "cu-steady-mind", name: "Steady Mind", icon: "🧠", desc: "+10 max SP on every run.", cost: 25),
+        Upgrade(id: "cu-spirit-satchel", name: "Spirit Satchel", icon: "🔵", desc: "Start every run with 2 Spirit Tonics.", cost: 20),
+        Upgrade(id: "cu-healers-cache", name: "Healer's Cache", icon: "💊", desc: "Start every run with a Greater Potion.", cost: 30),
+        Upgrade(id: "cu-keen-eye", name: "Keen Eye", icon: "🎯", desc: "+3% critical hit chance on every run.", cost: 35),
+        Upgrade(id: "cu-fortune-purse", name: "Fortune's Purse", icon: "👛", desc: "Start every run with 50 extra gold.", cost: 30),
     ]
 
     /// The upgrades bought so far.
@@ -141,7 +150,78 @@ public enum CoinShop {
             run.gold += 15
             wallet.addGold(15)
         }
+        // 12.2's upgrades.
+        if owned.contains("cu-whetstone") { run.atkBonus += 1 }
+        if owned.contains("cu-thick-hide") { run.maxHp += 15; run.hp = min(run.maxHp, run.hp + 15) }
+        if owned.contains("cu-guardian") { run.defBonus += 1 }
+        if owned.contains("cu-steady-mind") { run.maxSp += 10; run.sp = min(run.maxSp, run.sp + 10) }
+        if owned.contains("cu-spirit-satchel") {
+            for _ in 0..<2 {
+                var t = Item(name: "Spirit Tonic", icon: "🔵", type: "sp-potion", desc: "Restores 15 SP.")
+                t.sp = 15
+                run.inventory.append(t)
+            }
+        }
+        if owned.contains("cu-healers-cache") {
+            run.inventory.append(Item(name: "Greater Potion", icon: "💊", type: "potion", desc: "Restores 80 HP.", heal: 80))
+        }
+        if owned.contains("cu-keen-eye") { run.critBonus += 0.03 }
+        if owned.contains("cu-fortune-purse") { run.gold += 50; wallet.addGold(50) }
         return log
+    }
+
+    // MARK: Mastery (12.2)
+
+    /// Ranks that never run out: each gives a little more, and each costs
+    /// half again as much as the last (50, 75, 113, 169 …), so there's
+    /// always something to save Mystery Coins for.
+    public struct Mastery: Sendable, Identifiable {
+        public let id: String
+        public let name: String
+        public let icon: String
+        /// What one rank gives.
+        public let perRank: String
+    }
+
+    public static let masteries: [Mastery] = [
+        Mastery(id: "vigor", name: "Mastery of Vigor", icon: "❤️", perRank: "+5 max HP"),
+        Mastery(id: "might", name: "Mastery of Might", icon: "⚔️", perRank: "+1 attack"),
+        Mastery(id: "ward", name: "Mastery of the Ward", icon: "🛡", perRank: "+1 defense"),
+        Mastery(id: "focus", name: "Mastery of Focus", icon: "🔮", perRank: "+3 max SP"),
+    ]
+
+    public static func ranks(_ store: GameStore) -> [String: Int] {
+        guard let s = store.getItem("dd_coin_mastery"), let d = s.data(using: .utf8),
+              let v = try? JSONDecoder().decode([String: Int].self, from: d) else { return [:] }
+        return v
+    }
+
+    public static func rank(_ id: String, _ store: GameStore) -> Int { ranks(store)[id] ?? 0 }
+
+    /// The price of the next rank.
+    public static func rankCost(_ current: Int) -> Int { jsRound(50 * pow(1.5, Double(current))) }
+
+    @discardableResult
+    public static func buyRank(_ m: Mastery, store: GameStore) -> Bool {
+        let have = coins(store), r = rank(m.id, store), cost = rankCost(r)
+        guard have >= cost else { return false }
+        let left = have - cost
+        store.setItem("dd_mystery_coins", String(left))
+        RaidSave(store: store).syncCoins(left)
+        var all = ranks(store)
+        all[m.id] = r + 1
+        if let d = try? JSONEncoder().encode(all), let s = String(data: d, encoding: .utf8) { store.setItem("dd_coin_mastery", s) }
+        return true
+    }
+
+    /// The ranks' bonuses at the start of a run.
+    public static func applyMastery(_ store: GameStore, to run: inout Run) {
+        let r = ranks(store)
+        let vigor = r["vigor"] ?? 0, might = r["might"] ?? 0, ward = r["ward"] ?? 0, focus = r["focus"] ?? 0
+        if vigor > 0 { run.maxHp += 5 * vigor; run.hp = min(run.maxHp, run.hp + 5 * vigor) }
+        if might > 0 { run.atkBonus += might }
+        if ward > 0 { run.defBonus += ward }
+        if focus > 0 { run.maxSp += 3 * focus; run.sp = min(run.maxSp, run.sp + 3 * focus) }
     }
 
     /// isNightTime: 8 PM to 8 AM.

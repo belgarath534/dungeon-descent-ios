@@ -212,6 +212,7 @@ final class RunModel: ObservableObject {
         }
         var cd = SystemDice()
         CoinShop.apply(CoinShop.owned(game.store), to: &r, dice: &cd, wallet: game.wallet)
+        CoinShop.applyMastery(game.store, to: &r)
         game.achievements.trackGlobal("runsStarted")
         var d = SystemDice()
         Weather.start(&r, dice: &d)

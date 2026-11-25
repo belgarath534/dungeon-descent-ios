@@ -9,6 +9,7 @@ struct CoinShopView: View {
     @State private var coins = 0
     @State private var owned: Set<String> = []
     @State private var message = ""
+    @State private var ranks: [String: Int] = [:]
 
     var body: some View {
         WebScreen {
@@ -31,6 +32,16 @@ struct CoinShopView: View {
             .accessibilityElement(children: .combine)
             .accessibilityLabel("Your Mystery Coins: \(coins)." as String)
 
+            // 12.2: Mastery, ranks that never run out.
+            Text("MASTERY — RANKS THAT NEVER RUN OUT").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
+                .accessibilityAddTraits(.isHeader).padding(.top, 4)
+            Text("Each rank costs half again as much as the last.")
+                .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textSecondary)
+            VStack(spacing: 10) {
+                ForEach(CoinShop.masteries) { masteryRow($0) }
+            }
+            Text("UPGRADES").font(Theme.cinzel(10.4)).tracking(2).foregroundStyle(Theme.goldDim)
+                .accessibilityAddTraits(.isHeader).padding(.top, 10)
             VStack(spacing: 10) {
                 ForEach(CoinShop.upgrades) { row($0) }
             }
@@ -52,6 +63,35 @@ struct CoinShopView: View {
     private func refresh() {
         coins = CoinShop.coins(game.store)
         owned = CoinShop.owned(game.store)
+        ranks = CoinShop.ranks(game.store)
+    }
+
+    private func masteryRow(_ m: CoinShop.Mastery) -> some View {
+        let r = ranks[m.id] ?? 0, cost = CoinShop.rankCost(r), can = coins >= cost
+        return Button {
+            guard CoinShop.buyRank(m, store: game.store) else { Feedback.announce("Not enough Mystery Coins."); return }
+            Sound.sfx("sfx-unlock")
+            refresh()
+            message = "\(m.name) rank \(r + 1)! \(m.perRank) more on every run."
+            Feedback.announce(message)
+        } label: {
+            HStack(spacing: 16) {
+                Text(m.icon).font(.system(size: 26))
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("\(m.name) — Rank \(r)" as String).font(Theme.cinzel(14)).foregroundStyle(Theme.ashLight)
+                    Text("\(m.perRank) a rank on every run. Now: \(r) rank\(r == 1 ? "" : "s")." as String)
+                        .font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textSecondary)
+                }
+                Spacer(minLength: 0)
+                Text("\(cost) 🪙" as String).font(Theme.cinzel(13)).foregroundStyle(Theme.gold).fixedSize()
+            }
+            .padding(.vertical, 18).padding(.horizontal, 20)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Theme.bgPanel).overlay(Rectangle().stroke(Theme.borderDim))
+            .opacity(can ? 1 : 0.5).contentShape(Rectangle())
+        }
+        .buttonStyle(.plain).disabled(!can)
+        .accessibilityLabel("\(m.name), rank \(r). \(m.perRank) a rank on every run. Next rank costs \(cost) coins.\(can ? "" : " Not enough coins.")" as String)
     }
 
     @ViewBuilder

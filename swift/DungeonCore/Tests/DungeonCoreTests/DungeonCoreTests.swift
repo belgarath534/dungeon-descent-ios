@@ -1396,7 +1396,7 @@ final class CoinShopTests: XCTestCase {
         XCTAssertEqual(CoinShop.owned(store), ["cu-hp-boost"])
         let blade = CoinShop.upgrades.first { $0.id == "cu-void-touched" }!
         XCTAssertFalse(CoinShop.buy(blade, store: store))
-        XCTAssertEqual(CoinShop.upgrades.count, 26)
+        XCTAssertEqual(CoinShop.upgrades.count, 34)  // 26, and 8 more in 12.2
     }
 
     func testUpgradesApplyAtRunStart() {
@@ -6047,5 +6047,30 @@ final class BossPowerTests: XCTestCase {
         XCTAssertEqual(BossPower.scaled(b, for: r).maxHp, b.maxHp)
         // Normal enemies are never touched.
         XCTAssertEqual(BossPower.scaled(Enemy(name: "Rat", icon: "🐀", hp: 10, maxHp: 10, atk: 1...2, gold: 1...1), for: r).maxHp, 10)
+    }
+}
+
+final class CoinMasteryTests: XCTestCase {
+    func testNewUpgradesAndEndlessRanks() {
+        let store = MemoryStore()
+        store.setItem("dd_mystery_coins", "1000")
+        XCTAssertEqual(CoinShop.rankCost(0), 50)
+        XCTAssertEqual(CoinShop.rankCost(1), 75)
+        XCTAssertEqual(CoinShop.rankCost(3), 169)
+        let might = CoinShop.masteries.first { $0.id == "might" }!
+        XCTAssertTrue(CoinShop.buyRank(might, store: store))
+        XCTAssertTrue(CoinShop.buyRank(might, store: store))
+        XCTAssertEqual(CoinShop.rank("might", store), 2)
+        XCTAssertEqual(CoinShop.coins(store), 875)
+        XCTAssertTrue(CoinShop.buy(CoinShop.upgrades.first { $0.id == "cu-thick-hide" }!, store: store))
+        var r = Run(character: PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        let hp = r.maxHp, atk = r.atkBonus
+        var d = SystemDice()
+        CoinShop.apply(CoinShop.owned(store), to: &r, dice: &d, wallet: Wallet(store: store))
+        CoinShop.applyMastery(store, to: &r)
+        XCTAssertEqual(r.maxHp, hp + 15)
+        XCTAssertEqual(r.atkBonus, atk + 2)
+        XCTAssertGreaterThan(CoinShop.upgrades.count, 30)
     }
 }
