@@ -97,14 +97,15 @@ public enum Guns {
         let shot = "sfx-gun-shot.mp3"
         switch id {
         case "flintlock": return ShotSound(file: shot, pitch: 0.95, after: "sfx-gun-charge.mp3", afterPitch: 0.7, afterDelay: 0.25, afterVolume: 0.35)
-        case "revolver": return ShotSound(file: shot, pitch: 1.05)
+        // Made with ElevenLabs sound effects (12.2).
+        case "revolver": return ShotSound(file: "sfx-gun-revolver.mp3", pitch: 1)
         case "magnum": return ShotSound(file: shot, pitch: 0.82, after: shot, afterPitch: 0.6, afterDelay: 0.18, afterVolume: 0.3)
         case "glock": return ShotSound(file: shot, pitch: 1.25)
         case "machinepistol": return ShotSound(file: shot, pitch: 1.45)
         case "musket": return ShotSound(file: shot, pitch: 0.72, after: shot, afterPitch: 0.5, afterDelay: 0.3, afterVolume: 0.35)
         case "sawedoff": return ShotSound(file: shot, pitch: 0.68, after: "sfx-heavy-hit.mp3", afterPitch: 0.8, afterDelay: 0.04, afterVolume: 0.6)
         case "doublebarrel": return ShotSound(file: shot, pitch: 0.78, after: shot, afterPitch: 0.8, afterDelay: 0.12, afterVolume: 0.7)
-        case "repeater": return ShotSound(file: shot, pitch: 1.1, after: "sfx-gun-charge.mp3", afterPitch: 1.3, afterDelay: 0.2, afterVolume: 0.3)
+        case "repeater": return ShotSound(file: "sfx-gun-repeater.mp3", pitch: 1)
         case "autorifle": return ShotSound(file: shot, pitch: 1.2)
         case "ak47": return ShotSound(file: shot, pitch: 0.9, after: shot, afterPitch: 0.95, afterDelay: 0.08, afterVolume: 0.55)
         case "sniper": return ShotSound(file: shot, pitch: 0.6, after: shot, afterPitch: 0.45, afterDelay: 0.45, afterVolume: 0.3)
