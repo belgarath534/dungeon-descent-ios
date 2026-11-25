@@ -95,7 +95,7 @@ struct MainMenuView: View {
         Entry(id: "events", text: "🎃 Events", label: "Seasonal events, see active and upcoming events", action: .go(.events)),
         Entry(id: "credits", text: "📜 Credits", label: "Credits, see who made the game", action: .go(.credits)),
         Entry(id: "raid", text: "⚔️ Raid", label: "Raid, survive five waves of enemies for daily rewards", action: .go(.raid)),
-        Entry(id: "settings", text: "⚙ Settings", label: "Settings, adjust music and sound", action: .go(.settings), separatorBefore: true),
+        Entry(id: "settings", text: "⚙ Settings", label: "Settings", action: .go(.settings), separatorBefore: true),
         Entry(id: "quit", text: "🕯 Quit", label: "Quit Dungeon Descent", action: .quit),
     ]
 

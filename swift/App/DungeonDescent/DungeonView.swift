@@ -72,7 +72,6 @@ struct DungeonView: View {
                     if fighting, let e = run.enemy, e.isBoss { bossPhaseBar(e) }
                     roomSection
                     if fighting { combatSection } else if let h = run.conductor { conductorSection(h) } else if let s = run.stalker { stalkerSection(s) } else { navSection }
-                    if showInventory { inventorySection }
                 }
                 .padding(.horizontal, 14)
                 .padding(.top, 16)
@@ -107,6 +106,18 @@ struct DungeonView: View {
 
     @ViewBuilder
     private var overlays: some View {
+        // 12.1.1: the inventory is its own page, not a list unfolding under
+        // the room (30 items in the middle of the dungeon screen was hard to
+        // find your way through with VoiceOver).
+        if showInventory && model.phase != .victory && model.phase != .defeat {
+            WebScreen {
+                Button("← Back to the Dungeon") { toggleInventory() }
+                    .buttonStyle(BackButtonStyle())
+                    .accessibilityLabel("Close inventory and return to the dungeon")
+                inventorySection
+            }
+            .accessibilityAddTraits(.isModal)
+        }
         switch model.phase {
         case .shopping: ShopOverlay(model: model)
         case .floorCleared where model.levelUp == nil && run.skillChoices.isEmpty: floorComplete
@@ -764,7 +775,7 @@ struct DungeonView: View {
                     act("⬆ Level Points (\(model.run.levelPoints))", "Spend \(model.run.levelPoints) level points on your stats") { model.openLevelPoints() }
                 }
                 act("📖 Skills", "Open skill book, view and reorder your unlocked skills") { showSkillBook() }
-                act("⚙ Settings", "Open settings, adjust music and sound effects") { showSettings = true }
+                act("⚙ Settings", "Settings") { showSettings = true }
                 act("📜 Run Log", "Open run log, see everything that happened this run") { showRunLog = true }
                 act("💾 Save", "Save your progress right now") { model.manualSave() }
                 act("⚒ Blacksmith", "Open blacksmith — upgrade your equipped weapon or armor") { model.openBlacksmith() }
@@ -813,6 +824,7 @@ struct DungeonView: View {
         withAnimation { showInventory.toggle() }
         Feedback.announce(showInventory ? "Inventory opened. \(run.inventory.count) items.\(fighting ? " Armor equipping is locked during combat." : "")"
                           : "Inventory closed.")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { UIAccessibility.post(notification: .screenChanged, argument: nil) }
     }
 
     private var favorites: [String] {
