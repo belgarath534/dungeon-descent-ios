@@ -116,6 +116,10 @@ public enum Inventory {
             }
         case "insanity":
             out.message = Sanity.drink(&run, dice: &dice)
+        case "wishing-coin", "sheet-music":
+            guard let o = RareRooms.use(&run, item) else { return Outcome(message: "Nothing happens.", used: false) }
+            guard o.used else { return o }
+            out.message = o.message
         case "elixir", "heal":
             guard run.hp < run.maxHp else {
                 return Outcome(message: "Your health is already full. Save the elixir for when you need it.", used: false)

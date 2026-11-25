@@ -164,6 +164,8 @@ public enum Encounters {
               text: "A figure sits in the corner of the room. He does not look up. His name tag reads: JULIO. You have no idea who this is or how he got here.",
               choices: ["Talk to Julio", "Offer Julio gold", "Leave quietly"], weight: 1, dungeons: nil),
         MagicChamber.event,
+        RareRooms.events[0],
+        RareRooms.events[1],
         Event(id: "shrine", title: "Ancient Shrine",
               text: "A crumbling shrine stands here, still faintly warm. Something about it feels like an offer.",
               choices: ["Pray at the shrine", "Leave it alone"], weight: 3, dungeons: nil),
@@ -245,6 +247,7 @@ public enum Encounters {
             return SpecialEncounters.choose(id, choice, &run, dice: &dice, wallet: wallet)
         }
         if id == MagicChamber.id { return MagicChamber.choose(choice, &run, store: store) }
+        if let o = RareRooms.choose(id, choice, &run, dice: &dice, wallet: wallet) { return o }
         if id.hasPrefix("weeping-") { return HollowEvents.choose(id, choice, &run, dice: &dice, wallet: wallet) }
         if id.hasPrefix("shadow-") { return ShadowEvents.choose(id, choice, &run, dice: &dice, wallet: wallet) }
 

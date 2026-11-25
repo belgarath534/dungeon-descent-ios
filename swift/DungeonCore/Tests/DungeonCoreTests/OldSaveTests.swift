@@ -304,3 +304,59 @@ final class FivePlayerCoopTests: XCTestCase {
         XCTAssertEqual(Coop.roomMax(["max": NSNumber(value: 1)]), 2)
     }
 }
+
+final class RareRoomsTests: XCTestCase {
+    final class Mem: GameStore {
+        var d: [String: String] = [:]
+        func getItem(_ key: String) -> String? { d[key] }
+        func setItem(_ key: String, _ value: String) { d[key] = value }
+        func removeItem(_ key: String) { d[key] = nil }
+        func setItems(_ items: [String: String]) { items.forEach { d[$0] = $1 } }
+    }
+    func freshRun() -> Run {
+        Run(character: PlayerCharacter(name: "R", cls: "Warrior", race: "Human", prof: "Thief",
+                                       dungeon: "Crypt of Malachar", difficulty: .wanderer))
+    }
+
+    func testWishingWellCostsGoldAndGrantsAWish() {
+        let store = Mem(); let wallet = Wallet(store: store)
+        var r = freshRun()
+        r.gold = 0
+        r.pendingEvent = RareRooms.wellId
+        var d = LoadedDice(rolls: [2])
+        let poor = Encounters.choose(0, &r, dice: &d, wallet: wallet)
+        XCTAssertTrue(poor.retry)
+        wallet.addGold(100); r.gold = 100
+        r.pendingEvent = RareRooms.wellId
+        let atk = r.atkBonus
+        d = LoadedDice(rolls: [0])
+        _ = Encounters.choose(0, &r, dice: &d, wallet: wallet)
+        XCTAssertEqual(r.gold, 75)
+        XCTAssertEqual(r.atkBonus, atk + 3)
+        r.pendingEvent = RareRooms.wellId
+        d = LoadedDice(rolls: [2])
+        _ = Encounters.choose(0, &r, dice: &d, wallet: wallet)
+        let i = r.inventory.firstIndex { $0.type == "wishing-coin" }!
+        r.hp = 1
+        var c = LoadedDice()
+        _ = Inventory.use(&r, at: i, dice: &c)
+        XCTAssertEqual(r.hp, r.maxHp)
+        XCTAssertFalse(r.inventory.contains { $0.type == "wishing-coin" })
+    }
+
+    func testSheetMusicPutsAnEnemyToSleep() {
+        let store = Mem(); let wallet = Wallet(store: store)
+        var r = freshRun()
+        r.pendingEvent = RareRooms.musicId
+        var d = LoadedDice()
+        _ = Encounters.choose(1, &r, dice: &d, wallet: wallet)
+        let i = r.inventory.firstIndex { $0.type == "sheet-music" }!
+        XCTAssertFalse(Inventory.use(&r, at: i, dice: &d).used)
+        _ = Combat.begin(&r, against: Enemy(name: "Rat", icon: "x", hp: 30, maxHp: 30, atk: 5...5, gold: 1...1))
+        _ = Inventory.use(&r, at: i, dice: &d)
+        XCTAssertEqual(r.enemy?.stunTurns, 2)
+        r.pendingEvent = RareRooms.musicId
+        d = LoadedDice(rolls: [2])
+        XCTAssertNotNil(Encounters.choose(0, &r, dice: &d, wallet: wallet).enemy)
+    }
+}
