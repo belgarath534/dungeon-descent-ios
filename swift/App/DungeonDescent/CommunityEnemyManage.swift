@@ -27,25 +27,27 @@ struct MyEnemiesView: View {
             Button("← Back to Community Enemies") { close() }
                 .buttonStyle(BackButtonStyle())
                 .accessibilityLabel("Back to community enemies")
-            heading("My Enemies", "The enemies you made. Rename them, make them stronger, or delete them.")
+            heading("My Enemies", CommunityEnemyStore.isDeveloper
+                    ? "Developer: every community enemy. Editing one keeps it with the player who made it."
+                    : "The enemies you made. Rename them, make them stronger, or delete them.")
             if loading {
                 Text("Finding your enemies...").font(Theme.cinzel(10.4)).foregroundStyle(Theme.textDim).padding(20)
             } else if pool.mine.isEmpty {
-                Text("You haven't made any enemies yet, or they were made under a different name. Enemies made from this version on are always yours to edit.")
+                Text("You haven't made any enemies to edit yet. Enemies you make from this version on are yours to edit. For an older one, ask the developer on Discord.")
                     .font(Theme.crimson(14, italic: true)).foregroundStyle(Theme.textSecondary).padding(.vertical, 10)
             }
             ForEach(pool.mine) { e in
                 Button { editing = e } label: {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("\(e.icon) \(e.name)" as String).font(Theme.cinzel(13)).foregroundStyle(Theme.textPrimary)
-                        Text("\(e.type) · HP \(e.hp) · ATK \(e.atk) · DEF \(e.def) · ⚔ \(e.kills) kills" as String)
+                        Text("\(e.type) · HP \(e.hp) · ATK \(e.atk) · DEF \(e.def) · ⚔ \(e.kills) kills · by \(e.creator)" as String)
                             .font(Theme.cinzel(9.3)).foregroundStyle(Color(hex: 0x909090))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading).padding(12)
                     .background(Theme.bgStone).overlay(Rectangle().stroke(Color(hex: 0x554488)))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Edit \(e.name). \(e.type), HP \(e.hp), attack \(e.atk), defense \(e.def). \(e.kills) kills." as String)
+                .accessibilityLabel("Edit \(e.name), by \(e.creator). \(e.type), HP \(e.hp), attack \(e.atk), defense \(e.def). \(e.kills) kills." as String)
             }
         }
         .task {

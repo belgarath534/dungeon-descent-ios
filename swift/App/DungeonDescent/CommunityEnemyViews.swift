@@ -82,13 +82,15 @@ final class CommunityEnemyStore: ObservableObject {
     static var madeHere: [String] { UserDefaults.standard.stringArray(forKey: "swift_my_enemies") ?? [] }
     static func remember(_ id: String) { UserDefaults.standard.set(madeHere + [id], forKey: "swift_my_enemies") }
 
-    /// Yours: made with your account or on this device, or (an enemy from
-    /// before 12.2, with no owner yet) made under your chat name.
+    /// The developer's account can edit every enemy (older ones saved no
+    /// account, only a name anyone could type, so only the developer edits those).
+    static var isDeveloper: Bool { CloudAccount.shared.isDeveloper }
+
+    /// Yours: made with your account, or on this device.
     func isMine(_ e: CommunityEnemies.Entry, username: String?) -> Bool {
+        if Self.isDeveloper { return true }
         if let o = e.owner { return o == Self.ownerId }
-        if Self.madeHere.contains(e.id) { return true }
-        guard let u = username?.trimmingCharacters(in: .whitespacesAndNewlines), !u.isEmpty else { return false }
-        return e.creator.caseInsensitiveCompare(u) == .orderedSame
+        return Self.madeHere.contains(e.id)
     }
 
     @Published private(set) var mine: [CommunityEnemies.Entry] = []
@@ -106,9 +108,11 @@ final class CommunityEnemyStore: ObservableObject {
                 .owned(by: v["ownerUid"] as? String)
             if isMine(e, username: username) { found[e.id] = e }
         }
-        for d in (try? await col.whereField("ownerUid", isEqualTo: Self.ownerId).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
-        if let u = username, !u.isEmpty {
-            for d in (try? await col.whereField("creator", isEqualTo: u).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
+        if Self.isDeveloper {
+            // Every live enemy, for the developer.
+            for d in (try? await col.whereField("approved", isEqualTo: true).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
+        } else {
+            for d in (try? await col.whereField("ownerUid", isEqualTo: Self.ownerId).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
         }
         for id in Self.madeHere where found[id] == nil {
             if let d = try? await col.document(id).getDocument(), let v = d.data() { add(id, v) }
@@ -120,12 +124,15 @@ final class CommunityEnemyStore: ObservableObject {
     func save(_ e: CommunityEnemies.Entry, username: String?) async -> String? {
         guard isMine(e, username: username) else { return "That enemy isn't yours." }
         do {
-            try await col.document(e.id).updateData([
+            // The developer's edits leave the enemy with whoever made it.
+            var fields: [String: Any] = [
                 "name": e.name, "desc": e.desc, "type": e.type, "icon": e.icon, "hp": e.hp, "atk": e.atk, "def": e.def,
-                "ownerUid": Self.ownerId, "editedAt": (Date().timeIntervalSince1970 * 1000).rounded(),
-            ])
+                "editedAt": (Date().timeIntervalSince1970 * 1000).rounded(),
+            ]
+            if !Self.isDeveloper { fields["ownerUid"] = Self.ownerId }
+            try await col.document(e.id).updateData(fields)
             loadedAt = .distantPast
-            if let i = mine.firstIndex(where: { $0.id == e.id }) { mine[i] = e.owned(by: Self.ownerId) }
+            if let i = mine.firstIndex(where: { $0.id == e.id }) { mine[i] = Self.isDeveloper ? e : e.owned(by: Self.ownerId) }
             return nil
         } catch {
             return "Couldn't save it. Check your connection and try again."
@@ -137,7 +144,7 @@ final class CommunityEnemyStore: ObservableObject {
         guard isMine(e, username: username) else { return "That enemy isn't yours." }
         do {
             try await col.document(e.id).updateData([
-                "approved": false, "deletedByOwner": true, "ownerUid": Self.ownerId,
+                "approved": false, (Self.isDeveloper ? "deletedByDeveloper" : "deletedByOwner"): true,
                 "moderatedAt": (Date().timeIntervalSince1970 * 1000).rounded(),
             ])
             loadedAt = .distantPast
