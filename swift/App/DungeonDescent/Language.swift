@@ -348,6 +348,8 @@ enum Patterns {
         ("{0} rank {1}! {2} more on every run.", "{0} nível {1}! {2} a mais em toda partida."),
         ("{0}, rank {1}. {2} a rank on every run. Next rank costs {3} coins.", "{0}, nível {1}. {2} por nível em toda partida. O próximo nível custa {3} moedas."),
         ("{0}, rank {1}. {2} a rank on every run. Next rank costs {3} coins. Not enough coins.", "{0}, nível {1}. {2} por nível em toda partida. O próximo nível custa {3} moedas. Moedas insuficientes."),
+        ("💰 You drop half the gold you carried: {0} gold is lost in the dungeon. The {1} gold in your Home safe is safe.", "💰 Você deixa cair metade do ouro que carregava: {0} de ouro se perdem na masmorra. Os {1} de ouro no cofre da sua Casa estão seguros."),
+        ("💰 You drop half the gold you carried: {0} gold is lost in the dungeon. Gold kept in your Home safe is never lost.", "💰 Você deixa cair metade do ouro que carregava: {0} de ouro se perdem na masmorra. O ouro guardado no cofre da sua Casa nunca se perde."),
         // 12.2: What's New.
         ("The Unicorn Update", "A Atualização do Unicórnio"),
         ("Version 12.1.1", "Versão 12.1.1"),

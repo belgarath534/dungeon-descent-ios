@@ -6074,3 +6074,18 @@ final class CoinMasteryTests: XCTestCase {
         XCTAssertGreaterThan(CoinShop.upgrades.count, 30)
     }
 }
+
+final class DeathPenaltyTests: XCTestCase {
+    func testLosingARunCostsHalfTheCarriedGoldNotTheSafe() {
+        let store = MemoryStore()
+        let wallet = Wallet(store: store)
+        wallet.addGold(1000)
+        XCTAssertTrue(Home.deposit(400, store: store, wallet: wallet))
+        var r = Run(character: PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer), gold: wallet.gold)
+        XCTAssertEqual(DeathPenalty.apply(&r, wallet: wallet), 300)
+        XCTAssertEqual(wallet.gold, 300)
+        XCTAssertEqual(Home.safe(store), 400)
+        XCTAssertTrue(DeathPenalty.line(300, safe: 400).contains("400 gold in your Home safe"))
+    }
+}

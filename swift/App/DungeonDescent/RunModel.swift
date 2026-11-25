@@ -2836,6 +2836,16 @@ final class RunModel: ObservableObject {
         stopLowHp()
         if let line = weeklyDone(r, cleared: false) { Feedback.announce(line, after: 2) }
         medusaStillLooking(r)
+        // 12.2: losing a normal run costs half the gold you carry (the Home safe keeps the rest).
+        var r = r
+        var penalty = ""
+        if !isChallenge {
+            let lost = DeathPenalty.apply(&r, wallet: game.wallet)
+            if lost > 0 {
+                penalty = DeathPenalty.line(lost, safe: Home.safe(game.store))
+                add(penalty)
+            }
+        }
         // homeCreateSkillOrbs: the fallen character's upgrades become Skill Orbs.
         if Home.makeSkillOrbs(fromChar: r.name, store: game.store) > 0 {
             add("✨ Skill Orbs created from \(r.name)'s upgraded skills. Use them at your Home with a new \(r.cls).")
@@ -2847,7 +2857,7 @@ final class RunModel: ObservableObject {
             characterGone = true
             let msg = "💀 HARDCORE — \(r.name) has fallen. This character is gone forever. There are no second chances in Hardcore Mode."
             add(msg)
-            Feedback.announce(spoken + " " + msg)
+            Feedback.announce(spoken + " " + msg + (penalty.isEmpty ? "" : " " + penalty))
             return
         }
         run = r
@@ -2866,7 +2876,7 @@ final class RunModel: ObservableObject {
         killer = killedBy
         Sound.ambient(nil)
         showingDeathCinematic = true
-        Feedback.announce(spoken + " " + deathCinematicSpoken)
+        Feedback.announce(spoken + " " + (penalty.isEmpty ? "" : penalty + " ") + deathCinematicSpoken)
     }
 
     private func victory(_ spoken: String) {
