@@ -22,7 +22,7 @@ final class GunBelt: ObservableObject {
         case .charged:
             Sound.sfx("sfx-gun-charge")
         case .fire:
-            Sound.sfx("sfx-gun-shot")
+            SpatialAudio.shared.gunshot(Guns.sound(g.id))
             if state.reloadUntil > 0 { startReload() }
         case .reloading: break
         }

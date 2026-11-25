@@ -14,6 +14,8 @@ public struct Gun: Sendable, Equatable {
     public let desc: String
     public let diamondCost: Int
     public let parts: [String]
+    /// 12.2: what a shot does besides damage (pin, burn, spread, chain).
+    public var effect: String? = nil
 
     /// The parts it takes, counted ("barrel": 2 …).
     public var partCounts: [String: Int] { parts.reduce(into: [:]) { $0[$1, default: 0] += 1 } }
@@ -36,8 +38,9 @@ public enum Guns {
     public static func part(_ id: String) -> Part? { parts.first { $0.id == id } }
 
     static func g(_ id: String, _ name: String, _ icon: String, _ tier: Int, _ dmg: ClosedRange<Int>, _ shots: Int, _ cd: Int,
-                  _ cost: Int, _ parts: [String], _ desc: String) -> Gun {
-        Gun(id: id, name: name, icon: icon, tier: tier, damage: dmg, shots: shots, cooldown: cd, desc: desc, diamondCost: cost, parts: parts)
+                  _ cost: Int, _ parts: [String], _ desc: String, effect: String? = nil) -> Gun {
+        Gun(id: id, name: name, icon: icon, tier: tier, damage: dmg, shots: shots, cooldown: cd, desc: desc, diamondCost: cost, parts: parts,
+            effect: effect)
     }
 
     public static let all: [Gun] = [
@@ -67,7 +70,52 @@ public enum Guns {
           "The revolver's bigger, angrier brother. More damage, slightly longer cooldown. A serious weapon."),
         g("glock", "Glock", "🔫", 3, 22...35, 3, 11, 18, ["barrel", "mechanism", "stock", "trigger"],
           "Reliable, fast, no nonsense. 3 shots before reload, short cooldown. The everyday carry of dungeon weapons."),
+        // 12.2: four guns that do more than damage.
+        g("harpoon", "Harpoon Gun", "🪝", 3, 30...45, 1, 14, 24, ["barrel", "mechanism", "stock", "trigger"],
+          "Fires a barbed harpoon on a chain. It pins the enemy in place: it loses its next turn. Bosses break free half the time.",
+          effect: "pin"),
+        g("flaregun", "Flare Gun", "🎆", 2, 15...24, 2, 12, 15, ["barrel", "mechanism", "trigger"],
+          "Two burning flares. Weak on impact, but the enemy burns for 8 damage a turn for 3 turns.", effect: "burn"),
+        g("blunderbuss", "Blunderbuss", "💥", 4, 30...46, 1, 17, 30, ["barrel", "barrel", "mechanism", "stock", "trigger"],
+          "A brass funnel full of everything. In an ambush the spray hits every enemy at once.", effect: "spread"),
+        g("teslacoil", "Tesla Coil", "⚡", 5, 20...30, 6, 22, 55, ["barrel", "mechanism", "mechanism", "mechanism", "stock", "trigger"],
+          "Six crackling bolts. Every shot in a row in the same fight hits harder, up to double damage.", effect: "chain"),
     ]
+
+    /// 12.2: how each gun sounds: the shot's file and pitch, and an echo or a
+    /// second sound after it. Bigger guns boom lower; small ones crack higher.
+    public struct ShotSound: Sendable, Equatable {
+        public let file: String
+        public let pitch: Double
+        public var after: String? = nil
+        public var afterPitch: Double = 1
+        public var afterDelay: Double = 0
+        public var afterVolume: Float = 0.5
+    }
+
+    public static func sound(_ id: String) -> ShotSound {
+        let shot = "sfx-gun-shot.mp3"
+        switch id {
+        case "flintlock": return ShotSound(file: shot, pitch: 0.95, after: "sfx-gun-charge.mp3", afterPitch: 0.7, afterDelay: 0.25, afterVolume: 0.35)
+        case "revolver": return ShotSound(file: shot, pitch: 1.05)
+        case "magnum": return ShotSound(file: shot, pitch: 0.82, after: shot, afterPitch: 0.6, afterDelay: 0.18, afterVolume: 0.3)
+        case "glock": return ShotSound(file: shot, pitch: 1.25)
+        case "machinepistol": return ShotSound(file: shot, pitch: 1.45)
+        case "musket": return ShotSound(file: shot, pitch: 0.72, after: shot, afterPitch: 0.5, afterDelay: 0.3, afterVolume: 0.35)
+        case "sawedoff": return ShotSound(file: shot, pitch: 0.68, after: "sfx-heavy-hit.mp3", afterPitch: 0.8, afterDelay: 0.04, afterVolume: 0.6)
+        case "doublebarrel": return ShotSound(file: shot, pitch: 0.78, after: shot, afterPitch: 0.8, afterDelay: 0.12, afterVolume: 0.7)
+        case "repeater": return ShotSound(file: shot, pitch: 1.1, after: "sfx-gun-charge.mp3", afterPitch: 1.3, afterDelay: 0.2, afterVolume: 0.3)
+        case "autorifle": return ShotSound(file: shot, pitch: 1.2)
+        case "ak47": return ShotSound(file: shot, pitch: 0.9, after: shot, afterPitch: 0.95, afterDelay: 0.08, afterVolume: 0.55)
+        case "sniper": return ShotSound(file: shot, pitch: 0.6, after: shot, afterPitch: 0.45, afterDelay: 0.45, afterVolume: 0.3)
+        case "crossbow": return ShotSound(file: "sfx-attack.mp3", pitch: 1.35)
+        case "harpoon": return ShotSound(file: shot, pitch: 0.75, after: "sfx-heavy-hit.mp3", afterPitch: 0.7, afterDelay: 0.22, afterVolume: 0.7)
+        case "flaregun": return ShotSound(file: "sfx-firework.mp3", pitch: 1.1, after: "sfx-enemy-fire.mp3", afterPitch: 1, afterDelay: 0.3, afterVolume: 0.4)
+        case "blunderbuss": return ShotSound(file: shot, pitch: 0.58, after: shot, afterPitch: 0.7, afterDelay: 0.05, afterVolume: 0.65)
+        case "teslacoil": return ShotSound(file: "sfx-gun-charge.mp3", pitch: 1.7, after: "sfx-enemy-fire.mp3", afterPitch: 1.5, afterDelay: 0.06, afterVolume: 0.5)
+        default: return ShotSound(file: shot, pitch: 1)
+        }
+    }
 
     public static func gun(_ id: String) -> Gun? { all.first { $0.id == id } }
 
@@ -154,11 +202,47 @@ public enum Guns {
     public static func shoot(_ run: inout Run, _ g: Gun, dice: inout some Dice, options: Combat.Options = Combat.Options()) -> TurnResult {
         var r = TurnResult()
         guard run.inCombat, run.enemy != nil else { r.acted = false; return r }
-        let dmg = damage(g, atkBonus: run.atkBonus, dice: &dice)
+        var dmg = damage(g, atkBonus: run.atkBonus, dice: &dice)
+        // 12.2: the Tesla Coil builds charge with every shot in a row.
+        if g.effect == "chain" {
+            let n = min(4, run.fight.teslaShots ?? 0)
+            dmg = jsRound(Double(dmg) * (1 + 0.25 * Double(n)))
+            run.fight.teslaShots = n + 1
+        } else {
+            run.fight.teslaShots = nil
+        }
         r.playerDamage = dmg
-        r.log.append("🔫 \(g.name) fires! \(dmg) damage!")
+        r.log.append("\(g.icon) \(g.name) fires! \(dmg) damage!")
         Combat.dealDamage(&run, dmg, log: &r.log)
+        effect(g, &run, dmg, dice: &dice, log: &r.log)
         return Combat.finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
+    }
+
+    /// 12.2: what the newer guns do besides damage.
+    static func effect(_ g: Gun, _ run: inout Run, _ dmg: Int, dice: inout some Dice, log: inout [String]) {
+        guard let fx = g.effect, var e = run.enemy, !e.isDead else { return }
+        switch fx {
+        case "pin":
+            if !e.isBoss || dice.chance(0.5) {
+                e.stunTurns = max(e.stunTurns, 1)
+                log.append("🪝 The harpoon pins \(e.name) in place! It loses its next turn.")
+            } else {
+                log.append("🪝 \(e.name) tears the harpoon loose.")
+            }
+        case "burn":
+            e.dotDamage = max(e.dotDamage, 8)
+            e.dotTurns = max(e.dotTurns, 3)
+            log.append("🎆 \(e.name) catches fire! It burns for 8 a turn for 3 turns.")
+        case "spread":
+            guard !run.foes.isEmpty else { break }
+            let splash = max(1, dmg * 6 / 10)
+            for i in run.foes.indices { run.foes[i].hp = max(0, run.foes[i].hp - splash) }
+            log.append("💥 The spray hits the rest of the ambush for \(splash) each!")
+        case "chain":
+            if let n = run.fight.teslaShots, n > 1 { log.append("⚡ The coil crackles hotter. Shot \(n) in a row.") }
+        default: break
+        }
+        run.enemy = e
     }
 }
 

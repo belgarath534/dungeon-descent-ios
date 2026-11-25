@@ -245,6 +245,18 @@ enum Patterns {
         ("First encounter. {0}. {1}", "Primeiro encontro. {0}. {1}"),
         ("⚔ Leo enters the dungeon. The dungeon does not know what is coming.", "⚔ Leo entra na masmorra. A masmorra não sabe o que está por vir."),
         ("Leo. The dungeon has heard this name before. It fears it.", "Leo. A masmorra já ouviu esse nome antes. Ela o teme."),
+        // 12.2: New guns.
+        ("Harpoon Gun", "Arpão"), ("Flare Gun", "Pistola Sinalizadora"), ("Blunderbuss", "Bacamarte"), ("Tesla Coil", "Bobina de Tesla"),
+        ("Fires a barbed harpoon on a chain. It pins the enemy in place: it loses its next turn. Bosses break free half the time.", "Dispara um arpão farpado preso a uma corrente. Prende o inimigo no lugar: ele perde o próximo turno. Chefes se soltam metade das vezes."),
+        ("Two burning flares. Weak on impact, but the enemy burns for 8 damage a turn for 3 turns.", "Dois sinalizadores em chamas. Fracos no impacto, mas o inimigo queima 8 de dano por turno durante 3 turnos."),
+        ("A brass funnel full of everything. In an ambush the spray hits every enemy at once.", "Um funil de latão cheio de tudo. Numa emboscada, o disparo acerta todos os inimigos de uma vez."),
+        ("Six crackling bolts. Every shot in a row in the same fight hits harder, up to double damage.", "Seis raios crepitantes. Cada tiro seguido na mesma luta acerta mais forte, até o dobro do dano."),
+        ("{0} {1} fires! {2} damage!", "{0} {1} dispara! {2} de dano!"),
+        ("🪝 The harpoon pins {0} in place! It loses its next turn.", "🪝 O arpão prende {0} no lugar! Ele perde o próximo turno."),
+        ("🪝 {0} tears the harpoon loose.", "🪝 {0} arranca o arpão."),
+        ("🎆 {0} catches fire! It burns for 8 a turn for 3 turns.", "🎆 {0} pega fogo! Queima 8 por turno durante 3 turnos."),
+        ("💥 The spray hits the rest of the ambush for {0} each!", "💥 O disparo acerta o resto da emboscada causando {0} em cada um!"),
+        ("⚡ The coil crackles hotter. Shot {0} in a row.", "⚡ A bobina crepita mais forte. Tiro {0} seguido."),
         // 12.2: The Mine goes deeper.
         ("The Lantern Widow", "A Viúva da Lanterna"), ("The Hollow Drill", "A Broca Oca"), ("The Bone Seam", "O Veio de Ossos"),
         ("The Pale Queen", "A Rainha Pálida"), ("The First Stone", "A Primeira Pedra"), ("The Unending Dark", "A Escuridão sem Fim"),

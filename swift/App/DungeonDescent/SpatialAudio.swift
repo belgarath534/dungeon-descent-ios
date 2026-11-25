@@ -172,6 +172,14 @@ final class SpatialAudio {
         }
     }
 
+    /// 12.2: a gun's own shot, just in front of you, with its echo or
+    /// second sound (Guns.sound). The room's reverb follows the dungeon.
+    func gunshot(_ s: Guns.ShotSound) {
+        let front = Self.point(.north, 0.6)
+        sound(s.file, at: front, volume: 1, pitch: s.pitch)
+        if let a = s.after { sound(a, at: front, volume: s.afterVolume, pitch: s.afterPitch, delay: s.afterDelay) }
+    }
+
     /// A sound file placed in the room.
     func sound(_ file: String, at p: AVAudio3DPoint, volume: Float = 1, pitch: Double = 1, delay: Double = 0) {
         play(buffer(file, pitch: pitch), at: p, volume: volume, delay: delay)

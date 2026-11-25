@@ -2676,7 +2676,7 @@ final class GunTests: XCTestCase {
     func testCraftBuyEquip() {
         let store = MemoryStore()
         let w = Wallet(store: store)
-        XCTAssertEqual(Guns.all.count, 13)
+        XCTAssertEqual(Guns.all.count, 17)
         XCTAssertTrue(Guns.craft("musket", store: store).hasPrefix("Not enough parts"))
         for p in ["barrel", "stock", "trigger"] { Guns.addPart(p, store: store) }
         XCTAssertTrue(Guns.craft("musket", store: store).hasPrefix("You crafted"))

@@ -394,6 +394,8 @@ public struct FloorStats: Codable, Sendable, Equatable {
 
 /// Skill effects that last only for the current fight (reset when a new one starts).
 public struct FightEffects: Codable, Sendable {
+    /// 12.2: Tesla Coil shots in a row this fight.
+    public var teslaShots: Int? = nil
     /// The boss already asked its riddle this fight.
     public var riddleAsked = false
     /// Ranger's Opening Shot and Assassin's First Blood, still to come this fight.

@@ -417,3 +417,49 @@ final class DeepMineTests: XCTestCase {
         XCTAssertTrue(t.loot.contains { $0.name == "Diamonds ×12" })
     }
 }
+
+final class NewGunTests: XCTestCase {
+    func fight(_ foes: Int = 0) -> Run {
+        var r = Run(character: PlayerCharacter(name: "G", cls: "Warrior", race: "Human", prof: "Thief",
+                                               dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        r.spirit = nil
+        r.minion = nil
+        _ = Combat.begin(&r, against: Enemy(name: "Target", icon: "x", hp: 5000, maxHp: 5000, atk: 1...1, gold: 1...1))
+        r.foes = (0..<foes).map { _ in Enemy(name: "Other", icon: "x", hp: 500, maxHp: 500, atk: 1...1, gold: 1...1) }
+        r.hp = r.maxHp
+        return r
+    }
+
+    func testEveryGunHasItsOwnSound() {
+        for g in Guns.all { XCTAssertFalse(Guns.sound(g.id) == Guns.sound("unknown-gun") && g.id != "unknown-gun", g.id) }
+    }
+
+    func testHarpoonPinsFlareBurnsBlunderbussSpreads() {
+        var d = LoadedDice(rolls: [30], chances: [])
+        var r = fight()
+        let h = Guns.shoot(&r, Guns.gun("harpoon")!, dice: &d)
+        XCTAssertTrue(h.log.contains { $0.contains("pins Target") })
+        XCTAssertTrue(h.log.contains { $0.contains("cannot act") })
+        r = fight()
+        var l = Guns.shoot(&r, Guns.gun("flaregun")!, dice: &d)
+        XCTAssertTrue(l.log.contains { $0.contains("catches fire") })
+        XCTAssertEqual(r.enemy?.dotDamage, 8)
+        r = fight(2)
+        l = Guns.shoot(&r, Guns.gun("blunderbuss")!, dice: &d)
+        XCTAssertTrue(l.log.contains { $0.contains("hits the rest of the ambush") })
+        XCTAssertTrue(r.foes.allSatisfy { $0.hp < 500 })
+    }
+
+    func testTeslaCoilBuildsUp() {
+        var r = fight()
+        let coil = Guns.gun("teslacoil")!
+        var dmg: [Int] = []
+        for _ in 0..<6 {
+            var d = LoadedDice(rolls: [20])
+            dmg.append(Guns.shoot(&r, coil, dice: &d).playerDamage)
+        }
+        XCTAssertEqual(dmg.first.map { Double($0) }, Double(dmg[0]))
+        XCTAssertGreaterThan(dmg[4], dmg[0])
+        XCTAssertEqual(dmg[5], dmg[4])                        // capped at double
+    }
+}
