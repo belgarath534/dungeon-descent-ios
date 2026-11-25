@@ -1,0 +1,27 @@
+{
+  "rules": {
+    "global_chat": {
+      ".read": true,
+      "$message": {
+        ".write": true,
+        ".validate": "newData.hasChildren(['username', 'message', 'timestamp']) && newData.child('message').val().length <= 200 && newData.child('username').val().length <= 20"
+      }
+    },
+    "pvp_rooms": {
+      ".read": true,
+      ".write": true
+    },
+    "hs_rooms": {
+      ".read": true,
+      ".write": true
+    },
+    "presence": {
+      ".read": true,
+      ".write": true
+    },
+    "void_reaper": {
+      ".read": true,
+      ".write": true
+    }
+  }
+}
