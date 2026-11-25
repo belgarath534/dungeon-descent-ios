@@ -396,6 +396,8 @@ public struct FightEffects: Codable, Sendable {
     public var phantomCrit = false
     /// Damage absorbed before HP (Mana Shield, Bone Shield …).
     public var shield = 0
+    /// Skills with permanent stat gains already used this fight (each works once per fight).
+    public var permanentSkillsUsed: [String] = []
     /// Enemy attacks dodged completely.
     public var dodges = 0
     /// Chance the enemy's next attack misses (Camouflage).

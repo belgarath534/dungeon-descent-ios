@@ -39,6 +39,7 @@ public struct SkillSpec: Sendable {
 
     // Lasting changes
     var permAtk = 0, permDef = 0, permMaxHp = 0, permMaxSp = 0
+    var hasPermanentStats: Bool { permAtk != 0 || permDef != 0 || permMaxHp != 0 || permMaxSp != 0 }
     var fightAtk = 0, fightDef = 0
     var buffAtk = 0, buffDef = 0, buffTurns = 0
 
