@@ -5959,13 +5959,17 @@ final class WeaponGrowthTests: XCTestCase {
         armor.level = 10
         var forge = Forge(weapon: sword, armor: armor, bag: [Item(name: "Enchanter", icon: "🪄", type: "enchanter", desc: "")], gold: wallet.gold, prof: nil)
         forge.bag[0].extra["charges"] = JSONValue.number(3)
-        // Armor still stops at 10; weapons go on, and past 10 an Enchanter doesn't help.
+        // Armor still stops at 10; weapons go on. An Enchanter charge pays first,
+        // at any level (it runs out), then gold.
         XCTAssertFalse(Blacksmith.upgrade(.armor, &forge, wallet: wallet, store: store).ok)
         let goldBefore = forge.gold
         XCTAssertTrue(Blacksmith.upgrade(.weapon, &forge, wallet: wallet, store: store).ok)
         XCTAssertEqual(forge.weapon?.level, 11)
-        XCTAssertEqual(goldBefore - forge.gold, Blacksmith.upgradeCost(level: 10, prof: nil, store: store))
-        XCTAssertEqual(Blacksmith.charges(forge.bag[0]), 3)
+        XCTAssertEqual(forge.gold, goldBefore)
+        XCTAssertEqual(Blacksmith.charges(forge.bag[0]), 2)
+        forge.bag.removeAll()
+        XCTAssertTrue(Blacksmith.upgrade(.weapon, &forge, wallet: wallet, store: store).ok)
+        XCTAssertEqual(goldBefore - forge.gold, Blacksmith.upgradeCost(level: 11, prof: nil, store: store))
         XCTAssertGreaterThan(Blacksmith.upgradeCost(level: 20, prof: nil, store: store), 80_000)
 
         var r = Run(character: PlayerCharacter(name: "T", cls: "Warrior", race: "Human", prof: "Thief",

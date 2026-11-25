@@ -24,9 +24,6 @@ public enum Blacksmith {
     /// (WeaponGrowth), so it's something to spend a fortune on, not a way to
     /// break the game.
     public static let maxLevel = 10
-    /// Enchanters upgrade for free only up to this level; past it, gold only.
-    public static let enchanterMaxLevel = 10
-
     public static func isMaxed(_ slot: Slot, level: Int) -> Bool { slot == .armor && level >= maxLevel }
     public static let maxDurability = 100
     /// UPGRADE_COSTS, by the gear's current level.
@@ -131,7 +128,7 @@ public enum Blacksmith {
         if isMaxed(slot, level: lvl) { return (false, "\(item.name) is already at maximum level \(maxLevel).") }
         let cost = upgradeCost(level: lvl, prof: forge.prof, store: store)
         var note = ""
-        if lvl < enchanterMaxLevel, let e = enchanterIndex(forge.bag) {
+        if let e = enchanterIndex(forge.bag) {
             let left = charges(forge.bag[e]) - 1
             if left <= 0 { forge.bag.remove(at: e) } else { forge.bag[e].extra["charges"] = .number(Double(left)) }
             note = "Enchanter used! Free upgrade applied." + (left > 0 ? " \(left) charges remaining. " : " Enchanter used up. ")

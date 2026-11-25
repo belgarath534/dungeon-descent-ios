@@ -107,8 +107,7 @@ struct BlacksmithView: View {
         let lvl = item.level ?? 1
         let maxed = Blacksmith.isMaxed(slot, level: lvl)
         let cost = Blacksmith.upgradeCost(level: lvl, prof: f.prof, store: model.game.store)
-        // Enchanters only work up to level 10.
-        let enchanter = Blacksmith.hasEnchanter(f) && lvl < Blacksmith.enchanterMaxLevel
+        let enchanter = Blacksmith.hasEnchanter(f)
         let can = !maxed && (f.gold >= cost || enchanter)
         let stat = slot == .weapon ? "ATK \(item.weaponAttack.lowerBound)-\(item.weaponAttack.upperBound)" : "DEF +\(item.armorDefense)"
         let color = slot == .weapon ? Theme.gold : Color(hex: 0x88aaff)
