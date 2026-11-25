@@ -1,6 +1,7 @@
 import SwiftUI
 import FirebaseFirestore
 import FirebaseAuth
+import Security
 import DungeonCore
 
 /// The shared "community_enemies" pool (loadCommunityEnemies, ecSubmit,
@@ -70,13 +71,16 @@ final class CommunityEnemyStore: ObservableObject {
 
     // MARK: Your own enemies (12.2)
 
-    /// Your account, or this device if you aren't signed in.
-    static var ownerId: String {
-        if let uid = Auth.auth().currentUser?.uid { return uid }
-        if let d = UserDefaults.standard.string(forKey: "swift_owner_device_id") { return d }
-        let d = "device-" + UUID().uuidString
-        UserDefaults.standard.set(d, forKey: "swift_owner_device_id")
-        return d
+    /// Who new enemies belong to: your account, or (signed out) your
+    /// creator ID, which lives in iCloud Keychain so it survives deleting
+    /// the app and follows you to your other Apple devices.
+    static var ownerId: String { Auth.auth().currentUser?.uid ?? CreatorKey.id }
+
+    /// Every ID that's yours (an enemy made signed out stays yours after you sign in).
+    static var myIds: Set<String> {
+        var s: Set<String> = [CreatorKey.id]
+        if let uid = Auth.auth().currentUser?.uid { s.insert(uid) }
+        return s
     }
 
     static var madeHere: [String] { UserDefaults.standard.stringArray(forKey: "swift_my_enemies") ?? [] }
@@ -89,7 +93,7 @@ final class CommunityEnemyStore: ObservableObject {
     /// Yours: made with your account, or on this device.
     func isMine(_ e: CommunityEnemies.Entry, username: String?) -> Bool {
         if Self.isDeveloper { return true }
-        if let o = e.owner { return o == Self.ownerId }
+        if let o = e.owner { return Self.myIds.contains(o) }
         return Self.madeHere.contains(e.id)
     }
 
@@ -112,7 +116,7 @@ final class CommunityEnemyStore: ObservableObject {
             // Every live enemy, for the developer.
             for d in (try? await col.whereField("approved", isEqualTo: true).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
         } else {
-            for d in (try? await col.whereField("ownerUid", isEqualTo: Self.ownerId).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
+            for d in (try? await col.whereField("ownerUid", in: Array(Self.myIds)).getDocuments())?.documents ?? [] { add(d.documentID, d.data()) }
         }
         for id in Self.madeHere where found[id] == nil {
             if let d = try? await col.document(id).getDocument(), let v = d.data() { add(id, v) }
@@ -129,10 +133,11 @@ final class CommunityEnemyStore: ObservableObject {
                 "name": e.name, "desc": e.desc, "type": e.type, "icon": e.icon, "hp": e.hp, "atk": e.atk, "def": e.def,
                 "editedAt": (Date().timeIntervalSince1970 * 1000).rounded(),
             ]
-            if !Self.isDeveloper { fields["ownerUid"] = Self.ownerId }
+            // An enemy keeps the owner it has; one made here before it had one gets yours.
+            if !Self.isDeveloper && e.owner == nil { fields["ownerUid"] = Self.ownerId }
             try await col.document(e.id).updateData(fields)
             loadedAt = .distantPast
-            if let i = mine.firstIndex(where: { $0.id == e.id }) { mine[i] = Self.isDeveloper ? e : e.owned(by: Self.ownerId) }
+            if let i = mine.firstIndex(where: { $0.id == e.id }) { mine[i] = Self.isDeveloper || e.owner != nil ? e : e.owned(by: Self.ownerId) }
             return nil
         } catch {
             return "Couldn't save it. Check your connection and try again."
@@ -467,3 +472,51 @@ struct CommunityBestiary: View {
             .accessibilityLabel(voice)
     }
 }
+
+/// 12.2: the creator ID for players who aren't signed in, kept in iCloud
+/// Keychain (synchronizable), so deleting the app or moving to another
+/// iPhone, iPad, Mac or Apple Vision Pro on the same Apple ID keeps it.
+@MainActor
+enum CreatorKey {
+    private static let service = "com.dungeon.descent.creator"
+    private static let account = "creator-id"
+    private static var cached: String?
+
+    static var id: String {
+        if let c = cached { return c }
+        if let k = read() { cached = k; return k }
+        // An ID from an earlier build on this device, or a new one.
+        let new = UserDefaults.standard.string(forKey: "swift_owner_device_id") ?? "device-" + UUID().uuidString
+        save(new)
+        UserDefaults.standard.set(new, forKey: "swift_owner_device_id")
+        cached = new
+        return new
+    }
+
+    private static func read() -> String? {
+        let q: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecAttrSynchronizable as String: kSecAttrSynchronizableAny,
+            kSecReturnData as String: true,
+            kSecMatchLimit as String: kSecMatchLimitOne,
+        ]
+        var out: CFTypeRef?
+        guard SecItemCopyMatching(q as CFDictionary, &out) == errSecSuccess, let d = out as? Data else { return nil }
+        return String(data: d, encoding: .utf8)
+    }
+
+    private static func save(_ value: String) {
+        let item: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecAttrSynchronizable as String: kCFBooleanTrue as Any,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
+            kSecValueData as String: Data(value.utf8),
+        ]
+        _ = SecItemAdd(item as CFDictionary, nil)
+    }
+}
+
