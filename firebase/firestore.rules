@@ -185,6 +185,15 @@ service cloud.firestore {
           && request.time > chatMember(request.auth.uid).lastPostAt + duration.value(2, 's');
     }
 
+    // Reactions: a message's "reactions" map holds one emoji per person; you
+    // may only set or remove your own, from a fixed set, and not when banned.
+    function reactionOnly() {
+      return signedIn() && !chatBanned(request.auth.uid) && onlyChanges(['reactions'])
+          && request.resource.data.reactions.diff(resource.data.get('reactions', {})).affectedKeys().hasOnly([request.auth.uid])
+          && (!(request.auth.uid in request.resource.data.reactions)
+              || request.resource.data.reactions[request.auth.uid] in ['👍', '❤️', '😂', '🔥', '😮', '😢']);
+    }
+
     match /chat_members/{uid} {
       allow read: if signedIn();
       allow create: if isMe(uid)
@@ -238,7 +247,9 @@ service cloud.firestore {
                       && request.resource.data.keys().hasOnly(['uid', 'username', 'text', 'ts', 'replyTo'])
                       && (get(/databases/$(database)/documents/chat_channels/$(cid)).data.get('modsPost', false) != true || chatMod())
                       && (get(/databases/$(database)/documents/chat_channels/$(cid)).data.get('testersOnly', false) != true || chatTester());
-        allow update: if false;
+        // Reacting (anyone who can read it), or pinning (moderators).
+        allow update: if (reactionOnly() && (get(/databases/$(database)/documents/chat_channels/$(cid)).data.get('testersOnly', false) != true || chatTester()))
+                      || (chatMod() && onlyChanges(['pinned']) && request.resource.data.pinned is bool);
         allow delete: if signedIn() && (resource.data.uid == request.auth.uid || chatMod());
       }
     }
@@ -276,7 +287,7 @@ service cloud.firestore {
         allow read: if signedIn() && request.auth.uid in dmPair(pid);
         allow create: if canPost() && dmAllowed(dmPair(pid))
                       && request.resource.data.keys().hasOnly(['uid', 'username', 'text', 'ts', 'replyTo']);
-        allow update: if false;
+        allow update: if reactionOnly() && request.auth.uid in dmPair(pid);
         allow delete: if signedIn() && resource.data.uid == request.auth.uid;
       }
     }
@@ -327,7 +338,7 @@ service cloud.firestore {
         allow read: if inGroup(gid);
         allow create: if canPost() && inGroup(gid)
                       && request.resource.data.keys().hasOnly(['uid', 'username', 'text', 'ts', 'replyTo']);
-        allow update: if false;
+        allow update: if reactionOnly() && inGroup(gid);
         allow delete: if signedIn() && resource.data.uid == request.auth.uid;
       }
     }

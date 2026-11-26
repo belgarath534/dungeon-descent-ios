@@ -198,6 +198,27 @@ await t('new owner removes tess', updateDoc(doc(db('mod1'), G), { 'members.tess'
 await t('former member deletes it', deleteDoc(doc(db('tess'), G)), false);
 await t('owner deletes it', deleteDoc(doc(db('mod1'), G)), true);
 
+// Reactions and pins
+await env.withSecurityRulesDisabled(c => setDoc(doc(c.firestore(), 'chat_channels/general/messages/r1'), { uid: 'bob', username: 'Bob', text: 'gg', ts: old }));
+const R = 'chat_channels/general/messages/r1';
+await t('react 👍', updateDoc(doc(db('tess'), R), { 'reactions.tess': '👍' }), true);
+await t('react with an unlisted emoji', updateDoc(doc(db('tess'), R), { 'reactions.tess': '💩' }), false);
+await t('react as someone else', updateDoc(doc(db('tess'), R), { 'reactions.mod1': '👍' }), false);
+await t('change own reaction', updateDoc(doc(db('tess'), R), { 'reactions.tess': '🔥' }), true);
+await t('remove own reaction', updateDoc(doc(db('tess'), R), { 'reactions.tess': deleteField() }), true);
+await t('react and edit the text', updateDoc(doc(db('tess'), R), { 'reactions.tess': '👍', text: 'hacked' }), false);
+await t('banned player reacts', updateDoc(doc(db('banned'), R), { 'reactions.banned': '👍' }), false);
+await t('member pins', updateDoc(doc(db('tess'), R), { pinned: true }), false);
+await t('moderator pins', updateDoc(doc(db('mod1'), R), { pinned: true }), true);
+await t('moderator unpins', updateDoc(doc(db('mod1'), R), { pinned: false }), true);
+await t('react in a DM you\'re not in', (async () => {
+  await env.withSecurityRulesDisabled(c => setDoc(doc(c.firestore(), 'chat_dms/x_y/messages/d1'), { uid: 'x', username: 'X', text: 'hi', ts: old }));
+  await env.withSecurityRulesDisabled(c => setDoc(doc(c.firestore(), 'chat_dms/x_y'), { members: ['x', 'y'], names: {}, lastAt: old }));
+  return updateDoc(doc(db('tess'), 'chat_dms/x_y/messages/d1'), { 'reactions.tess': '👍' });
+})(), false);
+await t('react in your own DM', updateDoc(doc(db('x'), 'chat_dms/x_y/messages/d1'), { 'reactions.x': '❤️' }), true);
+await t('react in the testers channel (not a tester)', updateDoc(doc(db('alice'), 'chat_channels/testers/messages/m0'), { 'reactions.alice': '👍' }), false);
+
 // Reports
 const report = (u, extra = {}) => setDoc(doc(db(u), 'chat_reports/r' + Math.random().toString(36).slice(2)), {
   by: u, byName: names[u], kind: 'message', path: 'chat_channels/general/messages/x', author: 'bob', authorName: 'Bob',
