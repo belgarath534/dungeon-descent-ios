@@ -1,0 +1,38 @@
+# Deploys Dungeon Descent Chat's push server (functions-chat/) as the
+# chatPush cloud function. It reuses the liveActivity function's Apple push
+# key (the APNS_KEY secret, team-wide) and its key and team IDs. Runs when
+# pushed to the chat-push branch, or by hand.
+name: Chat push server
+
+on:
+  push:
+    branches: [chat-push]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy chatPush
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          printf '%s' "$SA" > /tmp/sa.json
+          gcloud auth activate-service-account --key-file=/tmp/sa.json --quiet
+          gcloud config set project dungeon-descent-fbaf2 --quiet
+          # The Live Activity function's Apple key and team IDs (not secret).
+          ENVS=$(gcloud functions describe liveActivity --region us-central1 --format=json | python3 -c "
+          import json, sys
+          e = json.load(sys.stdin).get('serviceConfig', {}).get('environmentVariables', {})
+          print(','.join(f'{k}={e[k]}' for k in ('APNS_KEY_ID', 'APNS_TEAM_ID') if k in e))")
+          [ -n "$ENVS" ] || { echo "liveActivity has no APNS_KEY_ID / APNS_TEAM_ID"; exit 1; }
+          echo "Reusing liveActivity's Apple key settings: $(echo "$ENVS" | sed 's/=[^,]*/=…/g')"
+          gcloud functions deploy chatPush --gen2 --region us-central1 --runtime nodejs22 \
+            --source functions-chat --entry-point chatPush --trigger-http --allow-unauthenticated \
+            --memory 256Mi --timeout 60s --max-instances 5 \
+            --set-env-vars "$ENVS,APNS_TOPIC=com.dungeon.descent.chat" \
+            --set-secrets "APNS_KEY=APNS_KEY:latest" --quiet
+          gcloud functions describe chatPush --region us-central1 --format="value(serviceConfig.uri,url)"
+          rm -f /tmp/sa.json

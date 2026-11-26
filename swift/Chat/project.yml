@@ -52,6 +52,8 @@ targets:
         UILaunchScreen: {}
         UIBackgroundModes: [remote-notification]
         ITSAppUsesNonExemptEncryption: false
+        # The push server (functions-chat/, deployed by "Chat push server").
+        ChatPushURL: https://us-central1-dungeon-descent-fbaf2.cloudfunctions.net/chatPush
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
         UISupportedInterfaceOrientations~ipad: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
         # Google sign-in comes back to the app through its reversed client ID.

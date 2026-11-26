@@ -1,0 +1,12 @@
+{
+  "name": "chat-push",
+  "description": "Dungeon Descent Chat's push notifications: tells the people who asked about a new message, with their chosen game sound",
+  "private": true,
+  "main": "index.js",
+  "type": "module",
+  "engines": { "node": "22" },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.4.0",
+    "firebase-admin": "^12.6.0"
+  }
+}
