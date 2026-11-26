@@ -219,6 +219,23 @@ await t('react in a DM you\'re not in', (async () => {
 await t('react in your own DM', updateDoc(doc(db('x'), 'chat_dms/x_y/messages/d1'), { 'reactions.x': '❤️' }), true);
 await t('react in the testers channel (not a tester)', updateDoc(doc(db('alice'), 'chat_channels/testers/messages/m0'), { 'reactions.alice': '👍' }), false);
 
+// Profiles: about me and favorite class
+await t('own bio', updateDoc(doc(db('tess'), 'chat_members/tess'), { bio: 'Blind player, Sorcerer main.' }), true);
+await t('bio with a bad word', updateDoc(doc(db('tess'), 'chat_members/tess'), { bio: 'you are an ass' }), false);
+await t('bio too long', updateDoc(doc(db('tess'), 'chat_members/tess'), { bio: 'x'.repeat(161) }), false);
+await t('clear bio', updateDoc(doc(db('tess'), 'chat_members/tess'), { bio: '' }), true);
+await t('favorite class', updateDoc(doc(db('tess'), 'chat_members/tess'), { favClass: 'Sorcerer' }), true);
+await t('made-up class', updateDoc(doc(db('tess'), 'chat_members/tess'), { favClass: 'Overlord' }), false);
+await t('someone else\'s bio', updateDoc(doc(db('bob'), 'chat_members/tess'), { bio: 'hi' }), false);
+
+// Activity: only the server writes it
+await env.withSecurityRulesDisabled(c => setDoc(doc(c.firestore(), 'chat_members/tess/activity/a1'), { type: 'mention', from: 'Bob', ts: old }));
+await t('read own activity', getDocs(collection(db('tess'), 'chat_members/tess/activity')), true);
+await t('read someone else\'s activity', getDocs(collection(db('bob'), 'chat_members/tess/activity')), false);
+await t('write own activity', setDoc(doc(db('tess'), 'chat_members/tess/activity/a2'), { type: 'mention' }), false);
+await t('write someone else\'s activity', setDoc(doc(db('bob'), 'chat_members/tess/activity/a3'), { type: 'mention' }), false);
+await t('clear own activity', deleteDoc(doc(db('tess'), 'chat_members/tess/activity/a1')), true);
+
 // Reports
 const report = (u, extra = {}) => setDoc(doc(db(u), 'chat_reports/r' + Math.random().toString(36).slice(2)), {
   by: u, byName: names[u], kind: 'message', path: 'chat_channels/general/messages/x', author: 'bob', authorName: 'Bob',
