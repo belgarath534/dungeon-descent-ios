@@ -1,7 +1,7 @@
 // Dungeon Descent Chat rules (firestore.rules, "Dungeon Descent Chat" part).
 import { initializeTestEnvironment, assertSucceeds, assertFails } from '@firebase/rules-unit-testing';
 import { readFileSync } from 'fs';
-import { doc, setDoc, updateDoc, deleteDoc, getDoc, getDocs, collection, writeBatch, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, deleteDoc, getDoc, getDocs, collection, writeBatch, serverTimestamp, Timestamp, deleteField } from 'firebase/firestore';
 
 const env = await initializeTestEnvironment({ projectId: 'demo-dd-chat', firestore: { rules: readFileSync(new URL('../firestore.rules', import.meta.url), 'utf8'), host: '127.0.0.1', port: 8085 } });
 const DEV = 'WgqZGmnPKeYIymlMkx0aAg8G2T52';
@@ -46,7 +46,7 @@ function post(u, path, text, extra = {}, name) {
   b.update(doc(d, 'chat_members/' + u), { lastPostAt: serverTimestamp() });
   return b.commit();
 }
-const names = { alice: 'Alice', bob: 'Bob', mod1: 'Sebastian', tess: 'Tess', newbie: 'Newbie', banned: 'Baddie', carol: 'Carol', quiet: 'Quiet', [DEV]: 'Leonardo' };
+const names = { zed: 'Zed', alice: 'Alice', bob: 'Bob', mod1: 'Sebastian', tess: 'Tess', newbie: 'Newbie', banned: 'Baddie', carol: 'Carol', quiet: 'Quiet', [DEV]: 'Leonardo' };
 const say = (u, path, text, extra) => post(u, path, text, extra, names[u]);
 const wait = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -158,6 +158,41 @@ await wait(2100);
 await t('tess writes after bob blocked her', say('tess', 'chat_dms/' + tb, 'hello?'), false);
 await t('bob\'s blocks are private', getDocs(collection(db('tess'), 'chat_members/bob/blocks')), false);
 await t('alice blocks someone', setDoc(doc(db('alice'), 'chat_members/alice/blocks/tess'), { at: serverTimestamp() }), true);
+
+// Group chats
+const G = 'chat_groups/raiders';
+const mkGroup = (u, name, members) => setDoc(doc(db(u), G.replace('raiders', name.replace(/\W/g, '').toLowerCase())),
+  { name, owner: u, members, createdAt: serverTimestamp(), lastAt: serverTimestamp() });
+await t('tess makes a group', mkGroup('tess', 'Raiders', { tess: 'Tess' }), true);
+await t('newbie makes a group (one day wait)', mkGroup('newbie', 'Newbies', { newbie: 'Newbie' }), false);
+await t('group with others already in it', mkGroup('tess', 'Crew', { tess: 'Tess', mod1: 'Sebastian' }), false);
+await t('group owned by someone else', setDoc(doc(db('tess'), 'chat_groups/fake'), { name: 'Fake', owner: 'mod1', members: { tess: 'Tess' }, createdAt: serverTimestamp(), lastAt: serverTimestamp() }), false);
+await t('bad group name', mkGroup('tess', 'Shit Squad', { tess: 'Tess' }), false);
+await t('owner adds Sebastian', updateDoc(doc(db('tess'), G), { 'members.mod1': 'Sebastian', added: 'mod1' }), true);
+await t('owner adds newbie', updateDoc(doc(db('tess'), G), { 'members.newbie': 'Newbie', added: 'newbie' }), true);
+await t('owner adds two at once', updateDoc(doc(db('tess'), G), { 'members.zed': 'Zed', 'members.gus': 'Gus', added: 'zed' }), false);
+await t('owner adds under a fake name', updateDoc(doc(db('tess'), G), { 'members.gus': 'Leonardo', added: 'gus' }), false);
+await t('owner adds someone with DMs off', updateDoc(doc(db('tess'), G), { 'members.quiet': 'Quiet', added: 'quiet' }), false);
+await t('owner adds someone who blocked them', updateDoc(doc(db('tess'), G), { 'members.bob': 'Bob', added: 'bob' }), false);
+await t('owner adds a banned player', updateDoc(doc(db('tess'), G), { 'members.banned': 'Baddie', added: 'banned' }), false);
+await t('member adds someone', updateDoc(doc(db('newbie'), G), { 'members.gus': 'Gus', added: 'gus' }), false);
+await t('member renames the group', updateDoc(doc(db('newbie'), G), { name: 'Mine' }), false);
+await t('owner renames it', updateDoc(doc(db('tess'), G), { name: 'Raid Night' }), true);
+await t('outsider reads the group', getDoc(doc(db('alice'), G)), false);
+await t('member reads the group', getDoc(doc(db('newbie'), G)), true);
+await wait(2100);
+await t('member writes in the group', say('mod1', G, 'Raid at 8?'), true);
+await t('newbie writes in the group (new players can talk in groups)', say('newbie', G, 'Count me in'), true);
+await t('outsider writes in the group', say('zed', G, 'hi'), false);
+await t('outsider reads messages', getDocs(collection(db('alice'), G + '/messages')), false);
+await t('member reads messages', getDocs(collection(db('newbie'), G + '/messages')), true);
+await t('newbie removes Sebastian', updateDoc(doc(db('newbie'), G), { 'members.mod1': deleteField() }), false);
+await t('newbie leaves', updateDoc(doc(db('newbie'), G), { 'members.newbie': deleteField() }), true);
+await t('owner leaves without handing over', updateDoc(doc(db('tess'), G), { 'members.tess': deleteField() }), false);
+await t('owner hands it to Sebastian', updateDoc(doc(db('tess'), G), { owner: 'mod1' }), true);
+await t('new owner removes tess', updateDoc(doc(db('mod1'), G), { 'members.tess': deleteField() }), true);
+await t('former member deletes it', deleteDoc(doc(db('tess'), G)), false);
+await t('owner deletes it', deleteDoc(doc(db('mod1'), G)), true);
 
 // Reports
 const report = (u, extra = {}) => setDoc(doc(db(u), 'chat_reports/r' + Math.random().toString(36).slice(2)), {

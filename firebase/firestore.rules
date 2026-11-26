@@ -277,6 +277,63 @@ service cloud.firestore {
       }
     }
 
+    // Group chats: up to 20 people; only members read them. The owner makes
+    // the group (just them, after the same day's wait as private messages),
+    // then adds people one at a time, never someone who blocked them or
+    // turned private messages off. The owner renames it and removes people;
+    // anyone can leave (the owner can't, until they hand it over).
+    function groupData(gid) { return get(/databases/$(database)/documents/chat_groups/$(gid)).data; }
+    function inGroup(gid) { return signedIn() && request.auth.uid in groupData(gid).members; }
+    function goodGroupName(n) { return n is string && n.size() >= 1 && n.size() <= 40 && cleanText(n); }
+
+    match /chat_groups/{gid} {
+      allow read: if signedIn() && request.auth.uid in resource.data.members;
+      allow create: if chatJoined() && !chatBanned(request.auth.uid)
+                    && request.resource.data.keys().hasOnly(['name', 'owner', 'members', 'createdAt', 'lastAt'])
+                    && request.resource.data.owner == request.auth.uid
+                    && request.resource.data.members.keys().hasOnly([request.auth.uid])
+                    && request.resource.data.members[request.auth.uid] == chatMember(request.auth.uid).username
+                    && goodGroupName(request.resource.data.name)
+                    && request.resource.data.createdAt == request.time
+                    && (chatMember(request.auth.uid).get('trusted', false) == true || chatMod()
+                        || request.time > chatMember(request.auth.uid).createdAt + duration.value(1, 'd'));
+      allow update: if signedIn() && request.auth.uid in resource.data.members && !chatBanned(request.auth.uid) && (
+                      // Anyone: the time of the last message.
+                      (onlyChanges(['lastAt']) && request.resource.data.lastAt == request.time)
+                      // Leaving (not the owner).
+                      || (onlyChanges(['members']) && resource.data.owner != request.auth.uid
+                          && request.resource.data.members.diff(resource.data.members).affectedKeys().hasOnly([request.auth.uid])
+                          && !(request.auth.uid in request.resource.data.members))
+                      // The owner: rename, remove people, hand it over to a member.
+                      || (resource.data.owner == request.auth.uid && onlyChanges(['name', 'members', 'owner'])
+                          && goodGroupName(request.resource.data.name)
+                          && request.resource.data.members.keys().hasOnly(resource.data.members.keys())
+                          && request.resource.data.owner in request.resource.data.members)
+                      // The owner: add one person (named in "added"), who accepts
+                      // messages and hasn't blocked them.
+                      || (resource.data.owner == request.auth.uid && onlyChanges(['members', 'added'])
+                          && request.resource.data.members.size() <= 20
+                          && request.resource.data.members.diff(resource.data.members).affectedKeys().hasOnly([request.resource.data.added])
+                          && request.resource.data.added in request.resource.data.members
+                          && !(request.resource.data.added in resource.data.members)
+                          && groupAddOk(request.resource.data.added, request.resource.data.members)));
+      allow delete: if signedIn() && resource.data.owner == request.auth.uid;
+
+      match /messages/{mid} {
+        allow read: if inGroup(gid);
+        allow create: if canPost() && inGroup(gid)
+                      && request.resource.data.keys().hasOnly(['uid', 'username', 'text', 'ts', 'replyTo']);
+        allow update: if false;
+        allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+      }
+    }
+    function groupAddOk(uid, members) {
+      return exists(/databases/$(database)/documents/chat_members/$(uid))
+          && members[uid] == chatMember(uid).username
+          && chatMember(uid).get('dmOff', false) != true
+          && !blocked(uid, request.auth.uid) && !blocked(request.auth.uid, uid) && !chatBanned(uid);
+    }
+
     // Reports go to the moderators. A private message report carries the
     // reported message and a few around it (the reporter could read them).
     match /chat_reports/{rid} {
