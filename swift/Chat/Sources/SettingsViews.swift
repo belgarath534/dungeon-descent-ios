@@ -23,6 +23,7 @@ struct SettingsView: View {
                 Section("Privacy") {
                     Toggle("Accept private messages", isOn: Binding(get: { chat.member?.dmOff != true },
                                                                      set: { on in Task { await chat.setDMsOff(!on) } }))
+                    Toggle("Show me as online", isOn: $chat.showOnline)
                     NavigationLink("Blocked players (\(chat.blocked.count))") { BlockedView() }
                 }
                 Section("Community") {

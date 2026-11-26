@@ -16,6 +16,7 @@ struct ChannelsView: View {
     @EnvironmentObject var chat: ChatService
     @State private var editing: ChannelEdit?
     @State private var deleting: Channel?
+    @State private var showingOnline = false
 
     var body: some View {
         NavigationStack {
@@ -23,6 +24,13 @@ struct ChannelsView: View {
                 if chat.banned {
                     Text("You've been banned from chat. You can still read, but not post.").foregroundStyle(.orange)
                 }
+                Button {
+                    showingOnline = true
+                } label: {
+                    Label("\(chat.online.count) \(chat.online.count == 1 ? "player" : "players") online", systemImage: "circle.fill")
+                        .foregroundStyle(.green)
+                }
+                .accessibilityHint("Shows who's online.")
                 ForEach(chat.channels.filter { !$0.testersOnly || chat.isTester }) { c in
                     NavigationLink(value: Room(kind: .channel, id: c.id, title: c.name, path: "chat_channels/\(c.id)",
                                                canPost: !c.modsPost || chat.isMod)) {
@@ -43,6 +51,7 @@ struct ChannelsView: View {
             .navigationDestination(for: Room.self) { ConversationView(room: $0) }
             .toolbar { if chat.isDeveloper { Button("New channel") { editing = .new } } }
             .sheet(item: $editing) { ChannelEditor(editing: $0) }
+            .sheet(isPresented: $showingOnline) { OnlineView() }
             .confirmationDialog("Delete #\(deleting?.name ?? "")?", isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }), titleVisibility: .visible) {
                 Button("Delete channel", role: .destructive) {
                     if let c = deleting { Task { Speech.say(await chat.deleteChannel(c) ? "Channel deleted." : "Couldn't delete it.") } }
@@ -419,6 +428,25 @@ struct GroupInfoView: View {
             }
             .navigationTitle(room?.title ?? "Group")
             .toolbar { Button("Done") { dismiss() } }
+        }
+    }
+}
+
+/// Who's online right now.
+struct OnlineView: View {
+    @EnvironmentObject var chat: ChatService
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List {
+                if chat.online.isEmpty { Text("Nobody else is online right now.") }
+                ForEach(chat.online, id: \.self) { Text($0) }
+            }
+            .navigationTitle("\(chat.online.count) online")
+            .toolbar { Button("Done") { dismiss() } }
+            .refreshable { await chat.refreshOnline() }
+            .task { await chat.refreshOnline() }
         }
     }
 }

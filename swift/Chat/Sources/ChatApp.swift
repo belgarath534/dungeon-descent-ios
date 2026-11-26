@@ -30,6 +30,7 @@ struct DungeonDescentChatApp: App {
     @StateObject private var account = Account()
     @StateObject private var chat = ChatService()
     @StateObject private var push = Push.shared
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
@@ -42,6 +43,7 @@ struct DungeonDescentChatApp: App {
                     chat.start(uid: uid)
                     if uid != nil { Task { await push.load() } }
                 }
+                .onChange(of: scenePhase) { _, phase in chat.presence(active: phase == .active) }
                 .preferredColorScheme(.dark)
                 .tint(Color(red: 0.96, green: 0.78, blue: 0.31))
         }

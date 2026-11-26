@@ -61,6 +61,16 @@ final class ChatService: ObservableObject {
     @Published private(set) var banned = false
     @Published private(set) var isDeveloper = false
     @Published var gameUsername: String?
+    /// Who's online now: members who checked in within the last 2.5 minutes.
+    @Published private(set) var online: [String] = []
+    /// "Show me as online" (Settings); off: you never check in.
+    @Published var showOnline = UserDefaults.standard.object(forKey: "chat.showOnline") as? Bool ?? true {
+        didSet {
+            UserDefaults.standard.set(showOnline, forKey: "chat.showOnline")
+            Task { await beat() }
+        }
+    }
+    private var presenceTimer: Timer?
 
     static let developerUID = "WgqZGmnPKeYIymlMkx0aAg8G2T52"
     private var db: Firestore { Account.db }
@@ -81,8 +91,10 @@ final class ChatService: ObservableObject {
         memberLoaded = false
         listeners.append(db.collection("chat_members").document(uid).addSnapshotListener { [weak self] snap, _ in
             Task { @MainActor in
+                let first = self?.member == nil
                 self?.member = snap.flatMap { Self.member($0) }
                 self?.memberLoaded = true
+                if first, self?.member != nil { self?.presence(active: true) }
             }
         })
         listeners.append(db.collection("chat_bans").document(uid).addSnapshotListener { [weak self] snap, _ in
@@ -123,7 +135,40 @@ final class ChatService: ObservableObject {
         }
     }
 
+    // MARK: Online
+
+    /// While the app is open: check in now and every minute, and refresh
+    /// who's online. Called when the app comes to the front or goes away.
+    func presence(active: Bool) {
+        presenceTimer?.invalidate()
+        presenceTimer = nil
+        guard active, uid != nil else { return }
+        Task { await beat() }
+        presenceTimer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            Task { @MainActor in await self?.beat() }
+        }
+    }
+
+    private func beat() async {
+        guard let uid, member != nil else { return }
+        let me = db.collection("chat_members").document(uid)
+        try? await me.updateData(["lastSeen": showOnline ? FieldValue.serverTimestamp() : FieldValue.delete()])
+        await refreshOnline()
+    }
+
+    func refreshOnline() async {
+        let cutoff = Timestamp(date: Date().addingTimeInterval(-150))
+        guard let snap = try? await db.collection("chat_members").whereField("lastSeen", isGreaterThan: cutoff)
+            .order(by: "lastSeen", descending: true).limit(to: 200).getDocuments() else { return }
+        online = snap.documents.compactMap { $0["username"] as? String }
+            .filter { name in !blocked.values.contains(name) }
+            .sorted { $0.lowercased() < $1.lowercased() }
+    }
+
     func stop() {
+        presenceTimer?.invalidate()
+        presenceTimer = nil
+        online = []
         listeners.forEach { $0.remove() }
         listeners = []
         member = nil; channels = []; dms = []; groups = []; blocked = [:]; banned = false
