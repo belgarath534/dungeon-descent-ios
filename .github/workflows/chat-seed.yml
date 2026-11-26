@@ -1,0 +1,22 @@
+# Creates Dungeon Descent Chat's channels in Firestore (tools/chat-seed.py).
+# Only missing channels are made. It writes to the live database, so it
+# runs only when pushed to the chat-seed branch (or by hand).
+name: Chat channels
+
+on:
+  push:
+    branches: [chat-seed]
+  workflow_dispatch:
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make the channels
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          pip install --quiet google-auth requests
+          python3 tools/chat-seed.py
