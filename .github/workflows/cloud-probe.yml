@@ -1,0 +1,38 @@
+# Read-only: what the Firebase service account can see in Google Cloud
+# (the cloud functions, their settings' names and secret names; never
+# values), to plan deploying the chat push server.
+name: Cloud probe
+
+on:
+  push:
+    branches: [claude/affectionate-heisenberg-tmog1v]
+    paths: ['.github/workflows/cloud-probe.yml']
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Look around
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          printf '%s' "$SA" > /tmp/sa.json
+          gcloud auth activate-service-account --key-file=/tmp/sa.json --quiet
+          gcloud config set project dungeon-descent-fbaf2 --quiet
+          echo "== Account: $(python3 -c "import json;print(json.load(open('/tmp/sa.json'))['client_email'])")"
+          echo "== Cloud Functions"
+          gcloud functions list --format="table(name,state,environment,url)" 2>&1 | head -20 || true
+          echo "== Cloud Run services"
+          gcloud run services list --format="table(metadata.name,status.url)" 2>&1 | head -20 || true
+          for f in liveActivity live-activity liveactivity; do
+            gcloud functions describe $f --region us-central1 --format="yaml(serviceConfig.environmentVariables.keys(),serviceConfig.secretEnvironmentVariables,buildConfig.runtime,serviceConfig.serviceAccountEmail)" 2>/dev/null && break
+          done
+          echo "== Secret names"
+          gcloud secrets list --format="value(name)" 2>&1 | head -20 || true
+          echo "== Can deploy? (IAM roles of this account)"
+          gcloud projects get-iam-policy dungeon-descent-fbaf2 --flatten="bindings[].members" \
+            --filter="bindings.members:$(python3 -c "import json;print(json.load(open('/tmp/sa.json'))['client_email'])")" \
+            --format="value(bindings.role)" 2>&1 | head -20 || true
+          rm -f /tmp/sa.json
