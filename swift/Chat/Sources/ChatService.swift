@@ -1,6 +1,7 @@
 import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
+import DungeonCore
 
 struct ChatMessage: Identifiable, Equatable {
     let id: String
@@ -33,6 +34,48 @@ struct Profile {
     let role: String
     let online: Bool
     let highScore: Int?
+    var bio = ""
+    var favClass = ""
+    /// Endless Descent's best floor and this week's Weekly Ladder score.
+    var endlessFloor: Int? = nil
+    var weeklyScore: Int? = nil
+}
+
+/// Something aimed at you: a mention, a reply or a reaction (written by the push server).
+struct ActivityItem: Identifiable, Equatable {
+    enum Kind: String { case mention, reply, reaction }
+    let id: String
+    let type: Kind
+    let from: String
+    let fromUID: String
+    let text: String
+    let emoji: String
+    let roomKind: String
+    let room: String
+    let whereName: String
+    let messageID: String
+    let date: Date
+
+    /// "Sebastian mentioned you in #general" (for lists and VoiceOver).
+    var headline: String {
+        switch type {
+        case .mention: return "\(from) mentioned you in \(whereName)"
+        case .reply: return roomKind == "dm" ? "\(from) replied to you" : "\(from) replied to you in \(whereName)"
+        case .reaction: return "\(from) reacted \(emoji) to your message" + (roomKind == "dm" ? "" : " in \(whereName)")
+        }
+    }
+    var spokenHeadline: String {
+        type == .reaction ? headline.replacingOccurrences(of: emoji, with: ChatService.reactionNames[emoji] ?? emoji) : headline
+    }
+}
+
+/// One line on a leaderboard.
+struct BoardEntry: Identifiable, Equatable {
+    let id: String      // the player's uid
+    let rank: Int
+    let name: String
+    let score: Int
+    var detail = ""
 }
 
 struct Channel: Identifiable, Equatable {
@@ -53,6 +96,8 @@ struct Member: Equatable {
     let tester: Bool
     let trusted: Bool
     let dmOff: Bool
+    var bio = ""
+    var favClass = ""
     /// The rules allow a message every 2 seconds, counted from this.
     var lastPostAt: Date? = nil
 }
@@ -99,6 +144,11 @@ final class ChatService: ObservableObject {
     @Published private(set) var unread: [String: Int] = [:]
     /// When you last read each room (by path), kept on this device.
     private var lastRead: [String: Double] = (UserDefaults.standard.dictionary(forKey: "chat.lastRead") as? [String: Double]) ?? [:]
+
+    /// Mentions, replies and reactions to you, newest first.
+    @Published private(set) var activity: [ActivityItem] = []
+    /// When you last looked at Activity (this device).
+    @Published private(set) var activitySeen = Date(timeIntervalSince1970: UserDefaults.standard.double(forKey: "chat.activitySeen"))
 
     static let developerUID = "WgqZGmnPKeYIymlMkx0aAg8G2T52"
     private var db: Firestore { Account.db }
@@ -157,6 +207,19 @@ final class ChatService: ObservableObject {
             let map = Dictionary((snap?.documents ?? []).map { ($0.documentID, $0["name"] as? String ?? "Player") }, uniquingKeysWith: { a, _ in a })
             Task { @MainActor in self?.blocked = map }
         })
+        listeners.append(db.collection("chat_members").document(uid).collection("activity")
+            .order(by: "ts", descending: true).limit(to: 100).addSnapshotListener { [weak self] snap, _ in
+                let items = (snap?.documents ?? []).compactMap { d -> ActivityItem? in
+                    guard let type = ActivityItem.Kind(rawValue: d["type"] as? String ?? "") else { return nil }
+                    return ActivityItem(id: d.documentID, type: type, from: d["from"] as? String ?? "Someone",
+                                        fromUID: d["fromUid"] as? String ?? "", text: d["text"] as? String ?? "",
+                                        emoji: d["emoji"] as? String ?? "", roomKind: d["kind"] as? String ?? "channel",
+                                        room: d["room"] as? String ?? "", whereName: d["where"] as? String ?? "",
+                                        messageID: d["mid"] as? String ?? "",
+                                        date: (d["ts"] as? Timestamp)?.dateValue() ?? Date())
+                }
+                Task { @MainActor in self?.activity = items }
+            })
         Task {
             let profile = try? await db.collection("users").document(uid).getDocument().data()
             gameUsername = profile?["username"] as? String
@@ -186,7 +249,9 @@ final class ChatService: ObservableObject {
     func react(_ m: ChatMessage, in room: Room, _ emoji: String?) async -> Bool {
         guard let uid else { return false }
         let ref = db.collection(room.path + "/messages").document(m.id)
-        return (try? await ref.updateData([FieldPath(["reactions", uid]): emoji ?? FieldValue.delete()])) != nil
+        guard (try? await ref.updateData([FieldPath(["reactions", uid]): emoji ?? FieldValue.delete()])) != nil else { return false }
+        await Push.call("react", ["kind": room.kind.rawValue, "room": room.id, "mid": m.id])
+        return true
     }
 
     /// Moderators pin a channel message to the top.
@@ -230,9 +295,121 @@ final class ChatService: ObservableObject {
         let seen = (d["lastSeen"] as? Timestamp)?.dateValue()
         let board = try? await db.collection("leaderboard").document(other).getDocument()
         let role = other == Self.developerUID ? "Developer" : m.mod ? "Moderator" : m.tester ? "Tester" : "Member"
+        let tournament = db.collection("tournament")
+        let endless = try? await tournament.document(AFKRivals.season).collection("scores").document(other).getDocument()
+        let weekly = try? await tournament.document(Challenges.weekly().season).collection("scores").document(other).getDocument()
         return Profile(uid: other, username: m.username, joined: m.createdAt, role: role,
                        online: seen.map { Date().timeIntervalSince($0) < 150 } ?? false,
-                       highScore: board?.data()?["score"] as? Int)
+                       highScore: board?.data()?["score"] as? Int, bio: m.bio, favClass: m.favClass,
+                       endlessFloor: endless?.data()?["score"] as? Int, weeklyScore: weekly?.data()?["score"] as? Int)
+    }
+
+    /// Your "about me" and favorite class; returns why not when refused.
+    func saveProfile(bio raw: String, favClass: String) async -> String? {
+        guard let uid else { return "You're not signed in." }
+        let bio = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        if bio.count > 160 { return "About me can have up to 160 characters." }
+        if Self.hasBadWord(bio) { return "About me has a word that isn't allowed here." }
+        do {
+            try await db.collection("chat_members").document(uid).updateData(["bio": bio, "favClass": favClass])
+            return nil
+        } catch { return "Couldn't save. Check your connection." }
+    }
+
+    /// The game's classes, for "favorite class" (the rules accept these).
+    static let classes = ["Warrior", "Monk", "Assassin", "Paladin", "Naturalist", "Sorcerer", "Necromancer", "Berserker", "Bard",
+                          "Alchemist", "BloodKnight", "Druid", "Warlock", "DeathKnight", "Ranger", "Sentinel", "Cleric", "Wizard",
+                          "Elementalist", "VoidWalker", "ShadowMage", "TimeMage", "Shaman", "Arcanist"]
+    /// "BloodKnight" → "Blood Knight".
+    static func className(_ id: String) -> String {
+        id.replacingOccurrences(of: "([a-z])([A-Z])", with: "$1 $2", options: .regularExpression)
+    }
+
+    // MARK: Activity
+
+    var unreadActivity: Int { activity.filter { $0.date > activitySeen && blocked[$0.fromUID] == nil }.count }
+
+    func markActivitySeen() {
+        activitySeen = Date()
+        UserDefaults.standard.set(activitySeen.timeIntervalSince1970, forKey: "chat.activitySeen")
+    }
+
+    func removeActivity(_ item: ActivityItem) async {
+        guard let uid else { return }
+        try? await db.collection("chat_members").document(uid).collection("activity").document(item.id).delete()
+    }
+
+    func clearActivity() async {
+        guard let uid else { return }
+        let col = db.collection("chat_members").document(uid).collection("activity")
+        guard let docs = try? await col.getDocuments() else { return }
+        let batch = db.batch()
+        for d in docs.documents.prefix(450) { batch.deleteDocument(d.reference) }
+        try? await batch.commit()
+    }
+
+    /// The room a kind ("channel", "dm", "group") and id point to, when you can open it.
+    func room(kind: String, id: String) -> Room? {
+        switch kind {
+        case "channel":
+            guard let c = channels.first(where: { $0.id == id }), !c.testersOnly || isTester else { return nil }
+            return Room(kind: .channel, id: c.id, title: c.name, path: "chat_channels/\(c.id)", canPost: !c.modsPost || isMod)
+        case "dm": return dms.first { $0.id == id }
+        case "group": return groups.first { $0.id == id }
+        default: return nil
+        }
+    }
+
+    // MARK: Leaderboards (the game's own)
+
+    private func entries(_ snap: QuerySnapshot?, name: (DocumentSnapshot) -> String, detail: (DocumentSnapshot) -> String = { _ in "" }) -> [BoardEntry] {
+        (snap?.documents ?? []).enumerated().map { i, d in
+            BoardEntry(id: d["uid"] as? String ?? d.documentID, rank: i + 1, name: name(d),
+                       score: (d["score"] as? NSNumber)?.intValue ?? 0, detail: detail(d))
+        }.filter { blocked[$0.id] == nil }
+    }
+
+    /// A name from a tournament entry: older ones hold an email address, so only the part before @ shows.
+    nonisolated private static func boardName(_ d: DocumentSnapshot, _ field: String = "email") -> String {
+        let n = (d[field] as? String) ?? "Anonymous"
+        if n.contains("@") { return String(String(n.split(separator: "@").first ?? "Player").prefix(3)) + "***" }
+        return n
+    }
+
+    func highScores() async -> [BoardEntry] {
+        let snap = try? await db.collection("leaderboard").order(by: "score", descending: true).limit(to: 25).getDocuments()
+        return entries(snap) { d in
+            let full = d["username"] as? String ?? "Anonymous"
+            return full.components(separatedBy: " · ").first ?? full
+        } detail: { d in d["tag"] as? String ?? "" }
+    }
+
+    /// The Weekly Ladder, an Endless Descent board ("afk-rivals"), a Tournament season or a World Boss day.
+    func board(_ season: String, limit: Int = 25) async -> [BoardEntry] {
+        let snap = try? await db.collection("tournament").document(season).collection("scores")
+            .order(by: "score", descending: true).limit(to: limit).getDocuments()
+        return entries(snap) { Self.boardName($0) } detail: { d in d["character"] as? String ?? "" }
+    }
+
+    /// Everyone's World Boss damage today, added up.
+    func worldBossTotal(_ season: String) async -> Int? {
+        guard let snap = try? await db.collection("tournament").document(season).collection("scores").getDocuments() else { return nil }
+        return snap.documents.reduce(0) { $0 + (($1["score"] as? NSNumber)?.intValue ?? 0) }
+    }
+
+    /// The newest Hall of Legends posts.
+    func legends(limit: Int = 15) async -> [ChatMessage] {
+        guard let snap = try? await db.collection("chat_channels/hall-of-legends/messages").order(by: "ts", descending: true)
+            .limit(to: limit).getDocuments() else { return [] }
+        return snap.documents.map { d in
+            ChatMessage(id: d.documentID, uid: d["uid"] as? String ?? "", username: d["username"] as? String ?? "Hall of Legends",
+                        text: d["text"] as? String ?? "", date: (d["ts"] as? Timestamp)?.dateValue() ?? Date(), replyTo: nil)
+        }
+    }
+
+    /// Whether a uid belongs to a chat member (for opening profiles from a leaderboard).
+    func isChatMember(_ other: String) async -> Bool {
+        (try? await db.collection("chat_members").document(other).getDocument())?.exists == true
     }
 
     // MARK: Unread
@@ -293,7 +470,7 @@ final class ChatService: ObservableObject {
         online = []
         listeners.forEach { $0.remove() }
         listeners = []
-        member = nil; channels = []; dms = []; groups = []; blocked = [:]; banned = false
+        member = nil; channels = []; dms = []; groups = []; blocked = [:]; banned = false; activity = []
         uid = nil
     }
 
@@ -304,6 +481,7 @@ final class ChatService: ObservableObject {
                       agreed: d["agreedAt"] is Timestamp, mod: d["mod"] as? Bool ?? false,
                       tester: d["tester"] as? Bool ?? false, trusted: d["trusted"] as? Bool ?? false,
                       dmOff: d["dmOff"] as? Bool ?? false,
+                      bio: d["bio"] as? String ?? "", favClass: d["favClass"] as? String ?? "",
                       lastPostAt: (d["lastPostAt"] as? Timestamp)?.dateValue())
     }
 
@@ -624,7 +802,7 @@ final class ChatService: ObservableObject {
     static func deleteChatData(uid: String) async {
         let db = Account.db
         let me = db.collection("chat_members").document(uid)
-        for sub in ["blocks", "private"] {
+        for sub in ["blocks", "private", "activity"] {
             if let docs = try? await me.collection(sub).getDocuments() {
                 for d in docs.documents { try? await d.reference.delete() }
             }

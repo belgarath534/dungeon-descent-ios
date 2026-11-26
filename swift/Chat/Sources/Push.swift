@@ -43,6 +43,8 @@ final class Push: ObservableObject {
     @Published var perChannelSounds = false
     /// The game posts your big moments to #hall-of-legends.
     @Published var legends = true
+    /// A push when someone reacts to your message.
+    @Published var reactions = true
     @Published private(set) var loaded = false
     @Published private(set) var chosen = false
     private var token: String?
@@ -62,6 +64,7 @@ final class Push: ObservableObject {
             soundFor.merge(d["sounds"] as? [String: String] ?? [:]) { _, new in new }
             perChannelSounds = d["custom"] as? Bool ?? false
             legends = d["legends"] as? Bool ?? true
+            reactions = d["reactions"] as? Bool ?? true
             chosen = d["chosen"] as? Bool ?? false
         }
         loaded = true
@@ -69,7 +72,7 @@ final class Push: ObservableObject {
 
     func save() async {
         guard let ref = ref() else { return }
-        var data: [String: Any] = ["channels": Array(channels), "dms": dms, "groups": groups, "sounds": soundFor, "custom": perChannelSounds, "legends": legends,
+        var data: [String: Any] = ["channels": Array(channels), "dms": dms, "groups": groups, "sounds": soundFor, "custom": perChannelSounds, "legends": legends, "reactions": reactions,
                                    "chosen": true, "updatedAt": FieldValue.serverTimestamp()]
         if let token { data["token"] = token; data["env"] = Self.apnsEnvironment }
         try? await ref.setData(data, merge: true)
@@ -120,13 +123,19 @@ final class Push: ObservableObject {
     /// sign-in token and the message itself; until it's set up (the
     /// ChatPushURL in Info.plist is empty), this does nothing.
     static func notify(room: Room, text: String, from: String) async {
+        await call("", ["kind": room.kind.rawValue, "room": room.id])
+    }
+
+    /// POSTs to the push server ("" for a new message, "react" after a reaction).
+    static func call(_ path: String, _ body: [String: String]) async {
         guard let base = Bundle.main.object(forInfoDictionaryKey: "ChatPushURL") as? String, !base.isEmpty,
-              let url = URL(string: base), let token = try? await Auth.auth().currentUser?.getIDToken() else { return }
+              let url = URL(string: path.isEmpty ? base : base + "/" + path),
+              let token = try? await Auth.auth().currentUser?.getIDToken() else { return }
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        req.httpBody = try? JSONSerialization.data(withJSONObject: ["kind": room.kind.rawValue, "room": room.id])
+        req.httpBody = try? JSONSerialization.data(withJSONObject: body)
         _ = try? await URLSession.shared.data(for: req)
     }
 }

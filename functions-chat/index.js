@@ -84,7 +84,9 @@ http('chatPush', async (req, res) => {
     let uid;
     try { uid = (await admin.auth().verifyIdToken(m[1])).uid; }
     catch { res.status(401).json({ error: 'Invalid auth token' }); return; }
-    if ((req.path || '').replace(/\/+$/, '').endsWith('/legend')) return await legend(uid, req.body || {}, res);
+    const route = (req.path || '').replace(/\/+$/, '');
+    if (route.endsWith('/legend')) return await legend(uid, req.body || {}, res);
+    if (route.endsWith('/react')) return await reaction(uid, req.body || {}, res);
     const { kind, room } = req.body || {};
     if (!['channel', 'dm', 'group'].includes(kind) || typeof room !== 'string' || !/^[\w-]{1,128}$/.test(room)) {
       res.status(400).json({ error: 'Bad room' }); return;
@@ -123,21 +125,45 @@ http('chatPush', async (req, res) => {
       const n = await db.doc('usernames/' + name.toLowerCase()).get();
       if (n.exists && n.get('uid') !== uid) mentioned.add(n.get('uid'));
     }
+    // A reply: the person replied to hears about it too.
+    let replyUid = null;
+    const replyTo = msg.get('replyTo');
+    if (typeof replyTo === 'string' && /^[\w-]{1,128}$/.test(replyTo)) {
+      const orig = await db.doc(path + '/messages/' + replyTo).get();
+      const author = orig.exists ? (orig.get('uid') === 'hall-of-legends' ? orig.get('about') : orig.get('uid')) : null;
+      if (typeof author === 'string' && author !== uid) replyUid = author;
+    }
+    const whereName = kind === 'channel' ? title : kind === 'group' ? title : 'a private message';
+    // Activity (chat_members/{uid}/activity): mentions and replies, for
+    // whoever can read this room and hasn't blocked the sender.
+    const targets = new Map();
+    for (const id of mentioned) targets.set(id, 'mention');
+    if (replyUid) targets.set(replyUid, 'reply');
+    await Promise.all([...targets].map(async ([id, type]) => {
+      if (members ? !members.includes(id) : !(await allowed(id))) return;
+      if (!(await db.doc('chat_members/' + id).get()).exists) return;
+      if ((await db.doc('chat_members/' + id + '/blocks/' + uid).get()).exists) return;
+      await db.doc('chat_members/' + id + '/activity/' + type + '_' + msg.id).set({
+        type, from, fromUid: uid, text: text.slice(0, 200), kind, room, where: whereName, mid: msg.id,
+        ts: admin.firestore.FieldValue.serverTimestamp() });
+    })).catch((e) => console.warn('activity', e));
     let sent = 0;
     await Promise.all(prefsDocs.map(async (d) => {
       const id = d.ref.parent.parent.id;
       const p = d.data();
       if (id === uid || !p.token) return;
       const isMention = mentioned.has(id);
-      const wants = isMention || (kind === 'dm' ? p.dms !== false : kind === 'group' ? p.groups !== false : (p.channels || []).includes(room));
+      const isReply = id === replyUid;
+      const wants = isMention || isReply || (kind === 'dm' ? p.dms !== false : kind === 'group' ? p.groups !== false : (p.channels || []).includes(room));
       if (!wants) return;
       if ((await db.doc('chat_members/' + id + '/blocks/' + uid).get()).exists) return;
       if (!(await allowed(id))) return;
       const body = kind === 'dm' ? text : from + ': ' + text;
-      const where = kind === 'channel' ? title : kind === 'group' ? title : 'a private message';
-      const payload = { aps: { alert: { title: isMention ? from + ' mentioned you in ' + where : title, body },
+      const where = whereName;
+      const heading = isReply && kind !== 'dm' ? from + ' replied to you in ' + where : isMention ? from + ' mentioned you in ' + where : title;
+      const payload = { aps: { alert: { title: heading, body },
                                sound: soundFor(p, key), 'thread-id': kind + ':' + room },
-                        kind, room };
+                        kind, room, mid: msg.id };
       const out = await push(p.token, payload, p.env === 'sandbox', null);
       if (out.status === 200) sent++;
       else if (out.status === 410 || /BadDeviceToken|Unregistered/.test(out.body)) await d.ref.update({ token: admin.firestore.FieldValue.delete() }).catch(() => {});
@@ -199,4 +225,44 @@ async function legend(uid, b, res) {
     if (out.status === 200) sent++;
   }));
   res.json({ posted: true, sent });
+}
+
+// ── Reactions: "Sebastian reacted 🔥 to your message" ──
+//
+// After reacting (or taking a reaction back), the app calls /react with
+// { kind, room, mid }. The reaction is read from the message itself, so
+// nobody can claim one they didn't make. The message's author gets an
+// Activity item (one per person per message: a new emoji replaces it) and,
+// unless they turned it off (private/push: reactions false), a push. A
+// Hall of Legends post counts as the player it's about.
+async function reaction(uid, b, res) {
+  const { kind, room, mid } = b;
+  if (!['channel', 'dm', 'group'].includes(kind) || typeof room !== 'string' || !/^[\w-]{1,128}$/.test(room)
+      || typeof mid !== 'string' || !/^[\w-]{1,128}$/.test(mid)) { res.status(400).json({ error: 'Bad message' }); return; }
+  const path = (kind === 'channel' ? 'chat_channels/' : kind === 'dm' ? 'chat_dms/' : 'chat_groups/') + room;
+  const [roomDoc, msg, me] = await Promise.all([db.doc(path).get(), db.doc(path + '/messages/' + mid).get(), db.doc('chat_members/' + uid).get()]);
+  if (!roomDoc.exists || !msg.exists || !me.exists) { res.status(404).json({ error: 'No such message' }); return; }
+  const author = msg.get('uid') === 'hall-of-legends' ? msg.get('about') : msg.get('uid');
+  if (typeof author !== 'string' || author === uid) { res.json({ sent: 0, note: 'your own message' }); return; }
+  const r = roomDoc.data();
+  if (kind === 'dm' && !(r.members || []).includes(author)) { res.json({ sent: 0 }); return; }
+  if (kind === 'group' && !(r.members || {})[author]) { res.json({ sent: 0 }); return; }
+  const ref = db.doc('chat_members/' + author + '/activity/react_' + mid + '_' + uid);
+  const emoji = (msg.get('reactions') || {})[uid];
+  if (!emoji) { await ref.delete().catch(() => {}); res.json({ sent: 0, note: 'removed' }); return; }
+  if ((await db.doc('chat_members/' + author + '/blocks/' + uid).get()).exists) { res.json({ sent: 0 }); return; }
+  const from = me.get('username') || 'Someone';
+  const where = kind === 'channel' ? '#' + (r.name || room) : kind === 'group' ? (r.name || 'Group') : 'a private message';
+  const text = String(msg.get('text') || '').slice(0, 200);
+  const before = await ref.get();
+  if (before.exists && before.get('emoji') === emoji) { res.json({ sent: 0, note: 'same' }); return; }
+  await ref.set({ type: 'reaction', emoji, from, fromUid: uid, text, kind, room, where, mid, ts: admin.firestore.FieldValue.serverTimestamp() });
+  const p = (await db.doc('chat_members/' + author + '/private/push').get()).data() || {};
+  if (!p.token || p.reactions === false) { res.json({ sent: 0 }); return; }
+  const names = { '👍': 'thumbs up', '❤️': 'heart', '😂': 'laughing', '🔥': 'fire', '😮': 'wow', '😢': 'sad' };
+  const payload = { aps: { alert: { title: from + ' reacted ' + emoji + ' to your message', body: text },
+                           sound: soundFor(p, 'reactions'), 'thread-id': 'activity' },
+                    kind, room, mid, reaction: names[emoji] || emoji };
+  const out = await push(p.token, payload, p.env === 'sandbox', 'react-' + mid);
+  res.json({ sent: out.status === 200 ? 1 : 0 });
 }

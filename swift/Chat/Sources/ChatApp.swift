@@ -23,7 +23,11 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         let info = response.notification.request.content.userInfo
         guard let kind = info["kind"] as? String, let room = info["room"] as? String else { return }
-        await MainActor.run { Router.shared.open = (kind, room) }
+        let mid = info["mid"] as? String
+        await MainActor.run {
+            Router.shared.focus = mid
+            Router.shared.open = (kind, room)
+        }
     }
 
     // Show notifications even while the app is open (with their sound).

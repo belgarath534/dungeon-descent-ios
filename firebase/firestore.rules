@@ -207,7 +207,12 @@ service cloud.firestore {
       // You: agreeing to the rules, private messages off/on, and lastPostAt
       // (only to now, which canPost checks). Moderators: tester. The
       // developer: moderator and trusted (private messages right away).
-      allow update: if (isMe(uid) && onlyChanges(['agreedAt', 'dmOff', 'lastPostAt', 'lastSeen'])
+      allow update: if (isMe(uid) && onlyChanges(['agreedAt', 'dmOff', 'lastPostAt', 'lastSeen', 'bio', 'favClass'])
+                        // Profile: a short "about me" (clean words, up to 160
+                        // characters) and a favorite class from the game's list.
+                        && (!('bio' in request.resource.data) || request.resource.data.bio == ''
+                            || (request.resource.data.bio is string && request.resource.data.bio.size() <= 160 && cleanText(request.resource.data.bio)))
+                        && (!('favClass' in request.resource.data) || request.resource.data.favClass in ['', 'Warrior', 'Monk', 'Assassin', 'Paladin', 'Naturalist', 'Sorcerer', 'Necromancer', 'Berserker', 'Bard', 'Alchemist', 'BloodKnight', 'Druid', 'Warlock', 'DeathKnight', 'Ranger', 'Sentinel', 'Cleric', 'Wizard', 'Elementalist', 'VoidWalker', 'ShadowMage', 'TimeMage', 'Shaman', 'Arcanist'])
                         && request.resource.data.lastPostAt in [resource.data.lastPostAt, request.time]
                         // "Online": only ever stamped with now, or removed (appear offline).
                         && (!('lastSeen' in request.resource.data)
@@ -225,6 +230,12 @@ service cloud.firestore {
       // Push token and notification choices; only you (and the push server).
       match /private/{doc} {
         allow read, write: if isMe(uid);
+      }
+      // Activity: mentions of you, replies to you and reactions to your
+      // messages. Only the push server writes it; you read it and clear it.
+      match /activity/{item} {
+        allow read, delete: if isMe(uid);
+        allow create, update: if false;
       }
     }
 

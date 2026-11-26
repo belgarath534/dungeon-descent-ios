@@ -19,6 +19,10 @@ packages:
   GoogleSignIn:
     url: https://github.com/google/GoogleSignIn-iOS
     from: 8.0.0
+  # The game's rules (events, the Weekly Ladder, the World Boss, Tournament
+  # seasons), so Community shows exactly what the game shows.
+  DungeonCore:
+    path: ../DungeonCore
 targets:
   DungeonDescentChat:
     type: application
@@ -38,6 +42,7 @@ targets:
         product: FirebaseFirestore
       - package: GoogleSignIn
         product: GoogleSignIn
+      - package: DungeonCore
     entitlements:
       path: DungeonDescentChat.entitlements
       properties:

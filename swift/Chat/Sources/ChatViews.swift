@@ -6,26 +6,36 @@ import FirebaseFirestore
 final class Router: ObservableObject {
     static let shared = Router()
     @Published var open: (kind: String, room: String)?
+    /// The message to jump to once it's open (from a reply, mention or reaction).
+    var focus: String?
+}
+
+/// A conversation to open, optionally at one message.
+struct OpenTarget: Identifiable, Hashable {
+    let room: Room
+    var focus: String? = nil
+    var id: String { room.path + "#" + (focus ?? "") }
 }
 
 struct MainView: View {
     @EnvironmentObject var chat: ChatService
     @ObservedObject private var router = Router.shared
-    @State private var opened: Room?
+    @State private var opened: OpenTarget?
 
     var body: some View {
         TabView {
             ChannelsView().tabItem { Label("Channels", systemImage: "number") }
                 .badge(chat.unreadChannels)
             MessagesView().tabItem { Label("Messages", systemImage: "envelope") }
-                .badge(chat.unreadDMs)
-            GroupsView().tabItem { Label("Groups", systemImage: "person.3") }
-                .badge(chat.unreadGroups)
-            SettingsView().tabItem { Label("Settings", systemImage: "gear") }
+                .badge(chat.unreadDMs + chat.unreadGroups)
+            ActivityView().tabItem { Label("Activity", systemImage: "bell") }
+                .badge(chat.unreadActivity)
+            CommunityView().tabItem { Label("Community", systemImage: "trophy") }
+            MeView().tabItem { Label("Profile", systemImage: "person.crop.circle") }
         }
-        .sheet(item: $opened) { room in
+        .sheet(item: $opened) { t in
             NavigationStack {
-                ConversationView(room: room)
+                ConversationView(room: t.room, focus: t.focus)
                     .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { opened = nil } } }
             }
         }
@@ -36,17 +46,11 @@ struct MainView: View {
     /// Opens the conversation a tapped notification points to, once it's known.
     private func openPending() {
         guard let (kind, id) = router.open else { return }
-        var room: Room?
-        switch kind {
-        case "channel":
-            if let c = chat.channels.first(where: { $0.id == id }) {
-                room = Room(kind: .channel, id: c.id, title: c.name, path: "chat_channels/\(c.id)", canPost: !c.modsPost || chat.isMod)
-            }
-        case "dm": room = chat.dms.first { $0.id == id }
-        case "group": room = chat.groups.first { $0.id == id }
-        default: break
+        if let room = chat.room(kind: kind, id: id) {
+            opened = OpenTarget(room: room, focus: router.focus)
+            router.open = nil
+            router.focus = nil
         }
-        if let room { opened = room; router.open = nil }
     }
 }
 
@@ -184,6 +188,10 @@ struct ChannelEditor: View {
 struct ConversationView: View {
     @EnvironmentObject var chat: ChatService
     let room: Room
+    /// A message to jump to and read out when it opens.
+    let focus: String?
+    @AccessibilityFocusState private var voiceOverOn: String?
+    @State private var highlighted: String?
     @State private var messages: [ChatMessage] = []
     @State private var listener: ListenerRegistration?
     @State private var draft = ""
@@ -200,6 +208,11 @@ struct ConversationView: View {
     @FocusState private var typing: Bool
     private var myUID: String? { chat.member?.uid }
 
+    init(room: Room, focus: String? = nil) {
+        self.room = room
+        self.focus = focus
+    }
+
     private var shown: [ChatMessage] { messages.filter { chat.blocked[$0.uid] == nil } }
 
     var body: some View {
@@ -214,10 +227,26 @@ struct ConversationView: View {
                             }
                         }
                     }
-                    ForEach(shown) { m in row(m).id(m.id) }
+                    ForEach(shown) { m in
+                        row(m).id(m.id)
+                            .listRowBackground(highlighted == m.id ? Color.accentColor.opacity(0.18) : nil)
+                            .accessibilityFocused($voiceOverOn, equals: m.id)
+                    }
                 }
                 .listStyle(.plain)
-                .onChange(of: shown.last?.id) { _, id in if let id { proxy.scrollTo(id, anchor: .bottom) } }
+                .onChange(of: shown.last?.id) { _, id in
+                    if let id, highlighted == nil { proxy.scrollTo(id, anchor: .bottom) }
+                }
+                .onChange(of: shown.count) { _, _ in
+                    // Jump to the message this was opened for, once it has loaded.
+                    guard let focus, highlighted == nil, let m = shown.first(where: { $0.id == focus }) else { return }
+                    highlighted = focus
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        proxy.scrollTo(focus, anchor: .center)
+                        voiceOverOn = focus
+                        Speech.say("\(m.username): \(m.text)")
+                    }
+                }
             }
             if room.canPost && !chat.banned { composer } else {
                 Text(chat.banned ? "You're banned from posting." : "Only moderators post here.")
@@ -397,28 +426,47 @@ struct ConversationView: View {
     }
 }
 
+/// Private messages and group chats, in one list.
 struct MessagesView: View {
     @EnvironmentObject var chat: ChatService
     @State private var newName = ""
     @State private var asking = false
+    @State private var naming = false
+    @State private var groupName = ""
     @State private var opened: Room?
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(chat.dms.filter { r in !r.members.keys.contains { chat.blocked[$0] != nil } }) { r in
-                    NavigationLink(value: r) {
-                        Text(r.title + (chat.isNew(r) ? ", new" : "")).fontWeight(chat.isNew(r) ? .bold : .regular)
+                Section("Private messages") {
+                    ForEach(chat.dms.filter { r in !r.members.keys.contains { chat.blocked[$0] != nil } }) { r in
+                        NavigationLink(value: r) {
+                            Text(r.title + (chat.isNew(r) ? ", new" : "")).fontWeight(chat.isNew(r) ? .bold : .regular)
+                        }
                     }
+                    if chat.dms.isEmpty {
+                        Text("No private messages yet. To message someone, use \"Message privately\" on one of their messages, or New, then Private message.")
+                    }
+                    Toggle("Accept private messages", isOn: Binding(get: { chat.member?.dmOff != true },
+                                                                     set: { on in Task { await chat.setDMsOff(!on) } }))
                 }
-                if chat.dms.isEmpty {
-                    Text("No private messages yet. To message someone, use \"Message privately\" on one of their messages, or the New message button.")
+                Section("Groups") {
+                    ForEach(chat.groups) { g in
+                        NavigationLink(value: g) {
+                            Text(g.title + (chat.isNew(g) ? ", new" : "")).fontWeight(chat.isNew(g) ? .bold : .regular)
+                                .accessibilityLabel("\(g.title)\(chat.isNew(g) ? ", new" : ""), group, \(g.members.count) \(g.members.count == 1 ? "person" : "people")")
+                        }
+                    }
+                    if chat.groups.isEmpty { Text("No groups yet. Make one with New, then Group, and add people by their username.") }
                 }
-                Toggle("Accept private messages", isOn: Binding(get: { chat.member?.dmOff != true },
-                                                                 set: { on in Task { await chat.setDMsOff(!on) } }))
             }
             .navigationTitle("Messages")
-            .toolbar { Button("New message") { asking = true } }
+            .toolbar {
+                Menu("New") {
+                    Button("Private message") { asking = true }
+                    Button("Group") { naming = true }
+                }
+            }
             .navigationDestination(for: Room.self) { ConversationView(room: $0) }
             .navigationDestination(item: $opened) { ConversationView(room: $0) }
             .alert("Message who?", isPresented: $asking) {
@@ -434,42 +482,17 @@ struct MessagesView: View {
                 }
                 Button("Cancel", role: .cancel) { newName = "" }
             }
-        }
-    }
-}
-
-struct GroupsView: View {
-    @EnvironmentObject var chat: ChatService
-    @State private var naming = false
-    @State private var name = ""
-    @State private var opened: Room?
-
-    var body: some View {
-        NavigationStack {
-            List {
-                ForEach(chat.groups) { g in
-                    NavigationLink(value: g) {
-                        Text(g.title + (chat.isNew(g) ? ", new" : "")).fontWeight(chat.isNew(g) ? .bold : .regular)
-                            .accessibilityLabel("\(g.title)\(chat.isNew(g) ? ", new" : ""), \(g.members.count) \(g.members.count == 1 ? "person" : "people")")
-                    }
-                }
-                if chat.groups.isEmpty { Text("No groups yet. Make one with New group, then add people by their username.") }
-            }
-            .navigationTitle("Groups")
-            .toolbar { Button("New group") { naming = true } }
-            .navigationDestination(for: Room.self) { ConversationView(room: $0) }
-            .navigationDestination(item: $opened) { ConversationView(room: $0) }
             .alert("New group", isPresented: $naming) {
-                TextField("Group name", text: $name)
+                TextField("Group name", text: $groupName)
                 Button("Create") {
-                    let n = name
-                    name = ""
+                    let n = groupName
+                    groupName = ""
                     Task {
                         let (r, p) = await chat.createGroup(name: n)
                         if let r { opened = r; Speech.say("Group created. Use Group info to add people.") } else if let p { Speech.say(p) }
                     }
                 }
-                Button("Cancel", role: .cancel) { name = "" }
+                Button("Cancel", role: .cancel) { groupName = "" }
             }
         }
     }
@@ -569,6 +592,8 @@ struct ProfileView: View {
     @State private var loaded = false
     @State private var dmRoom: Room?
 
+    init(uid: String) { self.uid = uid }
+
     var body: some View {
         NavigationStack {
             Form {
@@ -578,7 +603,15 @@ struct ProfileView: View {
                         LabeledContent("Role", value: p.role)
                         LabeledContent("Status", value: p.online ? "Online now" : "Offline")
                         if let j = p.joined { LabeledContent("Joined chat", value: j.formatted(date: .abbreviated, time: .omitted)) }
-                        if let s = p.highScore { LabeledContent("High Score", value: s.formatted()) }
+                        if !p.favClass.isEmpty { LabeledContent("Favorite class", value: ChatService.className(p.favClass)) }
+                    }
+                    if !p.bio.isEmpty { Section("About") { Text(p.bio) } }
+                    if p.highScore != nil || p.endlessFloor != nil || p.weeklyScore != nil {
+                        Section("In the game") {
+                            if let s = p.highScore { LabeledContent("High Score", value: s.formatted()) }
+                            if let f = p.endlessFloor { LabeledContent("Endless Descent best", value: "Floor \(f.formatted())") }
+                            if let w = p.weeklyScore { LabeledContent("Weekly Ladder this week", value: w.formatted()) }
+                        }
                     }
                     if p.uid != chat.member?.uid {
                         Section {

@@ -8,7 +8,6 @@ struct SettingsView: View {
     @State private var confirmAccountDelete = false
 
     var body: some View {
-        NavigationStack {
             Form {
                 Section {
                     Text("Signed in as \(chat.member?.username ?? "")"
@@ -80,7 +79,6 @@ struct SettingsView: View {
             } message: {
                 Text("This deletes your Dungeon Descent account for good: chat, your username, your cloud save and your leaderboard places. Saves on your devices stay. This can't be undone.")
             }
-        }
     }
 }
 

@@ -145,6 +145,12 @@ struct NotificationSetupView: View {
                 if push.perChannelSounds && push.groups { SoundPicker(key: "group", title: "Sound for group chats", allowDefault: true) }
             }
             Section {
+                Toggle("Reactions to my messages", isOn: $push.reactions)
+                if push.perChannelSounds && push.reactions { SoundPicker(key: "reactions", title: "Sound for reactions", allowDefault: true) }
+            } header: { Text("Activity") } footer: {
+                Text("Mentions of you and replies to you always notify you, even in channels you don't follow.")
+            }
+            Section {
                 Button(firstTime ? "Done" : "Save") {
                     Task {
                         await push.save()
