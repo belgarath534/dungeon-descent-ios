@@ -19,6 +19,13 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         GIDSignIn.sharedInstance.handle(url)
     }
 
+    // Tapping a notification opens its conversation.
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
+        let info = response.notification.request.content.userInfo
+        guard let kind = info["kind"] as? String, let room = info["room"] as? String else { return }
+        await MainActor.run { Router.shared.open = (kind, room) }
+    }
+
     // Show notifications even while the app is open (with their sound).
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async
         -> UNNotificationPresentationOptions { [.banner, .sound, .list] }

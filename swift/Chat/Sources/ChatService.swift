@@ -71,6 +71,10 @@ final class ChatService: ObservableObject {
         }
     }
     private var presenceTimer: Timer?
+    /// New messages per channel id since you last read it.
+    @Published private(set) var unread: [String: Int] = [:]
+    /// When you last read each room (by path), kept on this device.
+    private var lastRead: [String: Double] = (UserDefaults.standard.dictionary(forKey: "chat.lastRead") as? [String: Double]) ?? [:]
 
     static let developerUID = "WgqZGmnPKeYIymlMkx0aAg8G2T52"
     private var db: Firestore { Account.db }
@@ -149,7 +153,43 @@ final class ChatService: ObservableObject {
         }
     }
 
+    // MARK: Unread
+
+    private func readMark(_ path: String) -> Date {
+        let joined = member?.createdAt ?? Date()
+        guard let t = lastRead[path] else { return joined }
+        return max(joined, Date(timeIntervalSince1970: t))
+    }
+
+    func markRead(_ room: Room) {
+        lastRead[room.path] = Date().timeIntervalSince1970
+        UserDefaults.standard.set(lastRead, forKey: "chat.lastRead")
+        if room.kind == .channel { unread[room.id] = 0 }
+        objectWillChange.send()
+    }
+
+    func isNew(_ room: Room) -> Bool {
+        guard let at = room.lastAt else { return false }
+        return at > readMark(room.path).addingTimeInterval(1)
+    }
+
+    var unreadChannels: Int { unread.values.reduce(0, +) }
+    var unreadDMs: Int { dms.filter { isNew($0) && !$0.members.keys.contains { blocked[$0] != nil } }.count }
+    var unreadGroups: Int { groups.filter(isNew).count }
+
+    /// Counts new messages in each channel you can see.
+    func refreshUnread() async {
+        guard member != nil else { return }
+        var out: [String: Int] = [:]
+        for c in channels where !c.testersOnly || isTester {
+            let q = db.collection("chat_channels/\(c.id)/messages").whereField("ts", isGreaterThan: Timestamp(date: readMark("chat_channels/\(c.id)")))
+            if let n = try? await q.count.getAggregation(source: .server).count.intValue, n > 0 { out[c.id] = n }
+        }
+        unread = out
+    }
+
     private func beat() async {
+        await refreshUnread()
         guard let uid, member != nil else { return }
         let me = db.collection("chat_members").document(uid)
         try? await me.updateData(["lastSeen": showOnline ? FieldValue.serverTimestamp() : FieldValue.delete()])

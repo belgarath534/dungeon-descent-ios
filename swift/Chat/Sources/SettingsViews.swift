@@ -32,6 +32,9 @@ struct SettingsView: View {
                     }
                     Link("Terms of Service", destination: URL(string: "https://dungen-descent.org/terms")!)
                     Link("Privacy Policy", destination: URL(string: "https://dungen-descent.org/privacy")!)
+                    Link("Contact support", destination: URL(string: "https://dungen-descent.org/support")!)
+                    Text("Version \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "") (\(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? ""))")
+                        .font(.footnote).foregroundStyle(.secondary)
                 }
                 if chat.isDeveloper {
                     Section {

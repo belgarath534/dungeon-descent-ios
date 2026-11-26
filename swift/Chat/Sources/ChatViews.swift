@@ -1,14 +1,52 @@
 import SwiftUI
 import FirebaseFirestore
 
+/// Where a tapped notification wants to go.
+@MainActor
+final class Router: ObservableObject {
+    static let shared = Router()
+    @Published var open: (kind: String, room: String)?
+}
+
 struct MainView: View {
+    @EnvironmentObject var chat: ChatService
+    @ObservedObject private var router = Router.shared
+    @State private var opened: Room?
+
     var body: some View {
         TabView {
             ChannelsView().tabItem { Label("Channels", systemImage: "number") }
+                .badge(chat.unreadChannels)
             MessagesView().tabItem { Label("Messages", systemImage: "envelope") }
+                .badge(chat.unreadDMs)
             GroupsView().tabItem { Label("Groups", systemImage: "person.3") }
+                .badge(chat.unreadGroups)
             SettingsView().tabItem { Label("Settings", systemImage: "gear") }
         }
+        .sheet(item: $opened) { room in
+            NavigationStack {
+                ConversationView(room: room)
+                    .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Close") { opened = nil } } }
+            }
+        }
+        .onChange(of: router.open?.room, initial: true) { _, _ in openPending() }
+        .onChange(of: chat.channels.count) { _, _ in openPending() }
+    }
+
+    /// Opens the conversation a tapped notification points to, once it's known.
+    private func openPending() {
+        guard let (kind, id) = router.open else { return }
+        var room: Room?
+        switch kind {
+        case "channel":
+            if let c = chat.channels.first(where: { $0.id == id }) {
+                room = Room(kind: .channel, id: c.id, title: c.name, path: "chat_channels/\(c.id)", canPost: !c.modsPost || chat.isMod)
+            }
+        case "dm": room = chat.dms.first { $0.id == id }
+        case "group": room = chat.groups.first { $0.id == id }
+        default: break
+        }
+        if let room { opened = room; router.open = nil }
     }
 }
 
@@ -35,11 +73,18 @@ struct ChannelsView: View {
                     NavigationLink(value: Room(kind: .channel, id: c.id, title: c.name, path: "chat_channels/\(c.id)",
                                                canPost: !c.modsPost || chat.isMod)) {
                         VStack(alignment: .leading) {
-                            Text("# " + c.name).font(.headline)
+                            HStack {
+                                Text("# " + c.name).font(.headline)
+                                if let n = chat.unread[c.id], n > 0 {
+                                    Text(n > 99 ? "99+ new" : "\(n) new").font(.caption.bold()).foregroundStyle(.black)
+                                        .padding(.horizontal, 6).background(Capsule().fill(Color.accentColor))
+                                }
+                            }
                             if !c.topic.isEmpty { Text(c.topic).font(.subheadline).foregroundStyle(.secondary) }
                         }
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel(c.name + (c.topic.isEmpty ? "" : ". " + c.topic) + (c.modsPost ? ". Read only" : "")
+                        .accessibilityLabel(c.name + ((chat.unread[c.id] ?? 0) > 0 ? ", \(chat.unread[c.id]!) new" : "")
+                                            + (c.topic.isEmpty ? "" : ". " + c.topic) + (c.modsPost ? ". Read only" : "")
                                             + (c.testersOnly ? ". Testers only" : ""))
                     }
                     .accessibilityActions { if chat.isDeveloper { channelActions(c) } }
@@ -49,6 +94,8 @@ struct ChannelsView: View {
             }
             .navigationTitle("Channels")
             .navigationDestination(for: Room.self) { ConversationView(room: $0) }
+            .task { await chat.refreshUnread() }
+            .refreshable { await chat.refreshUnread(); await chat.refreshOnline() }
             .toolbar { if chat.isDeveloper { Button("New channel") { editing = .new } } }
             .sheet(item: $editing) { ChannelEditor(editing: $0) }
             .sheet(isPresented: $showingOnline) { OnlineView() }
@@ -168,8 +215,8 @@ struct ConversationView: View {
         }
         .sheet(isPresented: $showInfo) { GroupInfoView(roomID: room.id) }
         .navigationDestination(item: $dmRoom) { ConversationView(room: $0) }
-        .onAppear(perform: startListening)
-        .onDisappear { listener?.remove(); listener = nil }
+        .onAppear { startListening(); chat.markRead(room) }
+        .onDisappear { listener?.remove(); listener = nil; chat.markRead(room) }
         .alert("Report this message", isPresented: Binding(get: { reporting != nil }, set: { if !$0 { reporting = nil } })) {
             TextField("What's wrong? (optional)", text: $reason)
             Button("Send report") {
@@ -202,6 +249,7 @@ struct ConversationView: View {
         listener = chat.listen(room) { list in
             let new = list.filter { m in !messages.contains(where: { $0.id == m.id }) }
             messages = list
+            chat.markRead(room)
             if !first {
                 for m in new where m.uid != myUID && chat.blocked[m.uid] == nil {
                     Speech.say("\(m.username): \(m.text)")
@@ -303,7 +351,9 @@ struct MessagesView: View {
         NavigationStack {
             List {
                 ForEach(chat.dms.filter { r in !r.members.keys.contains { chat.blocked[$0] != nil } }) { r in
-                    NavigationLink(value: r) { Text(r.title) }
+                    NavigationLink(value: r) {
+                        Text(r.title + (chat.isNew(r) ? ", new" : "")).fontWeight(chat.isNew(r) ? .bold : .regular)
+                    }
                 }
                 if chat.dms.isEmpty {
                     Text("No private messages yet. To message someone, use \"Message privately\" on one of their messages, or the New message button.")
@@ -343,8 +393,8 @@ struct GroupsView: View {
             List {
                 ForEach(chat.groups) { g in
                     NavigationLink(value: g) {
-                        Text(g.title)
-                            .accessibilityLabel("\(g.title), \(g.members.count) \(g.members.count == 1 ? "person" : "people")")
+                        Text(g.title + (chat.isNew(g) ? ", new" : "")).fontWeight(chat.isNew(g) ? .bold : .regular)
+                            .accessibilityLabel("\(g.title)\(chat.isNew(g) ? ", new" : ""), \(g.members.count) \(g.members.count == 1 ? "person" : "people")")
                     }
                 }
                 if chat.groups.isEmpty { Text("No groups yet. Make one with New group, then add people by their username.") }
