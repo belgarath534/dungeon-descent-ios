@@ -71,6 +71,12 @@ function soundFor(prefs, key) {
 }
 
 http('chatPush', async (req, res) => {
+  // The web chat (chat.html) calls this from the browser: allow it. Every
+  // call still needs a player's Firebase sign-in token.
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  if (req.method === 'OPTIONS') { res.status(204).send(''); return; }
   try {
     if (req.method !== 'POST') { res.status(405).send('POST only'); return; }
     const m = (req.get('Authorization') || '').match(/^Bearer (.+)$/);
