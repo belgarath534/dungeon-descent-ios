@@ -62,7 +62,8 @@ files = sorted(glob.glob(os.path.join(os.environ["SHOTS_DIR"], "*.png")))
 if not files:
     sys.exit("No screenshots found in " + os.environ["SHOTS_DIR"])
 
-app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
+# Exact match: the filter also matches com.dungeon.descent.chat (Dungeon Descent Chat).
+app = next(a["id"] for a in call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"] if a["attributes"]["bundleId"] == BUNDLE)
 versions = call("GET", f"/apps/{app}/appStoreVersions",
                 params={"filter[platform]": platform, "filter[versionString]": version})["data"]
 if not versions:

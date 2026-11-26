@@ -88,7 +88,8 @@ def call(method, path, ok=(), **kw):
     return r.json() if r.content else {}
 
 
-app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
+# Exact match: the filter also matches com.dungeon.descent.chat (Dungeon Descent Chat).
+app = next(a["id"] for a in call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"] if a["attributes"]["bundleId"] == BUNDLE)
 
 # 1. Test Information
 locs = (call("GET", f"/apps/{app}/betaAppLocalizations") or {"data": []})["data"]
