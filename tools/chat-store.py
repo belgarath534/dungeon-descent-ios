@@ -103,12 +103,24 @@ if age:
         "messagingAndChat": True, "userGeneratedContent": True, "advertising": False,
         "parentalControls": False, "ageAssurance": False,
     }
-    done = []
-    for k, v in answers.items():
+    # All at once (Apple wants the whole questionnaire); any question it
+    # names as unknown or invalid is dropped and the rest sent again.
+    for attempt in range(6):
         r = S.patch(API + f"/ageRatingDeclarations/{aid}", timeout=60, json={"data": {
-            "type": "ageRatingDeclarations", "id": aid, "attributes": {k: v}}})
-        (done.append(k) if r.ok else print(f"  (age rating: {k} not accepted: {r.status_code})"))
-    print(f"Age rating: {len(done)} answers set (messaging and user-generated content: yes)")
+            "type": "ageRatingDeclarations", "id": aid, "attributes": answers}})
+        if r.ok:
+            print(f"Age rating: {len(answers)} answers set (messaging and user-generated content: yes)")
+            break
+        errs = r.json().get("errors", []) if r.text else []
+        print(f"  age rating try {attempt + 1}: {r.status_code}")
+        for er in errs:
+            print("   ", er.get("code"), "|", er.get("detail", "")[:300], "|", (er.get("source") or {}).get("pointer"))
+        bad = {(er.get("source") or {}).get("pointer", "").rsplit("/", 1)[-1] for er in errs} & set(answers)
+        if not bad:
+            problems.append("age rating: " + r.text[:600])
+            break
+        for k in bad:
+            answers.pop(k)
 
 # 3. Price: free, everywhere.
 pts = call("GET", f"/apps/{chat['id']}/appPricePoints", params={"filter[territory]": "USA", "limit": 200})
