@@ -1,0 +1,30 @@
+Dungeon Descent Chat is the official community app for Dungeon Descent, the dungeon crawler you can play completely by ear. Talk with other players, get help, find co-op partners and hear the news first, in an app built for VoiceOver and screen reader users from the ground up. Made by a blind developer.
+
+BUILT FOR VOICEOVER
+• Every channel, message and button is labeled and announced.
+• New messages are read aloud while you're in a channel.
+• Simple layout: channels on one screen, the conversation on the next.
+
+CHANNELS FOR EVERYTHING
+• Announcements: news and updates straight from the developer.
+• General, Help and Strategy: talk about the game and get help.
+• Bug Reports and Ideas: tell us what's broken and what you'd like next.
+• Hall of Legends: show off your best runs.
+• Co-op Rooms: find players for co-op dungeons and raids.
+• Community Enemies and Community Dungeons: share what you've made.
+
+PRIVATE MESSAGES
+• Message other players one on one.
+• Turn private messages off any time.
+
+YOUR NOTIFICATIONS, YOUR SOUNDS
+• Choose which channels notify you.
+• Pick notification sounds from the game itself: achievement chimes, unlock sounds and more.
+
+SAFE BY DESIGN
+• Sign in with the same account you use in Dungeon Descent (Apple, Google or email).
+• A word filter, and Report and Block on every message.
+• Moderators review every report within 24 hours.
+• Delete your account any time from Settings.
+
+No ads. No purchases. Just the Dungeon Descent community.
