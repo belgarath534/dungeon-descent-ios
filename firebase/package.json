@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "firebase emulators:exec --only firestore,database --project demo-dd \"node test/rules.test.mjs && node test/database.test.mjs\""
+    "test": "firebase emulators:exec --only firestore,database --project demo-dd \"node test/rules.test.mjs && node test/chat.test.mjs && node test/database.test.mjs\""
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "3.0.4",
