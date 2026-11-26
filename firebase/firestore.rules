@@ -198,8 +198,12 @@ service cloud.firestore {
       // You: agreeing to the rules, private messages off/on, and lastPostAt
       // (only to now, which canPost checks). Moderators: tester. The
       // developer: moderator and trusted (private messages right away).
-      allow update: if (isMe(uid) && onlyChanges(['agreedAt', 'dmOff', 'lastPostAt'])
+      allow update: if (isMe(uid) && onlyChanges(['agreedAt', 'dmOff', 'lastPostAt', 'lastSeen'])
                         && request.resource.data.lastPostAt in [resource.data.lastPostAt, request.time]
+                        // "Online": only ever stamped with now, or removed (appear offline).
+                        && (!('lastSeen' in request.resource.data)
+                            || request.resource.data.lastSeen == resource.data.get('lastSeen', null)
+                            || request.resource.data.lastSeen == request.time)
                         && (request.resource.data.get('agreedAt', null) == resource.data.get('agreedAt', null)
                             || request.resource.data.agreedAt == request.time))
                     || (chatMod() && onlyChanges(['tester']))

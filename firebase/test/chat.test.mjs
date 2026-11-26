@@ -74,6 +74,10 @@ await t('zed agrees to the rules', updateDoc(doc(db('zed'), 'chat_members/zed'),
 await t('zed makes himself mod', updateDoc(doc(db('zed'), 'chat_members/zed'), { mod: true }), false);
 await t('zed renames himself', updateDoc(doc(db('zed'), 'chat_members/zed'), { username: 'Alice' }), false);
 await t('zed sets lastPostAt to the past', updateDoc(doc(db('zed'), 'chat_members/zed'), { lastPostAt: old }), false);
+await t('zed is online (lastSeen now)', updateDoc(doc(db('zed'), 'chat_members/zed'), { lastSeen: serverTimestamp() }), true);
+await t('zed fakes lastSeen in the future', updateDoc(doc(db('zed'), 'chat_members/zed'), { lastSeen: Timestamp.fromMillis(Date.now() + 864e5) }), false);
+await t('zed appears offline (removes lastSeen)', updateDoc(doc(db('zed'), 'chat_members/zed'), { lastSeen: deleteField() }), true);
+await t('alice marks zed online', updateDoc(doc(db('alice'), 'chat_members/zed'), { lastSeen: serverTimestamp() }), false);
 
 // Posting in channels
 await t('alice posts', say('alice', 'chat_channels/general', 'Hello everyone, who wants to co-op?'), true);
