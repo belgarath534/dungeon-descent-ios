@@ -1,0 +1,22 @@
+# Read-only: how many documents each collection has in each Firestore
+# database (tools/db-audit.py). Reads no contents.
+name: Database audit
+
+on:
+  push:
+    branches: [claude/affectionate-heisenberg-tmog1v]
+    paths: ['tools/db-audit.py', '.github/workflows/db-audit.yml']
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Count documents in both databases
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          pip install --quiet google-auth requests
+          python3 tools/db-audit.py
