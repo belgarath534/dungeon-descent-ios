@@ -1,0 +1,68 @@
+# XcodeGen spec for Dungeon Descent Chat, the community app (channels,
+# private messages, group chats) for Dungeon Descent players. It shares the
+# game's Firebase project and accounts. `xcodegen generate` makes
+# DungeonDescentChat.xcodeproj; the project file is never committed.
+name: DungeonDescentChat
+options:
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+packages:
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: 11.0.0
+  GoogleSignIn:
+    url: https://github.com/google/GoogleSignIn-iOS
+    from: 8.0.0
+targets:
+  DungeonDescentChat:
+    type: application
+    platform: iOS
+    supportedDestinations: [iOS]
+    sources:
+      - path: Sources
+      - path: GoogleService-Info.plist
+        buildPhase: resources
+      # Notification sounds from the game (converted to .caf; under 30 seconds).
+      - path: Sounds
+        buildPhase: resources
+    dependencies:
+      - package: Firebase
+        product: FirebaseAuth
+      - package: Firebase
+        product: FirebaseFirestore
+      - package: GoogleSignIn
+        product: GoogleSignIn
+    entitlements:
+      path: DungeonDescentChat.entitlements
+      properties:
+        com.apple.developer.applesignin: [Default]
+        aps-environment: production
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: DD Chat
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UIBackgroundModes: [remote-notification]
+        ITSAppUsesNonExemptEncryption: false
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        UISupportedInterfaceOrientations~ipad: [UIInterfaceOrientationPortrait, UIInterfaceOrientationPortraitUpsideDown, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        # Google sign-in comes back to the app through its reversed client ID.
+        CFBundleURLTypes:
+          - CFBundleURLSchemes: [com.googleusercontent.apps.109323203666-o8q3nv4843u4pncffhn2uosr72derq31]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.dungeon.descent.chat
+        PRODUCT_NAME: DungeonDescentChat
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        GENERATE_INFOPLIST_FILE: NO
+        SWIFT_VERSION: "5.0"
+        CODE_SIGN_STYLE: Automatic
