@@ -1,0 +1,10 @@
+Thanks for testing Dungeon Descent Chat, the community app for Dungeon Descent!
+
+Please try:
+• Sign in with the same account you use in the game (Apple, Google or email). Your game username is suggested.
+• The channels, like our Discord: post, reply, and use the VoiceOver Actions rotor on a message (Reply, Message privately, Report, Block).
+• Private messages (Messages tab) and group chats (Groups tab: make one and add people by username).
+• Settings, Notifications: pick channels and a game sound for each.
+• Is anything hard to use with VoiceOver? Tell us exactly where.
+
+Found a bug? Post it in #bug-reports in the app, or use Send Feedback in TestFlight.
