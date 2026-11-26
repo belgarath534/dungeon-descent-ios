@@ -14,6 +14,8 @@ struct MainView: View {
 
 struct ChannelsView: View {
     @EnvironmentObject var chat: ChatService
+    @State private var editing: ChannelEdit?
+    @State private var deleting: Channel?
 
     var body: some View {
         NavigationStack {
@@ -29,15 +31,90 @@ struct ChannelsView: View {
                             if !c.topic.isEmpty { Text(c.topic).font(.subheadline).foregroundStyle(.secondary) }
                         }
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel(c.name + (c.topic.isEmpty ? "" : ". " + c.topic) + (c.modsPost ? ". Read only" : ""))
+                        .accessibilityLabel(c.name + (c.topic.isEmpty ? "" : ". " + c.topic) + (c.modsPost ? ". Read only" : "")
+                                            + (c.testersOnly ? ". Testers only" : ""))
                     }
+                    .accessibilityActions { if chat.isDeveloper { channelActions(c) } }
+                    .contextMenu { if chat.isDeveloper { channelActions(c) } }
                 }
                 if chat.channels.isEmpty { Text("Loading channels…") }
             }
             .navigationTitle("Channels")
             .navigationDestination(for: Room.self) { ConversationView(room: $0) }
+            .toolbar { if chat.isDeveloper { Button("New channel") { editing = .new } } }
+            .sheet(item: $editing) { ChannelEditor(editing: $0) }
+            .confirmationDialog("Delete #\(deleting?.name ?? "")?", isPresented: Binding(get: { deleting != nil }, set: { if !$0 { deleting = nil } }), titleVisibility: .visible) {
+                Button("Delete channel", role: .destructive) {
+                    if let c = deleting { Task { Speech.say(await chat.deleteChannel(c) ? "Channel deleted." : "Couldn't delete it.") } }
+                    deleting = nil
+                }
+            } message: { Text("The channel disappears for everyone. Its old messages stay stored but can't be reached from the app.") }
         }
     }
+
+    @ViewBuilder private func channelActions(_ c: Channel) -> some View {
+        Button("Edit channel") { editing = .edit(c) }
+        Button("Move up") { Task { await chat.moveChannel(c, by: -1) } }
+        Button("Move down") { Task { await chat.moveChannel(c, by: 1) } }
+        Button("Delete channel", role: .destructive) { deleting = c }
+    }
+}
+
+/// The developer's channel editor (new or existing).
+enum ChannelEdit: Identifiable {
+    case new
+    case edit(Channel)
+    var id: String { if case .edit(let c) = self { return c.id } else { return "new" } }
+}
+
+struct ChannelEditor: View {
+    @EnvironmentObject var chat: ChatService
+    @Environment(\.dismiss) private var dismiss
+    let editing: ChannelEdit
+    @State private var name = ""
+    @State private var topic = ""
+    @State private var modsPost = false
+    @State private var testersOnly = false
+    @State private var problem = ""
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    TextField("Channel name, like co-op-rooms", text: $name)
+                        .textInputAutocapitalization(.never).autocorrectionDisabled()
+                    TextField("Topic (optional)", text: $topic)
+                }
+                Section {
+                    Toggle("Only moderators can post", isOn: $modsPost)
+                    Toggle("Only testers can see it", isOn: $testersOnly)
+                }
+                if !problem.isEmpty { Section { Text(problem).foregroundStyle(.orange) } }
+            }
+            .navigationTitle(isNew ? "New channel" : "Edit channel")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button(isNew ? "Create" : "Save") {
+                        Task {
+                            if let p = await chat.saveChannel(id: existing?.id, name: name, topic: topic, modsPost: modsPost, testersOnly: testersOnly) {
+                                problem = p; Speech.say(p)
+                            } else {
+                                Speech.say(isNew ? "Channel created." : "Channel saved.")
+                                dismiss()
+                            }
+                        }
+                    }
+                }
+            }
+            .onAppear {
+                if let c = existing { name = c.name; topic = c.topic; modsPost = c.modsPost; testersOnly = c.testersOnly }
+            }
+        }
+    }
+
+    private var existing: Channel? { if case .edit(let c) = editing { return c } else { return nil } }
+    private var isNew: Bool { existing == nil }
 }
 
 /// One room's messages, newest at the bottom, with a box to write in.

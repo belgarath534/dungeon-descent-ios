@@ -406,6 +406,44 @@ final class ChatService: ObservableObject {
         (try? await db.collection("chat_members").document(other).updateData([field: on])) != nil
     }
 
+    // MARK: Channels (the developer only; the rules allow nobody else)
+
+    nonisolated static func channelID(_ name: String) -> String {
+        let slug = name.lowercased().map { $0.isLetter || $0.isNumber ? $0 : "-" }
+        return String(slug).split(separator: "-").joined(separator: "-")
+    }
+
+    func saveChannel(id: String?, name raw: String, topic: String, modsPost: Bool, testersOnly: Bool) async -> String? {
+        guard isDeveloper else { return "Only the developer can change channels." }
+        let name = Self.channelID(raw)
+        if name.isEmpty || name.count > 40 { return "A channel name needs 1 to 40 letters or numbers." }
+        let cid = id ?? name
+        if id == nil, channels.contains(where: { $0.id == cid }) { return "There's already a channel called \(name)." }
+        var data: [String: Any] = ["name": name, "topic": String(topic.prefix(120)), "modsPost": modsPost, "testersOnly": testersOnly]
+        if id == nil { data["order"] = (channels.map(\.order).max() ?? 0) + 1 }
+        do {
+            try await db.collection("chat_channels").document(cid).setData(data, merge: true)
+            return nil
+        } catch {
+            return "Couldn't save the channel. Check your connection."
+        }
+    }
+
+    func deleteChannel(_ c: Channel) async -> Bool {
+        guard isDeveloper else { return false }
+        return (try? await db.collection("chat_channels").document(c.id).delete()) != nil
+    }
+
+    /// Moves a channel up (-1) or down (+1) in the list.
+    func moveChannel(_ c: Channel, by dir: Int) async {
+        guard isDeveloper, let i = channels.firstIndex(of: c), channels.indices.contains(i + dir) else { return }
+        let other = channels[i + dir]
+        let batch = db.batch()
+        batch.updateData(["order": other.order == c.order ? c.order + dir : other.order], forDocument: db.collection("chat_channels").document(c.id))
+        batch.updateData(["order": c.order], forDocument: db.collection("chat_channels").document(other.id))
+        try? await batch.commit()
+    }
+
     // MARK: Deleting
 
     /// Your chat profile, blocks and notification settings. Messages you

@@ -10,7 +10,12 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    Text("Signed in as \(chat.member?.username ?? "")" + (chat.isMod ? ", moderator" : ""))
+                    Text("Signed in as \(chat.member?.username ?? "")"
+                         + (chat.isDeveloper ? ", developer" : chat.isMod ? ", moderator" : chat.isTester ? ", tester" : ""))
+                    if let uid = chat.member?.uid {
+                        Text("User ID: \(uid)").font(.footnote).textSelection(.enabled)
+                            .accessibilityHint("You can copy it. Support may ask for it.")
+                    }
                 }
                 Section("Notifications") {
                     NavigationLink("Channels, private messages and sounds") { NotificationSetupView() }
