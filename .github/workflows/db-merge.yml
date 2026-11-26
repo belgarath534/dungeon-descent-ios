@@ -1,0 +1,25 @@
+# Copies the web game's documents from "(default)" into "dungeon-descent"
+# (tools/db-merge.py), only ones that aren't there yet. On
+# claude/affectionate-heisenberg-tmog1v it's a dry run (counts only); on
+# the db-merge branch it copies.
+name: Database merge
+
+on:
+  push:
+    branches: [claude/affectionate-heisenberg-tmog1v, db-merge]
+    paths: ['tools/db-merge.py', '.github/workflows/db-merge.yml']
+  workflow_dispatch:
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy what's missing
+        env:
+          SA: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          APPLY: ${{ github.ref_name == 'db-merge' && 'yes' || '' }}
+        run: |
+          pip install --quiet google-auth requests
+          python3 tools/db-merge.py
