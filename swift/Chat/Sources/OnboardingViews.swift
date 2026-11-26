@@ -120,20 +120,29 @@ struct NotificationSetupView: View {
     var body: some View {
         let form = Form {
             if firstTime {
-                Section { Text("Which channels should notify you? You can change this any time in Settings.") }
+                Section { Text("Which channels should notify you, and with which sound? You can change this any time in Settings.") }
+            }
+            Section {
+                SoundPicker(key: "default", title: "Notification sound")
+                Toggle("Choose a sound for each channel", isOn: $push.perChannelSounds)
+            } header: { Text("Sound") } footer: {
+                Text(push.perChannelSounds ? "Each channel below has its own sound, starting with the default."
+                                           : "Every channel, private message and group uses this sound.")
             }
             Section("Channels") {
                 ForEach(chat.channels.filter { !$0.testersOnly || chat.isTester }) { c in
                     Toggle(c.name, isOn: Binding(get: { push.channels.contains(c.id) },
                                                  set: { on in if on { push.channels.insert(c.id) } else { push.channels.remove(c.id) } }))
-                    if push.channels.contains(c.id) { SoundPicker(key: c.id) }
+                    if push.perChannelSounds && push.channels.contains(c.id) {
+                        SoundPicker(key: c.id, title: "Sound for \(c.name)", allowDefault: true)
+                    }
                 }
             }
             Section("Private messages and groups") {
                 Toggle("Private messages", isOn: $push.dms)
-                if push.dms { SoundPicker(key: "dm") }
+                if push.perChannelSounds && push.dms { SoundPicker(key: "dm", title: "Sound for private messages", allowDefault: true) }
                 Toggle("Group chats", isOn: $push.groups)
-                if push.groups { SoundPicker(key: "group") }
+                if push.perChannelSounds && push.groups { SoundPicker(key: "group", title: "Sound for group chats", allowDefault: true) }
             }
             Section {
                 Button(firstTime ? "Done" : "Save") {
@@ -153,10 +162,14 @@ struct NotificationSetupView: View {
 struct SoundPicker: View {
     @EnvironmentObject var push: Push
     let key: String
+    var title = "Sound"
+    /// Offers "Same as default" (for a channel's own sound).
+    var allowDefault = false
 
     var body: some View {
-        Picker("Sound", selection: Binding(get: { push.soundFor[key] ?? "" },
-                                           set: { push.soundFor[key] = $0; push.preview($0) })) {
+        Picker(title, selection: Binding(get: { push.soundFor[key] ?? (allowDefault ? "default" : "") },
+                                         set: { push.soundFor[key] = $0; push.preview(push.sound(for: key == "default" ? "default" : key)) })) {
+            if allowDefault { Text("Same as default (\(push.soundName(push.soundFor["default"])))").tag("default") }
             ForEach(Push.sounds) { Text($0.name).tag($0.id) }
         }
         .accessibilityHint("Plays the sound when you pick it.")

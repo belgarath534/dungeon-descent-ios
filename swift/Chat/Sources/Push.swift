@@ -36,8 +36,11 @@ final class Push: ObservableObject {
     @Published var channels: Set<String> = ["announcements"]
     @Published var dms = true
     @Published var groups = true
-    /// Sound per channel id, "dm" and "group".
-    @Published var soundFor: [String: String] = ["announcements": "dd-ach-gold", "dm": "dd-ach-silver", "group": "dd-quest"]
+    /// "default": the sound for everything. With perChannelSounds on, a
+    /// channel id, "dm" or "group" can have its own ("default" or missing:
+    /// the default sound).
+    @Published var soundFor: [String: String] = ["default": "dd-ach-gold"]
+    @Published var perChannelSounds = false
     @Published private(set) var loaded = false
     @Published private(set) var chosen = false
     private var token: String?
@@ -55,6 +58,7 @@ final class Push: ObservableObject {
             dms = d["dms"] as? Bool ?? true
             groups = d["groups"] as? Bool ?? true
             soundFor.merge(d["sounds"] as? [String: String] ?? [:]) { _, new in new }
+            perChannelSounds = d["custom"] as? Bool ?? false
             chosen = d["chosen"] as? Bool ?? false
         }
         loaded = true
@@ -62,7 +66,7 @@ final class Push: ObservableObject {
 
     func save() async {
         guard let ref = ref() else { return }
-        var data: [String: Any] = ["channels": Array(channels), "dms": dms, "groups": groups, "sounds": soundFor,
+        var data: [String: Any] = ["channels": Array(channels), "dms": dms, "groups": groups, "sounds": soundFor, "custom": perChannelSounds,
                                    "chosen": true, "updatedAt": FieldValue.serverTimestamp()]
         if let token { data["token"] = token; data["env"] = Self.apnsEnvironment }
         try? await ref.setData(data, merge: true)
@@ -95,6 +99,13 @@ final class Push: ObservableObject {
         }
         player = try? AVAudioPlayer(contentsOf: url)
         player?.play()
+    }
+
+    /// The sound that plays for a channel id, "dm" or "group".
+    func sound(for key: String) -> String {
+        let own = soundFor[key]
+        if perChannelSounds, let own, own != "default" { return own }
+        return soundFor["default"] ?? ""
     }
 
     func soundName(_ id: String?) -> String {
