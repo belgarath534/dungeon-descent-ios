@@ -103,6 +103,19 @@ if age:
         "messagingAndChat": True, "userGeneratedContent": True, "socialMedia": True, "advertising": False,
         "parentalControls": False, "ageAssurance": False,
     }
+    # Every question the game's form has (Apple keeps adding some, like
+    # dating): the same "none" / "no" unless set above.
+    if game:
+        for gi in call("GET", f"/apps/{game['id']}/appInfos")["data"][:1]:
+            g = call("GET", f"/appInfos/{gi['id']}/ageRatingDeclaration")
+            for k, v in ((g or {}).get("data", {}).get("attributes") or {}).items():
+                if k in answers or "Override" in k or "AgeBand" in k:
+                    continue
+                if isinstance(v, bool):
+                    answers[k] = False
+                elif isinstance(v, str) and v in ("NONE", "INFREQUENT_OR_MILD", "FREQUENT_OR_INTENSE", "INFREQUENT", "FREQUENT"):
+                    answers[k] = "NONE"
+    print("Age rating questions:", ", ".join(f"{k}={v}" for k, v in sorted(answers.items())))
     # All at once (Apple wants the whole questionnaire); any question it
     # names as unknown or invalid is dropped and the rest sent again.
     for attempt in range(6):
@@ -115,8 +128,12 @@ if age:
         print(f"  age rating try {attempt + 1}: {r.status_code}")
         for er in errs:
             print("   ", er.get("code"), "|", er.get("detail", "")[:300], "|", (er.get("source") or {}).get("pointer"))
-        bad = {(er.get("source") or {}).get("pointer", "").rsplit("/", 1)[-1] for er in errs} & set(answers)
-        if not bad:
+        named = {(er.get("source") or {}).get("pointer", "").rsplit("/", 1)[-1]: er.get("code", "") for er in errs}
+        missing = [k for k, c in named.items() if "REQUIRED" in c and k and k not in answers]
+        for k in missing:  # a question Apple added: "no"
+            answers[k] = False
+        bad = {k for k, c in named.items() if "REQUIRED" not in c} & set(answers)
+        if not bad and not missing:
             problems.append("age rating: " + r.text[:600])
             break
         for k in bad:
