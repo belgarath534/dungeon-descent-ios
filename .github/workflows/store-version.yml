@@ -10,6 +10,7 @@ on:
   push:
     # store-submit: the same, and then sends all three to App Review.
     # store-cancel: only takes all three back out of App Review.
+    # store-cancel-vision: only Apple Vision Pro (iPhone: store-cancel-ios).
     # store-status: only prints where each one is in review.
     # store-auto-release: sets all three to release as soon as approved.
     # store-submit-ios-mac: like store-submit, for iPhone and Mac only (when
@@ -18,7 +19,7 @@ on:
     # (the other two may already be in review).
     # store-submit-ios: iPhone only (a fix update while Mac and Vision Pro
     # are still in review).
-    branches: [store-version, store-submit, store-cancel, store-status, store-auto-release, store-submit-ios-mac, store-submit-vision, store-submit-ios, store-cancel-ios, store-cancel-ios-mac]
+    branches: [store-version, store-submit, store-cancel, store-status, store-auto-release, store-submit-ios-mac, store-submit-vision, store-submit-ios, store-cancel-ios, store-cancel-ios-mac, store-cancel-vision]
   workflow_dispatch:
 
 jobs:
@@ -74,7 +75,7 @@ jobs:
         env:
           VERSION: "12.2.1"
           SUBMIT: ${{ startsWith(github.ref_name, 'store-submit') && 'yes' || '' }}
-          PLATFORMS: ${{ github.ref_name == 'store-submit-ios-mac' && 'IOS MAC_OS' || github.ref_name == 'store-submit-vision' && 'VISION_OS' || (github.ref_name == 'store-submit-ios' || github.ref_name == 'store-cancel-ios') && 'IOS' || github.ref_name == 'store-cancel-ios-mac' && 'IOS MAC_OS' || 'IOS MAC_OS VISION_OS' }}
+          PLATFORMS: ${{ github.ref_name == 'store-submit-ios-mac' && 'IOS MAC_OS' || (github.ref_name == 'store-submit-vision' || github.ref_name == 'store-cancel-vision') && 'VISION_OS' || (github.ref_name == 'store-submit-ios' || github.ref_name == 'store-cancel-ios') && 'IOS' || github.ref_name == 'store-cancel-ios-mac' && 'IOS MAC_OS' || 'IOS MAC_OS VISION_OS' }}
           CANCEL: ${{ startsWith(github.ref_name, 'store-cancel') && 'yes' || '' }}
           STATUS: ${{ github.ref_name == 'store-status' && 'yes' || '' }}
           AUTO_RELEASE: ${{ github.ref_name == 'store-auto-release' && 'yes' || '' }}

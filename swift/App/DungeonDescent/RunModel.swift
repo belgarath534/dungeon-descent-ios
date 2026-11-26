@@ -2898,6 +2898,7 @@ final class RunModel: ObservableObject {
         Sound.ambient(nil)
         summaryMusic(victory: true)
         add("Victory! You have conquered \(run.dungeon).")
+        game.postLegend("victory", ["dungeon": run.dungeon, "difficulty": run.difficulty.rawValue, "cls": run.cls])
         var d = dice
         if let sp = Spirits.victoryReward(run, earned: earnedSpirits, dice: &d) {
             earnSpirit(sp.id)

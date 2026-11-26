@@ -2,5 +2,6 @@ Thanks for testing Dungeon Descent 12.2.1!
 
 New in this build — please try:
 • Fixed: 25 skills could be cast over and over at 0 SP with an Apocalypse weapon to stack endless dodges, attack, defense, free casts or skill damage (Wind Step, Divine Shield, Shadow Form, Bless, The Lich King, Dark Ascension, Unlimited Power, Maestro, the Masteries and more). Dodges and free casts now top up instead of stacking, and the other bonuses work once per fight. If you play one of these classes, tell us how it feels.
+• New: Hall of Legends. When you conquer a dungeon, or reach a new Endless Descent (every 25 floors) or Spire (every 10) milestone, Dungeon Descent Chat's #hall-of-legends announces it (if you're signed in and have joined the chat; it's on the web game's main menu).
 
 Found a bug? Tell us in bug-reports on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.

@@ -239,6 +239,22 @@ final class GameModel: ObservableObject {
 
     func postDeath(_ d: DeathNotice) { onDeath?(d) }
 
+    /// Big moments for Dungeon Descent Chat's #hall-of-legends (set by the
+    /// cloud account; the chat's server writes the post).
+    var onLegend: ((String, [String: Any]) -> Void)?
+
+    func postLegend(_ event: String, _ info: [String: Any] = [:]) { onLegend?(event, info) }
+
+    /// Endless Descent and The Spire post each new milestone once (every 25
+    /// and every 10 floors), remembered on this device.
+    func postFloorLegend(_ event: String, best: Int, every: Int) {
+        let milestone = (best / every) * every
+        let key = "dd_legend_" + event
+        guard milestone >= every, milestone > Int(store.getItem(key) ?? "0") ?? 0 else { return }
+        store.setItem(key, String(milestone))
+        postLegend(event, ["floor": milestone])
+    }
+
     /// The player deleted the character: it goes to The Graveyard.
     func buryCharacter(at index: Int) {
         clearRun(for: index)

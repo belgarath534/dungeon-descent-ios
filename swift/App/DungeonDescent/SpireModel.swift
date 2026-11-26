@@ -139,6 +139,7 @@ final class SpireModel: ObservableObject {
         saveLevel(r)
         game.achievements.setGlobalMax("spireBestFloor", Double(Spire.bestFloor(game.store)))
         GameCenter.submit(Spire.bestFloor(game.store), to: .spireFloor)
+        game.postFloorLegend("spire", best: Spire.bestFloor(game.store), every: 10)
         if r.won {
             stopTimer()
             stage = .won
