@@ -152,6 +152,141 @@ service cloud.firestore {
       }
     }
 
+    // ── Dungeon Descent Chat (swift/Chat) ──
+    // Channels like the Discord server, private messages, moderators. The
+    // rules are the gatekeeper: the app can't skip the word filter, bans,
+    // blocks, the rate limit or who may read what.
+    function chatMember(uid) { return get(/databases/$(database)/documents/chat_members/$(uid)).data; }
+    function chatMemberAfter(uid) { return getAfter(/databases/$(database)/documents/chat_members/$(uid)).data; }
+    function chatJoined() { return signedIn() && exists(/databases/$(database)/documents/chat_members/$(request.auth.uid)); }
+    function chatMod() { return isDev() || (chatJoined() && chatMember(request.auth.uid).get('mod', false) == true); }
+    function chatTester() { return chatMod() || (chatJoined() && chatMember(request.auth.uid).get('tester', false) == true); }
+    function chatBanned(uid) { return exists(/databases/$(database)/documents/chat_bans/$(uid)); }
+    function blocked(owner, other) { return exists(/databases/$(database)/documents/chat_members/$(owner)/blocks/$(other)); }
+    // Whole words only, so "class", "assassin" and "Scunthorpe" are fine.
+    function cleanText(t) {
+      return !t.lower().matches('(?s).*\\b(fuck\\w*|motherfuck\\w*|shit|shits|shitty|shitting|bullshit|bitch\\w*|cunt\\w*|nigg\\w*|fag|fags|faggot\\w*|retard\\w*|whore\\w*|slut\\w*|dick|dicks|cock|cocks|pussy|pussies|ass|asshole\\w*|bastard\\w*|piss|pissed|pissing)\\b.*');
+    }
+    function goodText(t) { return t is string && t.size() >= 1 && t.size() <= 1000 && cleanText(t); }
+    // Nobody may pose as staff.
+    function reservedName(n) {
+      return n.lower().matches('.*(admin|moderator|developer|dungeondescent|official|staff|support).*') || n.lower() in ['dev', 'mod', 'leonardo'];
+    }
+    // Posting: your own name, signed up and agreed, not banned, and at most a
+    // message every 2 seconds (the same batch moves your lastPostAt to now).
+    function canPost() {
+      return chatJoined() && !chatBanned(request.auth.uid)
+          && chatMember(request.auth.uid).get('agreedAt', null) != null
+          && request.resource.data.uid == request.auth.uid
+          && request.resource.data.username == chatMember(request.auth.uid).username
+          && request.resource.data.ts == request.time
+          && goodText(request.resource.data.text)
+          && chatMemberAfter(request.auth.uid).lastPostAt == request.time
+          && request.time > chatMember(request.auth.uid).lastPostAt + duration.value(2, 's');
+    }
+
+    match /chat_members/{uid} {
+      allow read: if signedIn();
+      allow create: if isMe(uid)
+                    && request.resource.data.keys().hasOnly(['username', 'createdAt', 'lastPostAt', 'agreedAt', 'dmOff'])
+                    && request.resource.data.username is string
+                    && request.resource.data.username.matches('[A-Za-z0-9_]{3,20}')
+                    && (!reservedName(request.resource.data.username) || isDev())
+                    && getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.username.lower())).data.uid == uid
+                    && request.resource.data.createdAt == request.time
+                    && request.resource.data.lastPostAt == request.time;
+      // You: agreeing to the rules, private messages off/on, and lastPostAt
+      // (only to now, which canPost checks). Moderators: tester. The
+      // developer: moderator and trusted (private messages right away).
+      allow update: if (isMe(uid) && onlyChanges(['agreedAt', 'dmOff', 'lastPostAt'])
+                        && request.resource.data.lastPostAt in [resource.data.lastPostAt, request.time]
+                        && (request.resource.data.get('agreedAt', null) == resource.data.get('agreedAt', null)
+                            || request.resource.data.agreedAt == request.time))
+                    || (chatMod() && onlyChanges(['tester']))
+                    || (isDev() && onlyChanges(['mod', 'tester', 'trusted']));
+      allow delete: if isMe(uid) || isDev();
+
+      match /blocks/{other} {
+        allow read, write: if isMe(uid);
+      }
+      // Push token and notification choices; only you (and the push server).
+      match /private/{doc} {
+        allow read, write: if isMe(uid);
+      }
+    }
+
+    match /chat_bans/{uid} {
+      allow read: if signedIn();
+      allow create: if chatMod() && uid != request.auth.uid
+                    && request.resource.data.keys().hasOnly(['by', 'reason', 'at'])
+                    && request.resource.data.by == request.auth.uid && request.resource.data.at == request.time;
+      allow delete: if chatMod();
+    }
+
+    match /chat_channels/{cid} {
+      allow read: if signedIn();
+      allow write: if isDev();
+
+      match /messages/{mid} {
+        allow read: if signedIn() && (get(/databases/$(database)/documents/chat_channels/$(cid)).data.get('testersOnly', false) != true
+                                      || chatTester());
+        allow create: if canPost()
+                      && request.resource.data.keys().hasOnly(['uid', 'username', 'text', 'ts', 'replyTo'])
+                      && (get(/databases/$(database)/documents/chat_channels/$(cid)).data.get('modsPost', false) != true || chatMod())
+                      && (get(/databases/$(database)/documents/chat_channels/$(cid)).data.get('testersOnly', false) != true || chatTester());
+        allow update: if false;
+        allow delete: if signedIn() && (resource.data.uid == request.auth.uid || chatMod());
+      }
+    }
+
+    // Private messages: one conversation per pair, "uidA_uidB" (sorted). Only
+    // the two of them can read it. A new conversation needs the other person
+    // to accept private messages and not to have blocked you, and your
+    // account to be a day old (unless the developer marked it trusted).
+    function dmPair(pid) { return get(/databases/$(database)/documents/chat_dms/$(pid)).data.members; }
+    function dmOther(members) { return members[0] == request.auth.uid ? members[1] : members[0]; }
+    function dmAllowed(members) {
+      return request.auth.uid in members && members.size() == 2 && members[0] < members[1]
+          && !blocked(dmOther(members), request.auth.uid) && !blocked(request.auth.uid, dmOther(members))
+          && exists(/databases/$(database)/documents/chat_members/$(dmOther(members)))
+          && chatMember(dmOther(members)).get('dmOff', false) != true;
+    }
+    // Only starting a conversation waits a day; anyone can answer one.
+    function dmStart(members) {
+      return dmAllowed(members)
+          && (chatMember(request.auth.uid).get('trusted', false) == true || chatMod()
+              || request.time > chatMember(request.auth.uid).createdAt + duration.value(1, 'd'));
+    }
+
+    match /chat_dms/{pid} {
+      allow read: if signedIn() && request.auth.uid in resource.data.members;
+      allow create: if chatJoined() && !chatBanned(request.auth.uid)
+                    && request.resource.data.keys().hasOnly(['members', 'names', 'lastAt'])
+                    && pid == request.resource.data.members[0] + '_' + request.resource.data.members[1]
+                    && dmStart(request.resource.data.members);
+      allow update: if signedIn() && request.auth.uid in resource.data.members && onlyChanges(['lastAt'])
+                    && request.resource.data.lastAt == request.time;
+      allow delete: if false;
+
+      match /messages/{mid} {
+        allow read: if signedIn() && request.auth.uid in dmPair(pid);
+        allow create: if canPost() && dmAllowed(dmPair(pid))
+                      && request.resource.data.keys().hasOnly(['uid', 'username', 'text', 'ts', 'replyTo']);
+        allow update: if false;
+        allow delete: if signedIn() && resource.data.uid == request.auth.uid;
+      }
+    }
+
+    // Reports go to the moderators. A private message report carries the
+    // reported message and a few around it (the reporter could read them).
+    match /chat_reports/{rid} {
+      allow create: if chatJoined()
+                    && request.resource.data.keys().hasOnly(['by', 'byName', 'kind', 'path', 'author', 'authorName', 'text', 'context', 'reason', 'at'])
+                    && request.resource.data.by == request.auth.uid && request.resource.data.at == request.time
+                    && request.resource.data.reason is string && request.resource.data.reason.size() <= 500;
+      allow read, delete: if chatMod();
+    }
+
     // Everything else (ttsUsage …) is server-only.
   }
 }
