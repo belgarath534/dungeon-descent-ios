@@ -100,7 +100,7 @@ if age:
         "violenceCartoonOrFantasy": "NONE", "violenceRealistic": "NONE",
         "violenceRealisticProlongedGraphicOrSadistic": "NONE", "gunsOrOtherWeapons": "NONE",
         "healthOrWellnessTopics": False, "gambling": False, "lootBox": False, "unrestrictedWebAccess": False,
-        "messagingAndChat": True, "userGeneratedContent": True, "advertising": False,
+        "messagingAndChat": True, "userGeneratedContent": True, "socialMedia": True, "advertising": False,
         "parentalControls": False, "ageAssurance": False,
     }
     # All at once (Apple wants the whole questionnaire); any question it
