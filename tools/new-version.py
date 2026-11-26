@@ -220,7 +220,8 @@ def notes(platform, locale):
     return "\n".join(lines)
 
 
-app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
+# Exact match: the filter also matches com.dungeon.descent.chat (Dungeon Descent Chat).
+app = next(a["id"] for a in call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"] if a["attributes"]["bundleId"] == BUNDLE)
 for platform in PLATFORMS:
     found = call("GET", f"/apps/{app}/appStoreVersions",
                  params={"filter[platform]": platform, "filter[versionString]": VERSION})

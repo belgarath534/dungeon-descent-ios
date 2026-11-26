@@ -55,7 +55,8 @@ platform = os.environ["PLATFORM"]
 version = os.environ.get("VERSION", "11.8")
 submit = os.environ.get("SUBMIT", "") == "yes"
 
-app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
+# Exact match: the filter also matches com.dungeon.descent.chat (Dungeon Descent Chat).
+app = next(a["id"] for a in call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"] if a["attributes"]["bundleId"] == BUNDLE)
 
 # STATUS=yes: only print where this platform's version is in review.
 if os.environ.get("STATUS") == "yes":

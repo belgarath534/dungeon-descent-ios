@@ -73,7 +73,8 @@ def all_pages(path):
     return out
 
 
-app = call("GET", f"/apps?filter[bundleId]={BUNDLE}")["data"][0]["id"]
+# Exact match: the filter also matches com.dungeon.descent.chat (Dungeon Descent Chat).
+app = next(a["id"] for a in call("GET", f"/apps?filter[bundleId]={BUNDLE}")["data"] if a["attributes"]["bundleId"] == BUNDLE)
 detail = call("GET", f"/apps/{app}/gameCenterDetail", soft=True)
 if not detail or not detail.get("data"):
     detail = call("POST", "/gameCenterDetails", {"data": {"type": "gameCenterDetails",

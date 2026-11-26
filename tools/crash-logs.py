@@ -16,7 +16,8 @@ def get(path, **params):
         print(f"{path} -> {r.status_code}: {r.text[:400]}"); return None
     return r.json()
 
-app = get("/apps", **{"filter[bundleId]": "com.dungeon.descent"})["data"][0]["id"]
+# Exact match: the filter also matches com.dungeon.descent.chat (Dungeon Descent Chat).
+app = next(a["id"] for a in get("/apps", **{"filter[bundleId]": "com.dungeon.descent"})["data"] if a["attributes"]["bundleId"] == "com.dungeon.descent")
 subs = get(f"/apps/{app}/betaFeedbackCrashSubmissions", sort="-createdDate", limit=5) or {"data": []}
 print(f"{len(subs['data'])} shared crash report(s)")
 for s in subs["data"]:

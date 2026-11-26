@@ -41,7 +41,8 @@ def rel(kind, id_):
     return {"data": {"type": kind, "id": id_}}
 
 
-app = call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"][0]["id"]
+# Exact match: the filter also matches com.dungeon.descent.chat (Dungeon Descent Chat).
+app = next(a["id"] for a in call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"] if a["attributes"]["bundleId"] == BUNDLE)
 version = call("GET", f"/apps/{app}/appStoreVersions",
                params={"filter[platform]": PLATFORM, "filter[versionString]": VERSION})["data"][0]
 detail = call("GET", f"/apps/{app}/gameCenterDetail")["data"]["id"]
