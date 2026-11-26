@@ -123,7 +123,7 @@ public enum Skills {
             r.announcement = "Your skills are silenced!"
             return r
         }
-        if spec.hasPermanentStats && run.fight.permanentSkillsUsed.contains(effect) {
+        if spec.oncePerFight && run.fight.permanentSkillsUsed.contains(effect) {
             r.acted = false
             r.announcement = "\(skill.name) can only be used once per fight."
             return r
@@ -224,13 +224,16 @@ public enum Skills {
             if run.sp > before { msg += " +\(run.sp - before) SP." }
         }
         if spec.drainsSP { run.sp = 0; msg += " All SP consumed." }
-        // Permanent stat skills work once per fight. Most are free actions, so
-        // at 0 SP (Apocalypse) they could otherwise be repeated without limit.
-        let permKey = run.lastSkill ?? effect
-        if spec.hasPermanentStats && run.fight.permanentSkillsUsed.contains(permKey) {
-            msg += " Its permanent bonus was already gained this fight."
-        } else if spec.hasPermanentStats {
-            run.fight.permanentSkillsUsed.append(permKey)
+        // Bonuses that add up work once per fight (SkillSpec.oncePerFight). The
+        // check above stops a repeat; this one covers Spell Echo repeating it.
+        let onceKey = run.lastSkill ?? effect
+        let alreadyGained = spec.oncePerFight && run.fight.permanentSkillsUsed.contains(onceKey)
+        if alreadyGained {
+            msg += " Its bonus was already gained this fight."
+        } else if spec.oncePerFight {
+            run.fight.permanentSkillsUsed.append(onceKey)
+        }
+        if spec.hasPermanentStats && !alreadyGained {
             run.atkBonus += spec.permAtk
             run.defBonus += spec.permDef
             run.maxHp = max(1, run.maxHp + spec.permMaxHp)
@@ -244,7 +247,7 @@ public enum Skills {
                 spec.permMaxSp != 0 ? "+\(spec.permMaxSp) max SP" : nil,
             ].compactMap { $0 }.joined(separator: ", ") + "."
         }
-        if spec.fightAtk != 0 || spec.fightDef != 0 {
+        if (spec.fightAtk != 0 || spec.fightDef != 0) && !alreadyGained {
             run.fight.atk += spec.fightAtk
             run.fight.def += spec.fightDef
             msg += " " + [spec.fightAtk != 0 ? "+\(spec.fightAtk) attack" : nil,
@@ -261,7 +264,9 @@ public enum Skills {
         // version set it). Stacking let free 0-SP casts under Apocalypse build
         // a shield of tens of thousands.
         if spec.shield > 0 { run.fight.shield = max(run.fight.shield, spec.shield); msg += " Shield absorbs up to \(run.fight.shield) damage." }
-        if spec.dodges > 0 { run.fight.dodges += spec.dodges; msg += spec.dodges == 1 ? " The next attack will miss you." : " The next \(spec.dodges) attacks will miss you." }
+        // Dodges and free skills top up instead of stacking, like shields (the
+        // web version set them: DS.windStep = true, DS.unlimitedPower = 3).
+        if spec.dodges > 0 { run.fight.dodges = max(run.fight.dodges, spec.dodges); msg += spec.dodges == 1 ? " The next attack will miss you." : " The next \(spec.dodges) attacks will miss you." }
         if spec.enemyMiss > 0 { run.fight.enemyMiss = spec.enemyMiss; msg += " \(Int(spec.enemyMiss * 100))% chance the enemy misses." }
         if spec.reduceTurns > 0 { run.fight.reduce = spec.reduce; run.fight.reduceTurns = spec.reduceTurns; msg += " Damage taken -\(Int(spec.reduce * 100))% for \(spec.reduceTurns) turns." }
         if spec.capTurns > 0 { run.fight.cap = spec.cap; run.fight.capTurns = spec.capTurns; msg += " No hit can do more than \(spec.cap) for \(spec.capTurns) turns." }
@@ -271,9 +276,9 @@ public enum Skills {
         if spec.thorns > 0 { run.fight.thorns = spec.thorns; run.fight.thornsTurns = spec.thornsTurns; msg += " \(Int(spec.thorns * 100))% of damage reflected." }
         if spec.retaliate > 0 { run.fight.retaliate = spec.retaliate; msg += " Attackers take \(spec.retaliate) damage." }
         if spec.crusade > 0 { run.fight.crusadeHeal = spec.crusade; run.fight.crusadeTurns = spec.crusadeTurns; msg += " Each hit heals \(spec.crusade) HP." }
-        if spec.freeSkills > 0 { run.freeSkills += spec.freeSkills; msg += " Next \(spec.freeSkills == 1 ? "skill costs" : "\(spec.freeSkills) skills cost") 0 SP." }
+        if spec.freeSkills > 0 { run.freeSkills = max(run.freeSkills, spec.freeSkills); msg += " Next \(spec.freeSkills == 1 ? "skill costs" : "\(spec.freeSkills) skills cost") 0 SP." }
         if spec.grantsWarlord { run.fight.warlord = true; msg += " Kills this fight restore 10 HP and 3 SP." }
-        if spec.skillBonus > 0 || spec.allBonus > 0 || spec.halfCost {
+        if (spec.skillBonus > 0 || spec.allBonus > 0 || spec.halfCost) && !alreadyGained {
             run.skillDamageBonus += spec.skillBonus
             run.allDamageBonus += spec.allBonus
             if spec.halfCost { run.halfCostSkills = true }

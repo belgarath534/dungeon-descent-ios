@@ -40,6 +40,15 @@ public struct SkillSpec: Sendable {
     // Lasting changes
     var permAtk = 0, permDef = 0, permMaxHp = 0, permMaxSp = 0
     var hasPermanentStats: Bool { permAtk != 0 || permDef != 0 || permMaxHp != 0 || permMaxSp != 0 }
+    /// Skills whose bonus adds up each time they're used: permanent stats,
+    /// rest-of-the-run masteries, and this-fight attack/defense on a free
+    /// action. They work once per fight; at 0 SP (Apocalypse) they could
+    /// otherwise be repeated without limit. (A this-fight bonus on a skill that
+    /// gives the enemy its turn, like Shield Bash, still stacks: each one costs
+    /// a turn.)
+    var oncePerFight: Bool {
+        hasPermanentStats || skillBonus > 0 || allBonus > 0 || halfCost || (isFree && (fightAtk != 0 || fightDef != 0))
+    }
     var fightAtk = 0, fightDef = 0
     var buffAtk = 0, buffDef = 0, buffTurns = 0
 
