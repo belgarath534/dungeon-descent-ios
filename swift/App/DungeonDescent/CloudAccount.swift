@@ -56,6 +56,7 @@ final class CloudAccount: NSObject, ObservableObject {
     func start(game: GameModel) {
         self.game = game
         game.onDeath = { [weak self] d in Task { await self?.postDeath(d) } }
+        game.onLegend = { [weak self] e, info in Task { await self?.postLegend(e, info) } }
         guard authHandle == nil else { return }
         user = Auth.auth().currentUser
         authHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
@@ -728,6 +729,22 @@ final class CloudAccount: NSObject, ObservableObject {
             "killedBy": d.killedBy.isEmpty ? "unknown causes" : d.killedBy,
             "kills": d.kills, "gold": d.gold, "date": f.string(from: Date()), "timestamp": Self.now,
         ])
+    }
+
+    /// 12.3: a big moment for Dungeon Descent Chat's #hall-of-legends. The
+    /// chat's server checks the sign-in and writes a fixed sentence; it only
+    /// posts for chat members who haven't turned it off, at most every 10 min.
+    func postLegend(_ event: String, _ info: [String: Any]) async {
+        guard let u = Auth.auth().currentUser, let token = try? await u.getIDToken(),
+              let url = URL(string: "https://us-central1-dungeon-descent-fbaf2.cloudfunctions.net/chatPush/legend") else { return }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        var body = info
+        body["event"] = event
+        req.httpBody = try? JSONSerialization.data(withJSONObject: body)
+        _ = try? await URLSession.shared.data(for: req)
     }
 
     /// loadObituary: the 15 newest deaths worldwide. Nil when offline (the

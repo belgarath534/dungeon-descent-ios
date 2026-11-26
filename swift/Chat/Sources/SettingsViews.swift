@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var chat: ChatService
     @EnvironmentObject var account: Account
+    @EnvironmentObject var push: Push
     @State private var confirmChatDelete = false
     @State private var confirmAccountDelete = false
 
@@ -24,6 +25,9 @@ struct SettingsView: View {
                     Toggle("Accept private messages", isOn: Binding(get: { chat.member?.dmOff != true },
                                                                      set: { on in Task { await chat.setDMsOff(!on) } }))
                     Toggle("Show me as online", isOn: $chat.showOnline)
+                    Toggle("Post my big moments to Hall of Legends", isOn: Binding(get: { push.legends },
+                                                                                  set: { push.legends = $0; Task { await push.save() } }))
+                        .accessibilityHint("When you conquer a dungeon or reach a new Endless Descent or Spire milestone in the game, #hall-of-legends hears about it.")
                     NavigationLink("Blocked players (\(chat.blocked.count))") { BlockedView() }
                 }
                 Section("Community") {

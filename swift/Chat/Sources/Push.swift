@@ -41,6 +41,8 @@ final class Push: ObservableObject {
     /// the default sound).
     @Published var soundFor: [String: String] = ["default": "dd-ach-gold"]
     @Published var perChannelSounds = false
+    /// The game posts your big moments to #hall-of-legends.
+    @Published var legends = true
     @Published private(set) var loaded = false
     @Published private(set) var chosen = false
     private var token: String?
@@ -59,6 +61,7 @@ final class Push: ObservableObject {
             groups = d["groups"] as? Bool ?? true
             soundFor.merge(d["sounds"] as? [String: String] ?? [:]) { _, new in new }
             perChannelSounds = d["custom"] as? Bool ?? false
+            legends = d["legends"] as? Bool ?? true
             chosen = d["chosen"] as? Bool ?? false
         }
         loaded = true
@@ -66,7 +69,7 @@ final class Push: ObservableObject {
 
     func save() async {
         guard let ref = ref() else { return }
-        var data: [String: Any] = ["channels": Array(channels), "dms": dms, "groups": groups, "sounds": soundFor, "custom": perChannelSounds,
+        var data: [String: Any] = ["channels": Array(channels), "dms": dms, "groups": groups, "sounds": soundFor, "custom": perChannelSounds, "legends": legends,
                                    "chosen": true, "updatedAt": FieldValue.serverTimestamp()]
         if let token { data["token"] = token; data["env"] = Self.apnsEnvironment }
         try? await ref.setData(data, merge: true)

@@ -281,7 +281,7 @@ struct ConversationView: View {
 
     @ViewBuilder private func actions(_ m: ChatMessage) -> some View {
         if room.canPost && !chat.banned { Button("Reply") { replyTo = m; typing = true } }
-        if m.uid != myUID {
+        if m.uid != myUID && m.uid != "hall-of-legends" {
             if room.kind != .dm {
                 Button("Message \(m.username) privately") {
                     Task {

@@ -229,6 +229,7 @@ final class AFKModel: ObservableObject {
         AFKLiveActivity.end(r)
         AFKLiveActivity.loadRivals(best: s.bestFloor, name: r.charName) {}
         GameCenter.submit(s.bestFloor, to: .endlessFloor)
+        game.postFloorLegend("endless", best: s.bestFloor, every: 25)
         WatchBridge.shared.push()
 
         let learned = Set(r.skills)

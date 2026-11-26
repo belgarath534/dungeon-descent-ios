@@ -84,6 +84,7 @@ http('chatPush', async (req, res) => {
     let uid;
     try { uid = (await admin.auth().verifyIdToken(m[1])).uid; }
     catch { res.status(401).json({ error: 'Invalid auth token' }); return; }
+    if ((req.path || '').replace(/\/+$/, '').endsWith('/legend')) return await legend(uid, req.body || {}, res);
     const { kind, room } = req.body || {};
     if (!['channel', 'dm', 'group'].includes(kind) || typeof room !== 'string' || !/^[\w-]{1,128}$/.test(room)) {
       res.status(400).json({ error: 'Bad room' }); return;
@@ -139,3 +140,54 @@ http('chatPush', async (req, res) => {
     res.status(500).json({ error: String(e && e.message || e) });
   }
 });
+
+// ── #hall-of-legends: big moments posted by the game ──
+//
+// The game (signed in) calls /legend with an event; the post is written
+// here, from a fixed sentence per event (never the player's own text), as
+// "Hall of Legends", at most once every 10 minutes per player, and only for
+// chat members who haven't turned it off (private/push: legends false).
+// GameData.dungeons in DungeonCore (the same names as the web version).
+const DUNGEONS = ['Crypt of Malachar', 'The Ashbound Wastes', 'Frosthold Abyss', 'The Sunken Archives', 'The Hollow',
+  'The Whispering Forest', 'The Infernal Descent', 'The Abyssal Deep', 'The Shadow World'];
+const DIFFICULTIES = ['Wanderer', 'Ironblood', 'Condemned', 'Forsaken', 'Nightmare', 'Insane'];
+const LEGEND_ROOM = 'hall-of-legends';
+
+async function legend(uid, b, res) {
+  const memberDoc = await db.doc('chat_members/' + uid).get();
+  if (!memberDoc.exists) { res.json({ posted: false, note: 'not a chat member' }); return; }
+  const member = memberDoc.data();
+  if ((await db.doc('chat_bans/' + uid).get()).exists) { res.json({ posted: false, note: 'banned' }); return; }
+  const prefs = (await db.doc('chat_members/' + uid + '/private/push').get()).data() || {};
+  if (prefs.legends === false) { res.json({ posted: false, note: 'turned off' }); return; }
+  const last = member.lastLegendAt ? member.lastLegendAt.toMillis() : 0;
+  if (Date.now() - last < 10 * 60 * 1000) { res.json({ posted: false, note: 'too soon' }); return; }
+  const name = member.username;
+  const cls = typeof b.cls === 'string' && /^[A-Za-z ]{2,20}$/.test(b.cls) ? b.cls : null;
+  const floor = Number.isInteger(b.floor) ? b.floor : 0;
+  let text = null;
+  if (b.event === 'victory' && DUNGEONS.includes(b.dungeon) && DIFFICULTIES.includes(b.difficulty))
+    text = `🏆 ${name} conquered ${b.dungeon} on ${b.difficulty}` + (cls ? ` as a ${cls}!` : '!');
+  else if (b.event === 'endless' && floor >= 25 && floor % 25 === 0 && floor <= 100000)
+    text = `⬇️ ${name} reached floor ${floor} in Endless Descent!`;
+  else if (b.event === 'spire' && floor >= 10 && floor % 10 === 0 && floor <= 10000)
+    text = `🗼 ${name} climbed to floor ${floor} of The Spire!`;
+  if (!text) { res.status(400).json({ error: 'Unknown event' }); return; }
+  const chan = await db.doc('chat_channels/' + LEGEND_ROOM).get();
+  if (!chan.exists) { res.json({ posted: false, note: 'no hall-of-legends channel' }); return; }
+  await db.collection('chat_channels/' + LEGEND_ROOM + '/messages').add({
+    uid: 'hall-of-legends', username: 'Hall of Legends', text, about: uid, ts: admin.firestore.FieldValue.serverTimestamp(), pushed: true });
+  await memberDoc.ref.update({ lastLegendAt: admin.firestore.FieldValue.serverTimestamp() });
+  // Notify whoever follows #hall-of-legends (not the player it's about).
+  const docs = (await db.collectionGroup('private').get()).docs.filter((d) => d.id === 'push');
+  let sent = 0;
+  await Promise.all(docs.map(async (d) => {
+    const id = d.ref.parent.parent.id, p = d.data();
+    if (id === uid || !p.token || !(p.channels || []).includes(LEGEND_ROOM)) return;
+    const payload = { aps: { alert: { title: '#' + (chan.get('name') || LEGEND_ROOM), body: text }, sound: soundFor(p, LEGEND_ROOM),
+                             'thread-id': 'channel:' + LEGEND_ROOM }, kind: 'channel', room: LEGEND_ROOM };
+    const out = await push(p.token, payload, p.env === 'sandbox', null);
+    if (out.status === 200) sent++;
+  }));
+  res.json({ posted: true, sent });
+}
