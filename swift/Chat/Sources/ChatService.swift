@@ -29,6 +29,8 @@ struct Member: Equatable {
     let tester: Bool
     let trusted: Bool
     let dmOff: Bool
+    /// The rules allow a message every 2 seconds, counted from this.
+    var lastPostAt: Date? = nil
 }
 
 /// A place to talk: a channel, a private conversation or a group chat.
@@ -134,7 +136,8 @@ final class ChatService: ObservableObject {
                       createdAt: (d["createdAt"] as? Timestamp)?.dateValue() ?? Date(),
                       agreed: d["agreedAt"] is Timestamp, mod: d["mod"] as? Bool ?? false,
                       tester: d["tester"] as? Bool ?? false, trusted: d["trusted"] as? Bool ?? false,
-                      dmOff: d["dmOff"] as? Bool ?? false)
+                      dmOff: d["dmOff"] as? Bool ?? false,
+                      lastPostAt: (d["lastPostAt"] as? Timestamp)?.dateValue())
     }
 
     // MARK: Joining
@@ -220,7 +223,9 @@ final class ChatService: ObservableObject {
         if text.count > 1000 { return "That's too long. Messages can have up to 1000 characters." }
         if Self.hasBadWord(text) { return "That message has a word that isn't allowed here. Change it and try again." }
         if banned { return "You've been banned from chat, so you can't send messages." }
-        let wait = 2.1 - Date().timeIntervalSince(lastSent)
+        // At most a message every 2 seconds, counted from your last post (or
+        // from joining): wait out what's left instead of failing.
+        let wait = 2.3 - Date().timeIntervalSince(max(lastSent, me.lastPostAt ?? .distantPast))
         if wait > 0 { try? await Task.sleep(for: .seconds(wait)) }
         let batch = db.batch()
         var data: [String: Any] = ["uid": uid, "username": me.username, "text": text, "ts": FieldValue.serverTimestamp()]
