@@ -169,11 +169,15 @@ jobs:
           echo "Version $V"
 
       - name: Make the versions
+        # One platform still in review (Apple won't make its next version
+        # yet) mustn't stop the others from being submitted.
+        continue-on-error: true
         run: |
           pip install --quiet pyjwt cryptography requests
           PLATFORMS="IOS MAC_OS VISION_OS" python3 tools/new-version.py
 
       - name: Release the Game Center leaderboards and challenges
+        continue-on-error: true
         run: python3 tools/attach-game-center.py
 
       - name: Pick the builds and submit
@@ -191,6 +195,8 @@ jobs:
               # Already in review or approved: not a failure, just nothing to send.
               if echo "$out" | grep -q "nothing to do"; then
                 echo "$P is already in review or approved: left as it is."
+              elif echo "$out" | grep -q "^No $P .* version"; then
+                echo "$P: Apple hasn't let the new version be made yet (the last one is still in review). Submit it later with store-submit."
               else
                 status=1
               fi
