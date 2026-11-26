@@ -32,11 +32,19 @@ struct SettingsView: View {
                     Link("Terms of Service", destination: URL(string: "https://dungen-descent.org/terms")!)
                     Link("Privacy Policy", destination: URL(string: "https://dungen-descent.org/privacy")!)
                 }
-                if chat.isMod {
+                if chat.isDeveloper {
+                    Section {
+                        NavigationLink("Roles: moderators, testers, trusted") { RolesView() }
+                        NavigationLink("Bans") { BansView() }
+                        NavigationLink("Reports") { ReportsView() }
+                        Text("Channels: use New channel on the Channels tab, and Edit, Move or Delete in each channel's actions.")
+                            .font(.footnote)
+                    } header: { Text("Developer mode") } footer: { Text("Only your account sees this.") }
+                } else if chat.isMod {
                     Section("Moderator tools") {
                         NavigationLink("Reports") { ReportsView() }
                         NavigationLink("Bans") { BansView() }
-                        NavigationLink("Roles") { RolesView() }
+                        NavigationLink("Testers") { RolesView() }
                     }
                 }
                 Section("Account") {
@@ -111,12 +119,12 @@ struct ReportsView: View {
                     if r.kind == "channel" {
                         Button("Delete the message") { Task { Speech.say(await chat.deleteReported(r) ? "Deleted." : "Couldn't delete it."); await chat.dismiss(r); await reload() } }
                     }
-                    Button("Ban \(r.authorName)") { Task { Speech.say(await chat.ban(uid: r.authorUID, reason: "Report: \(r.text.prefix(80))") ? "\(r.authorName) is banned." : "Couldn't ban."); await chat.dismiss(r); await reload() } }
+                    Button("Ban \(r.authorName)") { Task { Speech.say(await chat.ban(uid: r.authorUID, reason: "\(r.authorName): reported, \"\(r.text.prefix(80))\"") ? "\(r.authorName) is banned." : "Couldn't ban."); await chat.dismiss(r); await reload() } }
                     Button("Dismiss the report") { Task { await chat.dismiss(r); await reload() } }
                 }
                 .contextMenu {
                     if r.kind == "channel" { Button("Delete the message") { Task { _ = await chat.deleteReported(r); await chat.dismiss(r); await reload() } } }
-                    Button("Ban \(r.authorName)") { Task { _ = await chat.ban(uid: r.authorUID, reason: "Report: \(r.text.prefix(80))"); await chat.dismiss(r); await reload() } }
+                    Button("Ban \(r.authorName)") { Task { _ = await chat.ban(uid: r.authorUID, reason: "\(r.authorName): reported, \"\(r.text.prefix(80))\""); await chat.dismiss(r); await reload() } }
                     Button("Dismiss") { Task { await chat.dismiss(r); await reload() } }
                 }
             }
@@ -135,15 +143,33 @@ struct ReportsView: View {
 struct BansView: View {
     @EnvironmentObject var chat: ChatService
     @State private var bans: [(uid: String, reason: String)] = []
+    @State private var name = ""
+    @State private var reason = ""
 
     var body: some View {
         List {
+            Section("Ban by username") {
+                TextField("Username", text: $name).textInputAutocapitalization(.never).autocorrectionDisabled()
+                TextField("Reason", text: $reason)
+                Button("Ban from chat", role: .destructive) {
+                    let n = name, why = reason
+                    Task {
+                        guard let m = await chat.findMember(username: n) else { Speech.say("No chat member is called \(n)."); return }
+                        if m.uid == chat.member?.uid { Speech.say("You can't ban yourself."); return }
+                        let ok = await chat.ban(uid: m.uid, reason: "\(m.username): \(why.isEmpty ? "no reason given" : why)")
+                        Speech.say(ok ? "\(m.username) is banned from chat." : "Couldn't ban \(m.username).")
+                        if ok { name = ""; reason = ""; bans = await chat.bans() }
+                    }
+                }
+                .disabled(name.isEmpty)
+            }
             if bans.isEmpty { Text("Nobody is banned.") }
             ForEach(bans, id: \.uid) { b in
                 HStack {
                     Text(b.reason.isEmpty ? b.uid : b.reason).font(.subheadline)
                     Spacer()
-                    Button("Unban") { Task { _ = await chat.unban(uid: b.uid); bans = await chat.bans() } }
+                    Button("Unban") { Task { _ = await chat.unban(uid: b.uid); Speech.say("Unbanned."); bans = await chat.bans() } }
+                        .accessibilityLabel("Unban. \(b.reason)")
                 }
             }
         }

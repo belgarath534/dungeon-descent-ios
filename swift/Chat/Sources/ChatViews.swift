@@ -243,7 +243,7 @@ struct ConversationView: View {
         }
         if chat.isMod && room.kind == .channel && m.uid != myUID {
             Button("Ban \(m.username) from chat", role: .destructive) {
-                Task { Speech.say(await chat.ban(uid: m.uid, reason: "From \(room.title): \(m.text.prefix(80))") ? "\(m.username) is banned." : "Couldn't ban.") }
+                Task { Speech.say(await chat.ban(uid: m.uid, reason: "\(m.username): in #\(room.title), \"\(m.text.prefix(80))\"") ? "\(m.username) is banned." : "Couldn't ban.") }
             }
         }
     }
