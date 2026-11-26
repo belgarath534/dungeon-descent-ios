@@ -69,11 +69,12 @@ struct ChannelsView: View {
                         .foregroundStyle(.green)
                 }
                 .accessibilityHint("Shows who's online.")
-                ForEach(chat.channels.filter { !$0.testersOnly || chat.isTester }) { c in
+                ForEach(chat.visibleChannels) { c in
                     NavigationLink(value: Room(kind: .channel, id: c.id, title: c.name, path: "chat_channels/\(c.id)",
                                                canPost: !c.modsPost || chat.isMod)) {
                         VStack(alignment: .leading) {
                             HStack {
+                                if chat.myPinned.contains(c.id) { Image(systemName: "pin.fill").accessibilityHidden(true) }
                                 Text("# " + c.name).font(.headline)
                                 if let n = chat.unread[c.id], n > 0 {
                                     Text(n > 99 ? "99+ new" : "\(n) new").font(.caption.bold()).foregroundStyle(.black)
@@ -83,12 +84,18 @@ struct ChannelsView: View {
                             if !c.topic.isEmpty { Text(c.topic).font(.subheadline).foregroundStyle(.secondary) }
                         }
                         .accessibilityElement(children: .combine)
-                        .accessibilityLabel(c.name + ((chat.unread[c.id] ?? 0) > 0 ? ", \(chat.unread[c.id]!) new" : "")
+                        .accessibilityLabel(c.name + (chat.myPinned.contains(c.id) ? ", pinned" : "") + ((chat.unread[c.id] ?? 0) > 0 ? ", \(chat.unread[c.id]!) new" : "")
                                             + (c.topic.isEmpty ? "" : ". " + c.topic) + (c.modsPost ? ". Read only" : "")
                                             + (c.testersOnly ? ". Testers only" : ""))
                     }
-                    .accessibilityActions { if chat.isDeveloper { channelActions(c) } }
-                    .contextMenu { if chat.isDeveloper { channelActions(c) } }
+                    .accessibilityActions {
+                        Button(chat.myPinned.contains(c.id) ? "Unpin from the top" : "Pin to the top") { chat.togglePinned(c) }
+                        if chat.isDeveloper { channelActions(c) }
+                    }
+                    .contextMenu {
+                        Button(chat.myPinned.contains(c.id) ? "Unpin from the top" : "Pin to the top") { chat.togglePinned(c) }
+                        if chat.isDeveloper { channelActions(c) }
+                    }
                 }
                 if chat.channels.isEmpty { Text("Loading channels…") }
             }
@@ -187,6 +194,9 @@ struct ConversationView: View {
     @State private var problem = ""
     @State private var dmRoom: Room?
     @State private var showInfo = false
+    @State private var reacting: ChatMessage?
+    @State private var profileUID: ProfileTarget?
+    @State private var pinned: [ChatMessage] = []
     @FocusState private var typing: Bool
     private var myUID: String? { chat.member?.uid }
 
@@ -195,8 +205,16 @@ struct ConversationView: View {
     var body: some View {
         VStack(spacing: 0) {
             ScrollViewReader { proxy in
-                List(shown) { m in
-                    row(m).id(m.id)
+                List {
+                    if !pinned.isEmpty {
+                        DisclosureGroup("📌 Pinned (\(pinned.count))") {
+                            ForEach(pinned) { p in
+                                Text("\(p.username): \(p.text)")
+                                    .accessibilityActions { if chat.isMod { Button("Unpin") { Task { _ = await chat.pin(p, in: room, false); await loadPinned() } } } }
+                            }
+                        }
+                    }
+                    ForEach(shown) { m in row(m).id(m.id) }
                 }
                 .listStyle(.plain)
                 .onChange(of: shown.last?.id) { _, id in if let id { proxy.scrollTo(id, anchor: .bottom) } }
@@ -214,6 +232,19 @@ struct ConversationView: View {
             }
         }
         .sheet(isPresented: $showInfo) { GroupInfoView(roomID: room.id) }
+        .sheet(item: $profileUID) { ProfileView(uid: $0.id) }
+        .task { await loadPinned() }
+        .confirmationDialog("React to \(reacting?.username ?? "")'s message", isPresented: Binding(get: { reacting != nil }, set: { if !$0 { reacting = nil } }), titleVisibility: .visible) {
+            ForEach(ChatService.reactionEmojis, id: \.self) { e in
+                Button("\(e) \(ChatService.reactionNames[e] ?? "")") {
+                    if let m = reacting { Task { _ = await chat.react(m, in: room, e); Speech.say("Reacted \(ChatService.reactionNames[e] ?? e).") } }
+                    reacting = nil
+                }
+            }
+            if let m = reacting, let me = myUID, m.reactions[me] != nil {
+                Button("Remove my reaction", role: .destructive) { Task { _ = await chat.react(m, in: room, nil) }; reacting = nil }
+            }
+        }
         .navigationDestination(item: $dmRoom) { ConversationView(room: $0) }
         .onAppear { startListening(); chat.markRead(room) }
         .onDisappear { listener?.remove(); listener = nil; chat.markRead(room) }
@@ -252,7 +283,9 @@ struct ConversationView: View {
             chat.markRead(room)
             if !first {
                 for m in new where m.uid != myUID && chat.blocked[m.uid] == nil {
-                    Speech.say("\(m.username): \(m.text)")
+                    let mentioned = chat.member.map { m.mentions($0.username) } ?? false
+                    if mentioned { Speech.say("\(m.username) mentioned you: \(m.text)") }
+                    else if chat.readAloud { Speech.say("\(m.username): \(m.text)") }
                 }
             }
             first = false
@@ -267,10 +300,14 @@ struct ConversationView: View {
                 Text(m.username).font(.subheadline.bold())
                 Text(m.date, style: .relative).font(.caption).foregroundStyle(.secondary)
             }
-            Text(m.text)
+            Text(m.text).fontWeight(mentionsMe(m) ? .bold : .regular)
+            if !m.reactions.isEmpty { Text(m.reactionSummary).font(.caption) }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel((reply.map { "Replying to \($0.username). " } ?? "") + "\(m.username): \(m.text)")
+        .accessibilityLabel((reply.map { "Replying to \($0.username). " } ?? "") + "\(m.username): \(m.text)"
+                            + (mentionsMe(m) ? ". Mentions you" : "")
+                            + (m.reactions.isEmpty ? "" : ". Reactions: " + readable(m.reactions))
+                            + (m.pinned ? ". Pinned" : ""))
         .accessibilityValue(m.date.formatted(.relative(presentation: .named)))
         .accessibilityActions { actions(m) }
         .contextMenu { actions(m) }
@@ -281,6 +318,13 @@ struct ConversationView: View {
 
     @ViewBuilder private func actions(_ m: ChatMessage) -> some View {
         if room.canPost && !chat.banned { Button("Reply") { replyTo = m; typing = true } }
+        if !chat.banned { Button("React") { reacting = m } }
+        if m.uid != "hall-of-legends" { Button("View \(m.uid == myUID ? "your" : m.username + "'s") profile") { profileUID = ProfileTarget(id: m.uid) } }
+        if chat.isMod && room.kind == .channel {
+            Button(m.pinned ? "Unpin message" : "Pin message") {
+                Task { Speech.say(await chat.pin(m, in: room, !m.pinned) ? (m.pinned ? "Unpinned." : "Pinned.") : "Couldn't change the pin."); await loadPinned() }
+            }
+        }
         if m.uid != myUID && m.uid != "hall-of-legends" {
             if room.kind != .dm {
                 Button("Message \(m.username) privately") {
@@ -303,6 +347,18 @@ struct ConversationView: View {
                 Task { Speech.say(await chat.ban(uid: m.uid, reason: "\(m.username): in #\(room.title), \"\(m.text.prefix(80))\"") ? "\(m.username) is banned." : "Couldn't ban.") }
             }
         }
+    }
+
+    private func mentionsMe(_ m: ChatMessage) -> Bool { m.uid != myUID && (chat.member.map { m.mentions($0.username) } ?? false) }
+
+    private func readable(_ r: [String: String]) -> String {
+        Dictionary(grouping: r.values, by: { $0 }).map { ($0.key, $0.value.count) }.sorted { $0.1 > $1.1 }
+            .map { "\($0.1) \(ChatService.reactionNames[$0.0] ?? $0.0)" }.joined(separator: ", ")
+    }
+
+    private func loadPinned() async {
+        guard room.kind == .channel else { return }
+        pinned = await chat.pinnedMessages(room)
     }
 
     private var composer: some View {
@@ -497,6 +553,58 @@ struct OnlineView: View {
             .toolbar { Button("Done") { dismiss() } }
             .refreshable { await chat.refreshOnline() }
             .task { await chat.refreshOnline() }
+        }
+    }
+}
+
+struct ProfileTarget: Identifiable { let id: String }
+
+/// A player's profile: role, when they joined, online, High Score, and what
+/// you can do (message, block).
+struct ProfileView: View {
+    @EnvironmentObject var chat: ChatService
+    @Environment(\.dismiss) private var dismiss
+    let uid: String
+    @State private var profile: Profile?
+    @State private var loaded = false
+    @State private var dmRoom: Room?
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                if let p = profile {
+                    Section {
+                        LabeledContent("Username", value: p.username)
+                        LabeledContent("Role", value: p.role)
+                        LabeledContent("Status", value: p.online ? "Online now" : "Offline")
+                        if let j = p.joined { LabeledContent("Joined chat", value: j.formatted(date: .abbreviated, time: .omitted)) }
+                        if let s = p.highScore { LabeledContent("High Score", value: s.formatted()) }
+                    }
+                    if p.uid != chat.member?.uid {
+                        Section {
+                            Button("Message \(p.username) privately") {
+                                Task {
+                                    let (r, problem) = await chat.openDM(with: p.uid, name: p.username)
+                                    if let r { dmRoom = r } else if let problem { Speech.say(problem) }
+                                }
+                            }
+                            if chat.blocked[p.uid] == nil {
+                                Button("Block \(p.username)", role: .destructive) { Task { await chat.block(uid: p.uid, name: p.username); dismiss() } }
+                            } else {
+                                Button("Unblock \(p.username)") { Task { await chat.unblock(uid: p.uid) } }
+                            }
+                        }
+                    }
+                } else if loaded {
+                    Text("This player isn't in chat anymore.")
+                } else {
+                    ProgressView()
+                }
+            }
+            .navigationTitle(profile?.username ?? "Profile")
+            .navigationDestination(item: $dmRoom) { ConversationView(room: $0) }
+            .toolbar { Button("Done") { dismiss() } }
+            .task { profile = await chat.profile(uid: uid); loaded = true }
         }
     }
 }

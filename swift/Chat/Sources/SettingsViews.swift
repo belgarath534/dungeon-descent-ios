@@ -25,6 +25,8 @@ struct SettingsView: View {
                     Toggle("Accept private messages", isOn: Binding(get: { chat.member?.dmOff != true },
                                                                      set: { on in Task { await chat.setDMsOff(!on) } }))
                     Toggle("Show me as online", isOn: $chat.showOnline)
+                    Toggle("Read new messages aloud", isOn: $chat.readAloud)
+                        .accessibilityHint("While you're in a conversation. Messages that mention you are always read.")
                     Toggle("Post my big moments to Hall of Legends", isOn: Binding(get: { push.legends },
                                                                                   set: { push.legends = $0; Task { await push.save() } }))
                         .accessibilityHint("When you conquer a dungeon or reach a new Endless Descent or Spire milestone in the game, #hall-of-legends hears about it.")

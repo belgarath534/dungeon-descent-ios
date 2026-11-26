@@ -117,17 +117,26 @@ http('chatPush', async (req, res) => {
     const prefsDocs = members
       ? (await Promise.all(members.filter((id) => id !== uid).map((id) => db.doc('chat_members/' + id + '/private/push').get()))).filter((d) => d.exists)
       : (await db.collectionGroup('private').get()).docs.filter((d) => d.id === 'push');
+    // @mentions: those players hear about it even if they don't follow the room.
+    const mentioned = new Set();
+    for (const [, name] of text.matchAll(/@([A-Za-z0-9_]{3,20})\b/g)) {
+      const n = await db.doc('usernames/' + name.toLowerCase()).get();
+      if (n.exists && n.get('uid') !== uid) mentioned.add(n.get('uid'));
+    }
     let sent = 0;
     await Promise.all(prefsDocs.map(async (d) => {
       const id = d.ref.parent.parent.id;
       const p = d.data();
       if (id === uid || !p.token) return;
-      const wants = kind === 'dm' ? p.dms !== false : kind === 'group' ? p.groups !== false : (p.channels || []).includes(room);
+      const isMention = mentioned.has(id);
+      const wants = isMention || (kind === 'dm' ? p.dms !== false : kind === 'group' ? p.groups !== false : (p.channels || []).includes(room));
       if (!wants) return;
       if ((await db.doc('chat_members/' + id + '/blocks/' + uid).get()).exists) return;
       if (!(await allowed(id))) return;
       const body = kind === 'dm' ? text : from + ': ' + text;
-      const payload = { aps: { alert: { title, body }, sound: soundFor(p, key), 'thread-id': kind + ':' + room },
+      const where = kind === 'channel' ? title : kind === 'group' ? title : 'a private message';
+      const payload = { aps: { alert: { title: isMention ? from + ' mentioned you in ' + where : title, body },
+                               sound: soundFor(p, key), 'thread-id': kind + ':' + room },
                         kind, room };
       const out = await push(p.token, payload, p.env === 'sandbox', null);
       if (out.status === 200) sent++;

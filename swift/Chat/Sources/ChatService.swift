@@ -9,6 +9,30 @@ struct ChatMessage: Identifiable, Equatable {
     let text: String
     let date: Date
     let replyTo: String?
+    /// One emoji per person (uid → emoji).
+    var reactions: [String: String] = [:]
+    var pinned = false
+
+    /// "2 👍, 1 🔥", most first.
+    var reactionSummary: String {
+        Dictionary(grouping: reactions.values, by: { $0 }).map { ($0.key, $0.value.count) }
+            .sorted { $0.1 > $1.1 }.map { "\($0.1) \($0.0)" }.joined(separator: ", ")
+    }
+
+    /// Whether the text @mentions this username (any letter case).
+    func mentions(_ name: String) -> Bool {
+        text.range(of: "@" + name + "\\b", options: [.regularExpression, .caseInsensitive]) != nil
+    }
+}
+
+/// What a player profile shows.
+struct Profile {
+    let uid: String
+    let username: String
+    let joined: Date?
+    let role: String
+    let online: Bool
+    let highScore: Int?
 }
 
 struct Channel: Identifiable, Equatable {
@@ -153,6 +177,64 @@ final class ChatService: ObservableObject {
         }
     }
 
+    // MARK: Reactions, pins, your own channel order, reading aloud
+
+    static let reactionEmojis = ["👍", "❤️", "😂", "🔥", "😮", "😢"]
+    static let reactionNames = ["👍": "thumbs up", "❤️": "heart", "😂": "laughing", "🔥": "fire", "😮": "wow", "😢": "sad"]
+
+    /// Sets your reaction (nil removes it).
+    func react(_ m: ChatMessage, in room: Room, _ emoji: String?) async -> Bool {
+        guard let uid else { return false }
+        let ref = db.collection(room.path + "/messages").document(m.id)
+        return (try? await ref.updateData([FieldPath(["reactions", uid]): emoji ?? FieldValue.delete()])) != nil
+    }
+
+    /// Moderators pin a channel message to the top.
+    func pin(_ m: ChatMessage, in room: Room, _ on: Bool) async -> Bool {
+        (try? await db.collection(room.path + "/messages").document(m.id).updateData(["pinned": on])) != nil
+    }
+
+    func pinnedMessages(_ room: Room) async -> [ChatMessage] {
+        guard let snap = try? await db.collection(room.path + "/messages").whereField("pinned", isEqualTo: true).limit(to: 20).getDocuments() else { return [] }
+        return snap.documents.map { d in
+            ChatMessage(id: d.documentID, uid: d["uid"] as? String ?? "", username: d["username"] as? String ?? "Player",
+                        text: d["text"] as? String ?? "", date: (d["ts"] as? Timestamp)?.dateValue() ?? Date(), replyTo: nil, pinned: true)
+        }.sorted { $0.date > $1.date }
+    }
+
+    /// Channels you pinned to the top of your own list (this device).
+    @Published var myPinned: [String] = UserDefaults.standard.stringArray(forKey: "chat.myPinned") ?? [] {
+        didSet { UserDefaults.standard.set(myPinned, forKey: "chat.myPinned") }
+    }
+
+    func togglePinned(_ c: Channel) {
+        if let i = myPinned.firstIndex(of: c.id) { myPinned.remove(at: i) } else { myPinned.append(c.id) }
+    }
+
+    /// The channels you can see, your pinned ones first (in the order you pinned them).
+    var visibleChannels: [Channel] {
+        let all = channels.filter { !$0.testersOnly || isTester }
+        let pinned = myPinned.compactMap { id in all.first { $0.id == id } }
+        return pinned + all.filter { !myPinned.contains($0.id) }
+    }
+
+    /// Read new messages aloud while you're in a conversation.
+    @Published var readAloud = UserDefaults.standard.object(forKey: "chat.readAloud") as? Bool ?? true {
+        didSet { UserDefaults.standard.set(readAloud, forKey: "chat.readAloud") }
+    }
+
+    // MARK: Profiles
+
+    func profile(uid other: String) async -> Profile? {
+        guard let d = try? await db.collection("chat_members").document(other).getDocument(), let m = Self.member(d) else { return nil }
+        let seen = (d["lastSeen"] as? Timestamp)?.dateValue()
+        let board = try? await db.collection("leaderboard").document(other).getDocument()
+        let role = other == Self.developerUID ? "Developer" : m.mod ? "Moderator" : m.tester ? "Tester" : "Member"
+        return Profile(uid: other, username: m.username, joined: m.createdAt, role: role,
+                       online: seen.map { Date().timeIntervalSince($0) < 150 } ?? false,
+                       highScore: board?.data()?["score"] as? Int)
+    }
+
     // MARK: Unread
 
     private func readMark(_ path: String) -> Date {
@@ -284,7 +366,8 @@ final class ChatService: ObservableObject {
                 let list = (snap?.documents ?? []).map { d in
                     ChatMessage(id: d.documentID, uid: d["uid"] as? String ?? "", username: d["username"] as? String ?? "Player",
                                 text: d["text"] as? String ?? "", date: (d["ts"] as? Timestamp)?.dateValue() ?? Date(),
-                                replyTo: d["replyTo"] as? String)
+                                replyTo: d["replyTo"] as? String, reactions: d["reactions"] as? [String: String] ?? [:],
+                                pinned: d["pinned"] as? Bool ?? false)
                 }.reversed()
                 Task { @MainActor in onChange(Array(list)) }
             }
