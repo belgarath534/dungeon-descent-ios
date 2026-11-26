@@ -1,7 +1,7 @@
 # Copies the web game's documents from "(default)" into "dungeon-descent"
 # (tools/db-merge.py), only ones that aren't there yet. On
 # claude/affectionate-heisenberg-tmog1v it's a dry run (counts only); on
-# the db-merge branch it copies.
+# the db-merge branch it copies (run once, 2026-11-26, after the dry run).
 name: Database merge
 
 on:
