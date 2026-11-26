@@ -10,7 +10,7 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "12.2")
+VERSION = os.environ.get("VERSION", "12.2.1")
 # Only these platforms (store-submit-ios: "IOS").
 PLATFORMS = os.environ.get("PLATFORMS", "IOS MAC_OS VISION_OS").split()
 
@@ -170,7 +170,15 @@ WHATS_NEW_12_2 = {
 • Corrigido: com uma arma Apocalipse, habilidades de escudo como a Armadura Arcana podiam ser usadas sem parar para um escudo sem fim. Agora os escudos se recarregam em vez de se acumular.
 • Muitas outras correções.""",
 }
-WHATS_NEW = {"12.2": WHATS_NEW_12_2, "12.1.1": WHATS_NEW_12_1_1, "12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
+WHATS_NEW_12_2_1 = {
+    "en-US": """New in 12.2.1:
+• Fixed 25 skills that could be cast over and over with an Apocalypse weapon to stack endless dodges, attack, defense, free casts or damage. Dodges and free casts now top up, and the other bonuses work once per fight.
+• Everything from 12.2: Guilds with a weekly Guild Boss, co-op for five, a deeper Mine with a legendary hammer, four new guns and more.""",
+    "pt-BR": """Novo na 12.2.1:
+• Corrigidas 25 habilidades que podiam ser usadas sem parar com uma arma Apocalipse para acumular esquivas, ataque, defesa, usos grátis ou dano sem fim. Esquivas e usos grátis agora se recarregam, e os outros bônus funcionam uma vez por luta.
+• Tudo da 12.2: Guildas com um Chefe semanal, cooperativo para cinco, uma Mina mais funda com um martelo lendário, quatro armas novas e mais.""",
+}
+WHATS_NEW = {"12.2.1": WHATS_NEW_12_2_1, "12.2": WHATS_NEW_12_2, "12.1.1": WHATS_NEW_12_1_1, "12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
 
 PROMO = {
     "en-US": "New in 12.2: Guilds with a weekly Guild Boss, co-op for five, a deeper Mine with a legendary hammer, and four new guns.",

@@ -1,14 +1,6 @@
-Thanks for testing Dungeon Descent 12.2!
+Thanks for testing Dungeon Descent 12.2.1!
 
 New in this build — please try:
-• Guilds (Multiplayer tab, needs an account): create or join a guild, talk in Guild Chat, and strike the weekly Guild Boss (5 strikes a day). Try Members, Guild Rankings, and Manage Guild as the leader.
-• Co-op and Raids for five players: up to four friends in one room.
-• The Mine goes deeper: bosses at depths 75, 150, 200, 300 and 500, and every 100 from 600. Mine bosses from depth 100 drop Heartstone Shards.
-• The Mountainbreaker: forge it at the Blacksmith (Buy Weapons) from 5 Heartstone Shards.
-• New guns: Harpoon Gun, Flare Gun, Blunderbuss and Tesla Coil. Every gun has its own sound.
-• Rare rooms: the Wishing Well and the Forgotten Music Room.
-• My Enemies (Bestiary, Community, needs an account): edit or delete the enemies you made.
-• Balance (please play a lot and tell us how it feels): bosses grow to match strong characters; prestige stars add 5% damage a star to every hit; the Gambler's Spirit bets only this floor's gold on a coin flip; weapons upgrade past level 10; 8 new Mystery Coin Shop upgrades and Mastery ranks; losing a normal run costs half the gold you carry (your Home safe keeps its gold).
-• Fixed: with an Apocalypse weapon, shield skills like Arcane Armor could be cast over and over for a giant shield. Shields now top up instead of stacking, and skills that give permanent stats work once per fight.
+• Fixed: 25 skills could be cast over and over at 0 SP with an Apocalypse weapon to stack endless dodges, attack, defense, free casts or skill damage (Wind Step, Divine Shield, Shadow Form, Bless, The Lich King, Dark Ascension, Unlimited Power, Maestro, the Masteries and more). Dodges and free casts now top up instead of stacking, and the other bonuses work once per fight. If you play one of these classes, tell us how it feels.
 
 Found a bug? Tell us in bug-reports on Discord, or use Send Feedback in Settings: what happened, what you were doing, and your device.
