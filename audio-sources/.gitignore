@@ -1,0 +1,6 @@
+*
+!.gitignore
+!sky-ruins/
+sky-ruins/*
+!sky-ruins/CREDITS.md
+!sky-ruins/SOURCES.tsv
