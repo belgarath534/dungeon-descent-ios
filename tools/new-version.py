@@ -189,13 +189,17 @@ WHATS_NEW_12_3 = {
 • The Sky Ruins: dungeon 10, unlocked by clearing The Shadow World. 19 new enemies and Queen Verdana, the Undying Bloom.
 • Deadly poison that stacks, killer plants, wind that can throw you off the edge, and a garden that grows stronger the longer you stay.
 • Two new races, the Aarakocra and the Goliath, and two new classes, the Plague Doctor and the Artificer.
-• Impossible mode: one life, everything stronger, double gold and XP, and its own leaderboard.
+• Impossible mode: one life, everything stronger, double gold and XP.
+• Advent Calendar: a door to open every day in December, with a prize behind each.
+• Unlimited character slots.
 • New boss music everywhere.""",
     "pt-BR": """Novo na 12.3, A Atualização das Ruínas do Céu:
 • As Ruínas do Céu: masmorra 10, desbloqueada ao vencer o Mundo das Sombras. 19 inimigos novos e a Rainha Verdana, a Flor Imortal.
 • Veneno mortal que acumula, plantas assassinas, vento que pode te jogar da beirada e um jardim que fica mais forte quanto mais você fica.
 • Duas raças novas, os Aarakocra e os Golias, e duas classes novas, o Médico da Peste e o Artífice.
-• Modo Impossível: uma vida, tudo mais forte, ouro e XP em dobro, e um placar só dele.
+• Modo Impossível: uma vida, tudo mais forte, ouro e XP em dobro.
+• Calendário do Advento: uma porta para abrir todo dia de dezembro, com um prêmio atrás de cada uma.
+• Vagas de personagem ilimitadas.
 • Música de chefe nova em todo lugar.""",
 }
 WHATS_NEW = {"12.3": WHATS_NEW_12_3, "12.2.1": WHATS_NEW_12_2_1, "12.2": WHATS_NEW_12_2, "12.1.1": WHATS_NEW_12_1_1, "12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
