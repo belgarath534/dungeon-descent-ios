@@ -15,7 +15,8 @@ import os, sys, time
 import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
-BUNDLE = "com.dungeon.descent"
+# BUNDLE: com.dungeon.descent.chat for Dungeon Descent Chat.
+BUNDLE = os.environ.get("BUNDLE", "com.dungeon.descent")
 
 
 def private_key():
@@ -184,6 +185,11 @@ count = sum(len(call("GET", f"/appScreenshotSets/{s['id']}/appScreenshots")["dat
 print(f"Screenshots: {count}")
 if count == 0:
     sys.exit("No screenshots yet: not submitting")
+
+# A sign-in the reviewer needs must be filled in, or App Review rejects it.
+rd = review(target)
+if rd and rd["attributes"].get("demoAccountRequired") and not (rd["attributes"].get("demoAccountName") and rd["attributes"].get("demoAccountPassword")):
+    sys.exit("The App Review demo account (sign-in) is empty: not submitting.")
 
 if not submit:
     print("Check only (SUBMIT is not yes): ready to submit.")

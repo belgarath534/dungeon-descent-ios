@@ -1,1 +1,9 @@
-Dungeon Descent Chat is the community app for the game Dungeon Descent (same developer, same accounts). Sign in with the demo account below. Channels are on the first screen; open one to read and post. Every message from another player has Report and Block (swipe actions or the VoiceOver Actions rotor). Settings has Notifications, Blocked Players and Delete Account. Moderators review reports within 24 hours; banned players can't post. The app is designed for VoiceOver users, so every control has a spoken label.
+Dungeon Descent Chat is the community app for the game Dungeon Descent (same developer, same accounts). Sign in with the demo account below (Sign in with email).
+
+Tabs: Channels (open one to read and post), Messages (private messages and group chats), Activity (mentions, replies and reactions to you), Community (game events and leaderboards) and Profile (your profile, and Settings).
+
+Safety: every message from another player has Report and Block (long press, swipe, or the VoiceOver Actions rotor). Profiles also have Block. A word filter blocks offensive words in messages, names and profiles. Moderators review reports within 24 hours and can delete messages and ban players; banned players can't post. New accounts wait one day before starting private messages (the demo account is exempt).
+
+Account deletion: Profile, Settings, Delete my chat profile, or Delete my whole Dungeon Descent account.
+
+The app is designed for VoiceOver users, so every control has a spoken label. There is no voice chat, no in-app purchase and no advertising.

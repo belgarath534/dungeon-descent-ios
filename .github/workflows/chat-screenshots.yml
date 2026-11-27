@@ -8,11 +8,16 @@ name: Chat app screenshots
 
 on:
   push:
-    branches: [chat-screenshots, chat-screenshots-upload]
+    # chat-submit: take, upload, fill in the store page and send 1.0 to App Review.
+    branches: [chat-screenshots, chat-screenshots-upload, chat-submit]
   workflow_dispatch:
     inputs:
       upload:
         description: Also upload them to App Store Connect (version 1.0)
+        type: boolean
+        default: false
+      submit:
+        description: Then fill in the store page and submit 1.0 for App Review
         type: boolean
         default: false
 
@@ -123,13 +128,13 @@ jobs:
           git add -A && git commit -qm "Chat screenshots ${GITHUB_SHA::7}" && git push -f origin chat-screenshots-results
 
       - name: Get key files from ios-certificates
-        if: inputs.upload || github.ref_name == 'chat-screenshots-upload'
+        if: inputs.upload || inputs.submit || github.ref_name == 'chat-screenshots-upload' || github.ref_name == 'chat-submit'
         continue-on-error: true
         uses: actions/checkout@v4
         with: { repository: belgarath534/ios-certificates, token: '${{ env.CLEAN_CERTS_TOKEN }}', path: .certs-repo }
 
       - name: Upload to App Store Connect
-        if: inputs.upload || github.ref_name == 'chat-screenshots-upload'
+        if: inputs.upload || inputs.submit || github.ref_name == 'chat-screenshots-upload' || github.ref_name == 'chat-submit'
         env:
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
         run: |
@@ -146,4 +151,19 @@ jobs:
           export BUNDLE=com.dungeon.descent.chat VERSION=1.0 PLATFORM=IOS
           DISPLAY_TYPE=APP_IPHONE_67 SHOTS_DIR=shots/iphone python3 store/upload_screenshots.py
           DISPLAY_TYPE=APP_IPAD_PRO_3GEN_129 SHOTS_DIR=shots/ipad python3 store/upload_screenshots.py
-          rm -rf "$HOME/.asc"
+          echo "KEYPATH=$KEYPATH" >> "$GITHUB_ENV"; echo "KEYID=$KEYID" >> "$GITHUB_ENV"
+
+      - name: Fill in the store page and submit for App Review
+        if: inputs.submit || github.ref_name == 'chat-submit'
+        env:
+          CHAT_REVIEW_EMAIL: ${{ secrets.CHAT_REVIEW_EMAIL }}
+          CHAT_REVIEW_PASSWORD: ${{ secrets.CHAT_REVIEW_PASSWORD }}
+        run: |
+          export ASC_KEY_PATH="$KEYPATH" GOOD_KEY_ID="$KEYID"
+          python3 tools/chat-store.py
+          export APP_STORE_CONNECT_PRIVATE_KEY="@file:$KEYPATH" APP_STORE_CONNECT_ISSUER_ID="$ASC_ISSUER_ID" APP_STORE_CONNECT_KEY_IDENTIFIER="$KEYID"
+          BUNDLE=com.dungeon.descent.chat VERSION=1.0 PLATFORM=IOS SUBMIT=yes python3 store/submit_version.py
+
+      - name: Remove keys
+        if: always()
+        run: rm -rf "$HOME/.asc"
