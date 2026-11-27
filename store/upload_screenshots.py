@@ -14,7 +14,8 @@ import glob, hashlib, os, sys, time
 import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
-BUNDLE = "com.dungeon.descent"
+# BUNDLE: com.dungeon.descent.chat for Dungeon Descent Chat (the "Chat app screenshots" workflow).
+BUNDLE = os.environ.get("BUNDLE", "com.dungeon.descent")
 
 
 def private_key():

@@ -202,7 +202,7 @@ async function legend(uid, b, res) {
   const floor = Number.isInteger(b.floor) ? b.floor : 0;
   let text = null;
   if (b.event === 'victory' && DUNGEONS.includes(b.dungeon) && DIFFICULTIES.includes(b.difficulty))
-    text = `🏆 ${name} conquered ${b.dungeon} on ${b.difficulty}` + (cls ? ` as a ${cls}!` : '!');
+    text = `🏆 ${name} conquered ${b.dungeon} on ${b.difficulty}` + (cls ? ` as ${/^[AEIOU]/i.test(cls) ? 'an' : 'a'} ${cls}!` : '!');
   else if (b.event === 'endless' && floor >= 25 && floor % 25 === 0 && floor <= 100000)
     text = `⬇️ ${name} reached floor ${floor} in Endless Descent!`;
   else if (b.event === 'spire' && floor >= 10 && floor % 10 === 0 && floor <= 10000)

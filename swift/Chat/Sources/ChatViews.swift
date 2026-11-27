@@ -21,17 +21,31 @@ struct MainView: View {
     @EnvironmentObject var chat: ChatService
     @ObservedObject private var router = Router.shared
     @State private var opened: OpenTarget?
+    @State private var tab = Self.firstTab
+
+    private static var firstTab: Int {
+        #if DEBUG
+        return ScreenshotMode.startTab
+        #else
+        return 0
+        #endif
+    }
 
     var body: some View {
-        TabView {
+        TabView(selection: $tab) {
             ChannelsView().tabItem { Label("Channels", systemImage: "number") }
-                .badge(chat.unreadChannels)
+                .badge(chat.unreadChannels).tag(0)
             MessagesView().tabItem { Label("Messages", systemImage: "envelope") }
-                .badge(chat.unreadDMs + chat.unreadGroups)
+                .badge(chat.unreadDMs + chat.unreadGroups).tag(1)
             ActivityView().tabItem { Label("Activity", systemImage: "bell") }
-                .badge(chat.unreadActivity)
-            CommunityView().tabItem { Label("Community", systemImage: "trophy") }
-            MeView().tabItem { Label("Profile", systemImage: "person.crop.circle") }
+                .badge(chat.unreadActivity).tag(2)
+            CommunityView().tabItem { Label("Community", systemImage: "trophy") }.tag(3)
+            MeView().tabItem { Label("Profile", systemImage: "person.crop.circle") }.tag(4)
+        }
+        .onAppear {
+            #if DEBUG
+            ScreenshotMode.openRoom()
+            #endif
         }
         .sheet(item: $opened) { t in
             NavigationStack {
@@ -41,6 +55,8 @@ struct MainView: View {
         }
         .onChange(of: router.open?.room, initial: true) { _, _ in openPending() }
         .onChange(of: chat.channels.count) { _, _ in openPending() }
+        .onChange(of: chat.dms.count) { _, _ in openPending() }
+        .onChange(of: chat.groups.count) { _, _ in openPending() }
     }
 
     /// Opens the conversation a tapped notification points to, once it's known.

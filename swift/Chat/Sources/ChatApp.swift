@@ -7,6 +7,9 @@ import UserNotifications
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     func application(_ app: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         if FirebaseApp.app() == nil { FirebaseApp.configure() }
+        #if DEBUG
+        ScreenshotMode.setUp()
+        #endif
         UNUserNotificationCenter.current().delegate = self
         return true
     }
