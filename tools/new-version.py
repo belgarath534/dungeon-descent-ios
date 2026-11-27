@@ -10,7 +10,7 @@ import jwt, requests
 
 API = "https://api.appstoreconnect.apple.com/v1"
 BUNDLE = "com.dungeon.descent"
-VERSION = os.environ.get("VERSION", "12.2.1")
+VERSION = os.environ.get("VERSION", "12.3")
 # Only these platforms (store-submit-ios: "IOS").
 PLATFORMS = os.environ.get("PLATFORMS", "IOS MAC_OS VISION_OS").split()
 
@@ -184,7 +184,21 @@ WHATS_NEW_12_2_1 = {
 • Corrigidas 25 habilidades que podiam ser usadas sem parar com uma arma Apocalipse para acumular esquivas, ataque, defesa, usos grátis ou dano sem fim. Esquivas e usos grátis agora se recarregam, e os outros bônus funcionam uma vez por luta.
 • Tudo da 12.2: Guildas com um Chefe semanal, cooperativo para cinco, uma Mina mais funda com um martelo lendário, quatro armas novas e mais.""",
 }
-WHATS_NEW = {"12.2.1": WHATS_NEW_12_2_1, "12.2": WHATS_NEW_12_2, "12.1.1": WHATS_NEW_12_1_1, "12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
+WHATS_NEW_12_3 = {
+    "en-US": """New in 12.3, The Sky Ruins Update:
+• The Sky Ruins: dungeon 10, unlocked by clearing The Shadow World. 19 new enemies and Queen Verdana, the Undying Bloom.
+• Deadly poison that stacks, killer plants, wind that can throw you off the edge, and a garden that grows stronger the longer you stay.
+• Two new races, the Aarakocra and the Goliath, and two new classes, the Plague Doctor and the Artificer.
+• Impossible mode: one life, everything stronger, double gold and XP, and its own leaderboard.
+• New boss music everywhere.""",
+    "pt-BR": """Novo na 12.3, A Atualização das Ruínas do Céu:
+• As Ruínas do Céu: masmorra 10, desbloqueada ao vencer o Mundo das Sombras. 19 inimigos novos e a Rainha Verdana, a Flor Imortal.
+• Veneno mortal que acumula, plantas assassinas, vento que pode te jogar da beirada e um jardim que fica mais forte quanto mais você fica.
+• Duas raças novas, os Aarakocra e os Golias, e duas classes novas, o Médico da Peste e o Artífice.
+• Modo Impossível: uma vida, tudo mais forte, ouro e XP em dobro, e um placar só dele.
+• Música de chefe nova em todo lugar.""",
+}
+WHATS_NEW = {"12.3": WHATS_NEW_12_3, "12.2.1": WHATS_NEW_12_2_1, "12.2": WHATS_NEW_12_2, "12.1.1": WHATS_NEW_12_1_1, "12.1": WHATS_NEW_12_1, "12.0.2": WHATS_NEW_12_0_2, "12.0.1": WHATS_NEW_12_0_1}.get(VERSION, WHATS_NEW_12_0)
 
 PROMO = {
     "en-US": "New in 12.2: Guilds with a weekly Guild Boss, co-op for five, a deeper Mine with a legendary hammer, and four new guns.",

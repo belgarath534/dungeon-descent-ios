@@ -710,7 +710,22 @@
  },
  "whatsnew": [
   {
-   "num": "v12.2.1 — Latest",
+   "num": "v12.3 — Latest",
+   "date": "The Sky Ruins Update",
+   "label": "Version 12.3",
+   "changes": [
+    "☁️ The Sky Ruins — dungeon 10, unlocked by clearing The Shadow World. A kingdom torn out of the earth by a flower that could not die. 19 new enemies, and Queen Verdana, the Undying Bloom, waiting on her throne of thorns.",
+    "☠️ Deadly poison — Sky Ruins poison stacks up to 5 times. Carry Antidotes; health potions won't cure it.",
+    "🌿 Killer plants and wind — Strangling Ivy, Spore Pods, Thornwalls and Siren Blooms, gusts that carry you ahead, and edges you can fall from.",
+    "🌱 The Garden Grows — stay too long on a floor and its enemies get stronger.",
+    "🪶 Two new races: the Aarakocra, bird-folk who glide, and the Goliath, giant-folk who don't move for the wind.",
+    "🩺 Two new classes: the Plague Doctor, who poisons and cures, and the Artificer, who builds turrets and gadgets.",
+    "💀 Impossible mode — one life, everything stronger, double gold and XP, and its own leaderboard.",
+    "🎵 New boss music everywhere, replacing tracks that caused copyright claims on YouTube videos."
+   ]
+  },
+  {
+   "num": "v12.2.1",
    "date": "The Fair Play Fix",
    "label": "Version 12.2.1",
    "changes": [
