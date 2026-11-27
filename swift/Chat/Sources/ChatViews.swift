@@ -343,7 +343,7 @@ struct ConversationView: View {
             if let reply { Text("↪ \(reply.username): \(reply.text)").font(.caption).foregroundStyle(.secondary).lineLimit(1) }
             HStack {
                 Text(m.username).font(.subheadline.bold())
-                Text(m.date, style: .relative).font(.caption).foregroundStyle(.secondary)
+                Text(m.date.formatted(.relative(presentation: .numeric, unitsStyle: .abbreviated))).font(.caption).foregroundStyle(.secondary)
             }
             Text(m.text).fontWeight(mentionsMe(m) ? .bold : .regular)
             if !m.reactions.isEmpty { Text(m.reactionSummary).font(.caption) }

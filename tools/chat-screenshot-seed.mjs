@@ -57,7 +57,7 @@ for (const [key, p] of Object.entries(P)) {
               dmOff: false, bio: p.bio, favClass: p.cls };
   if (p.mod) m.mod = true;
   if (key === 'me') m.trusted = true;
-  if (p.online) m.lastSeen = new Date(now + 10 * 60000); // stays "online" while the screenshots are taken
+  if (p.online) m.lastSeen = new Date(now + 3 * 3600000); // stays "online" while the screenshots are taken
   await put('chat_members/' + p.uid, m);
 }
 await put(`chat_members/${P.me.uid}/private/push`, { chosen: true, channels: ['announcements', 'general', 'hall-of-legends'],
@@ -166,7 +166,7 @@ const titles = { mira: 'Shadowblade', kael: 'Spire King', me: 'Voidwalker', thor
 for (const [k, s] of Object.entries(scores)) {
   await put('leaderboard/' + P[k].uid, { uid: P[k].uid, username: `${P[k].name} · ${titles[k]}`, score: s, tag: titles[k], updatedAt: now });
   await put(`tournament/${isoWeek(new Date())}/scores/${P[k].uid}`, { uid: P[k].uid, email: P[k].name, score: Math.round(s / 40), character: P[k].cls });
-  await put(`tournament/afk-rivals/scores/${P[k].uid}`, { uid: P[k].uid, email: P[k].name, score: Math.round(s / 1900), character: P[k].cls });
+  await put(`tournament/afk-rivals/scores/${P[k].uid}`, { uid: P[k].uid, email: P[k].name, score: k === 'me' ? 75 : Math.round(s / 1900), character: P[k].cls });
   await put(`tournament/worldboss-${new Date().toISOString().slice(0, 10)}/scores/${P[k].uid}`, { uid: P[k].uid, email: P[k].name, score: Math.round(s / 30) });
 }
 console.log(`me@screenshots.dev ${PASSWORD} ${P.me.uid} ${pair}`);

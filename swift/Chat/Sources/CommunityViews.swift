@@ -44,7 +44,7 @@ struct ActivityView: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(a.headline).font(.subheadline.weight(isNew ? .bold : .semibold))
                 if !a.text.isEmpty { Text("“\(a.text)”").lineLimit(3).foregroundStyle(.secondary) }
-                Text(a.date, style: .relative).font(.caption).foregroundStyle(.secondary)
+                Text(a.date.formatted(.relative(presentation: .numeric, unitsStyle: .abbreviated))).font(.caption).foregroundStyle(.secondary)
             }
         }
         .foregroundStyle(.primary)
@@ -160,7 +160,7 @@ struct CommunityView: View {
                     ForEach(legends.prefix(5)) { m in
                         VStack(alignment: .leading, spacing: 2) {
                             Text(m.text)
-                            Text(m.date, style: .relative).font(.caption).foregroundStyle(.secondary)
+                            Text(m.date.formatted(.relative(presentation: .numeric, unitsStyle: .abbreviated))).font(.caption).foregroundStyle(.secondary)
                         }
                         .accessibilityElement(children: .combine)
                     }

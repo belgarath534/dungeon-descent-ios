@@ -59,9 +59,9 @@ def call(method, path, **kw):
 platform = os.environ["PLATFORM"]
 display = os.environ["DISPLAY_TYPE"]
 version = os.environ.get("VERSION", "11.8")
-files = sorted(glob.glob(os.path.join(os.environ["SHOTS_DIR"], "*.png")))
+files = sorted(glob.glob(os.path.join(os.environ["SHOTS_DIR"], "*.png")) + glob.glob(os.path.join(os.environ["SHOTS_DIR"], "*.jpg")))
 if not files:
-    sys.exit("No screenshots found in " + os.environ["SHOTS_DIR"])
+    sys.exit("No screenshots (.png or .jpg) found in " + os.environ["SHOTS_DIR"])
 
 # Exact match: the filter also matches com.dungeon.descent.chat (Dungeon Descent Chat).
 app = next(a["id"] for a in call("GET", "/apps", params={"filter[bundleId]": BUNDLE})["data"] if a["attributes"]["bundleId"] == BUNDLE)

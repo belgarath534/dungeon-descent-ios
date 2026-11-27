@@ -147,10 +147,12 @@ jobs:
           KEYPATH=$(grep '^ASC_KEY_PATH=' "$GITHUB_ENV" | tail -1 | cut -d= -f2-)
           KEYID=$(grep '^GOOD_KEY_ID=' "$GITHUB_ENV" | tail -1 | cut -d= -f2-)
           pip3 install --quiet pyjwt cryptography requests
+          # JPEG: no transparency channel (App Store Connect can refuse PNGs with one).
+          for D in iphone ipad; do mkdir -p "up/$D"; for F in shots/$D/*.png; do sips -s format jpeg -s formatOptions 92 "$F" --out "up/$D/$(basename "${F%.png}").jpg" >/dev/null; done; done
           export APP_STORE_CONNECT_PRIVATE_KEY="@file:$KEYPATH" APP_STORE_CONNECT_ISSUER_ID="$ASC_ISSUER_ID" APP_STORE_CONNECT_KEY_IDENTIFIER="$KEYID"
           export BUNDLE=com.dungeon.descent.chat VERSION=1.0 PLATFORM=IOS
-          DISPLAY_TYPE=APP_IPHONE_67 SHOTS_DIR=shots/iphone python3 store/upload_screenshots.py
-          DISPLAY_TYPE=APP_IPAD_PRO_3GEN_129 SHOTS_DIR=shots/ipad python3 store/upload_screenshots.py
+          DISPLAY_TYPE=APP_IPHONE_67 SHOTS_DIR=up/iphone python3 store/upload_screenshots.py
+          DISPLAY_TYPE=APP_IPAD_PRO_3GEN_129 SHOTS_DIR=up/ipad python3 store/upload_screenshots.py
           echo "KEYPATH=$KEYPATH" >> "$GITHUB_ENV"; echo "KEYID=$KEYID" >> "$GITHUB_ENV"
 
       - name: Fill in the store page and submit for App Review
