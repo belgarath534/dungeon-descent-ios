@@ -14,11 +14,18 @@ on:
       device:
         description: Which device to run on
         type: choice
-        options: [all, iphone, mac, vision]
+        options: [all, iphone, ipad, mac, vision]
         default: all
+      test:
+        description: "tour: the screen tour; create: make characters through all 12 steps, then play"
+        type: choice
+        options: [tour, create]
+        default: tour
   # Also runs when the tour itself changes on the Swift branch.
   push:
-    branches: [swift-rewrite]
+    # ipad-create-test: the character creation test on an iPad (an iPad
+    # player's game closed before creation finished).
+    branches: [swift-rewrite, ipad-create-test]
     paths:
       - 'swift/App/UITests/**'
       - '.github/workflows/screen-tour.yml'
@@ -35,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        device: ${{ fromJSON((inputs.device == '' || inputs.device == 'all' || inputs.device == null) && '["iphone","mac","vision"]' || format('["{0}"]', inputs.device)) }}
+        device: ${{ fromJSON(github.ref_name == 'ipad-create-test' && '["ipad"]' || (inputs.device == '' || inputs.device == 'all' || inputs.device == null) && '["iphone","mac","vision"]' || format('["{0}"]', inputs.device)) }}
     runs-on: macos-15
     timeout-minutes: 120
     steps:
@@ -56,19 +63,26 @@ jobs:
       - name: Choose where it runs
         id: dest
         run: |
-          if [ "${{ matrix.device }}" = "iphone" ]; then
-            UDID=$(xcrun simctl list devices available -j | python3 -c '
-          import json, re, sys
+          if [ "${{ matrix.device }}" = "iphone" ] || [ "${{ matrix.device }}" = "ipad" ]; then
+            # iPad: the iOS 26 one when it's installed (the player's iPad runs
+            # iOS 26.7), else the newest.
+            KIND=$([ "${{ matrix.device }}" = "ipad" ] && echo iPad || echo iPhone)
+            xcrun simctl list runtimes
+            UDID=$(xcrun simctl list devices available -j | KIND=$KIND python3 -c '
+          import json, os, re, sys
           d = json.load(sys.stdin)["devices"]
+          kind = os.environ["KIND"]
           def ver(k):
               m = re.search(r"iOS-(\d+)-(\d+)", k)
-              return (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+              v = (int(m.group(1)), int(m.group(2))) if m else (0, 0)
+              return (v[0] == 26 and kind == "iPad", v)
           for rt in sorted((k for k in d if "iOS" in k), key=ver, reverse=True):
-              phones = [x for x in d[rt] if x["name"].startswith("iPhone")]
-              if phones:
-                  print(phones[0]["udid"]); break
+              devs = [x for x in d[rt] if x["name"].startswith(kind)]
+              if devs:
+                  print(devs[0]["udid"], file=sys.stdout); print(rt, devs[0]["name"], file=sys.stderr); break
           ')
             echo "Simulator: $UDID"
+            echo "SIM_UDID=$UDID" >> "$GITHUB_ENV"
             xcrun simctl boot "$UDID" || true
             echo "destination=id=$UDID" >> "$GITHUB_OUTPUT"
             echo "signing=CODE_SIGNING_ALLOWED=NO" >> "$GITHUB_OUTPUT"
@@ -106,6 +120,7 @@ jobs:
             -destination "${{ steps.dest.outputs.destination }}" \
             -derivedDataPath build \
             -resultBundlePath tour.xcresult \
+            ${{ (github.ref_name == 'ipad-create-test' || inputs.test == 'create') && '-only-testing:DungeonDescentUITests/CreateCharacterTest' || '-only-testing:DungeonDescentUITests/ScreenTour' }} \
             ${{ steps.dest.outputs.signing }} \
             2>&1 | tee test.log | grep -E "error:|Test Case|\*\* TEST|Testing failed|Unable to|xcodebuild: error" || true
           ls -d tour.xcresult
