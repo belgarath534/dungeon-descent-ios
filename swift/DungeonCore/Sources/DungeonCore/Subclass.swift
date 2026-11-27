@@ -157,6 +157,19 @@ public enum Subclasses {
             s("spell-weaver", "Spell Weaver", "🔮", "Can cast 2 spells before cooldown triggers instead of 1. Spell scrolls never fail to learn.",
               "Weave the Arcane — two spells, one breath.", [(.intelligence, 3), (.agility, 1)], "🔮 Spell Weaver path chosen. Two spells flow as one."),
         ],
+        // 12.3
+        "PlagueDoctor": [
+            s("carrier", "Carrier", "🦠", "Your attacks have a 25% chance to infect. Infected enemies take 5 damage per turn.",
+              "Patient Zero — the sickness spreads from your touch.", [(.intelligence, 2), (.luck, 1)], "🦠 Carrier path chosen. The sickness spreads."),
+            s("apothecary", "Apothecary", "⚗️", "Potions heal 50% more. A doctor knows the right dose.",
+              "Right Dose — every potion works harder.", [(.intelligence, 1), (.stamina, 2)], "⚗️ Apothecary path chosen. Every potion works harder."),
+        ],
+        "Artificer": [
+            s("engineer", "Engineer", "🔧", "+4 defense from reinforced plating. Built to last.",
+              "Reinforced — your gear takes the hits.", [(.stamina, 2), (.strength, 1)], "🔧 Engineer path chosen. Built to last."),
+            s("demolitionist", "Demolitionist", "💣", "+4 attack. Everything you build explodes eventually.",
+              "Blast Radius — your gadgets hit harder.", [(.strength, 2), (.agility, 1)], "💣 Demolitionist path chosen. Things go boom."),
+        ],
     ]
 
     /// Passives that work through spells (see Spells.swift).
@@ -191,7 +204,9 @@ public enum Subclasses {
         switch sub.id {
         case "gladiator": run.critBonus += 0.20
         case "wind-walker": run.critBonus += 0.10
-        case "crusader": run.defBonus += 4
+        case "crusader", "engineer": run.defBonus += 4
+        case "demolitionist": run.atkBonus += 4
+        case "apothecary": run.potionMult *= 1.5
         case "archmage": run.maxSp += 15; run.sp = min(run.maxSp, run.sp + 15)
         case "pact-keeper": run.atkBonus += 5; run.defBonus += 5
         case "ancient-blood": run.maxHp += 25; run.hp = min(run.maxHp, run.hp + 25)
@@ -260,6 +275,7 @@ public enum Subclasses {
         case "poisoner": dot(4, stack: true); log.append("🐍 \(e.name) is poisoned!")
         case "dragon-ascendant" where dice.chance(0.20): dot(8, stack: false); log.append("🐉 Flame breath! \(e.name) is burning!")
         case "plague-bearer" where dice.chance(0.25): dot(5, stack: false); log.append("☠️ \(e.name) is diseased!")
+        case "carrier" where dice.chance(0.25): dot(5, stack: false); log.append("🦠 \(e.name) is infected!")
         case "hex-blade":
             run.fight.vulnerable = max(run.fight.vulnerable, 0.35)
             run.fight.vulnerableTurns = 3

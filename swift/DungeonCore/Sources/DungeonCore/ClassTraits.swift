@@ -41,6 +41,9 @@ public enum ClassTraits {
         "TimeMage": Trait(name: "Time Mastery", desc: "Time spells have a 1 turn cooldown instead of 3 (3 instead of 6 for Time Stop). 18% less max HP."),
         "Shaman": Trait(name: "Earth Bond", desc: "Earthshake always stuns. Dungeon condition bonuses doubled. +4 DEF in the Ashbound Wastes, Frosthold and the Whispering Forest. 10% less max HP."),
         "Arcanist": Trait(name: "Pure Arcane", desc: "All spells cast at full power regardless of class. Learns any scroll at 95% success rate. 22% less max HP."),
+        // 12.3
+        "PlagueDoctor": Trait(name: "Bird Mask", desc: "Poison does half damage to you and spore clouds can't reach you. Enemies you've poisoned deal 15% less damage."),
+        "Artificer": Trait(name: "Tinkerer", desc: "Strangling Ivy can't hold you. Your Flamethrower burns roots, bark and regrowth."),
         "Dragonborn": Trait(name: "Dragon's Fury", desc: "+15% damage on every attack, growing 5% a floor from floor 4."),
     ]
 
