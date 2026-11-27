@@ -189,7 +189,7 @@ WHATS_NEW_12_3 = {
 • The Sky Ruins: dungeon 10, unlocked by clearing The Shadow World. 19 new enemies and Queen Verdana, the Undying Bloom.
 • Deadly poison that stacks, killer plants, wind that can throw you off the edge, and a garden that grows stronger the longer you stay.
 • Two new races, the Aarakocra and the Goliath, and two new classes, the Plague Doctor and the Artificer.
-• Impossible mode: one life, everything stronger, double gold and XP.
+• Impossible mode: one life, everything stronger, double gold and XP, with its own Game Center leaderboard.
 • Advent Calendar: a door to open every day in December, with a prize behind each.
 • Unlimited character slots.
 • New boss music everywhere.""",
@@ -197,7 +197,7 @@ WHATS_NEW_12_3 = {
 • As Ruínas do Céu: masmorra 10, desbloqueada ao vencer o Mundo das Sombras. 19 inimigos novos e a Rainha Verdana, a Flor Imortal.
 • Veneno mortal que acumula, plantas assassinas, vento que pode te jogar da beirada e um jardim que fica mais forte quanto mais você fica.
 • Duas raças novas, os Aarakocra e os Golias, e duas classes novas, o Médico da Peste e o Artífice.
-• Modo Impossível: uma vida, tudo mais forte, ouro e XP em dobro.
+• Modo Impossível: uma vida, tudo mais forte, ouro e XP em dobro, com seu próprio placar no Game Center.
 • Calendário do Advento: uma porta para abrir todo dia de dezembro, com um prêmio atrás de cada uma.
 • Vagas de personagem ilimitadas.
 • Música de chefe nova em todo lugar.""",
