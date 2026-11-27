@@ -189,6 +189,7 @@ const DIFFICULTIES = ['Wanderer', 'Ironblood', 'Condemned', 'Forsaken', 'Nightma
 const LEGEND_ROOM = 'hall-of-legends';
 
 async function legend(uid, b, res) {
+  if (b.event === 'coop') return await coopRoom(uid, b, res);
   const memberDoc = await db.doc('chat_members/' + uid).get();
   if (!memberDoc.exists) { res.json({ posted: false, note: 'not a chat member' }); return; }
   const member = memberDoc.data();
@@ -265,4 +266,45 @@ async function reaction(uid, b, res) {
                     kind, room, mid, reaction: names[emoji] || emoji };
   const out = await push(p.token, payload, p.env === 'sandbox', 'react-' + mid);
   res.json({ sent: out.status === 200 ? 1 : 0 });
+}
+
+// ── #co-op-rooms: a player opened a co-op room in the game ──
+//
+// The game calls /legend with { event: "coop", code, dungeon, raid } when its
+// host's room is ready. The post is a fixed sentence (never the player's own
+// text): the 4-character code and a dungeon from the game's list, at most
+// once every 5 minutes per player, for chat members who haven't turned it
+// off (private/push: coopPosts false). Followers of #co-op-rooms are notified.
+const COOP_ROOM = 'co-op-rooms';
+async function coopRoom(uid, b, res) {
+  const memberDoc = await db.doc('chat_members/' + uid).get();
+  if (!memberDoc.exists) { res.json({ posted: false, note: 'not a chat member' }); return; }
+  const member = memberDoc.data();
+  if ((await db.doc('chat_bans/' + uid).get()).exists) { res.json({ posted: false, note: 'banned' }); return; }
+  const prefs = (await db.doc('chat_members/' + uid + '/private/push').get()).data() || {};
+  if (prefs.coopPosts === false) { res.json({ posted: false, note: 'turned off' }); return; }
+  const code = typeof b.code === 'string' ? b.code.toUpperCase() : '';
+  if (!/^[A-Z0-9]{4}$/.test(code) || !DUNGEONS.includes(b.dungeon)) { res.status(400).json({ error: 'Bad room' }); return; }
+  const last = member.lastCoopAt ? member.lastCoopAt.toMillis() : 0;
+  if (Date.now() - last < 5 * 60 * 1000) { res.json({ posted: false, note: 'too soon' }); return; }
+  const chan = await db.doc('chat_channels/' + COOP_ROOM).get();
+  if (!chan.exists) { res.json({ posted: false, note: 'no co-op-rooms channel' }); return; }
+  const text = `🤝 ${member.username} opened a ${b.raid === true ? 'raid' : 'co-op'} room in ${b.dungeon}. Room code: ${code.split('').join(' ')}. Join from Co-op in the game!`;
+  await db.collection('chat_channels/' + COOP_ROOM + '/messages').add({
+    // uid "hall-of-legends": the apps' game-post sender (no profile, report or
+    // block buttons on it; a reaction reaches the player it's about).
+    uid: 'hall-of-legends', username: 'Co-op Rooms', text, about: uid, ts: admin.firestore.FieldValue.serverTimestamp(), pushed: true });
+  await memberDoc.ref.update({ lastCoopAt: admin.firestore.FieldValue.serverTimestamp() });
+  const docs = (await db.collectionGroup('private').get()).docs.filter((d) => d.id === 'push');
+  let sent = 0;
+  await Promise.all(docs.map(async (d) => {
+    const id = d.ref.parent.parent.id, p = d.data();
+    if (id === uid || !p.token || !(p.channels || []).includes(COOP_ROOM)) return;
+    if ((await db.doc('chat_members/' + id + '/blocks/' + uid).get()).exists) return;
+    const payload = { aps: { alert: { title: '#' + (chan.get('name') || COOP_ROOM), body: text }, sound: soundFor(p, COOP_ROOM),
+                             'thread-id': 'channel:' + COOP_ROOM }, kind: 'channel', room: COOP_ROOM };
+    const out = await push(p.token, payload, p.env === 'sandbox', null);
+    if (out.status === 200) sent++;
+  }));
+  res.json({ posted: true, sent });
 }
