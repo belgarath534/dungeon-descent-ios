@@ -392,6 +392,9 @@ final class CloudAccount: NSObject, ObservableObject {
     }
 
     /// syncToCloud. Silent syncs don't speak (the web version's auto-sync).
+    /// The near-the-size-limit warning was given this session.
+    private var warnedSaveSize = false
+
     func sync(silent: Bool) async {
         guard let uid = user?.uid ?? Auth.auth().currentUser?.uid else {
             if !silent { say("Not signed in. Please sign in first.", color: 0xffaa44) }
@@ -412,6 +415,13 @@ final class CloudAccount: NSObject, ObservableObject {
             data["savedBy"] = Self.platform
             data["savedDevice"] = Self.deviceId
         }
+        // 12.3: character slots are unlimited, but a cloud save is one record
+        // of at most 1 MB. Warn while there's still room.
+        let bytes = data.values.reduce(0) { $0 + (($1 as? String)?.utf8.count ?? 0) }
+        if bytes > 850_000 && !warnedSaveSize {
+            warnedSaveSize = true
+            Feedback.announce("Your save is close to the cloud's size limit. Delete characters you don't play any more, or the cloud backup will stop working.", after: 1)
+        }
         do {
             try await db.collection("saves").document(uid).setData(data, merge: true)
             if data["full"] != nil {
@@ -422,7 +432,9 @@ final class CloudAccount: NSObject, ObservableObject {
             lastAutoSync = Date()
             if !silent { say("✓ Synced to cloud! Your save data is backed up.", color: 0x44ff88) }
         } catch {
-            if !silent { say("✗ Sync failed. Check your connection and try again.") }
+            if bytes > 1_000_000 {
+                say("✗ Your save is too big for the cloud (\(bytes / 1000) KB of 1,000). Delete characters you don't play any more, then sync again.")
+            } else if !silent { say("✗ Sync failed. Check your connection and try again.") }
         }
     }
 

@@ -146,7 +146,9 @@ public enum GameData {
         "The Sky Ruins",
     ]
 
-    public static let maxCharacters = 10
+    /// 12.3: unlimited character slots (the cloud save warns when it gets
+    /// close to its size limit; see CloudSync).
+    public static let maxCharacters = Int.max
 
     private static func c(_ id: String, _ tag: String, _ hp: Int, _ atk: ClosedRange<Int>, _ def: Int) -> ClassInfo {
         ClassInfo(id: id, tagline: tag, maxHp: hp, atk: atk, def: def)

@@ -104,14 +104,13 @@ final class CharacterTests: XCTestCase {
         let roster = CharacterRoster(store: store)
         XCTAssertEqual(roster.unlockedDungeons(), ["Crypt of Malachar", "The Ashbound Wastes"])
         XCTAssertNotNil(store.getItem("dd_unlocks"))
-        // The web save has one character: fill the rest of the slots.
-        for i in 0..<(GameData.maxCharacters - roster.characters.count) {
+        // 12.3: slots are unlimited — 40 more characters and still room.
+        for i in 0..<40 {
             XCTAssertNotNil(roster.add(PlayerCharacter(name: "C\(i)", cls: "Monk", race: "Orc", prof: "Thief",
                                                  dungeon: "Crypt of Malachar", difficulty: .wanderer)))
         }
-        XCTAssertTrue(roster.isFull)
-        XCTAssertNil(roster.add(PlayerCharacter(name: "Extra", cls: "Monk", race: "Orc", prof: "Thief",
-                                          dungeon: "Crypt of Malachar", difficulty: .wanderer)))
+        XCTAssertFalse(roster.isFull)
+        XCTAssertEqual(roster.characters.count, 41)
     }
 
     func testDeathDeepInDungeonUnlocksNext() {
@@ -3990,8 +3989,8 @@ final class CharacterCodeTests: XCTestCase {
         XCTAssertNil(CharacterCode.read("not a code"))
         let store = MemoryStore()
         let roster = CharacterRoster(store: store)
-        for _ in 0..<GameData.maxCharacters { XCTAssertNotNil(try? CharacterCode.importCode(code, into: roster).get()) }
-        XCTAssertEqual(CharacterCode.importCode(code, into: roster), .failure(.full))
+        for _ in 0..<25 { XCTAssertNotNil(try? CharacterCode.importCode(code, into: roster).get()) }
+        XCTAssertFalse(roster.isFull) // 12.3: unlimited slots
     }
 }
 
