@@ -112103,6 +112103,17 @@
         }
       }
     },
+    "Impossible, dungeons conquered": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossível, masmorras conquistadas"
+          }
+        }
+      }
+    },
     "The Spire, highest floor": {
       "extractionState": "manual",
       "localizations": {

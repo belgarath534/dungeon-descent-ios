@@ -30,6 +30,11 @@ BOARDS = [
      "pt": ("A Torre: Andar Mais Alto", " andar", " andares"),
      "challenge": ("Spire Climb", "Climb higher in The Spire than your friends.",
                    "Escalada da Torre", "Suba mais alto na Torre do que seus amigos.")},
+    {"id": "DD_IMPOSSIBLE_WINS", "ref": "Impossible dungeons conquered",
+     "en": ("Impossible: Dungeons Conquered", " conquest", " conquests"),
+     "pt": ("Impossível: Masmorras Conquistadas", " conquista", " conquistas"),
+     "challenge": ("The Impossible", "Conquer more dungeons on Impossible than your friends.",
+                   "O Impossível", "Conquiste mais masmorras no Impossível do que seus amigos.")},
 ]
 
 

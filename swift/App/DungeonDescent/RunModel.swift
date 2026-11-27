@@ -2956,13 +2956,14 @@ final class RunModel: ObservableObject {
         game.globalInventory.keep(from: run)
         game.checkLegends(run)
         game.recordFirstClear(run)
-        // 12.3: Doctor's Orders and Some Assembly Required.
-        // 12.3: The Impossible and Beyond Impossible.
+        // 12.3: The Impossible and Beyond Impossible, and the Impossible leaderboard.
         if run.difficulty == .impossible {
             achievements.increment("impossibleWins")
             if run.dungeon == SkyRuins.name { achievements.increment("beyondImpossible") }
             _ = achievements.check()
+            GameCenter.submit(Int(achievements.stat("impossibleWins")), to: .impossibleWins)
         }
+        // 12.3: Doctor's Orders and Some Assembly Required.
         if run.cls == "PlagueDoctor" || run.cls == "Artificer" {
             achievements.increment(run.cls == "PlagueDoctor" ? "plagueDoctorWins" : "artificerWins")
             _ = achievements.check()

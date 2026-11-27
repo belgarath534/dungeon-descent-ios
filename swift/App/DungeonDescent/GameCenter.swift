@@ -58,12 +58,14 @@ enum GameCenter {
         case endlessFloor = "DD_ENDLESS_BEST_FLOOR"
         case weeklyLadder = "DD_WEEKLY_LADDER"
         case spireFloor = "DD_SPIRE_BEST_FLOOR"
+        case impossibleWins = "DD_IMPOSSIBLE_WINS"
 
         var title: String {
             switch self {
             case .endlessFloor: return "Endless Descent, deepest floor"
             case .weeklyLadder: return "Weekly Ladder score"
             case .spireFloor: return "The Spire, highest floor"
+            case .impossibleWins: return "Impossible, dungeons conquered"
             }
         }
     }
