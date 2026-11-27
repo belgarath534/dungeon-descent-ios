@@ -152,19 +152,27 @@ final class SkyRuinsTests: XCTestCase {
             r.inventory.append(SkyRuins.rootTorch)
             Combat.begin(&r, against: Combat.nextBoss(for: r, dice: &dice))
             var achievements: [String] = []
+            var lastLog: [String] = []
+            var turns = 0
+            var torch = "not used"
             for turn in 0..<400 {
                 guard r.inCombat, r.enemy != nil else { break }
+                turns = turn
                 if turn == 30, let i = r.inventory.firstIndex(where: { $0.name == "Root Torch" }) {
-                    _ = Inventory.use(&r, at: i, dice: &dice)
+                    torch = Inventory.use(&r, at: i, dice: &dice).message
                 }
                 r.hp = max(r.hp, 1000)
                 let res = Combat.takeTurn(&r, turn % 3 == 0 ? .heavy : .attack, dice: &dice)
                 achievements += res.achievements
+                lastLog = Array((lastLog + res.log).suffix(6))
                 if let p = play.brokenState(r) { problems.append("\(c.id) vs Verdana: \(p)"); break }
             }
             if achievements.contains("skyVerdanaKills") {
                 conquered += 1
                 XCTAssertTrue(r.inventory.contains { $0.name == "Seed of the Undying" }, "\(c.id): no seed")
+            } else if conquered == 0 && problems.count < 3 {
+                let e = r.enemy
+                problems.append("\(c.id) didn't beat Verdana: \(turns) turns, in combat \(r.inCombat), enemy \(e?.name ?? "none") \(e?.hp ?? -1)/\(e?.maxHp ?? -1), burned \(e?.flag("skyBurned") ?? false), phase3 \(e?.flag("skyPhase3") ?? false), torch: \(torch), achievements \(achievements), last log: \(lastLog.joined(separator: " | "))")
             }
         }
         XCTAssert(problems.isEmpty, "The Sky Ruins broke the game:\n" + problems.joined(separator: "\n"))

@@ -1118,8 +1118,12 @@ final class RunModeTests: XCTestCase {
         let r = Run(character: ch)
         XCTAssertEqual(r.level, 6)
         XCTAssertEqual(r.xp, 120)
+        var shadow = hero()
+        shadow.dungeon = "The Shadow World"
+        XCTAssertTrue(shadow.continueJourney(level: 1, xp: 0))
+        XCTAssertEqual(shadow.dungeon, "The Sky Ruins")
         var last = hero()
-        last.dungeon = "The Shadow World"
+        last.dungeon = "The Sky Ruins"
         XCTAssertFalse(last.continueJourney(level: 1, xp: 0))
     }
 
