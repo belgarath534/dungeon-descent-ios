@@ -27,7 +27,7 @@ enum ScreenshotMode {
     static func setUp() {
         guard on else { return }
         Auth.auth().useEmulator(withHost: "127.0.0.1", port: 9099)
-        let db = Account.db
+        let db = Firestore.firestore(database: "dungeon-descent") // the same instance as Account.db
         let s = db.settings
         s.host = "127.0.0.1:8085"
         s.isSSLEnabled = false
