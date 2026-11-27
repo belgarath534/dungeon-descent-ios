@@ -867,7 +867,23 @@ struct DungeonView: View {
                 stacks.append((item, 1, i))
             }
         }
-        stacks.sort { (favs.contains($0.item.name) ? 0 : 1) < (favs.contains($1.item.name) ? 0 : 1) }
+        // Favorites first, everything else in bag order. 12.2.1: ties keep
+        // their order (Swift's sort doesn't promise to), so items no longer
+        // trade places each time the dungeon screen refreshes.
+        stacks = stacks.enumerated().sorted {
+            let a = favs.contains($0.element.item.name) ? 0 : 1, b = favs.contains($1.element.item.name) ? 0 : 1
+            return a != b ? a < b : $0.offset < $1.offset
+        }.map(\.element)
+        // A stable identity for each row: a stack by its name, gear by its
+        // name and which copy it is. Rows keyed by position slid under
+        // VoiceOver whenever something above was used or dropped.
+        var copies: [String: Int] = [:]
+        let rowIDs: [String] = stacks.map { s in
+            guard s.item.isWeapon || s.item.isArmor else { return "stack:" + s.item.name }
+            let k = s.item.type + ":" + s.item.name
+            copies[k, default: 0] += 1
+            return "gear:\(k)#\(copies[k]!)"
+        }
         return VStack(alignment: .leading, spacing: 8) {
             HStack {
                 Text("🎒 Inventory").font(Theme.cinzel(9.9)).tracking(3).textCase(.uppercase).foregroundStyle(Theme.goldDim)
@@ -935,7 +951,7 @@ struct DungeonView: View {
             } else if stacks.isEmpty {
                 Text("Nothing in this category.").font(Theme.crimson(12.8, italic: true)).foregroundStyle(Theme.textDim)
             }
-            ForEach(Array(stacks.enumerated()), id: \.offset) { _, s in
+            ForEach(Array(zip(rowIDs, stacks)), id: \.0) { _, s in
                 itemRow(s.item, count: s.count, index: s.index, fav: favs.contains(s.item.name))
             }
         }
