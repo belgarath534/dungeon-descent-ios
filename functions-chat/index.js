@@ -214,13 +214,19 @@ async function legend(uid, b, res) {
   await db.collection('chat_channels/' + LEGEND_ROOM + '/messages').add({
     uid: 'hall-of-legends', username: 'Hall of Legends', text, about: uid, ts: admin.firestore.FieldValue.serverTimestamp(), pushed: true });
   await memberDoc.ref.update({ lastLegendAt: admin.firestore.FieldValue.serverTimestamp() });
-  // Notify whoever follows #hall-of-legends (not the player it's about).
+  // A Hall of Legends moment is rare, so it notifies everyone with
+  // notifications on (not only those following the channel), unless they
+  // turned Hall of Legends notifications off (private/push: hallPush false).
+  // The player it's about gets their own "You made the Hall of Legends".
   const docs = (await db.collectionGroup('private').get()).docs.filter((d) => d.id === 'push');
+  const title = '#' + (chan.get('name') || LEGEND_ROOM);
+  const mine = '🏛 You\'re in the Hall of Legends! You ' + text.replace(/^\S+\s+/, '').replace(name + ' ', '');
   let sent = 0;
   await Promise.all(docs.map(async (d) => {
     const id = d.ref.parent.parent.id, p = d.data();
-    if (id === uid || !p.token || !(p.channels || []).includes(LEGEND_ROOM)) return;
-    const payload = { aps: { alert: { title: '#' + (chan.get('name') || LEGEND_ROOM), body: text }, sound: soundFor(p, LEGEND_ROOM),
+    if (!p.token || p.hallPush === false) return;
+    const body = id === uid ? mine : text;
+    const payload = { aps: { alert: { title, body }, sound: soundFor(p, LEGEND_ROOM),
                              'thread-id': 'channel:' + LEGEND_ROOM }, kind: 'channel', room: LEGEND_ROOM };
     const out = await push(p.token, payload, p.env === 'sandbox', null);
     if (out.status === 200) sent++;
