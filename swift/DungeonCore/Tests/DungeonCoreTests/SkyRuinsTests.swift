@@ -174,7 +174,7 @@ final class SkyRuinsTests: XCTestCase {
             if achievements.contains("skyVerdanaKills") {
                 conquered += 1
                 XCTAssertTrue(r.inventory.contains { $0.name == "Seed of the Undying" }, "\(c.id): no seed")
-            } else if conquered == 0 && problems.count < 3 {
+            } else if problems.count < 3 {
                 let e = r.enemy
                 problems.append("\(c.id) didn't beat Verdana: \(turns) turns, in combat \(r.inCombat), enemy \(e?.name ?? "none") \(e?.hp ?? -1)/\(e?.maxHp ?? -1), burned \(e?.flag("skyBurned") ?? false), phase3 \(e?.flag("skyPhase3") ?? false), torch: \(torch), achievements \(achievements), last log: \(lastLog.joined(separator: " | "))")
             }
