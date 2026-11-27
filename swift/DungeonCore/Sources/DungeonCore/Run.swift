@@ -54,6 +54,8 @@ public struct Run: Codable, Sendable {
     public var beast = 0
     /// The spirit companion's id.
     public var spirit: String? = nil
+    /// 12.3: The Sky Ruins' poison, garden and the rest (nil outside it).
+    public var sky: SkyRuins.State? = nil
     /// Shadow Corruption stacks (The Shadow World).
     public var shadowCorruption = 0
     /// The rest of an ambush: enemies fighting alongside `enemy`, your target.

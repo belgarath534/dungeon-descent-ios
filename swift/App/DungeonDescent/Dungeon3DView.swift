@@ -16,6 +16,7 @@ struct Theme3D {
         "The Infernal Descent": .init(wall: 0x5c2418, floor: 0x452012, ceil: 0x2e1208, torch: 0xff2200, fog: 0x150300, ambient: 0x431408),
         "The Abyssal Deep": .init(wall: 0x2a3450, floor: 0x1e2438, ceil: 0x161c2a, torch: 0x2299ff, fog: 0x02040a, ambient: 0x18243c),
         "The Shadow World": .init(wall: 0x342a3e, floor: 0x261f2e, ceil: 0x1c1722, torch: 0x8844cc, fog: 0x0a0510, ambient: 0x2c1c3a),
+        "The Sky Ruins": .init(wall: 0x6a7a5a, floor: 0x4a5a3a, ceil: 0x8aa8c8, torch: 0xccff88, fog: 0xb8c8d8, ambient: 0x8a9a7a),
     ]
 
     static func of(_ dungeon: String) -> Theme3D { all[dungeon] ?? all["Crypt of Malachar"]! }

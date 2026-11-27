@@ -54,6 +54,7 @@ public enum Inventory {
 
         if ShapeshifterMask.isMask(item) { return ShapeshifterMask.use(&run, at: index) }
         if let o = Intros.use(&run, at: index) { return o }
+        if let o = SkyRuins.use(&run, at: index) { return o }
 
         // Mirror Fragment (Shadow World): purges every corruption stack.
         if item.extra["shadowItem"] == .string("mirrorFragment") {

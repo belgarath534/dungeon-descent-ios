@@ -2352,6 +2352,39 @@
        "color": "#9966cc"
       }
      ]
+    },
+    {
+     "id": "skyruins-dungeon-card",
+     "kind": "dungeon-card",
+     "key": "The Sky Ruins",
+     "label": "The Sky Ruins, locked. Complete The Shadow World to unlock.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "dungeon-icon",
+       "text": "☁️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "dungeon-name",
+       "text": "The Sky Ruins",
+       "hidden": false,
+       "color": "#88cc66"
+      },
+      {
+       "cls": "",
+       "text": "A kingdom torn out of the earth by a flower that could not die. Stacking poison, killer plants, wind that throws you off the edge, and a garden that grows stronger the longer you stay. Queen Verdana waits on her throne of thorns.",
+       "hidden": false,
+       "color": "#3a5a2a"
+      },
+      {
+       "cls": "dungeon-unlock-note",
+       "text": "🔒 Complete The Shadow World to unlock",
+       "hidden": true,
+       "color": "#88cc66"
+      }
+     ]
     }
    ],
    "extras": [

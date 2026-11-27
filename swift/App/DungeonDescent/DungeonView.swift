@@ -548,6 +548,11 @@ struct DungeonView: View {
                     Text("🌑 Corruption: \(n)\(n >= 3 ? " — HALF DAMAGE" : "")" as String).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0xaa66ff))
                         .accessibilityLabel("Shadow corruption \(n) stack\(n != 1 ? "s" : "")\(n >= 3 ? ". Your attacks deal half damage." : ".")" as String)
                 }
+                // 12.3: #dg-sky-status (poison, the garden, bleeding)
+                let sky = SkyRuins.status(run)
+                if !sky.isEmpty {
+                    Text(sky).font(Theme.cinzel(10.4)).foregroundStyle(Color(hex: 0x88cc66))
+                }
             }
             combatLog
             FlowRow(spacing: 8) {

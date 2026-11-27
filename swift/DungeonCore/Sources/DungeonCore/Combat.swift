@@ -30,6 +30,8 @@ public struct TurnResult: Equatable, Sendable {
     public var ambushContinues = false
     public var log: [String] = []
     public var announcement: String? = nil
+    /// 12.3: achievements earned this turn (Sky Ruins), by id.
+    public var achievements: [String] = []
 }
 
 /// The fight loop from doFight() and useSkill(): your action, then the enemy's
@@ -74,6 +76,7 @@ public enum Combat {
         Alchemy.combatStart(&run, log: &log)
         Spirits.combatStart(&run, log: &log)
         ShadowWorld.combatStart(&run, log: &log)
+        SkyRuins.combatStart(&run, log: &log)
         HollowAbyssal.combatStart(&run, log: &log)
         Spells.combatStart(&run, log: &log)
         ClassTraits.combatStart(&run, log: &log)
@@ -195,7 +198,7 @@ public enum Combat {
         CommunityDungeons.dressBoss(&b, for: run)
         // The web version's secret boss: 2% of the time the Department's
         // Grand Overseer comes for the audit instead (once a run).
-        if run.dddiDefeated != true, run.communityDungeon == nil, run.dungeon != ShadowWorld.name, dice.chance(0.02) {
+        if run.dddiDefeated != true, run.communityDungeon == nil, run.dungeon != ShadowWorld.name, run.dungeon != SkyRuins.name, dice.chance(0.02) {
             DDDI.dress(&b)
         }
         if run.worldCurse { cursed(&b) }
@@ -242,6 +245,13 @@ public enum Combat {
             r.announcement = r.log.last
             return r
         }
+
+        // The Sky Ruins: poison, the garden, regrowth, and turns lost to vines and wind.
+        if SkyRuins.turnStart(&run, attacking: action == .attack || action == .heavy, log: &r.log) {
+            if run.isDead { r.playerDied = true; run.inCombat = false; r.announcement = r.log.last; return r }
+            return finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
+        }
+        if run.isDead { r.playerDied = true; run.inCombat = false; r.announcement = r.log.last; return r }
 
         var baseAtk = attackRoll(run, dice: &dice)
         run.defending = false
@@ -467,6 +477,7 @@ public enum Combat {
     }
 
     static func dealDamage(_ run: inout Run, _ dmg: Int, log: inout [String]) {
+        let dmg = SkyRuins.onDamage(&run, dmg, log: &log)
         guard dmg > 0, var e = run.enemy else { return }
         e.hp = max(0, e.hp - dmg)
         run.enemy = e
@@ -492,7 +503,7 @@ public enum Combat {
                 r.announcement = line
                 return r
             }
-            return afterKill(&run, killed(&run, r), dice: &dice, options: options)
+            return afterKill(&run, skyKill(&run, killed(&run, r), dice: &dice), dice: &dice, options: options)
         }
         if let msg = checkBossPhase(&run) {
             r.bossPhaseMessage = msg
@@ -532,7 +543,7 @@ public enum Combat {
                 r.announcement = line
                 return r
             }
-            return afterKill(&run, killed(&run, r), dice: &dice, options: options)
+            return afterKill(&run, skyKill(&run, killed(&run, r), dice: &dice), dice: &dice, options: options)
         }
         r.enemyDamage = taken
         tickEffects(&run, log: &r.log)
@@ -665,6 +676,14 @@ public enum Combat {
         e.mechanics["resurrected"] = .bool(true)
         run.enemy = e
         return "👑 \(e.name) RESURRECTS at 1 HP! The undead do not yield easily!"
+    }
+
+    /// The Sky Ruins' kill effects (spore bursts, Verdana's seed …).
+    static func skyKill(_ run: inout Run, _ result: TurnResult, dice: inout some Dice) -> TurnResult {
+        var r = result
+        guard let e = r.defeated else { return r }
+        r.achievements += SkyRuins.onKill(&run, e, dice: &dice, log: &r.log)
+        return r
     }
 
     static func killed(_ run: inout Run, _ result: TurnResult) -> TurnResult {
@@ -821,7 +840,7 @@ public enum Combat {
         }
         let swing = run.enemy?.currentAtk ?? e.currentAtk
         var raw = (deep.maxRoll ? swing.upperBound : dice.roll(swing)) + EnemyAbilities.secondStrike(e, dice: &dice, log: &log)
-        raw = jsRound(Double(raw) * move.multiplier * shadow.multiplier * deep.multiplier) + move.extra
+        raw = jsRound(Double(raw) * move.multiplier * shadow.multiplier * deep.multiplier * SkyRuins.attackMultiplier(run)) + move.extra
         raw = max(raw, move.minimum)
         if Alchemy.gravity(&run, log: &log) { raw = 1 }
         if run.fight.softenHits > 0 {
@@ -878,6 +897,7 @@ public enum Combat {
         taken = ShapeshifterMask.incoming(&run, taken, log: &log)
         taken = CustomSpirits.incoming(run, taken)
         taken = BossRelics.incoming(run, taken)
+        taken = SkyRuins.incoming(&run, taken, log: &log)
         if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) || ShadowWorld.armorAvoids(&run, dice: &dice, log: &log) { return 0 }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)
@@ -901,6 +921,7 @@ public enum Combat {
         }
         if run.hp <= 0 { _ = Subclasses.cheatDeath(&run, hpBefore: hpBefore, log: &log) }
         if run.hp <= 0 { _ = ClassTraits.undying(&run, log: &log) }
+        if run.hp <= 0 { _ = SkyRuins.seedSaves(&run, log: &log) }
         run.fight.damageTaken += taken
         run.fight.recentHits.append(taken)
         if run.fight.recentHits.count > 3 { run.fight.recentHits.removeFirst() }
@@ -936,6 +957,7 @@ public enum Combat {
         }
         EnemyAbilities.afterAttack(&run, taken: taken, dice: &dice, log: &log)
         ShadowWorld.afterAttack(&run, log: &log)
+        SkyRuins.afterAttack(&run, taken: taken, dice: &dice, log: &log)
         HollowAbyssal.afterAttack(&run, taken: taken, log: &log)
         WhisperingForest.afterAttack(&run, log: &log)
         if var c = run.enemy, c.cursedTurns > 0 {

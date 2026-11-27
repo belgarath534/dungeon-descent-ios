@@ -71,6 +71,7 @@ final class SpatialAudio {
         case "Frosthold Abyss", "The Infernal Descent": preset = .largeHall
         case "The Sunken Archives", "The Abyssal Deep": preset = .plate
         case "The Shadow World": preset = .largeHall2
+        case "The Sky Ruins": preset = .largeHall2
         case "The Whispering Forest": preset = .mediumRoom
         default: preset = .mediumChamber
         }

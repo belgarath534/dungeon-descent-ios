@@ -266,6 +266,7 @@ public final class CharacterRoster {
             case "The Infernal Descent": return infernalUnlocked
             case "The Abyssal Deep": return isUnlocked(e.element) || abyssalUnlocked
             case "The Shadow World": return isUnlocked(e.element) || ShadowWorld.unlocked(store)
+            case "The Sky Ruins": return isUnlocked(e.element) || SkyRuins.unlocked(store)
             default: return e.offset == 0 || isUnlocked(e.element)
             }
         }.map(\.element)
@@ -486,6 +487,7 @@ public enum DungeonUnlockNews {
         "The Abyssal Deep": ("🌊", "The bottom of the ocean where no light reaches. Ancient creatures have waited for you.", "Floors 1-10 · Unlocked after The Infernal · Ocean enemies · The Leviathan awaits"),
         // The web version had no entry for the newest dungeon; its dungeon card's text.
         "The Shadow World": ("🌑", "It has existed for 3000 years beneath a cursed forest. It does not obey your rules. The Shapeshifter waits at the end — wearing your face, using your skills, knowing your every move.", "Floors 1-10 · Unlocked after The Abyssal Deep · Shadow Corruption · The Shapeshifter awaits"),
+        "The Sky Ruins": ("☁️", "A kingdom torn out of the earth by a flower that could not die. The garden is still growing.", "Floors 1-10 · Unlocked after The Shadow World · Poison, killer plants and wind · Queen Verdana awaits"),
     ]
 
     /// The next dungeon to announce, marked as seen; nil when there's none.

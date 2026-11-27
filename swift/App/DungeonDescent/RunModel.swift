@@ -597,6 +597,14 @@ final class RunModel: ObservableObject {
             spoken += " " + line
         }
 
+        // 12.3: Sky Ruins poison wears off as you walk (never below 1 HP).
+        if (r.sky?.poison ?? 0) > 0 {
+            var lines: [String] = []
+            SkyRuins.tickPoison(&r, boss: false, log: &lines)
+            lines.forEach { add($0) }
+            spoken += " " + lines.joined(separator: " ")
+        }
+
         if r.poisonTurns > 0 {
             var lines: [String] = []
             Combat.tickEffects(&r, log: &lines)
@@ -665,6 +673,15 @@ final class RunModel: ObservableObject {
                 let q = questFound(&r, item: out.item, gold: out.gold)
                 finishQuietRoom(r, d, spoken: said + q)
             }
+            return
+        }
+
+        // 12.3: the Sky Ruins' killer plants and wind.
+        if let id = SkyRuins.hazard(&r, dice: &d), let ev = Encounters.event(id) {
+            r.pendingEvent = id
+            add("\(label) \(ev.title) — \(ev.text)")
+            Sound.sfx(id == "sky-gust" || id == "sky-edge" ? "sfx-wind-gust" : id == "sky-spore" ? "sfx-plant-hiss" : "sfx-vine-creak")
+            finish(r, d, phase: .event, spoken: spoken + " \(ev.title). \(ev.text) " + ev.choices.joined(separator: " or ") + ".")
             return
         }
 
@@ -859,6 +876,23 @@ final class RunModel: ObservableObject {
             enemyCue(Soundtrack.enemyCue(dungeon: r.dungeon, boss: false))
             Sound.track(Soundtrack.battleTrack(dungeon: r.dungeon))
             finish(r, d, phase: .fighting, spoken: out.message + " \(enemy.name), \(enemy.hp) HP." + thirdEye(r))
+            return
+        }
+        // 12.3 Sky Ruins: over the edge to the next floor, or carried past the room.
+        if out.skyFall {
+            run = r; dice = d
+            Sound.sfx("sfx-fall")
+            Feedback.announce(out.message)
+            phase = .floorCleared
+            descend()
+            return
+        }
+        if out.skyCarried {
+            run = r; dice = d
+            Sound.sfx("sfx-wings-glide")
+            Feedback.announce(out.message)
+            phase = .exploring
+            enterRoom()
             return
         }
         if out.item != nil || out.gold > 0 { Sound.sfx("sfx-loot") }
@@ -2121,6 +2155,11 @@ final class RunModel: ObservableObject {
     }
 
     private func enemyDefeated(_ e: Enemy, spoken: String, result: TurnResult? = nil) {
+        // 12.3: Sky Ruins achievements (stats in dd_ach_stats).
+        if let earned = result?.achievements, !earned.isEmpty {
+            earned.forEach { achievements.increment($0) }
+            _ = achievements.check()
+        }
         // Medusa falls: raise the shield or lower it.
         if Medusa.isMedusa(e) && !medusaResolved {
             medusaChoice = true
@@ -2917,6 +2956,11 @@ final class RunModel: ObservableObject {
         game.globalInventory.keep(from: run)
         game.checkLegends(run)
         game.recordFirstClear(run)
+        // 12.3: Doctor's Orders and Some Assembly Required.
+        if run.cls == "Plague Doctor" || run.cls == "Artificer" {
+            achievements.increment(run.cls == "Plague Doctor" ? "plagueDoctorWins" : "artificerWins")
+            _ = achievements.check()
+        }
         if ShadowRealm.unlock(after: run.dungeon, store: game.store) {
             add("🌑 The Shadow Realm has opened. Find it on the main menu.")
             Feedback.announce("A secret has opened. The Shadow Realm is now on the main menu.", after: 2.5)
@@ -3715,6 +3759,7 @@ final class RunModel: ObservableObject {
         r.floor += 1
         r.roomsOnFloor = 0
         if let song = CustomSpirits.newFloor(&r) { add(song) }
+        SkyRuins.newFloor(&r).forEach { add($0) }
         r.floorRoomsNeeded = RunModifiers.rooms(Rooms.roomsNeeded(floor: r.floor, difficulty: r.difficulty, bossFloor: Challenges.bossFloor(r), dice: &d), r)
         r.upcomingRooms = []
         r.gearSavedThisFloor = false

@@ -393,6 +393,7 @@ struct CreateCharacterView: View {
         case "The Infernal Descent": return "The Infernal, unlocked, dungeon of pure darkness, 10 floors. Press to select."
         case "The Abyssal Deep": return "The Abyssal Deep. Unlocked. The Leviathan awaits."
         case "The Shadow World": return "The Shadow World. Unlocked. The Shapeshifter awaits."
+        case "The Sky Ruins": return "The Sky Ruins. Unlocked. Queen Verdana awaits."
         default: return "\(c.key), unlocked, 10 floors. Press to select."
         }
     }
@@ -419,6 +420,9 @@ struct CreateCharacterView: View {
             case "The Shadow World":
                 Feedback.announce("The Shadow World is sealed. It has waited 3000 years. Complete The Abyssal Deep first to break the seal.")
                 showToast("🌑 Complete The Abyssal Deep to unlock The Shadow World.")
+            case "The Sky Ruins":
+                Feedback.announce("The Sky Ruins float far above the dungeons. Complete The Shadow World to find the way up.")
+                showToast("☁️ Complete The Shadow World to unlock The Sky Ruins.")
             default: break
             }
             return

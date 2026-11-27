@@ -72,6 +72,9 @@ public enum Encounters {
         public var spirit: String? = nil
         /// A Void Fragment for the Void Chronicles.
         public var voidFragment = false
+        /// 12.3 Sky Ruins: you fell to the next floor, or the wind carried you past the room.
+        public var skyFall = false
+        public var skyCarried = false
     }
 
     public static func enterSpecial(_ room: SpecialRoom, _ run: inout Run, dice: inout some Dice,
@@ -208,6 +211,7 @@ public enum Encounters {
                          text: "Four camera feeds — North, South, East, West. The Darkness Swallower is on one feed. Listen for the growl: it comes from its camera. Then escape the opposite direction. You have \(Int(ShadowEvents.securitySeconds)) seconds. The growl is coming from the \(dir.rawValue).",
                          choices: Compass.allCases.map { "Escape \($0.rawValue)" }, weight: 0, dungeons: nil)
         }
+        if let e = SkyRuins.event(id) { return e }
         if let e = HollowEvents.event(id) { return e }
         if let e = SpecialEncounters.event(id) { return e }
         return events.first { $0.id == id }
@@ -250,6 +254,13 @@ public enum Encounters {
         if let o = RareRooms.choose(id, choice, &run, dice: &dice, wallet: wallet) { return o }
         if id.hasPrefix("weeping-") { return HollowEvents.choose(id, choice, &run, dice: &dice, wallet: wallet) }
         if id.hasPrefix("shadow-") { return ShadowEvents.choose(id, choice, &run, dice: &dice, wallet: wallet) }
+        if id.hasPrefix("sky-") {
+            let c = SkyRuins.choose(id, choice, &run)
+            var o = c.0
+            o.skyFall = c.fall
+            o.skyCarried = c.carried
+            return o
+        }
 
         switch (id, choice) {
         case ("abyssal-singing", 0):

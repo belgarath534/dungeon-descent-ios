@@ -141,6 +141,12 @@ public enum Skills {
         if spec.oncePerRun { run.usedOncePerRun.append(effect) }
         if !run.skillsUsed.contains(effect) { run.skillsUsed.append(effect) }
         run.defending = false
+        // The Sky Ruins: a fire skill burns roots; then the turn's poison and vines.
+        SkyRuins.skillUsed(&run, name: skill.name, effect: effect, log: &r.log)
+        if SkyRuins.turnStart(&run, attacking: false, log: &r.log) {
+            if run.isDead { r.playerDied = true; run.inCombat = false; r.announcement = r.log.last; return r }
+            return Combat.finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)
+        }
         if let line = Corruption.backfire(&run, skill: skill.name, dice: &dice) {
             r.log.append(line)
             return Combat.finishTurn(&run, r, skipEnemy: false, dice: &dice, options: options)

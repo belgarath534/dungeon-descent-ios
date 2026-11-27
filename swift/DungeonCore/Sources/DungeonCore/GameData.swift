@@ -133,6 +133,7 @@ public enum GameData {
         "The Infernal Descent",
         "The Abyssal Deep",
         "The Shadow World",
+        "The Sky Ruins",
     ]
 
     public static let maxCharacters = 10

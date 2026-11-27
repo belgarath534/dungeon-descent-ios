@@ -41,6 +41,7 @@ public enum Intros {
         "The Infernal Descent": ("Entering the Infernal", "Everything here has already burned. It burns still. The things that live in the fire have stopped noticing the fire. They will notice you."),
         "The Abyssal Deep": ("Descending into the Deep", "The deepest dungeon. Every boss here has four phases and at least 600 HP. It hits harder than anything you have faced. Stock every potion. Use every skill. Cast every spell. You have been warned."),
         "The Shadow World": ("Entering the Shadow World", "It has existed for 3000 years beneath a cursed forest. It does not obey your rules. The Shapeshifter waits at the end — wearing your face, using your skills, knowing your every move. Nothing that enters here leaves unchanged."),
+        "The Sky Ruins": ("Climbing into the Sky Ruins", "The stairs end in open sky. Below you, clouds. Ahead, broken towers wrapped in vines thicker than your arm. Something sweet is in the air. It burns a little when you breathe."),
     ]
 
     public static let runStartQuotes: [String: [String: String]] = [

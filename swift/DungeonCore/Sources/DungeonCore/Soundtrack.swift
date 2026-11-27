@@ -33,7 +33,7 @@ public enum Soundtrack {
     private static let prefixes: [String: String] = [
         "The Ashbound Wastes": "ash", "Frosthold Abyss": "frost", "The Sunken Archives": "sunken",
         "The Hollow": "hollow", "The Whispering Forest": "whisper", "The Abyssal Deep": "abyssal",
-        "The Infernal Descent": "infernal", "The Shadow World": "shadow",
+        "The Infernal Descent": "infernal", "The Shadow World": "shadow", "The Sky Ruins": "skyruins",
     ]
 
     /// Exploration music by depth: three tracks per dungeon and a boss track on floor 10.
@@ -74,6 +74,7 @@ public enum Soundtrack {
         case "The Infernal Descent": return "infernal"
         case "The Abyssal Deep": return "abyssal"
         case "The Shadow World": return "shadow"
+        case "The Sky Ruins": return "sky"
         default: return "crypt"
         }
     }

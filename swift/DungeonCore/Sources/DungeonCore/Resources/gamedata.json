@@ -11183,6 +11183,84 @@
     "key": "dd_void_fragments",
     "min": 25
    }
+  },
+  {
+   "id": "ach-undying-no-more",
+   "name": "Undying No More",
+   "icon": "🌹",
+   "desc": "She said she could not die. She was wrong.",
+   "hint": "Defeat Queen Verdana in The Sky Ruins.",
+   "gold": 400,
+   "trophies": 6,
+   "condition": {
+    "stat": "skyVerdanaKills",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-root-and-branch",
+   "name": "Root and Branch",
+   "icon": "🔥",
+   "desc": "You burned her roots before she could dig in.",
+   "hint": "Burn Queen Verdana's roots before her third phase.",
+   "gold": 300,
+   "trophies": 5,
+   "condition": {
+    "stat": "skyRootsBurnedEarly",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-antidote-not-required",
+   "name": "Antidote Not Required",
+   "icon": "🧪",
+   "desc": "All that poison, and you never needed the cure.",
+   "hint": "Defeat Queen Verdana without using an Antidote that run.",
+   "gold": 300,
+   "trophies": 5,
+   "condition": {
+    "stat": "skyNoAntidoteWins",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-featherweight",
+   "name": "Featherweight",
+   "icon": "🪶",
+   "desc": "Three falls. Still standing.",
+   "hint": "Fall off the edge 3 times in one Sky Ruins run.",
+   "gold": 150,
+   "trophies": 3,
+   "condition": {
+    "stat": "skyFeatherweight",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-doctors-orders",
+   "name": "Doctor's Orders",
+   "icon": "🩺",
+   "desc": "The cure was worse. It worked anyway.",
+   "hint": "Win a run as a Plague Doctor.",
+   "gold": 300,
+   "trophies": 5,
+   "condition": {
+    "stat": "plagueDoctorWins",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-some-assembly",
+   "name": "Some Assembly Required",
+   "icon": "⚙️",
+   "desc": "Built, not born. Built well.",
+   "hint": "Win a run as an Artificer.",
+   "gold": 300,
+   "trophies": 5,
+   "condition": {
+    "stat": "artificerWins",
+    "min": 1
+   }
   }
  ],
  "dailyQuests": [
