@@ -133409,6 +133409,2657 @@
           }
         }
       }
+    },
+    "Vine Creeper": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trepadeira Rastejante"
+          }
+        }
+      }
+    },
+    "A tangle of vines that moves like a snake. Its thorns can poison you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um emaranhado de vinhas que se move como uma cobra. Os espinhos podem te envenenar."
+          }
+        }
+      }
+    },
+    "Spore Drifter": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esporo Flutuante"
+          }
+        }
+      }
+    },
+    "A floating mushroom. When it dies it bursts into a poison cloud.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um cogumelo que flutua. Quando morre, estoura numa nuvem de veneno."
+          }
+        }
+      }
+    },
+    "Ruin Gull": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gaivota das Ruínas"
+          }
+        }
+      }
+    },
+    "A sky gull grown huge on garden seeds. Fast and mean.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma gaivota do céu que cresceu enorme comendo sementes do jardim. Rápida e malvada."
+          }
+        }
+      }
+    },
+    "Thorn Sprite": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fada dos Espinhos"
+          }
+        }
+      }
+    },
+    "A little spirit made of thorns. Hitting it hurts you: 3 damage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um pequeno espírito feito de espinhos. Acertá-lo te machuca: 3 de dano."
+          }
+        }
+      }
+    },
+    "Rootling": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raizinha"
+          }
+        }
+      }
+    },
+    "A walking plant. It heals 4 HP every turn while its roots are in the soil.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma planta que anda. Cura 4 de HP por turno enquanto as raízes estão no solo."
+          }
+        }
+      }
+    },
+    "Strangler Fig": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Figueira Estranguladora"
+          }
+        }
+      }
+    },
+    "A tree that wraps around its prey. Once a fight, its grip makes you lose a turn.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma árvore que se enrola na presa. Uma vez por luta, o aperto te faz perder um turno."
+          }
+        }
+      }
+    },
+    "Blight Wasp Swarm": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enxame de Vespas Pestilentas"
+          }
+        }
+      }
+    },
+    "A cloud of wasps fat on poisoned nectar. Every sting poisons you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma nuvem de vespas gordas de néctar envenenado. Cada ferroada te envenena."
+          }
+        }
+      }
+    },
+    "Gargoyle Moss": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Musgo Gárgula"
+          }
+        }
+      }
+    },
+    "A statue covered in stone-hard moss. Your first two hits do half damage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma estátua coberta de musgo duro como pedra. Seus dois primeiros golpes causam metade do dano."
+          }
+        }
+      }
+    },
+    "Pollen Wraith": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Espectro de Pólen"
+          }
+        }
+      }
+    },
+    "A ghost made of pollen. Its hits can put you to sleep, and you lose a turn.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um fantasma feito de pólen. Os golpes dele podem te fazer dormir, e você perde um turno."
+          }
+        }
+      }
+    },
+    "Sky Serpent": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serpente do Céu"
+          }
+        }
+      }
+    },
+    "A winged snake. Its bite gives 2 poison stacks.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma cobra alada. A mordida dá 2 acúmulos de veneno."
+          }
+        }
+      }
+    },
+    "Verdant Knight": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cavaleiro Verdejante"
+          }
+        }
+      }
+    },
+    "A knight in armor made of bark. It blocks 6 damage a hit until you burn it or hit it hard (20 or more).": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um cavaleiro de armadura de casca. Bloqueia 6 de dano por golpe até você queimá-la ou acertar forte (20 ou mais)."
+          }
+        }
+      }
+    },
+    "Corpse Bloom": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flor Cadáver"
+          }
+        }
+      }
+    },
+    "A giant flower that feeds on poison. It heals from the poison damage you take.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma flor gigante que se alimenta de veneno. Ela se cura com o dano de veneno que você recebe."
+          }
+        }
+      }
+    },
+    "Stormcaller Harpy": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Harpia Chamadora de Tempestades"
+          }
+        }
+      }
+    },
+    "A harpy that rides the wind. When it dies, its last gust can knock you down.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma harpia que cavalga o vento. Quando morre, a última rajada pode te derrubar."
+          }
+        }
+      }
+    },
+    "Hollow Gardener": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jardineiro Oco"
+          }
+        }
+      }
+    },
+    "A gardener with nothing inside but roots. Every 3 turns it plants a Spore Pod that poisons you. Sometimes drops a Root Torch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um jardineiro sem nada dentro além de raízes. A cada 3 turnos planta um Casulo de Esporos que te envenena. Às vezes deixa cair uma Tocha de Raízes."
+          }
+        }
+      }
+    },
+    "The Overgrown Colossus": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Colosso Coberto de Mato"
+          }
+        }
+      }
+    },
+    "Regrows 10 HP a turn until you burn it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Regenera 10 de HP por turno até você queimá-lo."
+          }
+        }
+      }
+    },
+    "Mother of Spores": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mãe dos Esporos"
+          }
+        }
+      }
+    },
+    "Every hit gives you 2 poison stacks.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cada golpe te dá 2 acúmulos de veneno."
+          }
+        }
+      }
+    },
+    "The Windbroken King": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Rei Partido pelo Vento"
+          }
+        }
+      }
+    },
+    "Every 3rd turn, a gust: you lose your next action.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A cada 3 turnos, uma rajada: você perde a próxima ação."
+          }
+        }
+      }
+    },
+    "A giant pruning hook. Every 3rd turn, a sweep that makes you bleed 4 a turn for 3 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um gancho de poda gigante. A cada 3 turnos, um golpe que te faz sangrar 4 por turno durante 3 turnos."
+          }
+        }
+      }
+    },
+    "Queen Verdana": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rainha Verdana"
+          }
+        }
+      }
+    },
+    "The Undying Bloom. She bred a flower that could not die, and it tore her kingdom out of the earth. She is still growing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Flor Imortal. Ela criou uma flor que não podia morrer, e a flor arrancou o reino dela da terra. Ela ainda está crescendo."
+          }
+        }
+      }
+    },
+    "\"You'll make such lovely soil.\" A wall of thorns rises in front of her. Her attacks are halved until you cut through it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"Você vai virar um solo tão bonito.\" Um muro de espinhos se ergue na frente dela. Os ataques dela caem pela metade até você cortá-lo."
+          }
+        }
+      }
+    },
+    "\"I cannot die. I am the garden.\" Her roots dig into the stone. Unless they are burned, she regrows 20 HP a turn.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "\"Eu não posso morrer. Eu sou o jardim.\" As raízes dela se cravam na pedra. A menos que sejam queimadas, ela regenera 20 de HP por turno."
+          }
+        }
+      }
+    },
+    "The Landing": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Patamar"
+          }
+        }
+      }
+    },
+    "The Hanging Gardens": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os Jardins Suspensos"
+          }
+        }
+      }
+    },
+    "The Aviary": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Aviário"
+          }
+        }
+      }
+    },
+    "The Rootways": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os Caminhos das Raízes"
+          }
+        }
+      }
+    },
+    "The Groundskeeper's Shed": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Galpão do Zelador"
+          }
+        }
+      }
+    },
+    "The Poisoned Wells": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Os Poços Envenenados"
+          }
+        }
+      }
+    },
+    "The Bell Tower": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Torre do Sino"
+          }
+        }
+      }
+    },
+    "The Windward Edge": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Beira do Vento"
+          }
+        }
+      }
+    },
+    "The Queen's Arboretum": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Arboreto da Rainha"
+          }
+        }
+      }
+    },
+    "The Throne of Thorns": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Trono de Espinhos"
+          }
+        }
+      }
+    },
+    "A fountain overgrown with flowers the color of bruises.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma fonte coberta de flores da cor de hematomas."
+          }
+        }
+      }
+    },
+    "Wind howls through a hole where a wall used to be. Clouds drift past below.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O vento uiva por um buraco onde antes havia uma parede. Nuvens passam lá embaixo."
+          }
+        }
+      }
+    },
+    "A collapsed bridge. Vines hold the halves together, barely.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma ponte desabada. Vinhas seguram as metades juntas, por pouco."
+          }
+        }
+      }
+    },
+    "A kitchen garden where the herbs have grown taller than you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma horta onde as ervas cresceram mais altas que você."
+          }
+        }
+      }
+    },
+    "A sundial with no shadow. The light here comes from everywhere.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um relógio de sol sem sombra. A luz aqui vem de todo lugar."
+          }
+        }
+      }
+    },
+    "A library with every book split open by roots growing through the pages.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma biblioteca com cada livro rasgado por raízes crescendo entre as páginas."
+          }
+        }
+      }
+    },
+    "A greenhouse. The glass is intact. Something inside taps on it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma estufa. O vidro está inteiro. Algo lá dentro bate nele."
+          }
+        }
+      }
+    },
+    "Seed pods hang from the ceiling like lanterns. One sways without wind.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Casulos de sementes pendem do teto como lanternas. Um balança sem vento."
+          }
+        }
+      }
+    },
+    "Bones in a flowerbed, arranged neatly, like they were planted.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ossos num canteiro, arrumados com cuidado, como se tivessem sido plantados."
+          }
+        }
+      }
+    },
+    "Pollen drifts in the light like snow. You try not to breathe too deep.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pólen flutua na luz como neve. Você tenta não respirar fundo demais."
+          }
+        }
+      }
+    },
+    "A royal portrait, the queen's face scratched out and replaced with a flower.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um retrato real, o rosto da rainha arranhado e trocado por uma flor."
+          }
+        }
+      }
+    },
+    "A gardener's journal on a bench: \"She says it can't die. She says that like it's good news.\"": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um diário de jardineiro num banco: \"Ela diz que não pode morrer. Ela fala isso como se fosse uma boa notícia.\""
+          }
+        }
+      }
+    },
+    "Statues of soldiers, each one hollowed out and full of moss.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Estátuas de soldados, cada uma oca e cheia de musgo."
+          }
+        }
+      }
+    },
+    "A rope bridge between two towers. It creaks in a rhythm, like breathing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma ponte de corda entre duas torres. Ela range num ritmo, como uma respiração."
+          }
+        }
+      }
+    },
+    "A cracked observatory. The telescope points down.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um observatório rachado. O telescópio aponta para baixo."
+          }
+        }
+      }
+    },
+    "Broken stairs, open sky, and a garden that hasn't been tended in a thousand years. It tends itself now.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escadas quebradas, céu aberto e um jardim que não é cuidado há mil anos. Agora ele cuida de si mesmo."
+          }
+        }
+      }
+    },
+    "Planters hang from chains over nothing. Some of them are breathing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vasos pendem de correntes sobre o nada. Alguns estão respirando."
+          }
+        }
+      }
+    },
+    "Empty cages, every door bent outward.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gaiolas vazias, todas as portas entortadas para fora."
+          }
+        }
+      }
+    },
+    "Corridors carved by roots, not hands. They're still carving.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Corredores escavados por raízes, não por mãos. Elas ainda estão escavando."
+          }
+        }
+      }
+    },
+    "Tools on every wall. One hook is missing. You hear it scraping somewhere ahead.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ferramentas em todas as paredes. Falta um gancho. Você ouve ele raspando em algum lugar à frente."
+          }
+        }
+      }
+    },
+    "The water is green and sweet-smelling. Don't.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A água é verde e tem cheiro doce. Não beba."
+          }
+        }
+      }
+    },
+    "The bell is wrapped in vines. Every so often, they ring it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O sino está enrolado em vinhas. De vez em quando, elas o tocam."
+          }
+        }
+      }
+    },
+    "The floor ends. The wind doesn't.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O chão acaba. O vento não."
+          }
+        }
+      }
+    },
+    "Every plant here leans the same way: toward the throne.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toda planta aqui se inclina para o mesmo lado: para o trono."
+          }
+        }
+      }
+    },
+    "She has been waiting. She has been growing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ela estava esperando. Ela estava crescendo."
+          }
+        }
+      }
+    },
+    "Clears all poison. Health potions don't.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cura todo o veneno. Poções de vida não curam."
+          }
+        }
+      }
+    },
+    "Featherfall Charm": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amuleto de Queda Suave"
+          }
+        }
+      }
+    },
+    "You take no damage from falls while you carry it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você não sofre dano de queda enquanto o carrega."
+          }
+        }
+      }
+    },
+    "Verdant Blade": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lâmina Verdejante"
+          }
+        }
+      }
+    },
+    "A blade grown, not forged. Each hit gives the enemy a poison stack.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma lâmina cultivada, não forjada. Cada golpe dá ao inimigo um acúmulo de veneno."
+          }
+        }
+      }
+    },
+    "Bark Mail": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cota de Casca"
+          }
+        }
+      }
+    },
+    "Armor of living bark. Poison can't touch you while you're above half HP.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Armadura de casca viva. O veneno não te atinge enquanto você está acima da metade do HP."
+          }
+        }
+      }
+    },
+    "Sky Lily": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lírio do Céu"
+          }
+        }
+      }
+    },
+    "A flower that grows only above the clouds. Restores 40 HP.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma flor que só cresce acima das nuvens. Restaura 40 de HP."
+          }
+        }
+      }
+    },
+    "Cloud Pearl": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pérola de Nuvem"
+          }
+        }
+      }
+    },
+    "A pearl formed inside a cloud. Worth 45 gold.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma pérola formada dentro de uma nuvem. Vale 45 de ouro."
+          }
+        }
+      }
+    },
+    "Gardener's Shears": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tesoura de Jardineiro"
+          }
+        }
+      }
+    },
+    "Rusty but sharp. Made for cutting things that grow back.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enferrujada, mas afiada. Feita para cortar coisas que crescem de novo."
+          }
+        }
+      }
+    },
+    "Root Torch": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocha de Raízes"
+          }
+        }
+      }
+    },
+    "Burns roots. Use it in a fight to stop a plant (or Queen Verdana) from regrowing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Queima raízes. Use numa luta para impedir uma planta (ou a Rainha Verdana) de regenerar."
+          }
+        }
+      }
+    },
+    "Toxic Flask": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frasco Tóxico"
+          }
+        }
+      }
+    },
+    "Throw a flask — poisons the enemy for 6 damage a turn for 3 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arremesse um frasco — envenena o inimigo com 6 de dano por turno durante 3 turnos."
+          }
+        }
+      }
+    },
+    "Remedy": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remédio"
+          }
+        }
+      }
+    },
+    "Clear your poison and heal 20 HP.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cure seu veneno e recupere 20 de HP."
+          }
+        }
+      }
+    },
+    "Leeches": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sanguessugas"
+          }
+        }
+      }
+    },
+    "Attach leeches — 1.2x damage, you heal half of it.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prenda sanguessugas — 1,2x de dano, e você cura metade disso."
+          }
+        }
+      }
+    },
+    "Bone Saw": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Serra de Ossos"
+          }
+        }
+      }
+    },
+    "A brutal cut — 1.4x damage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um corte brutal — 1,4x de dano."
+          }
+        }
+      }
+    },
+    "Smelling Salts": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sais Aromáticos"
+          }
+        }
+      }
+    },
+    "Wake up sharp — restore 12 SP and heal 8 HP.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acorde esperto — recupere 12 de SP e 8 de HP."
+          }
+        }
+      }
+    },
+    "A cloud of sickness — poisons the enemy for 10 damage a turn for 4 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma nuvem de doença — envenena o inimigo com 10 de dano por turno durante 4 turnos."
+          }
+        }
+      }
+    },
+    "Quarantine": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quarentena"
+          }
+        }
+      }
+    },
+    "Seal the enemy in — its next 2 attacks are halved.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isole o inimigo — os próximos 2 ataques dele caem pela metade."
+          }
+        }
+      }
+    },
+    "Fever Dream": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delírio de Febre"
+          }
+        }
+      }
+    },
+    "Burning fever — 1.3x damage, 40% chance to stun.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Febre ardente — 1,3x de dano, 40% de chance de atordoar."
+          }
+        }
+      }
+    },
+    "Bloodletting": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sangria"
+          }
+        }
+      }
+    },
+    "Let the bad blood out — 2.2x damage, costs you 10 HP.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tire o sangue ruim — 2,2x de dano, custa 10 do seu HP."
+          }
+        }
+      }
+    },
+    "Plague Mask": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máscara da Peste"
+          }
+        }
+      }
+    },
+    "Breathe easy — take 35% less damage for 3 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respire tranquilo — receba 35% menos dano por 3 turnos."
+          }
+        }
+      }
+    },
+    "Black Death": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peste Negra"
+          }
+        }
+      }
+    },
+    "The great sickness — 2.5x damage and poison for 14 a turn for 3 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A grande doença — 2,5x de dano e veneno de 14 por turno durante 3 turnos."
+          }
+        }
+      }
+    },
+    "Pandemic": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pandemia"
+          }
+        }
+      }
+    },
+    "It spreads — 3x damage, the enemy takes 40% more damage for 3 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ela se espalha — 3x de dano, o inimigo recebe 40% mais dano por 3 turnos."
+          }
+        }
+      }
+    },
+    "The Cure": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Cura"
+          }
+        }
+      }
+    },
+    "The cure is worse — heal 60% of your max HP. Once per run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A cura é pior — cure 60% do seu HP máximo. Uma vez por partida."
+          }
+        }
+      }
+    },
+    "Pestilence": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pestilência"
+          }
+        }
+      }
+    },
+    "A plague of rats — deals a third of the enemy's current HP.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma praga de ratos — causa um terço do HP atual do inimigo."
+          }
+        }
+      }
+    },
+    "Last Rites": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Últimos Ritos"
+          }
+        }
+      }
+    },
+    "Read the last rites — kills any non-boss below 25% HP outright.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leia os últimos ritos — mata na hora qualquer inimigo que não seja chefe abaixo de 25% de HP."
+          }
+        }
+      }
+    },
+    "Deploy Turret": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Montar Torreta"
+          }
+        }
+      }
+    },
+    "A turret that shoots for 7 damage every turn for 3 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma torreta que atira 7 de dano todo turno durante 3 turnos."
+          }
+        }
+      }
+    },
+    "Shock Gauntlet": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manopla de Choque"
+          }
+        }
+      }
+    },
+    "1.3x damage, 30% chance to stun.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1,3x de dano, 30% de chance de atordoar."
+          }
+        }
+      }
+    },
+    "Repair Kit": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kit de Reparos"
+          }
+        }
+      }
+    },
+    "Patch yourself up — heal 18 HP.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remende-se — cure 18 de HP."
+          }
+        }
+      }
+    },
+    "Rivet Gun": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pistola de Rebites"
+          }
+        }
+      }
+    },
+    "Three rivets — 0.6x damage, three hits.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Três rebites — 0,6x de dano, três golpes."
+          }
+        }
+      }
+    },
+    "Steam Vent": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jato de Vapor"
+          }
+        }
+      }
+    },
+    "Scalding steam — the enemy's next 2 attacks are 30% weaker.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vapor escaldante — os próximos 2 ataques do inimigo ficam 30% mais fracos."
+          }
+        }
+      }
+    },
+    "Flamethrower": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lança-chamas"
+          }
+        }
+      }
+    },
+    "14–20 fire damage and burning for 3 turns. Burns roots, bark and regrowth.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "14–20 de dano de fogo e queimadura por 3 turnos. Queima raízes, casca e regeneração."
+          }
+        }
+      }
+    },
+    "Clockwork Shield": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Escudo de Engrenagens"
+          }
+        }
+      }
+    },
+    "A spinning shield absorbs up to 35 damage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um escudo giratório absorve até 35 de dano."
+          }
+        }
+      }
+    },
+    "Tesla Coil": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bobina de Tesla"
+          }
+        }
+      }
+    },
+    "2x damage and stuns for a turn.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "2x de dano e atordoa por um turno."
+          }
+        }
+      }
+    },
+    "Grappling Hook": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gancho de Escalada"
+          }
+        }
+      }
+    },
+    "Pull the enemy off balance — its next attack will probably miss.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desequilibre o inimigo — o próximo ataque dele provavelmente vai errar."
+          }
+        }
+      }
+    },
+    "Iron Plating": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blindagem de Ferro"
+          }
+        }
+      }
+    },
+    "+8 defense for 3 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+8 de defesa por 3 turnos."
+          }
+        }
+      }
+    },
+    "Overclock": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sobrecarga"
+          }
+        }
+      }
+    },
+    "Your next 2 attacks deal double.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus próximos 2 ataques causam o dobro."
+          }
+        }
+      }
+    },
+    "Siege Cannon": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canhão de Cerco"
+          }
+        }
+      }
+    },
+    "4x damage. Costs you 15 HP from the recoil.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "4x de dano. Custa 15 do seu HP pelo coice."
+          }
+        }
+      }
+    },
+    "Automaton": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autômato"
+          }
+        }
+      }
+    },
+    "A clockwork soldier fights beside you — 15 damage a turn for 4 turns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um soldado mecânico luta ao seu lado — 15 de dano por turno durante 4 turnos."
+          }
+        }
+      }
+    },
+    "Masterwork": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Obra-prima"
+          }
+        }
+      }
+    },
+    "All your skills deal 40% more for the rest of the run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todas as suas habilidades causam 40% mais pelo resto da partida."
+          }
+        }
+      }
+    },
+    "Doomsday Device": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máquina do Juízo Final"
+          }
+        }
+      }
+    },
+    "5x damage. Once per run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "5x de dano. Uma vez por partida."
+          }
+        }
+      }
+    },
+    "The Sky Ruins": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As Ruínas do Céu"
+          }
+        }
+      }
+    },
+    "Plague Doctor": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Médico da Peste"
+          }
+        }
+      }
+    },
+    "PlagueDoctor": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Médico da Peste"
+          }
+        }
+      }
+    },
+    "Artificer": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Artífice"
+          }
+        }
+      }
+    },
+    "Goliath": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Golias"
+          }
+        }
+      }
+    },
+    "Impossible": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossível"
+          }
+        }
+      }
+    },
+    "The Cure Is Worse": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Cura É Pior"
+          }
+        }
+      }
+    },
+    "Built, Not Born": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construído, Não Nascido"
+          }
+        }
+      }
+    },
+    "Bird mask, black coat, a bag of flasks. Poisons the enemy, cures the self. Takes half damage from poison and breathes through spore clouds.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máscara de pássaro, casaco preto, uma bolsa de frascos. Envenena o inimigo e cura a si mesmo. Recebe metade do dano de veneno e respira através de nuvens de esporos."
+          }
+        }
+      }
+    },
+    "An inventor who fights with gadgets: turrets that shoot every turn, a shock gauntlet, a flamethrower that burns roots, and repair kits.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um inventor que luta com engenhocas: torretas que atiram todo turno, uma manopla de choque, um lança-chamas que queima raízes e kits de reparos."
+          }
+        }
+      }
+    },
+    "Glide · +8% dodge · −10% HP": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plana · +8% de esquiva · −10% de HP"
+          }
+        }
+      }
+    },
+    "+15% HP · Stone's Endurance": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+15% de HP · Resistência da Pedra"
+          }
+        }
+      }
+    },
+    "1 life · No revives · Everything stronger": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 vida · Sem reviver · Tudo mais forte"
+          }
+        }
+      }
+    },
+    "💀 Impossible": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "💀 Impossível"
+          }
+        }
+      }
+    },
+    "❤️ One Life · No Revives": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "❤️ Uma Vida · Sem Reviver"
+          }
+        }
+      }
+    },
+    "Everything is stronger. Most players will not finish a single floor.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tudo é mais forte. A maioria dos jogadores não vai terminar nem um andar."
+          }
+        }
+      }
+    },
+    "+80% enemy HP · +60% enemy attack · Potions heal half · Double gold and XP": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+80% de HP dos inimigos · +60% de ataque dos inimigos · Poções curam metade · Ouro e XP em dobro"
+          }
+        }
+      }
+    },
+    "Impossible. One life. Everything is stronger. Most players will not finish a single floor. Are you sure?": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Impossível. Uma vida. Tudo é mais forte. A maioria dos jogadores não vai terminar nem um andar. Tem certeza?"
+          }
+        }
+      }
+    },
+    "🌪️ A Gust": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌪️ Uma Rajada"
+          }
+        }
+      }
+    },
+    "The wind tears at you! Brace yourself, or let it carry you ahead?": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O vento te puxa! Firme os pés ou deixe ele te levar adiante?"
+          }
+        }
+      }
+    },
+    "Brace (lose 5 HP)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Firmar os pés (perde 5 de HP)"
+          }
+        }
+      }
+    },
+    "Let it carry you": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deixar o vento levar"
+          }
+        }
+      }
+    },
+    "Walk on": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seguir em frente"
+          }
+        }
+      }
+    },
+    "The wind tears at you, but you don't move. Mountain Born.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O vento te puxa, mas você não se move. Nascido da Montanha."
+          }
+        }
+      }
+    },
+    "🌪️ The Edge": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌪️ A Beirada"
+          }
+        }
+      }
+    },
+    "Fall": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cair"
+          }
+        }
+      }
+    },
+    "Glide down": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Planar para baixo"
+          }
+        }
+      }
+    },
+    "The floor crumbles under you and the wind pulls you over the edge. You fall to the floor below.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O chão desmorona debaixo de você e o vento te puxa pela beirada. Você cai para o andar de baixo."
+          }
+        }
+      }
+    },
+    "🌿 Strangling Ivy": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌿 Hera Estranguladora"
+          }
+        }
+      }
+    },
+    "Ivy wraps around your legs. You'll spend your next action in a fight tearing free.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A hera se enrola nas suas pernas. Você vai gastar a próxima ação numa luta para se soltar."
+          }
+        }
+      }
+    },
+    "Pull free": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Se soltar"
+          }
+        }
+      }
+    },
+    "🍄 Spore Pod": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🍄 Casulo de Esporos"
+          }
+        }
+      }
+    },
+    "A fat spore pod swells on the wall. It's about to burst.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um casulo de esporos gordo incha na parede. Está prestes a estourar."
+          }
+        }
+      }
+    },
+    "Hold your breath and move on": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prender a respiração e seguir"
+          }
+        }
+      }
+    },
+    "Search anyway": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Procurar mesmo assim"
+          }
+        }
+      }
+    },
+    "🌹 Thornwall": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌹 Muro de Espinhos"
+          }
+        }
+      }
+    },
+    "A wall of thorns blocks the room. Cut through it, or go around and leave the room unsearched?": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um muro de espinhos bloqueia a sala. Cortar caminho ou dar a volta e deixar a sala sem procurar?"
+          }
+        }
+      }
+    },
+    "Cut through (take 8 damage)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cortar caminho (recebe 8 de dano)"
+          }
+        }
+      }
+    },
+    "Go around": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dar a volta"
+          }
+        }
+      }
+    },
+    "🌸 Siren Bloom": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌸 Flor Sereia"
+          }
+        }
+      }
+    },
+    "A huge flower with a sweet, heavy smell. Breathing it in would heal you… probably.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uma flor enorme com um cheiro doce e pesado. Respirar isso te curaria… provavelmente."
+          }
+        }
+      }
+    },
+    "Breathe it in (+15 HP, 2 poison)": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respirar (+15 de HP, 2 de veneno)"
+          }
+        }
+      }
+    },
+    "The vines are thicker now. The garden is growing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As vinhas estão mais grossas agora. O jardim está crescendo."
+          }
+        }
+      }
+    },
+    "Roots crack the floor behind you. The garden is growing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raízes racham o chão atrás de você. O jardim está crescendo."
+          }
+        }
+      }
+    },
+    "The garden has noticed you.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O jardim percebeu você."
+          }
+        }
+      }
+    },
+    "Climbing into the Sky Ruins": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subindo às Ruínas do Céu"
+          }
+        }
+      }
+    },
+    "The stairs end in open sky. Below you, clouds. Ahead, broken towers wrapped in vines thicker than your arm. Something sweet is in the air. It burns a little when you breathe.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A escada termina no céu aberto. Abaixo, nuvens. À frente, torres quebradas envoltas em vinhas mais grossas que o seu braço. Há algo doce no ar. Arde um pouco quando você respira."
+          }
+        }
+      }
+    },
+    "A kingdom torn out of the earth by a flower that could not die. Stacking poison, killer plants, wind that throws you off the edge, and a garden that grows stronger the longer you stay. Queen Verdana waits on her throne of thorns.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Um reino arrancado da terra por uma flor que não podia morrer. Veneno que acumula, plantas assassinas, vento que te joga da beirada e um jardim que fica mais forte quanto mais você fica. A Rainha Verdana espera no seu trono de espinhos."
+          }
+        }
+      }
+    },
+    "🔒 Complete The Shadow World to unlock": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🔒 Complete o Mundo das Sombras para desbloquear"
+          }
+        }
+      }
+    },
+    "The Sky Ruins. Unlocked. Queen Verdana awaits.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As Ruínas do Céu. Desbloqueada. A Rainha Verdana aguarda."
+          }
+        }
+      }
+    },
+    "The Sky Ruins float far above the dungeons. Complete The Shadow World to find the way up.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "As Ruínas do Céu flutuam muito acima das masmorras. Complete o Mundo das Sombras para encontrar o caminho."
+          }
+        }
+      }
+    },
+    "☁️ Complete The Shadow World to unlock The Sky Ruins.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "☁️ Complete o Mundo das Sombras para desbloquear as Ruínas do Céu."
+          }
+        }
+      }
+    },
+    "Undying No More": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nunca Mais Imortal"
+          }
+        }
+      }
+    },
+    "She said she could not die. She was wrong.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ela disse que não podia morrer. Ela estava errada."
+          }
+        }
+      }
+    },
+    "Defeat Queen Verdana in The Sky Ruins.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Derrote a Rainha Verdana nas Ruínas do Céu."
+          }
+        }
+      }
+    },
+    "Root and Branch": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raiz e Galho"
+          }
+        }
+      }
+    },
+    "You burned her roots before she could dig in.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Você queimou as raízes dela antes que ela se firmasse."
+          }
+        }
+      }
+    },
+    "Burn Queen Verdana's roots before her third phase.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Queime as raízes da Rainha Verdana antes da terceira fase."
+          }
+        }
+      }
+    },
+    "Antidote Not Required": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antídoto Dispensado"
+          }
+        }
+      }
+    },
+    "All that poison, and you never needed the cure.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Todo aquele veneno, e você nunca precisou da cura."
+          }
+        }
+      }
+    },
+    "Defeat Queen Verdana without using an Antidote that run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Derrote a Rainha Verdana sem usar nenhum Antídoto na partida."
+          }
+        }
+      }
+    },
+    "Featherweight": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Peso Pena"
+          }
+        }
+      }
+    },
+    "Three falls. Still standing.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Três quedas. Ainda de pé."
+          }
+        }
+      }
+    },
+    "Fall off the edge 3 times in one Sky Ruins run.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Caia da beirada 3 vezes numa partida das Ruínas do Céu."
+          }
+        }
+      }
+    },
+    "Doctor's Orders": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ordens Médicas"
+          }
+        }
+      }
+    },
+    "The cure was worse. It worked anyway.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A cura era pior. Funcionou mesmo assim."
+          }
+        }
+      }
+    },
+    "Win a run as a Plague Doctor.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vença uma partida como Médico da Peste."
+          }
+        }
+      }
+    },
+    "Some Assembly Required": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Requer Montagem"
+          }
+        }
+      }
+    },
+    "Built, not born. Built well.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Construído, não nascido. Bem construído."
+          }
+        }
+      }
+    },
+    "Win a run as an Artificer.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vença uma partida como Artífice."
+          }
+        }
+      }
+    },
+    "The Impossible": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O Impossível"
+          }
+        }
+      }
+    },
+    "They said it couldn't be done. They were wrong.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Disseram que não dava. Estavam errados."
+          }
+        }
+      }
+    },
+    "Clear any dungeon on Impossible.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vença qualquer masmorra no Impossível."
+          }
+        }
+      }
+    },
+    "Beyond Impossible": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Além do Impossível"
+          }
+        }
+      }
+    },
+    "The garden, the queen, one life. Beyond impossible.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O jardim, a rainha, uma vida. Além do impossível."
+          }
+        }
+      }
+    },
+    "Clear The Sky Ruins on Impossible.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vença as Ruínas do Céu no Impossível."
+          }
+        }
+      }
+    },
+    "Carrier": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Portador"
+          }
+        }
+      }
+    },
+    "Your attacks have a 25% chance to infect. Infected enemies take 5 damage per turn.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seus ataques têm 25% de chance de infectar. Inimigos infectados recebem 5 de dano por turno."
+          }
+        }
+      }
+    },
+    "Patient Zero — the sickness spreads from your touch.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paciente Zero — a doença se espalha pelo seu toque."
+          }
+        }
+      }
+    },
+    "Apothecary": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boticário"
+          }
+        }
+      }
+    },
+    "Potions heal 50% more. A doctor knows the right dose.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Poções curam 50% mais. Um médico sabe a dose certa."
+          }
+        }
+      }
+    },
+    "Right Dose — every potion works harder.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dose Certa — toda poção funciona melhor."
+          }
+        }
+      }
+    },
+    "Engineer": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Engenheiro"
+          }
+        }
+      }
+    },
+    "+4 defense from reinforced plating. Built to last.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+4 de defesa com blindagem reforçada. Feito para durar."
+          }
+        }
+      }
+    },
+    "Reinforced — your gear takes the hits.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reforçado — seu equipamento aguenta os golpes."
+          }
+        }
+      }
+    },
+    "Demolitionist": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demolidor"
+          }
+        }
+      }
+    },
+    "+4 attack. Everything you build explodes eventually.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+4 de ataque. Tudo que você constrói explode uma hora."
+          }
+        }
+      }
+    },
+    "Blast Radius — your gadgets hit harder.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raio de Explosão — suas engenhocas batem mais forte."
+          }
+        }
+      }
+    },
+    "Bird Mask": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Máscara de Pássaro"
+          }
+        }
+      }
+    },
+    "Poison does half damage to you and spore clouds can't reach you. Enemies you've poisoned deal 15% less damage.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O veneno causa metade do dano em você e nuvens de esporos não te alcançam. Inimigos que você envenenou causam 15% menos dano."
+          }
+        }
+      }
+    },
+    "Strangling Ivy can't hold you. Your Flamethrower burns roots, bark and regrowth.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A Hera Estranguladora não te segura. Seu Lança-chamas queima raízes, casca e regeneração."
+          }
+        }
+      }
+    },
+    "Seed of the Undying": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semente do Imortal"
+          }
+        }
+      }
+    },
+    "Queen Verdana's trophy. Once per run, it saves you from a killing blow at 1 HP.": {
+      "extractionState": "manual",
+      "localizations": {
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O troféu da Rainha Verdana. Uma vez por partida, te salva de um golpe mortal com 1 de HP."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
