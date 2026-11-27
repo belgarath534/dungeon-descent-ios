@@ -27,7 +27,7 @@ final class CreateCharacterTest: XCTestCase {
             sleep(4)
             dismissPopups()
             shot("round\(round)-charlist")
-            let create = app.buttons["Create a new character"]
+            let create = button("Create a new character")
             XCTAssert(waitFor(create), "No Create a new character button (round \(round))")
             create.tap()
             sleep(2)
@@ -59,7 +59,7 @@ final class CreateCharacterTest: XCTestCase {
         // 1–3: class, race, profession by the ◀ ▶ slider (round + 1 steps along).
         for (slider, next) in [("Next class", "Continue to Race →"), ("Next race", "Continue to Profession →"),
                                ("Next profession", "Continue to Dungeon →")] {
-            let arrow = app.buttons[slider]
+            let arrow = button(slider)
             XCTAssert(waitFor(arrow), "No \(slider) button")
             for _ in 0...(round * 3) { arrow.tap(); usleep(300_000) }
             shot("round\(round)-\(slider)")
@@ -89,8 +89,13 @@ final class CreateCharacterTest: XCTestCase {
         shot("round\(round)-created")
     }
 
+    /// A button by its label, in any letter case (button styles show some in capitals).
+    private func button(_ label: String) -> XCUIElement {
+        app.buttons.matching(NSPredicate(format: "label ==[c] %@", label)).firstMatch
+    }
+
     private func tap(_ label: String) {
-        let b = app.buttons[label]
+        let b = button(label)
         XCTAssert(waitFor(b), "No \"\(label)\" button. The game is \(app.state == .runningForeground ? "open" : "closed").")
         for _ in 0..<6 where !b.isHittable { app.swipeUp() }
         b.tap()
