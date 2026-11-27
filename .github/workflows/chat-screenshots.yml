@@ -146,7 +146,8 @@ jobs:
           . "$GITHUB_ENV" 2>/dev/null || true
           KEYPATH=$(grep '^ASC_KEY_PATH=' "$GITHUB_ENV" | tail -1 | cut -d= -f2-)
           KEYID=$(grep '^GOOD_KEY_ID=' "$GITHUB_ENV" | tail -1 | cut -d= -f2-)
-          pip3 install --quiet pyjwt cryptography requests
+          python3 -m venv /tmp/venv && . /tmp/venv/bin/activate
+          pip install --quiet pyjwt cryptography requests
           # JPEG: no transparency channel (App Store Connect can refuse PNGs with one).
           for D in iphone ipad; do mkdir -p "up/$D"; for F in shots/$D/*.png; do sips -s format jpeg -s formatOptions 92 "$F" --out "up/$D/$(basename "${F%.png}").jpg" >/dev/null; done; done
           export APP_STORE_CONNECT_PRIVATE_KEY="@file:$KEYPATH" APP_STORE_CONNECT_ISSUER_ID="$ASC_ISSUER_ID" APP_STORE_CONNECT_KEY_IDENTIFIER="$KEYID"
@@ -161,6 +162,7 @@ jobs:
           CHAT_REVIEW_EMAIL: ${{ secrets.CHAT_REVIEW_EMAIL }}
           CHAT_REVIEW_PASSWORD: ${{ secrets.CHAT_REVIEW_PASSWORD }}
         run: |
+          . /tmp/venv/bin/activate
           export ASC_KEY_PATH="$KEYPATH" GOOD_KEY_ID="$KEYID"
           python3 tools/chat-store.py
           export APP_STORE_CONNECT_PRIVATE_KEY="@file:$KEYPATH" APP_STORE_CONNECT_ISSUER_ID="$ASC_ISSUER_ID" APP_STORE_CONNECT_KEY_IDENTIFIER="$KEYID"
