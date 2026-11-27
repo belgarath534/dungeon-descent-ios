@@ -146,9 +146,10 @@ final class SkyRuinsTests: XCTestCase {
                 Combat.begin(&r, against: Combat.nextEnemy(for: r, dice: &dice))
                 if let p = bots.playOne(&r, dice: &dice) { problems.append("\(c.id) floor \(floor): \(p)") }
             }
-            // The boss: strong enough to finish her, so the whole fight is played.
+            // The boss. The bot is healed every turn so the whole fight is
+            // played (not by raising max HP: some boss hits are a share of it).
             r.floor = 10
-            r.maxHp = 5000; r.hp = 5000; r.sp = r.maxSp
+            r.hp = r.maxHp; r.sp = r.maxSp
             r.inventory.append(SkyRuins.rootTorch)
             Combat.begin(&r, against: Combat.nextBoss(for: r, dice: &dice))
             var achievements: [String] = []
@@ -158,10 +159,13 @@ final class SkyRuinsTests: XCTestCase {
             for turn in 0..<400 {
                 guard r.inCombat, r.enemy != nil else { break }
                 turns = turn
-                if turn == 30, let i = r.inventory.firstIndex(where: { $0.name == "Root Torch" }) {
+                // Burn her roots when she warns about them, as a player would.
+                if r.enemy?.flag("skyWarned") == true || r.enemy?.flag("skyPhase3") == true,
+                   r.enemy?.flag("skyBurned") != true, let i = r.inventory.firstIndex(where: { $0.name == "Root Torch" }) {
                     torch = Inventory.use(&r, at: i, dice: &dice).message
                 }
-                r.hp = max(r.hp, 1000)
+                r.hp = r.maxHp
+                r.sky?.poison = 0
                 let res = Combat.takeTurn(&r, turn % 3 == 0 ? .heavy : .attack, dice: &dice)
                 achievements += res.achievements
                 lastLog = Array((lastLog + res.log).suffix(6))
