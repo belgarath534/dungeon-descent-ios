@@ -198,6 +198,7 @@ final class VoiceCommand: ObservableObject {
 
     /// `seconds`: how long it listens (a fight's command is short).
     func start(seconds: Double = 6, _ done: @escaping (String?) -> Void) {
+        guard !listening, self.done == nil else { return }
         self.seconds = seconds
         SFSpeechRecognizer.requestAuthorization { status in
             Task { @MainActor in
@@ -205,26 +206,60 @@ final class VoiceCommand: ObservableObject {
                     Feedback.announce("Voice commands need microphone and speech recognition permission. Enable it in your device Settings.")
                     return
                 }
-                self.begin(done)
+                // The microphone's own permission, before anything opens it.
+                AVAudioSession.sharedInstance().requestRecordPermission { granted in
+                    Task { @MainActor in
+                        guard granted else {
+                            Feedback.announce("Voice commands need microphone permission. Enable it in Settings, Dungeon Descent, Microphone.")
+                            return
+                        }
+                        self.begin(done)
+                    }
+                }
             }
         }
     }
 
+    /// 12.2.2: the audio is switched to recording first, and the microphone's
+    /// format is checked before listening. Reading it while the game was still
+    /// in playback mode gave an empty format (0 Hz, no channels), and the
+    /// audio engine closes the whole app on one: tapping the mic, allowing
+    /// the microphone, then a crash.
     private func begin(_ done: @escaping (String?) -> Void) {
-        guard let recognizer, recognizer.isAvailable else { done(nil); return }
+        guard !listening, self.done == nil else { return }
+        guard let recognizer, recognizer.isAvailable else {
+            Feedback.announce("Speech recognition isn't available right now. Check your connection and try again.")
+            done(nil); return
+        }
+        let session = AVAudioSession.sharedInstance()
+        do {
+            try session.setCategory(.playAndRecord, mode: .measurement, options: [.duckOthers, .defaultToSpeaker, .mixWithOthers])
+            try session.setActive(true)
+        } catch {
+            restorePlayback()
+            Feedback.announce("The microphone couldn't start. Try again.")
+            done(nil); return
+        }
+        let input = engine.inputNode
+        let format = input.outputFormat(forBus: 0)
+        guard session.isInputAvailable, format.sampleRate > 0, format.channelCount > 0 else {
+            restorePlayback()
+            Feedback.announce("No microphone is available right now.")
+            done(nil); return
+        }
         self.done = done
         let req = SFSpeechAudioBufferRecognitionRequest()
         req.shouldReportPartialResults = false
         request = req
-        let input = engine.inputNode
         input.removeTap(onBus: 0)
-        input.installTap(onBus: 0, bufferSize: 1024, format: input.outputFormat(forBus: 0)) { buf, _ in req.append(buf) }
+        input.installTap(onBus: 0, bufferSize: 1024, format: format) { buf, _ in req.append(buf) }
         do {
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, mode: .measurement, options: [.duckOthers, .defaultToSpeaker, .mixWithOthers])
             engine.prepare()
             try engine.start()
         } catch {
+            listening = true
             finish(nil)
+            Feedback.announce("The microphone couldn't start. Try again.")
             return
         }
         listening = true
@@ -242,6 +277,10 @@ final class VoiceCommand: ObservableObject {
         }
     }
 
+    private func restorePlayback() {
+        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
+    }
+
     func stop() {
         guard listening else { return }
         request?.endAudio()
@@ -255,7 +294,7 @@ final class VoiceCommand: ObservableObject {
         task = nil
         request = nil
         listening = false
-        try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers])
+        restorePlayback()
         let d = done
         done = nil
         d?(text)
