@@ -1,0 +1,4 @@
+Query chain:
+ →Find: Target Application 'com.dungeon.descent'
+  ↪︎Find: Descendants matching type Button
+    ↪︎Find: Elements matching predicate '"Continue to origin" IN identifiers'
