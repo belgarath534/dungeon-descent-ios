@@ -1037,7 +1037,7 @@ final class AchievementTests: XCTestCase {
     }
 
     func testAllAchievementsLoadWithGameCenterIDs() {
-        XCTAssertEqual(AchievementBook.all.count, 115)
+        XCTAssertEqual(AchievementBook.all.count, 121) // 12.3: six Sky Ruins achievements (no Game Center IDs yet)
         XCTAssertEqual(AchievementBook.all.filter { $0.gcId != nil }.count, 100)
     }
 
