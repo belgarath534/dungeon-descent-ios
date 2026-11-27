@@ -46,7 +46,7 @@ final class SkyRuinsTests: XCTestCase {
         XCTAssertEqual(r.hp, 1, "Outside a boss fight poison can't take you below 1 HP")
         for _ in 0..<3 { SkyRuins.tickPoison(&r, boss: false, log: &log) }
         XCTAssertEqual(r.sky?.poison, 0, "Poison lasts 4 turns")
-        r.cls = "Plague Doctor"
+        r.cls = "PlagueDoctor"
         SkyRuins.addPoison(&r, 3, source: "a test", log: &log)
         XCTAssertEqual(SkyRuins.poisonPerTurn(r), 3, "The Plague Doctor takes half")
     }

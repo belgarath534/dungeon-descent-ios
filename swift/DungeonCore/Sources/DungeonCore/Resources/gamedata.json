@@ -11261,6 +11261,32 @@
     "stat": "artificerWins",
     "min": 1
    }
+  },
+  {
+   "id": "ach-the-impossible",
+   "name": "The Impossible",
+   "icon": "💀",
+   "desc": "They said it couldn't be done. They were wrong.",
+   "hint": "Clear any dungeon on Impossible.",
+   "gold": 600,
+   "trophies": 10,
+   "condition": {
+    "stat": "impossibleWins",
+    "min": 1
+   }
+  },
+  {
+   "id": "ach-beyond-impossible",
+   "name": "Beyond Impossible",
+   "icon": "👑",
+   "desc": "The garden, the queen, one life. Beyond impossible.",
+   "hint": "Clear The Sky Ruins on Impossible.",
+   "gold": 1000,
+   "trophies": 15,
+   "condition": {
+    "stat": "beyondImpossible",
+    "min": 1
+   }
   }
  ],
  "dailyQuests": [
@@ -15217,6 +15243,250 @@
     "tier": "legendary",
     "effect": "omnimancy"
    }
+  ],
+  "PlagueDoctor": [
+   {
+    "name": "Toxic Flask",
+    "icon": "🧪",
+    "desc": "Throw a flask — poisons the enemy for 6 damage a turn for 3 turns.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "pd-toxic-flask"
+   },
+   {
+    "name": "Remedy",
+    "icon": "💊",
+    "desc": "Clear your poison and heal 20 HP.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "pd-remedy"
+   },
+   {
+    "name": "Leeches",
+    "icon": "🪱",
+    "desc": "Attach leeches — 1.2x damage, you heal half of it.",
+    "spCost": 12,
+    "tier": "common",
+    "effect": "pd-leeches"
+   },
+   {
+    "name": "Bone Saw",
+    "icon": "🪚",
+    "desc": "A brutal cut — 1.4x damage.",
+    "spCost": 7,
+    "tier": "common",
+    "effect": "pd-bone-saw"
+   },
+   {
+    "name": "Smelling Salts",
+    "icon": "🧂",
+    "desc": "Wake up sharp — restore 12 SP and heal 8 HP.",
+    "spCost": 4,
+    "tier": "common",
+    "effect": "pd-salts"
+   },
+   {
+    "name": "Miasma",
+    "icon": "🌫️",
+    "desc": "A cloud of sickness — poisons the enemy for 10 damage a turn for 4 turns.",
+    "spCost": 16,
+    "tier": "rare",
+    "effect": "pd-miasma"
+   },
+   {
+    "name": "Quarantine",
+    "icon": "🚧",
+    "desc": "Seal the enemy in — its next 2 attacks are halved.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "pd-quarantine"
+   },
+   {
+    "name": "Fever Dream",
+    "icon": "🤒",
+    "desc": "Burning fever — 1.3x damage, 40% chance to stun.",
+    "spCost": 13,
+    "tier": "rare",
+    "effect": "pd-fever"
+   },
+   {
+    "name": "Bloodletting",
+    "icon": "🩸",
+    "desc": "Let the bad blood out — 2.2x damage, costs you 10 HP.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "pd-bloodletting"
+   },
+   {
+    "name": "Plague Mask",
+    "icon": "🎭",
+    "desc": "Breathe easy — take 35% less damage for 3 turns.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "pd-mask"
+   },
+   {
+    "name": "Black Death",
+    "icon": "☠️",
+    "desc": "The great sickness — 2.5x damage and poison for 14 a turn for 3 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "pd-black-death"
+   },
+   {
+    "name": "Pandemic",
+    "icon": "🦠",
+    "desc": "It spreads — 3x damage, the enemy takes 40% more damage for 3 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "pd-pandemic"
+   },
+   {
+    "name": "The Cure",
+    "icon": "⚕️",
+    "desc": "The cure is worse — heal 60% of your max HP. Once per run.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "pd-the-cure"
+   },
+   {
+    "name": "Pestilence",
+    "icon": "🐀",
+    "desc": "A plague of rats — deals a third of the enemy's current HP.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "pd-pestilence"
+   },
+   {
+    "name": "Last Rites",
+    "icon": "⚰️",
+    "desc": "Read the last rites — kills any non-boss below 25% HP outright.",
+    "spCost": 18,
+    "tier": "legendary",
+    "effect": "pd-last-rites"
+   }
+  ],
+  "Artificer": [
+   {
+    "name": "Deploy Turret",
+    "icon": "🔫",
+    "desc": "A turret that shoots for 7 damage every turn for 3 turns.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "ar-turret"
+   },
+   {
+    "name": "Shock Gauntlet",
+    "icon": "⚡",
+    "desc": "1.3x damage, 30% chance to stun.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "ar-shock"
+   },
+   {
+    "name": "Repair Kit",
+    "icon": "🧰",
+    "desc": "Patch yourself up — heal 18 HP.",
+    "spCost": 10,
+    "tier": "common",
+    "effect": "ar-repair"
+   },
+   {
+    "name": "Rivet Gun",
+    "icon": "🔩",
+    "desc": "Three rivets — 0.6x damage, three hits.",
+    "spCost": 9,
+    "tier": "common",
+    "effect": "ar-rivets"
+   },
+   {
+    "name": "Steam Vent",
+    "icon": "♨️",
+    "desc": "Scalding steam — the enemy's next 2 attacks are 30% weaker.",
+    "spCost": 8,
+    "tier": "common",
+    "effect": "ar-steam"
+   },
+   {
+    "name": "Flamethrower",
+    "icon": "🔥",
+    "desc": "14–20 fire damage and burning for 3 turns. Burns roots, bark and regrowth.",
+    "spCost": 14,
+    "tier": "rare",
+    "effect": "ar-flamethrower"
+   },
+   {
+    "name": "Clockwork Shield",
+    "icon": "⚙️",
+    "desc": "A spinning shield absorbs up to 35 damage.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "ar-shield"
+   },
+   {
+    "name": "Tesla Coil",
+    "icon": "🌩️",
+    "desc": "2x damage and stuns for a turn.",
+    "spCost": 15,
+    "tier": "rare",
+    "effect": "ar-tesla"
+   },
+   {
+    "name": "Grappling Hook",
+    "icon": "🪝",
+    "desc": "Pull the enemy off balance — its next attack will probably miss.",
+    "spCost": 10,
+    "tier": "rare",
+    "effect": "ar-grapple"
+   },
+   {
+    "name": "Iron Plating",
+    "icon": "🛡️",
+    "desc": "+8 defense for 3 turns.",
+    "spCost": 12,
+    "tier": "rare",
+    "effect": "ar-plating"
+   },
+   {
+    "name": "Overclock",
+    "icon": "🏎️",
+    "desc": "Your next 2 attacks deal double.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "ar-overclock"
+   },
+   {
+    "name": "Siege Cannon",
+    "icon": "💣",
+    "desc": "4x damage. Costs you 15 HP from the recoil.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "ar-cannon"
+   },
+   {
+    "name": "Automaton",
+    "icon": "🤖",
+    "desc": "A clockwork soldier fights beside you — 15 damage a turn for 4 turns.",
+    "spCost": 22,
+    "tier": "legendary",
+    "effect": "ar-automaton"
+   },
+   {
+    "name": "Masterwork",
+    "icon": "🏆",
+    "desc": "All your skills deal 40% more for the rest of the run.",
+    "spCost": 20,
+    "tier": "legendary",
+    "effect": "ar-masterwork"
+   },
+   {
+    "name": "Doomsday Device",
+    "icon": "☢️",
+    "desc": "5x damage. Once per run.",
+    "spCost": 25,
+    "tier": "legendary",
+    "effect": "ar-doomsday"
+   }
   ]
  },
  "startingSkills": {
@@ -15231,7 +15501,9 @@
   "Sorcerer": "fireball",
   "Warlock": "eldritch-blast",
   "Sentinel": "sentinel-strike",
-  "Dragonborn": "flame-breath"
+  "Dragonborn": "flame-breath",
+  "PlagueDoctor": "pd-toxic-flask",
+  "Artificer": "ar-turret"
  },
  "audio": {
   "tracks": {

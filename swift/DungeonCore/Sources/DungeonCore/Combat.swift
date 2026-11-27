@@ -88,7 +88,7 @@ public enum Combat {
     public static func nextEnemy(for run: Run, dice: inout some Dice) -> Enemy {
         let tables = Bestiary.enemies(for: run.dungeon, difficulty: run.difficulty)
         // 15% elite chance from floor 4 (enterRoom)
-        let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(0.15)
+        let elite = run.floor >= 4 && !tables.elites.isEmpty && dice.chance(run.difficulty == .impossible ? 0.30 : 0.15)
         let pool = elite ? tables.elites : tables.pool(forFloor: run.floor)
         // 12.1: Insane Mode's own enemies.
         if !elite, let s = Sanity.encounter(for: run, dice: &dice) { return s }
@@ -897,7 +897,7 @@ public enum Combat {
         taken = ShapeshifterMask.incoming(&run, taken, log: &log)
         taken = CustomSpirits.incoming(run, taken)
         taken = BossRelics.incoming(run, taken)
-        taken = SkyRuins.incoming(&run, taken, log: &log)
+        taken = SkyRuins.incoming(&run, taken, dice: &dice, log: &log)
         if taken == 0 || Spirits.guards(&run, dice: &dice, log: &log) || ShadowWorld.armorAvoids(&run, dice: &dice, log: &log) { return 0 }
         if run.fight.shield > 0 {
             let absorbed = min(run.fight.shield, taken)

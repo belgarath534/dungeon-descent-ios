@@ -1037,7 +1037,7 @@ final class AchievementTests: XCTestCase {
     }
 
     func testAllAchievementsLoadWithGameCenterIDs() {
-        XCTAssertEqual(AchievementBook.all.count, 121) // 12.3: six Sky Ruins achievements (no Game Center IDs yet)
+        XCTAssertEqual(AchievementBook.all.count, 123) // 12.3: six Sky Ruins and two Impossible achievements (no Game Center IDs yet)
         XCTAssertEqual(AchievementBook.all.filter { $0.gcId != nil }.count, 100)
     }
 
@@ -3582,7 +3582,7 @@ final class RaceTests: XCTestCase {
     }
 
     func testEveryRaceOnTheCardIsHandled() {
-        XCTAssertEqual(GameData.races.count, 15)
+        XCTAssertEqual(GameData.races.count, 17) // 12.3: Aarakocra and Goliath
     }
 
     func testStatLines() {

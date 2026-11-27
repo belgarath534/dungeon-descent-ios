@@ -1229,6 +1229,108 @@
        "color": ""
       }
      ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "PlagueDoctor",
+     "label": "Plague Doctor, the cure is worse. Poisons enemies and cures itself. Takes half damage from poison.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "🩺",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Plague Doctor",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "The Cure Is Worse",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "Bird mask, black coat, a bag of flasks. Poisons the enemy, cures the self. Takes half damage from poison and breathes through spore clouds.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "INT ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "SP ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "HP ●●○○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "class-card",
+     "key": "Artificer",
+     "label": "Artificer, built not born. Turrets, shock gauntlets, a flamethrower and repair kits.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "class-icon",
+       "text": "⚙️",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "class-name",
+       "text": "Artificer",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-role",
+       "text": "Built, Not Born",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "class-desc",
+       "text": "An inventor who fights with gadgets: turrets that shoot every turn, a shock gauntlet, a flamethrower that burns roots, and repair kits.",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "STR ●●○○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "DEF ●●●○",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "stat-pip",
+       "text": "HP ●●●○",
+       "hidden": false,
+       "color": ""
+      }
+     ]
     }
    ],
    "extras": [
@@ -1680,6 +1782,60 @@
       {
        "cls": "race-trait",
        "text": "+AGI · Potions +20% · Sunken bonus",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Aarakocra",
+     "label": "Aarakocra, bird-folk, glide with no fall damage, plus 8 percent dodge, 10 percent less health",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🪶",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Aarakocra",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "Glide · +8% dodge · −10% HP",
+       "hidden": false,
+       "color": ""
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "race-card",
+     "key": "Goliath",
+     "label": "Goliath, giant-folk, 15 percent more health, once a fight a heavy hit is halved, the wind can't move you",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "race-icon",
+       "text": "🗿",
+       "hidden": true,
+       "color": ""
+      },
+      {
+       "cls": "race-name",
+       "text": "Goliath",
+       "hidden": false,
+       "color": ""
+      },
+      {
+       "cls": "race-trait",
+       "text": "+15% HP · Stone's Endurance",
        "hidden": false,
        "color": ""
       }
@@ -2605,6 +2761,39 @@
     {
      "id": "",
      "kind": "diff-card",
+     "key": "Impossible",
+     "label": "Impossible. One life, no revives. Enemies have 80 percent more health and 60 percent more attack. Potions heal half. Double gold and experience. Most players will not finish a single floor.",
+     "disabled": false,
+     "parts": [
+      {
+       "cls": "diff-name",
+       "text": "💀 Impossible",
+       "hidden": false,
+       "color": "#cc0000"
+      },
+      {
+       "cls": "diff-lives",
+       "text": "❤️ One Life · No Revives",
+       "hidden": false,
+       "color": "#cc0000"
+      },
+      {
+       "cls": "diff-desc",
+       "text": "Everything is stronger. Most players will not finish a single floor.",
+       "hidden": false,
+       "color": "#aa3333"
+      },
+      {
+       "cls": "",
+       "text": "+80% enemy HP · +60% enemy attack · Potions heal half · Double gold and XP",
+       "hidden": false,
+       "color": "#882222"
+      }
+     ]
+    },
+    {
+     "id": "",
+     "kind": "diff-card",
      "key": "Endless",
      "label": "Endless mode. The dungeon never ends. Keep descending forever until you die. Your floor depth is your score.",
      "disabled": false,
@@ -3072,7 +3261,9 @@
     "ShadowMage",
     "TimeMage",
     "Shaman",
-    "Arcanist"
+    "Arcanist",
+    "PlagueDoctor",
+    "Artificer"
    ],
    "descs": {
     "Warrior": "Frontline Fighter",
@@ -3091,7 +3282,9 @@
     "Ranger": "Swift Hunter",
     "Sentinel": "Unbreakable Wall",
     "Cleric": "Sacred Healer",
-    "Wizard": "Arcane Scholar"
+    "Wizard": "Arcane Scholar",
+    "PlagueDoctor": "The Cure Is Worse",
+    "Artificer": "Built, Not Born"
    }
   },
   "race": {
@@ -3110,7 +3303,9 @@
     "Halfling",
     "Dragonborn",
     "Gnome",
-    "Merfolk"
+    "Merfolk",
+    "Aarakocra",
+    "Goliath"
    ],
    "descs": {
     "Human": "Adaptable · +All Stats",
@@ -3127,7 +3322,9 @@
     "Halfling": "+LCK+LCK -STR",
     "Dragonborn": "10% burn damage · Scales with floor",
     "Gnome": "+INT +LCK · Skills cost less SP",
-    "Merfolk": "+AGI · Bonus in Sunken Archives · Potions +heal"
+    "Merfolk": "+AGI · Bonus in Sunken Archives · Potions +heal",
+    "Aarakocra": "Glide · +8% dodge · −10% HP",
+    "Goliath": "+15% HP · Stone's Endurance"
    }
   },
   "prof": {

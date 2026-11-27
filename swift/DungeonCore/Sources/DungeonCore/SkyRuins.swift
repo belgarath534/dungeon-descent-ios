@@ -69,7 +69,7 @@ public enum SkyRuins {
     public static func poisonPerTurn(_ run: Run) -> Int {
         guard let s = run.sky, s.poison > 0 else { return 0 }
         let d = s.poison * 2
-        return run.cls == "Plague Doctor" ? (d + 1) / 2 : d
+        return run.cls == "PlagueDoctor" ? (d + 1) / 2 : d
     }
 
     static func immune(_ run: Run) -> Bool {
@@ -148,6 +148,14 @@ public enum SkyRuins {
 
     /// combatStart: the garden's growth, Verdana's welcome.
     static func combatStart(_ run: inout Run, log: inout [String]) {
+        // 12.3 Impossible: enemies have 80% more HP (attack +60% is the difficulty's multiplier).
+        if run.difficulty == .impossible, var e = run.enemy, !e.flag("impScaled") {
+            e.mechanics["impScaled"] = .bool(true)
+            e.maxHp = jsRound(Double(e.maxHp) * 1.8); e.hp = jsRound(Double(e.hp) * 1.8)
+            e.phase1Hp = jsRound(Double(e.phase1Hp) * 1.8); e.phase2Hp = jsRound(Double(e.phase2Hp) * 1.8)
+            run.enemy = e
+            if e.isBoss { log.append("💀 Impossible — this boss has never lost.") }
+        }
         guard inSky(run), var e = run.enemy else { return }
         var s = run.sky ?? State()
         s.stoneUsed = false
@@ -175,6 +183,11 @@ public enum SkyRuins {
 
     /// A skill used: fire skills burn roots.
     public static func skillUsed(_ run: inout Run, name: String, effect: String = "", log: inout [String]) {
+        // The Plague Doctor's Remedy also clears Sky Ruins poison.
+        if effect == "pd-remedy", (run.sky?.poison ?? 0) > 0 {
+            var s = run.sky!; s.poison = 0; s.poisonTurns = 0; run.sky = s
+            log.append("💊 Remedy — the poison is gone.")
+        }
         guard inSky(run), fiery(name) || fiery(effect) else { return }
         burn(&run, how: name, log: &log)
     }
@@ -228,7 +241,7 @@ public enum SkyRuins {
             log.append("🌹 Her roots are reaching into the stone. Burn them (a fire skill, a fire weapon or a Root Torch) before she drops below a third of her health, or she will regrow 20 HP every turn.")
         }
         if e.flag("gardener") && turn % 3 == 0 {
-            if run.cls == "Plague Doctor" { log.append("🍄 The Gardener plants a Spore Pod. Your bird mask filters the spores.") }
+            if run.cls == "PlagueDoctor" { log.append("🍄 The Gardener plants a Spore Pod. Your bird mask filters the spores.") }
             else { log.append("🍄 The Gardener plants a Spore Pod. It bursts in your face."); run.enemy = e; addPoison(&run, 1, source: "a Spore Pod", log: &log) }
         }
         if e.flag("sweep") && turn % 3 == 0 {
@@ -296,8 +309,18 @@ public enum SkyRuins {
     }
 
     /// The hit about to land: the Goliath's Stone's Endurance.
-    static func incoming(_ run: inout Run, _ taken: Int, log: inout [String]) -> Int {
-        guard inSky(run) || run.race == "Goliath", taken > 0 else { return taken }
+    static func incoming(_ run: inout Run, _ taken: Int, dice: inout some Dice, log: inout [String]) -> Int {
+        guard taken > 0 else { return taken }
+        var taken = taken
+        // 12.3 Aarakocra: Hollow Bones, +8% dodge.
+        if run.race == "Aarakocra" && dice.chance(0.08) {
+            log.append("🪶 You flap out of the way — dodged!")
+            return 0
+        }
+        // 12.3 Plague Doctor's trait: enemies it has poisoned hit 15% softer.
+        if run.cls == "PlagueDoctor" && run.raceTraits, let e = run.enemy, e.dotTurns > 0 {
+            taken = jsRound(Double(taken) * 0.85)
+        }
         if run.race == "Goliath", run.sky?.stoneUsed != true, Double(taken) >= Double(run.maxHp) * 0.15 {
             var s = run.sky ?? State(); s.stoneUsed = true; run.sky = s
             log.append("🗿 Stone's Endurance — you take the blow like a mountain. Damage halved.")
@@ -331,7 +354,7 @@ public enum SkyRuins {
         guard inSky(run) else { return [] }
         var earned: [String] = []
         if let b = e.number("burstPoison") {
-            if run.cls == "Plague Doctor" { log.append("🍄 The Spore Drifter bursts. Your bird mask filters the cloud.") }
+            if run.cls == "PlagueDoctor" { log.append("🍄 The Spore Drifter bursts. Your bird mask filters the cloud.") }
             else { log.append("🍄 The Spore Drifter bursts into a poison cloud!"); addPoison(&run, Int(b), source: "the spore cloud", log: &log) }
         }
         if let g = e.number("harpyGust"), run.race != "Goliath", dice.chance(g) {
@@ -356,7 +379,8 @@ public enum SkyRuins {
 
     /// Seed of the Undying: once a run, a killing blow leaves you at 1 HP.
     static func seedSaves(_ run: inout Run, log: inout [String]) -> Bool {
-        guard run.hp <= 0, run.sky?.seedUsed != true, has(run, "seed") else { return false }
+        // No revives on Impossible.
+        guard run.hp <= 0, run.difficulty != .impossible, run.sky?.seedUsed != true, has(run, "seed") else { return false }
         var s = run.sky ?? State(); s.seedUsed = true; run.sky = s
         run.hp = 1
         log.append("🌰 The Seed of the Undying cracks open. Roots hold you together. You stand at 1 HP.")
@@ -451,7 +475,7 @@ public enum SkyRuins {
             else { var s = run.sky ?? State(); s.loseTurn = "ivy"; run.sky = s; log.append("🌿 The ivy holds on. Your next action in a fight goes to tearing free.") }
         case ("sky-spore", 0): log.append("🍄 You hold your breath and slip past."); run.searched = true
         case ("sky-spore", _):
-            if run.cls == "Plague Doctor" { log.append("🍄 The pod bursts. Your bird mask filters every spore.") }
+            if run.cls == "PlagueDoctor" { log.append("🍄 The pod bursts. Your bird mask filters every spore.") }
             else { addPoison(&run, 1, source: "the spores", log: &log) }
         case ("sky-thornwall", 0): log.append("🌹 You hack through the thorns. You take \(hurt(&run, 8)) damage.")
         case ("sky-thornwall", _): log.append("🌹 You go the long way around."); run.searched = true

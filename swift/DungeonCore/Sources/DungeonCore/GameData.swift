@@ -46,6 +46,9 @@ public enum GameData {
         c("TimeMage", "", 100, 6...12, 0),
         c("Shaman", "", 100, 6...12, 0),
         c("Arcanist", "", 100, 6...12, 0),
+        // 12.3
+        c("PlagueDoctor", "The Cure Is Worse", 95, 7...14, 2),
+        c("Artificer", "Built, Not Born", 100, 6...12, 3),
     ]
 
     public static func classInfo(_ id: String) -> ClassInfo {
@@ -68,6 +71,9 @@ public enum GameData {
         Option(id: "Dragonborn", desc: "10% burn damage · Scales with floor"),
         Option(id: "Gnome", desc: "+INT +LCK · Skills cost less SP"),
         Option(id: "Merfolk", desc: "+AGI · Bonus in Sunken Archives · Potions +heal"),
+        // 12.3
+        Option(id: "Aarakocra", desc: "Glide · +8% dodge · −10% HP"),
+        Option(id: "Goliath", desc: "+15% HP · Stone's Endurance"),
     ]
 
     public static let professions: [Option] = [
@@ -88,6 +94,8 @@ public enum GameData {
         case forsaken = "Forsaken"
         case nightmare = "Nightmare"
         case insane = "Insane"
+        /// 12.3: one life, no revives, everything stronger, double gold and XP.
+        case impossible = "Impossible"
         case endless = "Endless"
 
         public var lives: Int {
@@ -102,6 +110,7 @@ public enum GameData {
         public var enemyDamageMultiplier: Double {
             switch self {
             case .nightmare: return 1.75
+            case .impossible: return 1.6
             case .forsaken: return 1.5
             case .condemned: return 1.25
             case .ironblood: return 1.1
@@ -117,6 +126,7 @@ public enum GameData {
             case .forsaken: return "1 life · +50% damage"
             case .nightmare: return "1 life · Nightmare enemies"
             case .insane: return "1 life · Sanity bar"
+            case .impossible: return "1 life · No revives · Everything stronger"
             case .endless: return "Infinite floors · No victory"
             }
         }

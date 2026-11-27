@@ -563,6 +563,40 @@ enum SkillTable {
         "Arcanist/spell-mastery": util().mastery(skills: 0.4, halfCost: true),
         "Arcanist/arcane-overload": hit(5.0).selfDmg(30),
         "Arcanist/omnimancy": special("omnimancy"),
+
+        // 12.3: Plague Doctor (the same as the web's js/36-new-heroes.js)
+        "PlagueDoctor/pd-toxic-flask": hit(0.5).dot(6, 3),
+        "PlagueDoctor/pd-remedy": util().heal(20),
+        "PlagueDoctor/pd-leeches": hit(1.2).lifesteal(0.5),
+        "PlagueDoctor/pd-bone-saw": hit(1.4),
+        "PlagueDoctor/pd-salts": util().heal(8).sp(12),
+        "PlagueDoctor/pd-miasma": hit(0.5).dot(10, 4),
+        "PlagueDoctor/pd-quarantine": act().soften(0.5, 2),
+        "PlagueDoctor/pd-fever": hit(1.3).stun(1, chance: 0.4),
+        "PlagueDoctor/pd-bloodletting": hit(2.2).selfDmg(10),
+        "PlagueDoctor/pd-mask": act().reduce(0.35, 3),
+        "PlagueDoctor/pd-black-death": hit(2.5).dot(14, 3),
+        "PlagueDoctor/pd-pandemic": hit(3.0).vulnerable(0.4, 3),
+        "PlagueDoctor/pd-the-cure": util().healPct(0.6).once(),
+        "PlagueDoctor/pd-pestilence": pctHp(0.34),
+        "PlagueDoctor/pd-last-rites": hit(1.0).killBelow(0.25),
+
+        // 12.3: Artificer
+        "Artificer/ar-turret": hit(0.5).dot(7, 3),
+        "Artificer/ar-shock": hit(1.3).stun(1, chance: 0.3),
+        "Artificer/ar-repair": util().heal(18),
+        "Artificer/ar-rivets": hit(0.6, 3),
+        "Artificer/ar-steam": act().soften(0.7, 2),
+        "Artificer/ar-flamethrower": hit(1.6).dot(6, 3),
+        "Artificer/ar-shield": util().shield(35),
+        "Artificer/ar-tesla": hit(2.0).stun(1),
+        "Artificer/ar-grapple": util().enemyMiss(0.7),
+        "Artificer/ar-plating": act().buff(def: 8, turns: 3),
+        "Artificer/ar-overclock": util().empower(2.0, 2),
+        "Artificer/ar-cannon": hit(4.0).selfDmg(15),
+        "Artificer/ar-automaton": hit(0.6).dot(15, 4),
+        "Artificer/ar-masterwork": util().mastery(skills: 0.4),
+        "Artificer/ar-doomsday": hit(5.0).once(),
     ]
 
     static func spec(cls: String, effect: String) -> SkillSpec {

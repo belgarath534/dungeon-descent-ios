@@ -179,9 +179,11 @@ public enum Progression {
             run.luckKills -= 1
             if run.luckKills == 0 { luckNote = " 🍀 Lucky Potion wore off." }
         }
+        if run.difficulty == .impossible { g *= 2 } // 12.3: double gold on Impossible
         run.gold += g
         wallet.addGold(g)
         var xp = Progression.xp(for: tier(of: enemy.name, in: run.dungeon, difficulty: run.difficulty))
+        if run.difficulty == .impossible { xp *= 2 }
         if Challenges.has(run, "double-xp") { xp *= 2 }
         xp *= RunModifiers.xpMult(run)
         xp = CustomSpirits.xp(run, xp)

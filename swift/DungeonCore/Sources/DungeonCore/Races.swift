@@ -36,6 +36,11 @@ public enum Races {
         case "Gnome": luck(&run)
         case "Merfolk": agility(&run)
         case "Golem": run.defBonus += 5
+        // 12.3: light, quick bird-folk; giant-folk of the mountains.
+        case "Aarakocra":
+            run.maxHp = max(1, jsRound(Double(run.maxHp) * 0.90)); run.hp = run.maxHp
+        case "Goliath":
+            run.maxHp = jsRound(Double(run.maxHp) * 1.15); run.hp = run.maxHp
         case "Goblin":
             run.gold += 30
             wallet.addGold(30)
@@ -102,7 +107,9 @@ public enum Races {
 
     /// Merfolk potions heal 20% more.
     static func potionHeal(_ run: Run, _ heal: Int) -> Int {
-        trait(run, "Merfolk") ? jsRound(Double(heal) * 1.20) : heal
+        let h = trait(run, "Merfolk") ? jsRound(Double(heal) * 1.20) : heal
+        // 12.3: on Impossible potions heal half.
+        return run.difficulty == .impossible ? jsRound(Double(h) / 2) : h
     }
 
     /// Gnome skills cost 2 SP less.

@@ -119,15 +119,17 @@ struct CreateCharacterView: View {
                               "Corruption Mode", "Hunter Mode", "Your Guide", "Your Origin"]
     static let dungeonOrder = ["Crypt of Malachar", "The Ashbound Wastes", "Frosthold Abyss", "The Sunken Archives",
                                "The Hollow", "The Whispering Forest", "The Infernal Descent", "The Abyssal Deep"]
-    static let diffOrder = ["Wanderer", "Ironblood", "Condemned", "Forsaken", "Nightmare", "Insane", "Endless"]
+    static let diffOrder = ["Wanderer", "Ironblood", "Condemned", "Forsaken", "Nightmare", "Insane", "Impossible", "Endless"]
     static let diffDescs = ["Wanderer": "3 lives · Normal damage", "Ironblood": "1 life · +10% damage",
                             "Condemned": "1 life · +25% damage", "Forsaken": "1 life · +50% damage",
                             "Nightmare": "1 life · Nightmare enemies", "Insane": "1 life · Sanity bar",
+                            "Impossible": "1 life · No revives · Everything stronger",
                             "Endless": "Infinite floors · No victory"]
     static let warnings = ["Wanderer": "Wanderer: 3 lives. Good for learning.",
                            "Ironblood": "Warning — Ironblood: 1 life. One death ends your run.",
                            "Condemned": "Warning — Condemned: 1 life, empowered enemies.",
-                           "Forsaken": "Final warning — Forsaken: 1 life, maximum difficulty. Most never return."]
+                           "Forsaken": "Final warning — Forsaken: 1 life, maximum difficulty. Most never return.",
+                           "Impossible": "Impossible. One life. Everything is stronger. Most players will not finish a single floor. Are you sure?"]
 
     var body: some View {
         ZStack {
@@ -535,7 +537,7 @@ struct CreateCharacterView: View {
     private func pickDiff(_ d: String) {
         diff = d
         if let i = Self.diffOrder.firstIndex(of: d) { sliderIndex["diff"] = i }
-        Feedback.announce("\(d) difficulty selected.")
+        Feedback.announce(d == "Impossible" ? Self.warnings["Impossible"]! : "\(d) difficulty selected.")
     }
 
     private func pickHardcore(_ on: Bool) {
@@ -1018,7 +1020,7 @@ struct CreationCard: View {
     }
 
     private var borderColor: Color {
-        card.key == "Insane" ? Color(hex: 0x8b0000) : Theme.borderDim
+        card.key == "Insane" || card.key == "Impossible" ? Color(hex: 0x8b0000) : Theme.borderDim
     }
 
     @ViewBuilder

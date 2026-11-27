@@ -2957,8 +2957,14 @@ final class RunModel: ObservableObject {
         game.checkLegends(run)
         game.recordFirstClear(run)
         // 12.3: Doctor's Orders and Some Assembly Required.
-        if run.cls == "Plague Doctor" || run.cls == "Artificer" {
-            achievements.increment(run.cls == "Plague Doctor" ? "plagueDoctorWins" : "artificerWins")
+        // 12.3: The Impossible and Beyond Impossible.
+        if run.difficulty == .impossible {
+            achievements.increment("impossibleWins")
+            if run.dungeon == SkyRuins.name { achievements.increment("beyondImpossible") }
+            _ = achievements.check()
+        }
+        if run.cls == "PlagueDoctor" || run.cls == "Artificer" {
+            achievements.increment(run.cls == "PlagueDoctor" ? "plagueDoctorWins" : "artificerWins")
             _ = achievements.check()
         }
         if ShadowRealm.unlock(after: run.dungeon, store: game.store) {
