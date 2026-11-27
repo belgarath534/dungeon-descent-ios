@@ -184,8 +184,8 @@ http('chatPush', async (req, res) => {
 // chat members who haven't turned it off (private/push: legends false).
 // GameData.dungeons in DungeonCore (the same names as the web version).
 const DUNGEONS = ['Crypt of Malachar', 'The Ashbound Wastes', 'Frosthold Abyss', 'The Sunken Archives', 'The Hollow',
-  'The Whispering Forest', 'The Infernal Descent', 'The Abyssal Deep', 'The Shadow World'];
-const DIFFICULTIES = ['Wanderer', 'Ironblood', 'Condemned', 'Forsaken', 'Nightmare', 'Insane'];
+  'The Whispering Forest', 'The Infernal Descent', 'The Abyssal Deep', 'The Shadow World', 'The Sky Ruins'];
+const DIFFICULTIES = ['Wanderer', 'Ironblood', 'Condemned', 'Forsaken', 'Nightmare', 'Insane', 'Impossible'];
 const LEGEND_ROOM = 'hall-of-legends';
 
 async function legend(uid, b, res) {
