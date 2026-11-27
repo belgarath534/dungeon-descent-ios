@@ -189,3 +189,38 @@ final class CreationBotTests: XCTestCase {
         return nil
     }
 }
+
+/// 12.2.1: a player forged the Mountainbreaker at the menu's Blacksmith and
+/// it vanished: winning a run that started before the forge saved the run's
+/// bag over the saved items.
+final class MountainbreakerKeepTests: XCTestCase {
+    func testWinningARunKeepsAMountainbreakerForgedMeanwhile() {
+        let store = MemoryStore()
+        Mountainbreaker.addShards(5, store: store)
+        var run = Run(character: PlayerCharacter(name: "Bot", cls: "Warrior", race: "Human", prof: "Thief",
+                                                 dungeon: "Crypt of Malachar", difficulty: .wanderer))
+        GlobalInventory(store: store).load(into: &run)          // the run starts
+        XCTAssertTrue(Mountainbreaker.forge(store: store).contains("is yours"))   // forged at the menu meanwhile
+        GlobalInventory(store: store).keep(from: run)           // the run wins
+        XCTAssertTrue(GlobalInventory(store: store).has(named: "Mountainbreaker"), "The victory saved over the Mountainbreaker")
+        XCTAssertFalse(Mountainbreaker.isLost(store: store))
+        // Winning again with it carried doesn't make two.
+        GlobalInventory(store: store).load(into: &run)
+        GlobalInventory(store: store).keep(from: run)
+        XCTAssertEqual(GlobalInventory(store: store).items.filter { $0.name == "Mountainbreaker" }.count, 1)
+    }
+
+    func testALostMountainbreakerCanBeRecoveredOnce() {
+        let store = MemoryStore()
+        Mountainbreaker.addShards(5, store: store)
+        _ = Mountainbreaker.forge(store: store)
+        GlobalInventory(store: store).save([])                  // lost, as in 12.2
+        XCTAssertTrue(Mountainbreaker.isLost(store: store))
+        XCTAssertFalse(Mountainbreaker.isLost(store: store, alsoCarried: true))
+        XCTAssertTrue(Mountainbreaker.recover(store: store).ok)
+        let back = GlobalInventory(store: store).items.first { $0.name == "Mountainbreaker" }
+        XCTAssertEqual(back?.level, Mountainbreaker.recoveredLevel)
+        XCTAssertEqual(Mountainbreaker.memory(back), Mountainbreaker.maxMemory)
+        XCTAssertFalse(Mountainbreaker.recover(store: store).ok, "Recovered twice")
+    }
+}

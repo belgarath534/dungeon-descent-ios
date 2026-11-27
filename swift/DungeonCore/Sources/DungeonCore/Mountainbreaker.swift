@@ -52,6 +52,34 @@ public enum Mountainbreaker {
         return (true, "🔨 The Blacksmith works through the night. The shards glow, melt and ring like a bell. The Mountainbreaker is yours. Equip it from your items.")
     }
 
+    /// 12.2.1: forged, but in neither the saved items nor the saved gear (lost
+    /// when a run won at the same time saved over the items). `alsoCarried`:
+    /// a run in progress that has it.
+    public static func isLost(store: GameStore, alsoCarried: Bool = false) -> Bool {
+        forged(store) && !alsoCarried && !GlobalInventory(store: store).has(named: weapon.name)
+    }
+
+    /// The level a recovered Mountainbreaker comes back at (a player's was 21
+    /// when it vanished), with its Stone Memory full, as an apology.
+    public static let recoveredLevel = 21
+
+    /// A lost Mountainbreaker, as it comes back: level 21 and full Stone Memory.
+    public static var recovered: Item {
+        var w = weapon
+        w.level = recoveredLevel
+        w.extra["stoneKills"] = .number(Double(maxMemory * killsPerPoint))
+        return w
+    }
+
+    /// Gives a lost Mountainbreaker back, into the saved items.
+    public static func recover(store: GameStore) -> (ok: Bool, message: String) {
+        guard isLost(store: store) else {
+            return (false, forged(store) ? "Your Mountainbreaker is safe in your items." : "You haven't forged the Mountainbreaker yet.")
+        }
+        GlobalInventory(store: store).add(recovered)
+        return (true, "🔨 The Blacksmith finds your Mountainbreaker behind the anvil, sorry for the trouble. It's back in your items at level \(recoveredLevel), and it remembers everything: Stone Memory is full, +\(maxMemory) damage. Equip it from your items.")
+    }
+
     public static func forge(store: GameStore) -> String {
         var none: [Item]? = nil
         return forge(store: store, bag: &none).message

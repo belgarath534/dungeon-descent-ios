@@ -137,6 +137,9 @@ final class CoopModel: ObservableObject {
                 if error != nil { self.say("Couldn't create the room. Check your connection."); return }
                 self.stage = .lobby
                 Sound.sfx("sfx-confirm")
+                // 12.2.1: Dungeon Descent Chat's #co-op-rooms hears about it,
+                // so others can join (the chat's server writes the post).
+                self.game?.postLegend("coop", ["code": c, "dungeon": dungeon, "raid": raid != nil])
                 if let raid { self.say("Raid room created: \(raid.name). Your code is \(c.map(String.init).joined(separator: " ")). Invite up to four friends, then press Start."); self.listen(); return }
                 self.say("Room created. Your code is \(c.map(String.init).joined(separator: " ")). Share it with up to four friends, then press Start when everyone is ready.")
                 self.listen()

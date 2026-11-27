@@ -177,6 +177,16 @@ struct BlacksmithView: View {
             Text(Mountainbreaker.weapon.desc).font(Theme.crimson(12.5, italic: true)).foregroundStyle(Theme.textSecondary)
             Text(forged ? "Forged. There is only one." : "🔶 Heartstone Shards: \(have) of \(need)" as String)
                 .font(Theme.cinzel(10.5)).foregroundStyle(Color(hex: 0xffcc66))
+            // 12.2.1: forged, but gone from your items (a run won at the same
+            // time used to save over them): the Blacksmith gives it back.
+            let name = Mountainbreaker.weapon.name
+            let carried = f.bag.contains { $0.name == name } || f.weapon?.name == name
+            if Mountainbreaker.isLost(store: model.game.store, alsoCarried: carried) {
+                Text("Your Mountainbreaker isn't in your items.").font(Theme.crimson(12.5)).foregroundStyle(Theme.bloodBright)
+                Button("Recover the Mountainbreaker") { model.recoverMountainbreaker() }
+                    .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)
+                    .accessibilityLabel("Recover the Mountainbreaker. It's missing from your items; the Blacksmith gives it back.")
+            }
             if !forged {
                 Button("Forge the Mountainbreaker") { model.forgeMountainbreaker() }
                     .buttonStyle(WebButtonStyle(kind: .gold)).frame(maxWidth: .infinity)

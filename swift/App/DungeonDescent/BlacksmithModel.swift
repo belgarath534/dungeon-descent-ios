@@ -56,6 +56,12 @@ final class BlacksmithModel: ObservableObject {
         }
         done(r, sound: "sfx-unlock")
     }
+    /// 12.2.1: a forged Mountainbreaker that went missing comes back.
+    func recoverMountainbreaker() {
+        let r = Mountainbreaker.recover(store: game.store)
+        if r.ok { forge.bag.append(Mountainbreaker.recovered) }
+        done(r, sound: "sfx-unlock")
+    }
     func buyArmor(_ i: Item) { done(Blacksmith.buyArmor(i, &forge, wallet: game.wallet), sound: "sfx-purchase") }
     func sell(_ index: Int) { done(Blacksmith.sell(at: index, &forge, wallet: game.wallet, store: game.store), sound: "sfx-purchase") }
     func repair() { done(Blacksmith.repair(&forge, wallet: game.wallet)) }

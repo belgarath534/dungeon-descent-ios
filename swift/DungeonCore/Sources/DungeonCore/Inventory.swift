@@ -620,14 +620,30 @@ public struct GlobalInventory {
     }
 
     /// Saves what a run keeps: gear and the keep-types, without duplicates.
+    /// 12.2.1: legendaries in the saved items that the run never carried
+    /// (the Mountainbreaker, forged at the menu's Blacksmith while a run was
+    /// in progress) stay: the run's bag used to replace them, and a forged
+    /// Mountainbreaker vanished for good.
     public func keep(from run: Run) {
         var seen = Set<String>()
-        let kept = run.inventory.filter { i in
+        var kept = run.inventory.filter { i in
             if i.isWeapon || i.isArmor || BossRelics.isRelic(i) { return seen.insert(i.type + "::" + i.name).inserted }
             return Self.keepTypes.contains(i.type)
         }
+        let carried = Set((kept + [run.equippedWeapon, run.equippedArmor].compactMap { $0 }).map { $0.type + "::" + $0.name })
+        for i in items + [equippedWeapon, equippedArmor].compactMap({ $0 })
+        where Self.isLegendary(i) && !carried.contains(i.type + "::" + i.name) && seen.insert(i.type + "::" + i.name).inserted {
+            kept.append(i)
+        }
         save(kept)
         saveEquipped(weapon: run.equippedWeapon, armor: run.equippedArmor)
+    }
+
+    static func isLegendary(_ i: Item) -> Bool { Mountainbreaker.isIt(i) || i.extra["legendary"] == .bool(true) }
+
+    /// Whether an item with this name is in the saved items or saved gear.
+    public func has(named name: String) -> Bool {
+        items.contains { $0.name == name } || equippedWeapon?.name == name || equippedArmor?.name == name
     }
 
     private func load(_ key: String) -> Item? {

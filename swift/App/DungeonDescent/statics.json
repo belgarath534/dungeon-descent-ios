@@ -714,6 +714,10 @@
    "date": "The Fair Play Fix",
    "label": "Version 12.2.1",
    "changes": [
+    "🏆 Hall of Legends — your big moments post themselves to #hall-of-legends in Dungeon Descent Chat: conquering a dungeon, and every 25 floors of Endless Descent and 10 of The Spire. Turn it off in the chat's Settings.",
+    "🤝 Co-op rooms you open are posted to #co-op-rooms in Dungeon Descent Chat with their code, so other players can join.",
+    "🔨 Fixed: a Mountainbreaker forged at the Blacksmith could vanish when a run you had going was won. If yours is missing, the Blacksmith gives it back at level 21 with its Stone Memory full: Recover the Mountainbreaker.",
+    "🎙 Fixed: tapping Speak in a fight or in co-op closed the game after you allowed the microphone.",
     "🛡 Fixed 25 skills that could be cast over and over at 0 SP with an Apocalypse weapon to stack endless dodges, attack, defense, free casts or damage, like Wind Step, Divine Shield, Bless, The Lich King, Unlimited Power and the Masteries. Dodges and free casts now top up, and the other bonuses work once per fight."
    ]
   },

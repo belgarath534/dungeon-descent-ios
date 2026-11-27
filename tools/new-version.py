@@ -172,9 +172,15 @@ WHATS_NEW_12_2 = {
 }
 WHATS_NEW_12_2_1 = {
     "en-US": """New in 12.2.1:
+• Hall of Legends: your big moments post themselves to Dungeon Descent Chat, and co-op rooms you open are posted there with their code so others can join.
+• Fixed: a Mountainbreaker forged at the Blacksmith could vanish. If yours is missing, the Blacksmith gives it back.
+• Fixed: tapping Speak in a fight or in co-op closed the game after allowing the microphone.
 • Fixed 25 skills that could be cast over and over with an Apocalypse weapon to stack endless dodges, attack, defense, free casts or damage. Dodges and free casts now top up, and the other bonuses work once per fight.
 • Everything from 12.2: Guilds with a weekly Guild Boss, co-op for five, a deeper Mine with a legendary hammer, four new guns and more.""",
     "pt-BR": """Novo na 12.2.1:
+• Salão das Lendas: seus grandes momentos aparecem sozinhos no Dungeon Descent Chat, e as salas cooperativas que você abre aparecem lá com o código para outros entrarem.
+• Corrigido: um Mountainbreaker forjado no Ferreiro podia sumir. Se o seu sumiu, o Ferreiro devolve.
+• Corrigido: tocar em Falar numa luta ou no cooperativo fechava o jogo depois de permitir o microfone.
 • Corrigidas 25 habilidades que podiam ser usadas sem parar com uma arma Apocalipse para acumular esquivas, ataque, defesa, usos grátis ou dano sem fim. Esquivas e usos grátis agora se recarregam, e os outros bônus funcionam uma vez por luta.
 • Tudo da 12.2: Guildas com um Chefe semanal, cooperativo para cinco, uma Mina mais funda com um martelo lendário, quatro armas novas e mais.""",
 }
