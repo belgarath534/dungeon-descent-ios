@@ -331,6 +331,14 @@ struct MainMenuView: View {
                         .frame(maxWidth: 320).padding(.top, 4)
                 }
             }
+            // 12.3: #advent-menu-btn (December)
+            if Advent.isOn(game.store) {
+                let ready = Advent.ready(game.store)
+                Button("🎄 Advent Calendar" + (ready > 0 ? " (\(ready))" : "")) { router.goTo(.advent) }
+                    .buttonStyle(MenuButtonStyle(color: Theme.gold, border: Theme.gold))
+                    .frame(maxWidth: 320).padding(.top, 4)
+                    .accessibilityLabel("Advent Calendar. " + (ready > 0 ? "\(ready) door\(ready == 1 ? "" : "s") ready to open." : "No doors ready right now."))
+            }
             // #menu-event-banner
             let lines = Events.bannerLines()
             if !lines.isEmpty {

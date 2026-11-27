@@ -48,6 +48,8 @@ final class Router: ObservableObject {
         case hunting
         case spellbook
         case seasonalshop
+        /// 12.3: the Advent Calendar (December).
+        case advent
         case whatsnew
         case quit
         /// The secret Shadow Realm, open once the Shadow World is cleared.
@@ -239,6 +241,7 @@ struct RootView: View {
             case .hunting: HuntingGroundsView()
             case .spellbook: MenuSpellsScreen(showingBook: true)
             case .seasonalshop: SeasonalShopView()
+            case .advent: AdventView()
             case .whatsnew: WhatsNewView()
             case .quit: QuitScreen()
             }
