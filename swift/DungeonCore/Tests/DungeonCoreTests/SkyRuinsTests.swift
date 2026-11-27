@@ -149,6 +149,8 @@ final class SkyRuinsTests: XCTestCase {
             // The boss. The bot is healed every turn so the whole fight is
             // played (not by raising max HP: some boss hits are a share of it).
             r.floor = 10
+            // About what a player has by floor 10 (the bot is level 1).
+            r.maxHp = max(r.maxHp, 400)
             r.hp = r.maxHp; r.sp = r.maxSp
             r.inventory.append(SkyRuins.rootTorch)
             Combat.begin(&r, against: Combat.nextBoss(for: r, dice: &dice))

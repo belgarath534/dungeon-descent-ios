@@ -183,9 +183,10 @@ public enum SkyRuins {
     static func turnStart(_ run: inout Run, attacking: Bool, log: inout [String]) -> Bool {
         guard inSky(run), var e = run.enemy, run.foes.isEmpty else { return false }
         var s = run.sky ?? State()
-        // The garden grows every 8 turns on a floor.
-        s.gardenTurns += 1
-        if s.gardenTurns % 8 == 0 && s.gardenStage < 3 {
+        // The garden grows every 8 turns on a floor (not during a boss fight:
+        // Verdana's fight is long enough already).
+        if !e.isBoss { s.gardenTurns += 1 }
+        if !e.isBoss && s.gardenTurns % 8 == 0 && s.gardenStage < 3 {
             s.gardenStage += 1
             log.append("🌱 \(gardenLines[s.gardenStage]) (Enemies on this floor: +\(s.gardenStage * 10)% HP and attack.)")
         }
