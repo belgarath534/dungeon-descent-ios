@@ -7377,6 +7377,743 @@
     "The Shapeshifter's Approach",
     "The Final Reflection"
    ]
+  },
+  "The Sky Ruins": {
+   "enemies": {
+    "t1": [
+     {
+      "name": "Vine Creeper",
+      "icon": "🌿",
+      "hp": 30,
+      "atk": [
+       6,
+       12
+      ],
+      "gold": [
+       4,
+       7
+      ],
+      "desc": "A tangle of vines that moves like a snake. Its thorns can poison you.",
+      "poisonChance": 0.25,
+      "poisonStacks": 1
+     },
+     {
+      "name": "Spore Drifter",
+      "icon": "🍄",
+      "hp": 26,
+      "atk": [
+       5,
+       10
+      ],
+      "gold": [
+       3,
+       7
+      ],
+      "desc": "A floating mushroom. When it dies it bursts into a poison cloud.",
+      "burstPoison": 1
+     },
+     {
+      "name": "Ruin Gull",
+      "icon": "🐦",
+      "hp": 28,
+      "atk": [
+       7,
+       12
+      ],
+      "gold": [
+       4,
+       8
+      ],
+      "desc": "A sky gull grown huge on garden seeds. Fast and mean."
+     },
+     {
+      "name": "Thorn Sprite",
+      "icon": "🌱",
+      "hp": 24,
+      "atk": [
+       8,
+       13
+      ],
+      "gold": [
+       4,
+       7
+      ],
+      "desc": "A little spirit made of thorns. Hitting it hurts you: 3 damage.",
+      "thorns": 3
+     },
+     {
+      "name": "Rootling",
+      "icon": "🪴",
+      "hp": 34,
+      "atk": [
+       5,
+       9
+      ],
+      "gold": [
+       3,
+       6
+      ],
+      "desc": "A walking plant. It heals 4 HP every turn while its roots are in the soil.",
+      "rootHeal": 4
+     }
+    ],
+    "t2": [
+     {
+      "name": "Strangler Fig",
+      "icon": "🌳",
+      "hp": 48,
+      "atk": [
+       9,
+       15
+      ],
+      "gold": [
+       6,
+       10
+      ],
+      "desc": "A tree that wraps around its prey. Once a fight, its grip makes you lose a turn.",
+      "strangle": true
+     },
+     {
+      "name": "Blight Wasp Swarm",
+      "icon": "🐝",
+      "hp": 40,
+      "atk": [
+       10,
+       16
+      ],
+      "gold": [
+       6,
+       10
+      ],
+      "desc": "A cloud of wasps fat on poisoned nectar. Every sting poisons you.",
+      "poisonChance": 1,
+      "poisonStacks": 1
+     },
+     {
+      "name": "Gargoyle Moss",
+      "icon": "🗿",
+      "hp": 55,
+      "atk": [
+       8,
+       14
+      ],
+      "gold": [
+       7,
+       11
+      ],
+      "desc": "A statue covered in stone-hard moss. Your first two hits do half damage.",
+      "gargoyle": 2
+     },
+     {
+      "name": "Pollen Wraith",
+      "icon": "👻",
+      "hp": 44,
+      "atk": [
+       11,
+       17
+      ],
+      "gold": [
+       6,
+       10
+      ],
+      "desc": "A ghost made of pollen. Its hits can put you to sleep, and you lose a turn.",
+      "sleepChance": 0.2
+     },
+     {
+      "name": "Sky Serpent",
+      "icon": "🐍",
+      "hp": 46,
+      "atk": [
+       12,
+       18
+      ],
+      "gold": [
+       7,
+       12
+      ],
+      "desc": "A winged snake. Its bite gives 2 poison stacks.",
+      "poisonChance": 0.5,
+      "poisonStacks": 2
+     }
+    ],
+    "t3": [
+     {
+      "name": "Verdant Knight",
+      "icon": "🛡️",
+      "hp": 75,
+      "atk": [
+       13,
+       21
+      ],
+      "gold": [
+       10,
+       17
+      ],
+      "desc": "A knight in armor made of bark. It blocks 6 damage a hit until you burn it or hit it hard (20 or more).",
+      "bark": 6
+     },
+     {
+      "name": "Corpse Bloom",
+      "icon": "🌺",
+      "hp": 68,
+      "atk": [
+       12,
+       20
+      ],
+      "gold": [
+       10,
+       16
+      ],
+      "desc": "A giant flower that feeds on poison. It heals from the poison damage you take.",
+      "corpseBloom": true,
+      "poisonChance": 0.35,
+      "poisonStacks": 1
+     },
+     {
+      "name": "Stormcaller Harpy",
+      "icon": "🦅",
+      "hp": 70,
+      "atk": [
+       14,
+       22
+      ],
+      "gold": [
+       11,
+       17
+      ],
+      "desc": "A harpy that rides the wind. When it dies, its last gust can knock you down.",
+      "harpyGust": 0.3
+     },
+     {
+      "name": "Hollow Gardener",
+      "icon": "🧑‍🌾",
+      "hp": 80,
+      "atk": [
+       13,
+       20
+      ],
+      "gold": [
+       12,
+       18
+      ],
+      "desc": "A gardener with nothing inside but roots. Every 3 turns it plants a Spore Pod that poisons you. Sometimes drops a Root Torch.",
+      "gardener": true
+     }
+    ],
+    "bosses": [
+     {
+      "name": "Queen Verdana",
+      "icon": "🌹",
+      "hp": 260,
+      "atk": [
+       18,
+       28
+      ],
+      "gold": [
+       60,
+       90
+      ],
+      "isBoss": true,
+      "verdana": true,
+      "desc": "The Undying Bloom. She bred a flower that could not die, and it tore her kingdom out of the earth. She is still growing.",
+      "phaseMsg2": "\"You'll make such lovely soil.\" A wall of thorns rises in front of her. Her attacks are halved until you cut through it.",
+      "phaseMsg3": "\"I cannot die. I am the garden.\" Her roots dig into the stone. Unless they are burned, she regrows 20 HP a turn."
+     }
+    ],
+    "elites": [
+     {
+      "name": "The Overgrown Colossus",
+      "icon": "🌲",
+      "hp": 130,
+      "atk": [
+       17,
+       26
+      ],
+      "gold": [
+       22,
+       38
+      ],
+      "isElite": true,
+      "eliteAbility": "Regrows 10 HP a turn until you burn it.",
+      "regrow": 10
+     },
+     {
+      "name": "Mother of Spores",
+      "icon": "🍄",
+      "hp": 115,
+      "atk": [
+       15,
+       24
+      ],
+      "gold": [
+       20,
+       35
+      ],
+      "isElite": true,
+      "eliteAbility": "Every hit gives you 2 poison stacks.",
+      "poisonChance": 1,
+      "poisonStacks": 2
+     },
+     {
+      "name": "The Windbroken King",
+      "icon": "👑",
+      "hp": 125,
+      "atk": [
+       18,
+       27
+      ],
+      "gold": [
+       22,
+       38
+      ],
+      "isElite": true,
+      "eliteAbility": "Every 3rd turn, a gust: you lose your next action.",
+      "kingGust": true
+     },
+     {
+      "name": "The Groundskeeper",
+      "icon": "🪓",
+      "hp": 140,
+      "atk": [
+       15,
+       23
+      ],
+      "gold": [
+       25,
+       40
+      ],
+      "isElite": true,
+      "eliteAbility": "A giant pruning hook. Every 3rd turn, a sweep that makes you bleed 4 a turn for 3 turns.",
+      "sweep": true
+     }
+    ]
+   },
+   "loot": [
+    {
+     "name": "Antidote",
+     "icon": "🧴",
+     "type": "consumable",
+     "skyItem": "antidote",
+     "desc": "Clears all poison. Health potions don't."
+    },
+    {
+     "name": "Featherfall Charm",
+     "icon": "🪶",
+     "type": "relic",
+     "skyItem": "featherfall",
+     "desc": "You take no damage from falls while you carry it."
+    },
+    {
+     "name": "Verdant Blade",
+     "icon": "🗡️",
+     "type": "weapon",
+     "atk": 19,
+     "skyItem": "verdantBlade",
+     "desc": "A blade grown, not forged. Each hit gives the enemy a poison stack."
+    },
+    {
+     "name": "Bark Mail",
+     "icon": "🛡️",
+     "type": "armor",
+     "def": 7,
+     "skyItem": "barkMail",
+     "desc": "Armor of living bark. Poison can't touch you while you're above half HP."
+    },
+    {
+     "name": "Sky Lily",
+     "icon": "🌼",
+     "type": "potion",
+     "heal": 40,
+     "desc": "A flower that grows only above the clouds. Restores 40 HP."
+    },
+    {
+     "name": "Cloud Pearl",
+     "icon": "⚪",
+     "type": "gem",
+     "gold": 45,
+     "desc": "A pearl formed inside a cloud. Worth 45 gold."
+    },
+    {
+     "name": "Gardener's Shears",
+     "icon": "✂️",
+     "type": "weapon",
+     "atk": 16,
+     "desc": "Rusty but sharp. Made for cutting things that grow back."
+    }
+   ],
+   "shop": [
+    {
+     "name": "Soul Trap",
+     "icon": "🪤",
+     "type": "soul-trap",
+     "cost": 60,
+     "desc": "Captures the current enemy as a permanent minion. Use during combat."
+    },
+    {
+     "name": "Health Potion",
+     "icon": "🧪",
+     "type": "potion",
+     "heal": 40,
+     "cost": 12,
+     "desc": "Restores 40 HP."
+    },
+    {
+     "name": "Greater Potion",
+     "icon": "💊",
+     "type": "potion",
+     "heal": 80,
+     "cost": 22,
+     "desc": "Restores 80 HP. Stronger brew."
+    },
+    {
+     "name": "Spirit Tonic",
+     "icon": "🔵",
+     "type": "sp-potion",
+     "sp": 15,
+     "cost": 14,
+     "desc": "Restores 15 SP immediately."
+    },
+    {
+     "name": "Greater Tonic",
+     "icon": "💙",
+     "type": "sp-potion",
+     "sp": 30,
+     "cost": 24,
+     "desc": "Restores 30 SP. Concentrated essence."
+    },
+    {
+     "name": "Iron Flask",
+     "icon": "🛡️",
+     "type": "def-potion",
+     "def": 3,
+     "turns": 3,
+     "cost": 16,
+     "desc": "Grants +3 defense for 3 turns."
+    },
+    {
+     "name": "Berserker Draught",
+     "icon": "⚔️",
+     "type": "atk-potion",
+     "atk": 4,
+     "turns": 3,
+     "cost": 18,
+     "desc": "Grants +4 attack for 3 turns."
+    },
+    {
+     "name": "Lucky Potion",
+     "icon": "🍀",
+     "type": "luck-potion",
+     "cost": 20,
+     "desc": "Next 3 enemy kills drop double gold."
+    },
+    {
+     "name": "Fire Potion",
+     "icon": "🔥",
+     "type": "fire-potion",
+     "cost": 25,
+     "desc": "Deals 40% of target max HP as fire damage. Ignores defense."
+    },
+    {
+     "name": "Curse Potion",
+     "icon": "☠️",
+     "type": "curse-potion",
+     "cost": 18,
+     "desc": "Halves enemy attack for 3 turns."
+    },
+    {
+     "name": "Swift Potion",
+     "icon": "💨",
+     "type": "swift-potion",
+     "cost": 22,
+     "desc": "Guarantees flee for 2 turns. Perfect escape."
+    },
+    {
+     "name": "Cursed Vial",
+     "icon": "🌀",
+     "type": "cursed",
+     "cost": 3,
+     "desc": "Unpredictable effects. Cheap for a reason."
+    },
+    {
+     "name": "Phantom Potion",
+     "icon": "👻",
+     "type": "phantom-potion",
+     "cost": 35,
+     "desc": "Become untargetable for 2 turns. Enemy attacks pass through you."
+    },
+    {
+     "name": "Gravity Tonic",
+     "icon": "🌀",
+     "type": "gravity-tonic",
+     "cost": 28,
+     "desc": "Crushes enemy ATK to 1 for 3 turns."
+    },
+    {
+     "name": "Leech Brew",
+     "icon": "🩸",
+     "type": "leech-brew",
+     "cost": 32,
+     "desc": "Heals 30% of every hit you deal for 4 turns."
+    },
+    {
+     "name": "Rage Tonic",
+     "icon": "💢",
+     "type": "rage-tonic",
+     "cost": 38,
+     "desc": "Triple ATK but double incoming damage for 3 turns."
+    },
+    {
+     "name": "Fog Flask",
+     "icon": "🌫️",
+     "type": "fog-flask",
+     "cost": 25,
+     "desc": "Enemy has 70% chance to miss for 3 turns."
+    },
+    {
+     "name": "Time Potion",
+     "icon": "⌛",
+     "type": "time-potion",
+     "cost": 45,
+     "desc": "2 free attacks this turn. Enemy cannot respond."
+    },
+    {
+     "name": "Corruption Flask",
+     "icon": "💜",
+     "type": "corruption-flask",
+     "cost": 33,
+     "desc": "Deals 20 corruption damage to enemy each turn for 4 turns."
+    },
+    {
+     "name": "Warding Bell",
+     "icon": "🔔",
+     "type": "warding-bell",
+     "cost": 20,
+     "desc": "Rings out the next time you search a room with a trap, letting you step around it. One use."
+    },
+    {
+     "name": "Phoenix Feather",
+     "icon": "🪶",
+     "type": "phoenix-feather",
+     "cost": 150,
+     "desc": "If you would die while carrying this, it ignites instead — you are reborn at 30% HP. Consumed automatically. One use."
+    },
+    {
+     "name": "Elixir of Life",
+     "icon": "✨",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Gravebound Elixir",
+     "icon": "💀",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Tidal Elixir",
+     "icon": "🌊",
+     "type": "heal",
+     "healPct": 0.6,
+     "cost": 35,
+     "desc": "Restores 60% of max HP instantly."
+    },
+    {
+     "name": "Bloodstone",
+     "icon": "🔴",
+     "type": "gem",
+     "gold": 20,
+     "cost": 0,
+     "desc": "Worth 20 gold. Sell it at the Blacksmith."
+    },
+    {
+     "id": "shop-iron-sword",
+     "name": "Iron Sword",
+     "icon": "⚔️",
+     "type": "weapon",
+     "weaponType": "sword",
+     "level": 1,
+     "atkBase": [
+      5,
+      10
+     ],
+     "cost": 45,
+     "isEquippable": true,
+     "desc": "A reliable sword."
+    },
+    {
+     "id": "shop-oak-staff",
+     "name": "Oak Staff",
+     "icon": "🪄",
+     "type": "weapon",
+     "weaponType": "staff",
+     "level": 1,
+     "atkBase": [
+      4,
+      8
+     ],
+     "cost": 50,
+     "isEquippable": true,
+     "desc": "Channels arcane energy."
+    },
+    {
+     "id": "shop-battle-axe",
+     "name": "Battle Axe",
+     "icon": "🪓",
+     "type": "weapon",
+     "weaponType": "axe",
+     "level": 1,
+     "atkBase": [
+      7,
+      13
+     ],
+     "cost": 70,
+     "isEquippable": true,
+     "desc": "Heavy but devastating."
+    },
+    {
+     "id": "shop-leather-vest",
+     "name": "Leather Vest",
+     "icon": "🦺",
+     "type": "armor",
+     "armorType": "light",
+     "level": 1,
+     "defBase": 3,
+     "cost": 40,
+     "isEquippable": true,
+     "desc": "+3 defense."
+    },
+    {
+     "id": "shop-chain-mail",
+     "name": "Chain Mail",
+     "icon": "⛓️",
+     "type": "armor",
+     "armorType": "medium",
+     "level": 1,
+     "defBase": 5,
+     "cost": 65,
+     "isEquippable": true,
+     "desc": "+5 defense."
+    },
+    {
+     "id": "rune-strength",
+     "name": "Rune of Strength",
+     "icon": "🔴",
+     "type": "rune",
+     "cost": 30,
+     "desc": "+6 attack for the rest of this run."
+    },
+    {
+     "id": "rune-protection",
+     "name": "Rune of Protection",
+     "icon": "🔵",
+     "type": "rune",
+     "cost": 28,
+     "desc": "+5 defense for the rest of this run."
+    },
+    {
+     "id": "rune-vitality",
+     "name": "Rune of Vitality",
+     "icon": "🟣",
+     "type": "rune",
+     "cost": 32,
+     "desc": "+20 max HP this run."
+    },
+    {
+     "id": "scroll-smite",
+     "name": "Scroll of Smite",
+     "icon": "⚡",
+     "type": "scroll",
+     "cost": 35,
+     "desc": "80 unblockable damage to current enemy."
+    },
+    {
+     "id": "scroll-mending",
+     "name": "Scroll of Mending",
+     "icon": "✨",
+     "type": "scroll",
+     "cost": 30,
+     "desc": "Heals 50% max HP outside combat."
+    },
+    {
+     "id": "scroll-reveal",
+     "name": "Scroll of Reveal",
+     "icon": "📜",
+     "type": "scroll",
+     "cost": 22,
+     "desc": "Reveals the next 3 room types."
+    },
+    {
+     "name": "Antidote",
+     "icon": "🧴",
+     "type": "consumable",
+     "skyItem": "antidote",
+     "cost": 45,
+     "desc": "Clears all poison. Health potions don't."
+    },
+    {
+     "name": "Featherfall Charm",
+     "icon": "🪶",
+     "type": "relic",
+     "skyItem": "featherfall",
+     "cost": 90,
+     "desc": "You take no damage from falls while you carry it."
+    },
+    {
+     "cost": 120,
+     "name": "Root Torch",
+     "icon": "🔥",
+     "type": "consumable",
+     "skyItem": "rootTorch",
+     "desc": "Burns roots. Use it in a fight to stop a plant (or Queen Verdana) from regrowing."
+    }
+   ],
+   "rooms": [
+    "A fountain overgrown with flowers the color of bruises.",
+    "Wind howls through a hole where a wall used to be. Clouds drift past below.",
+    "A collapsed bridge. Vines hold the halves together, barely.",
+    "A kitchen garden where the herbs have grown taller than you.",
+    "A sundial with no shadow. The light here comes from everywhere.",
+    "A library with every book split open by roots growing through the pages.",
+    "A greenhouse. The glass is intact. Something inside taps on it.",
+    "Seed pods hang from the ceiling like lanterns. One sways without wind.",
+    "Bones in a flowerbed, arranged neatly, like they were planted.",
+    "Pollen drifts in the light like snow. You try not to breathe too deep.",
+    "A royal portrait, the queen's face scratched out and replaced with a flower.",
+    "A gardener's journal on a bench: \"She says it can't die. She says that like it's good news.\"",
+    "Statues of soldiers, each one hollowed out and full of moss.",
+    "A rope bridge between two towers. It creaks in a rhythm, like breathing.",
+    "A cracked observatory. The telescope points down."
+   ],
+   "floors": [
+    "",
+    "The Landing",
+    "The Hanging Gardens",
+    "The Aviary",
+    "The Rootways",
+    "The Groundskeeper's Shed",
+    "The Poisoned Wells",
+    "The Bell Tower",
+    "The Windward Edge",
+    "The Queen's Arboretum",
+    "The Throne of Thorns"
+   ],
+   "floorLines": [
+    "",
+    "Broken stairs, open sky, and a garden that hasn't been tended in a thousand years. It tends itself now.",
+    "Planters hang from chains over nothing. Some of them are breathing.",
+    "Empty cages, every door bent outward.",
+    "Corridors carved by roots, not hands. They're still carving.",
+    "Tools on every wall. One hook is missing. You hear it scraping somewhere ahead.",
+    "The water is green and sweet-smelling. Don't.",
+    "The bell is wrapped in vines. Every so often, they ring it.",
+    "The floor ends. The wind doesn't.",
+    "Every plant here leans the same way: toward the throne.",
+    "She has been waiting. She has been growing."
+   ]
   }
  },
  "nightmareEnemies": {
@@ -14497,7 +15234,12 @@
    "shadow-boss": "music-shadow-boss.mp3",
    "shadow-battle": "music-shadow-battle.mp3",
    "ambient-shadow": "ambient-shadow.mp3",
-   "shadow-stalker": "shadow-world-thriller-score.mp3"
+   "shadow-stalker": "shadow-world-thriller-score.mp3",
+   "skyruins1": "music-skyruins1.mp3",
+   "skyruins2": "music-skyruins2.mp3",
+   "skyruins3": "music-skyruins3.mp3",
+   "skyruins-boss": "music-skyruins-boss.mp3",
+   "skyruins-battle": "music-skyruins-battle.mp3"
   },
   "ambient": {
    "crypt": "ambient-crypt.mp3",
@@ -14510,7 +15252,8 @@
    "infernal": "ambient-infernal.mp3",
    "abyssal": "ambient-abyssal.mp3",
    "shadow": "ambient-shadow.mp3",
-   "mine": "music-mine-ambient.mp3"
+   "mine": "music-mine-ambient.mp3",
+   "sky": "ambient-sky.mp3"
   },
   "enemySfx": {
    "Crypt of Malachar": "sfx-enemy-undead",
@@ -14522,7 +15265,8 @@
    "The Infernal Descent": "sfx-enemy-demon",
    "The Infernal": "sfx-enemy-demon",
    "The Abyssal Deep": "sfx-enemy-leviathan",
-   "The Shadow World": "sfx-enemy-shadow"
+   "The Shadow World": "sfx-enemy-shadow",
+   "The Sky Ruins": "sfx-plant-hiss"
   },
   "bossSfx": {
    "Crypt of Malachar": "sfx-boss-undead",
@@ -14534,7 +15278,8 @@
    "The Infernal Descent": "sfx-boss-demon",
    "The Infernal": "sfx-boss-demon",
    "The Abyssal Deep": "sfx-boss-leviathan",
-   "The Shadow World": "sfx-boss-shadow"
+   "The Shadow World": "sfx-boss-shadow",
+   "The Sky Ruins": "sfx-boss-bloom-roar"
   }
  }
 }
