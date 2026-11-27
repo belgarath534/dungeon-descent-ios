@@ -20,9 +20,13 @@ final class CreateCharacterTest: XCTestCase {
         }
     }
 
+    /// The largest accessibility text size (an iPad player uses one of the
+    /// Larger Text sizes), so every screen is laid out the way theirs is.
+    private let bigText = ["-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"]
+
     func testCreateCharactersAndPlay() {
         for round in 0..<4 {
-            app.launchArguments = ["-skipLoading", "-startScreen", "charlist"]
+            app.launchArguments = ["-skipLoading", "-startScreen", "charlist"] + bigText
             app.launch()
             sleep(4)
             dismissPopups()
@@ -36,7 +40,7 @@ final class CreateCharacterTest: XCTestCase {
             app.terminate()
         }
         // Then play: the first character's dungeon.
-        app.launchArguments = ["-skipLoading", "-startScreen", "dungeon"]
+        app.launchArguments = ["-skipLoading", "-startScreen", "dungeon"] + bigText
         app.launch()
         sleep(6)
         dismissPopups()
