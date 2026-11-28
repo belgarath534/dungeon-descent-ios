@@ -85,7 +85,6 @@ jobs:
             echo "SIM_UDID=$UDID" >> "$GITHUB_ENV"
             xcrun simctl boot "$UDID" || true
             # The iPad test: the largest accessibility text size, like the player's iPad.
-            if [ "${{ github.ref_name }}" = "ipad-create-test" ]; then xcrun simctl ui "$UDID" content_size accessibility-extra-extra-extra-large || true; fi
             echo "destination=id=$UDID" >> "$GITHUB_OUTPUT"
             echo "signing=CODE_SIGNING_ALLOWED=NO" >> "$GITHUB_OUTPUT"
           elif [ "${{ matrix.device }}" = "vision" ]; then

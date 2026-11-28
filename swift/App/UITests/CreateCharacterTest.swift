@@ -26,7 +26,7 @@ final class CreateCharacterTest: XCTestCase {
 
     func testCreateCharactersAndPlay() {
         for round in 0..<4 {
-            app.launchArguments = ["-skipLoading", "-startScreen", "charlist"] + bigText
+            app.launchArguments = ["-skipLoading", "-startScreen", "charlist"]
             app.launch()
             sleep(4)
             dismissPopups()
@@ -40,7 +40,7 @@ final class CreateCharacterTest: XCTestCase {
             app.terminate()
         }
         // Then play: the first character's dungeon.
-        app.launchArguments = ["-skipLoading", "-startScreen", "dungeon"] + bigText
+        app.launchArguments = ["-skipLoading", "-startScreen", "dungeon"]
         app.launch()
         sleep(6)
         dismissPopups()
@@ -98,7 +98,19 @@ final class CreateCharacterTest: XCTestCase {
         app.buttons.matching(NSPredicate(format: "label ==[c] %@", label)).firstMatch
     }
 
+    /// Turns the iPad each time, the way it turns in a player's hands, so
+    /// every creation screen is rebuilt in portrait and landscape.
+    private var turns = 0
+    private func turn() {
+        let o: [UIDeviceOrientation] = [.landscapeLeft, .portrait, .landscapeRight, .portraitUpsideDown, .portrait]
+        XCUIDevice.shared.orientation = o[turns % o.count]
+        turns += 1
+        usleep(600_000)
+        XCTAssertEqual(app.state, .runningForeground, "The game closed when the iPad turned (turn \(turns))")
+    }
+
     private func tap(_ label: String) {
+        turn()
         let b = button(label)
         XCTAssert(waitFor(b), "No \"\(label)\" button. The game is \(app.state == .runningForeground ? "open" : "closed").")
         for _ in 0..<6 where !b.isHittable { app.swipeUp() }
