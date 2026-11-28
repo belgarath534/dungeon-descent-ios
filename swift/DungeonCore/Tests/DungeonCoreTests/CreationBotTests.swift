@@ -8,7 +8,7 @@ import XCTest
 /// creation"; a crash anywhere here is a crash in the app, and a broken
 /// number is named with the character that caused it.
 final class CreationBotTests: XCTestCase {
-    let play = AutoPlayTests()
+    let play = makeAutoPlay()
 
     /// What RunModel.newRun does at the start of a run, without the app's
     /// screens and online parts.

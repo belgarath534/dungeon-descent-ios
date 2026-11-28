@@ -5,8 +5,8 @@ import XCTest
 /// says, and a bot can play every class through its fights and conquer
 /// Queen Verdana without the game breaking.
 final class SkyRuinsTests: XCTestCase {
-    let play = AutoPlayTests()
-    let bots = CreationBotTests()
+    let play = makeAutoPlay()
+    let bots = makeCreationBots()
 
     func skyRun(_ cls: String = "Warrior", race: String = "Human") -> Run {
         Run(character: PlayerCharacter(name: "Bot", cls: cls, race: race, prof: "Thief",

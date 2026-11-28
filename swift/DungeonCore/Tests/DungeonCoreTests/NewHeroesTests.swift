@@ -47,7 +47,7 @@ final class NewHeroesTests: XCTestCase {
     }
 
     func testBothNewClassesFightWithEverySkill() {
-        let bots = CreationBotTests()
+        let bots = makeCreationBots()
         for cls in ["PlagueDoctor", "Artificer"] {
             var dice = SeededDice(seed: 21)
             var r = run(cls, race: cls == "PlagueDoctor" ? "Goliath" : "Aarakocra")

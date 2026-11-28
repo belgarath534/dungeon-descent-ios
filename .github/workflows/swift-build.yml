@@ -11,7 +11,7 @@ name: Swift iOS build
 
 on:
   push:
-    branches: [swift-rewrite, '12.1', '12.3']
+    branches: [swift-rewrite, '12.1', '12.3', '12.4']
     paths:
       - 'swift/**'
       - '.github/workflows/swift-build.yml'

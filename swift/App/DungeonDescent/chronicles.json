@@ -1566,6 +1566,11 @@
    "dungeon": "Crypt of Malachar"
   },
   {
+   "key": "floor4",
+   "label": "The Lower Crypt — Crypt of Malachar",
+   "dungeon": "Crypt of Malachar"
+  },
+  {
    "key": "boss",
    "label": "The Undying King — Crypt Boss",
    "dungeon": "Crypt of Malachar"
@@ -1721,6 +1726,21 @@
    "dungeon": "The Abyssal Deep"
   },
   {
+   "key": "abyssal-boss-p2",
+   "label": "The Leviathan Wakes — Phase 2",
+   "dungeon": "The Abyssal Deep"
+  },
+  {
+   "key": "abyssal-boss-p3",
+   "label": "Crushing Depths — Leviathan Phase 3",
+   "dungeon": "The Abyssal Deep"
+  },
+  {
+   "key": "abyssal-boss-p4",
+   "label": "The Last Tide — Leviathan Phase 4",
+   "dungeon": "The Abyssal Deep"
+  },
+  {
    "key": "abyssal-battle",
    "label": "Deep Water — Abyssal Battle",
    "dungeon": "The Abyssal Deep"
@@ -1781,6 +1801,31 @@
    "dungeon": "The Shadow World"
   },
   {
+   "key": "skyruins1",
+   "label": "The Landing — Sky Ruins, Floors 1–3",
+   "dungeon": "The Sky Ruins"
+  },
+  {
+   "key": "skyruins2",
+   "label": "The Hanging Gardens — Sky Ruins, Floors 4–6",
+   "dungeon": "The Sky Ruins"
+  },
+  {
+   "key": "skyruins3",
+   "label": "The Rootspire — Sky Ruins, Floors 7–9",
+   "dungeon": "The Sky Ruins"
+  },
+  {
+   "key": "skyruins-battle",
+   "label": "Thorns and Wind — Sky Ruins Battle",
+   "dungeon": "The Sky Ruins"
+  },
+  {
+   "key": "skyruins-boss",
+   "label": "The Undying Bloom — Queen Verdana",
+   "dungeon": "The Sky Ruins"
+  },
+  {
    "key": "raid",
    "label": "No Retreat — Daily Raid",
    "dungeon": "Special"
@@ -1809,6 +1854,11 @@
    "key": "time-descender",
    "label": "The Last Tick — Time Descender",
    "dungeon": "Special"
+  },
+  {
+   "key": "spire",
+   "label": "The Endless Climb — The Spire",
+   "dungeon": "The Spire"
   },
   {
    "key": "menu-halloween",
@@ -1851,6 +1901,11 @@
    "dungeon": "The Mine"
   },
   {
+   "key": "mine",
+   "label": "Echoes in the Stone — The Mine",
+   "dungeon": "The Mine"
+  },
+  {
    "key": "hideseek-explore",
    "label": "Something Waits — Hide and Seek",
    "dungeon": "Hide and Seek"
@@ -1863,6 +1918,21 @@
   {
    "key": "home",
    "label": "Hearthstone — Home Theme",
+   "dungeon": "Special"
+  },
+  {
+   "key": "tavern",
+   "label": "The Tavern Songs — Co-op, Friends and the Bounty Board",
+   "dungeon": "Special"
+  },
+  {
+   "key": "blacksmith",
+   "label": "The Forge — Blacksmith Theme",
+   "dungeon": "Special"
+  },
+  {
+   "key": "graveyard",
+   "label": "Where the Fallen Rest — The Graveyard",
    "dungeon": "Special"
   },
   {
