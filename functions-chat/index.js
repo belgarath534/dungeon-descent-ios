@@ -187,6 +187,7 @@ const DUNGEONS = ['Crypt of Malachar', 'The Ashbound Wastes', 'Frosthold Abyss',
   'The Whispering Forest', 'The Infernal Descent', 'The Abyssal Deep', 'The Shadow World', 'The Sky Ruins'];
 const DIFFICULTIES = ['Wanderer', 'Ironblood', 'Condemned', 'Forsaken', 'Nightmare', 'Insane', 'Impossible'];
 const LEGEND_ROOM = 'hall-of-legends';
+const SPIRE_TOP = 1800; // The Time Eater's floor (DungeonCore Spire.swift)
 
 async function legend(uid, b, res) {
   if (b.event === 'coop') return await coopRoom(uid, b, res);
@@ -196,24 +197,37 @@ async function legend(uid, b, res) {
   if ((await db.doc('chat_bans/' + uid).get()).exists) { res.json({ posted: false, note: 'banned' }); return; }
   const prefs = (await db.doc('chat_members/' + uid + '/private/push').get()).data() || {};
   if (prefs.legends === false) { res.json({ posted: false, note: 'turned off' }); return; }
+  const floor = Number.isInteger(b.floor) ? b.floor : 0;
+  // The top of The Spire (floor 1800, The Time Eater) happens once in a
+  // player's life: it's posted even right after another post (the 10-minute
+  // wait would otherwise drop it for good, since the game sends it once).
+  const once = (b.event === 'spire' && floor >= SPIRE_TOP) || b.event === 'timeeater';
   const last = member.lastLegendAt ? member.lastLegendAt.toMillis() : 0;
-  if (Date.now() - last < 10 * 60 * 1000) { res.json({ posted: false, note: 'too soon' }); return; }
+  if (!once && Date.now() - last < 10 * 60 * 1000) { res.json({ posted: false, note: 'too soon' }); return; }
+  if (b.event === 'timeeater') {
+    // Once per player, ever.
+    if (member.timeEaterPosted) { res.json({ posted: false, note: 'already posted' }); return; }
+  }
   const name = member.username;
   const cls = typeof b.cls === 'string' && /^[A-Za-z ]{2,20}$/.test(b.cls) ? b.cls : null;
-  const floor = Number.isInteger(b.floor) ? b.floor : 0;
   let text = null;
   if (b.event === 'victory' && DUNGEONS.includes(b.dungeon) && DIFFICULTIES.includes(b.difficulty))
     text = `🏆 ${name} conquered ${b.dungeon} on ${b.difficulty}` + (cls ? ` as ${/^[AEIOU]/i.test(cls) ? 'an' : 'a'} ${cls}!` : '!');
   else if (b.event === 'endless' && floor >= 25 && floor % 25 === 0 && floor <= 100000)
     text = `⬇️ ${name} reached floor ${floor} in Endless Descent!`;
+  else if (b.event === 'spire' && floor >= SPIRE_TOP && floor <= 10000)
+    text = `🗼👑 ${name} reached the top of The Spire! Floor ${SPIRE_TOP}, where The Time Eater waits.`;
   else if (b.event === 'spire' && floor >= 10 && floor % 10 === 0 && floor <= 10000)
     text = `🗼 ${name} climbed to floor ${floor} of The Spire!`;
+  else if (b.event === 'timeeater')
+    text = `⏳👑 ${name} defeated The Time Eater and conquered all ${SPIRE_TOP} floors of The Spire!` + (cls ? ` (${/^[AEIOU]/i.test(cls) ? 'an' : 'a'} ${cls})` : '');
   if (!text) { res.status(400).json({ error: 'Unknown event' }); return; }
   const chan = await db.doc('chat_channels/' + LEGEND_ROOM).get();
   if (!chan.exists) { res.json({ posted: false, note: 'no hall-of-legends channel' }); return; }
   await db.collection('chat_channels/' + LEGEND_ROOM + '/messages').add({
     uid: 'hall-of-legends', username: 'Hall of Legends', text, about: uid, ts: admin.firestore.FieldValue.serverTimestamp(), pushed: true });
-  await memberDoc.ref.update({ lastLegendAt: admin.firestore.FieldValue.serverTimestamp() });
+  await memberDoc.ref.update(Object.assign({ lastLegendAt: admin.firestore.FieldValue.serverTimestamp() },
+    b.event === 'timeeater' ? { timeEaterPosted: true } : {}));
   // A Hall of Legends moment is rare, so it notifies everyone with
   // notifications on (not only those following the channel), unless they
   // turned Hall of Legends notifications off (private/push: hallPush false).
