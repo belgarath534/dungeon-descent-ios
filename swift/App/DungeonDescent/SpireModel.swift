@@ -145,6 +145,11 @@ final class SpireModel: ObservableObject {
             stage = .won
             game.achievements.trackGlobal("timeEaterDefeated")
             game.achievements.award("ach-time-eater")
+            // #hall-of-legends: the server posts it once per player, ever.
+            if game.store.getItem("dd_legend_timeeater") == nil {
+                game.store.setItem("dd_legend_timeeater", "1")
+                game.postLegend("timeeater", ["cls": r.cls])
+            }
             Sound.track("menu")
             Sound.sfx("sfx-levelup")
             Feedback.announce("THE TIME EATER IS DEFEATED. You have climbed all 1800 floors of The Spire. 1000 gold awarded. 25 Mystery Coins awarded. 25 percent Blacksmith discount active for 2 hours. You have conquered The Spire. This has never been done before.")
