@@ -56,6 +56,9 @@ public struct Run: Codable, Sendable {
     public var spirit: String? = nil
     /// 12.3: The Sky Ruins' poison, garden and the rest (nil outside it).
     public var sky: SkyRuins.State? = nil
+    /// 12.4: what the player has learned about each enemy's weaknesses this
+    /// run (name → type → multiplier); the app adds it to the Bestiary.
+    public var learnedAffinities: [String: [String: Double]]? = nil
     /// Shadow Corruption stacks (The Shadow World).
     public var shadowCorruption = 0
     /// The rest of an ambush: enemies fighting alongside `enemy`, your target.

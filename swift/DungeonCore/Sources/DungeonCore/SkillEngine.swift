@@ -208,8 +208,12 @@ public enum Skills {
             if let lvl = run.skillLevels[Home.skillKey(cls: run.cls, name: skill.name)], lvl > 1, dmg > 0 {
                 dmg = jsRound(Double(dmg) * (1 + 0.10 * Double(lvl - 1)))
             }
+            // 12.4: the skill's damage type, and the enemy's weakness to it.
+            let type = DamageTypes.of(skill)
+            dmg = DamageTypes.apply(dmg, type, enemy: &e, run: &run, log: &r.log)
             if dmg > 0 {
-                msg += spec.hits > 1 ? " \(spec.hits) hits for \(dmg) damage." : " \(dmg) damage."
+                let w = type == .physical ? "" : " \(type.rawValue)"
+                msg += spec.hits > 1 ? " \(spec.hits) hits for \(dmg)\(w) damage." : " \(dmg)\(w) damage."
             }
         }
         run.enemy = e

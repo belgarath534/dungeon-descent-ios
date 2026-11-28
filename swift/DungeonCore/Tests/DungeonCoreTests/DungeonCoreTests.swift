@@ -180,6 +180,8 @@ final class CombatTests: XCTestCase {
         return r
     }
 
+    /// 12.4: a shade slightly resists Physical (×0.75), so attacks on it
+    /// below are three quarters of the roll.
     var shade: Enemy { Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1) }
 
     func testAttackThenCounter() {
@@ -187,12 +189,12 @@ final class CombatTests: XCTestCase {
         Combat.begin(&run, against: shade)
         var dice = LoadedDice(rolls: [10, 9], chances: [false])
         let r = Combat.takeTurn(&run, .attack, dice: &dice)
-        XCTAssertEqual(r.playerDamage, 10)
-        XCTAssertEqual(run.enemy?.hp, 14)
+        XCTAssertEqual(r.playerDamage, 8)   // round(10 × 0.75)
+        XCTAssertEqual(run.enemy?.hp, 16)
         // raw 9, block capped at floor(9 × 0.6) = 5, Warrior def 3 → blocks 3, takes 6
         XCTAssertEqual(r.enemyDamage, 6)
         XCTAssertEqual(run.hp, 114)
-        XCTAssertEqual(r.log, ["You attack for 10 damage.",
+        XCTAssertEqual(r.log, ["You attack for 8 damage.",
                                "Hollow Shade strikes for 9 — you absorb 3. You take 6 damage."])
         XCTAssertEqual(r.announcement, "Hollow Shade dealt 6 damage. Your HP: 114 of 120.")
     }
@@ -203,8 +205,8 @@ final class CombatTests: XCTestCase {
         var dice = LoadedDice(rolls: [10, 4], chances: [true])
         let r = Combat.takeTurn(&run, .attack, dice: &dice)
         XCTAssertTrue(r.crit)
-        XCTAssertEqual(r.playerDamage, 18)
-        XCTAssertEqual(r.log.first, "CRITICAL HIT! You strike for 18 damage!")
+        XCTAssertEqual(r.playerDamage, 14)   // round(18 × 0.75)
+        XCTAssertEqual(r.log.first, "CRITICAL HIT! You strike for 14 damage!")
     }
 
     func testMarkedKillForcesCrit() {
@@ -223,7 +225,7 @@ final class CombatTests: XCTestCase {
         var miss = LoadedDice(rolls: [10, 4], chances: [true])
         XCTAssertTrue(Combat.takeTurn(&run, .heavy, dice: &miss).missed)
         var hit = LoadedDice(rolls: [10, 4], chances: [false])
-        XCTAssertEqual(Combat.takeTurn(&run, .heavy, dice: &hit).playerDamage, 17)
+        XCTAssertEqual(Combat.takeTurn(&run, .heavy, dice: &hit).playerDamage, 13)   // round(17 × 0.75)
     }
 
     func testDefendWithSentinelTrait() {
@@ -254,7 +256,7 @@ final class CombatTests: XCTestCase {
     func testKillSkipsCounter() {
         var run = makeRun("Wizard")
         Combat.begin(&run, against: shade)
-        var dice = LoadedDice(rolls: [24], chances: [true])
+        var dice = LoadedDice(rolls: [32], chances: [true])   // × 0.75 = 24, its whole HP
         let r = Combat.takeTurn(&run, .attack, dice: &dice)
         XCTAssertTrue(r.enemyDied)
         XCTAssertNil(r.enemyDamage)
@@ -390,6 +392,8 @@ final class InventoryTests: XCTestCase {
     func item(_ name: String) -> Item {
         (ItemTables.cryptShop + ItemTables.cryptLoot).first { $0.name == name }!
     }
+    /// 12.4: a shade slightly resists Physical (×0.75), so attacks on it
+    /// below are three quarters of the roll.
     var shade: Enemy { Enemy.spawn(Bestiary.crypt.t1[0], floor: 1, playerLevel: 1) }
 
     func testPotionsHealWithHerbalistAndAlchemist() {

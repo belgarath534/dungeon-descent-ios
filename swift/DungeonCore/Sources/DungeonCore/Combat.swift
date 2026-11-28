@@ -312,8 +312,9 @@ public enum Combat {
                 dmg = gearDamage(&run, dmg, log: &r.log)
                 r.playerDamage = ClassTraits.attack(&run, Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log), dice: &dice, log: &r.log)
                 r.playerDamage = Mountainbreaker.onHit(&run, r.playerDamage, log: &r.log)
-                r.log.append(r.crit ? "CRITICAL HIT! You strike for \(r.playerDamage) damage!"
-                                    : "You attack for \(r.playerDamage) damage.")
+                r.playerDamage = typed(&run, r.playerDamage, log: &r.log)
+                r.log.append(r.crit ? "CRITICAL HIT! You strike for \(r.playerDamage)\(attackWord(run)) damage!"
+                                    : "You attack for \(r.playerDamage)\(attackWord(run)) damage.")
             case .heavy:
                 if run.weaponEffect != "weighted" && run.subclass != "hawkeye" && run.fight.bloodOath == 0 && dice.chance(0.30) {
                     r.missed = true
@@ -324,7 +325,8 @@ public enum Combat {
                     dmg = gearDamage(&run, dmg, log: &r.log)
                     r.playerDamage = ClassTraits.attack(&run, Races.attack(run, scaleDamage(run, dmg), dice: &dice, log: &r.log), dice: &dice, log: &r.log)
                     r.playerDamage = Mountainbreaker.onHit(&run, r.playerDamage, log: &r.log)
-                    r.log.append("Heavy strike lands for \(r.playerDamage) damage!")
+                    r.playerDamage = typed(&run, r.playerDamage, log: &r.log)
+                    r.log.append("Heavy strike lands for \(r.playerDamage)\(attackWord(run)) damage!")
                 }
             case .defend:
                 run.defending = true
@@ -474,6 +476,21 @@ public enum Combat {
             run.hp = min(run.maxHp, run.hp + MagicChamber.heal)
             log.append("🦄 Starlight's horn glows. You heal \(MagicChamber.heal) HP.")
         }
+    }
+
+    /// 12.4: the type of your basic and heavy attacks (Physical, unless the
+    /// weapon's enchantment changes it).
+    public static func attackType(_ run: Run) -> DamageType { Enchantments.attackType(run) }
+    static func attackWord(_ run: Run) -> String {
+        let t = attackType(run)
+        return t == .physical ? "" : " \(t.rawValue)"
+    }
+    /// Your attack after the enemy's weakness or resistance.
+    static func typed(_ run: inout Run, _ dmg: Int, log: inout [String]) -> Int {
+        guard dmg > 0, var e = run.enemy else { return dmg }
+        let d = DamageTypes.apply(dmg, attackType(run), enemy: &e, run: &run, log: &log)
+        run.enemy = e
+        return d
     }
 
     static func dealDamage(_ run: inout Run, _ dmg: Int, log: inout [String]) {
