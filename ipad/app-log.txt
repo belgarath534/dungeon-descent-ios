@@ -1,342 +1,342 @@
-2026-11-27 01:44:32.316 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.316 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button (AX element pid: 78438, elementOrHash.elementID: 4323911312.85) faulted in {
+2026-11-28 00:14:03.349 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.349 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button (AX element pid: 87442, elementOrHash.elementID: 4326250400.85) faulted in {
     "XC_kAXXCAttributeLabel" = "Open run log, see everything that happened this run";
 }: (no error) for label using XC_kAXXCAttributeLabel
-2026-11-27 01:44:32.316 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.317 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 78438, elementOrHash.elementID: 4323912208.86
-2026-11-27 01:44:32.317 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.317 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] AX element pid: 78438, elementOrHash.elementID: 4323912208.86 (AX element pid: 78438, elementOrHash.elementID: 4323912208.86) faulted in {
+2026-11-28 00:14:03.349 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.350 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 87442, elementOrHash.elementID: 4326251296.86
+2026-11-28 00:14:03.350 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.350 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] AX element pid: 87442, elementOrHash.elementID: 4326251296.86 (AX element pid: 87442, elementOrHash.elementID: 4326251296.86) faulted in {
     "XC_kAXXCAttributeAutomationType" = 9;
     "XC_kAXXCAttributeElementBaseType" = UIResponder;
     "XC_kAXXCAttributeElementType" = "SwiftUI.AccessibilityNode";
     "XC_kAXXCAttributeTraits" = 8589934593;
 }: (no error) for elementType using XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType
-2026-11-27 01:44:32.317 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Computed elementType Button.
-2026-11-27 01:44:32.317 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.317 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 78438, elementOrHash.elementID: 4323912208.86
-2026-11-27 01:44:32.318 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.318 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button (AX element pid: 78438, elementOrHash.elementID: 4323912208.86) faulted in {
+2026-11-28 00:14:03.350 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Computed elementType Button.
+2026-11-28 00:14:03.350 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.350 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 87442, elementOrHash.elementID: 4326251296.86
+2026-11-28 00:14:03.351 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.351 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button (AX element pid: 87442, elementOrHash.elementID: 4326251296.86) faulted in {
     "XC_kAXXCAttributeLabel" = "Save your progress right now";
 }: (no error) for label using XC_kAXXCAttributeLabel
-2026-11-27 01:44:32.318 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.318 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 78438, elementOrHash.elementID: 4323912640.87
-2026-11-27 01:44:32.318 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.318 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] AX element pid: 78438, elementOrHash.elementID: 4323912640.87 (AX element pid: 78438, elementOrHash.elementID: 4323912640.87) faulted in {
+2026-11-28 00:14:03.351 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.351 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 87442, elementOrHash.elementID: 4326251728.87
+2026-11-28 00:14:03.351 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.351 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] AX element pid: 87442, elementOrHash.elementID: 4326251728.87 (AX element pid: 87442, elementOrHash.elementID: 4326251728.87) faulted in {
     "XC_kAXXCAttributeAutomationType" = 9;
     "XC_kAXXCAttributeElementBaseType" = UIResponder;
     "XC_kAXXCAttributeElementType" = "SwiftUI.AccessibilityNode";
     "XC_kAXXCAttributeTraits" = 8589934593;
 }: (no error) for elementType using XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType
-2026-11-27 01:44:32.319 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Computed elementType Button.
-2026-11-27 01:44:32.319 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.319 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 78438, elementOrHash.elementID: 4323912640.87
-2026-11-27 01:44:32.319 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.320 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button (AX element pid: 78438, elementOrHash.elementID: 4323912640.87) faulted in {
+2026-11-28 00:14:03.351 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Computed elementType Button.
+2026-11-28 00:14:03.351 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.351 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 87442, elementOrHash.elementID: 4326251728.87
+2026-11-28 00:14:03.352 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.352 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button (AX element pid: 87442, elementOrHash.elementID: 4326251728.87) faulted in {
     "XC_kAXXCAttributeLabel" = "Open blacksmith \134U2014 upgrade your equipped weapon or armor";
 }: (no error) for label using XC_kAXXCAttributeLabel
-2026-11-27 01:44:32.320 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.320 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 78438, elementOrHash.elementID: 4323914144.88
-2026-11-27 01:44:32.320 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.320 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] AX element pid: 78438, elementOrHash.elementID: 4323914144.88 (AX element pid: 78438, elementOrHash.elementID: 4323914144.88) faulted in {
+2026-11-28 00:14:03.352 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.352 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 87442, elementOrHash.elementID: 4326253232.88
+2026-11-28 00:14:03.352 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.352 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] AX element pid: 87442, elementOrHash.elementID: 4326253232.88 (AX element pid: 87442, elementOrHash.elementID: 4326253232.88) faulted in {
     "XC_kAXXCAttributeAutomationType" = 9;
     "XC_kAXXCAttributeElementBaseType" = UIResponder;
     "XC_kAXXCAttributeElementType" = "SwiftUI.AccessibilityNode";
     "XC_kAXXCAttributeTraits" = 8589934593;
 }: (no error) for elementType using XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType
-2026-11-27 01:44:32.320 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Computed elementType Button.
-2026-11-27 01:44:32.320 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.320 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 78438, elementOrHash.elementID: 4323914144.88
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button (AX element pid: 78438, elementOrHash.elementID: 4323914144.88) faulted in {
+2026-11-28 00:14:03.352 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Computed elementType Button.
+2026-11-28 00:14:03.353 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.353 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 87442, elementOrHash.elementID: 4326253232.88
+2026-11-28 00:14:03.353 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.353 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button (AX element pid: 87442, elementOrHash.elementID: 4326253232.88) faulted in {
     "XC_kAXXCAttributeLabel" = "Open Arcane Shop \134U2014 buy spell scrolls";
 }: (no error) for label using XC_kAXXCAttributeLabel
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 78438, elementOrHash.elementID: 4323915040.89
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] AX element pid: 78438, elementOrHash.elementID: 4323915040.89 (AX element pid: 78438, elementOrHash.elementID: 4323915040.89) faulted in {
+2026-11-28 00:14:03.353 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.353 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 87442, elementOrHash.elementID: 4326254128.89
+2026-11-28 00:14:03.353 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.354 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] AX element pid: 87442, elementOrHash.elementID: 4326254128.89 (AX element pid: 87442, elementOrHash.elementID: 4326254128.89) faulted in {
     "XC_kAXXCAttributeAutomationType" = 9;
     "XC_kAXXCAttributeElementBaseType" = UIResponder;
     "XC_kAXXCAttributeElementType" = "SwiftUI.AccessibilityNode";
     "XC_kAXXCAttributeTraits" = 8589934593;
 }: (no error) for elementType using XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Computed elementType Button.
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 78438, elementOrHash.elementID: 4323915040.89
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button (AX element pid: 78438, elementOrHash.elementID: 4323915040.89) faulted in {
+2026-11-28 00:14:03.354 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Computed elementType Button.
+2026-11-28 00:14:03.354 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.354 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 87442, elementOrHash.elementID: 4326254128.89
+2026-11-28 00:14:03.354 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.354 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button (AX element pid: 87442, elementOrHash.elementID: 4326254128.89) faulted in {
     "XC_kAXXCAttributeLabel" = "Open Spell Book \134U2014 view your learned spells";
 }: (no error) for label using XC_kAXXCAttributeLabel
-2026-11-27 01:44:32.321 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.322 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 78438, elementOrHash.elementID: 4323915472.90
-2026-11-27 01:44:32.322 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.322 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] AX element pid: 78438, elementOrHash.elementID: 4323915472.90 (AX element pid: 78438, elementOrHash.elementID: 4323915472.90) faulted in {
+2026-11-28 00:14:03.354 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.354 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 87442, elementOrHash.elementID: 4326254560.90
+2026-11-28 00:14:03.355 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.355 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] AX element pid: 87442, elementOrHash.elementID: 4326254560.90 (AX element pid: 87442, elementOrHash.elementID: 4326254560.90) faulted in {
     "XC_kAXXCAttributeAutomationType" = 9;
     "XC_kAXXCAttributeElementBaseType" = UIResponder;
     "XC_kAXXCAttributeElementType" = "SwiftUI.AccessibilityNode";
     "XC_kAXXCAttributeTraits" = 8589934593;
 }: (no error) for elementType using XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType
-2026-11-27 01:44:32.322 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Computed elementType Button.
-2026-11-27 01:44:32.322 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.323 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 78438, elementOrHash.elementID: 4323915472.90
-2026-11-27 01:44:32.324 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.325 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button (AX element pid: 78438, elementOrHash.elementID: 4323915472.90) faulted in {
+2026-11-28 00:14:03.355 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Computed elementType Button.
+2026-11-28 00:14:03.355 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.355 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 87442, elementOrHash.elementID: 4326254560.90
+2026-11-28 00:14:03.356 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.356 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button (AX element pid: 87442, elementOrHash.elementID: 4326254560.90) faulted in {
     "XC_kAXXCAttributeLabel" = "FUGIR DA MASMORRA E VOLTAR \134U00c0 SELE\134U00c7\134U00c3O DE PERSONAGEM";
 }: (no error) for label using XC_kAXXCAttributeLabel
-2026-11-27 01:44:32.325 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.325 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 78438, elementOrHash.elementID: 4323916976.91
-2026-11-27 01:44:32.325 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.325 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] AX element pid: 78438, elementOrHash.elementID: 4323916976.91 (AX element pid: 78438, elementOrHash.elementID: 4323916976.91) faulted in {
+2026-11-28 00:14:03.356 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.356 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType for AX element pid: 87442, elementOrHash.elementID: 4326256064.91
+2026-11-28 00:14:03.357 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.357 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] AX element pid: 87442, elementOrHash.elementID: 4326256064.91 (AX element pid: 87442, elementOrHash.elementID: 4326256064.91) faulted in {
     "XC_kAXXCAttributeAutomationType" = 9;
     "XC_kAXXCAttributeElementBaseType" = UIResponder;
     "XC_kAXXCAttributeElementType" = "SwiftUI.AccessibilityNode";
     "XC_kAXXCAttributeTraits" = 8589934593;
 }: (no error) for elementType using XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeTraits, XC_kAXXCAttributeAutomationType
-2026-11-27 01:44:32.326 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Computed elementType Button.
-2026-11-27 01:44:32.327 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.327 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 78438, elementOrHash.elementID: 4323916976.91
-2026-11-27 01:44:32.327 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.327 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button (AX element pid: 78438, elementOrHash.elementID: 4323916976.91) faulted in {
+2026-11-28 00:14:03.357 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Computed elementType Button.
+2026-11-28 00:14:03.357 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] iteration with input Button and transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.357 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeLabel for AX element pid: 87442, elementOrHash.elementID: 4326256064.91
+2026-11-28 00:14:03.357 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.357 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button (AX element pid: 87442, elementOrHash.elementID: 4326256064.91) faulted in {
     "XC_kAXXCAttributeLabel" = "Go home \134U2014 rest, store gold, upgrade skills";
 }: (no error) for label using XC_kAXXCAttributeLabel
-2026-11-27 01:44:32.328 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
-2026-11-27 01:44:32.328 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323895472.74
-2026-11-27 01:44:32.329 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.329 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] StaticText (AX element pid: 78438, elementOrHash.elementID: 4323895472.74) faulted in {
+2026-11-28 00:14:03.358 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Elements matching predicate 'label ==[c] "Close"'`
+2026-11-28 00:14:03.358 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326234560.74
+2026-11-28 00:14:03.359 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.359 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] StaticText (AX element pid: 87442, elementOrHash.elementID: 4326234560.74) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.329 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323895904.75
-2026-11-27 01:44:32.331 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.331 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] StaticText (AX element pid: 78438, elementOrHash.elementID: 4323895904.75) faulted in {
+2026-11-28 00:14:03.359 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326234992.75
+2026-11-28 00:14:03.359 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.359 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] StaticText (AX element pid: 87442, elementOrHash.elementID: 4326234992.75) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.331 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323900544.76
-2026-11-27 01:44:32.331 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.331 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Move north' (AX element pid: 78438, elementOrHash.elementID: 4323900544.76) faulted in {
+2026-11-28 00:14:03.360 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326239632.76
+2026-11-28 00:14:03.360 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.360 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Move north' (AX element pid: 87442, elementOrHash.elementID: 4326239632.76) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.331 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323900976.77
-2026-11-27 01:44:32.331 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.331 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Move west' (AX element pid: 78438, elementOrHash.elementID: 4323900976.77) faulted in {
+2026-11-28 00:14:03.360 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326240064.77
+2026-11-28 00:14:03.360 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.360 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Move west' (AX element pid: 87442, elementOrHash.elementID: 4326240064.77) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.332 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323902464.78
-2026-11-27 01:44:32.332 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.332 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'BUSCAR NESTA SALA' (AX element pid: 78438, elementOrHash.elementID: 4323902464.78) faulted in {
+2026-11-28 00:14:03.360 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326241552.78
+2026-11-28 00:14:03.361 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.361 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'BUSCAR NESTA SALA' (AX element pid: 87442, elementOrHash.elementID: 4326241552.78) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.332 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323903360.79
-2026-11-27 01:44:32.332 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.332 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Move east' (AX element pid: 78438, elementOrHash.elementID: 4323903360.79) faulted in {
+2026-11-28 00:14:03.361 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326242448.79
+2026-11-28 00:14:03.361 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.362 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Move east' (AX element pid: 87442, elementOrHash.elementID: 4326242448.79) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.332 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323903792.80
-2026-11-27 01:44:32.332 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.333 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Move south' (AX element pid: 78438, elementOrHash.elementID: 4323903792.80) faulted in {
+2026-11-28 00:14:03.362 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326242880.80
+2026-11-28 00:14:03.362 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.362 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Move south' (AX element pid: 87442, elementOrHash.elementID: 4326242880.80) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.333 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323906992.81
-2026-11-27 01:44:32.333 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.333 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Toggle inventory' (AX element pid: 78438, elementOrHash.elementID: 4323906992.81) faulted in {
+2026-11-28 00:14:03.362 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326246080.81
+2026-11-28 00:14:03.362 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.362 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Toggle inventory' (AX element pid: 87442, elementOrHash.elementID: 4326246080.81) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.333 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323908480.82
-2026-11-27 01:44:32.333 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'View character stats' (AX element pid: 78438, elementOrHash.elementID: 4323908480.82) faulted in {
+2026-11-28 00:14:03.363 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326247568.82
+2026-11-28 00:14:03.364 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.364 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'View character stats' (AX element pid: 87442, elementOrHash.elementID: 4326247568.82) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323909376.83
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Open skill book, view and reorder your unlocked skills' (AX element pid: 78438, elementOrHash.elementID: 4323909376.83) faulted in {
+2026-11-28 00:14:03.364 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326248464.83
+2026-11-28 00:14:03.364 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Open skill book, view and reorder your unlocked skills' (AX element pid: 87442, elementOrHash.elementID: 4326248464.83) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323909808.84
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Settings' (AX element pid: 78438, elementOrHash.elementID: 4323909808.84) faulted in {
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326248896.84
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Settings' (AX element pid: 87442, elementOrHash.elementID: 4326248896.84) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323911312.85
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.334 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Open run log, see everything that happened this run' (AX element pid: 78438, elementOrHash.elementID: 4323911312.85) faulted in {
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326250400.85
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Open run log, see everything that happened this run' (AX element pid: 87442, elementOrHash.elementID: 4326250400.85) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323912208.86
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Save your progress right now' (AX element pid: 78438, elementOrHash.elementID: 4323912208.86) faulted in {
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326251296.86
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.365 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Save your progress right now' (AX element pid: 87442, elementOrHash.elementID: 4326251296.86) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323912640.87
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Open blacksmith — upgrade your equipped weapon or armor' (AX element pid: 78438, elementOrHash.elementID: 4323912640.87) faulted in {
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326251728.87
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Open blacksmith — upgrade your equipped weapon or armor' (AX element pid: 87442, elementOrHash.elementID: 4326251728.87) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323914144.88
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Open Arcane Shop — buy spell scrolls' (AX element pid: 78438, elementOrHash.elementID: 4323914144.88) faulted in {
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326253232.88
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Open Arcane Shop — buy spell scrolls' (AX element pid: 87442, elementOrHash.elementID: 4326253232.88) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.335 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323915040.89
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Open Spell Book — view your learned spells' (AX element pid: 78438, elementOrHash.elementID: 4323915040.89) faulted in {
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326254128.89
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Open Spell Book — view your learned spells' (AX element pid: 87442, elementOrHash.elementID: 4326254128.89) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323915472.90
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'FUGIR DA MASMORRA E VOLTAR À SELEÇÃO DE PERSONAGEM' (AX element pid: 78438, elementOrHash.elementID: 4323915472.90) faulted in {
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326254560.90
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'FUGIR DA MASMORRA E VOLTAR À SELEÇÃO DE PERSONAGEM' (AX element pid: 87442, elementOrHash.elementID: 4326254560.90) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 78438, elementOrHash.elementID: 4323916976.91
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Button, label: 'Go home — rest, store gold, upgrade skills' (AX element pid: 78438, elementOrHash.elementID: 4323916976.91) faulted in {
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeChildren for AX element pid: 87442, elementOrHash.elementID: 4326256064.91
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.366 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Button, label: 'Go home — rest, store gold, upgrade skills' (AX element pid: 87442, elementOrHash.elementID: 4326256064.91) faulted in {
     "XC_kAXXCAttributeChildren" =     (
     );
 }: (no error) for children using XC_kAXXCAttributeChildren
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Descendants matching type Button`
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] no match found and no further inputs/transformers to explore in the current sequence, returning nil
-2026-11-27 01:44:32.336 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] [First Match] unioned related elements {(
+2026-11-28 00:14:03.367 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] no match found for transformer `Descendants matching type Button`
+2026-11-28 00:14:03.367 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] no match found and no further inputs/transformers to explore in the current sequence, returning nil
+2026-11-28 00:14:03.367 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] [First Match] unioned related elements {(
 )} from {(
 )}
-2026-11-27 01:44:32.338 Df DungeonDescent[78438:2ff58] [com.apple.dt.xctest:Default] Current tree:
-0x101c6d420 <App element pid: 78438>
-  Window, 0x101be04c0 <AX element pid: 78438, elementOrHash.elementID: 4326496512.4>
-    Other, 0x101b9b080 <AX element pid: 78438, elementOrHash.elementID: 4326653504.5>
-      Other, 0x101b367f0 <AX element pid: 78438, elementOrHash.elementID: 4323381360.6>
-        Other, 0x101c587e0 <AX element pid: 78438, elementOrHash.elementID: 4323382464.7>
-          Other, 0x101c69b90 <AX element pid: 78438, elementOrHash.elementID: 4323350752.8>
-            Other, 0x101b32190 <AX element pid: 78438, elementOrHash.elementID: 4327458704.9>
-              Button, 0x101e8dad0, label: 'Main menu' <AX element pid: 78438, elementOrHash.elementID: 4572953280.10>
-              Button, 0x101e0cbb0, label: 'Character list' <AX element pid: 78438, elementOrHash.elementID: 4326759056.11>
-              Button, 0x101e3aae0, label: 'Bestiary' <AX element pid: 78438, elementOrHash.elementID: 4326464688.12>
-              Button, 0x101e53390, label: 'Quests and achievements' <AX element pid: 78438, elementOrHash.elementID: 4326709488.13>
-              Button, 0x101e51e60, label: 'Events' <AX element pid: 78438, elementOrHash.elementID: 4326770016.14>
-              Button, 0x101e8ba40, label: 'Settings' <AX element pid: 78438, elementOrHash.elementID: 4326765776.15>
-              Button, 0x101e42140, label: 'High score' <AX element pid: 78438, elementOrHash.elementID: 4327455664.16>
-              Button, 0x101e53fd0, label: 'Chronicles' <AX element pid: 78438, elementOrHash.elementID: 4327456096.17>
-              Button, 0x101e52d70, label: 'Spell book' <AX element pid: 78438, elementOrHash.elementID: 4326712576.18>
-              Button, 0x101eaa4b0, label: 'Arcane shop' <AX element pid: 78438, elementOrHash.elementID: 4326713472.19>
-              Button, 0x101efd5b0, label: 'New character' <AX element pid: 78438, elementOrHash.elementID: 4326715120.20>
-              Other, 0x12f219a10 <AX element pid: 78438, elementOrHash.elementID: 4326716016.21>
-              Button, 0x101ee9ca0, label: 'Status' <AX element pid: 78438, elementOrHash.elementID: 4327194624.22>
-              Button, 0x101e8ddb0, label: 'Inventário' <AX element pid: 78438, elementOrHash.elementID: 4327195520.23>
-              Button, 0x101e67ed0, label: 'Inventory ' <AX element pid: 78438, elementOrHash.elementID: 4326665680.24>
-              Button, 0x101ead800, label: 'Pausar' <AX element pid: 78438, elementOrHash.elementID: 4326648384.25>
-              Button, 0x101e8b6b0, label: 'Skill book' <AX element pid: 78438, elementOrHash.elementID: 4326649280.26>
-              Button, 0x101e925e0, label: 'Estatísticas do personagem' <AX element pid: 78438, elementOrHash.elementID: 4326730000.27>
-              Button, 0x101e44dd0, label: 'Salvar' <AX element pid: 78438, elementOrHash.elementID: 4326730896.28>
-              Button, 0x101e94020, label: 'Fechar' <AX element pid: 78438, elementOrHash.elementID: 4326700336.29>
-              ScrollView, 0x101e8d740 <AX element pid: 78438, elementOrHash.elementID: 4330383360.30>
-                Other, 0x101c5b750 <AX element pid: 78438, elementOrHash.elementID: 4323805360.32>
-                  Button, 0x101cdad50, label: 'Pause game' <AX element pid: 78438, elementOrHash.elementID: 4326701232.34>
-                  StaticText, 0x101c12300 <AX element pid: 78438, elementOrHash.elementID: 4326702128.35>
-                  StaticText, 0x101cc2a90 <AX element pid: 78438, elementOrHash.elementID: 4326702560.36>
-                  StaticText, 0x101cc1ee0 <AX element pid: 78438, elementOrHash.elementID: 4326696336.37>
-                    StaticText, 0x101e47c90 <AX element pid: 78438, elementOrHash.elementID: 4326702992.48>
-                    StaticText, 0x101e428f0 <AX element pid: 78438, elementOrHash.elementID: 4326695552.49>
-                  Other, 0x101ca80a0 <AX element pid: 78438, elementOrHash.elementID: 4323604016.38>
-                    StaticText, 0x1109322e0 <AX element pid: 78438, elementOrHash.elementID: 4323873088.50>
-                    StaticText, 0x11097bd20 <AX element pid: 78438, elementOrHash.elementID: 4323546864.51>
-                    StaticText, 0x11097be40 <AX element pid: 78438, elementOrHash.elementID: 4323892608.52>
-                  StaticText, 0x101cbb8d0 <AX element pid: 78438, elementOrHash.elementID: 4323430032.39>
-                  Other, 0x101cf7e80 <AX element pid: 78438, elementOrHash.elementID: 4323428208.40>
-                    StaticText, 0x101ee55a0 <AX element pid: 78438, elementOrHash.elementID: 4323389120.53>
-                    StaticText, 0x101e95000 <AX element pid: 78438, elementOrHash.elementID: 4323668720.54>
-                    StaticText, 0x101eaa180 <AX element pid: 78438, elementOrHash.elementID: 4323602896.55>
-                  Other, 0x101ce13f0 <AX element pid: 78438, elementOrHash.elementID: 4323480832.41>
-                    StaticText, 0x101b92a80 <AX element pid: 78438, elementOrHash.elementID: 4323399008.56>
-                    StaticText, 0x101b4ea40 <AX element pid: 78438, elementOrHash.elementID: 4323555664.57>
-                    Other, 0x101b3c4d0 <AX element pid: 78438, elementOrHash.elementID: 4323656080.58>
-                  Other, 0x110935bc0 <AX element pid: 78438, elementOrHash.elementID: 4323883424.42>
-                    StaticText, 0x12f206a20 <AX element pid: 78438, elementOrHash.elementID: 4323893824.59>
-                    StaticText, 0x101e33500 <AX element pid: 78438, elementOrHash.elementID: 4323894256.60>
-                    Other, 0x101e33620 <AX element pid: 78438, elementOrHash.elementID: 4323422528.61>
-                    StaticText, 0x12f216d40 <AX element pid: 78438, elementOrHash.elementID: 4323422960.62>
-                    StaticText, 0x12f216e60 <AX element pid: 78438, elementOrHash.elementID: 4323597616.63>
-                    Other, 0x101e52350 <AX element pid: 78438, elementOrHash.elementID: 4323598048.64>
-                    StaticText, 0x101e52470 <AX element pid: 78438, elementOrHash.elementID: 4323598480.65>
-                  StaticText, 0x1109342e0 <AX element pid: 78438, elementOrHash.elementID: 4323875952.43>
-                    StaticText, 0x101bdcc80 <AX element pid: 78438, elementOrHash.elementID: 4323874736.66>
-                    StaticText, 0x101b7c4a0 <AX element pid: 78438, elementOrHash.elementID: 4323875168.67>
-                  StaticText, 0x110950080 <AX element pid: 78438, elementOrHash.elementID: 4323877408.44>
-                  Other, 0x11096a050 <AX element pid: 78438, elementOrHash.elementID: 4323898656.45>
-                    StaticText, 0x11093c470 <AX element pid: 78438, elementOrHash.elementID: 4323896688.68>
-                      StaticText, 0x101b9a880 <AX element pid: 78438, elementOrHash.elementID: 4323895472.74>
-                      StaticText, 0x101b98d40 <AX element pid: 78438, elementOrHash.elementID: 4323895904.75>
-                    StaticText, 0x11096a690 <AX element pid: 78438, elementOrHash.elementID: 4323898224.69>
-                    StaticText, 0x11096a4b0 <AX element pid: 78438, elementOrHash.elementID: 4327361440.107>
-                  Other, 0x101ce1a10 <AX element pid: 78438, elementOrHash.elementID: 4323919344.46>
-                    StaticText, 0x101b7b180 <AX element pid: 78438, elementOrHash.elementID: 4323900112.70>
-                    Other, 0x101b60490 <AX element pid: 78438, elementOrHash.elementID: 4323905296.71>
-                      Button, 0x11091bcb0, label: 'Move north' <AX element pid: 78438, elementOrHash.elementID: 4323900544.76>
-                      Button, 0x11096a170, label: 'Move west' <AX element pid: 78438, elementOrHash.elementID: 4323900976.77>
-                      Button, 0x11096a290, label: 'BUSCAR NESTA SALA' <AX element pid: 78438, elementOrHash.elementID: 4323902464.78>
-                      Button, 0x11096b430, label: 'Move east' <AX element pid: 78438, elementOrHash.elementID: 4323903360.79>
-                      Button, 0x11096b550, label: 'Move south' <AX element pid: 78438, elementOrHash.elementID: 4323903792.80>
-                    Button, 0x101b4c780, label: 'MAPA SONORO' <AX element pid: 78438, elementOrHash.elementID: 4323905728.72>
-                    Other, 0x101b9be60 <AX element pid: 78438, elementOrHash.elementID: 4323917872.73>
-                      Button, 0x11096b670, label: 'Toggle inventory' <AX element pid: 78438, elementOrHash.elementID: 4323906992.81>
-                      Button, 0x11096b790, label: 'View character stats' <AX element pid: 78438, elementOrHash.elementID: 4323908480.82>
-                      Button, 0x11096b8b0, label: 'Open skill book, view and reorder your unlocked skills' <AX element pid: 78438, elementOrHash.elementID: 4323909376.83>
-                      Button, 0x11096b9d0, label: 'Settings' <AX element pid: 78438, elementOrHash.elementID: 4323909808.84>
-                      Button, 0x11096baf0, label: 'Open run log, see everything that happened this run' <AX element pid: 78438, elementOrHash.elementID: 4323911312.85>
-                      Button, 0x11096bc10, label: 'Save your progress right now' <AX element pid: 78438, elementOrHash.elementID: 4323912208.86>
-                      Button, 0x11096bd30, label: 'Open blacksmith — upgrade your equipped weapon or armor' <AX element pid: 78438, elementOrHash.elementID: 4323912640.87>
-                      Button, 0x11096be50, label: 'Open Arcane Shop — buy spell scrolls' <AX element pid: 78438, elementOrHash.elementID: 4323914144.88>
-                      Button, 0x11096bf70, label: 'Open Spell Book — view your learned spells' <AX element pid: 78438, elementOrHash.elementID: 4323915040.89>
-                      Button, 0x11096c090, label: 'FUGIR DA MASMORRA E VOLTAR À SELEÇÃO DE PERSONAGEM' <AX element pid: 78438, elementOrHash.elementID: 4323915472.90>
-                      Button, 0x11096c1b0, label: 'Go home — rest, store gold, upgrade skills' <AX element pid: 78438, elementOrHash.elementID: 4323916976.91>
-                Other, 0x101c58440 <AX element pid: 78438, elementOrHash.elementID: 4323719072.33>
-                  Other, 0x101b49d80 <AX element pid: 78438, elementOrHash.elementID: 4323785280.47>
-                Other, 0x101c8a900 <AX element pid: 78438, elementOrHash.elementID: 4323719072.33>
-                  Other, 0x101b30d10 <AX element pid: 78438, elementOrHash.elementID: 4323785280.47>
-              Alert, 0x101e87740 <AX element pid: 78438, elementOrHash.elementID: 4324093616.108>
-              ScrollView, 0x101e9cae0 <AX element pid: 78438, elementOrHash.elementID: 4330876928.109>
-                Other, 0x101b5e770 <AX element pid: 78438, elementOrHash.elementID: 4323914576.110>
-                  Button, 0x101e3bb60, label: 'Back to settings' <AX element pid: 78438, elementOrHash.elementID: 4573128608.174>
-                  StaticText, 0x101e90bd0 <AX element pid: 78438, elementOrHash.elementID: 4573056560.175>
-                  StaticText, 0x12f215290 <AX element pid: 78438, elementOrHash.elementID: 4573259456.176>
-                  Button, 0x12f21b970, label: '📱 Idioma do aparelho' <AX element pid: 78438, elementOrHash.elementID: 4573029488.177>
-                  Button, 0x12f20df40, label: '🇬🇧 Inglês' <AX element pid: 78438, elementOrHash.elementID: 4573145584.178>
-                  Button, 0x101e4c070, label: '🇧🇷 Português' <AX element pid: 78438, elementOrHash.elementID: 4573298480.179>
-                  StaticText, 0x101e58960 <AX element pid: 78438, elementOrHash.elementID: 4573054784.180>
-                Other, 0x101b5fc40 <AX element pid: 78438, elementOrHash.elementID: 4325107984.111>
-                  Other, 0x101b24b20 <AX element pid: 78438, elementOrHash.elementID: 4324927616.116>
-                Other, 0x101b12000 <AX element pid: 78438, elementOrHash.elementID: 4325107984.111>
-                  Other, 0x12f21b460 <AX element pid: 78438, elementOrHash.elementID: 4324927616.116>
-              Other, 0x101e95ad0 <AX element pid: 78438, elementOrHash.elementID: 4327457600.31>
-2026-11-27 01:44:32.342 Df DungeonDescent[78438:2ff58] [com.apple.dt.xctest:Default] Query ↪︎ Descendants matching type Button
+2026-11-28 00:14:03.368 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Current tree:
+0x101e5f140 <App element pid: 87442>
+  Window, 0x101ddb2d0 <AX element pid: 87442, elementOrHash.elementID: 4354179408.4>
+    Other, 0x101e10970 <AX element pid: 87442, elementOrHash.elementID: 4354131440.5>
+      Other, 0x101d46850 <AX element pid: 87442, elementOrHash.elementID: 4325479632.6>
+        Other, 0x101e63e50 <AX element pid: 87442, elementOrHash.elementID: 4325502272.7>
+          Other, 0x101d72290 <AX element pid: 87442, elementOrHash.elementID: 4353741248.8>
+            Other, 0x1038edf50 <AX element pid: 87442, elementOrHash.elementID: 4326261808.9>
+              Button, 0x1038f3f70, label: 'Main menu' <AX element pid: 87442, elementOrHash.elementID: 4354657408.10>
+              Button, 0x1038fae50, label: 'Character list' <AX element pid: 87442, elementOrHash.elementID: 4325875984.11>
+              Button, 0x110b4b9d0, label: 'Bestiary' <AX element pid: 87442, elementOrHash.elementID: 4326164608.12>
+              Button, 0x110b4c7d0, label: 'Quests and achievements' <AX element pid: 87442, elementOrHash.elementID: 4326146304.13>
+              Button, 0x110b45740, label: 'Events' <AX element pid: 87442, elementOrHash.elementID: 4326128080.14>
+              Button, 0x10389f7e0, label: 'Settings' <AX element pid: 87442, elementOrHash.elementID: 4326064064.15>
+              Button, 0x110b65a10, label: 'High score' <AX element pid: 87442, elementOrHash.elementID: 4326064960.16>
+              Button, 0x10386ade0, label: 'Chronicles' <AX element pid: 87442, elementOrHash.elementID: 4326065856.17>
+              Button, 0x103883e50, label: 'Spell book' <AX element pid: 87442, elementOrHash.elementID: 4326066752.18>
+              Button, 0x103840660, label: 'Arcane shop' <AX element pid: 87442, elementOrHash.elementID: 4326067648.19>
+              Button, 0x1038700f0, label: 'New character' <AX element pid: 87442, elementOrHash.elementID: 4326068544.20>
+              Other, 0x1038602e0 <AX element pid: 87442, elementOrHash.elementID: 4326069440.21>
+              Button, 0x1038673e0, label: 'Status' <AX element pid: 87442, elementOrHash.elementID: 4326070224.22>
+              Button, 0x10387a770, label: 'Inventário' <AX element pid: 87442, elementOrHash.elementID: 4326060480.23>
+              Button, 0x103838690, label: 'Inventory ' <AX element pid: 87442, elementOrHash.elementID: 4326061376.24>
+              Button, 0x103885660, label: 'Pausar' <AX element pid: 87442, elementOrHash.elementID: 4326056800.25>
+              Button, 0x103872b00, label: 'Skill book' <AX element pid: 87442, elementOrHash.elementID: 4326057696.26>
+              Button, 0x10381b570, label: 'Estatísticas do personagem' <AX element pid: 87442, elementOrHash.elementID: 4326058592.27>
+              Button, 0x10386c270, label: 'Salvar' <AX element pid: 87442, elementOrHash.elementID: 4326205568.28>
+              Button, 0x103884f90, label: 'Fechar' <AX element pid: 87442, elementOrHash.elementID: 4326206464.29>
+              ScrollView, 0x1038196f0 <AX element pid: 87442, elementOrHash.elementID: 4330447360.30>
+                Other, 0x103814010 <AX element pid: 87442, elementOrHash.elementID: 4325603552.32>
+                  Button, 0x101d99750, label: 'Pause game' <AX element pid: 87442, elementOrHash.elementID: 4326207360.34>
+                  StaticText, 0x101db43f0 <AX element pid: 87442, elementOrHash.elementID: 4326208256.35>
+                  StaticText, 0x101df5af0 <AX element pid: 87442, elementOrHash.elementID: 4326209072.36>
+                  StaticText, 0x101df62b0 <AX element pid: 87442, elementOrHash.elementID: 4326211424.37>
+                    StaticText, 0x101db94f0 <AX element pid: 87442, elementOrHash.elementID: 4326209856.48>
+                    StaticText, 0x101d191e0 <AX element pid: 87442, elementOrHash.elementID: 4326210640.49>
+                  Other, 0x101d3e550 <AX element pid: 87442, elementOrHash.elementID: 4326214960.38>
+                    StaticText, 0x101dc03e0 <AX element pid: 87442, elementOrHash.elementID: 4326212960.50>
+                    StaticText, 0x101db66c0 <AX element pid: 87442, elementOrHash.elementID: 4326213392.51>
+                    StaticText, 0x101dc0200 <AX element pid: 87442, elementOrHash.elementID: 4326214176.52>
+                  StaticText, 0x101d0b960 <AX element pid: 87442, elementOrHash.elementID: 4326216416.39>
+                  Other, 0x101da2fc0 <AX element pid: 87442, elementOrHash.elementID: 4326219200.40>
+                    StaticText, 0x101d19300 <AX element pid: 87442, elementOrHash.elementID: 4326216848.53>
+                    StaticText, 0x101ddb660 <AX element pid: 87442, elementOrHash.elementID: 4326217632.54>
+                    StaticText, 0x101ddb780 <AX element pid: 87442, elementOrHash.elementID: 4326218416.55>
+                  Other, 0x101da30e0 <AX element pid: 87442, elementOrHash.elementID: 4326222656.41>
+                    StaticText, 0x101df4f80 <AX element pid: 87442, elementOrHash.elementID: 4326220656.56>
+                    StaticText, 0x101df50a0 <AX element pid: 87442, elementOrHash.elementID: 4326221088.57>
+                    Other, 0x101df51c0 <AX element pid: 87442, elementOrHash.elementID: 4326221872.58>
+                  Other, 0x101db6b80 <AX element pid: 87442, elementOrHash.elementID: 4326229248.42>
+                    StaticText, 0x10388a050 <AX element pid: 87442, elementOrHash.elementID: 4326224112.59>
+                    StaticText, 0x103870460 <AX element pid: 87442, elementOrHash.elementID: 4326224544.60>
+                    Other, 0x103866d10 <AX element pid: 87442, elementOrHash.elementID: 4326225328.61>
+                    StaticText, 0x103862860 <AX element pid: 87442, elementOrHash.elementID: 4326226112.62>
+                    StaticText, 0x10388de10 <AX element pid: 87442, elementOrHash.elementID: 4326226896.63>
+                    Other, 0x1038515a0 <AX element pid: 87442, elementOrHash.elementID: 4326227680.64>
+                    StaticText, 0x103868880 <AX element pid: 87442, elementOrHash.elementID: 4326228464.65>
+                  StaticText, 0x101db6ca0 <AX element pid: 87442, elementOrHash.elementID: 4326231920.43>
+                    StaticText, 0x101ddb8a0 <AX element pid: 87442, elementOrHash.elementID: 4326230704.66>
+                    StaticText, 0x101df52e0 <AX element pid: 87442, elementOrHash.elementID: 4326231136.67>
+                  StaticText, 0x101d9a2a0 <AX element pid: 87442, elementOrHash.elementID: 4326233456.44>
+                  Other, 0x101d9a3c0 <AX element pid: 87442, elementOrHash.elementID: 4326237744.45>
+                    StaticText, 0x101df5400 <AX element pid: 87442, elementOrHash.elementID: 4326235776.68>
+                      StaticText, 0x101e7e470 <AX element pid: 87442, elementOrHash.elementID: 4326234560.74>
+                      StaticText, 0x101e85400 <AX element pid: 87442, elementOrHash.elementID: 4326234992.75>
+                    StaticText, 0x101df5520 <AX element pid: 87442, elementOrHash.elementID: 4326237312.69>
+                    StaticText, 0x101df5640 <AX element pid: 87442, elementOrHash.elementID: 4326032256.107>
+                  Other, 0x101d2c340 <AX element pid: 87442, elementOrHash.elementID: 4326258432.46>
+                    StaticText, 0x103888530 <AX element pid: 87442, elementOrHash.elementID: 4326239200.70>
+                    Other, 0x103889cb0 <AX element pid: 87442, elementOrHash.elementID: 4326244384.71>
+                      Button, 0x101e128b0, label: 'Move north' <AX element pid: 87442, elementOrHash.elementID: 4326239632.76>
+                      Button, 0x101eaa900, label: 'Move west' <AX element pid: 87442, elementOrHash.elementID: 4326240064.77>
+                      Button, 0x101eadfc0, label: 'BUSCAR NESTA SALA' <AX element pid: 87442, elementOrHash.elementID: 4326241552.78>
+                      Button, 0x101e8fd90, label: 'Move east' <AX element pid: 87442, elementOrHash.elementID: 4326242448.79>
+                      Button, 0x101e9d5a0, label: 'Move south' <AX element pid: 87442, elementOrHash.elementID: 4326242880.80>
+                    Button, 0x10388a3a0, label: 'MAPA SONORO' <AX element pid: 87442, elementOrHash.elementID: 4326244816.72>
+                    Other, 0x103886890 <AX element pid: 87442, elementOrHash.elementID: 4326256960.73>
+                      Button, 0x101d3fce0, label: 'Toggle inventory' <AX element pid: 87442, elementOrHash.elementID: 4326246080.81>
+                      Button, 0x101d3fec0, label: 'View character stats' <AX element pid: 87442, elementOrHash.elementID: 4326247568.82>
+                      Button, 0x101d3ffe0, label: 'Open skill book, view and reorder your unlocked skills' <AX element pid: 87442, elementOrHash.elementID: 4326248464.83>
+                      Button, 0x101d40100, label: 'Settings' <AX element pid: 87442, elementOrHash.elementID: 4326248896.84>
+                      Button, 0x101d204b0, label: 'Open run log, see everything that happened this run' <AX element pid: 87442, elementOrHash.elementID: 4326250400.85>
+                      Button, 0x101d205d0, label: 'Save your progress right now' <AX element pid: 87442, elementOrHash.elementID: 4326251296.86>
+                      Button, 0x101d206f0, label: 'Open blacksmith — upgrade your equipped weapon or armor' <AX element pid: 87442, elementOrHash.elementID: 4326251728.87>
+                      Button, 0x101d20810, label: 'Open Arcane Shop — buy spell scrolls' <AX element pid: 87442, elementOrHash.elementID: 4326253232.88>
+                      Button, 0x101dbf750, label: 'Open Spell Book — view your learned spells' <AX element pid: 87442, elementOrHash.elementID: 4326254128.89>
+                      Button, 0x101dbf870, label: 'FUGIR DA MASMORRA E VOLTAR À SELEÇÃO DE PERSONAGEM' <AX element pid: 87442, elementOrHash.elementID: 4326254560.90>
+                      Button, 0x101dbf990, label: 'Go home — rest, store gold, upgrade skills' <AX element pid: 87442, elementOrHash.elementID: 4326256064.91>
+                Other, 0x1038841e0 <AX element pid: 87442, elementOrHash.elementID: 4354479168.33>
+                  Other, 0x103863d10 <AX element pid: 87442, elementOrHash.elementID: 4354500000.47>
+                Other, 0x103873500 <AX element pid: 87442, elementOrHash.elementID: 4354479168.33>
+                  Other, 0x101e894c0 <AX element pid: 87442, elementOrHash.elementID: 4354500000.47>
+              Alert, 0x10381aeb0 <AX element pid: 87442, elementOrHash.elementID: 4326315424.108>
+              ScrollView, 0x1038410d0 <AX element pid: 87442, elementOrHash.elementID: 4332258304.109>
+                Other, 0x10384a440 <AX element pid: 87442, elementOrHash.elementID: 4326282896.110>
+                  Button, 0x101e4f320, label: 'Back to settings' <AX element pid: 87442, elementOrHash.elementID: 4574964592.174>
+                  StaticText, 0x101e1ebc0 <AX element pid: 87442, elementOrHash.elementID: 4574965024.175>
+                  StaticText, 0x101e52a90 <AX element pid: 87442, elementOrHash.elementID: 4574966832.176>
+                  Button, 0x101e85a80, label: '📱 Idioma do aparelho' <AX element pid: 87442, elementOrHash.elementID: 4574967264.177>
+                  Button, 0x101e36110, label: '🇬🇧 Inglês' <AX element pid: 87442, elementOrHash.elementID: 4574967696.178>
+                  Button, 0x101e899d0, label: '🇧🇷 Português' <AX element pid: 87442, elementOrHash.elementID: 4574969968.179>
+                  StaticText, 0x101e8d190 <AX element pid: 87442, elementOrHash.elementID: 4574968832.180>
+                Other, 0x103885300 <AX element pid: 87442, elementOrHash.elementID: 4326060912.111>
+                  Other, 0x101e91690 <AX element pid: 87442, elementOrHash.elementID: 5105624192.116>
+                Other, 0x10383e740 <AX element pid: 87442, elementOrHash.elementID: 4326060912.111>
+                  Other, 0x101d2c460 <AX element pid: 87442, elementOrHash.elementID: 5105624192.116>
+              Other, 0x10388f680 <AX element pid: 87442, elementOrHash.elementID: 4326259968.31>
+2026-11-28 00:14:03.369 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Query ↪︎ Descendants matching type Button
     ↪︎ Elements matching predicate 'label ==[c] "Close"' (First Match) found matching snapshots: {(
 )} (error: (null))
-2026-11-27 01:44:32.342 Df DungeonDescent[78438:2ff58] [com.apple.dt.xctest:Default] Replying to query ↪︎ Descendants matching type Button
-    ↪︎ Elements matching predicate 'label ==[c] "Close"' (First Match) with results: <XCTElementQueryResults: 0x600000d95530> (error: (null))
-2026-11-27 01:44:32.346 Df DungeonDescent[78438:2ff58] [com.apple.dt.xctest:Default] Received request to fetch matches for query:
-2026-11-27 01:44:32.346 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Evaluating query:
-2026-11-27 01:44:32.346 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Getting root element snapshot
-2026-11-27 01:44:32.346 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Getting snapshot for App element pid: 78438 for query
-2026-11-27 01:44:32.346 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Query requires iOS snapshot attributes .
-2026-11-27 01:44:32.346 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: about to CFRunLoopPerform
-2026-11-27 01:44:32.346 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting with 30.00s responsiveness timeout
-2026-11-27 01:44:32.346 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: inside CFRunLoopPerform
-2026-11-27 01:44:32.347 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: MT responded in time (won the race to the busy flag)
-2026-11-27 01:44:32.347 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting 60.00s for work to complete
-2026-11-27 01:44:32.347 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got main window <AXUIElementRef 0x600000d888d0> {pid=78438} {uid=[ID:4 hash:0x101e11900]}
-2026-11-27 01:44:32.348 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Capturing hierarchy with attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeParent, XC_kAXXCAttributeIdentifier, XC_kAXXCAttributeAutomationType, XC_kAXXCAttributeTraits
-2026-11-27 01:44:32.348 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Capturing hierarchy with parameters {
+2026-11-28 00:14:03.369 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Replying to query ↪︎ Descendants matching type Button
+    ↪︎ Elements matching predicate 'label ==[c] "Close"' (First Match) with results: <XCTElementQueryResults: 0x600000d3e010> (error: (null))
+2026-11-28 00:14:03.370 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Received request to fetch matches for query:
+2026-11-28 00:14:03.370 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Evaluating query:
+2026-11-28 00:14:03.370 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Getting root element snapshot
+2026-11-28 00:14:03.371 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Getting snapshot for App element pid: 87442 for query
+2026-11-28 00:14:03.371 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Query requires iOS snapshot attributes .
+2026-11-28 00:14:03.371 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: about to CFRunLoopPerform
+2026-11-28 00:14:03.371 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting with 30.00s responsiveness timeout
+2026-11-28 00:14:03.371 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: inside CFRunLoopPerform
+2026-11-28 00:14:03.371 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: MT responded in time (won the race to the busy flag)
+2026-11-28 00:14:03.371 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting 60.00s for work to complete
+2026-11-28 00:14:03.371 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got main window <AXUIElementRef 0x600000d3f210> {pid=87442} {uid=[ID:4 hash:0x103878150]}
+2026-11-28 00:14:03.372 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Capturing hierarchy with attributes XC_kAXXCAttributeElementType, XC_kAXXCAttributeElementBaseType, XC_kAXXCAttributeParent, XC_kAXXCAttributeIdentifier, XC_kAXXCAttributeAutomationType, XC_kAXXCAttributeTraits
+2026-11-28 00:14:03.372 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Capturing hierarchy with parameters {
     attributes =     (
         5003,
         5004,
@@ -351,50 +351,50 @@
     snapshotKeyHonorModalViews = 0;
     traverseFromParentsToChildren = 1;
 }
-2026-11-27 01:44:32.348 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Snapshot attributes 5003, 5004, 5002, 5019, 5058, 2004
-2026-11-27 01:44:32.406 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got snapshot for <AXUIElementRef 0x600000d7e070> {pid=78438} {uid=[ID:1 hash:0x0]}
-2026-11-27 01:44:32.406 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got app orientation 0
-2026-11-27 01:44:32.406 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Captured accessibility snapshot data in 0.06s
-2026-11-27 01:44:32.407 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Found main window: Window
-2026-11-27 01:44:32.407 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] ScrollView is not actually a child of Other, including at this point anyway (rdar://problem/20738636)
-2026-11-27 01:44:32.407 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Preferring automation type 7 instead of legacy element type OTHER derived from class/trait: SwiftUI.AccessibilityNode:UIResponder 8589934592
-2026-11-27 01:44:32.407 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] ScrollView is not actually a child of Other, including at this point anyway (rdar://problem/20738636)
-2026-11-27 01:44:32.407 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Query  found matching snapshots: {(
-    Application, pid: 78438
+2026-11-28 00:14:03.372 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Snapshot attributes 5003, 5004, 5002, 5019, 5058, 2004
+2026-11-28 00:14:03.494 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got snapshot for <AXUIElementRef 0x600000d3cf00> {pid=87442} {uid=[ID:1 hash:0x0]}
+2026-11-28 00:14:03.495 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got app orientation 0
+2026-11-28 00:14:03.495 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Captured accessibility snapshot data in 0.12s
+2026-11-28 00:14:03.495 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Found main window: Window
+2026-11-28 00:14:03.495 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] ScrollView is not actually a child of Other, including at this point anyway (rdar://problem/20738636)
+2026-11-28 00:14:03.495 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Preferring automation type 7 instead of legacy element type OTHER derived from class/trait: SwiftUI.AccessibilityNode:UIResponder 8589934592
+2026-11-28 00:14:03.495 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] ScrollView is not actually a child of Other, including at this point anyway (rdar://problem/20738636)
+2026-11-28 00:14:03.495 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Query  found matching snapshots: {(
+    Application, pid: 87442
 )} (error: (null))
-2026-11-27 01:44:32.407 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Replying to query  with results: <XCTElementQueryResults: 0x600000d8a310> (error: (null))
-2026-11-27 01:44:32.409 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Received attributes request for element: App element pid: 78438. Attributes: (
+2026-11-28 00:14:03.496 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Replying to query  with results: <XCTElementQueryResults: 0x600000ce60a0> (error: (null))
+2026-11-28 00:14:03.497 Df DungeonDescent[87442:352f7] [com.apple.dt.xctest:Default] Received attributes request for element: App element pid: 87442. Attributes: (
     "XC_kAXXCAttributeFrame",
     "XC_kAXXCAttributeWindowDisplayId",
     "XC_kAXXCAttributeWindowContextId"
 )
-2026-11-27 01:44:32.409 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: about to CFRunLoopPerform
-2026-11-27 01:44:32.409 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting with 30.00s responsiveness timeout
-2026-11-27 01:44:32.409 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: inside CFRunLoopPerform
-2026-11-27 01:44:32.409 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: MT responded in time (won the race to the busy flag)
-2026-11-27 01:44:32.409 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting 60.00s for work to complete
-2026-11-27 01:44:32.409 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeFrame, XC_kAXXCAttributeWindowDisplayId, XC_kAXXCAttributeWindowContextId for App element pid: 78438
-2026-11-27 01:44:32.409 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.409 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Replying with attribute values: {
+2026-11-28 00:14:03.497 Df DungeonDescent[87442:3534d] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: about to CFRunLoopPerform
+2026-11-28 00:14:03.497 Df DungeonDescent[87442:3534d] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting with 30.00s responsiveness timeout
+2026-11-28 00:14:03.497 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: inside CFRunLoopPerform
+2026-11-28 00:14:03.497 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: MT responded in time (won the race to the busy flag)
+2026-11-28 00:14:03.497 Df DungeonDescent[87442:3534d] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting 60.00s for work to complete
+2026-11-28 00:14:03.497 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeFrame, XC_kAXXCAttributeWindowDisplayId, XC_kAXXCAttributeWindowContextId for App element pid: 87442
+2026-11-28 00:14:03.498 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.498 Df DungeonDescent[87442:3534d] [com.apple.dt.xctest:Default] Replying with attribute values: {
     "XC_kAXXCAttributeFrame" =     {
         Height = 1376;
         Width = 1032;
         X = 0;
         Y = 0;
     };
-    "XC_kAXXCAttributeWindowContextId" = 3737367778;
+    "XC_kAXXCAttributeWindowContextId" = 1919433063;
     "XC_kAXXCAttributeWindowDisplayId" = 0;
 }
-2026-11-27 01:44:32.410 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Received attributes request for element: App element pid: 78438. Attributes: (
+2026-11-28 00:14:03.500 Df DungeonDescent[87442:3534d] [com.apple.dt.xctest:Default] Received attributes request for element: App element pid: 87442. Attributes: (
     "XC_kAXXCAttributeWindowDisplayId"
 )
-2026-11-27 01:44:32.410 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: about to CFRunLoopPerform
-2026-11-27 01:44:32.410 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting with 30.00s responsiveness timeout
-2026-11-27 01:44:32.410 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: inside CFRunLoopPerform
-2026-11-27 01:44:32.410 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: MT responded in time (won the race to the busy flag)
-2026-11-27 01:44:32.410 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting 60.00s for work to complete
-2026-11-27 01:44:32.410 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeWindowDisplayId for App element pid: 78438
-2026-11-27 01:44:32.410 Df DungeonDescent[78438:2fe19] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
-2026-11-27 01:44:32.411 Df DungeonDescent[78438:2ff59] [com.apple.dt.xctest:Default] Replying with attribute values: {
+2026-11-28 00:14:03.500 Df DungeonDescent[87442:3534d] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: about to CFRunLoopPerform
+2026-11-28 00:14:03.500 Df DungeonDescent[87442:3534d] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting with 30.00s responsiveness timeout
+2026-11-28 00:14:03.500 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: inside CFRunLoopPerform
+2026-11-28 00:14:03.500 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[MT]: MT responded in time (won the race to the busy flag)
+2026-11-28 00:14:03.500 Df DungeonDescent[87442:3534d] [com.apple.dt.xctest:Default] XCTPerformOnMainRunLoop[not MT]: waiting 60.00s for work to complete
+2026-11-28 00:14:03.500 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Fetching AX attributes XC_kAXXCAttributeWindowDisplayId for App element pid: 87442
+2026-11-28 00:14:03.500 Df DungeonDescent[87442:3520a] [com.apple.dt.xctest:Default] Got attributes, transferring to dictionary for return.
+2026-11-28 00:14:03.500 Df DungeonDescent[87442:3534d] [com.apple.dt.xctest:Default] Replying with attribute values: {
     "XC_kAXXCAttributeWindowDisplayId" = 0;
 }
