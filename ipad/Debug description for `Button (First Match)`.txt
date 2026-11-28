@@ -1,0 +1,5 @@
+Query chain:
+ →Find: Target Application 'com.dungeon.descent'
+  ↪︎Find: Descendants matching type Button
+    ↪︎Find: Elements matching predicate 'label ==[c] "Next race"'
+      ↪︎Find: First Match
